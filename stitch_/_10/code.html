@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>안부 (Anbu) - 모드 선택</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Lexend:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "on-secondary-fixed": "#00105c",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#293ca0",
+              "on-primary-fixed-variant": "#005048",
+              "on-tertiary-fixed-variant": "#00504a",
+              "surface-variant": "#e2e2e2",
+              "secondary-container": "#8596ff",
+              "surface-container-low": "#f3f3f3",
+              "error": "#ba1a1a",
+              "on-primary-container": "#f4fffb",
+              "on-primary-fixed": "#00201c",
+              "tertiary-container": "#00837a",
+              "surface-bright": "#f9f9f9",
+              "secondary-fixed": "#dee0ff",
+              "surface": "#f9f9f9",
+              "on-surface-variant": "#3d4947",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#71d7cd",
+              "inverse-on-surface": "#f1f1f1",
+              "on-tertiary-fixed": "#00201d",
+              "primary-fixed": "#85f6e5",
+              "primary-fixed-dim": "#67d9c9",
+              "on-error-container": "#93000a",
+              "surface-tint": "#006a60",
+              "tertiary-fixed": "#8ef4e9",
+              "background": "#f9f9f9",
+              "surface-container-lowest": "#ffffff",
+              "on-surface": "#1a1c1c",
+              "on-secondary": "#ffffff",
+              "secondary": "#4355b9",
+              "on-secondary-container": "#11278e",
+              "surface-container-highest": "#e2e2e2",
+              "secondary-fixed-dim": "#bac3ff",
+              "surface-dim": "#dadada",
+              "inverse-surface": "#2f3131",
+              "primary": "#00685e",
+              "outline": "#6d7a77",
+              "tertiary": "#006860",
+              "on-tertiary": "#ffffff",
+              "inverse-primary": "#67d9c9",
+              "on-tertiary-container": "#f3fffc",
+              "surface-container": "#eeeeee",
+              "on-background": "#1a1c1c",
+              "surface-container-high": "#e8e8e8",
+              "outline-variant": "#bcc9c6",
+              "primary-container": "#008377"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Lexend"],
+              "label": ["Lexend"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .font-plus-jakarta-sans { font-family: 'Plus Jakarta Sans', sans-serif; }
+      .font-lexend { font-family: 'Lexend', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col font-body">
+<!-- Header Section (Filtered for Focus) -->
+<header class="bg-surface/80 backdrop-blur-md sticky top-0 z-50 flex justify-between items-center w-full px-5 h-16 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="menu">menu</span>
+<h1 class="font-headline font-black tracking-tight text-xl text-primary">안부 (Anbu)</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-outline" data-icon="person">person</span>
+</div>
+</header>
+<!-- Main Content: Mode Selection Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-5 py-12 max-w-4xl mx-auto w-full">
+<!-- Editorial Title Section -->
+<div class="text-center mb-12 space-y-4">
+<h2 class="font-headline text-4xl md:text-5xl font-extrabold text-on-surface tracking-tight leading-tight">
+                누구를 위한 것인가요?
+            </h2>
+<p class="font-body text-on-surface-variant text-lg max-w-md mx-auto">
+                사용자의 목적에 가장 적합한 모드를 선택해 주세요. 설정은 언제든지 변경할 수 있습니다.
+            </p>
+</div>
+<!-- Mode Selection Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full items-stretch">
+<!-- Option 1: Senior Mode (Teal) -->
+<button class="group relative flex flex-col items-start text-left p-8 bg-surface-container-lowest rounded-[2.5rem] shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_48px_rgba(0,104,94,0.1)] transition-all duration-500 border-2 border-transparent hover:border-primary-fixed/30 outline-none focus:ring-4 focus:ring-primary-fixed ring-offset-4">
+<div class="mb-8 w-20 h-20 rounded-3xl bg-primary-fixed/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+</div>
+<h3 class="font-headline text-2xl font-bold text-primary mb-3 leading-snug">
+                    나의 안부를 확인받고 싶어요
+                </h3>
+<p class="font-body text-on-surface-variant text-base mb-10 leading-relaxed">
+                    가족에게 자동으로 나의 안전을 알립니다. 일상적인 안부 확인이 필요한 분들을 위한 모드입니다.
+                </p>
+<div class="mt-auto flex items-center gap-2 font-bold text-primary">
+<span>대상자 모드 시작하기</span>
+<span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<!-- Subtle Icon Accent -->
+<div class="absolute top-6 right-8">
+<span class="material-symbols-outlined text-primary-fixed-dim/40 text-5xl" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</button>
+<!-- Option 2: Guardian Mode (Indigo) -->
+<button class="group relative flex flex-col items-start text-left p-8 bg-surface-container-lowest rounded-[2.5rem] shadow-[0_8px_32px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_48px_rgba(67,85,185,0.1)] transition-all duration-500 border-2 border-transparent hover:border-secondary-fixed/30 outline-none focus:ring-4 focus:ring-secondary-fixed ring-offset-4">
+<div class="mb-8 w-20 h-20 rounded-3xl bg-secondary-fixed/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-secondary text-4xl" data-icon="visibility" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+<h3 class="font-headline text-2xl font-bold text-secondary mb-3 leading-snug">
+                    소중한 사람을 지켜보고 싶어요
+                </h3>
+<p class="font-body text-on-surface-variant text-base mb-10 leading-relaxed">
+                    가족의 안부를 실시간으로 확인하고 알림을 받습니다. 보호자가 필요한 가족을 위한 모드입니다.
+                </p>
+<div class="mt-auto flex items-center gap-2 font-bold text-secondary">
+<span>보호자 모드 시작하기</span>
+<span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<!-- Subtle Icon Accent -->
+<div class="absolute top-6 right-8">
+<span class="material-symbols-outlined text-secondary-fixed-dim/40 text-5xl" data-icon="family_history" style="font-variation-settings: 'FILL' 1;">family_history</span>
+</div>
+</button>
+</div>
+<!-- Floating Hint -->
+<div class="mt-16 flex items-center gap-3 py-3 px-6 bg-surface-container-low rounded-full">
+<span class="material-symbols-outlined text-outline text-sm" data-icon="info">info</span>
+<span class="text-sm font-label text-on-surface-variant">모드에 따라 화면 구성과 알림 설정이 달라집니다.</span>
+</div>
+</main>
+<!-- Visual Decorative Elements (Asymmetric) -->
+<div class="fixed -bottom-20 -left-20 w-80 h-80 bg-primary-fixed/5 rounded-full blur-[80px] pointer-events-none"></div>
+<div class="fixed top-40 -right-20 w-64 h-64 bg-secondary-fixed/5 rounded-full blur-[60px] pointer-events-none"></div>
+<!-- Bottom Navigation Suppressed for Login/Selection flow per rules -->
+</body></html>

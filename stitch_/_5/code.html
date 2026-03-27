@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Lexend:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#93000a",
+              "surface-container-low": "#f3f3f3",
+              "outline-variant": "#bcc9c6",
+              "on-tertiary": "#ffffff",
+              "on-secondary-container": "#11278e",
+              "secondary-fixed-dim": "#bac3ff",
+              "secondary-container": "#8596ff",
+              "on-error": "#ffffff",
+              "surface-dim": "#dadada",
+              "on-primary-container": "#f4fffb",
+              "on-surface-variant": "#3d4947",
+              "on-secondary-fixed-variant": "#293ca0",
+              "on-background": "#1a1c1c",
+              "inverse-surface": "#2f3131",
+              "on-tertiary-fixed-variant": "#00504a",
+              "inverse-primary": "#67d9c9",
+              "tertiary-fixed-dim": "#71d7cd",
+              "background": "#f9f9f9",
+              "on-tertiary-container": "#f3fffc",
+              "tertiary-fixed": "#8ef4e9",
+              "surface-bright": "#f9f9f9",
+              "error": "#ba1a1a",
+              "primary-container": "#008377",
+              "error-container": "#ffdad6",
+              "surface-tint": "#006a60",
+              "primary": "#00685e",
+              "surface": "#f9f9f9",
+              "primary-fixed-dim": "#67d9c9",
+              "on-secondary": "#ffffff",
+              "inverse-on-surface": "#f1f1f1",
+              "outline": "#6d7a77",
+              "primary-fixed": "#85f6e5",
+              "on-primary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "surface-container": "#eeeeee",
+              "tertiary-container": "#00837a",
+              "surface-variant": "#e2e2e2",
+              "surface-container-highest": "#e2e2e2",
+              "surface-container-high": "#e8e8e8",
+              "on-secondary-fixed": "#00105c",
+              "on-primary-fixed": "#00201c",
+              "on-surface": "#1a1c1c",
+              "secondary": "#4355b9",
+              "tertiary": "#006860",
+              "on-tertiary-fixed": "#00201d",
+              "secondary-fixed": "#dee0ff",
+              "on-primary-fixed-variant": "#005048"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Lexend"],
+              "label": ["Lexend"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+          min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex justify-between items-center px-5 py-4 w-full fixed top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center overflow-hidden">
+<img alt="Guardian Profile" class="w-full h-full object-cover" data-alt="Guardian Profile Professional Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPtzQ2f1fmexg5SW06JlNriBnOeyRMGorymPbbncrTNXwQZyOPradP4vGKp9PolwW3unfP36PUZapovSoMy6K4ckzvyLwIBWbbINPfTmCkDE9bPw5NjeY19NbpZDY5PILkc21AmbFFO3YiTbYPRrUgo8z_LqWmm15Jfma6hAH3O9TWRbHHnO_3w5cjzVwfTfZCJpFHCB6TSFZwLd-mYkeI8ezKyScLbR6Hf4Wdzt7HSKogHUMoYmBOPMEp16FsnVyDMfeNEWelYIZR"/>
+</div>
+<h1 class="text-xl font-bold text-indigo-700 dark:text-indigo-400 font-headline">Anbu Guardian</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors">
+<span class="material-symbols-outlined text-indigo-700 dark:text-indigo-400" data-icon="emergency">emergency</span>
+</button>
+</header>
+<main class="mt-20 px-5 space-y-8">
+<!-- Summary Section -->
+<section class="relative overflow-hidden rounded-[2rem] bg-secondary p-8 text-on-secondary shadow-lg">
+<div class="relative z-10">
+<p class="text-secondary-fixed font-medium mb-2 opacity-90">실시간 보호 현황</p>
+<h2 class="text-2xl font-bold font-headline leading-tight">
+                현재 2명의 안부를 확인 중입니다.<br/>모두 안전합니다.
+            </h2>
+</div>
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+<div class="absolute -left-8 -bottom-8 w-32 h-32 bg-secondary-container/30 rounded-full blur-2xl"></div>
+</section>
+<!-- Guardian List -->
+<section class="space-y-4">
+<h3 class="text-lg font-bold font-headline px-1 flex items-center gap-2">
+<span class="w-1.5 h-6 bg-secondary rounded-full"></span>
+            대상자 리스트
+        </h3>
+<div class="flex flex-col gap-5">
+<!-- First Card: Mother -->
+<div class="bg-surface-container-lowest p-6 rounded-[1.5rem] flex flex-col gap-6 border border-transparent hover:border-secondary/20 transition-all shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="w-14 h-14 rounded-2xl bg-[#96f7d2] flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="person">person</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold">어머니</h4>
+<p class="text-xs text-slate-500 font-label">마지막 확인: 방금 전</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5 bg-primary/10 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-primary text-[18px] fill-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-primary font-bold text-sm">정상</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-2xl">
+<div class="flex justify-between items-end">
+<div>
+<span class="text-xs text-slate-500 font-label block mb-1">활동량</span>
+<span class="text-lg font-bold">안정적임</span>
+</div>
+<div class="flex items-end gap-1.5 h-10">
+<div class="w-4 bg-primary/20 rounded-t-sm h-[40%]"></div>
+<div class="w-4 bg-primary/30 rounded-t-sm h-[60%]"></div>
+<div class="w-4 bg-primary rounded-t-sm h-full"></div>
+<div class="w-4 bg-primary/50 rounded-t-sm h-[75%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Second Card: Father -->
+<div class="bg-[#FFF8E1] p-6 rounded-[1.5rem] flex flex-col gap-5 border border-transparent shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="w-14 h-14 rounded-2xl bg-[#FFE0B2] flex items-center justify-center">
+<span class="material-symbols-outlined text-[#E65100] text-3xl" data-icon="person">person</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold">아버지</h4>
+<p class="text-xs text-slate-500 font-label">마지막 확인: 3시간 전</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5 bg-[#FFE0B2] px-3 py-1 rounded-md">
+<span class="material-symbols-outlined text-[#E65100] text-[18px]" data-icon="warning">warning</span>
+<span class="text-[#E65100] font-bold text-sm">주의</span>
+</div>
+</div>
+<div class="bg-white/60 p-5 rounded-2xl border border-white/40">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-[#E65100] shrink-0" data-icon="motion_sensor_active">motion_sensor_active</span>
+<p class="text-[15px] font-medium leading-relaxed text-slate-700">
+                            3시간 동안 움직임이 감지되지 않았습니다. 전화를 걸어 안부를 확인해보세요.
+                        </p>
+</div>
+</div>
+<button class="w-full bg-[#E65100] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-md">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+                    지금 바로 통화하기
+                </button><button class="w-full mt-3 border-2 border-indigo-100 text-indigo-700 py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-all bg-white hover:bg-indigo-50">
+<span class="material-symbols-outlined text-[20px]" data-icon="check_circle">check_circle</span>
+                    안전확인 완료
+                </button>
+</div>
+<!-- Add New Target -->
+<button class="border-2 border-dashed border-outline-variant rounded-[1.5rem] flex items-center justify-center gap-3 text-slate-500 hover:bg-surface-container transition-colors group h-48 flex-col">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</div>
+<span class="font-medium text-sm font-label">새로운 대상자 추가</span>
+</button>
+</div>
+</section>
+<!-- Promotional Banner -->
+<section class="relative overflow-hidden bg-[#00695C] rounded-[2rem] p-8 text-white shadow-lg cursor-pointer transition-transform active:scale-[0.98] group min-h-[180px]">
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div class="space-y-4">
+<p class="text-xs font-black tracking-widest opacity-80 font-headline uppercase">Premium Service</p>
+<h3 class="text-2xl font-bold font-headline leading-tight">
+                    실버 케어 전문가와<br/>실시간 상담하세요
+                </h3>
+</div>
+<p class="text-sm font-medium opacity-90 mt-6">
+                첫 달 무료 체험 이벤트 중
+            </p>
+</div>
+<!-- Decorative Icons -->
+<div class="absolute right-6 top-6 opacity-30 group-hover:opacity-50 transition-opacity">
+<div class="relative w-24 h-20 bg-white/40 rounded-xl flex items-center justify-center">
+<div class="absolute -top-3 w-10 h-6 border-4 border-white/60 rounded-t-lg"></div>
+<span class="material-symbols-outlined text-4xl text-white">add</span>
+</div>
+</div>
+<div class="absolute -right-2 -bottom-2 w-20 h-20 bg-[#004D40] rounded-3xl flex items-center justify-center shadow-xl">
+<span class="material-symbols-outlined text-4xl text-white">add</span>
+</div>
+<!-- Background Gradients for depth -->
+<div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent"></div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-t-[2rem] shadow-[0px_-12px_32px_rgba(0,0,0,0.04)] z-50">
+<a class="flex flex-col items-center justify-center bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-100 rounded-2xl px-6 py-2 transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[12px] font-medium font-label mt-1">홈</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-6 py-2 hover:text-indigo-600 dark:hover:text-indigo-300 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+<span class="text-[12px] font-medium font-label mt-1">연결</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-6 py-2 hover:text-indigo-600 dark:hover:text-indigo-300 transition-all relative" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="text-[12px] font-medium font-label mt-1">알림</span>
+<span class="absolute top-2 right-6 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-6 py-2 hover:text-indigo-600 dark:hover:text-indigo-300 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[12px] font-medium font-label mt-1">설정</span>
+</a>
+</nav>
+</body></html>

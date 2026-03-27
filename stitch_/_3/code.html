@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#293ca0",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#00105c",
+              "on-error": "#ffffff",
+              "secondary-container": "#8596ff",
+              "surface-variant": "#e2e2e2",
+              "on-tertiary-fixed-variant": "#00504a",
+              "on-primary-fixed-variant": "#005048",
+              "on-primary-container": "#f4fffb",
+              "surface-container-low": "#f3f3f3",
+              "error": "#ba1a1a",
+              "tertiary-fixed-dim": "#71d7cd",
+              "inverse-on-surface": "#f1f1f1",
+              "on-surface-variant": "#3d4947",
+              "on-primary": "#ffffff",
+              "surface": "#f9f9f9",
+              "secondary-fixed": "#dee0ff",
+              "tertiary-container": "#00837a",
+              "surface-bright": "#f9f9f9",
+              "on-primary-fixed": "#00201c",
+              "surface-tint": "#006a60",
+              "on-error-container": "#93000a",
+              "primary-fixed-dim": "#67d9c9",
+              "primary-fixed": "#85f6e5",
+              "on-tertiary-fixed": "#00201d",
+              "secondary-fixed-dim": "#bac3ff",
+              "surface-container-highest": "#e2e2e2",
+              "on-secondary-container": "#11278e",
+              "secondary": "#4355b9",
+              "on-secondary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-surface": "#1a1c1c",
+              "tertiary-fixed": "#8ef4e9",
+              "background": "#f9f9f9",
+              "tertiary": "#006860",
+              "on-tertiary": "#ffffff",
+              "primary": "#00685e",
+              "outline": "#6d7a77",
+              "inverse-surface": "#2f3131",
+              "surface-dim": "#dadada",
+              "primary-container": "#008377",
+              "outline-variant": "#bcc9c6",
+              "surface-container-high": "#e8e8e8",
+              "surface-container": "#eeeeee",
+              "on-background": "#1a1c1c",
+              "on-tertiary-container": "#f3fffc",
+              "inverse-primary": "#67d9c9"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Lexend"],
+              "label": ["Lexend"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Lexend', sans-serif; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-lg mx-auto">
+<div class="flex items-center gap-4">
+<button class="text-indigo-600 dark:text-indigo-400 active:scale-95 transition-transform duration-200" style="">
+<span class="material-symbols-outlined" data-icon="arrow_back" style="">arrow_back</span>
+</button>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg tracking-tight text-on-surface" style="">설정</h1>
+</div>
+<div class="text-indigo-700 dark:text-indigo-300 font-extrabold tracking-tighter" style="">Guardian</div>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-lg mx-auto space-y-8">
+<!-- Profile & OS Info Section -->
+<section class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full bg-secondary-fixed flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Guardian user profile avatar placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeQt_ymp9umXcDbVKSlQppzq2Q20aW5VRisjnUkpLuKp1_UIdxL8zgUiLGtQPVURkBk3JqCWZIOyNY9vhxElOhv2_tI2IxOpqbAl6ZYJjij_g23kIolfpPfFdEaQKJyaJwmPyWIYxWaxtOygyr6XEu3O-CHNrhDacyIdpMsDH-2HQt4UVx8D5YEnuAKoBkJFmsP_szqBQMqR9incBaMd-SZilq37-Dre2o3RHK30lbfXMSGELrBB0YfMfo59r8K0GBuqZTPhNwFOOd" style=""/>
+</div>
+<div>
+<h2 class="text-xl font-bold text-on-surface tracking-tight" style="">안부 수호자</h2>
+<p class="text-sm text-on-surface-variant font-medium" style="">iOS 17.2</p>
+</div>
+</div>
+</section>
+<!-- Connectivity Section -->
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container-low rounded-[2rem] p-6">
+<a class="block active:scale-[0.98] transition-transform" href="{{DATA:SCREEN:SCREEN_42}}">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="supervisor_account" style="">supervisor_account</span>
+<h3 class="font-bold text-on-surface" style="">연결 관리</h3>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-2xl flex items-center justify-between">
+<span class="text-on-surface font-medium" style="">관리 대상자 수</span>
+<span class="text-secondary font-bold text-lg" style="">2 / 5명</span>
+</div>
+</a>
+</div>
+</div>
+<!-- Subscription Section -->
+<section class="space-y-4">
+<h3 class="px-2 text-sm font-bold uppercase tracking-widest text-secondary/60" style="">구독 및 서비스</h3>
+<div class="bg-secondary text-on-secondary rounded-[2rem] p-6 shadow-lg shadow-secondary/20 relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="verified" style="">verified</span>
+<span class="text-xs font-bold uppercase tracking-wider opacity-80" style="">현재 멤버십</span>
+</div>
+<h4 class="text-2xl font-extrabold mb-6" style="">프리미엄 구독 중</h4>
+<div class="flex gap-3">
+<button class="flex-1 bg-white text-secondary font-bold py-3 px-4 rounded-xl text-sm active:scale-95 transition-all" style="">
+                        구독 취소</button>
+<button class="flex-1 bg-secondary-container/30 text-white font-bold py-3 px-4 rounded-xl text-sm active:scale-95 transition-all border border-white/10" style="">
+                        구독 관리</button>
+</div>
+</div>
+<!-- Abstract Graphic -->
+<div class="absolute -right-4 -top-4 w-32 h-32 bg-secondary-fixed/10 rounded-full blur-3xl"></div>
+</div>
+</section>
+<!-- Notification Settings Section -->
+<section class="space-y-4">
+<div class="bg-surface-container-low rounded-[2rem] p-6 space-y-4">
+<button class="w-full flex items-center justify-between p-4 bg-surface-container-lowest rounded-2xl active:scale-98 transition-all" style="">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="notifications" style="">notifications</span>
+<span class="font-bold text-on-surface" style="">알림 설정</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right" style="">chevron_right</span>
+</button>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-2xl">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="emergency_share" style="">emergency_share</span>
+<div>
+<p class="font-bold text-on-surface text-sm" style="">의심 시 안부 확인 알림</p>
+<p class="text-[10px] text-on-surface-variant" style="">비정상 패턴 감지 시 즉시 알림</p>
+</div>
+</div>
+<!-- Custom Toggle -->
+<div class="w-12 h-6 bg-surface-container-highest rounded-full relative p-1 cursor-pointer">
+<div class="w-4 h-4 bg-white rounded-full shadow-sm transition-all transform translate-x-0"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- App Info Section -->
+<section class="space-y-4">
+<div class="bg-surface-container-low rounded-[2rem] p-6">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary" data-icon="info" style="">info</span>
+<h3 class="font-bold text-on-surface" style="">앱 정보</h3>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm px-2">
+<span class="text-on-surface-variant" style="">현재 버전</span>
+<span class="font-bold text-on-surface" style="">v1.0.4</span>
+</div>
+<hr class="border-surface-container-highest"/>
+<div class="flex justify-between items-center text-sm px-2 py-2">
+<span class="text-on-surface-variant" style="">서비스 약관</span>
+<span class="material-symbols-outlined text-outline text-lg" data-icon="open_in_new" style="">open_in_new</span>
+</div>
+</div>
+</div>
+</section>
+<footer class="py-8 text-center">
+<p class="text-[11px] text-outline tracking-widest font-medium" style="">ANBU GUARD NETWORK</p>
+<p class="text-[10px] text-outline/50 mt-1" style="">© 2024 Guardian Tech Inc.</p>
+</footer>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg rounded-t-[1.5rem] border-t border-slate-100 dark:border-slate-800 shadow-[0px_-4px_20px_rgba(0,0,0,0.04)]">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform duration-200" href="#" style="">
+<span class="material-symbols-outlined" data-icon="home" style="">home</span>
+<span class="font-['Lexend'] text-xs font-medium tracking-wide" style="">홈</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform duration-200" href="#" style="">
+<span class="material-symbols-outlined" data-icon="link" style="">link</span>
+<span class="font-['Lexend'] text-xs font-medium tracking-wide" style="">연결</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform duration-200" href="#" style="">
+<span class="material-symbols-outlined" data-icon="notifications" style="">notifications</span>
+<span class="font-['Lexend'] text-xs font-medium tracking-wide" style="">알림</span>
+</a>
+<a aria-current="page" class="flex flex-col items-center justify-center bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-200 rounded-2xl px-5 py-2 active:scale-90 transition-transform duration-200" href="#" id="settings-nav-item" style="">
+<span class="material-symbols-outlined" data-icon="settings" style='font-variation-settings: "FILL" 1;'>settings</span>
+<span class="font-['Lexend'] text-xs font-medium tracking-wide" style="">설정</span>
+</a>
+</nav>
+</body></html>

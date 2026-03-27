@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Lexend:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, .headline-font {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .tonal-transition {
+            background: linear-gradient(180deg, rgba(249, 249, 249, 0) 0%, rgba(243, 243, 243, 1) 100%);
+        }
+        .glass-header {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .custom-toggle:checked + .toggle-bg {
+            background-color: #4355b9;
+        }
+        .custom-toggle:checked + .toggle-bg .toggle-dot {
+            transform: translateX(1.5rem);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary": "#4355b9",
+                        "on-tertiary-fixed-variant": "#00504a",
+                        "surface": "#f9f9f9",
+                        "primary-fixed-dim": "#67d9c9",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dadada",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#006860",
+                        "on-secondary-fixed": "#00105c",
+                        "tertiary-fixed": "#8ef4e9",
+                        "on-primary-container": "#f4fffb",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-container": "#f3fffc",
+                        "primary-fixed": "#85f6e5",
+                        "secondary-container": "#8596ff",
+                        "on-error-container": "#93000a",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#71d7cd",
+                        "surface-container-low": "#f3f3f3",
+                        "surface-bright": "#f9f9f9",
+                        "surface-container-high": "#e8e8e8",
+                        "outline-variant": "#bcc9c6",
+                        "background": "#f9f9f9",
+                        "surface-variant": "#e2e2e2",
+                        "primary-container": "#008377",
+                        "inverse-surface": "#2f3131",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#6d7a77",
+                        "secondary-fixed": "#dee0ff",
+                        "on-secondary-container": "#11278e",
+                        "tertiary-container": "#00837a",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary-fixed": "#00201d",
+                        "inverse-primary": "#67d9c9",
+                        "on-surface": "#1a1c1c",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-secondary-fixed-variant": "#293ca0",
+                        "surface-tint": "#006a60",
+                        "on-primary-fixed": "#00201c",
+                        "surface-container": "#eeeeee",
+                        "primary": "#00685e",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#bac3ff",
+                        "on-surface-variant": "#3d4947",
+                        "on-primary-fixed-variant": "#005048"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Lexend"],
+                        "label": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full flex items-center px-5 h-16 bg-surface/80 backdrop-blur-md z-50 tonal-transition">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200/50 transition-colors active:scale-95 duration-150 ease-in-out">
+<span class="material-symbols-outlined text-indigo-700" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="ml-2 text-xl font-bold text-indigo-900 headline-font">알림 설정</h1>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 mt-16 pb-32 px-5 max-w-2xl mx-auto w-full">
+<!-- Section 1: 푸시 알림 -->
+<section class="mt-8 mb-10">
+<h2 class="text-xs font-bold text-secondary uppercase tracking-widest mb-4 px-1 headline-font">푸시 알림</h2>
+<div class="bg-surface-container-lowest rounded-xl p-6 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+<div>
+<h3 class="text-lg font-semibold text-on-surface headline-font">전체 알림 받기</h3>
+<p class="text-sm text-on-surface-variant mt-1">모든 서비스 알림을 일괄 활성화합니다.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest rounded-full peer toggle-bg transition-all duration-300">
+<div class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-all duration-300 toggle-dot"></div>
+</div>
+</label>
+</div>
+</section>
+<!-- Section 2: 등급별 알림 설정 -->
+<section class="mb-10">
+<h2 class="text-xs font-bold text-secondary uppercase tracking-widest mb-4 px-1 headline-font">등급별 알림 설정</h2>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+<!-- Urgent -->
+<div class="p-6 flex items-center justify-between">
+<div class="flex items-start gap-4">
+<div class="mt-1 w-10 h-10 rounded-xl bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined" data-icon="emergency" style="font-variation-settings: 'FILL' 1;">emergency</span>
+</div>
+<div>
+<h3 class="text-base font-semibold text-on-surface headline-font">긴급 알림</h3>
+<p class="text-sm text-on-surface-variant">심각한 위험 감지 시 즉시 알림</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest rounded-full peer toggle-bg transition-all duration-300">
+<div class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-all duration-300 toggle-dot"></div>
+</div>
+</label>
+</div>
+<div class="h-px mx-6 bg-surface-container"></div>
+<!-- Warning -->
+<div class="p-6 flex items-center justify-between">
+<div class="flex items-start gap-4">
+<div class="mt-1 w-10 h-10 rounded-xl bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<h3 class="text-base font-semibold text-on-surface headline-font">경고 알림</h3>
+<p class="text-sm text-on-surface-variant">비정상 활동 감지 시 알림</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest rounded-full peer toggle-bg transition-all duration-300">
+<div class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-all duration-300 toggle-dot"></div>
+</div>
+</label>
+</div>
+<div class="h-px mx-6 bg-surface-container"></div>
+<!-- Caution -->
+<div class="p-6 flex items-center justify-between">
+<div class="flex items-start gap-4">
+<div class="mt-1 w-10 h-10 rounded-xl bg-tertiary-container/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="info" style="font-variation-settings: 'FILL' 1;">info</span>
+</div>
+<div>
+<h3 class="text-base font-semibold text-on-surface headline-font">주의 알림</h3>
+<p class="text-sm text-on-surface-variant">배터리 부족 및 미확인 상태 알림</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest rounded-full peer toggle-bg transition-all duration-300">
+<div class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-all duration-300 toggle-dot"></div>
+</div>
+</label>
+</div>
+<div class="h-px mx-6 bg-surface-container"></div>
+<!-- Info -->
+<div class="p-6 flex items-center justify-between">
+<div class="flex items-start gap-4">
+<div class="mt-1 w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications_active" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+</div>
+<div>
+<h3 class="text-base font-semibold text-on-surface headline-font">정보 알림</h3>
+<p class="text-sm text-on-surface-variant">활동 재개 및 정상 복귀 알림</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest rounded-full peer toggle-bg transition-all duration-300">
+<div class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-all duration-300 toggle-dot"></div>
+</div>
+</label>
+</div>
+</div>
+</section>
+<!-- Section 3: 고급 설정 -->
+<section class="mb-10">
+<h2 class="text-xs font-bold text-secondary uppercase tracking-widest mb-4 px-1 headline-font">고급 설정</h2>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+<button class="w-full p-6 flex items-center justify-between hover:bg-surface-container-low transition-colors text-left">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="do_not_disturb_on">do_not_disturb_on</span>
+<h3 class="text-base font-semibold text-on-surface headline-font">방해금지 모드</h3>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</button>
+<div class="h-px mx-6 bg-surface-container"></div>
+<button class="w-full p-6 flex items-center justify-between hover:bg-surface-container-low transition-colors text-left">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="volume_up">volume_up</span>
+<div>
+<h3 class="text-base font-semibold text-on-surface headline-font">알림 소리 및 진동</h3>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium text-secondary">기본음</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 backdrop-blur-md rounded-t-3xl shadow-[0_-12px_32px_rgba(0,0,0,0.06)]">
+<a class="flex flex-col items-center justify-center text-slate-400 px-6 py-2 hover:text-indigo-500 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-[10px] font-medium font-body">홈</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 px-6 py-2 hover:text-indigo-500 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="link">link</span>
+<span class="text-[10px] font-medium font-body">연결</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 px-6 py-2 hover:text-indigo-500 transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="notifications">notifications</span>
+<span class="text-[10px] font-medium font-body">알림</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-indigo-50 text-indigo-700 rounded-2xl px-6 py-2 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-[10px] font-bold font-body">설정</span>
+</a>
+</nav>
+</body></html>

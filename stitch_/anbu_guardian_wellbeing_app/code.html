@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>안부 (Anbu) - Splash Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Lexend:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "on-secondary-fixed": "#00105c",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#293ca0",
+              "on-primary-fixed-variant": "#005048",
+              "on-tertiary-fixed-variant": "#00504a",
+              "surface-variant": "#e2e2e2",
+              "secondary-container": "#8596ff",
+              "surface-container-low": "#f3f3f3",
+              "error": "#ba1a1a",
+              "on-primary-container": "#f4fffb",
+              "on-primary-fixed": "#00201c",
+              "tertiary-container": "#00837a",
+              "surface-bright": "#f9f9f9",
+              "secondary-fixed": "#dee0ff",
+              "surface": "#f9f9f9",
+              "on-surface-variant": "#3d4947",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#71d7cd",
+              "inverse-on-surface": "#f1f1f1",
+              "on-tertiary-fixed": "#00201d",
+              "primary-fixed": "#85f6e5",
+              "primary-fixed-dim": "#67d9c9",
+              "on-error-container": "#93000a",
+              "surface-tint": "#006a60",
+              "tertiary-fixed": "#8ef4e9",
+              "background": "#f9f9f9",
+              "surface-container-lowest": "#ffffff",
+              "on-surface": "#1a1c1c",
+              "on-secondary": "#ffffff",
+              "secondary": "#4355b9",
+              "on-secondary-container": "#11278e",
+              "surface-container-highest": "#e2e2e2",
+              "secondary-fixed-dim": "#bac3ff",
+              "surface-dim": "#dadada",
+              "inverse-surface": "#2f3131",
+              "primary": "#00685e",
+              "outline": "#6d7a77",
+              "tertiary": "#006860",
+              "on-tertiary": "#ffffff",
+              "inverse-primary": "#67d9c9",
+              "on-tertiary-container": "#f3fffc",
+              "surface-container": "#eeeeee",
+              "on-background": "#1a1c1c",
+              "surface-container-high": "#e8e8e8",
+              "outline-variant": "#bcc9c6",
+              "primary-container": "#008377"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Lexend"],
+              "label": ["Lexend"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      @keyframes heartbeat {
+        0% { transform: scale(1); }
+        15% { transform: scale(1.15); }
+        30% { transform: scale(1); }
+        45% { transform: scale(1.25); }
+        70% { transform: scale(1); }
+      }
+      .animate-heartbeat {
+        animation: heartbeat 2s ease-in-out infinite;
+      }
+      .pulse-ring {
+        position: absolute;
+        border-radius: 50%;
+        background-color: #85f6e5;
+        opacity: 0.2;
+        width: 100%;
+        height: 100%;
+        animation: pulse-ring 3s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+      }
+      @keyframes pulse-ring {
+        0% { transform: scale(0.8); opacity: 0.5; }
+        100% { transform: scale(2.5); opacity: 0; }
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-white font-body text-on-surface antialiased">
+<!-- Splash Screen Container -->
+<main class="relative flex h-screen w-full flex-col items-center justify-between overflow-hidden bg-white px-8 pb-16 pt-24">
+<!-- Background Soft Decor (Optional Tonal Layering) -->
+<div class="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary-fixed/10 blur-3xl"></div>
+<div class="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
+<!-- Central Identity Area -->
+<div class="relative flex flex-1 flex-col items-center justify-center">
+<!-- Animated Icon Group -->
+<div class="relative mb-12 flex h-32 w-32 items-center justify-center">
+<!-- Outer Pulse Rings -->
+<div class="pulse-ring" style="animation-delay: 0s;"></div>
+<div class="pulse-ring" style="animation-delay: 1s;"></div>
+<!-- Main Icon Container -->
+<div class="z-10 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary shadow-[0_8px_30px_rgb(0,104,94,0.15)] animate-heartbeat">
+<span class="material-symbols-outlined text-4xl text-on-primary" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<!-- Brand Typography -->
+<div class="text-center">
+<h1 class="font-headline text-4xl font-black tracking-tight text-primary mb-3">
+                    안부 (Anbu)
+                </h1>
+<p class="font-body text-lg font-medium text-outline">
+                    당신의 안부를 확인합니다. (Checking your wellbeing.)
+                </p>
+</div>
+</div>
+<!-- Footer Service Info -->
+<div class="flex flex-col items-center gap-4">
+<!-- Tonal Indicator/Divider (No-line rule applied) -->
+<div class="h-1 w-12 rounded-full bg-surface-container-highest"></div>
+<p class="font-label text-sm tracking-widest text-outline-variant uppercase">
+                자동 안부 확인 서비스
+            </p>
+<!-- Subtle Loading Indicator -->
+<div class="flex gap-1.5">
+<div class="h-1.5 w-1.5 rounded-full bg-primary/40"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-primary/20"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-primary/10"></div>
+</div>
+</div>
+</main>
+<!-- Semantic Shell Suppression Logic: No NavBar or TopBar on Splash Screens as per rules -->
+</body></html>
