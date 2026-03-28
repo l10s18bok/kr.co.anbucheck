@@ -99,7 +99,7 @@ class NotificationLocalDatasource {
       },
       {
         'title': '정보',
-        'body': '생존확인이 정상 복귀되었습니다.',
+        'body': '안부 확인이 정상 복귀되었습니다.',
         'alert_level': 'info',
         'invite_code': 'K7M-4PXR',
         'received_at':

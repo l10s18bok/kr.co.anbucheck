@@ -43,4 +43,16 @@ class SubjectRemoteDatasource {
       throw Exception('대상자 연결 해제 실패 (${result.statusCode})');
     }
   }
+
+  /// PUT /api/v1/alerts/clear-all — 특정 대상자의 활성 경고 전부 해제
+  Future<void> clearAllAlerts(String deviceToken, int subjectUserId) async {
+    final result = await ApiClientFactory.instance.put<dynamic>(
+      ApiEndpoints.alertsClearAll,
+      {'subject_user_id': subjectUserId},
+      headers: _auth(deviceToken),
+    );
+    if (!result.isOk) {
+      throw Exception('경고 클리어 실패 (${result.statusCode})');
+    }
+  }
 }

@@ -24,7 +24,10 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
           onPressed: () {},
         ),
-        title: Text('안부 (Anbu)', style: AppTextTheme.headlineSmall()),
+        title: Obx(() => Text(
+              controller.userId > 0 ? '안부 (${controller.userId})' : '안부',
+              style: AppTextTheme.headlineSmall(),
+            )),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16.w),

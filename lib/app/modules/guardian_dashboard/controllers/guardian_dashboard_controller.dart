@@ -85,20 +85,15 @@ class GuardianDashboardController extends BaseController {
         });
   }
 
-  /// 안전확인 완료 처리 — 서버 경고 클리어는 추후 구현
-  void confirmSafety(String inviteCode) {
+  /// 안전확인 완료 처리 — 서버 경고 클리어 후 로컬 상태 갱신
+  Future<void> confirmSafety(String inviteCode) async {
     clearHighlight();
-    final index = subjects.indexWhere((s) => s.inviteCode == inviteCode);
-    if (index == -1) return;
-    final s = subjects[index];
-    subjects[index] = SubjectStatus(
-      guardianId: s.guardianId,
-      inviteCode: s.inviteCode,
-      alias: s.alias,
-      alertLevel: 'normal',
-      lastCheck: '마지막 확인: 방금 전',
-      daysInactive: 0,
-    );
+    try {
+      await _svc.clearAlerts(inviteCode);
+    } catch (_) {
+      Get.snackbar('오류', '경고 해제에 실패했습니다.',
+          snackPosition: SnackPosition.BOTTOM);
+    }
   }
 
   /// 새로고침

@@ -29,7 +29,7 @@ class HeartbeatService {
     final timestamp   = DateTime.now().toUtc().toIso8601String();
     final batteryLevel = await _getBatteryLevel();
     final sensor      = await _collectSensor();
-    // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 생존 증거 → suspicious 강제 false
+    // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false
     final suspicious  = manual ? false : await _calcSuspicious(sensor);
 
     // 센서 스냅샷 저장 (다음 주기 비교용)

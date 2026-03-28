@@ -19,12 +19,12 @@ class ApiEndpoints {
   static const String users = '/api/v1/users';
 
   // ────────────────────────────────────────────────
-  // [대상자 전용] 생존확인 Heartbeat
+  // [대상자 전용] 안부 확인 Heartbeat
   // ────────────────────────────────────────────────
 
   /// POST /api/v1/heartbeat
   /// - 대상자 앱이 서버의 FCM Silent Push(heartbeat_trigger)를 수신했을 때 호출
-  /// - 센서 스냅샷(배터리, 화면 잠금 여부 등)을 포함하여 생존 신호를 전송
+  /// - 센서 스냅샷(배터리, 화면 잠금 여부 등)을 포함하여 안부 신호를 전송
   /// - 서버는 수신 시각을 기록하고 경고 등급을 정상으로 리셋
   /// ※ 보호자 앱에서는 절대 호출하지 않음
   static const String heartbeat = '/api/v1/heartbeat';

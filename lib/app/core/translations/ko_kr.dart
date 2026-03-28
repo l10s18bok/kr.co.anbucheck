@@ -23,7 +23,7 @@ abstract class KoKr {
     'mode_select_title': '안부에 오신 것을\n환영합니다',
     'mode_select_subtitle': '어떤 모드로 사용하시겠어요?',
     'mode_subject': '나의 안전을\n확인받고 싶어요',
-    'mode_subject_desc': '매일 자동으로 생존 확인이\n전송됩니다',
+    'mode_subject_desc': '매일 자동으로 안부 확인이\n전송됩니다',
     'mode_guardian': '소중한 사람을\n지켜보고 싶어요',
     'mode_guardian_desc': '대상자의 안전 상태를\n실시간으로 확인합니다',
     'mode_select_notice': '모드는 나중에 변경할 수 없습니다',
@@ -31,14 +31,14 @@ abstract class KoKr {
     // 권한 요청
     'permission_title': '앱 사용을 위해\n권한이 필요합니다',
     'permission_notification': '알림 권한',
-    'permission_notification_desc': '생존확인 결과와 긴급 알림을\n받기 위해 필요합니다',
+    'permission_notification_desc': '안부 확인 결과와 긴급 알림을\n받기 위해 필요합니다',
     'permission_battery': '배터리 최적화 제외',
     'permission_battery_desc': '백그라운드에서 안정적으로\nheartbeat를 전송하기 위해 필요합니다',
     'permission_allow': '권한 허용하기',
 
     // 대상자 온보딩
     'onboarding_title_1': '매일 자동으로\n안부를 전합니다',
-    'onboarding_desc_1': '매일 정해진 시각에 자동으로\n생존 확인 신호를 보냅니다.\n별도 조작이 필요 없어요.',
+    'onboarding_desc_1': '매일 정해진 시각에 자동으로\n안부 확인 신호를 보냅니다.\n별도 조작이 필요 없어요.',
     'onboarding_title_2': '보호자에게\n안심을 전달합니다',
     'onboarding_desc_2': '신호가 정상 수신되면\n보호자는 안심할 수 있습니다.\n이상 감지 시 보호자에게 알립니다.',
     'onboarding_title_3': '개인정보는\n수집하지 않습니다',

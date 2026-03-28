@@ -18,6 +18,9 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   final _inviteCode = ''.obs;
   String get inviteCode => _inviteCode.value;
 
+  final _userId = 0.obs;
+  int get userId => _userId.value;
+
   final _notificationGranted = false.obs;
   bool get notificationGranted => _notificationGranted.value;
 
@@ -131,6 +134,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
   Future<void> _loadStatus() async {
     _inviteCode.value = await _tokenDs.getInviteCode() ?? '';
+    _userId.value = await _tokenDs.getUserId() ?? 0;
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
 

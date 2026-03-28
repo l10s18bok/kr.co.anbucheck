@@ -86,6 +86,21 @@ class GuardianSubjectService extends GetxService {
         subjects[idx].copyWith(heartbeatHour: hour, heartbeatMinute: minute);
   }
 
+  /// 특정 대상자 경고 해제 — 서버 API 호출 후 로컬 캐시 갱신
+  Future<void> clearAlerts(String inviteCode) async {
+    final idx = subjects.indexWhere((s) => s.inviteCode == inviteCode);
+    if (idx == -1) return;
+
+    final deviceToken = await _tokenDs.getDeviceToken();
+    if (deviceToken == null) return;
+
+    await _subjectDs.clearAllAlerts(deviceToken, subjects[idx].userId);
+
+    // 로컬 캐시 즉시 반영 → ever() 콜백 자동 실행
+    subjects[idx] = subjects[idx].copyWith(status: 'normal');
+    subjects.refresh();
+  }
+
   /// 특정 대상자 제거
   void removeByGuardianId(int guardianId) {
     subjects.removeWhere((s) => s.guardianId == guardianId);

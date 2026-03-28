@@ -57,21 +57,36 @@ class OnboardingController extends BaseController {
         platform: platform,
       );
 
-      // 공통 저장
-      await _tokenDs.saveDeviceToken(response['device_token'] as String);
-      await _tokenDs.saveUserId(response['user_id'] as int);
-      await _tokenDs.saveUserRole(mode);
-
-      // 대상자 전용: invite_code 저장
-      if (mode == 'subject' && response['invite_code'] != null) {
-        await _tokenDs.saveInviteCode(response['invite_code'] as String);
+      // 기존 기기에 다른 role로 가입 시도 시 다이얼로그
+      final existingRole = response['existing_role'] as String?;
+      if (existingRole != null) {
+        isLoading = false;
+        final roleLabel = existingRole == 'subject' ? '대상자' : '보호자';
+        final confirmed = await Get.dialog<bool>(
+          AlertDialog(
+            title: const Text('이미 등록된 기기'),
+            content: Text(
+              '이 기기는 이미 $roleLabel 모드로 등록되어 있습니다.\n$roleLabel 모드로 계속하시겠습니까?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(result: false),
+                child: const Text('취소'),
+              ),
+              TextButton(
+                onPressed: () => Get.back(result: true),
+                child: Text('$roleLabel 모드로 계속'),
+              ),
+            ],
+          ),
+        );
+        if (confirmed != true) return;
+        // 서버의 기존 role로 진행
+        await _saveAndNavigate(response, existingRole);
+        return;
       }
 
-      if (mode == 'subject') {
-        Get.offNamed(AppRoutes.subjectHome);
-      } else {
-        Get.offNamed(AppRoutes.guardianDashboard);
-      }
+      await _saveAndNavigate(response, mode);
     } catch (e) {
       Get.snackbar(
         '등록 실패',
@@ -80,6 +95,22 @@ class OnboardingController extends BaseController {
       );
     } finally {
       isLoading = false;
+    }
+  }
+
+  Future<void> _saveAndNavigate(Map<String, dynamic> response, String role) async {
+    await _tokenDs.saveDeviceToken(response['device_token'] as String);
+    await _tokenDs.saveUserId(response['user_id'] as int);
+    await _tokenDs.saveUserRole(role);
+
+    if (role == 'subject' && response['invite_code'] != null) {
+      await _tokenDs.saveInviteCode(response['invite_code'] as String);
+    }
+
+    if (role == 'subject') {
+      Get.offNamed(AppRoutes.subjectHome);
+    } else {
+      Get.offNamed(AppRoutes.guardianDashboard);
     }
   }
 
