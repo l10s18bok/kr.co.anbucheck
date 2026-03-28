@@ -35,7 +35,12 @@ class PermissionController extends BaseController {
       }
     }
 
-    // 2. 대상자 모드 + Android: 배터리 최적화 제외 요청
+    // 2. 대상자 모드 + Android: 활동 인식 권한 요청 (걸음수 감지)
+    if (isSubjectMode && Platform.isAndroid) {
+      await Permission.activityRecognition.request();
+    }
+
+    // 3. 대상자 모드 + Android: 배터리 최적화 제외 요청
     if (isSubjectMode && Platform.isAndroid) {
       await Permission.ignoreBatteryOptimizations.request();
     }

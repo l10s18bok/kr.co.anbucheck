@@ -6,17 +6,13 @@ class HeartbeatRequest {
   /// 수동 보고 여부 — 대상자가 직접 버튼을 눌러 전송한 경우 true
   final bool manual;
 
-  /// 센서값 — 이전 스냅샷과 비교 후 채움
-  final double? accelX;
-  final double? accelY;
-  final double? accelZ;
-  final double? gyroX;
-  final double? gyroY;
-  final double? gyroZ;
+  /// 이전 heartbeat 이후 걸음수 증가량
+  /// 권한 거부 또는 조회 실패 시 null
+  final int? stepsDelta;
 
-  /// 이전 센서값 대비 변화 없음 여부
-  /// true  = 폰 미사용 의심
-  /// false = 폰 사용 확인
+  /// 활동 지표 기반 의심 여부
+  /// true  = 활동 감지 안 됨 (걸음수 0 + 가속도/자이로 변화 없음)
+  /// false = 활동 확인됨
   final bool suspicious;
 
   /// 배터리 잔량 (0~100), 조회 실패 시 null
@@ -26,12 +22,7 @@ class HeartbeatRequest {
     required this.deviceId,
     required this.timestamp,
     this.manual = false,
-    this.accelX,
-    this.accelY,
-    this.accelZ,
-    this.gyroX,
-    this.gyroY,
-    this.gyroZ,
+    this.stepsDelta,
     required this.suspicious,
     this.batteryLevel,
   });
@@ -40,12 +31,7 @@ class HeartbeatRequest {
         'device_id': deviceId,
         'timestamp': timestamp,
         if (manual) 'manual': true,
-        if (accelX != null) 'accel_x': accelX,
-        if (accelY != null) 'accel_y': accelY,
-        if (accelZ != null) 'accel_z': accelZ,
-        if (gyroX != null) 'gyro_x': gyroX,
-        if (gyroY != null) 'gyro_y': gyroY,
-        if (gyroZ != null) 'gyro_z': gyroZ,
+        if (stepsDelta != null) 'steps_delta': stepsDelta,
         'suspicious': suspicious,
         if (batteryLevel != null) 'battery_level': batteryLevel,
       };

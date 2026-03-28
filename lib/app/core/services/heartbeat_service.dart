@@ -1,13 +1,15 @@
 import 'dart:math';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/heartbeat_remote_datasource.dart';
 import 'package:anbucheck/app/data/models/heartbeat_request.dart';
-/// 센서 변화 임계값 (플로우차트 기준)
+
+/// 센서 변화 임계값 (가속도/자이로 — 걸음수 0일 때만 사용)
 const _accelThreshold = 5.0;  // m/s²
 const _gyroThreshold  = 0.3;  // rad/s
 
@@ -26,35 +28,41 @@ class HeartbeatService {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceId == null || deviceToken == null) return;
 
-    final timestamp   = DateTime.now().toUtc().toIso8601String();
+    final timestamp    = DateTime.now().toUtc().toIso8601String();
     final batteryLevel = await _getBatteryLevel();
-    final sensor      = await _collectSensor();
-    // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false
-    final suspicious  = manual ? false : await _calcSuspicious(sensor);
 
-    // 센서 스냅샷 저장 (다음 주기 비교용)
-    if (sensor != null) {
-      await _sensorDs.saveSnapshot(
-        accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
-        gyroX:  sensor.gyroX,  gyroY:  sensor.gyroY,  gyroZ:  sensor.gyroZ,
-      );
+    // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false
+    int? stepsDelta;
+    bool suspicious = false;
+    if (!manual) {
+      stepsDelta = await _getStepsDelta();
+      if (stepsDelta != null && stepsDelta > 0) {
+        // 걸음수 변화 있음 → 즉시 정상 판정
+        suspicious = false;
+      } else {
+        // 걸음수 변화 없거나 권한 거부 → 가속도/자이로로 보완 판정
+        final sensor = await _collectSensor();
+        suspicious = await _calcSuspicious(sensor);
+        if (sensor != null) {
+          await _sensorDs.saveSnapshot(
+            accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
+            gyroX:  sensor.gyroX,  gyroY:  sensor.gyroY,  gyroZ:  sensor.gyroZ,
+          );
+        }
+      }
+      // 현재 걸음수 저장 (다음 주기 비교용)
+      await _saveCurrentSteps();
     }
 
     final request = HeartbeatRequest(
       deviceId:     deviceId,
       timestamp:    timestamp,
       manual:       manual,
-      accelX:       sensor?.accelX,
-      accelY:       sensor?.accelY,
-      accelZ:       sensor?.accelZ,
-      gyroX:        sensor?.gyroX,
-      gyroY:        sensor?.gyroY,
-      gyroZ:        sensor?.gyroZ,
+      stepsDelta:   stepsDelta,
       suspicious:   suspicious,
       batteryLevel: batteryLevel,
     );
 
-    // 네트워크 연결 여부 확인
     final results = await _connectivity.checkConnectivity();
     final isOnline = results.any((r) => r != ConnectivityResult.none);
 
@@ -75,7 +83,7 @@ class HeartbeatService {
         );
         await _heartbeatDs.dequeue(item.id);
       } catch (_) {
-        break; // 실패 시 중단, 다음 기회에 재시도
+        break;
       }
     }
   }
@@ -85,7 +93,6 @@ class HeartbeatService {
   Future<void> _sendOrQueue(HeartbeatRequest request, String deviceToken) async {
     try {
       await HeartbeatRemoteDatasource(deviceToken).send(request);
-      // 전송 성공 시 날짜 + 시각 로컬 저장 (홈 화면 상태 표시용)
       final now = DateTime.now();
       final today =
           '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
@@ -94,18 +101,40 @@ class HeartbeatService {
       await _tokenDs.saveLastHeartbeatDate(today);
       await _tokenDs.saveLastHeartbeatTime(timeStr);
     } catch (_) {
-      // 전송 실패 시 큐에 저장
       await _heartbeatDs.enqueue(request.toJson());
     }
   }
 
-  /// 배터리 레벨 조회 (실패 시 null)
   Future<int?> _getBatteryLevel() async {
     try {
       return await _battery.batteryLevel;
     } catch (_) {
       return null;
     }
+  }
+
+  /// 이전 heartbeat 이후 걸음수 증가량 조회
+  /// 권한 거부 또는 조회 실패 시 null 반환
+  Future<int?> _getStepsDelta() async {
+    try {
+      final current = await Pedometer.stepCountStream.first
+          .timeout(const Duration(seconds: 2));
+      final prevSteps = await _sensorDs.getLastSteps();
+      if (prevSteps == null) return null; // 첫 heartbeat
+      final delta = current.steps.toInt() - prevSteps;
+      return delta > 0 ? delta : 0;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// 현재 누적 걸음수 저장 (다음 주기 비교용)
+  Future<void> _saveCurrentSteps() async {
+    try {
+      final current = await Pedometer.stepCountStream.first
+          .timeout(const Duration(seconds: 2));
+      await _sensorDs.saveLastSteps(current.steps.toInt());
+    } catch (_) {}
   }
 
   /// 센서 스냅샷 1회 수집 (500ms 타임아웃, 실패 시 null)
@@ -125,13 +154,11 @@ class HeartbeatService {
   }
 
   /// 이전 스냅샷과 비교하여 suspicious 판정
-  /// 이전 값 없으면 false (첫 heartbeat는 정상으로 처리)
   Future<bool> _calcSuspicious(_SensorSnapshot? current) async {
     if (current == null) return false;
 
     final prev = await _sensorDs.getSnapshot();
-    final prevAccelX = prev['accel_x'];
-    if (prevAccelX == null) return false; // 이전 값 없음
+    if (prev['accel_x'] == null) return false; // 이전 값 없음 → 첫 heartbeat
 
     final accelDelta = sqrt(
       pow((current.accelX - (prev['accel_x'] ?? 0)), 2) +
@@ -145,7 +172,6 @@ class HeartbeatService {
       pow((current.gyroZ - (prev['gyro_z'] ?? 0)), 2),
     );
 
-    // 가속도 변화 < 5.0 AND 자이로 변화 < 0.3 → 미사용 의심
     return accelDelta < _accelThreshold && gyroDelta < _gyroThreshold;
   }
 
@@ -154,12 +180,7 @@ class HeartbeatService {
         deviceId:     json['device_id'] as String,
         timestamp:    json['timestamp'] as String,
         manual:       (json['manual'] as bool?) ?? false,
-        accelX:       (json['accel_x'] as num?)?.toDouble(),
-        accelY:       (json['accel_y'] as num?)?.toDouble(),
-        accelZ:       (json['accel_z'] as num?)?.toDouble(),
-        gyroX:        (json['gyro_x'] as num?)?.toDouble(),
-        gyroY:        (json['gyro_y'] as num?)?.toDouble(),
-        gyroZ:        (json['gyro_z'] as num?)?.toDouble(),
+        stepsDelta:   json['steps_delta'] as int?,
         suspicious:   json['suspicious'] as bool,
         batteryLevel: json['battery_level'] as int?,
       );

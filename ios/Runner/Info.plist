@@ -49,6 +49,8 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSMotionUsageDescription</key>
+	<string>걸음수를 측정하여 안부 확인에 활용합니다</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
