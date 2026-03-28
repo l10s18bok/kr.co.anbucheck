@@ -424,15 +424,11 @@ Body:
 {
   "device_id": "uuid-v4",
   "timestamp": "2026-03-18T14:32:00+09:00",
-  "accel_x": 0.12,
-  "accel_y": 9.78,
-  "accel_z": 0.34,
-  "gyro_x": 0.01,
-  "gyro_y": 0.02,
-  "gyro_z": 0.00,
+  "steps_delta": 342,
   "suspicious": false,
   "battery_level": 85
 }
+// steps_delta: 이전 heartbeat 이후 걸음수 증가량 (권한 거부 시 null)
 Response: 200 OK
 {
   "status": "ok",
@@ -788,12 +784,7 @@ CREATE TABLE IF NOT EXISTS devices (
     platform        TEXT NOT NULL,                     -- 'android' 또는 'ios'
     os_version      TEXT,
     fcm_token       TEXT,
-    accel_x         REAL,                              -- 마지막 가속도 센서 x (m/s²)
-    accel_y         REAL,                              -- 마지막 가속도 센서 y
-    accel_z         REAL,                              -- 마지막 가속도 센서 z
-    gyro_x          REAL,                              -- 마지막 자이로 센서 x (rad/s)
-    gyro_y          REAL,                              -- 마지막 자이로 센서 y
-    gyro_z          REAL,                              -- 마지막 자이로 센서 z
+    steps_delta     INTEGER,                           -- 마지막 heartbeat 이후 걸음수 증가량 (권한 거부 시 NULL)
     battery_level   INTEGER,                           -- 마지막 배터리 잔량 (0~100)
     suspicious_count INTEGER DEFAULT 0,                -- 연속 suspicious 횟수
     heartbeat_hour  INTEGER NOT NULL DEFAULT 9,        -- heartbeat 시각 (시, 0~23, 기본 9)
@@ -869,13 +860,8 @@ CREATE INDEX IF NOT EXISTS idx_alerts_subject ON alerts (subject_user_id, create
 CREATE TABLE IF NOT EXISTS heartbeat_logs (
     id              SERIAL PRIMARY KEY,
     device_id       TEXT NOT NULL,
-    accel_x         REAL,
-    accel_y         REAL,
-    accel_z         REAL,
-    gyro_x          REAL,
-    gyro_y          REAL,
-    gyro_z          REAL,
-    suspicious      INTEGER DEFAULT 0,                 -- 센서 변화량 미달 (0/1)
+    steps_delta     INTEGER,                           -- heartbeat 이후 걸음수 증가량 (권한 거부 시 NULL)
+    suspicious      INTEGER DEFAULT 0,                 -- 활동 지표 미달 (0/1)
     battery_level   INTEGER,
     client_ts       TIMESTAMPTZ NOT NULL,
     server_ts       TIMESTAMPTZ NOT NULL DEFAULT NOW()

@@ -38,12 +38,16 @@ flowchart TD
     SPKilled --> Collect
 
     Collect[데이터 수집]
-    Collect --> Sensor[센서 스냅샷 조회<br/>가속도계 x,y,z<br/>자이로스코프 x,y,z]
+    Collect --> Steps[걸음수 조회<br/>pedometer<br/>steps_delta]
     Collect --> Battery[배터리 상태 조회<br/>battery_level]
 
+    Steps --> StepsCheck{steps_delta > 0?}
+    StepsCheck -->|YES| Normal[suspicious = false<br/>활동 확인]
+    StepsCheck -->|NO| Sensor[가속도/자이로 조회<br/>sensors_plus]
+
     Sensor --> Compare{이전 센서 값과 비교}
-    Compare -->|가속도 변화 < 5.0 m/s²<br/>AND 자이로 변화 < 0.3 rad/s| Suspicious[suspicious = true<br/>폰 미사용 의심]
-    Compare -->|가속도 변화 ≥ 5.0 m/s²<br/>OR 자이로 변화 ≥ 0.3 rad/s| Normal[suspicious = false<br/>폰 사용 확인]
+    Compare -->|가속도 변화 < 5.0 m/s²<br/>AND 자이로 변화 < 0.3 rad/s| Suspicious[suspicious = true<br/>활동 의심]
+    Compare -->|가속도 변화 ≥ 5.0 m/s²<br/>OR 자이로 변화 ≥ 0.3 rad/s| Normal
 
     Battery --> BattCheck{배터리 ≤ 20%?}
     BattCheck -->|YES| SubjectNoti[대상자 로컬 알림<br/>📱 충전이 필요합니다<br/>배터리가 부족합니다<br/>충전하지 않으면 안부 확인이<br/>중단될 수 있습니다]

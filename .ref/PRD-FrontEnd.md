@@ -69,6 +69,7 @@ Splash → 버전 체크 → 모드 선택
         ├─ "나의 안전을 확인받고 싶어요" → [대상자 모드]
         │   권한 요청 안내 화면
         │   ├─ 알림 권한 (필수)
+        │   ├─ 활동 인식 권한 (Android만, 걸음수 감지용)
         │   ├─ 배터리 최적화 제외 (Android만)
         │   └─ [확인] 탭 → OS 권한 팝업 순차 표시
         │   Onboarding (서비스 소개/동작 안내) → 서버 등록 (자동) → Home (고유 코드 표시)
@@ -268,69 +269,50 @@ iOS의 로컬 알림(`UNUserNotificationCenter`)은 **예약한 시간에 정확
 - 서버가 heartbeat를 수신했다는 것 자체가 **폰이 정상 동작 중**이라는 증거
 - 지정 시각 + 2시간 내 heartbeat 미수신 → 경고 발생 (기본: 09:30 미수신 → 11:30 경고)
 
-**보조 지표: 가속도계 + 자이로스코프 결합 분석** (`sensors_plus` 패키지, Android/iOS 공통)
+**활동 지표: 걸음수(primary) + 가속도/자이로(secondary) 결합 분석**
 
-heartbeat가 정상 수신되더라도 사용자가 실제로 폰을 조작했는지를 추가 판별한다.
-(백그라운드에서 heartbeat가 자동 전송되므로, 사용자가 의식불명/사망 상태여도 heartbeat는 수신될 수 있음)
+heartbeat가 정상 수신되더라도 사용자가 실제로 활동 중인지를 추가 판별한다.
+(백그라운드에서 heartbeat가 자동 전송되므로, 사용자가 의식불명 상태여도 heartbeat는 수신될 수 있음)
 
 ```
-[heartbeat 실행 시 (24시간 간격)]
+[heartbeat 실행 시]
     │
-    ├─ 센서 스냅샷 조회 (sensors_plus)
-    │   · 가속도계(accelerometer): x, y, z (단위: m/s², 중력 포함)
-    │   · 자이로스코프(gyroscope): x, y, z (단위: rad/s, 각속도)
+    ├─ 1단계: 걸음수 변화 확인 (pedometer 패키지)
+    │   · 이전 heartbeat 이후 걸음수 증가량(steps_delta) 조회
+    │   · steps_delta > 0 → suspicious = false (즉시 정상 판정, 이하 생략)
     │
-    ├─ 이전 heartbeat 때 저장한 센서 값과 비교
-    │   · 가속도 변화량 = √((Δx)² + (Δy)² + (Δz)²)
-    │   · 자이로 변화량 = √((Δx)² + (Δy)² + (Δz)²)
-    │
-    ├─ 판정 로직 (진동 vs 사용자 조작 구분)
-    │
-    │   ┌─────────────────────────────────────────────────────────────┐
-    │   │  상황             │ 가속도 변화량   │ 자이로 변화량  │ 판정  │
-    │   ├───────────────────┼───────────────┼──────────────┼───────┤
-    │   │  완전 정지         │ < 0.5 m/s²    │ < 0.1 rad/s  │ 의심  │
-    │   │  진동 알림만       │ 0.5 ~ 5 m/s²  │ < 0.1 rad/s  │ 의심  │
-    │   │  (전화/카톡 등)    │ (소폭 떨림)    │ (회전 없음)   │       │
-    │   │  사용자 조작       │ > 5 m/s²      │ > 0.3 rad/s  │ 정상  │
-    │   │  (들기/이동/기울임) │ (큰 변화)      │ (회전 발생)   │       │
-    │   └─────────────────────────────────────────────────────────────┘
-    │
-    │   핵심: 진동은 가속도만 소폭 변하고 회전(자이로)은 거의 없음
-    │         사용자 조작은 가속도 + 회전 모두 큰 변화 발생
-    │
-    ├─ 의심 조건 (두 조건 모두 충족 시):
-    │   · 가속도 변화량 < 5.0 m/s²  (진동 수준의 미세 변화)
-    │   · 자이로 변화량 < 0.3 rad/s (회전 거의 없음)
-    │   → suspicious = true
-    │
-    └─ 정상 조건 (하나라도 충족 시):
-        · 가속도 변화량 ≥ 5.0 m/s²  (폰이 크게 움직임)
-        · 자이로 변화량 ≥ 0.3 rad/s (폰이 회전됨 = 사람이 들었음)
-        → suspicious = false
+    └─ 2단계: 걸음수 변화 없을 때만 (steps_delta = 0)
+        │
+        ├─ 가속도계(accelerometer) 스냅샷 조회 (sensors_plus)
+        ├─ 자이로스코프(gyroscope) 스냅샷 조회 (sensors_plus)
+        ├─ 이전 스냅샷과 비교
+        │   · 가속도 변화량 = √((Δx)² + (Δy)² + (Δz)²)
+        │   · 자이로 변화량 = √((Δx)² + (Δy)² + (Δz)²)
+        │
+        ├─ 의심 조건 (두 조건 모두 충족 시):
+        │   · 가속도 변화량 < 5.0 m/s²
+        │   · 자이로 변화량 < 0.3 rad/s
+        │   → suspicious = true
+        │
+        └─ 정상 조건 (하나라도 충족 시):
+            · 가속도 변화량 ≥ 5.0 m/s²
+            · 자이로 변화량 ≥ 0.3 rad/s
+            → suspicious = false
 ```
 
 **의심 상태(suspicious) 발생 시 서버 동작:**
 - heartbeat는 정상 수신된 것이므로 즉시 경고를 발생시키지 않음
 - suspicious 플래그를 서버에 기록
-- **연속 2회 이상 suspicious** 상태 시 → 보호자에게 "대상자의 폰 움직임이 48시간째 감지되지 않습니다" 참고 알림 발송 (경고와 별도)
+- **연속 2회 이상 suspicious** 상태 시 → 보호자에게 참고 알림 발송
 - 보호자가 판단하여 직접 확인하도록 유도
 
-**장점:**
-- 별도 권한 불필요 (가속도계/자이로스코프는 OS 기본 센서)
-- 앱 심사에서 전혀 문제 없음
-- 양 OS에서 동일하게 동작
-- 백그라운드에서 즉시 조회 가능 (스냅샷 1회 읽기, 상시 모니터링 불필요)
-- 진동 알림과 사용자 조작을 높은 정확도로 구분 가능
-
-**임계값 조정:**
-- 위 임계값(가속도 5.0 m/s², 자이로 0.3 rad/s)은 초기 설정값
-- 실사용 데이터 수집 후 거짓 경고(false alarm) 비율을 보고 서버에서 조정 가능
-- 임계값을 서버 설정으로 관리하여 앱 업데이트 없이 튜닝 가능
+**권한:**
+- Android: `ACTIVITY_RECOGNITION` 런타임 권한 필요 (사용자 허용 필요)
+- iOS: `NSMotionUsageDescription` Info.plist 등록, 첫 사용 시 팝업 자동 표시
+- 가속도계/자이로스코프는 권한 불필요 (OS 기본 센서)
 
 **센서 미지원 기기 대응:**
-- 저사양/구형 Android 기기는 자이로스코프가 없을 수 있음
-- 자이로 미지원 시 → 가속도계 단독으로 판별 (정확도 저하 감수)
+- 걸음수 권한 거부 시 → 가속도/자이로 단독으로 판별
 - 가속도계마저 미지원 시 → 보조 지표 없이 heartbeat 수신 여부만으로 동작
 
 
@@ -463,20 +445,20 @@ Day 4+: 추가 알림 없음 (향후 정책 변경 가능)
 제로 인터랙션 설계의 핵심 과제는 **오탐(false alarm) 최소화**와 **위험 감지 속도 향상**이다.
 아래 보완 설계를 통해 단순 heartbeat 미수신 판정을 넘어, 복합 지표 기반의 정밀한 생존 판단을 구현한다.
 
-**heartbeat 전송 데이터 (권한 불필요):**
+**heartbeat 전송 데이터:**
 ```json
 {
   "device_id": "기기 고유 ID (Android: SSAID, iOS: identifierForVendor)",
   "timestamp": "2026-03-18T09:30:00+09:00",
-  "source": "workmanager | silent_push | foreground",
-  "accel_x": 0.12, "accel_y": 9.78, "accel_z": 0.34,
-  "gyro_x": 0.01, "gyro_y": 0.02, "gyro_z": 0.00,
+  "steps_delta": 342,
   "suspicious": false,
   "battery_level": 85
 }
 ```
+- `steps_delta`: 이전 heartbeat 이후 걸음수 증가량 (권한 허용 시), 거부 시 null
+- `suspicious`: 앱에서 판정 후 전송 (steps_delta > 0이면 항상 false)
 
-**필요 패키지:** `sensors_plus` (가속도/자이로), `battery_plus` (배터리 잔량, 권한 불필요)
+**필요 패키지:** `pedometer` (걸음수, Android/iOS 통합), `sensors_plus` (가속도/자이로), `battery_plus` (배터리 잔량, 권한 불필요)
 
 
 ### 3.2 배터리 방전 오탐 방지
@@ -518,20 +500,26 @@ Day 4+: 추가 알림 없음 (향후 정책 변경 가능)
 ```
 
 
-### 3.3 suspicious 판정 (센서 기반 활동 지표)
+### 3.3 suspicious 판정 (걸음수 primary + 가속도/자이로 secondary)
 
-**핵심:** 가속도 + 자이로 변화량으로 폰 사용 여부를 판단. 잠금해제/충전 상태 없이 센서값만으로 결정
+**핵심:** 걸음수 변화가 있으면 즉시 정상 판정. 걸음수 0일 때만 가속도/자이로로 보완 판정.
 
 ```
-[heartbeat 수집 시 센서 비교]
+[heartbeat 수집 시 활동 판정]
 
-    의심 조건 (두 조건 모두 충족 시 suspicious = true):
-      · accel_delta < 5.0 m/s²  (가속도 변화 없음)
-      · gyro_delta < 0.3 rad/s  (자이로 변화 없음)
+    1단계: steps_delta > 0 → suspicious = false (즉시 정상, 이하 생략)
 
-    정상 조건 (하나라도 충족 시 suspicious = false):
-      · accel_delta ≥ 5.0 m/s²
-      · gyro_delta ≥ 0.3 rad/s
+    2단계: steps_delta = 0 일 때
+      의심 조건 (두 조건 모두 충족 시 suspicious = true):
+        · accel_delta < 5.0 m/s²  (가속도 변화 없음)
+        · gyro_delta < 0.3 rad/s  (자이로 변화 없음)
+
+      정상 조건 (하나라도 충족 시 suspicious = false):
+        · accel_delta ≥ 5.0 m/s²
+        · gyro_delta ≥ 0.3 rad/s
+
+    ※ 걸음수 권한 거부 시 → 2단계(가속도/자이로)만으로 판정
+    ※ 첫 heartbeat (이전 스냅샷 없음) → suspicious = false 처리
 
 [서버 판정]
     suspicious = false → 활성 경고 해소 여부 확인
@@ -542,9 +530,6 @@ Day 4+: 추가 알림 없음 (향후 정책 변경 가능)
     suspicious = true  → warning/urgent → caution 하향 (정상 복귀 알림 없음)
                          - 1회 → 주의 등급 발생
                          - 2회 이상 → 경고 등급 발생
-
-※ 이전 스냅샷 없으면 (첫 heartbeat) suspicious = false 처리
-※ 이전 스냅샷과 비교 후 로컬 저장 (sensor_local_datasource)
 ```
 
 
@@ -1207,7 +1192,8 @@ ios/Runner/
 | `firebase_messaging`                       | FCM/APNs Push 수신     | Silent Push + 일반 Push                                          |
 | `workmanager`                              | 백그라운드 주기적 작업 | Android 매일 고정 시각 스케줄러 (기본 09:30)                     |
 | `flutter_local_notifications`              | 로컬 알림 예약/취소    | iOS 데드맨 스위치 + 배터리/네트워크 안내 알림 (Android/iOS 공통) |
-| `sensors_plus`                             | 가속도 센서 조회       | **보조 활동 지표** (폰 위치 변화 감지), 권한 불필요              |
+| `pedometer`                                | 걸음수 조회           | **primary 활동 지표** (걸음수 변화 감지), Android: ACTIVITY_RECOGNITION 권한 필요, iOS: NSMotionUsageDescription |
+| `sensors_plus`                             | 가속도/자이로 센서 조회 | **secondary 활동 지표** (걸음수 0일 때 보완), 권한 불필요       |
 | `google_mobile_ads`                        | AdMob 하단 고정 배너   | 유료 사용자 광고 제거                                            |
 | `shared_preferences`                       | 경량 로컬 저장소       | device_token, 이전 센서 값, 대상자 별칭 저장                     |
 | `sqflite`                                  | 로컬 DB                | 전송 실패 heartbeat 큐, 보호자 알림 이력 (30일/100건)            |
