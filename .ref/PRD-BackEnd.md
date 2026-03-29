@@ -165,7 +165,7 @@ heartbeat 수신 → last_seen 갱신
       │       ├─ manual = true  → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
       │       └─ manual = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
       └─ true  → warning/urgent → caution 하향 (정상 복귀 알림 없음)
-               → 대상자에게 wellbeing_check 발송 (보호자 경고 없음)
+               → 앱 클라이언트가 suspicious=true 판정 시 로컬 알림 직접 표시 (서버 관여 없음)
                → 보호자 경고는 heartbeat 미수신 시에만 발생
 
 [heartbeat 미수신 시 (기기별 고정 시각 + 2시간 경과 시 체크)]

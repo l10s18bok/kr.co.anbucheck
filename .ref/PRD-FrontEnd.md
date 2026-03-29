@@ -528,6 +528,10 @@ Day 4+: 추가 알림 없음 (향후 정책 변경 가능)
                              ├─ manual = true  → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
                              └─ manual = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
     suspicious = true  → warning/urgent → caution 하향 (정상 복귀 알림 없음)
+                         → 앱 클라이언트가 FlutterLocalNotificationsPlugin으로 즉시 로컬 알림 표시
+                           · 알림 ID: 0x57656C6C (고정 — 중복 발송 시 덮어씀)
+                           · 메시지: "💛 안부 확인 / 잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요."
+                           · 서버 FCM Push 없음 — 네트워크 없어도 동작
                          - 1회 → 주의 등급 발생
                          - 2회 이상 → 경고 등급 발생
 ```

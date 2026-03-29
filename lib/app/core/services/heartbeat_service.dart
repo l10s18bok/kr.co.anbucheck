@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
@@ -52,6 +53,11 @@ class HeartbeatService {
       }
       // 현재 걸음수 저장 (다음 주기 비교용)
       await _saveCurrentSteps();
+    }
+
+    // suspicious=true → 대상자에게 로컬 알림 즉시 발송 (서버 왕복 불필요)
+    if (suspicious) {
+      await _showWellbeingCheckNotification();
     }
 
     final request = HeartbeatRequest(
@@ -173,6 +179,33 @@ class HeartbeatService {
     );
 
     return accelDelta < _accelThreshold && gyroDelta < _gyroThreshold;
+  }
+
+  /// suspicious=true 판정 시 대상자에게 로컬 알림 즉시 발송
+  /// 서버 왕복 없이 즉각 표시 — 네트워크 없어도 동작
+  Future<void> _showWellbeingCheckNotification() async {
+    try {
+      final plugin = FlutterLocalNotificationsPlugin();
+      await plugin.show(
+        0x57656C6C, // 고정 ID ('Well' hex) — 중복 발송 시 덮어씀
+        '💛 안부 확인',
+        '잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요.',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'anbu_alerts',
+            '안부 알림',
+            importance: Importance.high,
+            priority: Priority.high,
+            icon: '@mipmap/ic_launcher',
+          ),
+          iOS: DarwinNotificationDetails(
+            presentAlert: true,
+            presentSound: true,
+          ),
+        ),
+        payload: 'wellbeing_check',
+      );
+    } catch (_) {}
   }
 
   HeartbeatRequest _fromQueueJson(Map<String, dynamic> json) =>

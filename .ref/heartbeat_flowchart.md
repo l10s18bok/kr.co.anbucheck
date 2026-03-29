@@ -106,7 +106,7 @@ flowchart TD
     Downgrade --> WellbeingCheck
 
     CheckSuspicious -->|false| StatusNormal
-    CheckSuspicious -->|true| WellbeingCheck[대상자에게 wellbeing_check 발송<br/>📱 안부를 확인해 주세요<br/>보호자 경고 없음]
+    CheckSuspicious -->|true| WellbeingCheck[앱 로컬 알림 즉시 표시<br/>💛 안부 확인<br/>잘 지내고 계시죠? 이 메시지 알림을<br/>한 번 터치해 주세요.<br/>서버 왕복 없음 — 오프라인에서도 동작]
     WellbeingCheck --> Wait1([⏱ 다음 heartbeat 대기<br/>보호자 경고는 미수신 시에만 발생])
 
     StatusNormal --> SaveNoti[보호자 알림 DB 저장<br/>guardian_notifications<br/>alert_level: info<br/>is_push_sent: true/false]
