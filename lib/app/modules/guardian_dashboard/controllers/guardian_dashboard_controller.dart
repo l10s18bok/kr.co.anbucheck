@@ -44,7 +44,7 @@ class GuardianDashboardController extends BaseController {
       await _svc.load(force: force);
       _mapSubjects();
     } catch (e) {
-      Get.snackbar('오류', '대상자 목록을 불러오지 못했습니다.',
+      Get.snackbar('오류', '보호 대상자 목록을 불러오지 못했습니다.',
           snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading = false;

@@ -39,7 +39,7 @@ class AddSubjectButton extends StatelessWidget {
               ),
               SizedBox(height: 10.h),
               Text(
-                '새로운 대상자 추가',
+                '새로운 보호 대상자 추가',
                 style: AppTextTheme.bodyMedium(
                   color: AppColors.textSecondary,
                   fw: FontWeight.w500,

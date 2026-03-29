@@ -22,10 +22,7 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
           icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
           onPressed: () {},
         ),
-        title: Text(
-          '안부 (Anbu)',
-          style: AppTextTheme.headlineSmall(),
-        ),
+        title: Text('안부 (Anbu)', style: AppTextTheme.headlineSmall()),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -36,13 +33,10 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
               SizedBox(height: AppSpacing.sp6),
 
               // 제목
-              Text(
-                '누구를 위한\n것인가요?',
-                style: AppTextTheme.displaySmall(),
-              ),
+              Text('누구를 위한\n것인가요?', style: AppTextTheme.displaySmall()),
               SizedBox(height: AppSpacing.sm),
               Text(
-                '사용자의 목적에 가장 적합한 모드를 선택해\n주세요. 설정된 이후에 다시 변경할 수 있습니다.',
+                '사용자의 목적에 가장 적합한 모드를 선택해 주세요',
                 style: AppTextTheme.bodyMedium(color: AppColors.textTertiary),
               ),
               SizedBox(height: AppSpacing.sp6),
@@ -52,8 +46,8 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
                 gradientColors: const [Color(0xFFE0F2F1), Color(0xFFC8E6C9)],
                 iconBackgroundColor: const Color(0xFF00685E),
                 icon: Icons.home_rounded,
-                title: '나의 안부를 확인받고 싶어\n요',
-                buttonLabel: '대상자 모드 시작하기 →',
+                title: '나의 안부를 확인받고 싶어요',
+                buttonLabel: '보호 대상자로 시작하기 →',
                 buttonColor: const Color(0xFF00685E),
                 onTap: controller.selectSubjectMode,
               ),
@@ -64,8 +58,8 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
                 gradientColors: const [Color(0xFFE8EAF6), Color(0xFFDDE1FF)],
                 iconBackgroundColor: const Color(0xFF4355B9),
                 icon: Icons.visibility_rounded,
-                title: '소중한 사람을 지켜보고 싶\n어요',
-                buttonLabel: '보호자 모드 시작하기 →',
+                title: '소중한 사람을 지켜보고 싶어요',
+                buttonLabel: '보호자로 시작하기 →',
                 buttonColor: const Color(0xFF4355B9),
                 onTap: controller.selectGuardianMode,
               ),
@@ -78,13 +72,9 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.info_outline,
-                          size: 14.w, color: AppColors.textTertiary),
+                      Icon(Icons.info_outline, size: 14.w, color: AppColors.textTertiary),
                       SizedBox(width: 4.w),
-                      Text(
-                        '모드에 따라 화면 구성과 알림 설정이 달라집니다',
-                        style: AppTextTheme.bodySmall(),
-                      ),
+                      Text('위 선택에 따라 화면 구성과 알림 설정이 달라집니다', style: AppTextTheme.bodySmall()),
                     ],
                   ),
                 ),
@@ -147,28 +137,17 @@ class _ModeCard extends StatelessWidget {
             SizedBox(height: AppSpacing.lg),
 
             // 제목
-            Text(
-              title,
-              style: AppTextTheme.headlineMedium(
-                color: AppColors.onSurface,
-              ),
-            ),
+            Text(title, style: AppTextTheme.headlineMedium(color: AppColors.onSurface)),
             SizedBox(height: AppSpacing.lg),
 
             // 시작 버튼
             Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.md,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
               decoration: BoxDecoration(
                 color: buttonColor,
                 borderRadius: BorderRadius.circular(24.r),
               ),
-              child: Text(
-                buttonLabel,
-                style: AppTextTheme.labelMedium(color: Colors.white),
-              ),
+              child: Text(buttonLabel, style: AppTextTheme.labelMedium(color: Colors.white)),
             ),
           ],
         ),

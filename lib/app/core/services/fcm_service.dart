@@ -94,21 +94,30 @@ class FcmService extends GetxService {
   final _token = Rxn<String>();
   String? get token => _token.value;
 
-  /// 초기화
-  Future<FcmService> init() async {
-    // iOS: APNs 권한 요청
-    if (Platform.isIOS) {
+  /// iOS APNs 권한 요청 + FCM 토큰 재발급
+  /// PermissionController에서 알림 권한 허용 후 호출
+  Future<void> requestIosPermission() async {
+    if (!Platform.isIOS) return;
+    try {
       await _messaging.requestPermission(
         alert: true,
         badge: true,
         sound: true,
       );
+      await _getToken();
+    } catch (e) {
+      debugPrint('[FCM] iOS 권한 요청 실패: $e');
     }
+  }
 
+  /// 초기화
+  Future<FcmService> init() async {
     // 로컬 알림 초기화
     await _initLocalNotifications();
 
     // FCM 토큰 발급
+    // iOS: 권한이 이미 허용된 경우 토큰 발급 시도 (미허용이면 조용히 실패)
+    //      최초 권한 요청은 PermissionPage → requestIosPermission()에서 처리
     await _getToken();
 
     // 토큰 갱신 리스너
@@ -118,11 +127,15 @@ class FcmService extends GetxService {
     });
 
     // iOS 포그라운드 알림 표시 설정
-    await _messaging.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    try {
+      await _messaging
+          .setForegroundNotificationPresentationOptions(
+            alert: true,
+            badge: true,
+            sound: true,
+          )
+          .timeout(const Duration(seconds: 3));
+    } catch (_) {}
 
     // 포그라운드 메시지 수신
     FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
@@ -132,12 +145,16 @@ class FcmService extends GetxService {
 
     // 앱 종료 상태에서 알림 탭하여 앱 열기
     // addPostFrameCallback으로 GetX 라우터가 준비된 후 처리
-    final initialMessage = await _messaging.getInitialMessage();
-    if (initialMessage != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _handleMessageOpenedApp(initialMessage);
-      });
-    }
+    try {
+      final initialMessage = await _messaging
+          .getInitialMessage()
+          .timeout(const Duration(seconds: 3));
+      if (initialMessage != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _handleMessageOpenedApp(initialMessage);
+        });
+      }
+    } catch (_) {}
 
     return this;
   }

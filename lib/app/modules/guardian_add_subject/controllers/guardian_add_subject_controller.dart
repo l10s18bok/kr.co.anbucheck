@@ -45,12 +45,12 @@ class GuardianAddSubjectController extends BaseController {
       }
 
       Get.back(result: true);
-      Get.snackbar('완료', '대상자가 연결되었습니다.', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('완료', '보호 대상자가 연결되었습니다.', snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
       final msg = e.toString().contains('404')
           ? '유효하지 않은 코드입니다.'
           : e.toString().contains('409')
-              ? '이미 연결된 대상자입니다.'
+              ? '이미 연결된 보호 대상자입니다.'
               : '연결에 실패했습니다. 잠시 후 다시 시도해 주세요.';
       Get.snackbar('오류', msg, snackPosition: SnackPosition.BOTTOM);
     } finally {

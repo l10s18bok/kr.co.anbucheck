@@ -57,7 +57,7 @@ class GuardianConnectionManagementPage
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: '관리 대상자 수 ',
+                              text: '관리 보호 대상자 수 ',
                               style: AppTextTheme.headlineMedium(),
                             ),
                             TextSpan(
@@ -77,7 +77,7 @@ class GuardianConnectionManagementPage
                 SizedBox(height: AppSpacing.lg),
 
                 // 연결된 대상자 섹션
-                Text('연결된 대상자',
+                Text('연결된 보호 대상자',
                     style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
                 SizedBox(height: AppSpacing.lg),
 
@@ -120,9 +120,9 @@ class GuardianConnectionManagementPage
                       SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
-                          '연결 해제 시 해당 대상자의 데이터는 삭제됩니다.\n'
+                          '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.\n'
                           '재연결 시 이전의 기록을 복구할 수 없으며,\n'
-                          '대상자 코드를 다시 입력해야 합니다.',
+                          '보호 대상자 코드를 다시 입력해야 합니다.',
                           style: AppTextTheme.bodySmall(
                               color: const Color(0xFFE65100)),
                         ),
@@ -405,7 +405,7 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('대상자 편집', style: AppTextTheme.headlineSmall()),
+      title: Text('보호 대상자 편집', style: AppTextTheme.headlineSmall()),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -44,7 +44,7 @@ class PermissionPage extends GetWidget<PermissionController> {
                 title: '알림 권한',
                 description: controller.isSubjectMode
                     ? '안부 확인 알림을 받기 위해 필요합니다'
-                    : '대상자의 안전 상태 알림을 받기 위해 필요합니다',
+                    : '보호 대상자의 안전 상태 알림을 받기 위해 필요합니다',
               ),
 
               // 배터리 최적화 카드 (대상자 모드 + Android만)

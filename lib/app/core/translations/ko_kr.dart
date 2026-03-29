@@ -25,7 +25,7 @@ abstract class KoKr {
     'mode_subject': '나의 안전을\n확인받고 싶어요',
     'mode_subject_desc': '매일 자동으로 안부 확인이\n전송됩니다',
     'mode_guardian': '소중한 사람을\n지켜보고 싶어요',
-    'mode_guardian_desc': '대상자의 안전 상태를\n실시간으로 확인합니다',
+    'mode_guardian_desc': '보호 대상자의 안전 상태를\n실시간으로 확인합니다',
     'mode_select_notice': '모드는 나중에 변경할 수 없습니다',
 
     // 권한 요청
@@ -57,13 +57,13 @@ abstract class KoKr {
 
     // 보호자 대시보드
     'guardian_dashboard_title': '대시보드',
-    'guardian_dashboard_empty': '아직 연결된 대상자가 없습니다',
-    'guardian_dashboard_add': '대상자 추가',
+    'guardian_dashboard_empty': '아직 연결된 보호 대상자가 없습니다',
+    'guardian_dashboard_add': '보호 대상자 추가',
     'guardian_dashboard_status_normal': '정상',
     'guardian_dashboard_status_caution': '주의',
     'guardian_dashboard_status_warning': '경고',
     'guardian_dashboard_status_urgent': '긴급',
-    'guardian_add_subject_title': '대상자 추가',
+    'guardian_add_subject_title': '보호 대상자 추가',
     'guardian_add_subject_code_hint': '고유 코드를 입력하세요',
     'guardian_add_subject_alias_hint': '별칭을 입력하세요 (예: 어머니)',
     'guardian_add_subject_connect': '연결하기',

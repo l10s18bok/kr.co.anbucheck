@@ -108,7 +108,7 @@ class NotificationLocalDatasource {
       // 지난 알림
       {
         'title': '경고',
-        'body': '대상자 폰 사용이 48시간째 감지되지 않습니다.',
+        'body': '보호 대상자 폰 사용이 48시간째 감지되지 않습니다.',
         'alert_level': 'warning',
         'invite_code': 'ABC-1234',
         'received_at':

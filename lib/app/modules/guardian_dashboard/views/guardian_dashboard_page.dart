@@ -90,7 +90,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
             Obx(() {
               final count = controller.subjects.length;
               final text = count == 0
-                  ? '연결된 대상자가 없습니다.'
+                  ? '연결된 보호 대상자가 없습니다.'
                   : '현재 $count명의 안부를\n확인 중입니다.';
               return Text(
                 text,
@@ -103,7 +103,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('대상자 리스트',
+                Text('보호 대상자 리스트',
                     style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
                 Obx(() {
                   final subjects = controller.subjects;

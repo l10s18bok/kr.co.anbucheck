@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 권한 안내 및 요청 컨트롤러
@@ -25,13 +26,19 @@ class PermissionController extends BaseController {
     _isRequesting = true;
 
     // 1. 알림 권한 요청
-    final notificationStatus = await Permission.notification.request();
-
-    if (!notificationStatus.isGranted) {
-      final retry = await _showPermissionDeniedDialog();
-      if (retry) {
-        openAppSettings();
-        return;
+    // iOS: Firebase Messaging의 requestPermission()으로 APNs 권한 + FCM 토큰 발급
+    // Android: permission_handler로 OS 알림 권한 요청
+    if (Platform.isIOS) {
+      await Get.find<FcmService>().requestIosPermission();
+    } else {
+      final notificationStatus = await Permission.notification.request();
+      if (!notificationStatus.isGranted) {
+        final retry = await _showPermissionDeniedDialog();
+        if (retry) {
+          _isRequesting = false;
+          openAppSettings();
+          return;
+        }
       }
     }
 
@@ -45,7 +52,7 @@ class PermissionController extends BaseController {
       await Permission.ignoreBatteryOptimizations.request();
     }
 
-    // 3. 온보딩으로 이동 (공통)
+    // 온보딩으로 이동 (공통)
     _isRequesting = false;
     Get.offNamed(AppRoutes.onboarding, arguments: {'mode': mode});
   }

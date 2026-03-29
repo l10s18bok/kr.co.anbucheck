@@ -61,28 +61,50 @@ class OnboardingController extends BaseController {
       final existingRole = response['existing_role'] as String?;
       if (existingRole != null) {
         isLoading = false;
-        final roleLabel = existingRole == 'subject' ? '대상자' : '보호자';
-        final confirmed = await Get.dialog<bool>(
+        final roleLabel = existingRole == 'subject' ? '보호 대상자' : '보호자';
+        final newRoleLabel = mode == 'subject' ? '보호 대상자' : '보호자';
+        // 'keep' | 'change' | null(취소)
+        final choice = await Get.dialog<String>(
+          barrierDismissible: false,
           AlertDialog(
             title: const Text('이미 등록된 기기'),
             content: Text(
-              '이 기기는 이미 $roleLabel 모드로 등록되어 있습니다.\n$roleLabel 모드로 계속하시겠습니까?',
+              '이 기기는 이미 $roleLabel 모드로 등록되어 있습니다.\n'
+              '$roleLabel 모드로 계속하시겠습니까?\n\n'
+              '아니면 $newRoleLabel 모드로 변경하시겠습니까?\n'
+              '변경하시면 기존 저장 내용은 모두 삭제됩니다.',
             ),
             actions: [
               TextButton(
-                onPressed: () => Get.back(result: false),
+                onPressed: () => exit(0),
                 child: const Text('취소'),
               ),
               TextButton(
-                onPressed: () => Get.back(result: true),
+                onPressed: () => Get.back(result: 'change'),
+                child: Text('$newRoleLabel 모드로 변경'),
+              ),
+              TextButton(
+                onPressed: () => Get.back(result: 'keep'),
                 child: Text('$roleLabel 모드로 계속'),
               ),
             ],
           ),
         );
-        if (confirmed != true) return;
-        // 서버의 기존 role로 진행
-        await _saveAndNavigate(response, existingRole);
+
+        if (choice == 'keep') {
+          isLoading = true;
+          await _saveAndNavigate(response, existingRole);
+          return;
+        }
+
+        // 변경 → 서버 계정 삭제 후 새 모드로 재등록
+        isLoading = true;
+        final oldToken = response['device_token'] as String?;
+        if (oldToken != null) {
+          await _userDs.deleteMe(oldToken);
+        }
+        await _tokenDs.clear();
+        await completeOnboarding();
         return;
       }
 

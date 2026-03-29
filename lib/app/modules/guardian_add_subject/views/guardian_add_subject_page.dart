@@ -24,7 +24,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
           icon: Icon(Icons.arrow_back, color: AppColors.onSurface, size: 24.w),
           onPressed: () => Get.back(),
         ),
-        title: Text('대상자 연결', style: AppTextTheme.headlineSmall()),
+        title: Text('보호 대상자 연결', style: AppTextTheme.headlineSmall()),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
@@ -35,7 +35,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
 
             // 안내 문구
             Text(
-              '연결할 대상자의 고유 코드\n와 별칭을 입력해주세요.',
+              '연결할 보호 대상자의 고유 코드\n와 별칭을 입력해주세요.',
               style: AppTextTheme.headlineLarge(),
             ),
             SizedBox(height: AppSpacing.sm),
@@ -100,7 +100,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                 SizedBox(width: 4.w),
                 Expanded(
                   child: Text(
-                    '고유 코드는 대상자의 앱에서 확인할 수 있습니다.',
+                    '고유 코드는 보호 대상자의 앱에서 확인할 수 있습니다.',
                     style: AppTextTheme.bodySmall(),
                   ),
                 ),
@@ -110,7 +110,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
 
             // 대상자 별칭
             Text(
-              '대상자 별칭',
+              '보호 대상자 별칭',
               style: AppTextTheme.labelMedium(
                 color: AppColors.onSurface,
                 fw: FontWeight.w600,

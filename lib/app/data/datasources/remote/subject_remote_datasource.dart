@@ -12,7 +12,7 @@ class SubjectRemoteDatasource {
       headers: _auth(deviceToken),
     );
     if (!result.isOk) {
-      throw Exception('대상자 목록 조회 실패 (${result.statusCode})');
+      throw Exception('보호 대상자 목록 조회 실패 (${result.statusCode})');
     }
     return Map<String, dynamic>.from(result.body as Map);
   }
@@ -28,7 +28,7 @@ class SubjectRemoteDatasource {
       headers: _auth(deviceToken),
     );
     if (!result.isOk) {
-      throw Exception('대상자 연결 실패 (${result.statusCode}): ${result.bodyString}');
+      throw Exception('보호 대상자 연결 실패 (${result.statusCode}): ${result.bodyString}');
     }
     return Map<String, dynamic>.from(result.body as Map);
   }
@@ -40,7 +40,7 @@ class SubjectRemoteDatasource {
       headers: _auth(deviceToken),
     );
     if (!result.isOk) {
-      throw Exception('대상자 연결 해제 실패 (${result.statusCode})');
+      throw Exception('보호 대상자 연결 해제 실패 (${result.statusCode})');
     }
   }
 

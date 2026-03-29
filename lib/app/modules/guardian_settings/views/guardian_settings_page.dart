@@ -108,7 +108,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('관리 대상자 수',
+                            Text('관리 보호 대상자 수',
                                 style: AppTextTheme.bodyMedium(
                                     color: AppColors.textSecondary)),
                             Obx(() => Text(
