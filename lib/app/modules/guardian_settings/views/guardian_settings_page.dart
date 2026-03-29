@@ -18,24 +18,9 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded,
-              color: AppColors.onSurface, size: 20.w),
-          onPressed: () => Get.back(),
-        ),
+        automaticallyImplyLeading: false,
         title: Text('설정', style: AppTextTheme.headlineSmall()),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: Text(
-              'Guardian',
-              style: AppTextTheme.labelMedium(
-                color: const Color(0xFF4355B9),
-                fw: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
+        actions: const [],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
@@ -79,49 +64,42 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                 SizedBox(height: AppSpacing.lg),
 
                 // 연결 관리 카드
-                GestureDetector(
-                  onTap: controller.goToConnectionManagement,
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(AppSpacing.lg),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerLowest,
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.people_alt_rounded,
-                                size: 22.w, color: AppColors.onSurfaceVariant),
-                            SizedBox(width: AppSpacing.md),
-                            Expanded(
-                              child: Text('연결 관리',
-                                  style: AppTextTheme.bodyLarge(
-                                      fw: FontWeight.w600)),
-                            ),
-                            Icon(Icons.chevron_right_rounded,
-                                size: 22.w, color: AppColors.onSurfaceVariant),
-                          ],
-                        ),
-                        SizedBox(height: AppSpacing.md),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('관리 보호 대상자 수',
-                                style: AppTextTheme.bodyMedium(
-                                    color: AppColors.textSecondary)),
-                            Obx(() => Text(
-                                  '${controller.subjects.length} / ${controller.maxSubjects.value}명',
-                                  style: AppTextTheme.headlineSmall(
-                                    color: const Color(0xFF4355B9),
-                                    fw: FontWeight.w700,
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(AppSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.people_alt_rounded,
+                              size: 22.w, color: AppColors.onSurfaceVariant),
+                          SizedBox(width: AppSpacing.md),
+                          Text('연결 관리',
+                              style: AppTextTheme.bodyLarge(
+                                  fw: FontWeight.w600)),
+                        ],
+                      ),
+                      SizedBox(height: AppSpacing.md),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('관리 보호 대상자 수',
+                              style: AppTextTheme.bodyMedium(
+                                  color: AppColors.textSecondary)),
+                          Obx(() => Text(
+                                '${controller.subjects.length} / ${controller.maxSubjects.value}명',
+                                style: AppTextTheme.headlineSmall(
+                                  color: const Color(0xFF4355B9),
+                                  fw: FontWeight.w700,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: AppSpacing.sp6),

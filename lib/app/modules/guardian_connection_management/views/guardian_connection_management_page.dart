@@ -12,8 +12,7 @@ import 'package:anbucheck/app/modules/guardian_connection_management/controllers
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 연결 관리 페이지 — 시안 _4 기준
-class GuardianConnectionManagementPage
-    extends GetWidget<GuardianConnectionManagementController> {
+class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManagementController> {
   const GuardianConnectionManagementPage({super.key});
 
   @override
@@ -23,116 +22,109 @@ class GuardianConnectionManagementPage
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded,
-              color: AppColors.onSurface, size: 20.w),
-          onPressed: () => Get.back(),
-        ),
+        automaticallyImplyLeading: false,
         title: Text('연결관리', style: AppTextTheme.headlineSmall()),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
-        child: Obx(() => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: AppSpacing.lg),
+        child: Obx(
+          () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: AppSpacing.lg),
 
-                // 헤더 카드
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(AppSpacing.lg),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLowest,
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Guardian Mode',
-                          style: AppTextTheme.labelSmall(
-                              color: AppColors.textTertiary,
-                              fw: FontWeight.w600)),
-                      SizedBox(height: AppSpacing.sm),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '관리 보호 대상자 수 ',
-                              style: AppTextTheme.headlineMedium(),
-                            ),
-                            TextSpan(
-                              text:
-                                  '${controller.subjects.length} / ${controller.maxSubjects}명',
-                              style: AppTextTheme.headlineMedium(
-                                color: const Color(0xFF4355B9),
-                                fw: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+              // 헤더 카드
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(AppSpacing.lg),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerLowest,
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
-                SizedBox(height: AppSpacing.lg),
-
-                // 연결된 대상자 섹션
-                Text('연결된 보호 대상자',
-                    style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
-                SizedBox(height: AppSpacing.lg),
-
-                // 대상자 리스트
-                ...List.generate(controller.subjects.length, (index) {
-                  final subject = controller.subjects[index];
-                  return _SubjectListTile(
-                    alias: subject.alias,
-                    code: subject.code,
-                    heartbeatHour: subject.heartbeatHour,
-                    heartbeatMinute: subject.heartbeatMinute,
-                    hasDevice: subject.deviceId != null,
-                    onSaveAlias: (newAlias) =>
-                        controller.saveAlias(index, newAlias),
-                    onScheduleChange: (hour, minute) =>
-                        controller.updateSchedule(index, hour, minute),
-                    onDelete: () => controller.deleteSubject(index),
-                  );
-                }),
-
-                SizedBox(height: AppSpacing.lg),
-
-                // 새로운 대상자 추가
-                AddSubjectButton(onTap: controller.goToAddSubject),
-                SizedBox(height: AppSpacing.sp6),
-
-                // 하단 안내 박스
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(AppSpacing.lg),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF3E0).withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(Icons.info_outline_rounded,
-                          size: 18.w, color: const Color(0xFFFF9800)),
-                      SizedBox(width: AppSpacing.sm),
-                      Expanded(
-                        child: Text(
-                          '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.\n'
-                          '재연결 시 이전의 기록을 복구할 수 없으며,\n'
-                          '보호 대상자 코드를 다시 입력해야 합니다.',
-                          style: AppTextTheme.bodySmall(
-                              color: const Color(0xFFE65100)),
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Guardian Mode',
+                      style: AppTextTheme.labelSmall(
+                        color: AppColors.textTertiary,
+                        fw: FontWeight.w600,
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: AppSpacing.sm),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(text: '관리 보호 대상자 수 ', style: AppTextTheme.headlineMedium()),
+                          TextSpan(
+                            text: '${controller.subjects.length} / ${controller.maxSubjects}명',
+                            style: AppTextTheme.headlineMedium(
+                              color: const Color(0xFF4355B9),
+                              fw: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: AppSpacing.sp6),
-              ],
-            )),
+              ),
+              SizedBox(height: AppSpacing.lg),
+
+              // 연결된 대상자 섹션
+              Text('연결된 보호 대상자', style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
+              SizedBox(height: AppSpacing.lg),
+
+              // 대상자 리스트
+              ...List.generate(controller.subjects.length, (index) {
+                final subject = controller.subjects[index];
+                return _SubjectListTile(
+                  alias: subject.alias,
+                  code: subject.code,
+                  heartbeatHour: subject.heartbeatHour,
+                  heartbeatMinute: subject.heartbeatMinute,
+                  hasDevice: subject.deviceId != null,
+                  onSaveAlias: (newAlias) => controller.saveAlias(index, newAlias),
+                  onScheduleChange: (hour, minute) =>
+                      controller.updateSchedule(index, hour, minute),
+                  onDelete: () => controller.deleteSubject(index),
+                );
+              }),
+
+              SizedBox(height: AppSpacing.lg),
+
+              // 새로운 대상자 추가
+              AddSubjectButton(onTap: controller.goToAddSubject),
+              SizedBox(height: AppSpacing.sp6),
+
+              // 하단 안내 박스
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(AppSpacing.lg),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF3E0).withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.info_outline_rounded, size: 18.w, color: const Color(0xFFFF9800)),
+                    SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Text(
+                        '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.'
+                        '재연결 시 이전의 기록을 복구할 수 없으며,\n'
+                        '보호 대상자 코드를 다시 입력해야 합니다.',
+                        style: AppTextTheme.bodySmall(color: const Color(0xFFE65100)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: AppSpacing.sp6),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: _buildBottomNav(),
     );
@@ -151,10 +143,8 @@ class GuardianConnectionManagementPage
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
         BottomNavigationBarItem(icon: Icon(Icons.link_rounded), label: '연결'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_rounded), label: '알림'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.settings_rounded), label: '설정'),
+        BottomNavigationBarItem(icon: Icon(Icons.notifications_rounded), label: '알림'),
+        BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
       ],
       onTap: (index) {
         switch (index) {
@@ -223,8 +213,7 @@ class _SubjectListTile extends StatelessWidget {
       padding: EdgeInsets.only(bottom: AppSpacing.md),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
         decoration: BoxDecoration(
           color: AppColors.surfaceContainerLowest,
           borderRadius: BorderRadius.circular(14.r),
@@ -234,40 +223,37 @@ class _SubjectListTile extends StatelessWidget {
             CircleAvatar(
               radius: 20.r,
               backgroundColor: AppColors.surfaceContainerHigh,
-              child: Icon(Icons.person,
-                  size: 22.w, color: AppColors.onSurfaceVariant),
+              child: Icon(Icons.person, size: 22.w, color: AppColors.onSurfaceVariant),
             ),
             SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(alias,
-                      style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
+                  Text(alias, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
                   SizedBox(height: 2.h),
-                  Text(code,
-                      style: AppTextTheme.bodySmall(
-                          color: AppColors.textTertiary)),
+                  Text(code, style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
                   if (hasDevice) ...[
                     SizedBox(height: 2.h),
-                    Text(_timeLabel,
-                        style: AppTextTheme.bodySmall(
-                            color: const Color(0xFF4355B9),
-                            fw: FontWeight.w600)),
+                    Text(
+                      _timeLabel,
+                      style: AppTextTheme.bodySmall(
+                        color: const Color(0xFF4355B9),
+                        fw: FontWeight.w600,
+                      ),
+                    ),
                   ],
                 ],
               ),
             ),
             IconButton(
               onPressed: () => _openEditDialog(context),
-              icon: Icon(Icons.edit_rounded,
-                  size: 20.w, color: const Color(0xFF4355B9)),
+              icon: Icon(Icons.edit_rounded, size: 20.w, color: const Color(0xFF4355B9)),
               constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.w),
             ),
             IconButton(
               onPressed: onDelete,
-              icon: Icon(Icons.delete_outline_rounded,
-                  size: 20.w, color: AppColors.error),
+              icon: Icon(Icons.delete_outline_rounded, size: 20.w, color: AppColors.error),
               constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.w),
             ),
           ],
@@ -359,10 +345,7 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CupertinoButton(
-                    child: const Text('취소'),
-                    onPressed: () => Navigator.pop(ctx),
-                  ),
+                  CupertinoButton(child: const Text('취소'), onPressed: () => Navigator.pop(ctx)),
                   CupertinoButton(
                     child: const Text('확인'),
                     onPressed: () {
@@ -394,9 +377,7 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
     if (newAlias.isNotEmpty && newAlias != widget.alias) {
       await widget.onSaveAlias(newAlias);
     }
-    if (widget.hasDevice &&
-        (_hour != widget.heartbeatHour ||
-            _minute != widget.heartbeatMinute)) {
+    if (widget.hasDevice && (_hour != widget.heartbeatHour || _minute != widget.heartbeatMinute)) {
       await widget.onScheduleChange(_hour, _minute);
     }
     if (mounted) Navigator.pop(context);
@@ -424,7 +405,9 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
               ),
               isDense: true,
               contentPadding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md, vertical: AppSpacing.md),
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.md,
+              ),
             ),
             style: AppTextTheme.bodyLarge(),
           ),
@@ -441,16 +424,9 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('취소'),
-        ),
-        TextButton(
-          onPressed: _save,
-          child: const Text('저장'),
-        ),
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('취소')),
+        TextButton(onPressed: _save, child: const Text('저장')),
       ],
     );
   }
 }
-

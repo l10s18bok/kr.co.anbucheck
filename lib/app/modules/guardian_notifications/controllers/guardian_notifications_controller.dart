@@ -21,11 +21,15 @@ class GuardianNotificationsController extends BaseController {
   }
 
   Future<void> load() async {
+    if (isLoading) return;
+    isLoading = true;
     try {
       final list = await _getNotifications();
       notifications.value = list;
     } catch (e) {
       notifications.value = [];
+    } finally {
+      isLoading = false;
     }
   }
 }

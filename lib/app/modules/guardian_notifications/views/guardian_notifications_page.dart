@@ -19,46 +19,39 @@ class GuardianNotificationsPage
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded,
-              color: AppColors.onSurface, size: 20.w),
-          onPressed: () => Get.back(),
-        ),
+        automaticallyImplyLeading: false,
         title: Text('알림', style: AppTextTheme.headlineSmall()),
         actions: [
-          IconButton(
+          Obx(() => IconButton(
             icon: Icon(Icons.refresh_rounded,
                 color: AppColors.onSurfaceVariant, size: 22.w),
-            onPressed: controller.load,
-          ),
+            onPressed: controller.isLoading ? null : controller.load,
+          )),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
-        child: Obx(() {
-          final items = controller.notifications;
+      body: Obx(() {
+        final items = controller.notifications;
 
-          return Column(
+        if (items.isEmpty) {
+          return const _EmptyState();
+        }
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: AppSpacing.lg),
-
-              // 오늘 섹션
               Text('오늘',
                   style: AppTextTheme.labelMedium(
                       color: AppColors.textTertiary, fw: FontWeight.w600)),
               SizedBox(height: AppSpacing.md),
-
-              if (items.isEmpty)
-                const _EmptyTile(message: '오늘 받은 알림이 없습니다')
-              else
-                ...items.map((item) => _NotificationCard(item: item)),
-
+              ...items.map((item) => _NotificationCard(item: item)),
               SizedBox(height: AppSpacing.sp6),
             ],
-          );
-        }),
-      ),
+          ),
+        );
+      }),
       bottomNavigationBar: _buildBottomNav(),
     );
   }
@@ -210,20 +203,26 @@ class _NotificationCard extends StatelessWidget {
 
 // ─── 빈 상태 ──────────────────────────────────────────────────────────────────
 
-class _EmptyTile extends StatelessWidget {
-  final String message;
-
-  const _EmptyTile({required this.message});
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
-      child: Center(
-        child: Text(
-          message,
-          style: AppTextTheme.bodyMedium(color: AppColors.textTertiary),
-        ),
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.notifications_off_rounded,
+            size: 80.w,
+            color: AppColors.textTertiary.withValues(alpha: 0.4),
+          ),
+          SizedBox(height: AppSpacing.lg),
+          Text(
+            '오늘 받은 알림이 없습니다',
+            style: AppTextTheme.bodyLarge(color: AppColors.textTertiary),
+          ),
+        ],
       ),
     );
   }

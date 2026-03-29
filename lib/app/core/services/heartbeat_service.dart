@@ -73,30 +73,25 @@ class HeartbeatService {
     final isOnline = results.any((r) => r != ConnectivityResult.none);
 
     if (isOnline) {
-      await _sendOrQueue(request, deviceToken);
+      await _sendOrSavePending(request, deviceToken);
     } else {
-      await _heartbeatDs.enqueue(request.toJson());
+      await _heartbeatDs.savePending(request.toJson());
     }
   }
 
-  /// 오프라인 큐 일괄 전송 (네트워크 복구 시 호출)
-  Future<void> flushQueue(String deviceToken) async {
-    final queue = await _heartbeatDs.getQueue();
-    for (final item in queue) {
-      try {
-        await HeartbeatRemoteDatasource(deviceToken).send(
-          _fromQueueJson(item.payload),
-        );
-        await _heartbeatDs.dequeue(item.id);
-      } catch (_) {
-        break;
-      }
-    }
+  /// 보류 중인 heartbeat 재전송 (네트워크 복구 시 호출)
+  Future<void> sendPending(String deviceToken) async {
+    final payload = await _heartbeatDs.getPending();
+    if (payload == null) return;
+    try {
+      await HeartbeatRemoteDatasource(deviceToken).send(_fromJson(payload));
+      await _heartbeatDs.clearPending();
+    } catch (_) {}
   }
 
   // ── private ──────────────────────────────────────────────
 
-  Future<void> _sendOrQueue(HeartbeatRequest request, String deviceToken) async {
+  Future<void> _sendOrSavePending(HeartbeatRequest request, String deviceToken) async {
     try {
       await HeartbeatRemoteDatasource(deviceToken).send(request);
       final now = DateTime.now();
@@ -107,7 +102,7 @@ class HeartbeatService {
       await _tokenDs.saveLastHeartbeatDate(today);
       await _tokenDs.saveLastHeartbeatTime(timeStr);
     } catch (_) {
-      await _heartbeatDs.enqueue(request.toJson());
+      await _heartbeatDs.savePending(request.toJson());
     }
   }
 
@@ -208,7 +203,7 @@ class HeartbeatService {
     } catch (_) {}
   }
 
-  HeartbeatRequest _fromQueueJson(Map<String, dynamic> json) =>
+  HeartbeatRequest _fromJson(Map<String, dynamic> json) =>
       HeartbeatRequest(
         deviceId:     json['device_id'] as String,
         timestamp:    json['timestamp'] as String,

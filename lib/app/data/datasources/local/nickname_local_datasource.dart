@@ -32,4 +32,9 @@ class NicknameLocalDatasource {
     all.remove(inviteCode);
     await prefs.setString(_key, jsonEncode(all));
   }
+
+  Future<void> clearAll() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_key);
+  }
 }

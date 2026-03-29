@@ -19,11 +19,7 @@ class PermissionPage extends GetWidget<PermissionController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded,
-              color: AppColors.onSurface, size: 20.w),
-          onPressed: () => Get.back(),
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: Padding(
@@ -46,6 +42,16 @@ class PermissionPage extends GetWidget<PermissionController> {
                     ? '안부 확인 알림을 받기 위해 필요합니다'
                     : '보호 대상자의 안전 상태 알림을 받기 위해 필요합니다',
               ),
+
+              // 걸음수 / 신체 활동 카드 (대상자 모드 + Android만)
+              if (controller.isSubjectMode && Platform.isAndroid) ...[
+                SizedBox(height: AppSpacing.lg),
+                _PermissionCard(
+                  icon: Icons.directions_walk_rounded,
+                  title: '신체 활동 권한',
+                  description: '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다',
+                ),
+              ],
 
               // 배터리 최적화 카드 (대상자 모드 + Android만)
               if (controller.isSubjectMode && Platform.isAndroid) ...[

@@ -18,10 +18,6 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
-          onPressed: () {},
-        ),
         title: Text('안부 (Anbu)', style: AppTextTheme.headlineSmall()),
       ),
       body: SafeArea(

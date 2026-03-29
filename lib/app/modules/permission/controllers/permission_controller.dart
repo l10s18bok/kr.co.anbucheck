@@ -43,7 +43,9 @@ class PermissionController extends BaseController {
     }
 
     // 2. 대상자 모드 + Android: 활동 인식 권한 요청 (걸음수 감지)
+    //    OS 다이얼로그 전 사전 안내 다이얼로그 표시
     if (isSubjectMode && Platform.isAndroid) {
+      await _showActivityRecognitionRationaleDialog();
       await Permission.activityRecognition.request();
     }
 
@@ -55,6 +57,25 @@ class PermissionController extends BaseController {
     // 온보딩으로 이동 (공통)
     _isRequesting = false;
     Get.offNamed(AppRoutes.onboarding, arguments: {'mode': mode});
+  }
+
+  /// 신체 활동 권한 요청 전 사전 안내 다이얼로그
+  Future<void> _showActivityRecognitionRationaleDialog() async {
+    await Get.dialog<void>(
+      AlertDialog(
+        title: const Text('신체 활동 권한 안내'),
+        content: const Text(
+          '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.\n'
+          '다음 화면에서 "허용"을 선택해 주세요.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('확인'),
+          ),
+        ],
+      ),
+    );
   }
 
   /// 알림 권한 거부 시 다이얼로그

@@ -108,6 +108,7 @@ class GuardianConnectionManagementController extends BaseController {
     isLoading = true;
     try {
       await _subjectDs.unlinkSubject(deviceToken, subject.guardianId);
+      await _nicknameDs.remove(subject.code);
       _svc.removeByGuardianId(subject.guardianId);
       _subjects.removeAt(index);
       Get.snackbar('완료', '연결이 해제되었습니다.',

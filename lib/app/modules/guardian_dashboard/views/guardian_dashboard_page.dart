@@ -20,6 +20,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false,
         title: Obx(() => Text(
               'Anbu Guardian (${controller.subjects.length})',
               style: AppTextTheme.headlineSmall(),

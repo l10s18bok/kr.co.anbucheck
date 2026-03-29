@@ -963,10 +963,40 @@ Authorization: Bearer <device_token> → 항상 유효
   · 별칭 다시 설정 필요
   · 기존 유료 구독은 Apple/Google 구독 복원(restoreTransactions)으로 복구
 
+[모드 변경 (동일 기기에서 다른 모드 선택)]
+  · 서버: DELETE /api/v1/users/me → 전체 데이터 삭제
+    (users, devices, guardians, alerts, guardian_notifications, heartbeat_logs, subscriptions)
+  · 앱 로컬: _tokenDs.clear() + _nicknameDs.clearAll() 호출
+    → device_token, 역할, 초대 코드 등 토큰 정보 및 대상자 별칭 전체 삭제
+  · 이후 새 모드로 재등록 (completeOnboarding 재호출)
+
 ※ 앱 재설치는 드문 이벤트이며, 연결 대상이 소수(1~2명)이므로
   재연결 부담이 작음. 계정 복구를 위해 개인정보를 수집하지 않는 것이
   더 큰 가치를 제공함.
 ```
+
+
+### 3.7 연결 해제 시 처리
+
+```
+[보호자가 연결 해제]
+연결관리 → 대상자 삭제 버튼 → 확인 다이얼로그 → 해제
+```
+
+**앱(클라이언트) 처리:**
+- 서버 DELETE `/api/v1/subjects/{guardian_id}/unlink` 호출
+- `NicknameLocalDatasource`에서 해당 `invite_code` 별칭 삭제
+- `GuardianSubjectService` 인메모리 캐시에서 제거
+
+**서버 처리:**
+- `guardians` 레코드 삭제
+- `guardian_notifications` 중 해당 보호자-대상자 기록 삭제
+- `alerts`는 삭제하지 않음 (대상자 기준 공유 데이터 — 다른 보호자에게도 유효)
+
+**재연결:**
+- 동일 `invite_code`로 재연결 가능 (대상자 계정 유지)
+- 재연결 후 별칭은 다시 설정 필요 (로컬 삭제되었으므로)
+- 재연결 후 알림 이력은 새로 시작
 
 
 ### 3.6 구독 및 결제
@@ -1078,11 +1108,10 @@ lib/
     │   │   │   ├── alert_remote_datasource.dart
     │   │   │   └── subscription_remote_datasource.dart
     │   │   └── local/
-    │   │       ├── heartbeat_local_datasource.dart      # 전송 실패 큐 (sqflite)
+    │   │       ├── heartbeat_local_datasource.dart      # 전송 실패 보류 heartbeat 1건 (shared_preferences)
     │   │       ├── token_local_datasource.dart          # device_token 로컬 저장
     │   │       ├── sensor_local_datasource.dart          # 이전 센서 값 저장 (가속도+자이로)
-    │   │       ├── nickname_local_datasource.dart        # 대상자 별칭 로컬 저장
-    │   │       └── notification_local_datasource.dart   # 보호자 알림 이력 (sqflite, 30일/100건)
+    │   │       └── nickname_local_datasource.dart        # 대상자 별칭 로컬 저장
     │   └── repositories/
     │       ├── heartbeat_repository_impl.dart
     │       ├── auth_repository_impl.dart
@@ -1215,8 +1244,7 @@ ios/Runner/
 | `pedometer`                                | 걸음수 조회           | **primary 활동 지표** (걸음수 변화 감지), Android: ACTIVITY_RECOGNITION 권한 필요, iOS: NSMotionUsageDescription |
 | `sensors_plus`                             | 가속도/자이로 센서 조회 | **secondary 활동 지표** (걸음수 0일 때 보완), 권한 불필요       |
 | `google_mobile_ads`                        | AdMob 하단 고정 배너   | 유료 사용자 광고 제거                                            |
-| `shared_preferences`                       | 경량 로컬 저장소       | device_token, 이전 센서 값, 대상자 별칭 저장                     |
-| `sqflite`                                  | 로컬 DB                | 전송 실패 heartbeat 큐, 보호자 알림 이력 (30일/100건)            |
+| `shared_preferences`                       | 경량 로컬 저장소       | device_token, 이전 센서 값, 대상자 별칭, 보류 heartbeat 1건 저장 |
 | `device_info_plus`                         | 기기 고유 ID + 기기 정보 | device_id (Android: SSAID, iOS: identifierForVendor), OS 타입/버전 |
 | `connectivity_plus`                        | 네트워크 상태          | 오프라인 시 전송 보류                                            |
 | `freezed_annotation` + `json_annotation`   | 직렬화                 | Freezed DTO                                                      |
@@ -1829,7 +1857,7 @@ assets/
     │   │           ※ heartbeat 실패 시 매일 같은 시각에 반복 표시
     │   │           ※ 다음 heartbeat 성공 시 다시 취소+재등록
     │   └─ 미연결:
-    │       ├─ 로컬 큐에 저장 (sqflite)
+    │       ├─ 보류 heartbeat 1건 저장 (shared_preferences, 이전 보류 건 덮어씀)
     │       └─ 대상자 폰에 로컬 알림 표시:
     │           "인터넷 연결이 꺼져 있습니다.
     │            안부 확인이 전송되지 않고 있으며,

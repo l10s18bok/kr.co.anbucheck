@@ -28,7 +28,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
         ),
         inviteCode: inviteCode,
         nickname: nickname,
-        receivedAt: DateTime.parse(row['created_at'] as String),
+        receivedAt: DateTime.parse(row['created_at'] as String).toLocal(),
       );
     }).toList();
   }

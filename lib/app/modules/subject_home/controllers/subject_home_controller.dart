@@ -186,16 +186,16 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     final wasConnected = _isConnected.value;
     _isConnected.value = results.any((r) => r != ConnectivityResult.none);
 
-    // 오프라인 → 온라인 복구 시 큐에 쌓인 heartbeat 일괄 전송
+    // 오프라인 → 온라인 복구 시 보류 heartbeat 재전송
     if (!wasConnected && _isConnected.value) {
-      _flushHeartbeatQueue();
+      _sendPendingHeartbeat();
     }
   }
 
-  Future<void> _flushHeartbeatQueue() async {
+  Future<void> _sendPendingHeartbeat() async {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
-    await HeartbeatService().flushQueue(deviceToken);
+    await HeartbeatService().sendPending(deviceToken);
   }
 
   /// 고유 코드 클립보드 복사
