@@ -7,7 +7,7 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
-/// 보호자 알림 목록 페이지
+/// 보호자 알림 목록 페이지 — 당일 알림만 표시 (서버 API 기반)
 class GuardianNotificationsPage
     extends GetWidget<GuardianNotificationsController> {
   const GuardianNotificationsPage({super.key});
@@ -26,37 +26,21 @@ class GuardianNotificationsPage
         ),
         title: Text('알림', style: AppTextTheme.headlineSmall()),
         actions: [
-          Obx(() => controller.todayNotifications.isEmpty
-              ? const SizedBox.shrink()
-              : TextButton(
-                  onPressed: controller.markAllAsRead,
-                  child: Text(
-                    '모두 읽음',
-                    style: AppTextTheme.bodyMedium(
-                      color: const Color(0xFF4355B9),
-                      fw: FontWeight.w600,
-                    ),
-                  ),
-                )),
+          IconButton(
+            icon: Icon(Icons.refresh_rounded,
+                color: AppColors.onSurfaceVariant, size: 22.w),
+            onPressed: controller.load,
+          ),
         ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
         child: Obx(() {
-          final today = controller.todayNotifications;
-          final past = controller.pastNotifications;
+          final items = controller.notifications;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: AppSpacing.lg),
-
-              // 새로운 알림 수
-              Text(
-                '새로운 알림 ${controller.newCount}개',
-                style: AppTextTheme.bodyMedium(
-                    color: AppColors.textSecondary),
-              ),
               SizedBox(height: AppSpacing.lg),
 
               // 오늘 섹션
@@ -65,46 +49,10 @@ class GuardianNotificationsPage
                       color: AppColors.textTertiary, fw: FontWeight.w600)),
               SizedBox(height: AppSpacing.md),
 
-              if (today.isEmpty)
+              if (items.isEmpty)
                 const _EmptyTile(message: '오늘 받은 알림이 없습니다')
               else
-                ...today.map((item) => _NotificationCard(
-                      item: item,
-                      isRead: item.isRead || controller.isAllRead.value,
-                      onTap: () {
-                        if (item.id != null) controller.markAsRead(item.id!);
-                      },
-                    )),
-
-              SizedBox(height: AppSpacing.sp6),
-
-              // 지난 알림 섹션
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('지난 알림',
-                      style: AppTextTheme.labelMedium(
-                          color: AppColors.textTertiary, fw: FontWeight.w600)),
-                  if (past.length > 2)
-                    GestureDetector(
-                      onTap: () => Get.toNamed(
-                          AppRoutes.guardianPastNotifications),
-                      child: Text(
-                        '+ 더보기',
-                        style: AppTextTheme.labelSmall(
-                          color: const Color(0xFF4355B9),
-                          fw: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              SizedBox(height: AppSpacing.md),
-
-              if (past.isEmpty)
-                const _EmptyTile(message: '지난 알림이 없습니다')
-              else
-                ...past.take(2).map((item) => _PastNotificationTile(item: item)),
+                ...items.map((item) => _NotificationCard(item: item)),
 
               SizedBox(height: AppSpacing.sp6),
             ],
@@ -149,24 +97,16 @@ class GuardianNotificationsPage
   }
 }
 
-// ─── 오늘 알림 카드 ────────────────────────────────────────────────────────────
+// ─── 알림 카드 ─────────────────────────────────────────────────────────────────
 
 class _NotificationCard extends StatelessWidget {
   final NotificationEntity item;
-  final bool isRead;
-  final VoidCallback? onTap;
 
-  const _NotificationCard({
-    required this.item,
-    this.isRead = false,
-    this.onTap,
-  });
+  const _NotificationCard({required this.item});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
+    return Padding(
       padding: EdgeInsets.only(bottom: AppSpacing.md),
       child: Container(
         width: double.infinity,
@@ -178,32 +118,20 @@ class _NotificationCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 등급 아이콘 + 읽음 체크
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 36.w,
-                  height: 36.w,
-                  decoration: BoxDecoration(
-                    color: _iconColor.withValues(alpha: 0.15),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(_icon, size: 20.w, color: _iconColor),
-                ),
-                if (isRead) ...[
-                  SizedBox(height: 4.h),
-                  Icon(Icons.check_circle_rounded,
-                      size: 14.w, color: const Color(0xFF4355B9)),
-                ],
-              ],
+            Container(
+              width: 36.w,
+              height: 36.w,
+              decoration: BoxDecoration(
+                color: _iconColor.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(_icon, size: 20.w, color: _iconColor),
             ),
             SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 등급 라벨 + 수신 시각
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -221,14 +149,12 @@ class _NotificationCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 4.h),
-                  // 대상자 + 메시지
                   RichText(
                     text: TextSpan(
                       children: [
                         TextSpan(
                           text: '${item.displayName} - ',
-                          style:
-                              AppTextTheme.bodyMedium(fw: FontWeight.w600),
+                          style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
                         ),
                         TextSpan(
                           text: item.body,
@@ -243,7 +169,6 @@ class _NotificationCard extends StatelessWidget {
           ],
         ),
       ),
-    ),
     );
   }
 
@@ -281,54 +206,6 @@ class _NotificationCard extends StatelessWidget {
         AlertLevel.caution => '주의',
         AlertLevel.info => '정보',
       };
-}
-
-// ─── 지난 알림 타일 ────────────────────────────────────────────────────────────
-
-class _PastNotificationTile extends StatelessWidget {
-  final NotificationEntity item;
-
-  const _PastNotificationTile({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: AppSpacing.sm),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.check_circle_outline_rounded,
-                size: 18.w, color: AppColors.onSurfaceVariant),
-            SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                '${item.displayName} - ${item.body}',
-                style:
-                    AppTextTheme.bodyMedium(color: AppColors.textTertiary),
-              ),
-            ),
-            SizedBox(width: AppSpacing.sm),
-            Text(
-              _formatDate(item.receivedAt),
-              style: AppTextTheme.labelSmall(
-                  color: AppColors.textTertiary, fw: FontWeight.w500),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  String _formatDate(DateTime dt) {
-    return '${dt.month}/${dt.day}';
-  }
 }
 
 // ─── 빈 상태 ──────────────────────────────────────────────────────────────────

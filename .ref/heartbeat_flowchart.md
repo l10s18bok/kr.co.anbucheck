@@ -108,6 +108,12 @@ flowchart TD
     CheckSuspicious -->|false| StatusNormal
     CheckSuspicious -->|true| WellbeingCheck[대상자에게 wellbeing_check 발송<br/>📱 안부를 확인해 주세요<br/>보호자 경고 없음]
     WellbeingCheck --> Wait1([⏱ 다음 heartbeat 대기<br/>보호자 경고는 미수신 시에만 발생])
+
+    StatusNormal --> SaveNoti[보호자 알림 DB 저장<br/>guardian_notifications<br/>alert_level: info<br/>is_push_sent: true/false]
+    SaveNoti --> StepsNoti{steps_delta 있음?}
+    StepsNoti -->|YES| StepsCompare[어제 last_steps와 비교<br/>오늘 걸음수 정보 알림 DB 저장<br/>is_push_sent = false<br/>Push 발송 없음<br/>last_steps 갱신]
+    StepsNoti -->|NO| End3([완료])
+    StepsCompare --> End3
 ```
 
 
@@ -124,13 +130,15 @@ flowchart TD
 
     CheckLastBatt -->|YES| BattDead[🔵 정보 등급 판정<br/>배터리 방전 추정]
     BattDead --> BattDeadNoti[보호자 Push 알림 정보 등급 소리 없음<br/>🔋 배터리 방전 추정<br/>충전 후 자동으로 정상 복귀됩니다]
-    BattDeadNoti --> BattEnd([1회 발송 후 종료<br/>이후 미수신 지속되어도 상향 없음<br/>heartbeat 수신 시 자동 해소])
+    BattDeadNoti --> BattSave[guardian_notifications DB 저장<br/>alert_level: info, is_push_sent: true]
+    BattSave --> BattEnd([1회 발송 후 종료<br/>이후 미수신 지속되어도 상향 없음<br/>heartbeat 수신 시 자동 해소])
 
     CheckLastBatt -->|NO| MissCount{누적 미수신 횟수?}
 
     MissCount -->|1회| Caution[⚠ 주의 등급 판정]
     Caution --> CautionNoti[보호자 Push 알림 주의 등급<br/>⚠ 안부 확인<br/>오늘 안부 확인이 없습니다]
-    CautionNoti --> NextDay0([다음 날 재확인])
+    CautionNoti --> CautionSave[guardian_notifications DB 저장<br/>alert_level: caution, is_push_sent: true]
+    CautionSave --> NextDay0([다음 날 재확인])
 
     MissCount -->|2회 이상| Warning[⚠ 경고 등급 판정]
     Warning --> NightCheck1{현재 시각<br/>22:00~09:00?}
@@ -139,7 +147,8 @@ flowchart TD
     NightCheck1 -->|YES 야간| Delay1([DB에 기록 후<br/>다음 날 09:00에 발송 예약])
     Delay1 --> WarningNoti
 
-    WarningNoti --> WarningRepeat{경고 횟수?}
+    WarningNoti --> WarningSave[guardian_notifications DB 저장<br/>alert_level: warning, is_push_sent: true]
+    WarningSave --> WarningRepeat{경고 횟수?}
     WarningRepeat -->|2회 이하| NextDay1([다음 날 같은 시각에 재발송])
     WarningRepeat -->|3회 이상| UpgradeUrgent[🚨 긴급 등급으로 상향]
     UpgradeUrgent --> NightCheck2{현재 시각<br/>22:00~09:00?}
@@ -148,11 +157,36 @@ flowchart TD
     NightCheck2 -->|YES 야간| Delay2([DB에 기록 후<br/>다음 날 09:00에 발송 예약])
     Delay2 --> UrgentNoti
 
-    UrgentNoti --> DailyRepeat([매일 같은 시각에 반복<br/>보호자 확인까지 종료 없음])
+    UrgentNoti --> UrgentSave[guardian_notifications DB 저장<br/>alert_level: urgent, is_push_sent: true]
+    UrgentSave --> DailyRepeat([매일 같은 시각에 반복<br/>보호자 확인까지 종료 없음])
 ```
 
 
-## 4. 적응형 Heartbeat 주기 상태도
+## 4. 보호자 알림 자정 정리 스케줄러
+
+```mermaid
+flowchart TD
+    Midnight([서버 스케줄러: 매일 00:00 KST 실행])
+    Midnight --> DeleteOld["guardian_notifications에서<br/>전날(KST 기준) 알림 전체 삭제<br/>DELETE WHERE created_at < 오늘 00:00 KST"]
+    DeleteOld --> Log["[자정 알림 정리] 삭제 완료 — N건"]
+    Log --> End([완료])
+```
+
+**보호자 알림 조회 흐름:**
+```
+보호자 앱 실행 또는 알림 목록 화면 진입
+    ↓
+GET /api/v1/notifications 호출
+    ↓
+서버: 당일(KST) guardian_notifications 반환 (시간순)
+    ↓
+클라이언트: is_push_sent = false 항목도 목록에 표시
+    ↓
+자정 이후 → 서버가 전날 알림 삭제 → 다음 날 00:00부터 새 목록 시작
+```
+
+
+## 5. 적응형 Heartbeat 주기 상태도
 
 ```mermaid
 flowchart LR
@@ -169,7 +203,7 @@ flowchart LR
 ```
 
 
-## 5. 경고 등급 요약
+## 6. 경고 등급 요약
 
 ```mermaid
 flowchart TD
@@ -195,7 +229,7 @@ flowchart TD
 ```
 
 
-## 6. iOS 로컬 알림 데드맨 스위치 (Dead Man's Switch)
+## 7. iOS 로컬 알림 데드맨 스위치 (Dead Man's Switch)
 
 > BGTaskScheduler는 iOS가 실행 시점을 보장하지 않으며, 앱 강제 종료 시 동작하지 않으므로 채택하지 않는다.
 > 대신 **로컬 알림 예약/취소 패턴**으로 iOS의 안전망을 구현한다.

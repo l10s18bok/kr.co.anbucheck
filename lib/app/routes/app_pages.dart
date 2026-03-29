@@ -21,8 +21,6 @@ import 'package:anbucheck/app/modules/guardian_settings/bindings/guardian_settin
 import 'package:anbucheck/app/modules/guardian_settings/views/guardian_settings_page.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/bindings/guardian_connection_management_binding.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/views/guardian_connection_management_page.dart';
-import 'package:anbucheck/app/modules/guardian_past_notifications/bindings/guardian_past_notifications_binding.dart';
-import 'package:anbucheck/app/modules/guardian_past_notifications/views/guardian_past_notifications_page.dart';
 
 part 'app_routes.dart';
 
@@ -86,11 +84,6 @@ class AppPages {
       name: AppRoutes.guardianConnectionManagement,
       page: () => const GuardianConnectionManagementPage(),
       binding: GuardianConnectionManagementBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.guardianPastNotifications,
-      page: () => const GuardianPastNotificationsPage(),
-      binding: GuardianPastNotificationsBinding(),
     ),
   ];
 }

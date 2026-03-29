@@ -1,45 +1,35 @@
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
-import 'package:anbucheck/app/data/datasources/local/notification_local_datasource.dart';
-import 'package:anbucheck/app/data/models/notification_model.dart';
+import 'package:anbucheck/app/data/datasources/remote/notification_remote_datasource.dart';
 import 'package:anbucheck/app/domain/entities/notification_entity.dart';
 import 'package:anbucheck/app/domain/repositories/notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
-  final NotificationLocalDatasource _localDs;
+  final NotificationRemoteDatasource _remoteDs;
   final NicknameLocalDatasource _nicknameDs;
 
-  NotificationRepositoryImpl(this._localDs, this._nicknameDs);
+  NotificationRepositoryImpl(this._remoteDs, this._nicknameDs);
 
   @override
   Future<List<NotificationEntity>> getAll() async {
-    final rows = await _localDs.getAll();
+    final rows = await _remoteDs.getAll();
     final nicknames = await _nicknameDs.getAll();
+
     return rows.map((row) {
-      final model = NotificationModel.fromMap(row);
-      final nickname = nicknames[model.inviteCode ?? ''];
-      return model.toEntity(nickname: nickname);
+      final inviteCode = row['invite_code'] as String?;
+      final nickname = nicknames[inviteCode ?? ''];
+
+      return NotificationEntity(
+        id: row['id'] as int?,
+        title: row['title'] as String,
+        body: row['body'] as String,
+        level: AlertLevel.values.firstWhere(
+          (e) => e.name == (row['alert_level'] as String? ?? 'info'),
+          orElse: () => AlertLevel.info,
+        ),
+        inviteCode: inviteCode,
+        nickname: nickname,
+        receivedAt: DateTime.parse(row['created_at'] as String),
+      );
     }).toList();
-  }
-
-  @override
-  Future<void> save(NotificationEntity entity) async {
-    final model = NotificationModel.fromEntity(entity);
-    await _localDs.insert(model.toMap());
-  }
-
-  @override
-  Future<void> markAsRead(int id) => _localDs.markAsRead(id);
-
-  @override
-  Future<void> resetAllRead() => _localDs.resetAllRead();
-
-  @override
-  Future<void> cleanup() => _localDs.cleanup();
-
-  @override
-  Future<void> seedIfEmpty() async {
-    await _nicknameDs.save('K7M-4PXR', '어머니');
-    await _nicknameDs.save('ABC-1234', '아버지');
-    await _localDs.seedIfEmpty();
   }
 }

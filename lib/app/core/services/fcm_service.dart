@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
-import 'package:anbucheck/app/data/datasources/local/notification_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/modules/subject_home/controllers/subject_home_controller.dart';
@@ -41,31 +40,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     return;
   }
 
-  // 보호자 알림: 탭하지 않아도 로컬 DB에 저장 (Android 백그라운드/종료 상태)
-  // iOS는 notification+data 메시지에서 백그라운드 핸들러 호출이 보장되지 않음
-  final notification = message.notification;
-  if (notification == null) return;
-
-  const skipTypes = {'wellbeing_check'};
-  if (skipTypes.contains(type)) return;
-
-  final level = switch (type) {
-    'alert_urgent'  => 'urgent',
-    'alert_warning' => 'warning',
-    'alert_caution' => 'caution',
-    _               => 'info', // alert_resolved, auto_report, manual_report, alert_info
-  };
-
-  // 백그라운드에서는 FCM data의 invite_code 사용 (없으면 null)
-  await NotificationLocalDatasource().insert({
-    'title': notification.title ?? '',
-    'body': notification.body ?? '',
-    'alert_level': level,
-    'invite_code': message.data['invite_code'],
-    'received_at': DateTime.now().toIso8601String(),
-    'is_read': 0,
-  });
-  debugPrint('[FCM] 백그라운드 알림 저장: $type');
+  debugPrint('[FCM] 백그라운드 보호자 알림 수신: $type');
 }
 
 /// 로컬 알림 탭 핸들러 (top-level 함수 필수)
@@ -107,8 +82,6 @@ void _handleNotificationTap(String type) {
 class FcmService extends GetxService {
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
-  final _notificationDs = NotificationLocalDatasource();
-
   /// Android 알림 채널
   static const _androidChannel = AndroidNotificationChannel(
     'anbu_alerts',
@@ -274,8 +247,6 @@ class FcmService extends GetxService {
       payload: message.data['type'] ?? '',
     );
 
-    // 알림 이력 로컬 저장 + 대시보드 데이터 갱신
-    _saveNotification(message);
     _refreshSubjectsIfNeeded(message.data['type']);
   }
 
@@ -283,8 +254,6 @@ class FcmService extends GetxService {
   void _handleMessageOpenedApp(RemoteMessage message) {
     debugPrint('[FCM] 알림 탭: ${message.data}');
     final type = message.data['type'] ?? '';
-    // 백그라운드에서 탭한 알림도 이력 저장
-    _saveNotification(message);
     _handleNotificationTap(type);
   }
 
@@ -301,52 +270,7 @@ class FcmService extends GetxService {
     } catch (_) {}
   }
 
-  /// 알림 이력을 로컬 DB에 저장
-  /// heartbeat_trigger / schedule_updated / wellbeing_check은 저장 제외
-  Future<void> _saveNotification(RemoteMessage message) async {
-    final notification = message.notification;
-    if (notification == null) return;
-
-    final type = message.data['type'] ?? '';
-    const skipTypes = {'heartbeat_trigger', 'schedule_updated', 'wellbeing_check'};
-    if (skipTypes.contains(type)) return;
-
-    final level = switch (type) {
-      'alert_urgent'  => 'urgent',
-      'alert_warning' => 'warning',
-      'alert_caution' => 'caution',
-      _               => 'info', // alert_resolved, auto_report, manual_report, alert_info
-    };
-
-    // invite_code: FCM data에 포함된 값을 우선 사용
-    // 없는 경우 GuardianSubjectService 캐시에서 subject_user_id로 조회
-    String? inviteCode = message.data['invite_code'];
-    if (inviteCode == null || inviteCode.isEmpty) {
-      final subjectUserIdStr = message.data['subject_user_id'];
-      if (subjectUserIdStr != null) {
-        final subjectUserId = int.tryParse(subjectUserIdStr);
-        if (subjectUserId != null) {
-          try {
-            final subjectService = Get.find<GuardianSubjectService>();
-            inviteCode = subjectService.subjects
-                .firstWhereOrNull((s) => s.userId == subjectUserId)
-                ?.inviteCode;
-          } catch (_) {}
-        }
-      }
-    }
-
-    await _notificationDs.insert({
-      'title': notification.title ?? '',
-      'body': notification.body ?? '',
-      'alert_level': level,
-      'invite_code': inviteCode,
-      'received_at': DateTime.now().toIso8601String(),
-      'is_read': 0,
-    });
-  }
-
-  /// 특정 토픽 구독 (대상자별 알림 채널)
+/// 특정 토픽 구독 (대상자별 알림 채널)
   Future<void> subscribeToTopic(String topic) async {
     await _messaging.subscribeToTopic(topic);
     debugPrint('[FCM] 토픽 구독: $topic');

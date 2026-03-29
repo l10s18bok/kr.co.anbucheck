@@ -447,11 +447,17 @@ Response: 200 OK
   - `suspicious` = false:
     - 활성 경고 있으면 → 완전 해소 + 보호자 Push "정상 복귀" (정보 등급 DND 적용)
     - 활성 경고 없고 `manual` = true → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
-    - 활성 경고 없고 `manual` = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
+    - 활성 경고 없고 `manual` = false, 예약 heartbeat → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
+      - `steps_delta` 있으면 → 어제 `last_steps`와 비교하여 걸음수 정보 알림 DB 저장 (Push 발송 안 함)
+      - `last_steps` 갱신 (다음날 비교용)
   - `suspicious` = true → warning/urgent 경고를 caution으로 하향 (정상 복귀 알림 없음)
     - 1회 → 주의 등급 발생 (caution 중복 방지)
     - 2회 이상 → 경고 등급 발생 (warning/urgent 없을 때만)
   - 보호자 설정 "안부 확인 알림 ON" 시 → 대상자에게 안부 확인 Push 발송 (suspicious 2회+)
+- **보호자 알림 DB 저장 정책:**
+  - 보호자에게 발송되는 모든 알림(info/caution/warning/urgent)은 `guardian_notifications` 테이블에 시간순 저장
+  - 걸음수 정보 알림은 Push 발송 없이 DB에만 저장 (`is_push_sent = false`)
+  - 매일 00:00 KST 스케줄러가 전날 알림 전체 삭제
 
 
 ### 4.7 구독 상태 확인 (보호자용)
@@ -754,6 +760,47 @@ Response: 200 OK
 - 플랫폼별(android/ios) 독립 관리
 
 
+### 4.16 당일 보호자 알림 목록 조회
+```
+GET /api/v1/notifications
+Headers:
+  Authorization: Bearer <device_token>  (보호자)
+Response: 200 OK
+{
+  "notifications": [
+    {
+      "id": 101,
+      "subject_user_id": 1,
+      "invite_code": "K7M-4PXR",
+      "alert_level": "info",
+      "title": "✅ 오늘 안부 확인 완료",
+      "body": "대상자의 오늘 안부 확인이 정상 수신되었습니다.",
+      "is_push_sent": true,
+      "created_at": "2026-03-29T09:32:10+09:00"
+    },
+    {
+      "id": 102,
+      "subject_user_id": 1,
+      "invite_code": "K7M-4PXR",
+      "alert_level": "info",
+      "title": "📊 오늘 걸음수 정보",
+      "body": "어제 1,240보 → 오늘 3,580보 (2,340보 증가)",
+      "is_push_sent": false,
+      "created_at": "2026-03-29T09:32:11+09:00"
+    }
+  ]
+}
+```
+
+- 보호자만 호출 가능 (대상자가 호출 시 403)
+- **오늘(KST) 생성된 알림만 반환** — 자정 00:00 KST 스케줄러가 전날 알림 전체 삭제
+- `created_at` 오름차순 정렬 (시간순)
+- 보호자 본인에게 연결된 대상자의 알림만 조회 가능
+- `is_push_sent = false`인 항목은 걸음수 정보 알림 (Push 미발송, DB 전용)
+- 연결된 대상자가 여러 명일 경우, 모든 대상자의 알림이 시간순으로 혼합 반환됨
+  - 클라이언트는 `invite_code`로 대상자를 식별하여 로컬 별칭으로 표시
+
+
 ---
 
 
@@ -785,6 +832,7 @@ CREATE TABLE IF NOT EXISTS devices (
     os_version      TEXT,
     fcm_token       TEXT,
     steps_delta     INTEGER,                           -- 마지막 heartbeat 이후 걸음수 증가량 (권한 거부 시 NULL)
+    last_steps      INTEGER,                           -- 전날 예약 heartbeat의 걸음수 (오늘 걸음수 비교용)
     battery_level   INTEGER,                           -- 마지막 배터리 잔량 (0~100)
     suspicious_count INTEGER DEFAULT 0,                -- 연속 suspicious 횟수
     heartbeat_hour  INTEGER NOT NULL DEFAULT 9,        -- heartbeat 시각 (시, 0~23, 기본 9)
@@ -869,6 +917,22 @@ CREATE TABLE IF NOT EXISTS heartbeat_logs (
 
 -- 30일 보관 후 삭제 정책 권장
 CREATE INDEX IF NOT EXISTS idx_heartbeat_device_ts ON heartbeat_logs (device_id, server_ts DESC);
+
+
+-- 보호자 알림 저장 테이블 (당일 알림만 보관, 자정 일괄 삭제)
+CREATE TABLE IF NOT EXISTS guardian_notifications (
+    id                  SERIAL PRIMARY KEY,
+    guardian_user_id    INTEGER NOT NULL REFERENCES users(id),
+    subject_user_id     INTEGER NOT NULL,                      -- 대상자 user_id
+    invite_code         TEXT,                                  -- 대상자 식별용
+    alert_level         TEXT NOT NULL,                         -- 'info' | 'caution' | 'warning' | 'urgent'
+    title               TEXT NOT NULL,
+    body                TEXT NOT NULL,
+    is_push_sent        BOOLEAN NOT NULL DEFAULT FALSE,        -- FCM 발송 여부 (info 등급 일부는 발송 안 함)
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_guardian_noti_guardian ON guardian_notifications (guardian_user_id, created_at DESC);
 
 
 -- 앱 버전 관리 테이블
@@ -1026,7 +1090,24 @@ ON CONFLICT (platform) DO NOTHING;
 ```
 
 
-### 6.5 보호자 Push 발송 실패 처리
+### 6.5 당일 알림 자정 일괄 삭제
+```
+실행 주기: 매일 00:00 KST (APScheduler CronTrigger(hour=0, minute=0, timezone='Asia/Seoul'))
+
+처리 흐름:
+1. guardian_notifications 테이블에서 전날(today KST 기준 이전) 알림 전체 삭제
+   DELETE FROM guardian_notifications
+   WHERE created_at < date_trunc('day', NOW() AT TIME ZONE 'Asia/Seoul') AT TIME ZONE 'Asia/Seoul'
+
+2. 로그 출력
+   [자정 알림 정리] 삭제 완료 — {deleted_count}건
+
+※ 보호자 알림 목록(GET /api/v1/notifications)은 당일 알림만 반환하는 구조
+※ 삭제 실패 시 다음 날 00:00에 재시도됨 (중복 삭제 무해)
+```
+
+
+### 6.6 보호자 Push 발송 실패 처리
 ```
 실행 주기: Push 발송 시마다
 
@@ -1200,6 +1281,7 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 | `/api/v1/subscription` | GET | 구독 상태 확인 |
 | `/api/v1/subscription/verify` | POST | 인앱 결제 영수증 검증 |
 | `/api/v1/subscription/restore` | POST | 구독 복원 (앱 재설치 시) |
+| `/api/v1/notifications` | GET | 당일 보호자 알림 목록 조회 (시간순) |
 | `/api/v1/alerts` | GET | 대상자별 경고 목록 조회 (보호자용) |
 | `/api/v1/alerts/{id}/clear` | PUT | 개별 경고 클리어 (보호자가 건강 확인 후) |
 | `/api/v1/alerts/clear-all` | PUT | 대상자별 모든 활성 경고 일괄 클리어 + 적응형 주기 복원 |
