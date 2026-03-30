@@ -87,10 +87,18 @@ class GuardianDashboardController extends BaseController {
         });
   }
 
+  /// 트리거 발송 중인 대상자 코드 집합 (더블탭 방지)
+  final _triggeringCodes = <String>{};
+
   /// 수동 heartbeat 트리거 발송 — 테스트/긴급 확인 목적
   Future<void> triggerHeartbeat(String inviteCode) async {
+    if (_triggeringCodes.contains(inviteCode)) return;
+    _triggeringCodes.add(inviteCode);
     final deviceToken = await TokenLocalDatasource().getDeviceToken();
-    if (deviceToken == null) return;
+    if (deviceToken == null) {
+      _triggeringCodes.remove(inviteCode);
+      return;
+    }
     try {
       await SubjectRemoteDatasource().triggerHeartbeat(deviceToken, inviteCode);
       Get.snackbar('전송 완료', '대상자에게 안부 확인 신호를 보냈습니다.',
@@ -100,6 +108,8 @@ class GuardianDashboardController extends BaseController {
           ? 'FCM 토큰 만료 — 대상자가 앱을 다시 열어야 합니다.'
           : '신호 전송에 실패했습니다.';
       Get.snackbar('오류', msg, snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      _triggeringCodes.remove(inviteCode);
     }
   }
 
