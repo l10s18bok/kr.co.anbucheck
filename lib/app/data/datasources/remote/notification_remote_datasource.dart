@@ -14,7 +14,10 @@ class NotificationRemoteDatasource {
 
     final result = await ApiClientFactory.instance.get<Map<String, dynamic>>(
       ApiEndpoints.notifications,
-      headers: {'Authorization': 'Bearer $token'},
+      headers: {
+        'Authorization': 'Bearer $token',
+        'X-Timezone-Offset': _utcOffsetString(),
+      },
     );
 
     if (!result.isOk || result.body == null) {
@@ -31,11 +34,22 @@ class NotificationRemoteDatasource {
 
     final result = await ApiClientFactory.instance.delete<dynamic>(
       ApiEndpoints.notificationsDeleteAll,
-      headers: {'Authorization': 'Bearer $token'},
+      headers: {
+        'Authorization': 'Bearer $token',
+        'X-Timezone-Offset': _utcOffsetString(),
+      },
     );
 
     if (!result.isOk) {
       throw Exception('알림 전체 삭제 실패 (${result.statusCode})');
     }
+  }
+
+  String _utcOffsetString() {
+    final offset = DateTime.now().timeZoneOffset;
+    final sign = offset.isNegative ? '-' : '+';
+    final hours = offset.inHours.abs().toString().padLeft(2, '0');
+    final minutes = (offset.inMinutes.abs() % 60).toString().padLeft(2, '0');
+    return '$sign$hours:$minutes';
   }
 }

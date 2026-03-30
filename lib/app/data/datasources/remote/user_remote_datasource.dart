@@ -1,5 +1,6 @@
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
+import 'package:timezone/timezone.dart' as tzlib;
 
 /// 사용자 등록/삭제 원격 저장소
 class UserRemoteDatasource {
@@ -12,6 +13,12 @@ class UserRemoteDatasource {
     if (!result.isOk && result.statusCode != 204) {
       throw Exception('계정 삭제 실패 (${result.statusCode})');
     }
+  }
+
+  /// 기기 로컬 IANA timezone 문자열 반환.
+  /// main()에서 FlutterTimezone으로 tzlib.local을 설정한 뒤 호출되므로 항상 유효한 IANA 이름 반환.
+  String _timezoneString() {
+    return tzlib.local.name;
   }
 
   /// POST /api/v1/users
@@ -31,6 +38,7 @@ class UserRemoteDatasource {
           'fcm_token': fcmToken,
           'platform': platform,
           'os_version': osVersion,
+          'timezone': _timezoneString(),
         },
       },
     );
