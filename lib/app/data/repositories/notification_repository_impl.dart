@@ -10,6 +10,9 @@ class NotificationRepositoryImpl implements NotificationRepository {
   NotificationRepositoryImpl(this._remoteDs, this._nicknameDs);
 
   @override
+  Future<void> deleteAll() => _remoteDs.deleteAll();
+
+  @override
   Future<List<NotificationEntity>> getAll() async {
     final rows = await _remoteDs.getAll();
     final nicknames = await _nicknameDs.getAll();

@@ -1,7 +1,8 @@
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
+import 'package:anbucheck/app/core/network/api_endpoints.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 
-/// GET /api/v1/notifications — 당일 보호자 알림 목록 조회
+/// GET/DELETE /api/v1/notifications — 당일 보호자 알림 목록 조회/삭제
 class NotificationRemoteDatasource {
   final TokenLocalDatasource _tokenDs;
 
@@ -12,7 +13,7 @@ class NotificationRemoteDatasource {
     if (token == null) return [];
 
     final result = await ApiClientFactory.instance.get<Map<String, dynamic>>(
-      '/api/v1/notifications',
+      ApiEndpoints.notifications,
       headers: {'Authorization': 'Bearer $token'},
     );
 
@@ -22,5 +23,19 @@ class NotificationRemoteDatasource {
 
     final list = result.body!['notifications'] as List<dynamic>? ?? [];
     return list.cast<Map<String, dynamic>>();
+  }
+
+  Future<void> deleteAll() async {
+    final token = await _tokenDs.getDeviceToken();
+    if (token == null) return;
+
+    final result = await ApiClientFactory.instance.delete<dynamic>(
+      ApiEndpoints.notificationsDeleteAll,
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (!result.isOk) {
+      throw Exception('알림 전체 삭제 실패 (${result.statusCode})');
+    }
   }
 }

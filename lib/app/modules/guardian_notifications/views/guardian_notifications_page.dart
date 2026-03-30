@@ -42,9 +42,25 @@ class GuardianNotificationsPage
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: AppSpacing.lg),
-              Text('오늘',
-                  style: AppTextTheme.labelMedium(
-                      color: AppColors.textTertiary, fw: FontWeight.w600)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('오늘',
+                      style: AppTextTheme.labelMedium(
+                          color: const Color(0xFF4355B9), fw: FontWeight.w600)),
+                  Obx(() => GestureDetector(
+                    onTap: controller.isLoading ? null : controller.deleteAll,
+                    child: Text(
+                      '전체 삭제',
+                      style: AppTextTheme.labelSmall(
+                          color: controller.isLoading
+                              ? AppColors.textTertiary.withValues(alpha: 0.4)
+                              : AppColors.textTertiary,
+                          fw: FontWeight.w500),
+                    ),
+                  )),
+                ],
+              ),
               SizedBox(height: AppSpacing.md),
               ...items.map((item) => _NotificationCard(item: item)),
               SizedBox(height: AppSpacing.sp6),

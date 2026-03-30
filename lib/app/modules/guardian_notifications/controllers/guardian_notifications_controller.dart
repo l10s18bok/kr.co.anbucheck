@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/domain/entities/notification_entity.dart';
+import 'package:anbucheck/app/domain/usecases/delete_all_notifications_usecase.dart';
 import 'package:anbucheck/app/domain/usecases/get_notifications_usecase.dart';
 
 export 'package:anbucheck/app/domain/entities/notification_entity.dart'
@@ -9,8 +10,10 @@ export 'package:anbucheck/app/domain/entities/notification_entity.dart'
 /// 보호자 알림 목록 컨트롤러 — 당일 서버 알림만 표시
 class GuardianNotificationsController extends BaseController {
   final GetNotificationsUseCase _getNotifications;
+  final DeleteAllNotificationsUseCase _deleteAllNotifications;
 
-  GuardianNotificationsController(this._getNotifications);
+  GuardianNotificationsController(
+      this._getNotifications, this._deleteAllNotifications);
 
   final notifications = <NotificationEntity>[].obs;
 
@@ -29,6 +32,20 @@ class GuardianNotificationsController extends BaseController {
         ..sort((a, b) => b.receivedAt.compareTo(a.receivedAt));
     } catch (e) {
       notifications.value = [];
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  Future<void> deleteAll() async {
+    if (isLoading || notifications.isEmpty) return;
+    isLoading = true;
+    try {
+      await _deleteAllNotifications();
+      notifications.clear();
+    } catch (_) {
+      Get.snackbar('오류', '알림 삭제에 실패했습니다.',
+          snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading = false;
     }

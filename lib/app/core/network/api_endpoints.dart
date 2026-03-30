@@ -150,4 +150,9 @@ class ApiEndpoints {
   /// - 서버가 매일 00:00 KST에 전날 알림 삭제 → 항상 당일 알림만 반환
   /// ※ 대상자 앱에서는 호출하지 않음
   static const String notifications = '/api/v1/notifications';
+
+  /// DELETE /api/v1/notifications
+  /// - 당일 보호자 알림 전체 삭제
+  /// ※ 대상자 앱에서는 호출하지 않음
+  static const String notificationsDeleteAll = '/api/v1/notifications';
 }
