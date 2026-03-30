@@ -194,7 +194,7 @@ class _NotificationCard extends StatelessWidget {
         AlertLevel.warning => const Color(0xFFFFF3E0),
         AlertLevel.caution => const Color(0xFFFFFDE7),
         AlertLevel.info    => item.title.contains('배터리')
-            ? const Color(0xFFFFFDE7) // 파스텔 연한 yellow
+            ? const Color(0xFFEDE7F6) // 파스텔 연한 보라
             : const Color(0xFFE3F2FD),
         AlertLevel.health  => const Color(0xFFE8F5E9),
       };
@@ -204,7 +204,7 @@ class _NotificationCard extends StatelessWidget {
         AlertLevel.warning => const Color(0xFFFF9800),
         AlertLevel.caution => const Color(0xFFFFC107),
         AlertLevel.info    => item.title.contains('배터리')
-            ? const Color(0xFFF9A825) // 앰버 yellow
+            ? const Color(0xFF7B1FA2) // 보라
             : const Color(0xFF4355B9),
         AlertLevel.health  => const Color(0xFF43A047),
       };
