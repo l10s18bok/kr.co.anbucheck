@@ -1,5 +1,5 @@
 /// 알림 등급
-enum AlertLevel { urgent, warning, caution, info }
+enum AlertLevel { urgent, warning, caution, info, health }
 
 /// 보호자 알림 엔티티 — 순수 Dart
 class NotificationEntity {

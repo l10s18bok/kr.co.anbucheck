@@ -149,12 +149,13 @@ class _NotificationCard extends StatelessWidget {
                         style: AppTextTheme.labelSmall(
                             color: _iconColor, fw: FontWeight.w700),
                       ),
-                      Text(
-                        _formatTime(item.receivedAt),
-                        style: AppTextTheme.labelSmall(
-                            color: const Color(0xFF4355B9),
-                            fw: FontWeight.w500),
-                      ),
+                      if (item.level != AlertLevel.health)
+                        Text(
+                          _formatTime(item.receivedAt),
+                          style: AppTextTheme.labelSmall(
+                              color: const Color(0xFF4355B9),
+                              fw: FontWeight.w500),
+                        ),
                     ],
                   ),
                   SizedBox(height: 4.h),
@@ -189,31 +190,35 @@ class _NotificationCard extends StatelessWidget {
   }
 
   Color get _backgroundColor => switch (item.level) {
-        AlertLevel.urgent => const Color(0xFFFFEBEE),
+        AlertLevel.urgent  => const Color(0xFFFFEBEE),
         AlertLevel.warning => const Color(0xFFFFF3E0),
         AlertLevel.caution => const Color(0xFFFFFDE7),
-        AlertLevel.info => const Color(0xFFE3F2FD),
+        AlertLevel.info    => const Color(0xFFE3F2FD),
+        AlertLevel.health  => const Color(0xFFE8F5E9), // 파스텔 연한 녹색
       };
 
   Color get _iconColor => switch (item.level) {
-        AlertLevel.urgent => const Color(0xFFE53935),
+        AlertLevel.urgent  => const Color(0xFFE53935),
         AlertLevel.warning => const Color(0xFFFF9800),
         AlertLevel.caution => const Color(0xFFFFC107),
-        AlertLevel.info => const Color(0xFF4355B9),
+        AlertLevel.info    => const Color(0xFF4355B9),
+        AlertLevel.health  => const Color(0xFF43A047), // 녹색
       };
 
   IconData get _icon => switch (item.level) {
-        AlertLevel.urgent => Icons.error_rounded,
+        AlertLevel.urgent  => Icons.error_rounded,
         AlertLevel.warning => Icons.warning_amber_rounded,
         AlertLevel.caution => Icons.info_rounded,
-        AlertLevel.info => Icons.notifications_rounded,
+        AlertLevel.info    => Icons.notifications_rounded,
+        AlertLevel.health  => Icons.directions_walk_rounded,
       };
 
   String get _levelLabel => switch (item.level) {
-        AlertLevel.urgent => '긴급',
+        AlertLevel.urgent  => '긴급',
         AlertLevel.warning => '경고',
         AlertLevel.caution => '주의',
-        AlertLevel.info => '정보',
+        AlertLevel.info    => '정보',
+        AlertLevel.health  => '건강',
       };
 }
 
