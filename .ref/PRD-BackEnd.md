@@ -151,13 +151,13 @@ guardians: { subject_user_id:1, guardian_user_id:2 }
 | 🚨 긴급 | 경고 3회 이상 누적 | 매일 반복, 보호자 확인까지 종료 없음 |
 | ⚠ 경고 | 미수신 2회 이상 | 1~2회 다음날 재발송 |
 | ⚠ 주의 | 미수신 1회 | 1회 발송 |
-| 🔵 정보 | 배터리 ≤ 10% / 자동 heartbeat 정상 수신 / 정상복귀 / 수동 heartbeat | DND 적용 (시간 외 소리, 시간 내 조용) |
+| 🔵 정보 | 배터리 < 20% / 자동 heartbeat 정상 수신 / 정상복귀 / 수동 heartbeat | DND 적용 (시간 외 소리, 시간 내 조용) |
 
 ```
 [heartbeat 수신 시]
 heartbeat 수신 → last_seen 갱신
   ├─ 오늘(KST) 이미 heartbeat 수신한 경우 → suspicious 강제 false (하루 첫 heartbeat만 판정)
-  ├─ battery_level ≤ 10% + 기존 info 경고 없음 → 정보 등급 1회 발송 (DND 적용)
+  ├─ battery_level < 20% + 기존 info 경고 없음 → 정보 등급 1회 발송 (DND 적용)
   └─ suspicious 판정:
       ├─ false → 활성 경고 해소 여부 확인
       │   ├─ 활성 경고 있었음 → 완전 해소 + 보호자 Push "정상 복귀" (정보 등급 DND 적용)
@@ -171,7 +171,7 @@ heartbeat 수신 → last_seen 갱신
 [heartbeat 미수신 시 (기기별 고정 시각 + 2시간 경과 시 체크)]
 지정 시각 + 2시간 내 미수신 대상자 감지 (기본: 09:30 → 11:30 체크)
   ├─ 보호자 구독 만료 → 알림 미발송 (heartbeat는 계속 수신)
-  ├─ battery_level ≤ 10% → 정보 등급 1회 발송 후 종료 (이후 상향 없음)
+  ├─ battery_level < 20% → 정보 등급 1회 발송 후 종료 (이후 상향 없음)
   └─ 누적 미수신 횟수 기반 (기존 활성 경고 상태로 결정):
       ├─ 활성 경고 없음   → 1회 미수신 → 주의 등급
       ├─ caution 활성    → 2회 미수신 → 경고 등급
@@ -1015,7 +1015,7 @@ ON CONFLICT (platform) DO NOTHING;
    b. 보호자 구독 활성 → 등급 판정 진행
 
 3. 등급 판정 (누적 미수신 횟수 기반):
-   a. battery_level ≤ 10%
+   a. battery_level < 20%
       → 정보 등급 1회 발송 후 종료 (이후 상향 없음, 소리 없음)
       → heartbeat 수신 시 자동 해소
 

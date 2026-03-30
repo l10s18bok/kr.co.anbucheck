@@ -7,7 +7,7 @@
 | 🚨 긴급 | 경고 3회 이상 누적 | 매일 반복, 보호자 확인까지 종료 없음 |
 | ⚠ 경고 | 미수신 2회 이상 | 1~2회 다음날 재발송 |
 | ⚠ 주의 | 미수신 1회 | 1회 발송 |
-| 🔵 정보 | 배터리 ≤ 10% (마지막 heartbeat 기준) | 1회 발송, 이후 상향 없음 |
+| 🔵 정보 | 배터리 < 20% (마지막 heartbeat 기준) | 1회 발송, 이후 상향 없음 |
 
 
 ## 용어 설명
@@ -60,16 +60,16 @@ flowchart TD
 
     Build[heartbeat 데이터 구성<br/>battery_level 포함]
 
-    Build --> Network{네트워크 연결?}
+    Build --> Network{네트워크 연결?<br/>※ FCM 수신 후 데이터 수집 중<br/>끊길 수 있음}
 
     Network -->|연결됨| Send[서버 전송<br/>POST /api/v1/heartbeat]
     Network -->|미연결| Queue[로컬 큐 저장<br/>sqflite]
 
     Queue --> LocalNoti1[대상자 로컬 알림<br/>📱 인터넷 연결이 꺼져 있습니다<br/>안부 확인이 전송되지 않고 있으며<br/>보호자에게 경고가 발생할 수 있습니다]
 
-    Send --> DeadmanReset[데드맨 스위치 갱신<br/>기존 반복 알림 취소<br/>매일 반복 알림 재등록<br/>heartbeat 시각 + 2시간<br/>기본 11:30, repeats: true]
+    Send --> AlarmReset[로컬 안전망 알림 갱신<br/>기존 반복 알림 취소<br/>다음날 같은 시각으로 재예약<br/>heartbeat 시각 + 10분<br/>기본 09:40, 매일 반복]
 
-    DeadmanReset --> SaveEnd[센서 값 로컬 저장<br/>완료]
+    AlarmReset --> SaveEnd[센서 값 로컬 저장<br/>완료]
 
     SaveEnd --> End1([종료 — 다음 주기 대기])
 
@@ -90,7 +90,7 @@ flowchart TD
 
     ForceNormal --> BattCheck
 
-    BattCheck{battery_level ≤ 10%?}
+    BattCheck{battery_level < 20%?}
     BattCheck -->|YES| BattNoti[🔵 정보 등급<br/>보호자 Push 알림 소리 없음<br/>🔋 배터리 부족<br/>충전이 필요합니다]
     BattCheck -->|NO| AlertActive
     BattNoti --> AlertActive
@@ -126,7 +126,7 @@ flowchart TD
 
     FindMissing --> SubActive{보호자<br/>구독 활성?}
     SubActive -->|NO| Skip([알림 미발송<br/>heartbeat는 계속 수신])
-    SubActive -->|YES| CheckLastBatt{마지막 heartbeat의<br/>battery_level ≤ 10%?}
+    SubActive -->|YES| CheckLastBatt{마지막 heartbeat의<br/>battery_level < 20%?}
 
     CheckLastBatt -->|YES| BattDead[🔵 정보 등급 판정<br/>배터리 방전 추정]
     BattDead --> BattDeadNoti[보호자 Push 알림 정보 등급 소리 없음<br/>🔋 배터리 방전 추정<br/>충전 후 자동으로 정상 복귀됩니다]
@@ -220,7 +220,7 @@ flowchart TD
     end
 
     subgraph 정보등급[🔵 정보 — 소리 없음, 1회 발송, 이후 상향 없음]
-        I1[🔋 배터리 ≤ 10%<br/>마지막 heartbeat 수신 시 포함된 값 기준]
+        I1[🔋 배터리 < 20%<br/>마지막 heartbeat 수신 시 포함된 값 기준]
     end
 
     subgraph 야간발송제한[⏰ 야간 발송 제한 — 경고/긴급 공통]
@@ -229,58 +229,58 @@ flowchart TD
 ```
 
 
-## 7. iOS 로컬 알림 데드맨 스위치 (Dead Man's Switch)
+## 7. 로컬 반복 알림 안전망 (Android/iOS 공통)
 
-> BGTaskScheduler는 iOS가 실행 시점을 보장하지 않으며, 앱 강제 종료 시 동작하지 않으므로 채택하지 않는다.
-> 대신 **로컬 알림 예약/취소 패턴**으로 iOS의 안전망을 구현한다.
-> 로컬 알림은 예약 시간에 정확히 표시가 보장되며, 앱이 강제 종료되어도 정상 동작한다.
+> BGTaskScheduler(iOS)는 실행 시점 보장이 없고 앱 강제 종료 시 동작하지 않는다.
+> Android FCM Silent Push는 MIUI 등 제조사 OS에서 랜덤으로 차단된다.
+> 두 플랫폼 모두 **로컬 알림 예약/취소 패턴**으로 안전망을 구현한다.
+> 로컬 알림은 OS가 직접 관리하므로 앱이 종료/스와이프되어도 예약 시각에 정확히 표시된다.
 
 ```mermaid
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
-        Install --> FirstHB[첫 heartbeat 전송]
-        FirstHB --> FirstSchedule[데드맨 스위치 매일 반복 알림 등록<br/>heartbeat 시각 + 2시간<br/>기본 매일 11:30, repeats: true<br/>📱 안부 확인이 필요합니다]
+        Install --> FirstSchedule[로컬 반복 알림 최초 등록<br/>heartbeat 시각 + 10분<br/>기본 매일 09:40, 매일 반복<br/>📱 안부 확인이 필요합니다<br/>메시지를 터치하여 앱을 열어주세요]
     end
 
-    FirstSchedule --> NormalCycle
+    FirstSchedule --> Wait
 
     subgraph 정상주기[정상 동작 주기]
-        NormalCycle([heartbeat 전송 성공])
-        NormalCycle --> Cancel[기존 반복 알림 취소<br/>cancel - deadman_switch]
-        Cancel --> Reschedule[매일 반복 알림 재등록<br/>heartbeat 시각 + 2시간<br/>기본 매일 11:30, repeats: true]
-        Reschedule --> Wait([다음 heartbeat 대기<br/>Silent Push 또는 앱 실행])
+        Wait([다음 heartbeat 대기<br/>Silent Push 수신 대기])
+        Wait -->|Silent Push 수신| Cancel[기존 반복 알림 취소<br/>cancel - local_safety_alarm]
+        Cancel --> Collect[heartbeat 수집 및 서버 전송]
+        Collect --> Reschedule[다음날 같은 시각으로<br/>반복 알림 재예약<br/>heartbeat 시각 + 10분, 매일 반복]
+        Reschedule --> Wait
     end
 
-    Wait -->|다음 날 고정 시각에<br/>heartbeat 성공| NormalCycle
-    Wait -->|고정 시각 + 2시간 경과<br/>heartbeat 실패| Alarm
+    Wait -->|Silent Push 미수신<br/>heartbeat 시각 + 10분 경과| Alarm
 
     subgraph 안전망[안전망 동작 — 반복 알림]
-        Alarm[iOS가 로컬 알림 표시<br/>📱 안부 확인이 필요합니다<br/>메시지를 터치하여 앱을 열어주세요]
+        Alarm[OS가 로컬 알림 표시<br/>📱 안부 확인이 필요합니다<br/>이 메시지 알림을 한 번 터치해 주세요]
 
         Alarm --> UserAction{사용자 반응?}
 
-        UserAction -->|알림 탭| AppOpen[앱 실행<br/>heartbeat 즉시 전송]
-        AppOpen --> NormalCycle
+        UserAction -->|알림 탭| AppOpen[앱 실행<br/>heartbeat 즉시 전송<br/>→ 알림 재예약]
+        AppOpen --> Wait
 
-        UserAction -->|알림 무시| Repeat[다음 날 같은 시각에 다시 알림<br/>repeats: true이므로<br/>앱을 열 때까지 매일 반복]
+        UserAction -->|알림 무시| Repeat[다음 날 같은 시각에 다시 알림<br/>매일 반복이므로<br/>앱을 열 때까지 매일 반복]
         Repeat --> UserAction
 
         Repeat -.->|동시에| ServerAlert[서버 측 미수신 경고<br/>보호자에게 Push 알림 발송<br/>→ 차트 3 경고 플로우 진입]
     end
 ```
 
-**데드맨 스위치가 발동하는 상황:**
+**로컬 안전망이 발동하는 상황:**
 
-| 상황 | Silent Push | 데드맨 스위치 반복 알림 | 결과 |
-|------|-------------|----------------------|------|
-| 정상 동작 (09:30) | 수신 → heartbeat 성공 | 매번 리셋되어 11:30 알림 표시 안 됨 | 정상 |
-| 앱 강제 종료 (스와이프) | **미전달** (Apple 정책) | **당일 11:30 표시, 이후 매일 11:30 반복** | 사용자가 탭하면 복구 |
-| 네트워크 장시간 불가 | 미수신 (네트워크 없음) | **당일 11:30 표시, 이후 매일 11:30 반복** | 네트워크 복구 + 앱 실행 시 복구 |
-| 백그라운드 앱 새로고침 OFF | 영향 없음 (Silent Push는 별도) | **당일 11:30 표시, 이후 매일 11:30 반복** | 사용자가 탭하면 복구 |
+| 상황 | Silent Push | 로컬 반복 알림 | 결과 |
+|------|-------------|----------------|------|
+| 정상 동작 (09:30) | 수신 → heartbeat 성공 | 매번 재예약되어 09:40 알림 표시 안 됨 | 정상 |
+| 앱 스와이프 종료 (Android MIUI) | **랜덤 차단** | **당일 09:40 표시, 이후 매일 09:40 반복** | 사용자가 탭하면 복구 |
+| 앱 강제 종료 (iOS 스와이프) | **미전달** (Apple 정책) | **당일 09:40 표시, 이후 매일 09:40 반복** | 사용자가 탭하면 복구 |
+| 네트워크 장시간 불가 | 미수신 | **당일 09:40 표시, 이후 매일 09:40 반복** | 네트워크 복구 + 앱 실행 시 복구 |
 | 알림 권한 거부 | 영향 없음 | **표시 불가** | 서버 경고로만 대응 |
 
-※ 위 시각은 기본값(09:30) 기준. 보호자가 시각을 변경하면 데드맨 알림도 자동 조정됨.
+※ 위 시각은 기본값(09:30) 기준. 보호자가 시각을 변경하면 로컬 알림도 자동 조정됨.
 
 
 ## Mermaid 렌더링 방법
