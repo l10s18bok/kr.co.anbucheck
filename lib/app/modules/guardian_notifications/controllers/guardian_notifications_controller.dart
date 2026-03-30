@@ -25,7 +25,8 @@ class GuardianNotificationsController extends BaseController {
     isLoading = true;
     try {
       final list = await _getNotifications();
-      notifications.value = list;
+      notifications.value = list
+        ..sort((a, b) => b.receivedAt.compareTo(a.receivedAt));
     } catch (e) {
       notifications.value = [];
     } finally {
