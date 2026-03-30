@@ -139,7 +139,7 @@ Splash → 버전 체크 → 모드 선택
 | 트리거                | 서버가 지정 시각(기본 09:30)에 FCM `data` 메시지(`heartbeat_trigger`) 발송 → OS가 앱 깨움                        | 서버가 지정 시각(기본 09:30)에 APNs `content-available: 1` 발송 → OS가 앱 깨움                    |
 | 백그라운드 실행       | `FirebaseMessaging.onBackgroundMessage` 핸들러                                                                    | `application(_:didReceiveRemoteNotification:fetchCompletionHandler:)`                             |
 | UI 표시               | 없음 (사용자 인지 불가)                                                                                           | 없음 (사용자 인지 불가)                                                                           |
-| 보조 방식             | **로컬 알림 데드맨 스위치** (heartbeat 성공 시마다 예약 갱신, 실패 시 알림 표시하여 앱 실행 유도)                 | **로컬 알림 데드맨 스위치** (heartbeat 성공 시마다 예약 갱신, 실패 시 알림 표시하여 앱 실행 유도) |
+| 보조 방식             | **WorkManager 스케줄러** (FCM 미수신 시 자동 재시도) — **테스트 후 구현 결정**                                   | **로컬 알림 데드맨 스위치** (heartbeat 성공 시마다 예약 갱신, 실패 시 알림 표시하여 앱 실행 유도) — **테스트 후 구현 결정** |
 | 앱 강제 종료 시       | **FCM Silent Push 미전달** (Android 12+ 정책 — 강제 종료된 앱에 FCM 미전달)                                      | **FCM Silent Push 미전달** (Apple 정책)                                                           |
 | 앱 포그라운드 진입 시 | heartbeat 즉시 전송                                                                                               | heartbeat 즉시 전송                                                                               |
 

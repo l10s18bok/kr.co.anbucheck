@@ -193,6 +193,8 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                       onCall: () => controller.onCallTapped(subject.inviteCode),
                       onConfirmSafety: () =>
                           controller.confirmSafety(subject.inviteCode),
+                      onTriggerHeartbeat: () =>
+                          controller.triggerHeartbeat(subject.inviteCode),
                     ),
                   );
                 });
@@ -304,6 +306,7 @@ class _SubjectCard extends StatefulWidget {
   final bool isHighlighted;
   final VoidCallback? onCall;
   final VoidCallback? onConfirmSafety;
+  final VoidCallback? onTriggerHeartbeat;
 
   const _SubjectCard({
     super.key,
@@ -319,6 +322,7 @@ class _SubjectCard extends StatefulWidget {
     this.isHighlighted = false,
     this.onCall,
     this.onConfirmSafety,
+    this.onTriggerHeartbeat,
   });
 
   @override
@@ -386,18 +390,29 @@ class _SubjectCardState extends State<_SubjectCard>
               children: [
                 Text(widget.name,
                     style: AppTextTheme.bodyLarge(fw: FontWeight.w700)),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
-                  decoration: BoxDecoration(
-                    color: widget.statusColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Text(
-                    widget.status,
-                    style: AppTextTheme.labelSmall(
-                      color: widget.statusColor,
-                      fw: FontWeight.w600,
+                GestureDetector(
+                  onTap: widget.onTriggerHeartbeat,
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
+                    decoration: BoxDecoration(
+                      color: widget.statusColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          widget.status,
+                          style: AppTextTheme.labelSmall(
+                            color: widget.statusColor,
+                            fw: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(width: 3.w),
+                        Icon(Icons.touch_app_rounded,
+                            size: 12.w, color: widget.statusColor),
+                      ],
                     ),
                   ),
                 ),

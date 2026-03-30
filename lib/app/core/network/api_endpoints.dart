@@ -52,6 +52,13 @@ class ApiEndpoints {
   static String subjectUnlink(int guardianId) =>
       '/api/v1/subjects/$guardianId/unlink';
 
+  /// POST /api/v1/subjects/{inviteCode}/trigger-heartbeat
+  /// - 보호자가 대상자에게 수동으로 heartbeat 트리거 Silent Push 발송
+  /// - 테스트 또는 긴급 확인 목적으로 사용
+  /// ※ 대상자 앱에서는 호출하지 않음
+  static String subjectTriggerHeartbeat(String inviteCode) =>
+      '/api/v1/subjects/$inviteCode/trigger-heartbeat';
+
   // ────────────────────────────────────────────────
   // [보호자 전용] 구독 (인앱 결제)
   // ────────────────────────────────────────────────
