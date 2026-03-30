@@ -209,7 +209,9 @@ class _NotificationCard extends StatelessWidget {
         AlertLevel.urgent  => Icons.error_rounded,
         AlertLevel.warning => Icons.warning_amber_rounded,
         AlertLevel.caution => Icons.info_rounded,
-        AlertLevel.info    => Icons.notifications_rounded,
+        AlertLevel.info    => item.title.contains('배터리')
+            ? Icons.battery_alert_rounded
+            : Icons.notifications_rounded,
         AlertLevel.health  => Icons.directions_walk_rounded,
       };
 
