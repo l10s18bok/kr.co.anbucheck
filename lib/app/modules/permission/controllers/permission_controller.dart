@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -6,16 +7,39 @@ import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
+/// 배터리 최적화 제외가 필요한 제조사 목록
+/// (자체 전력관리로 AlarmManager/FCM을 차단하는 중국산 OEM)
+const _batteryOptManufacturers = [
+  'xiaomi', 'redmi', 'poco',
+  'huawei', 'honor',
+  'oppo', 'realme', 'oneplus',
+  'vivo', 'iqoo',
+  'meizu',
+];
+
 /// 권한 안내 및 요청 컨트롤러
 /// 모드 선택 후 진입, arguments['mode']로 모드 구분
 class PermissionController extends BaseController {
   late final String mode;
   bool get isSubjectMode => mode == 'subject';
 
+  /// 배터리 최적화 제외 권한이 필요한 기기인지 여부
+  final needsBatteryOptimization = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     mode = (Get.arguments as Map<String, dynamic>?)?['mode'] ?? 'subject';
+    if (isSubjectMode && Platform.isAndroid) {
+      _detectManufacturer();
+    }
+  }
+
+  Future<void> _detectManufacturer() async {
+    final info = await DeviceInfoPlugin().androidInfo;
+    final manufacturer = info.manufacturer.toLowerCase();
+    needsBatteryOptimization.value = _batteryOptManufacturers
+        .any((m) => manufacturer.contains(m));
   }
 
   bool _isRequesting = false;
@@ -50,13 +74,35 @@ class PermissionController extends BaseController {
     }
 
     // 3. 대상자 모드 + Android: 배터리 최적화 제외 요청
-    if (isSubjectMode && Platform.isAndroid) {
+    //    Xiaomi 등 중국산 OEM만 요청 (삼성/구글은 불필요)
+    if (isSubjectMode && Platform.isAndroid && needsBatteryOptimization.value) {
+      await _showBatteryOptimizationRationaleDialog();
       await Permission.ignoreBatteryOptimizations.request();
     }
 
     // 온보딩으로 이동 (공통)
     _isRequesting = false;
     Get.offNamed(AppRoutes.onboarding, arguments: {'mode': mode});
+  }
+
+  /// 배터리 최적화 제외 요청 전 사전 안내 다이얼로그
+  Future<void> _showBatteryOptimizationRationaleDialog() async {
+    await Get.dialog<void>(
+      AlertDialog(
+        title: const Text('배터리 최적화 제외 안내'),
+        content: const Text(
+          '매일 자동 안부 전송과 로컬 알림이 정상 동작하려면 '
+          '배터리 최적화 제외가 필요합니다.\n'
+          '다음 화면에서 "허용"을 선택해 주세요.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('확인'),
+          ),
+        ],
+      ),
+    );
   }
 
   /// 신체 활동 권한 요청 전 사전 안내 다이얼로그
