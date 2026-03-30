@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
@@ -9,6 +11,10 @@ import 'package:anbucheck/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // timezone 초기화 (로컬 알림 예약에 필요)
+  tz.initializeTimeZones();
+  tzlib.setLocalLocation(tzlib.getLocation('Asia/Seoul'));
 
   // Firebase 초기화
   await Firebase.initializeApp(

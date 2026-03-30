@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
@@ -133,6 +134,9 @@ class OnboardingController extends BaseController {
     }
 
     if (role == 'subject') {
+      // 대상자 최초 등록 시 로컬 안전망 알림 예약 (기본 09:40, 매일 반복)
+      final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
+      await LocalAlarmService.schedule(hour, minute);
       Get.offNamed(AppRoutes.subjectHome);
     } else {
       Get.offNamed(AppRoutes.guardianDashboard);

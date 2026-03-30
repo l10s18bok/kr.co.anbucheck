@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/modules/subject_home/controllers/subject_home_controller.dart';
@@ -30,11 +31,13 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     if (role != 'subject') return;
 
     if (type == 'heartbeat_trigger') {
+      // heartbeat 전송 성공 시 _sendOrSavePending 내부에서 로컬 알림 재예약됨
       await HeartbeatService().execute();
     } else {
       final hour = int.tryParse(message.data['hour'] ?? '') ?? 9;
       final minute = int.tryParse(message.data['minute'] ?? '') ?? 30;
       await TokenLocalDatasource().saveHeartbeatSchedule(hour, minute);
+      await LocalAlarmService.schedule(hour, minute);
       debugPrint('[FCM] heartbeat 스케줄 갱신: $hour:${minute.toString().padLeft(2, '0')}');
     }
     return;
@@ -69,9 +72,28 @@ void _handleNotificationTap(String type) {
     case 'heartbeat':
       Get.toNamed(AppRoutes.subjectHome);
       break;
+    // 로컬 안전망 알림 탭 — 앱 실행 (heartbeat는 다음 Silent Push 시 자동 전송)
+    case LocalAlarmService.alarmPayload:
+      Get.toNamed(AppRoutes.subjectHome);
+      break;
+    // suspicious=true 판정 알림 탭 — suspicious=false로 heartbeat 즉시 전송
+    case 'wellbeing_check':
+      _sendWellbeingHeartbeat();
+      Get.toNamed(AppRoutes.subjectHome);
+      break;
     default:
       break;
   }
+}
+
+/// 안부 확인 알림 탭 시 suspicious=false heartbeat 전송
+Future<void> _sendWellbeingHeartbeat() async {
+  try {
+    ApiClientFactory.init(type: HttpClientType.getConnect);
+    final role = await TokenLocalDatasource().getUserRole();
+    if (role != 'subject') return;
+    await HeartbeatService().execute(manual: true);
+  } catch (_) {}
 }
 
 /// FCM 푸시 알림 서비스
@@ -229,11 +251,12 @@ class FcmService extends GetxService {
       return;
     }
 
-    // schedule_updated: 로컬 저장 (서버가 다음 FCM Silent Push 발송 시각을 변경)
+    // schedule_updated: 로컬 저장 + 로컬 안전망 알림 재예약
     if (message.data['type'] == 'schedule_updated') {
       final hour = int.tryParse(message.data['hour'] ?? '') ?? 9;
       final minute = int.tryParse(message.data['minute'] ?? '') ?? 30;
-      TokenLocalDatasource().saveHeartbeatSchedule(hour, minute);
+      await TokenLocalDatasource().saveHeartbeatSchedule(hour, minute);
+      await LocalAlarmService.schedule(hour, minute);
       debugPrint('[FCM] heartbeat 스케줄 갱신: $hour:${minute.toString().padLeft(2, '0')}');
       return;
     }

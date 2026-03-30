@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -101,6 +102,10 @@ class HeartbeatService {
           '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
       await _tokenDs.saveLastHeartbeatDate(today);
       await _tokenDs.saveLastHeartbeatTime(timeStr);
+
+      // 로컬 안전망 알림 재예약 (heartbeat 시각 + 10분, 매일 반복)
+      final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
+      await LocalAlarmService.schedule(hour, minute);
     } catch (_) {
       await _heartbeatDs.savePending(request.toJson());
     }
