@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 
@@ -125,6 +126,8 @@ mixin HeartbeatScheduleMixin on GetxController {
       heartbeatHour.value = hour;
       heartbeatMinute.value = minute;
       _applyToHeartbeatTime(hour, minute);
+      // 대상자 모드: 로컬 안전망 알림 재예약 (변경된 시각 + 10분)
+      await LocalAlarmService.schedule(hour, minute);
     } catch (e) {
       Get.snackbar('시각 변경 실패', '서버에 반영되지 않았습니다.',
           snackPosition: SnackPosition.BOTTOM);
