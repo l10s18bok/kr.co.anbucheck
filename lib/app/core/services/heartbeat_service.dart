@@ -84,22 +84,11 @@ class HeartbeatService {
   Future<void> sendPending(String deviceToken) async {
     final payload = await _heartbeatDs.getPending();
     if (payload == null) return;
-
-    // pending의 timestamp가 오늘 날짜가 아니면 stale → 버림
-    // (백그라운드에서 이미 처리된 경우 cross-isolate 캐시 문제 없이 걸러냄)
-    final pendingTs = DateTime.tryParse(payload['timestamp'] as String? ?? '');
-    final now = DateTime.now();
-    if (pendingTs == null || pendingTs.toLocal().day != now.day ||
-        pendingTs.toLocal().month != now.month ||
-        pendingTs.toLocal().year != now.year) {
-      await _heartbeatDs.clearPending();
-      return;
-    }
-
     try {
       await HeartbeatRemoteDatasource(deviceToken).send(_fromJson(payload));
       await _heartbeatDs.clearPending();
 
+      final now = DateTime.now();
       final today =
           '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
       final timeStr =
