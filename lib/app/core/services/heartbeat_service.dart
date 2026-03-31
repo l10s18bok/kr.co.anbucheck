@@ -106,6 +106,9 @@ class HeartbeatService {
   Future<void> _sendOrSavePending(HeartbeatRequest request, String deviceToken) async {
     try {
       await HeartbeatRemoteDatasource(deviceToken).send(request);
+      // 전송 성공 시 stale pending 제거 (앱 재실행 시 중복 전송 방지)
+      await _heartbeatDs.clearPending();
+
       final now = DateTime.now();
       final today =
           '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
