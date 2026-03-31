@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -153,6 +154,8 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       final minute = data['heartbeat_minute'] as int? ?? 30;
       await _tokenDs.saveHeartbeatSchedule(hour, minute);
       applySchedule(hour, minute);
+      // 서버 기준 시각으로 로컬 안전망 알림 재예약 (schedule_updated 미수신 케이스 보완)
+      await LocalAlarmService.schedule(hour, minute);
     } catch (_) {
       // 실패 시 로컬 저장값 유지
     }
