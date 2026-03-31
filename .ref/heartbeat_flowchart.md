@@ -84,7 +84,7 @@ flowchart TD
     Receive([서버: heartbeat 수신])
     Receive --> UpdateLastSeen[last_seen 갱신]
 
-    UpdateLastSeen --> TodayCheck{오늘(KST) 이미<br/>heartbeat 수신 여부?}
+    UpdateLastSeen --> TodayCheck{오늘(기기 로컬 타임존) 이미<br/>heartbeat 수신 여부?}
     TodayCheck -->|이미 수신 + suspicious=true| ForceNormal[suspicious 강제 false<br/>하루 첫 heartbeat에서만 판정]
     TodayCheck -->|첫 heartbeat| BattCheck
 
@@ -166,8 +166,8 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    Midnight([서버 스케줄러: 매일 00:00 KST 실행])
-    Midnight --> DeleteOld["guardian_notifications에서<br/>전날(KST 기준) 알림 전체 삭제<br/>DELETE WHERE created_at < 오늘 00:00 KST"]
+    Midnight([서버 스케줄러: 매 분 정각 실행<br/>보호자별 로컬 타임존 자정 도달 시 처리])
+    Midnight --> DeleteOld["guardian_notifications에서<br/>전날(보호자 로컬 타임존 기준) 알림 전체 삭제<br/>보호자별 타임존으로 자정 UTC 계산 후 삭제"]
     DeleteOld --> Log["[자정 알림 정리] 삭제 완료 — N건"]
     Log --> End([완료])
 ```
@@ -251,6 +251,8 @@ flowchart TD
         Cancel --> Collect[heartbeat 수집 및 서버 전송]
         Collect --> Reschedule[다음날 같은 시각으로<br/>반복 알림 재예약<br/>heartbeat 시각 + 10분, 매일 반복]
         Reschedule --> Wait
+        Wait -->|앱 실행 또는 포그라운드 복귀| ServerSync[서버에서 최신 heartbeat 시각 조회<br/>로컬 알림 시각 동기화<br/>schedule_updated FCM 미수신 보완]
+        ServerSync --> Wait
     end
 
     Wait -->|Silent Push 미수신<br/>heartbeat 시각 + 10분 경과| Alarm
@@ -280,7 +282,8 @@ flowchart TD
 | 네트워크 장시간 불가 | 미수신 | **당일 09:40 표시, 이후 매일 09:40 반복** | 네트워크 복구 + 앱 실행 시 복구 |
 | 알림 권한 거부 | 영향 없음 | **표시 불가** | 서버 경고로만 대응 |
 
-※ 위 시각은 기본값(09:30) 기준. 보호자가 시각을 변경하면 로컬 알림도 자동 조정됨.
+※ 위 시각은 기본값(09:30) 기준.
+※ 보호자가 시각을 변경하면 `schedule_updated` FCM으로 즉시 반영. FCM 미수신 시에도 대상자가 앱을 실행하거나 포그라운드로 복귀하면 서버 스케줄을 조회하여 자동 동기화됨.
 
 
 ## Mermaid 렌더링 방법
