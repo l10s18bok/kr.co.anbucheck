@@ -12,8 +12,9 @@ class TokenLocalDatasource {
   static const _keyInviteCode = 'invite_code';
   static const _keyHeartbeatHour = 'heartbeat_hour';
   static const _keyHeartbeatMinute = 'heartbeat_minute';
-  static const _keyLastHeartbeatDate = 'last_heartbeat_date';
-  static const _keyLastHeartbeatTime = 'last_heartbeat_time';
+  static const _keyLastHeartbeatDate   = 'last_heartbeat_date';
+  static const _keyLastHeartbeatTime   = 'last_heartbeat_time';
+  static const _keyLastFcmHeartbeatId  = 'last_fcm_heartbeat_id';
 
   // ── device_id ─────────────────────────────────────────────
   Future<String> getOrCreateDeviceId() async {
@@ -138,6 +139,18 @@ class TokenLocalDatasource {
   Future<void> saveLastHeartbeatTime(String time) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyLastHeartbeatTime, time);
+  }
+
+  // ── FCM 메시지 ID (중복 처리 방지) ───────────────────────────
+  Future<String?> getLastFcmHeartbeatId() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    return prefs.getString(_keyLastFcmHeartbeatId);
+  }
+
+  Future<void> saveLastFcmHeartbeatId(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyLastFcmHeartbeatId, id);
   }
 
   // ── 전체 삭제 ─────────────────────────────────────────────

@@ -31,6 +31,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     if (role != 'subject') return;
 
     if (type == 'heartbeat_trigger') {
+      // messageId 저장 — 포그라운드 핸들러 중복 처리 방지용
+      final msgId = message.messageId;
+      if (msgId != null) {
+        await TokenLocalDatasource().saveLastFcmHeartbeatId(msgId);
+      }
       // heartbeat 전송 성공 시 _sendOrSavePending 내부에서 로컬 알림 재예약됨
       await HeartbeatService().execute();
     } else {
@@ -243,6 +248,18 @@ class FcmService extends GetxService {
     if (message.data['type'] == 'heartbeat_trigger') {
       final role = await TokenLocalDatasource().getUserRole();
       if (role == 'subject') {
+        // 백그라운드 핸들러에서 이미 처리한 메시지는 건너뜀 (Android 재전달 방지)
+        final msgId = message.messageId;
+        if (msgId != null) {
+          final lastId = await TokenLocalDatasource().getLastFcmHeartbeatId();
+          if (lastId == msgId) {
+            debugPrint('[FCM] heartbeat_trigger 중복 수신 무시: $msgId');
+            try {
+              await Get.find<SubjectHomeController>().reloadHeartbeatState();
+            } catch (_) {}
+            return;
+          }
+        }
         await HeartbeatService().execute();
         try {
           await Get.find<SubjectHomeController>().reloadHeartbeatState();
