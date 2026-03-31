@@ -3,7 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
@@ -21,6 +24,16 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // 백그라운드 isolate는 main()을 거치지 않으므로 timezone 별도 초기화
+  // LocalAlarmService.schedule()의 tz.TZDateTime.now(tz.local) 정상 동작에 필요
+  tz.initializeTimeZones();
+  try {
+    final localTzName = await FlutterTimezone.getLocalTimezone();
+    tzlib.setLocalLocation(tzlib.getLocation(localTzName));
+  } catch (_) {
+    tzlib.setLocalLocation(tzlib.getLocation('Asia/Seoul'));
+  }
 
   final type = message.data['type'];
 
