@@ -5,14 +5,10 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <!-- 배터리 최적화 제외 -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
-    <!-- 정확한 알람 예약 (Android 12+, 로컬 안전망 알림용) -->
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <!-- 정확한 알람 예약 (Android 13+, 사용자 승인 불필요) -->
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
-    <!-- WorkManager 재부팅 후 재등록 -->
+    <!-- 재부팅 후 예약 알림 복구 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <!-- WorkManager 포그라운드 서비스 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
 <application
