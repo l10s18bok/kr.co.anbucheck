@@ -212,6 +212,9 @@ class FcmService extends GetxService {
       onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
     );
 
+    // LocalAlarmService에 초기화된 플러그인 공유
+    LocalAlarmService.setPlugin(_localNotifications);
+
     // Android: 알림 채널 생성
     if (Platform.isAndroid) {
       await _localNotifications

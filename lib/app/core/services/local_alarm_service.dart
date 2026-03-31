@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 /// 로컬 반복 알림 안전망 (Android/iOS 공통)
@@ -9,15 +11,35 @@ class LocalAlarmService {
   static const _alarmId = 0x416C6172; // 'Alar' hex — 중복 방지 고정 ID
   static const alarmPayload = 'local_safety_alarm';
 
-  static final _plugin = FlutterLocalNotificationsPlugin();
+  static FlutterLocalNotificationsPlugin? _plugin;
 
   static const _androidChannelId = 'anbu_alerts';
   static const _androidChannelName = '안부 알림';
 
+  /// FcmService 초기화 후 반드시 호출 — 초기화된 플러그인 인스턴스 공유
+  static void setPlugin(FlutterLocalNotificationsPlugin plugin) {
+    _plugin = plugin;
+  }
+
   /// 로컬 안전망 알림 예약
   /// heartbeat 시각 + 10분, 매일 반복
   /// 이미 예약된 알림이 있으면 먼저 취소 후 재등록
+  /// 플러그인이 미초기화 상태일 때 (백그라운드 isolate) 직접 초기화
+  static Future<void> _ensureInitialized() async {
+    if (_plugin != null) return;
+    final plugin = FlutterLocalNotificationsPlugin();
+    await plugin.initialize(
+      const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        iOS: DarwinInitializationSettings(),
+      ),
+    );
+    _plugin = plugin;
+    debugPrint('[LocalAlarm] 플러그인 자체 초기화 완료 (백그라운드 isolate)');
+  }
+
   static Future<void> schedule(int heartbeatHour, int heartbeatMinute) async {
+    await _ensureInitialized();
     await cancel();
 
     final totalMinutes = heartbeatHour * 60 + heartbeatMinute + 10;
@@ -35,7 +57,16 @@ class LocalAlarmService {
       scheduled = scheduled.add(const Duration(days: 1));
     }
 
-    await _plugin.zonedSchedule(
+    debugPrint('[LocalAlarm] 예약 시도: ${scheduled.toString()} (heartbeat $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')} + 10분)');
+
+    // Android: SCHEDULE_EXACT_ALARM 권한 런타임 확인
+    final exactAlarmStatus = await Permission.scheduleExactAlarm.status;
+    if (exactAlarmStatus.isDenied) {
+      debugPrint('[LocalAlarm] SCHEDULE_EXACT_ALARM 권한 없음 — 권한 요청');
+      await Permission.scheduleExactAlarm.request();
+    }
+
+    await _plugin!.zonedSchedule(
       _alarmId,
       '📱 안부 확인이 필요합니다',
       '이 메시지 알림을 한 번 터치해 주세요.',
@@ -56,13 +87,13 @@ class LocalAlarmService {
       androidScheduleMode: AndroidScheduleMode.alarmClock,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time, // 매일 같은 시각 반복
       payload: alarmPayload,
     );
+    debugPrint('[LocalAlarm] 예약 완료: ${scheduled.toString()}');
   }
 
   /// 로컬 안전망 알림 취소
   static Future<void> cancel() async {
-    await _plugin.cancel(_alarmId);
+    await _plugin?.cancel(_alarmId);
   }
 }
