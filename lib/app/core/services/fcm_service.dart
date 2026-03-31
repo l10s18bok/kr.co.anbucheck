@@ -264,13 +264,16 @@ class FcmService extends GetxService {
       return;
     }
 
-    // schedule_updated: 로컬 저장 + 로컬 안전망 알림 재예약
+    // schedule_updated: 로컬 저장 + 로컬 안전망 알림 재예약 + UI 갱신
     if (message.data['type'] == 'schedule_updated') {
       final hour = int.tryParse(message.data['hour'] ?? '') ?? 9;
       final minute = int.tryParse(message.data['minute'] ?? '') ?? 30;
       await TokenLocalDatasource().saveHeartbeatSchedule(hour, minute);
       await LocalAlarmService.schedule(hour, minute);
       debugPrint('[FCM] heartbeat 스케줄 갱신: $hour:${minute.toString().padLeft(2, '0')}');
+      try {
+        Get.find<SubjectHomeController>().loadScheduleFromLocal();
+      } catch (_) {}
       return;
     }
 
