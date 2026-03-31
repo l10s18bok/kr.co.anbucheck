@@ -106,23 +106,29 @@ class HeartbeatService {
   Future<void> _sendOrSavePending(HeartbeatRequest request, String deviceToken) async {
     try {
       await HeartbeatRemoteDatasource(deviceToken).send(request);
-      // 전송 성공 시 stale pending 제거 (앱 재실행 시 중복 전송 방지)
-      await _heartbeatDs.clearPending();
+    } catch (_) {
+      // 전송 실패 시 큐에 저장 (네트워크 복구 후 재전송)
+      await _heartbeatDs.savePending(request.toJson());
+      return;
+    }
 
-      final now = DateTime.now();
-      final today =
-          '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-      final timeStr =
-          '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-      await _tokenDs.saveLastHeartbeatDate(today);
-      await _tokenDs.saveLastHeartbeatTime(timeStr);
+    // 전송 성공 — 이후 작업 실패가 pending 큐를 오염시키지 않도록 분리
+    await _heartbeatDs.clearPending();
 
-      // 로컬 안전망 알림 재예약 (heartbeat 시각 + 10분, 매일 반복)
+    final now = DateTime.now();
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    final timeStr =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+    await _tokenDs.saveLastHeartbeatDate(today);
+    await _tokenDs.saveLastHeartbeatTime(timeStr);
+
+    // 로컬 안전망 알림 재예약 (heartbeat 시각 + 10분, 매일 반복)
+    // 백그라운드 isolate에서 tz 미초기화 등으로 실패해도 전송 결과에 영향 없음
+    try {
       final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
       await LocalAlarmService.schedule(hour, minute);
-    } catch (_) {
-      await _heartbeatDs.savePending(request.toJson());
-    }
+    } catch (_) {}
   }
 
   Future<int?> _getBatteryLevel() async {
