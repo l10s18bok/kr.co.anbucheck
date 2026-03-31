@@ -13,6 +13,8 @@ class HeartbeatLocalDatasource {
 
   Future<Map<String, dynamic>?> getPending() async {
     final prefs = await SharedPreferences.getInstance();
+    // 백그라운드 isolate의 변경사항을 반영하기 위해 캐시 강제 갱신
+    await prefs.reload();
     final json = prefs.getString(_key);
     if (json == null) return null;
     return jsonDecode(json) as Map<String, dynamic>;
