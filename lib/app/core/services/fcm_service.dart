@@ -85,8 +85,9 @@ void _handleNotificationTap(String type) {
     case 'heartbeat':
       Get.toNamed(AppRoutes.subjectHome);
       break;
-    // 로컬 안전망 알림 탭 — 앱 실행 (heartbeat는 다음 Silent Push 시 자동 전송)
+    // 로컬 안전망 알림 탭 — heartbeat 즉시 전송 후 홈으로 이동
     case LocalAlarmService.alarmPayload:
+      _sendSafetyAlarmHeartbeat();
       Get.toNamed(AppRoutes.subjectHome);
       break;
     // suspicious=true 판정 알림 탭 — suspicious=false로 heartbeat 즉시 전송
@@ -97,6 +98,16 @@ void _handleNotificationTap(String type) {
     default:
       break;
   }
+}
+
+/// 로컬 안전망 알림 탭 시 heartbeat 즉시 전송
+Future<void> _sendSafetyAlarmHeartbeat() async {
+  try {
+    ApiClientFactory.init(type: HttpClientType.getConnect);
+    final role = await TokenLocalDatasource().getUserRole();
+    if (role != 'subject') return;
+    await HeartbeatService().execute();
+  } catch (_) {}
 }
 
 /// 안부 확인 알림 탭 시 suspicious=false heartbeat 전송
