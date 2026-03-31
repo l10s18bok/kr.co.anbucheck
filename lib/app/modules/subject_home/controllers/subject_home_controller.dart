@@ -196,6 +196,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
     await HeartbeatService().sendPending(deviceToken);
+    await _reloadLocalState();
   }
 
   /// 고유 코드 클립보드 복사

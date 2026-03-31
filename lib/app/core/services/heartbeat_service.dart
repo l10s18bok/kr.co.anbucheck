@@ -87,6 +87,17 @@ class HeartbeatService {
     try {
       await HeartbeatRemoteDatasource(deviceToken).send(_fromJson(payload));
       await _heartbeatDs.clearPending();
+
+      final now = DateTime.now();
+      final today =
+          '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      final timeStr =
+          '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+      await _tokenDs.saveLastHeartbeatDate(today);
+      await _tokenDs.saveLastHeartbeatTime(timeStr);
+
+      final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
+      await LocalAlarmService.schedule(hour, minute);
     } catch (_) {}
   }
 
