@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 /// 로컬 반복 알림 안전망 (Android/iOS 공통)
@@ -58,13 +57,6 @@ class LocalAlarmService {
     }
 
     debugPrint('[LocalAlarm] 예약 시도: ${scheduled.toString()} (heartbeat $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')} + 10분)');
-
-    // Android: SCHEDULE_EXACT_ALARM 권한 런타임 확인
-    final exactAlarmStatus = await Permission.scheduleExactAlarm.status;
-    if (exactAlarmStatus.isDenied) {
-      debugPrint('[LocalAlarm] SCHEDULE_EXACT_ALARM 권한 없음 — 권한 요청');
-      await Permission.scheduleExactAlarm.request();
-    }
 
     await _plugin!.zonedSchedule(
       _alarmId,
