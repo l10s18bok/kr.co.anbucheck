@@ -121,7 +121,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   @override
   void onResumed() {
     super.onResumed();
-    _reloadLocalState();
+    _reloadLocalState().then((_) => _autoSendHeartbeatIfNeeded());
     _syncScheduleFromServer();
   }
 
@@ -142,6 +142,15 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     // 로컬 저장값으로 먼저 표시 후 서버에서 최신 스케줄 동기화
     await loadScheduleFromLocal();
     await _syncScheduleFromServer();
+    await _autoSendHeartbeatIfNeeded();
+  }
+
+  /// 앱 열기 시 예약 시각이 지났고 오늘 미전송 상태이면 heartbeat 자동 전송
+  Future<void> _autoSendHeartbeatIfNeeded() async {
+    if (isReportedToday) return;
+    if (isScheduleInFuture) return;
+    await HeartbeatService().execute();
+    await _reloadLocalState();
   }
 
   /// 서버에서 heartbeat 스케줄 조회 후 로컬 동기화
