@@ -777,7 +777,7 @@ void onMessageReceived(RemoteMessage message) {
 | 저장소 | 데이터 | 유지 기간 |
 |--------|--------|-----------|
 | 서버 `alerts` | `active` 상태 경고만 | 경고 해소(cleared) 시 삭제 |
-| 서버 `guardian_notifications` | 당일 발생한 모든 보호자 알림 | 당일 — 보호자 로컬 타임존 자정 일괄 삭제 |
+| 서버 `notification_events` | 당일 발생한 대상자별 알림 이벤트 | 당일 — 대상자 기기 타임존 자정 일괄 삭제 |
 
 **알림 종류:**
 | alert_level | Push 발송 | DB 저장 | 내용 |
@@ -792,20 +792,24 @@ void onMessageReceived(RemoteMessage message) {
 ```
 서버 heartbeat 수신 또는 미수신 판정
     ↓
-guardian_notifications 테이블에 저장 (title, body, alert_level, is_push_sent)
+notification_events 테이블에 대상자 기준 1건 저장 (title, body, alert_level)
     ↓
-is_push_sent = true인 경우 → FCM Push 발송
-is_push_sent = false인 경우 → DB 전용 (걸음수 정보 알림)
+보호자별 알림 설정(guardian_notification_settings) 확인 후 FCM Push 개별 발송
+  - Push 발송과 DB 저장은 분리 (DB에는 대상자 기준 1건만 저장)
+  - DND 적용: 긴급 등급은 항상 발송, 나머지는 DND 시간대 Push 미발송
 
 보호자 앱 알림 목록 화면
     ↓
 GET /api/v1/notifications 호출 (당일 알림 시간순 조회)
     ↓
-오늘 알림 목록 표시 (is_push_sent = false 항목도 포함)
+서버에서 보호자에 연결된 대상자의 notification_events 조회
+    + 보호자별 알림 설정으로 등급 필터링하여 반환
+    ↓
+같은 대상자를 보는 모든 보호자가 동일한 알림 목록을 확인 가능
 ```
 
 **자정 정리 정책:**
-- 보호자 로컬 타임존 기준 자정에 서버 스케줄러가 전날 알림 전체 삭제
+- 대상자 기기 타임존 기준 자정에 서버 스케줄러가 전날 알림 전체 삭제
 - 클라이언트는 로컬 DB에 알림 이력을 저장하지 않음
 - 앱 삭제/기기 변경 시에도 당일 알림은 서버에서 재조회 가능
 
@@ -974,7 +978,7 @@ Authorization: Bearer <device_token> → 항상 유효
 
 [모드 변경 (동일 기기에서 다른 모드 선택)]
   · 서버: DELETE /api/v1/users/me → 전체 데이터 삭제
-    (users, devices, guardians, alerts, guardian_notifications, heartbeat_logs, subscriptions)
+    (users, devices, guardians, alerts, notification_events, heartbeat_logs, subscriptions, guardian_notification_settings)
   · 앱 로컬: _tokenDs.clear() + _nicknameDs.clearAll() 호출
     → device_token, 역할, 초대 코드 등 토큰 정보 및 대상자 별칭 전체 삭제
   · 이후 새 모드로 재등록 (completeOnboarding 재호출)
@@ -999,7 +1003,7 @@ Authorization: Bearer <device_token> → 항상 유효
 
 **서버 처리:**
 - `guardians` 레코드 삭제
-- `guardian_notifications` 중 해당 보호자-대상자 기록 삭제
+- `notification_events`는 삭제하지 않음 (대상자 중심 데이터 — 다른 보호자에게도 유효)
 - `alerts`는 삭제하지 않음 (대상자 기준 공유 데이터 — 다른 보호자에게도 유효)
 
 **재연결:**

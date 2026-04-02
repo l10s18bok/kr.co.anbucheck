@@ -17,7 +17,7 @@
 
 ### 1.2 목적
 스마트폰 사용 패턴을 기반으로 사용자의 안녕을 자동으로 확인하는 크로스 플랫폼(Android/iOS) 시스템의 서버 측 설계.
-클라이언트로부터 heartbeat를 수신하고, 매일 고정 시각(기본 09:30) + 2시간 내 미수신 시 보호자에게 FCM Push 경고를 발송하는 역할을 담당한다. heartbeat 트리거는 서버가 아닌 클라이언트(WorkManager/BGTaskScheduler)가 자체적으로 수행한다.
+클라이언트로부터 heartbeat를 수신하고, 매일 고정 시각(기본 09:30) + 2시간 내 미수신 시 보호자에게 FCM Push 경고를 발송하며, Android/iOS 기기에 매일 고정 시각에 FCM Silent Push(heartbeat_trigger)를 발송하는 역할을 담당한다.
 
 **기술 스택:** Python + FastAPI + PostgreSQL (asyncpg) + Railway
 
@@ -70,12 +70,13 @@
 │  │ API Router   │  │  Scheduler   │  │   Push Service     │  │
 │  │             │  │ (APScheduler)│  │ (firebase-admin)   │  │
 │  │ · 사용자 등록│  │              │  │                    │  │
-│  │ · heartbeat │  │ · 경고 생성  │  │ · 일반 Push 발송   │  │
-│  │ · 대상자    │  │   (미수신 시) │  │   (보호자 알림)    │  │
-│  │   연결 관리 │  │ · 구독 만료  │  │                    │  │
-│  │ · 구독 관리  │  │   체크       │  │ ※ Silent Push 미사용│  │
-│  │ · FCM 토큰  │  │              │  │   (클라이언트 자체  │  │
-│  │   갱신      │  │              │  │    스케줄링)       │  │
+│  │ · heartbeat │  │ · heartbeat  │  │ · Silent Push 발송 │  │
+│  │ · 대상자    │  │   트리거 FCM │  │   (iOS/Android     │  │
+│  │   연결 관리 │  │   발송 (매일 │  │    heartbeat 트리거│  │
+│  │ · 구독 관리  │  │   고정 시각) │  │ · 일반 Push 발송   │  │
+│  │ · FCM 토큰  │  │ · 경고 생성  │  │   (보호자 알림)    │  │
+│  │ · FCM 토큰  │  │ · 경고 생성  │  │                    │  │
+│  │   갱신      │  │   (미수신 시) │  │                    │  │
 │  └──────┬──────┘  └──────┬───────┘  └─────────┬──────────┘  │
 │         │               │                    │              │
 │         └───────────────┼────────────────────┘              │
@@ -92,11 +93,11 @@
 
 | | Android 기기 | iOS 기기 |
 |--|-------------|----------|
-| heartbeat 트리거 | **클라이언트 WorkManager가 예약 시각에 자체 실행** | **클라이언트 BGTaskScheduler가 예약 시각에 자체 실행** |
-| 서버 역할 | heartbeat 수신 + 미수신 시 경고 생성 (트리거 발송 없음) | heartbeat 수신 + 미수신 시 경고 생성 (트리거 발송 없음) |
+| heartbeat 트리거 | **서버가 매일 고정 시각에 FCM Silent Push 발송** | **서버가 매일 고정 시각에 FCM Silent Push 발송** |
+| 서버 추가 작업 | 기기별 고정 시각에 heartbeat_trigger Push 발송 | 기기별 고정 시각에 heartbeat_trigger Push 발송 |
 | 확인 주기 | 매일 고정 시각 (기본 09:30) | 매일 고정 시각 (기본 09:30) |
-| 시각 변경 | 대상자가 서버에 저장 → 클라이언트가 WorkManager 재예약 | 대상자가 서버에 저장 → 클라이언트가 BGTask 재예약 |
-| Silent Push | **미사용** | **미사용** |
+| 시각 변경 | 서버가 변경된 시각에 맞춰 FCM Push 발송 | 서버가 변경된 시각에 맞춰 FCM Push 발송 |
+| 클라이언트 스케줄러 | 불필요 (WorkManager 제거) | 불필요 |
 
 
 ### 2.3 대상자-보호자 연결 메커니즘
@@ -150,13 +151,13 @@ guardians: { subject_user_id:1, guardian_user_id:2 }
 | 🚨 긴급 | 경고 3회 이상 누적 | 매일 반복, 보호자 확인까지 종료 없음 |
 | ⚠ 경고 | 미수신 2회 이상 | 1~2회 다음날 재발송 |
 | ⚠ 주의 | 미수신 1회 | 1회 발송 |
-| 🔵 정보 | 배터리 < 20% / 자동 heartbeat 정상 수신 / 정상복귀 / 수동 heartbeat | DND 적용 (시간 외 소리, 시간 내 조용) |
+| 🔵 정보 | 배터리 ≤ 10% / 자동 heartbeat 정상 수신 / 정상복귀 / 수동 heartbeat | DND 적용 (시간 외 소리, 시간 내 조용) |
 
 ```
 [heartbeat 수신 시]
 heartbeat 수신 → last_seen 갱신
   ├─ 오늘(KST) 이미 heartbeat 수신한 경우 → suspicious 강제 false (하루 첫 heartbeat만 판정)
-  ├─ battery_level < 20% + 기존 info 경고 없음 → 정보 등급 1회 발송 (DND 적용)
+  ├─ battery_level ≤ 10% + 기존 info 경고 없음 → 정보 등급 1회 발송 (DND 적용)
   └─ suspicious 판정:
       ├─ false → 활성 경고 해소 여부 확인
       │   ├─ 활성 경고 있었음 → 완전 해소 + 보호자 Push "정상 복귀" (정보 등급 DND 적용)
@@ -164,13 +165,13 @@ heartbeat 수신 → last_seen 갱신
       │       ├─ manual = true  → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
       │       └─ manual = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
       └─ true  → warning/urgent → caution 하향 (정상 복귀 알림 없음)
-               → 앱 클라이언트가 suspicious=true 판정 시 로컬 알림 직접 표시 (서버 관여 없음)
+               → 대상자에게 wellbeing_check 발송 (보호자 경고 없음)
                → 보호자 경고는 heartbeat 미수신 시에만 발생
 
 [heartbeat 미수신 시 (기기별 고정 시각 + 2시간 경과 시 체크)]
 지정 시각 + 2시간 내 미수신 대상자 감지 (기본: 09:30 → 11:30 체크)
   ├─ 보호자 구독 만료 → 알림 미발송 (heartbeat는 계속 수신)
-  ├─ battery_level < 20% → 정보 등급 1회 발송 후 종료 (이후 상향 없음)
+  ├─ battery_level ≤ 10% → 정보 등급 1회 발송 후 종료 (이후 상향 없음)
   └─ 누적 미수신 횟수 기반 (기존 활성 경고 상태로 결정):
       ├─ 활성 경고 없음   → 1회 미수신 → 주의 등급
       ├─ caution 활성    → 2회 미수신 → 경고 등급
@@ -265,9 +266,9 @@ server/
 │   ├── heartbeat_service.py        # heartbeat 비즈니스 로직
 │   ├── alert_service.py            # 경고 생성/클리어/보호자 Push 발송
 │   ├── subject_service.py          # 대상자-보호자 연결 관리
-│   ├── push_service.py             # 일반 Push 발송 (보호자 경고 알림만, Silent Push 미사용)
+│   ├── push_service.py             # Silent Push / 일반 Push 발송
 │   ├── subscription_service.py     # 구독 상태 관리
-│   └── scheduler.py                # APScheduler 경고 체크 + 구독 만료 (Silent Push 스케줄 제거됨)
+│   └── scheduler.py                # APScheduler 경고 체크 + Silent Push + 구독 만료
 ├── models/
 │   ├── user.py                     # Pydantic 모델 (요청/응답 스키마)
 │   ├── device.py
@@ -413,6 +414,19 @@ Response: 200 OK
 }
 ```
 
+**연결 해제 시 서버 삭제 정책:**
+
+| 테이블 | 처리 | 이유 |
+| ----------------------- | ------ | ------------------------------------------------- |
+| `guardians` | 삭제 | 보호자-대상자 연결 레코드 자체 |
+| `notification_events` | **유지** | `subject_user_id` 기준 공유 데이터. 다른 보호자가 같은 대상자를 볼 수 있으므로 삭제 금지 |
+| `alerts` | **유지** | `subject_user_id` 기준 공유 데이터. 다른 보호자가 같은 대상자를 볼 수 있으므로 삭제 금지 |
+| `heartbeat_logs` | **유지** | 대상자 활동 로그. 연결 해제와 무관 |
+
+**재연결 시 동작:**
+- 동일 `invite_code`로 재연결 가능 (`users` 테이블의 대상자 계정은 유지됨)
+- 재연결 시 새 `guardian_id`가 발급되며, 대상자의 당일 알림 이벤트는 즉시 조회 가능
+
 
 ### 4.6 Heartbeat 수신
 ```
@@ -446,17 +460,11 @@ Response: 200 OK
   - `suspicious` = false:
     - 활성 경고 있으면 → 완전 해소 + 보호자 Push "정상 복귀" (정보 등급 DND 적용)
     - 활성 경고 없고 `manual` = true → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
-    - 활성 경고 없고 `manual` = false, 예약 heartbeat → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
-      - `steps_delta` 있으면 → 어제 `last_steps`와 비교하여 걸음수 정보 알림 DB 저장 (Push 발송 안 함)
-      - `last_steps` 갱신 (다음날 비교용)
+    - 활성 경고 없고 `manual` = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
   - `suspicious` = true → warning/urgent 경고를 caution으로 하향 (정상 복귀 알림 없음)
     - 1회 → 주의 등급 발생 (caution 중복 방지)
     - 2회 이상 → 경고 등급 발생 (warning/urgent 없을 때만)
   - 보호자 설정 "안부 확인 알림 ON" 시 → 대상자에게 안부 확인 Push 발송 (suspicious 2회+)
-- **보호자 알림 DB 저장 정책:**
-  - 보호자에게 발송되는 모든 알림(info/caution/warning/urgent)은 `guardian_notifications` 테이블에 시간순 저장
-  - 걸음수 정보 알림은 Push 발송 없이 DB에만 저장 (`is_push_sent = false`)
-  - 매일 00:00 KST 스케줄러가 전날 알림 전체 삭제
 
 
 ### 4.7 구독 상태 확인 (보호자용)
@@ -641,10 +649,13 @@ Response: 200 OK
 }
 ```
 
-- **대상자 본인만** 호출 가능 (보호자는 heartbeat 시각 변경 불가)
+- **대상자 본인** 또는 **보호자** 모두 호출 가능
+- 보호자가 호출 시: 해당 대상자가 본인에게 연결된 대상자인지 권한 검증
+- 대상자가 호출 시: 본인 기기만 변경 가능
 - 선택 범위: 06:00 ~ 21:00 (30분 단위)
 - 서버에서 `devices.heartbeat_hour`, `devices.heartbeat_minute` 갱신
-- 클라이언트가 변경 후 WorkManager/BGTask + 로컬 알림 재예약
+- iOS: 다음 Silent Push가 변경된 시각에 발송됨
+- Android: 대상자 기기가 다음 heartbeat 시 응답의 `heartbeat_hour/minute`를 확인하여 WorkManager 재스케줄링
 
 
 ### 4.14 앱 버전 체크 (강제 업데이트)
@@ -756,45 +767,75 @@ Response: 200 OK
 - 플랫폼별(android/ios) 독립 관리
 
 
-### 4.16 당일 보호자 알림 목록 조회
+### 4.16 알림 목록 조회 (보호자용)
 ```
 GET /api/v1/notifications
 Headers:
-  Authorization: Bearer <device_token>  (보호자)
+  Authorization: Bearer <device_token>
+  X-Timezone-Offset: +09:00
 Response: 200 OK
 {
   "notifications": [
     {
-      "id": 101,
+      "id": 1,
       "subject_user_id": 1,
       "invite_code": "K7M-4PXR",
       "alert_level": "info",
       "title": "✅ 오늘 안부 확인 완료",
       "body": "대상자의 오늘 안부 확인이 정상 수신되었습니다.",
-      "is_push_sent": true,
-      "created_at": "2026-03-29T09:32:10+09:00"
-    },
-    {
-      "id": 102,
-      "subject_user_id": 1,
-      "invite_code": "K7M-4PXR",
-      "alert_level": "info",
-      "title": "📊 오늘 걸음수 정보",
-      "body": "어제 1,240보 → 오늘 3,580보 (2,340보 증가)",
-      "is_push_sent": false,
-      "created_at": "2026-03-29T09:32:11+09:00"
+      "created_at": "2026-04-02T09:32:00+00:00"
     }
   ]
 }
 ```
 
-- 보호자만 호출 가능 (대상자가 호출 시 403)
-- **오늘(KST) 생성된 알림만 반환** — 자정 00:00 KST 스케줄러가 전날 알림 전체 삭제
-- `created_at` 오름차순 정렬 (시간순)
-- 보호자 본인에게 연결된 대상자의 알림만 조회 가능
-- `is_push_sent = false`인 항목은 걸음수 정보 알림 (Push 미발송, DB 전용)
-- 연결된 대상자가 여러 명일 경우, 모든 대상자의 알림이 시간순으로 혼합 반환됨
-  - 클라이언트는 `invite_code`로 대상자를 식별하여 로컬 별칭으로 표시
+- 보호자에 연결된 **모든 대상자**의 당일 알림 이벤트를 조회
+- 알림은 대상자 중심(`notification_events`) 테이블에 저장되므로, 같은 대상자를 보는 모든 보호자가 동일한 알림을 볼 수 있음
+- 보호자별 알림 설정(`guardian_notification_settings`)에 따라 서버에서 필터링하여 반환
+  - `all_enabled = false` → 전체 비활성
+  - 등급별 ON/OFF (`urgent_enabled`, `warning_enabled`, `caution_enabled`, `info_enabled`)
+- `X-Timezone-Offset` 헤더로 클라이언트 타임존 전달 → 오늘 자정 기준 필터링
+- 파싱 실패 시 기본값 KST(+09:00) 적용
+
+
+### 4.17 알림 전체 삭제 (보호자용)
+```
+DELETE /api/v1/notifications
+Headers:
+  Authorization: Bearer <device_token>
+  X-Timezone-Offset: +09:00
+Response: 200 OK
+{
+  "deleted_count": 5
+}
+```
+
+- 보호자에 연결된 대상자의 당일 알림 이벤트를 전체 삭제
+- 다른 보호자도 동일 대상자의 알림이 삭제됨 (대상자 중심 데이터이므로)
+
+
+### 4.18 사용자 탈퇴
+```
+DELETE /api/v1/users/me
+Headers:
+  Authorization: Bearer <device_token>
+Response: 204 No Content
+```
+
+**탈퇴 시 서버 삭제 정책:**
+
+| 테이블 | 처리 | 비고 |
+| ----------------------- | ------ | ------------------------------------------------- |
+| `heartbeat_logs` | 삭제 | 해당 기기의 heartbeat 로그 |
+| `guardian_notification_settings` | 삭제 | 보호자 알림 설정 |
+| `notification_events` | 삭제 | `subject_user_id` 기준 대상자 알림 이벤트 |
+| `alerts` | 삭제 | `subject_user_id` 기준 활성 경고 |
+| `guardians` | 삭제 | 보호자-대상자 연결 (양방향) |
+| `subscriptions` | 삭제 | 구독 정보 |
+| `devices` | 삭제 | 기기 정보 |
+| `users` | 삭제 | 사용자 계정 |
+
+- 대상자 탈퇴 시 연결된 보호자에게 "대상자 탈퇴 알림" Push 발송 (DB 저장 없음)
 
 
 ---
@@ -828,7 +869,6 @@ CREATE TABLE IF NOT EXISTS devices (
     os_version      TEXT,
     fcm_token       TEXT,
     steps_delta     INTEGER,                           -- 마지막 heartbeat 이후 걸음수 증가량 (권한 거부 시 NULL)
-    last_steps      INTEGER,                           -- 전날 예약 heartbeat의 걸음수 (오늘 걸음수 비교용)
     battery_level   INTEGER,                           -- 마지막 배터리 잔량 (0~100)
     suspicious_count INTEGER DEFAULT 0,                -- 연속 suspicious 횟수
     heartbeat_hour  INTEGER NOT NULL DEFAULT 9,        -- heartbeat 시각 (시, 0~23, 기본 9)
@@ -915,22 +955,6 @@ CREATE TABLE IF NOT EXISTS heartbeat_logs (
 CREATE INDEX IF NOT EXISTS idx_heartbeat_device_ts ON heartbeat_logs (device_id, server_ts DESC);
 
 
--- 보호자 알림 저장 테이블 (당일 알림만 보관, 자정 일괄 삭제)
-CREATE TABLE IF NOT EXISTS guardian_notifications (
-    id                  SERIAL PRIMARY KEY,
-    guardian_user_id    INTEGER NOT NULL REFERENCES users(id),
-    subject_user_id     INTEGER NOT NULL,                      -- 대상자 user_id
-    invite_code         TEXT,                                  -- 대상자 식별용
-    alert_level         TEXT NOT NULL,                         -- 'info' | 'caution' | 'warning' | 'urgent'
-    title               TEXT NOT NULL,
-    body                TEXT NOT NULL,
-    is_push_sent        BOOLEAN NOT NULL DEFAULT FALSE,        -- FCM 발송 여부 (info 등급 일부는 발송 안 함)
-    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_guardian_noti_guardian ON guardian_notifications (guardian_user_id, created_at DESC);
-
-
 -- 앱 버전 관리 테이블
 CREATE TABLE IF NOT EXISTS app_versions (
     platform        TEXT PRIMARY KEY,                      -- android, ios
@@ -946,7 +970,44 @@ VALUES
   ('android', '1.0.0', '1.0.0', 'https://play.google.com/store/apps/details?id=com.anbu.app'),
   ('ios', '1.0.0', '1.0.0', 'https://apps.apple.com/app/id000000000')
 ON CONFLICT (platform) DO NOTHING;
+
+
+-- 알림 이벤트 테이블 (대상자 중심)
+-- 대상자별 1건 저장, 보호자 조회 시 guardians 테이블 JOIN으로 필터링
+CREATE TABLE IF NOT EXISTS notification_events (
+    id                  SERIAL PRIMARY KEY,
+    subject_user_id     INTEGER NOT NULL,              -- 대상자 user_id
+    invite_code         TEXT,                          -- 대상자 고유 코드 (조회 편의)
+    alert_level         TEXT NOT NULL,                 -- info, caution, warning, urgent, health
+    title               TEXT NOT NULL,
+    body                TEXT NOT NULL,
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_ne_subject_created ON notification_events (subject_user_id, created_at DESC);
+
+
+-- 보호자 알림 설정 테이블
+CREATE TABLE IF NOT EXISTS guardian_notification_settings (
+    guardian_user_id  INTEGER PRIMARY KEY REFERENCES users(id),
+    all_enabled       BOOLEAN NOT NULL DEFAULT TRUE,   -- 전체 알림 ON/OFF
+    urgent_enabled    BOOLEAN NOT NULL DEFAULT TRUE,   -- 긴급 등급 ON/OFF
+    warning_enabled   BOOLEAN NOT NULL DEFAULT TRUE,   -- 경고 등급 ON/OFF
+    caution_enabled   BOOLEAN NOT NULL DEFAULT TRUE,   -- 주의 등급 ON/OFF
+    info_enabled      BOOLEAN NOT NULL DEFAULT TRUE,   -- 정보 등급 ON/OFF
+    dnd_enabled       BOOLEAN NOT NULL DEFAULT FALSE,  -- 방해금지 모드 ON/OFF
+    dnd_start         TEXT,                            -- 방해금지 시작 시각 (HH:MM)
+    dnd_end           TEXT,                            -- 방해금지 종료 시각 (HH:MM)
+    updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 ```
+
+**알림 아키텍처 설계 원칙:**
+- 알림 이벤트는 **대상자 중심**으로 1건만 저장 (이전: 보호자마다 각각 저장)
+- 보호자가 알림을 조회할 때 `guardians` 테이블 JOIN으로 연결된 대상자 필터링
+- 보호자별 알림 설정(`guardian_notification_settings`)은 **조회 시점에 적용** (저장 시점 아님)
+- Push 알림은 보호자마다 개별 발송 (FCM 토큰별), DB 저장과 분리
+- 같은 대상자를 여러 보호자가 보는 경우 모두 동일한 알림 목록을 확인 가능
 
 **PostgreSQL 참고사항:**
 - `BOOLEAN` → 네이티브 타입 사용 (`TRUE`/`FALSE`)
@@ -962,15 +1023,30 @@ ON CONFLICT (platform) DO NOTHING;
 ## 6. 서버 스케줄러
 
 
-### 6.1 Heartbeat 트리거 (클라이언트 자체 스케줄링)
+### 6.1 iOS/Android Silent Push 발송 (매일 고정 시각)
+```
+실행 주기: 매 분 정각 (APScheduler CronTrigger(second=0))
 
-서버는 heartbeat 트리거 Silent Push를 발송하지 않는다.
-클라이언트(대상자 앱)가 WorkManager(Android) / BGTaskScheduler(iOS)를 사용하여 예약 시각에 자체적으로 heartbeat를 전송한다.
+처리 흐름:
+1. 현재 시각(KST)이 각 기기의 heartbeat 시각(heartbeat_hour:heartbeat_minute)에
+   해당하는 대상자 기기 조회 (iOS/Android 공통)
+   SELECT d.fcm_token, d.device_id, d.platform
+   FROM devices d
+   JOIN users u ON d.user_id = u.id
+   WHERE u.role = 'subject'
+     AND d.heartbeat_hour = :current_hour
+     AND d.heartbeat_minute = :current_minute
+     AND d.fcm_token IS NOT NULL
 
-서버의 역할:
-- heartbeat 수신 및 `last_seen` 갱신
-- 미수신 시 경고 생성 (6.2 참조)
-- `/api/v1/devices/me` 엔드포인트에서 heartbeat 시각 제공 (클라이언트 동기화용)
+2. 조회된 기기 전체에 Silent Push 병렬 발송 (asyncio.gather + asyncio.to_thread)
+   - FCM firebase-admin SDK의 send()는 동기 블로킹 함수이므로 asyncio.to_thread로 스레드 풀에서 실행
+   - 모든 기기에 대한 FCM I/O를 동시에 처리하여 N건 순차 발송 대비 응답 시간 대폭 단축
+3. FCM 발송 결과 수집 후 토큰 무효화 기기 DB 업데이트 (순차 — 커넥션 공유)
+
+※ 기본값: heartbeat_hour=9, heartbeat_minute=30 (KST 기준)
+※ 보호자/대상자가 시각 변경 시 devices 테이블의 heartbeat_hour/minute 갱신
+※ CronTrigger(second=0): 매 분 0초에 실행 — 서버 재시작 후에도 정각에 동기화됨
+```
 
 
 ### 6.2 경고 생성 스케줄러 (고정 시각 기반 + 등급별 판정)
@@ -998,7 +1074,7 @@ ON CONFLICT (platform) DO NOTHING;
    b. 보호자 구독 활성 → 등급 판정 진행
 
 3. 등급 판정 (누적 미수신 횟수 기반):
-   a. battery_level < 20%
+   a. battery_level ≤ 10%
       → 정보 등급 1회 발송 후 종료 (이후 상향 없음, 소리 없음)
       → heartbeat 수신 시 자동 해소
 
@@ -1023,6 +1099,11 @@ ON CONFLICT (platform) DO NOTHING;
    - 주의 등급: 1회 발송
    - 경고 등급: 1~2회 다음날 재발송 → 3회 이상 긴급 상향
    - 긴급 등급: 보호자 확인까지 매일 반복 (종료 없음)
+
+6. 보호자 Push 병렬 발송 (alert_service.send_alert_to_guardians):
+   - 경고 등급 판정 후 연결된 보호자 전체에 Push 발송 시 asyncio.gather 병렬 처리
+   - 각 보호자의 FCM 발송은 독립적이므로 완전 병렬화 가능
+   - DB 작업 없이 FCM I/O만 수행하는 함수이므로 커넥션 공유 문제 없음
 ```
 
 
@@ -1063,7 +1144,8 @@ ON CONFLICT (platform) DO NOTHING;
 2. 조회된 각 대상자:
    a. heartbeat_logs 삭제 (해당 device_id)
    b. alerts 삭제
-   c. devices 삭제
+   c. notification_events 삭제
+   d. devices 삭제
    e. users 삭제
 
 3. 별도 알림 없음 (앱은 그대로 남아있음)
@@ -1073,24 +1155,38 @@ ON CONFLICT (platform) DO NOTHING;
 ```
 
 
-### 6.5 당일 알림 자정 일괄 삭제
+### 6.5 당일 알림 자정 정리
 ```
-실행 주기: 매일 00:00 KST (APScheduler CronTrigger(hour=0, minute=0, timezone='Asia/Seoul'))
+실행 주기: 매일 00:00 KST
 
 처리 흐름:
-1. guardian_notifications 테이블에서 전날(today KST 기준 이전) 알림 전체 삭제
-   DELETE FROM guardian_notifications
-   WHERE created_at < date_trunc('day', NOW() AT TIME ZONE 'Asia/Seoul') AT TIME ZONE 'Asia/Seoul'
+1. notification_events 테이블에서 대상자별 timezone 조회
+   SELECT DISTINCT ne.subject_user_id,
+          COALESCE(d.timezone, 'Asia/Seoul') AS tz
+   FROM notification_events ne
+   LEFT JOIN devices d ON d.user_id = ne.subject_user_id
 
-2. 로그 출력
-   [자정 알림 정리] 삭제 완료 — {deleted_count}건
+2. 각 대상자의 기기 timezone 기준 자정 이전 알림 삭제
+   DELETE FROM notification_events
+   WHERE subject_user_id = $1 AND created_at < $2
+   (자정 = 대상자 기기 timezone 기준 오늘 00:00 UTC 변환값)
 
-※ 보호자 알림 목록(GET /api/v1/notifications)은 당일 알림만 반환하는 구조
-※ 삭제 실패 시 다음 날 00:00에 재시도됨 (중복 삭제 무해)
+※ 당일 알림만 보관하고 전날 이전 알림은 자정에 일괄 삭제
 ```
 
 
-### 6.6 보호자 Push 발송 실패 처리
+### 6.6 heartbeat_logs 30일 초과 삭제
+```
+실행 주기: 매일 04:00 KST
+
+처리 흐름:
+1. DELETE FROM heartbeat_logs WHERE server_ts < NOW() - INTERVAL '30 days'
+
+※ 30일 이상 지난 heartbeat 로그를 삭제하여 DB 용량 관리
+```
+
+
+### 6.7 보호자 Push 발송 실패 처리
 ```
 실행 주기: Push 발송 시마다
 
@@ -1173,8 +1269,8 @@ ON CONFLICT (platform) DO NOTHING;
 | `fastapi` | 웹 프레임워크 (API 자동 문서화, Swagger UI) |
 | `uvicorn` | ASGI 서버 (FastAPI 실행) |
 | `asyncpg` | PostgreSQL 비동기 드라이버 |
-| `apscheduler` | 스케줄러 (경고 체크, 구독 만료) |
-| `firebase-admin` | FCM Push 발송 (보호자 경고 알림만) |
+| `apscheduler` | 스케줄러 (Silent Push, 경고 체크, 구독 만료) |
+| `firebase-admin` | FCM/APNs Push 발송 (Silent Push + 일반 Push) |
 | `pydantic` | 요청/응답 데이터 검증 (FastAPI 내장) |
 | `python-dotenv` | 환경변수 로드 (.env 파일) |
 
@@ -1200,7 +1296,7 @@ python-dotenv==1.1.*
 | 구성요소 | 서비스 | 비고 |
 |----------|--------|------|
 | **Python 서버 + PostgreSQL** | Railway | Git push 자동 배포, HTTPS 자동, PostgreSQL 플러그인 포함 월 $5~10 |
-| **Push** | FCM (Firebase Cloud Messaging) | 보호자 경고 Push만 (Silent Push 미사용), 무제한 무료 |
+| **Push** | FCM (Firebase Cloud Messaging) | Silent Push + 일반 Push, 무제한 무료 |
 
 
 ### 10.2 서버 배포 (Railway)
@@ -1264,10 +1360,12 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 | `/api/v1/subscription` | GET | 구독 상태 확인 |
 | `/api/v1/subscription/verify` | POST | 인앱 결제 영수증 검증 |
 | `/api/v1/subscription/restore` | POST | 구독 복원 (앱 재설치 시) |
-| `/api/v1/notifications` | GET | 당일 보호자 알림 목록 조회 (시간순) |
 | `/api/v1/alerts` | GET | 대상자별 경고 목록 조회 (보호자용) |
 | `/api/v1/alerts/{id}/clear` | PUT | 개별 경고 클리어 (보호자가 건강 확인 후) |
 | `/api/v1/alerts/clear-all` | PUT | 대상자별 모든 활성 경고 일괄 클리어 + 적응형 주기 복원 |
+| `/api/v1/notifications` | GET | 당일 알림 목록 조회 (보호자용, 대상자 중심 + 설정 필터링) |
+| `/api/v1/notifications` | DELETE | 당일 알림 전체 삭제 (보호자용) |
+| `/api/v1/users/me` | DELETE | 사용자 탈퇴 (계정 및 관련 데이터 전체 삭제) |
 | `/api/v1/devices/fcm-token` | PUT | FCM 토큰 갱신 |
 | `/api/v1/devices/{device_id}/heartbeat-schedule` | PATCH | heartbeat 시각 변경 (대상자/보호자) |
 | `/api/v1/app/version-check` | GET | 앱 버전 체크 (강제 업데이트 판정) |
@@ -1286,7 +1384,7 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 |------|------|
 | 서버 응답 시간 | heartbeat API p99 < 200ms |
 | 서버 가용성 | ≥ 99.5% |
-| 보호자 경고 Push 발송 성공률 | ≥ 98% |
+| Silent Push 발송 성공률 | ≥ 98% |
 | 경고 생성 정확도 | 거짓 경고 ≤ 5% |
 | 보호자 Push 전달률 | ≥ 95% |
 
@@ -1314,7 +1412,7 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 |------|--------|
 | 1단계: DB + 사용자 등록/연결 API | FastAPI 서버, PostgreSQL 스키마, 사용자 등록, 고유 코드 생성, 대상자 연결 API |
 | 2단계: Heartbeat + 경고 | heartbeat 수신, 경고 생성/클리어 로직 |
-| 3단계: Push 서비스 | 보호자 FCM Push 발송 (Silent Push 미사용) |
-| 4단계: 스케줄러 | APScheduler — 경고 체크, 구독 만료 체크 |
+| 3단계: Push 서비스 | Silent Push 발송, 보호자 FCM Push 발송 |
+| 4단계: 스케줄러 | APScheduler — iOS Silent Push 주기, 경고 체크, 구독 만료 체크 |
 | 5단계: 구독/결제 API | 구독 상태 관리, 영수증 검증, 구독 복원 |
 | 6단계: Railway 배포 + 통합 테스트 | Railway 배포, E2E 테스트 |
