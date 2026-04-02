@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -22,6 +23,7 @@ class SplashController extends BaseController {
   }
 
   Future<void> _initialize() async {
+    FlutterNativeSplash.remove();
     await Future.delayed(const Duration(milliseconds: 1500));
 
     // 1. 버전 체크 (실패해도 계속 진행)

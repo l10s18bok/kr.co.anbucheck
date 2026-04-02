@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
@@ -15,7 +16,12 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) BackPressHandler.onBackPressed();
+      },
+      child: Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -285,6 +291,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
           }
         },
       ),
+    ),
     );
   }
 }

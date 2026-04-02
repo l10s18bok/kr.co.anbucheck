@@ -8,6 +8,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/modules/subject_home/controllers/subject_home_controller.dart';
 
@@ -21,7 +22,12 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
     controller.loadAppVersion();
     final scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) BackPressHandler.onBackPressed();
+      },
+      child: Scaffold(
       key: scaffoldKey,
       backgroundColor: AppColors.surface,
       drawer: _buildDrawer(scaffoldKey),
@@ -95,6 +101,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           ],
         ),
       ),
+    ),
     );
   }
 
@@ -480,8 +487,6 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             ),
             const Divider(color: AppColors.surfaceContainerHigh, height: 1),
 
-            const Spacer(),
-
             // 법적 문서 링크
             ListTile(
               leading: Icon(Icons.description_outlined, size: 22.w, color: AppColors.onSurfaceVariant),
@@ -495,6 +500,8 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               trailing: Icon(Icons.open_in_new_rounded, size: 18.w, color: AppColors.onSurfaceVariant),
               onTap: () => launchUrl(Uri.parse(AppConstants.termsOfServiceUrl), mode: LaunchMode.externalApplication),
             ),
+
+            const Spacer(),
 
             const Divider(height: 1),
 

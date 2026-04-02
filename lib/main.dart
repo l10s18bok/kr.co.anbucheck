@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -12,7 +13,8 @@ import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   // timezone 초기화 — 기기 로컬 IANA timezone 감지 (로컬 알림 예약에 필요)
   tz.initializeTimeZones();
