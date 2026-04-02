@@ -50,11 +50,11 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   }
 
   /// 카드 상태 (reported / pending / waiting)
-  /// - reported : 금일 보고 완료 + 예정 시각 지남
-  /// - pending  : 예정 시각 아직 안 됨
+  /// - reported : 금일 보고 완료
+  /// - pending  : 예정 시각 아직 안 됨 (미전송)
   /// - waiting  : 예정 시각 지났으나 미수신 (WorkManager 지연 등)
   String get checkCardState {
-    if (isReportedToday && !isScheduleInFuture) return 'reported';
+    if (isReportedToday) return 'reported';
     if (isScheduleInFuture) return 'pending';
     return 'waiting';
   }
@@ -171,7 +171,11 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       applySchedule(hour, minute);
       // 서버 기준 시각으로 WorkManager 및 로컬 안전망 알림 재예약
       await HeartbeatWorkerService.schedule(hour, minute);
-      await LocalAlarmService.schedule(hour, minute);
+      // 오늘 이미 heartbeat 전송했으면 데드맨 스위치는 내일로
+      final lastDate = await _tokenDs.getLastHeartbeatDate();
+      final syncNow = DateTime.now();
+      final syncToday = '${syncNow.year}-${syncNow.month.toString().padLeft(2, '0')}-${syncNow.day.toString().padLeft(2, '0')}';
+      await LocalAlarmService.schedule(hour, minute, nextDay: lastDate == syncToday);
     } catch (_) {
       // 실패 시 로컬 저장값 유지
     }

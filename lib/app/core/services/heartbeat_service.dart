@@ -97,7 +97,7 @@ class HeartbeatService {
       await _tokenDs.saveLastHeartbeatTime(timeStr);
 
       final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
-      await LocalAlarmService.schedule(hour, minute);
+      await LocalAlarmService.schedule(hour, minute, nextDay: true);
     } catch (_) {}
   }
 
@@ -123,11 +123,11 @@ class HeartbeatService {
     await _tokenDs.saveLastHeartbeatDate(today);
     await _tokenDs.saveLastHeartbeatTime(timeStr);
 
-    // 로컬 안전망 알림 재예약 (heartbeat 시각 + 10분, 매일 반복)
+    // 로컬 안전망 알림: 오늘 heartbeat 성공 → 내일 알람으로 재예약
     // 백그라운드 isolate에서 tz 미초기화 등으로 실패해도 전송 결과에 영향 없음
     try {
       final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
-      await LocalAlarmService.schedule(hour, minute);
+      await LocalAlarmService.schedule(hour, minute, nextDay: true);
     } catch (_) {}
   }
 

@@ -44,8 +44,9 @@ void _handleNotificationTap(String type) {
     case 'heartbeat':
       Get.toNamed(AppRoutes.subjectHome);
       break;
-    // 로컬 안전망 알림 탭 — 홈으로 이동 (heartbeat는 SubjectHomeController에서 자동 처리)
+    // 로컬 안전망 알림 탭 — heartbeat 즉시 전송 후 홈으로 이동
     case LocalAlarmService.alarmPayload:
+      _sendWellbeingHeartbeat();
       Get.toNamed(AppRoutes.subjectHome);
       break;
     // suspicious=true 판정 알림 탭 — suspicious=false로 heartbeat 즉시 전송

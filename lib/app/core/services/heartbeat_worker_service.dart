@@ -47,10 +47,10 @@ void heartbeatWorkerCallback() {
 
       await HeartbeatService().execute();
 
-      // 로컬 안전망 알림 재예약
+      // 로컬 안전망 알림: heartbeat 성공 → 내일 알람으로 재예약
       try {
         final (hour, minute) = await tokenDs.getHeartbeatSchedule();
-        await LocalAlarmService.schedule(hour, minute);
+        await LocalAlarmService.schedule(hour, minute, nextDay: true);
       } catch (_) {}
 
       // 다음 날 동일 시각 재예약
