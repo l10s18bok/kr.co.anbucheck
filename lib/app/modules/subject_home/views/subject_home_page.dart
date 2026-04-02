@@ -24,10 +24,12 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
           onPressed: () {},
         ),
-        title: Obx(() => Text(
-              controller.userId > 0 ? '안부 (${controller.userId})' : '안부',
-              style: AppTextTheme.headlineSmall(),
-            )),
+        title: Obx(
+          () => Text(
+            controller.userId > 0 ? '안부 (${controller.userId})' : '안부',
+            style: AppTextTheme.headlineSmall(),
+          ),
+        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16.w),
@@ -49,9 +51,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             // 안전 코드 공유 안내
             Text(
               '나의 안전 코드를 공유해 주세요',
-              style: AppTextTheme.headlineMedium(
-                color: const Color(0xFF00685E),
-              ),
+              style: AppTextTheme.headlineMedium(color: const Color(0xFF00685E)),
             ),
             SizedBox(height: AppSpacing.lg),
 
@@ -72,12 +72,14 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             SizedBox(height: AppSpacing.lg),
 
             // 안부 확인 시각 변경 버튼
-            Obx(() => HeartbeatScheduleTile(
-                  heartbeatTime: controller.heartbeatTime.value,
-                  onTap: controller.showTimePickerDialog,
-                  color: const Color(0xFF00685E),
-                  backgroundColor: const Color(0xFFE0F2F1),
-                )),
+            Obx(
+              () => HeartbeatScheduleTile(
+                heartbeatTime: controller.heartbeatTime.value,
+                onTap: controller.showTimePickerDialog,
+                color: const Color(0xFF00685E),
+                backgroundColor: const Color(0xFFE0F2F1),
+              ),
+            ),
             SizedBox(height: AppSpacing.sp6),
 
             // 광고 배너
@@ -98,74 +100,74 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(20.r),
       ),
-      child: Obx(() => Column(
-            children: [
-              // SAFETY SHARE CODE 헤더 + 버튼
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'SAFETY SHARE CODE',
-                    style: AppTextTheme.labelMedium(
-                      color: AppColors.textTertiary,
-                      fw: FontWeight.w600,
-                    ),
+      child: Obx(
+        () => Column(
+          children: [
+            // SAFETY SHARE CODE 헤더 + 버튼
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'SAFETY SHARE CODE',
+                  style: AppTextTheme.labelMedium(
+                    color: AppColors.textTertiary,
+                    fw: FontWeight.w600,
                   ),
-                  if (controller.notificationGranted)
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: controller.copyInviteCode,
-                          child: Container(
-                            padding: EdgeInsets.all(AppSpacing.sm),
-                            decoration: BoxDecoration(
-                              color: AppColors.surfaceContainerLow,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Icon(
-                              Icons.copy_rounded,
-                              size: 20.w,
-                              color: AppColors.onSurfaceVariant,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: AppSpacing.md),
-                        GestureDetector(
-                          onTap: controller.shareInviteCode,
-                          child: Container(
-                            padding: EdgeInsets.all(AppSpacing.sm),
-                            decoration: BoxDecoration(
-                              color: AppColors.surfaceContainerLow,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Icon(
-                              Icons.share_rounded,
-                              size: 20.w,
-                              color: AppColors.onSurfaceVariant,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-              SizedBox(height: AppSpacing.md),
-              // 초대 코드 (가운데 정렬)
-              Text(
-                controller.notificationGranted
-                    ? controller.inviteCode
-                    : 'XXX-XXXX',
-                style: TextStyle(
-                  fontSize: 40.sp,
-                  fontWeight: FontWeight.w800,
-                  color: controller.notificationGranted
-                      ? const Color(0xFF00685E)
-                      : AppColors.textTertiary,
-                  letterSpacing: 2,
                 ),
+                if (controller.notificationGranted)
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: controller.copyInviteCode,
+                        child: Container(
+                          padding: EdgeInsets.all(AppSpacing.sm),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceContainerLow,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: Icon(
+                            Icons.copy_rounded,
+                            size: 20.w,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: AppSpacing.md),
+                      GestureDetector(
+                        onTap: controller.shareInviteCode,
+                        child: Container(
+                          padding: EdgeInsets.all(AppSpacing.sm),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceContainerLow,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: Icon(
+                            Icons.share_rounded,
+                            size: 20.w,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+            SizedBox(height: AppSpacing.md),
+            // 초대 코드 (가운데 정렬)
+            Text(
+              controller.notificationGranted ? controller.inviteCode : 'XXX-XXXX',
+              style: TextStyle(
+                fontSize: 40.sp,
+                fontWeight: FontWeight.w800,
+                color: controller.notificationGranted
+                    ? const Color(0xFF00685E)
+                    : AppColors.textTertiary,
+                letterSpacing: 2,
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -176,19 +178,17 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
       final iconData = state == 'reported'
           ? Icons.check_rounded
           : state == 'waiting'
-              ? Icons.hourglass_top_rounded
-              : Icons.schedule_rounded;
+          ? Icons.hourglass_top_rounded
+          : Icons.schedule_rounded;
       final iconBg = state == 'reported'
           ? const Color(0xFF00685E)
           : state == 'waiting'
-              ? const Color(0xFFE65100)
-              : AppColors.surfaceContainerHigh;
+          ? const Color(0xFFE65100)
+          : AppColors.surfaceContainerHigh;
       final iconColor = state == 'reported' || state == 'waiting'
           ? Colors.white
           : AppColors.onSurfaceVariant;
-      final textColor = state == 'waiting'
-          ? const Color(0xFFE65100)
-          : const Color(0xFF00685E);
+      final textColor = state == 'waiting' ? const Color(0xFFE65100) : const Color(0xFF00685E);
 
       return Container(
         width: double.infinity,
@@ -202,10 +202,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             Container(
               width: 48.w,
               height: 48.w,
-              decoration: BoxDecoration(
-                color: iconBg,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
               child: Icon(iconData, size: 28.w, color: iconColor),
             ),
             SizedBox(width: AppSpacing.lg),
@@ -214,14 +211,12 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               children: [
                 Text(
                   controller.checkCardTitle,
-                  style: AppTextTheme.bodyMedium(
-                      color: AppColors.textSecondary),
+                  style: AppTextTheme.bodyMedium(color: AppColors.textSecondary),
                 ),
                 SizedBox(height: 2.h),
                 Text(
                   controller.checkCardBody,
-                  style: AppTextTheme.headlineSmall(
-                      color: textColor, fw: FontWeight.w700),
+                  style: AppTextTheme.headlineSmall(color: textColor, fw: FontWeight.w700),
                 ),
               ],
             ),
@@ -235,13 +230,9 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
   Widget _buildBentoGrid() {
     return Obx(() {
       final batteryLow = controller.isBatteryLow;
-      final batteryColor = batteryLow
-          ? const Color(0xFFD32F2F)
-          : const Color(0xFF00685E);
+      final batteryColor = batteryLow ? const Color(0xFFD32F2F) : const Color(0xFF00685E);
       final disconnected = !controller.isConnected;
-      final connectColor = disconnected
-          ? const Color(0xFFE64A19)
-          : const Color(0xFF00685E);
+      final connectColor = disconnected ? const Color(0xFFE64A19) : const Color(0xFF00685E);
 
       return Row(
         children: [
@@ -250,9 +241,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             child: Container(
               padding: EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(
-                color: batteryLow
-                    ? const Color(0xFFFFEBEE)
-                    : AppColors.surfaceContainerLowest,
+                color: batteryLow ? const Color(0xFFFFEBEE) : AppColors.surfaceContainerLowest,
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Column(
@@ -268,25 +257,16 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                       ),
                       Text(
                         '${controller.batteryLevel}%',
-                        style: AppTextTheme.headlineSmall(
-                          color: batteryColor,
-                          fw: FontWeight.w700,
-                        ),
+                        style: AppTextTheme.headlineSmall(color: batteryColor, fw: FontWeight.w700),
                       ),
                     ],
                   ),
                   SizedBox(height: AppSpacing.sm),
-                  Text(
-                    '배터리 상태',
-                    style: AppTextTheme.bodySmall(),
-                  ),
+                  Text('배터리 상태', style: AppTextTheme.bodySmall()),
                   SizedBox(height: 2.h),
                   Text(
                     controller.batteryStateText,
-                    style: AppTextTheme.headlineSmall(
-                      color: batteryColor,
-                      fw: FontWeight.w700,
-                    ),
+                    style: AppTextTheme.headlineSmall(color: batteryColor, fw: FontWeight.w700),
                   ),
                 ],
               ),
@@ -298,9 +278,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             child: Container(
               padding: EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(
-                color: disconnected
-                    ? const Color(0xFFFBE9E7)
-                    : AppColors.surfaceContainerLowest,
+                color: disconnected ? const Color(0xFFFBE9E7) : AppColors.surfaceContainerLowest,
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Column(
@@ -310,33 +288,22 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Icon(
-                        controller.isConnected
-                            ? Icons.wifi_rounded
-                            : Icons.wifi_off_rounded,
+                        controller.isConnected ? Icons.wifi_rounded : Icons.wifi_off_rounded,
                         size: 24.w,
                         color: connectColor,
                       ),
                       Text(
                         controller.connectivityText,
-                        style: AppTextTheme.headlineSmall(
-                          color: connectColor,
-                          fw: FontWeight.w700,
-                        ),
+                        style: AppTextTheme.headlineSmall(color: connectColor, fw: FontWeight.w700),
                       ),
                     ],
                   ),
                   SizedBox(height: AppSpacing.sm),
-                  Text(
-                    '통신 연결 상태',
-                    style: AppTextTheme.bodySmall(),
-                  ),
+                  Text('통신 연결 상태', style: AppTextTheme.bodySmall()),
                   SizedBox(height: 2.h),
                   Text(
                     controller.isConnected ? '정상' : '연결 없음',
-                    style: AppTextTheme.headlineSmall(
-                      color: connectColor,
-                      fw: FontWeight.w700,
-                    ),
+                    style: AppTextTheme.headlineSmall(color: connectColor, fw: FontWeight.w700),
                   ),
                 ],
               ),
@@ -373,30 +340,21 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     SizedBox(
                       width: 24.w,
                       height: 24.w,
-                      child: const CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: Colors.white,
-                      ),
+                      child: const CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white),
                     )
                   else
-                    Icon(Icons.verified_user_rounded,
-                        size: 24.w, color: Colors.white),
+                    Icon(Icons.verified_user_rounded, size: 24.w, color: Colors.white),
                   SizedBox(width: 8.w),
                   Text(
                     sending ? '안부 보고 중...' : '지금 바로 안전 보고하기',
-                    style: AppTextTheme.headlineSmall(
-                      color: Colors.white,
-                      fw: FontWeight.w700,
-                    ),
+                    style: AppTextTheme.headlineSmall(color: Colors.white, fw: FontWeight.w700),
                   ),
                 ],
               ),
               SizedBox(height: 4.h),
               Text(
                 '보호자에게 걱정 말라고 알려주세요',
-                style: AppTextTheme.bodySmall(
-                  color: Colors.white.withValues(alpha: 0.8),
-                ),
+                style: AppTextTheme.bodySmall(color: Colors.white.withValues(alpha: 0.8)),
               ),
             ],
           ),
@@ -434,8 +392,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               color: AppColors.surfaceContainerHigh,
               borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(Icons.image_rounded,
-                size: 24.w, color: AppColors.onSurfaceVariant),
+            child: Icon(Icons.image_rounded, size: 24.w, color: AppColors.onSurfaceVariant),
           ),
           SizedBox(width: AppSpacing.md),
           Expanded(
@@ -450,15 +407,11 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                   ),
                 ),
                 SizedBox(height: 2.h),
-                Text(
-                  '시니어를 위한 프리미엄 건강 관리 서비스',
-                  style: AppTextTheme.bodyMedium(),
-                ),
+                Text('시니어를 위한 프리미엄 건강 관리 서비스', style: AppTextTheme.bodyMedium()),
               ],
             ),
           ),
-          Icon(Icons.open_in_new_rounded,
-              size: 18.w, color: AppColors.onSurfaceVariant),
+          Icon(Icons.open_in_new_rounded, size: 18.w, color: AppColors.onSurfaceVariant),
         ],
       ),
     );

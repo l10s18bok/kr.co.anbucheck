@@ -121,22 +121,6 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
 
               SizedBox(height: AppSpacing.sp6),
 
-              // 안부 확인 시각
-              Text(
-                '안부 확인 시각',
-                style: AppTextTheme.labelMedium(color: AppColors.textTertiary, fw: FontWeight.w600),
-              ),
-              SizedBox(height: AppSpacing.md),
-              Obx(
-                () => HeartbeatScheduleTile(
-                  heartbeatTime: controller.heartbeatTime.value,
-                  onTap: controller.showTimePickerDialog,
-                  color: const Color(0xFF4355B9),
-                  backgroundColor: const Color(0xFFC5CAE9),
-                ),
-              ),
-              SizedBox(height: AppSpacing.sp6),
-
               // 방해금지모드
               Container(
                 padding: EdgeInsets.all(AppSpacing.lg),
@@ -156,8 +140,7 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                         ),
                         SizedBox(width: AppSpacing.md),
                         Expanded(
-                          child: Text('방해금지모드',
-                              style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
+                          child: Text('방해금지모드', style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
                         ),
                         Switch(
                           value: controller.dndEnabled.value,
@@ -170,33 +153,36 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                     Row(
                       children: [
                         Expanded(
-                          child: Obx(() => HeartbeatScheduleTile(
-                                heartbeatTime: controller.dndStartTime.value,
-                                onTap: controller.showDndStartPicker,
-                                color: const Color(0xFF4355B9),
-                                backgroundColor: const Color(0xFFE8EAF6),
-                                label: '시작 시각',
-                                subLabel: controller.dndStartTime.value,
-                              )),
+                          child: Obx(
+                            () => HeartbeatScheduleTile(
+                              heartbeatTime: controller.dndStartTime.value,
+                              onTap: controller.showDndStartPicker,
+                              color: const Color(0xFF4355B9),
+                              backgroundColor: const Color(0xFFE8EAF6),
+                              label: '시작 시각',
+                              subLabel: controller.dndStartTime.value,
+                            ),
+                          ),
                         ),
                         SizedBox(width: AppSpacing.md),
                         Expanded(
-                          child: Obx(() => HeartbeatScheduleTile(
-                                heartbeatTime: controller.dndEndTime.value,
-                                onTap: controller.showDndEndPicker,
-                                color: const Color(0xFF4355B9),
-                                backgroundColor: const Color(0xFFE8EAF6),
-                                label: '종료 시각',
-                                subLabel: controller.dndEndTime.value,
-                              )),
+                          child: Obx(
+                            () => HeartbeatScheduleTile(
+                              heartbeatTime: controller.dndEndTime.value,
+                              onTap: controller.showDndEndPicker,
+                              color: const Color(0xFF4355B9),
+                              backgroundColor: const Color(0xFFE8EAF6),
+                              label: '종료 시각',
+                              subLabel: controller.dndEndTime.value,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                     SizedBox(height: AppSpacing.sm),
                     Text(
                       '※ 긴급 알림은 방해금지모드 중에도 수신됩니다',
-                      style: AppTextTheme.bodySmall(
-                          color: AppColors.textTertiary),
+                      style: AppTextTheme.bodySmall(color: AppColors.textTertiary),
                     ),
                   ],
                 ),
