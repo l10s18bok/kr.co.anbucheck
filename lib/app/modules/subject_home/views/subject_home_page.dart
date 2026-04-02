@@ -532,7 +532,10 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                   isDark ? '라이트 모드' : '다크 모드',
                   style: AppTextTheme.bodyLarge(),
                 ),
-                onTap: themeSvc.toggle,
+                onTap: () {
+                  scaffoldKey.currentState?.closeDrawer();
+                  Future.delayed(const Duration(milliseconds: 300), themeSvc.toggle);
+                },
               );
             }),
 
