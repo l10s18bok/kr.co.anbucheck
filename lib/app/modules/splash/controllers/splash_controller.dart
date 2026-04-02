@@ -1,14 +1,23 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/network/api_client_factory.dart';
+import 'package:anbucheck/app/core/services/fcm_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/firebase_options.dart';
 
 /// Splash 컨트롤러
-/// 흐름: Splash → 버전 체크 → 기등록 확인 → 홈 or 모드 선택
+/// 흐름: 네이티브 스플래시 제거 → 서비스 초기화 → 버전 체크 → 홈 or 모드 선택
 class SplashController extends BaseController {
   final _tokenDs = TokenLocalDatasource();
   final _versionDs = VersionRemoteDatasource();
@@ -23,12 +32,15 @@ class SplashController extends BaseController {
   }
 
   Future<void> _initialize() async {
+    // 네이티브 스플래시 제거 → Flutter Splash 화면 표시
     FlutterNativeSplash.remove();
-    await Future.delayed(const Duration(milliseconds: 1500));
+
+    // 서비스 초기화 (Flutter Splash 화면이 보이는 동안 진행)
+    await _initServices();
 
     // 1. 버전 체크 (실패해도 계속 진행)
     final forceUpdate = await _checkVersion();
-    if (forceUpdate) return; // 강제 업데이트 다이얼로그에서 처리
+    if (forceUpdate) return;
 
     // 2. 기등록 여부 확인 → 해당 홈으로 이동
     final deviceToken = await _tokenDs.getDeviceToken();
@@ -43,6 +55,35 @@ class SplashController extends BaseController {
     } else {
       Get.offNamed(AppRoutes.modeSelect);
     }
+  }
+
+  /// 기존 main()에서 수행하던 무거운 초기화를 Splash 화면에서 처리
+  Future<void> _initServices() async {
+    // timezone 초기화
+    tz.initializeTimeZones();
+    try {
+      final localTzName = await FlutterTimezone.getLocalTimezone();
+      tzlib.setLocalLocation(tzlib.getLocation(localTzName));
+    } catch (_) {
+      tzlib.setLocalLocation(tzlib.getLocation('Asia/Seoul'));
+    }
+
+    // Firebase 초기화
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    // HTTP 클라이언트 초기화
+    ApiClientFactory.init(type: HttpClientType.getConnect);
+
+    // FCM 백그라운드 핸들러 등록
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+    // WorkManager 초기화
+    await HeartbeatWorkerService.init();
+
+    // FCM 서비스 초기화
+    await Get.putAsync(() => FcmService().init());
   }
 
   /// 버전 체크 — 강제 업데이트 필요 시 true 반환
