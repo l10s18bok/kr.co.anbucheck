@@ -105,7 +105,7 @@ class HeartbeatWorkerService {
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
-    debugPrint('[HeartbeatWorker] 예약: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} (${delay.inMinutes}분 후)');
+    debugPrint('[HeartbeatWorker] 예약: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} (${delay.inHours}시간 ${delay.inMinutes % 60}분 후)');
   }
 
   /// 다음 날 동일 시각 재예약 (콜백 내에서 호출)
