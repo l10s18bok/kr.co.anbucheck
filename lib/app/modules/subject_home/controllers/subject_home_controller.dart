@@ -244,8 +244,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   /// 고유 코드 클립보드 복사
   void copyInviteCode() {
     Clipboard.setData(ClipboardData(text: _inviteCode.value));
-    Get.snackbar('', 'subject_home_code_copied'.tr,
-        snackPosition: SnackPosition.BOTTOM);
+    Get.rawSnackbar(
+      message: 'subject_home_code_copied'.tr,
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   /// 고유 코드 SNS 공유

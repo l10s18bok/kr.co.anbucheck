@@ -217,7 +217,9 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
       final iconColor = state == 'reported' || state == 'waiting'
           ? Colors.white
           : (dark ? Colors.white : AppColors.onSurfaceVariant);
-      final textColor = state == 'waiting' ? const Color(0xFFE65100) : const Color(0xFF00685E);
+      final textColor = dark
+          ? const Color(0xFFFFD54F)
+          : (state == 'waiting' ? const Color(0xFFE65100) : const Color(0xFF00685E));
 
       return Container(
         width: double.infinity,
