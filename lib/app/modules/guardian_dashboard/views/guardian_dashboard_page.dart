@@ -27,10 +27,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: Obx(() => Text(
-              'Anbu Guardian (${controller.subjects.length})',
-              style: AppTextTheme.headlineSmall(),
-            )),
+        title: Text('Anbu Guardian', style: AppTextTheme.headlineSmall()),
         actions: [
           Obx(() {
             if (controller.subjects.isEmpty) return const SizedBox.shrink();
@@ -333,10 +330,13 @@ class _SubjectCard extends StatefulWidget {
 }
 
 class _SubjectCardState extends State<_SubjectCard>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _animCtrl;
   late final Animation<double> _scale;
   late final Animation<double> _glow;
+
+  // 막대 차트 웨이브 애니메이션
+  late final AnimationController _waveCtrl;
 
   @override
   void initState() {
@@ -352,6 +352,12 @@ class _SubjectCardState extends State<_SubjectCard>
       CurvedAnimation(parent: _animCtrl, curve: Curves.easeInOut),
     );
     if (widget.isHighlighted) _animCtrl.repeat(reverse: true);
+
+    _waveCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    );
+    if (widget.showChart) _waveCtrl.repeat();
   }
 
   @override
@@ -363,11 +369,17 @@ class _SubjectCardState extends State<_SubjectCard>
       _animCtrl.stop();
       _animCtrl.animateTo(0);
     }
+    if (widget.showChart && !_waveCtrl.isAnimating) {
+      _waveCtrl.repeat();
+    } else if (!widget.showChart && _waveCtrl.isAnimating) {
+      _waveCtrl.stop();
+    }
   }
 
   @override
   void dispose() {
     _animCtrl.dispose();
+    _waveCtrl.dispose();
     super.dispose();
   }
 
@@ -419,32 +431,45 @@ class _SubjectCardState extends State<_SubjectCard>
                       AppTextTheme.bodySmall(color: AppColors.textSecondary)),
             ],
 
-            // 활동 차트
+            // 활동 차트 — 웨이브 애니메이션
             if (widget.showChart) ...[
               SizedBox(height: 8.h),
-              SizedBox(
-                height: 28.h,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: List.generate(14, (i) {
-                    final heights = [
-                      0.4, 0.6, 0.5, 0.8, 0.55, 0.9, 0.7,
-                      0.85, 0.5, 0.75, 0.65, 0.95, 0.8, 1.0
-                    ];
-                    final h = heights[i] * 28.h;
-                    return Expanded(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 1.5.w),
-                        height: h,
-                        decoration: BoxDecoration(
-                          color: widget.statusColor
-                              .withValues(alpha: 0.25 + heights[i] * 0.4),
-                          borderRadius: BorderRadius.circular(2.r),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
+              AnimatedBuilder(
+                animation: _waveCtrl,
+                builder: (_, __) {
+                  const heights = [
+                    0.4, 0.6, 0.5, 0.8, 0.55, 0.9, 0.7,
+                    0.85, 0.5, 0.75, 0.65, 0.95, 0.8, 1.0
+                  ];
+                  // 0→1 전반: 좌→우, 후반: 우→좌
+                  final t = _waveCtrl.value;
+                  final wave = t <= 0.5 ? t * 2.0 : (1.0 - t) * 2.0;
+
+                  return SizedBox(
+                    height: 28.h,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: List.generate(14, (i) {
+                        // 각 막대의 위상: 왼→오 순서로 밝아졌다 어두워짐
+                        final phase = (i / 13.0 - wave).abs();
+                        final brightness = (1.0 - phase).clamp(0.0, 1.0);
+                        final alpha = 0.2 + brightness * 0.55;
+                        final h = heights[i] * 28.h;
+
+                        return Expanded(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 1.5.w),
+                            height: h,
+                            decoration: BoxDecoration(
+                              color: widget.statusColor.withValues(alpha: alpha),
+                              borderRadius: BorderRadius.circular(2.r),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  );
+                },
               ),
             ],
 

@@ -6,6 +6,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
+import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/modules/guardian_settings/controllers/guardian_settings_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -15,7 +16,12 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) BackPressHandler.onBackPressed();
+      },
+      child: Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -281,6 +287,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
             ),
       ),
       bottomNavigationBar: _buildBottomNav(),
+    ),
     );
   }
 

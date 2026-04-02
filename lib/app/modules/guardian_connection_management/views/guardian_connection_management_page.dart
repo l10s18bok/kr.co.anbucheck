@@ -6,6 +6,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/controllers/guardian_connection_management_controller.dart';
+import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 연결 관리 페이지 — 시안 _4 기준
@@ -14,7 +15,12 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) BackPressHandler.onBackPressed();
+      },
+      child: Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -122,6 +128,7 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
         ),
       ),
       bottomNavigationBar: _buildBottomNav(),
+    ),
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
+import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 알림 목록 페이지 — 당일 알림만 표시 (서버 API 기반)
@@ -14,7 +15,12 @@ class GuardianNotificationsPage
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) BackPressHandler.onBackPressed();
+      },
+      child: Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -69,6 +75,7 @@ class GuardianNotificationsPage
         );
       }),
       bottomNavigationBar: _buildBottomNav(),
+    ),
     );
   }
 
