@@ -18,6 +18,10 @@ class ApiEndpoints {
   /// 두 역할 모두 device_token을 응답으로 받아 이후 요청에 사용
   static const String users = '/api/v1/users';
 
+  /// DELETE /api/v1/users/me
+  /// - 현재 사용자 계정 및 관련 데이터 전체 삭제 (탈퇴)
+  static const String usersMe = '/api/v1/users/me';
+
   // ────────────────────────────────────────────────
   // [대상자 전용] 안부 확인 Heartbeat
   // ────────────────────────────────────────────────

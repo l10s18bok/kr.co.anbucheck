@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
@@ -12,10 +13,18 @@ class GuardianSettingsController extends BaseController {
   RxList<SubjectItem> get subjects => _svc.subjects;
   RxInt get maxSubjects => _svc.maxSubjects;
 
+  final appVersion = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
     _svc.load();
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    appVersion.value = '${info.version} (${info.buildNumber})';
   }
 
   void goToConnectionManagement() {

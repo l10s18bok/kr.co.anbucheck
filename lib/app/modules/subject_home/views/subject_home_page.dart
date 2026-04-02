@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:battery_plus/battery_plus.dart';
@@ -6,6 +7,8 @@ import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/modules/subject_home/controllers/subject_home_controller.dart';
 
 /// 대상자 홈 페이지 — 시안 _9 기준
@@ -15,30 +18,34 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.loadAppVersion();
+    final scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: AppColors.surface,
+      drawer: _buildDrawer(scaffoldKey),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         leading: IconButton(
           icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
-          onPressed: () {},
+          onPressed: () => scaffoldKey.currentState?.openDrawer(),
         ),
-        title: Obx(
-          () => Text(
-            controller.userId > 0 ? '안부 (${controller.userId})' : '안부',
-            style: AppTextTheme.headlineSmall(),
-          ),
-        ),
+        title: Text('안부', style: AppTextTheme.headlineSmall()),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: CircleAvatar(
-              radius: 18.r,
-              backgroundColor: AppColors.surfaceContainerHigh,
-              child: Icon(Icons.person, size: 20.w, color: AppColors.onSurfaceVariant),
-            ),
-          ),
+          Obx(() {
+            if (!controller.isGuardianConnected) return const SizedBox.shrink();
+            return Padding(
+              padding: EdgeInsets.only(right: 16.w),
+              child: CircleAvatar(
+                radius: 18.r,
+                backgroundColor: const Color(0xFFE0F2F1),
+                child: Icon(Icons.person, size: 20.w, color: const Color(0xFF00685E)),
+              ),
+            );
+          }),
         ],
       ),
       body: SingleChildScrollView(
@@ -412,6 +419,131 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             ),
           ),
           Icon(Icons.open_in_new_rounded, size: 18.w, color: AppColors.onSurfaceVariant),
+        ],
+      ),
+    );
+  }
+
+  /// Navigation Drawer
+  Widget _buildDrawer(GlobalKey<ScaffoldState> scaffoldKey) {
+    final screenHeight = MediaQuery.of(Get.context!).size.height;
+
+    return Drawer(
+      backgroundColor: AppColors.surface.withValues(alpha: 0.92),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // 헤더 영역 (화면 1/3)
+            Container(
+              height: screenHeight / 3,
+              width: double.infinity,
+              color: const Color(0xFFB2DFDB),
+              child: Stack(
+                children: [
+                  // 닫기 버튼 (우상단 끝)
+                  Positioned(
+                    top: 4.h,
+                    right: 4.w,
+                    child: GestureDetector(
+                      onTap: () => scaffoldKey.currentState?.closeDrawer(),
+                      child: Padding(
+                        padding: EdgeInsets.all(12.w),
+                        child: Icon(Icons.close_rounded, size: 28.w, color: AppColors.onSurfaceVariant),
+                      ),
+                    ),
+                  ),
+                  // 센터 콘텐츠
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircleAvatar(
+                          radius: 48.r,
+                          backgroundColor: const Color(0xFF80CBC4),
+                          child: Icon(Icons.person, size: 56.w, color: Colors.white),
+                        ),
+                        SizedBox(height: AppSpacing.md),
+                        Obx(() => Text(
+                          controller.inviteCode.isNotEmpty ? controller.inviteCode : '코드 없음',
+                          style: TextStyle(
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF00685E),
+                            letterSpacing: 1.5,
+                          ),
+                        )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(color: AppColors.surfaceContainerHigh, height: 1),
+
+            const Spacer(),
+
+            // 법적 문서 링크
+            ListTile(
+              leading: Icon(Icons.description_outlined, size: 22.w, color: AppColors.onSurfaceVariant),
+              title: Text('개인정보처리방침', style: AppTextTheme.bodyLarge()),
+              trailing: Icon(Icons.open_in_new_rounded, size: 18.w, color: AppColors.onSurfaceVariant),
+              onTap: () => launchUrl(Uri.parse(AppConstants.privacyPolicyUrl), mode: LaunchMode.externalApplication),
+            ),
+            ListTile(
+              leading: Icon(Icons.gavel_rounded, size: 22.w, color: AppColors.onSurfaceVariant),
+              title: Text('이용약관', style: AppTextTheme.bodyLarge()),
+              trailing: Icon(Icons.open_in_new_rounded, size: 18.w, color: AppColors.onSurfaceVariant),
+              onTap: () => launchUrl(Uri.parse(AppConstants.termsOfServiceUrl), mode: LaunchMode.externalApplication),
+            ),
+
+            const Divider(height: 1),
+
+            // 탈퇴 메뉴 (하단)
+            ListTile(
+              leading: Icon(Icons.logout_rounded, color: Colors.redAccent, size: 22.w),
+              title: Text('탈퇴', style: AppTextTheme.bodyLarge(color: Colors.redAccent)),
+              onTap: () => _showDeleteConfirm(scaffoldKey),
+            ),
+
+            // 앱 버전
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: AppSpacing.lg, top: AppSpacing.sm,
+                  right: AppSpacing.horizontalMargin),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Obx(() => Text(
+                  'v${controller.appVersion.value}',
+                  style: AppTextTheme.bodySmall(color: AppColors.textTertiary),
+                )),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 탈퇴 확인 다이얼로그
+  void _showDeleteConfirm(GlobalKey<ScaffoldState> scaffoldKey) {
+    scaffoldKey.currentState?.closeDrawer();
+    Get.dialog(
+      AlertDialog(
+        title: Text('탈퇴', style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
+        content: Text('계정과 모든 데이터가 삭제됩니다.\n정말 탈퇴하시겠습니까?',
+            style: AppTextTheme.bodyMedium()),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('취소', style: AppTextTheme.bodyMedium(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              controller.deleteAccount();
+            },
+            child: Text('탈퇴', style: AppTextTheme.bodyMedium(color: Colors.redAccent)),
+          ),
         ],
       ),
     );

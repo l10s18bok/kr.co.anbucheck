@@ -3,6 +3,10 @@ import 'package:anbucheck/app/core/network/api_client.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
 import 'package:anbucheck/app/core/network/api_response.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
+import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
+import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// GetConnect 기반 ApiClient 구현체 (컴포지션 방식)
 class GetConnectClient extends ApiClient {
@@ -98,6 +102,26 @@ class GetConnectClient extends ApiClient {
   }
 }
 
+/// 401 응답 시 로컬 데이터 초기화 + 모드 선택 화면 이동
+/// 중복 호출 방지를 위한 플래그
+bool _handlingUnauthorized = false;
+
+Future<void> _handleUnauthorized() async {
+  if (_handlingUnauthorized) return;
+  _handlingUnauthorized = true;
+  try {
+    await HeartbeatWorkerService.cancel();
+    await LocalAlarmService.cancel();
+    await TokenLocalDatasource().clear();
+    Get.offAllNamed(AppRoutes.modeSelect);
+    Get.snackbar('', '계정 정보가 만료되었습니다. 다시 등록해 주세요.',
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(seconds: 3));
+  } finally {
+    _handlingUnauthorized = false;
+  }
+}
+
 /// 내부 GetConnect 래퍼 (시그니처 충돌 방지)
 class _InternalGetConnect extends GetConnect {
   dynamic _reqBody;
@@ -132,6 +156,12 @@ class _InternalGetConnect extends GetConnect {
           .split('\n')
           .forEach((l) => l.printLog());
       '*************************************'.printLog();
+
+      // 401: 서버에서 계정 삭제됨 → 로컬 초기화 + 모드 선택 화면 이동
+      if (response.statusCode == 401) {
+        _handleUnauthorized();
+      }
+
       return response;
     });
   }

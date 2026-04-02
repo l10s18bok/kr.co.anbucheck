@@ -1,11 +1,14 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
+import 'package:anbucheck/app/core/network/api_client_factory.dart';
+import 'package:anbucheck/app/core/network/api_endpoints.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
@@ -13,6 +16,7 @@ import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
+import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 대상자 홈 컨트롤러
 /// PRD 7.4: 고유 코드 표시, heartbeat 상태, 시각 변경
@@ -25,6 +29,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
   final _notificationGranted = false.obs;
   bool get notificationGranted => _notificationGranted.value;
+
+  /// 보호자 연결 여부 (subscription_active를 proxy로 사용)
+  final _guardianConnected = false.obs;
+  bool get isGuardianConnected => _guardianConnected.value;
 
   /// 마지막 heartbeat 전송 날짜 (yyyy-MM-dd), 없으면 빈 문자열
   final _lastHeartbeatDate = ''.obs;
@@ -118,6 +126,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     _initConnectivity();
   }
 
+
   /// 앱 포그라운드 복귀 시 로컬 상태 + 서버 스케줄 재동기화
   @override
   void onResumed() {
@@ -140,6 +149,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
 
+    _guardianConnected.value = await _tokenDs.getSubscriptionActive();
     // 로컬 저장값으로 먼저 표시 후 서버에서 최신 스케줄 동기화
     await loadScheduleFromLocal();
     await _syncScheduleFromServer();
@@ -157,7 +167,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     await _reloadLocalState();
   }
 
-  /// 서버에서 heartbeat 스케줄 조회 후 로컬 동기화
+  /// 서버에서 heartbeat 스케줄 조회 후 로컬과 다를 때만 재예약
   Future<void> _syncScheduleFromServer() async {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
@@ -166,8 +176,17 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       final hour = data['heartbeat_hour'] as int? ?? 9;
       final minute = data['heartbeat_minute'] as int? ?? 30;
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
-      await _tokenDs.saveHeartbeatSchedule(hour, minute);
       await _tokenDs.saveSubscriptionActive(subscriptionActive);
+      _guardianConnected.value = subscriptionActive;
+
+      // 로컬 저장값과 동일하면 재예약 스킵
+      final (localH, localM) = await _tokenDs.getHeartbeatSchedule();
+      if (localH == hour && localM == minute) {
+        applySchedule(hour, minute);
+        return;
+      }
+
+      await _tokenDs.saveHeartbeatSchedule(hour, minute);
       applySchedule(hour, minute);
       // 서버 기준 시각으로 WorkManager 및 로컬 안전망 알림 재예약
       await HeartbeatWorkerService.schedule(hour, minute);
@@ -260,5 +279,30 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   /// 연락처 선택 → 전화 걸기 (안전 보고)
   Future<void> openPhoneDialer() async {
     await PhoneUtils.pickContactAndCall();
+  }
+
+  // ── 앱 버전 ────────────────────────────────────────
+  final appVersion = ''.obs;
+
+  Future<void> loadAppVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    appVersion.value = '${info.version} (${info.buildNumber})';
+  }
+
+  // ── 탈퇴 ──────────────────────────────────────────
+  Future<void> deleteAccount() async {
+    final deviceToken = await _tokenDs.getDeviceToken();
+    if (deviceToken != null) {
+      try {
+        await ApiClientFactory.instance.delete(
+          ApiEndpoints.usersMe,
+          headers: {'Authorization': 'Bearer $deviceToken'},
+        );
+      } catch (_) {}
+    }
+    await HeartbeatWorkerService.cancel();
+    await LocalAlarmService.cancel();
+    await _tokenDs.clear();
+    Get.offAllNamed(AppRoutes.modeSelect);
   }
 }

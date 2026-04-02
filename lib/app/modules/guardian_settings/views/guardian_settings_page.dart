@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/modules/guardian_settings/controllers/guardian_settings_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -220,21 +222,39 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                           Text('현재 버전',
                               style: AppTextTheme.bodyMedium(
                                   color: AppColors.textSecondary)),
-                          Text('v1.0.4',
+                          Obx(() => Text(
+                              'v${controller.appVersion.value}',
                               style: AppTextTheme.bodyMedium(
-                                  fw: FontWeight.w600)),
+                                  fw: FontWeight.w600))),
                         ],
                       ),
                       SizedBox(height: AppSpacing.md),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('서비스 약관',
-                              style: AppTextTheme.bodyMedium(
-                                  color: AppColors.textSecondary)),
-                          Icon(Icons.open_in_new_rounded,
-                              size: 18.w, color: AppColors.onSurfaceVariant),
-                        ],
+                      GestureDetector(
+                        onTap: () => launchUrl(Uri.parse(AppConstants.privacyPolicyUrl), mode: LaunchMode.externalApplication),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('개인정보처리방침',
+                                style: AppTextTheme.bodyMedium(
+                                    color: AppColors.textSecondary)),
+                            Icon(Icons.open_in_new_rounded,
+                                size: 18.w, color: AppColors.onSurfaceVariant),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.md),
+                      GestureDetector(
+                        onTap: () => launchUrl(Uri.parse(AppConstants.termsOfServiceUrl), mode: LaunchMode.externalApplication),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('이용약관',
+                                style: AppTextTheme.bodyMedium(
+                                    color: AppColors.textSecondary)),
+                            Icon(Icons.open_in_new_rounded,
+                                size: 18.w, color: AppColors.onSurfaceVariant),
+                          ],
+                        ),
                       ),
                     ],
                   ),
