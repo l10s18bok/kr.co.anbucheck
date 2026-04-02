@@ -8,6 +8,9 @@ import 'package:anbucheck/app/routes/app_pages.dart';
 class GuardianDashboardController extends BaseController {
   final subjects = <SubjectStatus>[].obs;
 
+  /// 현재 카드 슬라이드 인덱스
+  final currentCardIndex = 0.obs;
+
   /// 전화 후 앱 복귀 시 강조할 대상자 코드
   final highlightedInviteCode = RxnString();
 

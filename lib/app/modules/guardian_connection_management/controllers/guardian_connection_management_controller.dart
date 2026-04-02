@@ -15,6 +15,8 @@ class GuardianConnectionManagementController extends BaseController {
 
   int get maxSubjects => _svc.maxSubjects.value;
 
+  final listScrollController = ScrollController();
+
   final _svc = Get.find<GuardianSubjectService>();
   final _tokenDs = TokenLocalDatasource();
   final _nicknameDs = NicknameLocalDatasource();
@@ -24,6 +26,12 @@ class GuardianConnectionManagementController extends BaseController {
   void onInit() {
     super.onInit();
     _loadSubjects(force: true);
+  }
+
+  @override
+  void onClose() {
+    listScrollController.dispose();
+    super.onClose();
   }
 
   Future<void> _loadSubjects({bool force = false}) async {

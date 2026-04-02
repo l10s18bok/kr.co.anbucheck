@@ -109,98 +109,139 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               children: [
                 Text('보호 대상자 리스트',
                     style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
-                Obx(() {
-                  final subjects = controller.subjects;
-                  final counts = {
-                    'normal': subjects.where((s) => s.alertLevel == 'normal' || s.alertLevel == 'info').length,
-                    'caution': subjects.where((s) => s.alertLevel == 'caution').length,
-                    'warning': subjects.where((s) => s.alertLevel == 'warning').length,
-                    'urgent': subjects.where((s) => s.alertLevel == 'urgent').length,
-                  };
-                  const colors = {
-                    'normal':  Color(0xFF00685E),
-                    'caution': Color(0xFFF59E0B),
-                    'warning': Color(0xFFE65100),
-                    'urgent':  Color(0xFFE53935),
-                  };
-                  const labels = {
-                    'normal':  '정상',
-                    'caution': '주의',
-                    'warning': '경고',
-                    'urgent':  '긴급',
-                  };
-                  final items = counts.entries
-                      .where((e) => e.value > 0)
-                      .toList();
-                  if (items.isEmpty) return const SizedBox.shrink();
-                  return Row(
-                    children: items.expand((e) => [
-                      _LegendDot(
+                Flexible(
+                  child: Obx(() {
+                    final subjects = controller.subjects;
+                    final counts = {
+                      'normal': subjects.where((s) => s.alertLevel == 'normal' || s.alertLevel == 'info').length,
+                      'caution': subjects.where((s) => s.alertLevel == 'caution').length,
+                      'warning': subjects.where((s) => s.alertLevel == 'warning').length,
+                      'urgent': subjects.where((s) => s.alertLevel == 'urgent').length,
+                    };
+                    const colors = {
+                      'normal':  Color(0xFF00685E),
+                      'caution': Color(0xFFF59E0B),
+                      'warning': Color(0xFFE65100),
+                      'urgent':  Color(0xFFE53935),
+                    };
+                    const labels = {
+                      'normal':  '정상',
+                      'caution': '주의',
+                      'warning': '경고',
+                      'urgent':  '긴급',
+                    };
+                    final items = counts.entries
+                        .where((e) => e.value > 0)
+                        .toList();
+                    if (items.isEmpty) return const SizedBox.shrink();
+                    return Wrap(
+                      alignment: WrapAlignment.end,
+                      spacing: 6.w,
+                      runSpacing: 4.h,
+                      children: items.map((e) => _LegendDot(
                         color: colors[e.key]!,
                         label: '${labels[e.key]}: ${e.value}',
-                      ),
-                      SizedBox(width: 8.w),
-                    ]).toList()..removeLast(),
-                  );
-                }),
+                      )).toList(),
+                    );
+                  }),
+                ),
               ],
             ),
             SizedBox(height: AppSpacing.md),
 
-            // 대상자 카드 리스트 (동적)
-            Obx(() => Column(
-              children: controller.subjects.map((subject) {
-                // 정보(info)는 normal과 동일하게 표시
-                final level = subject.alertLevel == 'info'
-                    ? 'normal'
-                    : subject.alertLevel;
-                final isNormal = level == 'normal';
+            // 대상자 카드 슬라이드
+            Obx(() {
+              final items = controller.subjects;
+              if (items.isEmpty) return const SizedBox.shrink();
 
-                final statusColor = switch (level) {
-                  'caution' => const Color(0xFFF59E0B),
-                  'warning' => const Color(0xFFE65100),
-                  'urgent'  => const Color(0xFFE53935),
-                  _         => const Color(0xFF00685E),
-                };
-                final bgColor = switch (level) {
-                  'caution' => const Color(0xFFFFFDE7).withValues(alpha: 0.6),
-                  'warning' => const Color(0xFFFFF3E0).withValues(alpha: 0.6),
-                  'urgent'  => const Color(0xFFFFEBEE).withValues(alpha: 0.6),
-                  _         => const Color(0xFFE8F5E9).withValues(alpha: 0.5),
-                };
-                final statusLabel = switch (level) {
-                  'caution' => '주의',
-                  'warning' => '경고',
-                  'urgent'  => '긴급',
-                  _         => '안전확인',
-                };
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 180.h,
+                    child: PageView.builder(
+                      clipBehavior: Clip.none,
+                      padEnds: false,
+                      itemCount: items.length,
+                      controller: PageController(
+                        viewportFraction: items.length > 1 ? 0.92 : 1.0,
+                      ),
+                      onPageChanged: (i) => controller.currentCardIndex.value = i,
+                      itemBuilder: (_, i) {
+                        final subject = items[i];
+                        final level = subject.alertLevel == 'info'
+                            ? 'normal'
+                            : subject.alertLevel;
+                        final isNormal = level == 'normal';
 
-                return Obx(() {
-                  final isHighlighted =
-                      controller.highlightedInviteCode.value ==
-                          subject.inviteCode;
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: AppSpacing.md),
-                    child: _SubjectCard(
-                      key: ValueKey(subject.inviteCode),
-                      name: subject.alias,
-                      status: statusLabel,
-                      statusColor: statusColor,
-                      borderColor: statusColor,
-                      backgroundColor: bgColor,
-                      activityLabel: subject.activityLabel,
-                      lastCheck: subject.lastCheck,
-                      showChart: isNormal,
-                      showActionButtons: !isNormal,
-                      isHighlighted: isHighlighted,
-                      onCall: () => controller.onCallTapped(subject.inviteCode),
-                      onConfirmSafety: () =>
-                          controller.confirmSafety(subject.inviteCode),
+                        final statusColor = switch (level) {
+                          'caution' => const Color(0xFFF59E0B),
+                          'warning' => const Color(0xFFE65100),
+                          'urgent'  => const Color(0xFFE53935),
+                          _         => const Color(0xFF00685E),
+                        };
+                        final bgColor = switch (level) {
+                          'caution' => const Color(0xFFFFFDE7).withValues(alpha: 0.6),
+                          'warning' => const Color(0xFFFFF3E0).withValues(alpha: 0.6),
+                          'urgent'  => const Color(0xFFFFEBEE).withValues(alpha: 0.6),
+                          _         => const Color(0xFFE8F5E9).withValues(alpha: 0.5),
+                        };
+                        final statusLabel = switch (level) {
+                          'caution' => '주의',
+                          'warning' => '경고',
+                          'urgent'  => '긴급',
+                          _         => '안전확인',
+                        };
+
+                        return Obx(() {
+                          final isHighlighted =
+                              controller.highlightedInviteCode.value ==
+                                  subject.inviteCode;
+                          return _SubjectCard(
+                            key: ValueKey(subject.inviteCode),
+                            name: subject.alias,
+                            status: statusLabel,
+                            statusColor: statusColor,
+                            borderColor: statusColor,
+                            backgroundColor: bgColor,
+                            activityLabel: subject.activityLabel,
+                            lastCheck: subject.lastCheck,
+                            showChart: isNormal,
+                            showActionButtons: !isNormal,
+                            isHighlighted: isHighlighted,
+                            onCall: () => controller.onCallTapped(subject.inviteCode),
+                            onConfirmSafety: () =>
+                                controller.confirmSafety(subject.inviteCode),
+                          );
+                        });
+                      },
                     ),
-                  );
-                });
-              }).toList(),
-            )),
+                  ),
+
+                  // 페이지 인디케이터
+                  if (items.length > 1) ...[
+                    SizedBox(height: 10.h),
+                    Obx(() => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(items.length, (i) {
+                        final isActive = controller.currentCardIndex.value == i;
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          margin: EdgeInsets.symmetric(horizontal: 3.w),
+                          width: isActive ? 20.w : 6.w,
+                          height: 6.w,
+                          decoration: BoxDecoration(
+                            color: isActive
+                                ? const Color(0xFF4355B9)
+                                : const Color(0xFF4355B9).withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(3.r),
+                          ),
+                        );
+                      }),
+                    )),
+                  ],
+                ],
+              );
+            }),
             SizedBox(height: AppSpacing.sp6),
 
             // 다른 대상자 추가 버튼
@@ -387,6 +428,7 @@ class _SubjectCardState extends State<_SubjectCard>
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      margin: EdgeInsets.only(right: 8.w),
       decoration: BoxDecoration(
         color: widget.backgroundColor,
         borderRadius: BorderRadius.circular(16.r),
@@ -434,46 +476,48 @@ class _SubjectCardState extends State<_SubjectCard>
             // 활동 차트 — 웨이브 애니메이션
             if (widget.showChart) ...[
               SizedBox(height: 8.h),
-              AnimatedBuilder(
-                animation: _waveCtrl,
-                builder: (_, __) {
-                  const heights = [
-                    0.4, 0.6, 0.5, 0.8, 0.55, 0.9, 0.7,
-                    0.85, 0.5, 0.75, 0.65, 0.95, 0.8, 1.0
-                  ];
-                  // 0→1 전반: 좌→우, 후반: 우→좌
-                  final t = _waveCtrl.value;
-                  final wave = t <= 0.5 ? t * 2.0 : (1.0 - t) * 2.0;
+              Expanded(
+                child: AnimatedBuilder(
+                  animation: _waveCtrl,
+                  builder: (_, __) {
+                    const heights = [
+                      0.4, 0.6, 0.5, 0.8, 0.55, 0.9, 0.7,
+                      0.85, 0.5, 0.75, 0.65, 0.95, 0.8, 1.0
+                    ];
+                    final t = _waveCtrl.value;
+                    final wave = t <= 0.5 ? t * 2.0 : (1.0 - t) * 2.0;
 
-                  return SizedBox(
-                    height: 28.h,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: List.generate(14, (i) {
-                        // 각 막대의 위상: 왼→오 순서로 밝아졌다 어두워짐
-                        final phase = (i / 13.0 - wave).abs();
-                        final brightness = (1.0 - phase).clamp(0.0, 1.0);
-                        final alpha = 0.2 + brightness * 0.55;
-                        final h = heights[i] * 28.h;
+                    return LayoutBuilder(
+                      builder: (_, constraints) {
+                        final chartHeight = constraints.maxHeight;
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: List.generate(14, (i) {
+                            final phase = (i / 13.0 - wave).abs();
+                            final brightness = (1.0 - phase).clamp(0.0, 1.0);
+                            final alpha = 0.2 + brightness * 0.55;
+                            final h = heights[i] * chartHeight;
 
-                        return Expanded(
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 1.5.w),
-                            height: h,
-                            decoration: BoxDecoration(
-                              color: widget.statusColor.withValues(alpha: alpha),
-                              borderRadius: BorderRadius.circular(2.r),
-                            ),
-                          ),
+                            return Expanded(
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 1.5.w),
+                                height: h,
+                                decoration: BoxDecoration(
+                                  color: widget.statusColor.withValues(alpha: alpha),
+                                  borderRadius: BorderRadius.circular(2.r),
+                                ),
+                              ),
+                            );
+                          }),
                         );
-                      }),
-                    ),
-                  );
-                },
+                      },
+                    );
+                  },
+                ),
               ),
             ],
 
-            SizedBox(height: 6.h),
+            SizedBox(height: 3),
 
             // 마지막 확인 시간
             Text(widget.lastCheck,
@@ -481,7 +525,7 @@ class _SubjectCardState extends State<_SubjectCard>
 
             // 주의 상태 — 액션 버튼
             if (widget.showActionButtons) ...[
-              SizedBox(height: 12.h),
+              SizedBox(height: 8.h),
               Row(
                 children: [
                   // 전화 버튼
@@ -576,12 +620,12 @@ class _LegendDot extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 8.w,
-          height: 8.w,
+          width: 6.w,
+          height: 6.w,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        SizedBox(width: 4.w),
-        Text(label, style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
+        SizedBox(width: 3.w),
+        Text(label, style: AppTextTheme.labelSmall(color: AppColors.textTertiary)),
       ],
     );
   }

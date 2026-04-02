@@ -28,7 +28,7 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
         automaticallyImplyLeading: false,
         title: Text('연결관리', style: AppTextTheme.headlineSmall()),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
         child: Obx(
           () => Column(
@@ -78,25 +78,39 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
               Text('연결된 보호 대상자', style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
               SizedBox(height: AppSpacing.lg),
 
-              // 대상자 리스트
-              ...List.generate(controller.subjects.length, (index) {
-                final subject = controller.subjects[index];
-                return _SubjectListTile(
-                  alias: subject.alias,
-                  code: subject.code,
-                  heartbeatHour: subject.heartbeatHour,
-                  heartbeatMinute: subject.heartbeatMinute,
-                  hasDevice: subject.deviceId != null,
-                  onSaveAlias: (newAlias) => controller.saveAlias(index, newAlias),
-                  onDelete: () => controller.deleteSubject(index),
-                );
-              }),
+              // 대상자 리스트 (남은 공간 채움, 내부 스크롤)
+              Expanded(
+                child: Container(
+                  color: AppColors.surfaceContainerLow,
+                  child: Scrollbar(
+                    controller: controller.listScrollController,
+                    thumbVisibility: true,
+                    child: ListView.builder(
+                      controller: controller.listScrollController,
+                      padding: EdgeInsets.all(AppSpacing.md),
+                      itemCount: controller.subjects.length,
+                      itemBuilder: (_, index) {
+                        final subject = controller.subjects[index];
+                        return _SubjectListTile(
+                          alias: subject.alias,
+                          code: subject.code,
+                          heartbeatHour: subject.heartbeatHour,
+                          heartbeatMinute: subject.heartbeatMinute,
+                          hasDevice: subject.deviceId != null,
+                          onSaveAlias: (newAlias) => controller.saveAlias(index, newAlias),
+                          onDelete: () => controller.deleteSubject(index),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
 
               SizedBox(height: AppSpacing.lg),
 
               // 새로운 대상자 추가
               AddSubjectButton(onTap: controller.goToAddSubject),
-              SizedBox(height: AppSpacing.sp6),
+              SizedBox(height: AppSpacing.md),
 
               // 하단 안내 박스
               Container(
@@ -122,7 +136,7 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                   ],
                 ),
               ),
-              SizedBox(height: AppSpacing.sp6),
+              SizedBox(height: AppSpacing.md),
             ],
           ),
         ),
@@ -207,53 +221,86 @@ class _SubjectListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppSpacing.md),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLowest,
-          borderRadius: BorderRadius.circular(14.r),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20.r,
-              backgroundColor: AppColors.surfaceContainerHigh,
-              child: Icon(Icons.person, size: 22.w, color: AppColors.onSurfaceVariant),
+      child: Column(
+        children: [
+          // 상단 카드: 대상자 정보
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainerLowest,
+              borderRadius: hasDevice
+                  ? BorderRadius.vertical(top: Radius.circular(14.r))
+                  : BorderRadius.circular(14.r),
             ),
-            SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(alias, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
-                  SizedBox(height: 2.h),
-                  Text(code, style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
-                  if (hasDevice) ...[
-                    SizedBox(height: 2.h),
-                    Text(
-                      _timeLabel,
-                      style: AppTextTheme.bodySmall(
-                        color: const Color(0xFF4355B9),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 20.r,
+                  backgroundColor: AppColors.surfaceContainerHigh,
+                  child: Icon(Icons.person, size: 22.w, color: AppColors.onSurfaceVariant),
+                ),
+                SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(alias, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
+                      SizedBox(height: 2.h),
+                      Text(code, style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
+                      if (hasDevice) ...[
+                        SizedBox(height: 2.h),
+                        Text(
+                          _timeLabel,
+                          style: AppTextTheme.bodySmall(
+                            color: const Color(0xFF4355B9),
+                            fw: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => _openEditDialog(context),
+                  icon: Icon(Icons.edit_rounded, size: 20.w, color: const Color(0xFF4355B9)),
+                  constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.w),
+                ),
+                IconButton(
+                  onPressed: onDelete,
+                  icon: Icon(Icons.delete_outline_rounded, size: 20.w, color: AppColors.error),
+                  constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.w),
+                ),
+              ],
+            ),
+          ),
+          // 하단 카드: 안부 보고시간 안내
+          if (hasDevice)
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+              decoration: BoxDecoration(
+                color: const Color(0xFF4355B9),
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(14.r)),
+              ),
+              child: RichText(
+                text: TextSpan(
+                  style: AppTextTheme.labelSmall(color: Colors.white70),
+                  children: [
+                    const TextSpan(text: '안부 보고시간은 '),
+                    TextSpan(
+                      text: '보호 대상자',
+                      style: AppTextTheme.labelSmall(
+                        color: Colors.white,
                         fw: FontWeight.w600,
                       ),
                     ),
+                    const TextSpan(text: ' 앱에서만 변경 가능합니다'),
                   ],
-                ],
+                ),
               ),
             ),
-            IconButton(
-              onPressed: () => _openEditDialog(context),
-              icon: Icon(Icons.edit_rounded, size: 20.w, color: const Color(0xFF4355B9)),
-              constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.w),
-            ),
-            IconButton(
-              onPressed: onDelete,
-              icon: Icon(Icons.delete_outline_rounded, size: 20.w, color: AppColors.error),
-              constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.w),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
