@@ -16,10 +16,10 @@ class BackPressHandler {
       _lastPressed = now;
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
-              Icon(Icons.favorite_rounded, color: Color(0xFF00685E), size: 20),
-              SizedBox(width: 8),
+              Image.asset('assets/icon/app_icon.png', width: 20, height: 20),
+              const SizedBox(width: 8),
               Text('뒤로 버튼 한번 더 누르면 종료됩니다.',
                   style: TextStyle(color: Color(0xFF1a1c1c))),
             ],
