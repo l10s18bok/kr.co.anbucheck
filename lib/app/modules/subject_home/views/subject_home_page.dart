@@ -44,7 +44,12 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
         actions: [
           Obx(() {
             if (!controller.isGuardianConnected) return const SizedBox.shrink();
-            return Padding(
+            return GestureDetector(
+              onTap: () => Get.rawSnackbar(
+                message: 'subject_home_guardian_count'.trParams({'count': '${controller.guardianCount}'}),
+                snackPosition: SnackPosition.BOTTOM,
+              ),
+              child: Padding(
               padding: EdgeInsets.only(right: 16.w),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -64,6 +69,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                   ),
                 ],
               ),
+            ),
             );
           }),
         ],

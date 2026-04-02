@@ -54,6 +54,7 @@ abstract class KoKr {
     'subject_home_invite_code_desc': '보호자에게 이 코드를 알려주세요',
     'subject_home_copy_code': '코드 복사',
     'subject_home_code_copied': '코드가 복사되었습니다',
+    'subject_home_guardian_count': '연결된 보호자수 : @count명',
 
     // 보호자 대시보드
     'guardian_dashboard_title': '대시보드',

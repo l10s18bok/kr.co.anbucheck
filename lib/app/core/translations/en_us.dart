@@ -54,6 +54,7 @@ abstract class EnUs {
     'subject_home_invite_code_desc': 'Share this code with your guardian',
     'subject_home_copy_code': 'Copy Code',
     'subject_home_code_copied': 'Code copied',
+    'subject_home_guardian_count': 'Connected guardians : @count',
 
     // Guardian Dashboard
     'guardian_dashboard_title': 'Dashboard',
