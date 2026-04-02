@@ -14,6 +14,7 @@ class TokenLocalDatasource {
   static const _keyHeartbeatMinute = 'heartbeat_minute';
   static const _keyLastHeartbeatDate = 'last_heartbeat_date';
   static const _keyLastHeartbeatTime = 'last_heartbeat_time';
+  static const _keySubscriptionActive = 'subscription_active';
 
   // ── device_id ─────────────────────────────────────────────
   Future<String> getOrCreateDeviceId() async {
@@ -140,6 +141,17 @@ class TokenLocalDatasource {
     await prefs.setString(_keyLastHeartbeatTime, time);
   }
 
+  // ── 구독 활성화 여부 ──────────────────────────────────────
+  Future<bool> getSubscriptionActive() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keySubscriptionActive) ?? true; // 미설정 시 활성으로 간주
+  }
+
+  Future<void> saveSubscriptionActive(bool active) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keySubscriptionActive, active);
+  }
+
   // ── 전체 삭제 ─────────────────────────────────────────────
   Future<void> clear() async {
     final prefs = await SharedPreferences.getInstance();
@@ -152,6 +164,7 @@ class TokenLocalDatasource {
     await prefs.remove(_keyHeartbeatMinute);
     await prefs.remove(_keyLastHeartbeatDate);
     await prefs.remove(_keyLastHeartbeatTime);
+    await prefs.remove(_keySubscriptionActive);
   }
 
 }

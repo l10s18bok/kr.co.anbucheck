@@ -149,6 +149,9 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   Future<void> _autoSendHeartbeatIfNeeded() async {
     if (isReportedToday) return;
     if (isScheduleInFuture) return;
+    // 구독 만료 시 heartbeat 전송 안함
+    final active = await _tokenDs.getSubscriptionActive();
+    if (!active) return;
     await HeartbeatService().execute();
     await _reloadLocalState();
   }
@@ -161,7 +164,9 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       final data = await DeviceRemoteDatasource().getMyDevice(deviceToken);
       final hour = data['heartbeat_hour'] as int? ?? 9;
       final minute = data['heartbeat_minute'] as int? ?? 30;
+      final subscriptionActive = data['subscription_active'] as bool? ?? true;
       await _tokenDs.saveHeartbeatSchedule(hour, minute);
+      await _tokenDs.saveSubscriptionActive(subscriptionActive);
       applySchedule(hour, minute);
       // 서버 기준 시각으로 로컬 안전망 알림 재예약 (schedule_updated 미수신 케이스 보완)
       await LocalAlarmService.schedule(hour, minute);
