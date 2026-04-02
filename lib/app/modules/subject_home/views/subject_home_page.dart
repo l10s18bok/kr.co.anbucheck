@@ -459,14 +459,19 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
 
     return Drawer(
       backgroundColor: AppColors.surface.withValues(alpha: 0.92),
-      child: SafeArea(
+      child: Row(
+        children: [
+          Expanded(
+            child: SafeArea(
         child: Column(
           children: [
             // 헤더 영역 (화면 1/3)
             Container(
               height: screenHeight / 3,
               width: double.infinity,
-              color: const Color(0xFFB2DFDB),
+              color: Get.find<ThemeService>().isDarkMode.value
+                  ? AppColors.surface
+                  : const Color(0xFFB2DFDB),
               child: Stack(
                 children: [
                   // 닫기 버튼 (우상단 끝)
@@ -488,7 +493,9 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                       children: [
                         CircleAvatar(
                           radius: 48.r,
-                          backgroundColor: const Color(0xFF80CBC4),
+                          backgroundColor: Get.find<ThemeService>().isDarkMode.value
+                              ? const Color(0xFF00695C)
+                              : const Color(0xFF80CBC4),
                           child: Icon(Icons.person, size: 56.w, color: Colors.white),
                         ),
                         SizedBox(height: AppSpacing.md),
@@ -497,7 +504,9 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                           style: TextStyle(
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF00685E),
+                            color: Get.find<ThemeService>().isDarkMode.value
+                                ? Colors.white
+                                : const Color(0xFF00685E),
                             letterSpacing: 1.5,
                           ),
                         )),
@@ -569,6 +578,13 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             ),
           ],
         ),
+      ),
+          ),
+          Container(
+            width: 1,
+            color: Colors.white,
+          ),
+        ],
       ),
     );
   }
