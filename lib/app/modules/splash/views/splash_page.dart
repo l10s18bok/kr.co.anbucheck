@@ -30,25 +30,13 @@ class SplashPage extends GetWidget<SplashController> {
             children: [
               const Spacer(flex: 3),
 
-              // 앱 아이콘 — 둥근 사각형 + 하트
-              Container(
-                width: 100.w,
-                height: 100.w,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF00685E),
-                  borderRadius: BorderRadius.circular(24.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF00685E).withValues(alpha: 0.2),
-                      blurRadius: 24,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.favorite_rounded,
-                  size: 48.w,
-                  color: Colors.white,
+              // 앱 아이콘
+              ClipRRect(
+                borderRadius: BorderRadius.circular(24.r),
+                child: Image.asset(
+                  'assets/icon/app_icon.png',
+                  width: 100.w,
+                  height: 100.w,
                 ),
               ),
               SizedBox(height: 32.h),
