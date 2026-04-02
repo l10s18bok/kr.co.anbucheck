@@ -63,6 +63,7 @@ class GuardianDashboardController extends BaseController {
           alertLevel: s.status,
           lastCheck: _formatLastSeen(s.lastSeen),
           daysInactive: s.alertDaysInactive,
+          batteryLevel: s.batteryLevel,
         )).toList();
   }
 
@@ -124,6 +125,7 @@ class SubjectStatus {
   final String alertLevel; // normal, caution, warning, urgent
   final String lastCheck;
   final int daysInactive;
+  final int? batteryLevel;
 
   const SubjectStatus({
     required this.guardianId,
@@ -132,6 +134,7 @@ class SubjectStatus {
     required this.alertLevel,
     required this.lastCheck,
     this.daysInactive = 0,
+    this.batteryLevel,
   });
 
   bool get isNormal => alertLevel == 'normal';

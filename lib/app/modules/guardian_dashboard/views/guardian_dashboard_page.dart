@@ -220,6 +220,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             onCall: () => controller.onCallTapped(subject.inviteCode),
                             onConfirmSafety: () =>
                                 controller.confirmSafety(subject.inviteCode),
+                            batteryLevel: subject.batteryLevel,
                           );
                         });
                       },
@@ -358,6 +359,7 @@ class _SubjectCard extends StatefulWidget {
   final bool isHighlighted;
   final VoidCallback? onCall;
   final VoidCallback? onConfirmSafety;
+  final int? batteryLevel;
 
   const _SubjectCard({
     super.key,
@@ -373,6 +375,7 @@ class _SubjectCard extends StatefulWidget {
     this.isHighlighted = false,
     this.onCall,
     this.onConfirmSafety,
+    this.batteryLevel,
   });
 
   @override
@@ -433,6 +436,21 @@ class _SubjectCardState extends State<_SubjectCard>
     super.dispose();
   }
 
+  IconData _getBatteryIcon(int level) {
+    if (level >= 90) return Icons.battery_full_rounded;
+    if (level >= 70) return Icons.battery_6_bar_rounded;
+    if (level >= 50) return Icons.battery_5_bar_rounded;
+    if (level >= 30) return Icons.battery_3_bar_rounded;
+    if (level >= 15) return Icons.battery_2_bar_rounded;
+    return Icons.battery_alert_rounded;
+  }
+
+  Color _getBatteryColor(int level) {
+    if (level <= 15) return const Color(0xFFD32F2F);
+    if (level <= 30) return const Color(0xFFFF9800);
+    return const Color(0xFF43A047);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -454,8 +472,28 @@ class _SubjectCardState extends State<_SubjectCard>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.name,
-                    style: AppTextTheme.bodyLarge(fw: FontWeight.w700)),
+                Row(
+                  children: [
+                    Text(widget.name,
+                        style: AppTextTheme.bodyLarge(fw: FontWeight.w700)),
+                    if (widget.batteryLevel != null) ...[
+                      SizedBox(width: 6.w),
+                      Icon(
+                        _getBatteryIcon(widget.batteryLevel!),
+                        size: 18.w,
+                        color: _getBatteryColor(widget.batteryLevel!),
+                      ),
+                      SizedBox(width: 2.w),
+                      Text(
+                        '${widget.batteryLevel}%',
+                        style: AppTextTheme.labelSmall(
+                          color: _getBatteryColor(widget.batteryLevel!),
+                          fw: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
                 Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),

@@ -34,6 +34,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   final _guardianConnected = false.obs;
   bool get isGuardianConnected => _guardianConnected.value;
 
+  /// 연결된 보호자 수
+  final _guardianCount = 1.obs;
+  int get guardianCount => _guardianCount.value;
+
   /// 마지막 heartbeat 전송 날짜 (yyyy-MM-dd), 없으면 빈 문자열
   final _lastHeartbeatDate = ''.obs;
 
@@ -178,6 +182,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
       await _tokenDs.saveSubscriptionActive(subscriptionActive);
       _guardianConnected.value = subscriptionActive;
+      _guardianCount.value = data['guardian_count'] as int? ?? 0;
 
       // 로컬 저장값과 동일하면 재예약 스킵
       final (localH, localM) = await _tokenDs.getHeartbeatSchedule();

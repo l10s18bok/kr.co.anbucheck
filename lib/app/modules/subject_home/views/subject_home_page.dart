@@ -46,10 +46,23 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             if (!controller.isGuardianConnected) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.only(right: 16.w),
-              child: CircleAvatar(
-                radius: 18.r,
-                backgroundColor: const Color(0xFFE0F2F1),
-                child: Icon(Icons.person, size: 20.w, color: const Color(0xFF00685E)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleAvatar(
+                    radius: 18.r,
+                    backgroundColor: const Color(0xFFE0F2F1),
+                    child: Icon(Icons.person, size: 20.w, color: const Color(0xFF00685E)),
+                  ),
+                  SizedBox(width: 4.w),
+                  Text(
+                    'x${controller.guardianCount}',
+                    style: AppTextTheme.labelMedium(
+                      color: const Color(0xFF00685E),
+                      fw: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
             );
           }),

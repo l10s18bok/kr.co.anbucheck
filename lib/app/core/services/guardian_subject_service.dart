@@ -52,6 +52,7 @@ class GuardianSubjectService extends GetxService {
           deviceId: s['device_id'] as String?,
           heartbeatHour: s['heartbeat_hour'] as int? ?? 9,
           heartbeatMinute: s['heartbeat_minute'] as int? ?? 30,
+          batteryLevel: s['battery_level'] as int?,
         );
       }).toList();
 
@@ -111,6 +112,7 @@ class SubjectItem {
   final String? deviceId;
   final int heartbeatHour;
   final int heartbeatMinute;
+  final int? batteryLevel;
 
   const SubjectItem({
     required this.guardianId,
@@ -123,6 +125,7 @@ class SubjectItem {
     this.deviceId,
     this.heartbeatHour = 9,
     this.heartbeatMinute = 30,
+    this.batteryLevel,
   });
 
   bool get isNormal => status == 'normal';
@@ -144,6 +147,7 @@ class SubjectItem {
       deviceId: deviceId,
       heartbeatHour: heartbeatHour ?? this.heartbeatHour,
       heartbeatMinute: heartbeatMinute ?? this.heartbeatMinute,
+      batteryLevel: batteryLevel,
     );
   }
 }
