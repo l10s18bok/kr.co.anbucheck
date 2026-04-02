@@ -26,7 +26,13 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: Text('연결관리', style: AppTextTheme.headlineSmall()),
+        title: Row(
+          children: [
+            Icon(Icons.link_rounded, size: 22.w, color: AppColors.onSurface),
+            SizedBox(width: 8.w),
+            Text('연결관리', style: AppTextTheme.headlineSmall()),
+          ],
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),

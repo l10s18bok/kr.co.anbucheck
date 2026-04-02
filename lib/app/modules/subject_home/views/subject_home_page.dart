@@ -65,7 +65,11 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             // 안전 코드 공유 안내
             Text(
               '나의 안전 코드를 공유해 주세요',
-              style: AppTextTheme.headlineMedium(color: const Color(0xFF00685E)),
+              style: AppTextTheme.headlineMedium(
+                color: Get.find<ThemeService>().isDarkMode.value
+                    ? const Color(0xFF80CBC4)
+                    : const Color(0xFF00685E),
+              ),
             ),
             SizedBox(height: AppSpacing.lg),
 
@@ -90,8 +94,15 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               () => HeartbeatScheduleTile(
                 heartbeatTime: controller.heartbeatTime.value,
                 onTap: controller.showTimePickerDialog,
-                color: const Color(0xFF00685E),
-                backgroundColor: const Color(0xFFE0F2F1),
+                color: Get.find<ThemeService>().isDarkMode.value
+                    ? const Color(0xFF80CBC4)
+                    : const Color(0xFF00685E),
+                timeColor: Get.find<ThemeService>().isDarkMode.value
+                    ? Colors.white
+                    : null,
+                backgroundColor: Get.find<ThemeService>().isDarkMode.value
+                    ? const Color(0xFF0A3A2A)
+                    : const Color(0xFFE0F2F1),
               ),
             ),
             SizedBox(height: AppSpacing.sp6),
@@ -175,7 +186,9 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                 fontSize: 40.sp,
                 fontWeight: FontWeight.w800,
                 color: controller.notificationGranted
-                    ? const Color(0xFF00685E)
+                    ? (Get.find<ThemeService>().isDarkMode.value
+                        ? Colors.white
+                        : const Color(0xFF00685E))
                     : AppColors.textTertiary,
                 letterSpacing: 2,
               ),
@@ -195,21 +208,24 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           : state == 'waiting'
           ? Icons.hourglass_top_rounded
           : Icons.schedule_rounded;
+      final dark = Get.find<ThemeService>().isDarkMode.value;
       final iconBg = state == 'reported'
-          ? const Color(0xFF00685E)
+          ? (dark ? const Color(0xFF00897B) : const Color(0xFF00685E))
           : state == 'waiting'
-          ? const Color(0xFFE65100)
-          : AppColors.surfaceContainerHigh;
+          ? (dark ? const Color(0xFFFF6D00) : const Color(0xFFE65100))
+          : (dark ? const Color(0xFF6A1B9A) : AppColors.surfaceContainerHigh);
       final iconColor = state == 'reported' || state == 'waiting'
           ? Colors.white
-          : AppColors.onSurfaceVariant;
+          : (dark ? Colors.white : AppColors.onSurfaceVariant);
       final textColor = state == 'waiting' ? const Color(0xFFE65100) : const Color(0xFF00685E);
 
       return Container(
         width: double.infinity,
         padding: EdgeInsets.all(AppSpacing.lg),
         decoration: BoxDecoration(
-          color: const Color(0xFFE8F5E9).withValues(alpha: 0.5),
+          color: Get.find<ThemeService>().isDarkMode.value
+              ? const Color(0xFF0A3A2A).withValues(alpha: 0.7)
+              : const Color(0xFFE8F5E9).withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Row(
@@ -244,10 +260,15 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
   /// Bento 그리드 (배터리 + 통신 상태)
   Widget _buildBentoGrid() {
     return Obx(() {
+      final dark = Get.find<ThemeService>().isDarkMode.value;
       final batteryLow = controller.isBatteryLow;
-      final batteryColor = batteryLow ? const Color(0xFFD32F2F) : const Color(0xFF00685E);
+      final batteryColor = batteryLow
+          ? const Color(0xFFD32F2F)
+          : (dark ? const Color(0xFF80CBC4) : const Color(0xFF00685E));
       final disconnected = !controller.isConnected;
-      final connectColor = disconnected ? const Color(0xFFE64A19) : const Color(0xFF00685E);
+      final connectColor = disconnected
+          ? const Color(0xFFE64A19)
+          : (dark ? const Color(0xFF80CBC4) : const Color(0xFF00685E));
 
       return Row(
         children: [
@@ -448,27 +469,6 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               color: const Color(0xFFB2DFDB),
               child: Stack(
                 children: [
-                  // 다크모드 토글 (좌상단)
-                  Positioned(
-                    top: 4.h,
-                    left: 4.w,
-                    child: Obx(() {
-                      final themeSvc = Get.find<ThemeService>();
-                      return GestureDetector(
-                        onTap: themeSvc.toggle,
-                        child: Padding(
-                          padding: EdgeInsets.all(12.w),
-                          child: Icon(
-                            themeSvc.isDarkMode.value
-                                ? Icons.light_mode_rounded
-                                : Icons.dark_mode_rounded,
-                            size: 24.w,
-                            color: AppColors.onSurfaceVariant,
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
                   // 닫기 버튼 (우상단 끝)
                   Positioned(
                     top: 4.h,
@@ -507,6 +507,26 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                 ],
               ),
             ),
+            Divider(color: AppColors.surfaceContainerHigh, height: 1),
+
+            // 다크모드 전환
+            Obx(() {
+              final themeSvc = Get.find<ThemeService>();
+              final isDark = themeSvc.isDarkMode.value;
+              return ListTile(
+                leading: Icon(
+                  isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                  size: 22.w,
+                  color: AppColors.onSurfaceVariant,
+                ),
+                title: Text(
+                  isDark ? '라이트 모드' : '다크 모드',
+                  style: AppTextTheme.bodyLarge(),
+                ),
+                onTap: themeSvc.toggle,
+              );
+            }),
+
             Divider(color: AppColors.surfaceContainerHigh, height: 1),
 
             // 법적 문서 링크

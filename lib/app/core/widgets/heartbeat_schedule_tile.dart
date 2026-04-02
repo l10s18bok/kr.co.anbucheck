@@ -12,6 +12,7 @@ class HeartbeatScheduleTile extends StatelessWidget {
   final Color backgroundColor;
   final String label;
   final String? subLabel;
+  final Color? timeColor;
 
   const HeartbeatScheduleTile({
     super.key,
@@ -21,6 +22,7 @@ class HeartbeatScheduleTile extends StatelessWidget {
     required this.backgroundColor,
     this.label = '안부 확인 시각 변경',
     this.subLabel,
+    this.timeColor,
   });
 
   @override
@@ -52,7 +54,7 @@ class HeartbeatScheduleTile extends StatelessWidget {
             Text(
               subLabel ?? '매일 $heartbeatTime',
               style: AppTextTheme.bodySmall(
-                color: color.withValues(alpha: 0.8),
+                color: (timeColor ?? color).withValues(alpha: 0.8),
                 fw: FontWeight.w700,
               ),
             ),

@@ -26,7 +26,13 @@ class GuardianNotificationsPage
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: Text('알림', style: AppTextTheme.headlineSmall()),
+        title: Row(
+          children: [
+            Icon(Icons.notifications_rounded, size: 22.w, color: AppColors.onSurface),
+            SizedBox(width: 8.w),
+            Text('알림', style: AppTextTheme.headlineSmall()),
+          ],
+        ),
         actions: [
           Obx(() => IconButton(
             icon: Icon(Icons.refresh_rounded,

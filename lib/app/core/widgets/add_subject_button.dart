@@ -15,7 +15,7 @@ class AddSubjectButton extends StatelessWidget {
       onTap: onTap,
       child: CustomPaint(
         painter: _DashedBorderPainter(
-          color: AppColors.outlineVariant.withValues(alpha: 0.4),
+          color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
           radius: 14.r,
           dashWidth: 6,
           dashSpace: 4,

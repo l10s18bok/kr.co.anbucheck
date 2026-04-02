@@ -31,7 +31,13 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: Text('설정', style: AppTextTheme.headlineSmall()),
+        title: Row(
+          children: [
+            Icon(Icons.settings_rounded, size: 22.w, color: AppColors.onSurface),
+            SizedBox(width: 8.w),
+            Text('설정', style: AppTextTheme.headlineSmall()),
+          ],
+        ),
         actions: const [],
       ),
       body: SingleChildScrollView(
