@@ -71,7 +71,7 @@ class HeartbeatWorkerService {
 
   /// Workmanager 초기화 (main()에서 1회 호출)
   static Future<void> init() async {
-    await Workmanager().initialize(heartbeatWorkerCallback, isInDebugMode: false);
+    await Workmanager().initialize(heartbeatWorkerCallback);
   }
 
   /// 예약 시각에 맞춰 one-off 태스크 예약 + periodic 태스크 등록
@@ -101,7 +101,7 @@ class HeartbeatWorkerService {
       _taskName,
       frequency: const Duration(hours: 1),
       initialDelay: delay,
-      existingWorkPolicy: ExistingWorkPolicy.replace,
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
