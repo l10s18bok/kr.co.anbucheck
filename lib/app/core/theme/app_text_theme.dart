@@ -79,7 +79,7 @@ abstract class AppTextTheme {
   static TextStyle labelLarge({Color? color, FontWeight? fw}) => TextStyle(
         fontSize: 16.sp,
         fontWeight: fw ?? FontWeight.w600,
-        color: color ?? Colors.white,
+        color: color,
         height: 1.5,
       );
 

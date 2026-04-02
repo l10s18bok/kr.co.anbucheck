@@ -198,7 +198,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                           'caution' => '주의',
                           'warning' => '경고',
                           'urgent'  => '긴급',
-                          _         => '안전확인',
+                          _         => '안전확인됨',
                         };
 
                         return Obx(() {
@@ -526,7 +526,7 @@ class _SubjectCardState extends State<_SubjectCard>
               Expanded(
                 child: AnimatedBuilder(
                   animation: _waveCtrl,
-                  builder: (_, __) {
+                  builder: (_, _) {
                     const heights = [
                       0.4, 0.6, 0.5, 0.8, 0.55, 0.9, 0.7,
                       0.85, 0.5, 0.75, 0.65, 0.95, 0.8, 1.0
@@ -564,7 +564,7 @@ class _SubjectCardState extends State<_SubjectCard>
               ),
             ],
 
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
 
             // 마지막 확인 시간
             Text(widget.lastCheck,

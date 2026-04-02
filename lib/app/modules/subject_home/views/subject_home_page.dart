@@ -200,11 +200,11 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             SizedBox(height: AppSpacing.md),
             // 초대 코드 (가운데 정렬)
             Text(
-              controller.notificationGranted ? controller.inviteCode : 'XXX-XXXX',
+              controller.inviteCode.isNotEmpty ? controller.inviteCode : '---  ----',
               style: TextStyle(
                 fontSize: 40.sp,
                 fontWeight: FontWeight.w800,
-                color: controller.notificationGranted
+                color: controller.inviteCode.isNotEmpty
                     ? (Get.find<ThemeService>().isDarkMode.value
                         ? Colors.white
                         : const Color(0xFF00685E))
@@ -521,13 +521,17 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                         ),
                         SizedBox(height: AppSpacing.md),
                         Obx(() => Text(
-                          controller.inviteCode.isNotEmpty ? controller.inviteCode : '코드 없음',
+                          controller.inviteCode.isNotEmpty
+                              ? controller.inviteCode
+                              : '---  ----',
                           style: TextStyle(
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w800,
-                            color: Get.find<ThemeService>().isDarkMode.value
-                                ? Colors.white
-                                : const Color(0xFF00685E),
+                            color: controller.inviteCode.isNotEmpty
+                                ? (Get.find<ThemeService>().isDarkMode.value
+                                    ? Colors.white
+                                    : const Color(0xFF00685E))
+                                : AppColors.textTertiary,
                             letterSpacing: 1.5,
                           ),
                         )),
@@ -631,7 +635,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               Get.back();
               controller.deleteAccount();
             },
-            child: Text('탈퇴', style: AppTextTheme.bodyMedium(color: Colors.redAccent)),
+            child: Text('탈퇴', style: AppTextTheme.bodyMedium(color: AppColors.error)),
           ),
         ],
       ),

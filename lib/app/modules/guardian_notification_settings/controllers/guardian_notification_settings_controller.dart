@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/notification_settings_remote_datasource.dart';
 
@@ -128,15 +129,15 @@ class GuardianNotificationSettingsController extends BaseController {
   }
 
   /// 개별 스위치 상태에서 "전체 알림 받기" 자동 계산
+  /// 긴급 알림은 항상 ON이므로 계산에서 제외
   void _syncAllSwitch() {
     allNotifications.value =
-        urgentEnabled.value && warningEnabled.value &&
-        cautionEnabled.value && infoEnabled.value;
+        warningEnabled.value && cautionEnabled.value && infoEnabled.value;
   }
 
   void toggleAll(bool value) {
     allNotifications.value = value;
-    urgentEnabled.value = value;
+    // 긴급 알림은 항상 ON — 전체 토글에서 제외
     warningEnabled.value = value;
     cautionEnabled.value = value;
     infoEnabled.value = value;
@@ -224,16 +225,19 @@ class GuardianNotificationSettingsController extends BaseController {
         child: Column(
           children: [
             SizedBox(
-              height: 44,
+              height: 52,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CupertinoButton(
-                    child: const Text('취소'),
+                    child: Text('취소',
+                        style: TextStyle(color: AppColors.textSecondary)),
                     onPressed: () => Navigator.pop(context),
                   ),
                   CupertinoButton(
-                    child: const Text('확인'),
+                    child: Text('확인',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary)),
                     onPressed: () {
                       target.value =
                           _formatTime(selectedTime.hour, selectedTime.minute);

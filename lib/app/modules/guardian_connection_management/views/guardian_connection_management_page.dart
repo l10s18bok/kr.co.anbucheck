@@ -381,8 +381,14 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
         ],
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('취소')),
-        TextButton(onPressed: _save, child: const Text('저장')),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('취소', style: AppTextTheme.bodyMedium(color: AppColors.textSecondary)),
+        ),
+        TextButton(
+          onPressed: _save,
+          child: Text('저장', style: AppTextTheme.bodyMedium(color: AppColors.onSurface)),
+        ),
       ],
     );
   }
