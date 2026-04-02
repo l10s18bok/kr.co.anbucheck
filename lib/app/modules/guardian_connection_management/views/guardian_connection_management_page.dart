@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,7 +5,6 @@ import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
-import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/controllers/guardian_connection_management_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -85,8 +82,6 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                   heartbeatMinute: subject.heartbeatMinute,
                   hasDevice: subject.deviceId != null,
                   onSaveAlias: (newAlias) => controller.saveAlias(index, newAlias),
-                  onScheduleChange: (hour, minute) =>
-                      controller.updateSchedule(index, hour, minute),
                   onDelete: () => controller.deleteSubject(index),
                 );
               }),
@@ -172,7 +167,6 @@ class _SubjectListTile extends StatelessWidget {
   final int heartbeatMinute;
   final bool hasDevice;
   final Future<void> Function(String newAlias) onSaveAlias;
-  final Future<void> Function(int hour, int minute) onScheduleChange;
   final VoidCallback onDelete;
 
   const _SubjectListTile({
@@ -182,7 +176,6 @@ class _SubjectListTile extends StatelessWidget {
     required this.heartbeatMinute,
     required this.hasDevice,
     required this.onSaveAlias,
-    required this.onScheduleChange,
     required this.onDelete,
   });
 
@@ -198,11 +191,7 @@ class _SubjectListTile extends StatelessWidget {
       context: context,
       builder: (_) => _EditSubjectDialog(
         alias: alias,
-        heartbeatHour: heartbeatHour,
-        heartbeatMinute: heartbeatMinute,
-        hasDevice: hasDevice,
         onSaveAlias: onSaveAlias,
-        onScheduleChange: onScheduleChange,
       ),
     );
   }
@@ -265,19 +254,11 @@ class _SubjectListTile extends StatelessWidget {
 
 class _EditSubjectDialog extends StatefulWidget {
   final String alias;
-  final int heartbeatHour;
-  final int heartbeatMinute;
-  final bool hasDevice;
   final Future<void> Function(String) onSaveAlias;
-  final Future<void> Function(int hour, int minute) onScheduleChange;
 
   const _EditSubjectDialog({
     required this.alias,
-    required this.heartbeatHour,
-    required this.heartbeatMinute,
-    required this.hasDevice,
     required this.onSaveAlias,
-    required this.onScheduleChange,
   });
 
   @override
@@ -286,15 +267,11 @@ class _EditSubjectDialog extends StatefulWidget {
 
 class _EditSubjectDialogState extends State<_EditSubjectDialog> {
   late final TextEditingController _aliasController;
-  late int _hour;
-  late int _minute;
 
   @override
   void initState() {
     super.initState();
     _aliasController = TextEditingController(text: widget.alias);
-    _hour = widget.heartbeatHour;
-    _minute = widget.heartbeatMinute;
   }
 
   @override
@@ -303,82 +280,10 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
     super.dispose();
   }
 
-  String get _timeLabel {
-    final period = _hour < 12 ? '오전' : '오후';
-    final h = _hour == 0 ? 12 : (_hour > 12 ? _hour - 12 : _hour);
-    final m = _minute.toString().padLeft(2, '0');
-    return '$period ${h.toString().padLeft(2, '0')}:$m';
-  }
-
-  Future<void> _pickTime() async {
-    if (Platform.isIOS) {
-      await _showCupertinoPicker();
-    } else {
-      await _showMaterialPicker();
-    }
-  }
-
-  Future<void> _showMaterialPicker() async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: _hour, minute: _minute),
-    );
-    if (picked != null) {
-      setState(() {
-        _hour = picked.hour;
-        _minute = picked.minute;
-      });
-    }
-  }
-
-  Future<void> _showCupertinoPicker() async {
-    var selected = DateTime(2024, 1, 1, _hour, _minute);
-    await showCupertinoModalPopup<void>(
-      context: context,
-      builder: (ctx) => Container(
-        height: 280,
-        color: CupertinoColors.systemBackground.resolveFrom(ctx),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 44,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CupertinoButton(child: const Text('취소'), onPressed: () => Navigator.pop(ctx)),
-                  CupertinoButton(
-                    child: const Text('확인'),
-                    onPressed: () {
-                      setState(() {
-                        _hour = selected.hour;
-                        _minute = selected.minute;
-                      });
-                      Navigator.pop(ctx);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.time,
-                initialDateTime: selected,
-                onDateTimeChanged: (dt) => selected = dt,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Future<void> _save() async {
     final newAlias = _aliasController.text.trim();
     if (newAlias.isNotEmpty && newAlias != widget.alias) {
       await widget.onSaveAlias(newAlias);
-    }
-    if (widget.hasDevice && (_hour != widget.heartbeatHour || _minute != widget.heartbeatMinute)) {
-      await widget.onScheduleChange(_hour, _minute);
     }
     if (mounted) Navigator.pop(context);
   }
@@ -411,16 +316,6 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
             ),
             style: AppTextTheme.bodyLarge(),
           ),
-          if (widget.hasDevice) ...[
-            SizedBox(height: AppSpacing.lg),
-            HeartbeatScheduleTile(
-              heartbeatTime: _timeLabel,
-              onTap: _pickTime,
-              color: const Color(0xFF4355B9),
-              backgroundColor: const Color(0xFFEEF0FB),
-              label: '안부 확인 시각',
-            ),
-          ],
         ],
       ),
       actions: [

@@ -26,16 +26,15 @@ flowchart TD
     Start --> Trigger
 
     Trigger{트리거 종류?}
-    Trigger -->|고정 시각 Android/iOS| SP[서버 FCM Silent Push 수신<br/>type: heartbeat_trigger<br/>매 1분 스케줄러가 지정 시각에 발송]
-    Trigger -->|공통| FG[앱 포그라운드 진입<br/>사용자가 직접 앱 실행 시]
+    Trigger -->|고정 시각 Android| WM[WorkManager one-off 태스크<br/>예약 시각에 백그라운드 실행<br/>+ periodic 태스크 1시간 주기 보조<br/>실행 후 다음 날 자동 재예약]
+    Trigger -->|고정 시각 iOS| BG[BGProcessingTask one-off<br/>+ BGAppRefreshTask periodic 보조<br/>OS 재량에 따라 지연 가능<br/>두 경로 모두 동일 콜백 실행]
+    Trigger -->|공통| FG[앱 열기 / 포그라운드 복귀<br/>예약 시각 경과 + 오늘 미전송 시<br/>자동 heartbeat 전송]
 
-    FG --> FGCollect[센서 스냅샷 로컬 저장만<br/>서버 전송 없음]
-    FGCollect --> End0([종료])
-
-    SP --> SPState{앱 상태?}
-    SPState -->|포그라운드/백그라운드| Collect
-    SPState -->|앱 완전 종료 killed| SPKilled[Google Play Services가<br/>FCM 수신 후 새 isolate 생성<br/>→ 백그라운드 핸들러 실행]
-    SPKilled --> Collect
+    WM --> Collect
+    BG --> Collect
+    FG --> FGCheck{예약 시각 지남<br/>AND 오늘 미전송?}
+    FGCheck -->|YES| Collect
+    FGCheck -->|NO| End0([종료 — 이미 전송 완료])
 
     Collect[데이터 수집]
     Collect --> Steps[걸음수 조회<br/>pedometer<br/>steps_delta]
@@ -60,14 +59,14 @@ flowchart TD
 
     Build[heartbeat 데이터 구성<br/>battery_level 포함]
 
-    Build --> Network{네트워크 연결?<br/>※ FCM 수신 후 데이터 수집 중<br/>끊길 수 있음}
+    Build --> Network{네트워크 연결?}
 
     Network -->|연결됨| Send[서버 전송<br/>POST /api/v1/heartbeat]
-    Network -->|미연결| Queue[로컬 큐 저장<br/>sqflite]
+    Network -->|미연결| Queue[로컬 큐 저장<br/>SharedPreferences]
 
     Queue --> LocalNoti1[대상자 로컬 알림<br/>📱 인터넷 연결이 꺼져 있습니다<br/>안부 확인이 전송되지 않고 있으며<br/>보호자에게 경고가 발생할 수 있습니다]
 
-    Send --> AlarmReset[로컬 안전망 알림 갱신<br/>기존 반복 알림 취소<br/>다음날 같은 시각으로 재예약<br/>heartbeat 시각 + 10분<br/>기본 09:40, 매일 반복]
+    Send --> AlarmReset[로컬 안전망 알림 갱신<br/>기존 알림 취소<br/>다음날 같은 시각으로 재예약<br/>heartbeat 시각 + 10분<br/>기본 09:40, 매일 반복]
 
     AlarmReset --> SaveEnd[센서 값 로컬 저장<br/>완료]
 
@@ -121,7 +120,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    Scheduler([서버 APScheduler: 매 분 정각 실행<br/>CronTrigger(second=0)<br/>① heartbeat_trigger FCM 발송 (지정 시각)<br/>② heartbeat 시각 + 2시간 경과 시 미수신 체크])
+    Scheduler([서버 APScheduler: 매 분 정각 실행<br/>CronTrigger(second=0)<br/>heartbeat 시각 + 2시간 경과 시 미수신 체크])
     Scheduler --> FindMissing[해당 시각까지<br/>heartbeat 미수신 대상자 조회]
 
     FindMissing --> SubActive{보호자<br/>구독 활성?}
@@ -229,61 +228,62 @@ flowchart TD
 ```
 
 
-## 7. 로컬 반복 알림 안전망 (Android/iOS 공통)
+## 7. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)
 
-> BGTaskScheduler(iOS)는 실행 시점 보장이 없고 앱 강제 종료 시 동작하지 않는다.
-> Android FCM Silent Push는 MIUI 등 제조사 OS에서 랜덤으로 차단된다.
-> 두 플랫폼 모두 **로컬 알림 예약/취소 패턴**으로 안전망을 구현한다.
-> 로컬 알림은 OS가 직접 관리하므로 앱이 종료/스와이프되어도 예약 시각에 정확히 표시된다.
+> **1차**: WorkManager(Android) / BGTaskScheduler(iOS)가 예약 시각에 heartbeat를 백그라운드 실행한다. one-off 태스크(정확한 시각)와 periodic 태스크(iOS: BGAppRefreshTask, Android: WorkManager 주기)를 병행 등록하여 실행 확률을 높인다. 콜백 내 `lastHeartbeatDate` 검사로 당일 중복 전송을 방지한다.
+> **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다.
+> **3차**: 로컬 알림 안전망 (heartbeat 시각 + 10분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열리고 자동 전송된다.
 
 ```mermaid
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
-        Install --> FirstSchedule[로컬 반복 알림 최초 등록<br/>heartbeat 시각 + 10분<br/>기본 매일 09:40, 매일 반복<br/>📱 안부 확인이 필요합니다<br/>메시지를 터치하여 앱을 열어주세요]
+        Install --> FirstWM[WorkManager one-off + periodic 태스크 예약<br/>heartbeat 시각 기본 09:30]
+        FirstWM --> FirstAlarm[로컬 안전망 알림 예약<br/>heartbeat 시각 + 10분<br/>기본 매일 09:40]
     end
 
-    FirstSchedule --> Wait
+    FirstAlarm --> Wait
 
     subgraph 정상주기[정상 동작 주기]
-        Wait([다음 heartbeat 대기<br/>Silent Push 수신 대기])
-        Wait -->|Silent Push 수신| Cancel[기존 반복 알림 취소<br/>cancel - local_safety_alarm]
-        Cancel --> Collect[heartbeat 수집 및 서버 전송]
-        Collect --> Reschedule[다음날 같은 시각으로<br/>반복 알림 재예약<br/>heartbeat 시각 + 10분, 매일 반복]
+        Wait([다음 heartbeat 대기])
+        Wait -->|WorkManager/BGTaskScheduler 실행| Collect[heartbeat 수집 및 서버 전송]
+        Collect --> Reschedule[다음날 같은 시각으로<br/>WorkManager 재예약 +<br/>로컬 안전망 알림 재예약<br/>heartbeat 시각 + 10분]
         Reschedule --> Wait
-        Wait -->|앱 실행 또는 포그라운드 복귀| ServerSync[서버에서 최신 heartbeat 시각 조회<br/>로컬 알림 시각 동기화<br/>schedule_updated FCM 미수신 보완]
+        Wait -->|앱 실행 또는 포그라운드 복귀| AutoSend{예약 시각 지남<br/>AND 오늘 미전송?}
+        AutoSend -->|YES| Collect
+        AutoSend -->|NO| ServerSync[서버에서 최신 heartbeat 시각 조회<br/>WorkManager + 로컬 알림 재예약]
         ServerSync --> Wait
     end
 
-    Wait -->|Silent Push 미수신<br/>heartbeat 시각 + 10분 경과| Alarm
+    Wait -->|WorkManager 미실행<br/>heartbeat 시각 + 10분 경과| Alarm
 
-    subgraph 안전망[안전망 동작 — 반복 알림]
+    subgraph 안전망[안전망 동작 — 로컬 알림]
         Alarm[OS가 로컬 알림 표시<br/>📱 안부 확인이 필요합니다<br/>이 메시지 알림을 한 번 터치해 주세요]
 
         Alarm --> UserAction{사용자 반응?}
 
-        UserAction -->|알림 탭| AppOpen[앱 실행<br/>heartbeat 즉시 전송<br/>→ 알림 재예약]
+        UserAction -->|알림 탭| AppOpen[앱 실행<br/>앱 열기 자동 전송 로직으로<br/>heartbeat 전송]
         AppOpen --> Wait
 
-        UserAction -->|알림 무시| Repeat[다음 날 같은 시각에 다시 알림<br/>매일 반복이므로<br/>앱을 열 때까지 매일 반복]
+        UserAction -->|알림 무시| Repeat[다음 날 같은 시각에 다시 알림<br/>앱을 열 때까지 매일 반복]
         Repeat --> UserAction
 
         Repeat -.->|동시에| ServerAlert[서버 측 미수신 경고<br/>보호자에게 Push 알림 발송<br/>→ 차트 3 경고 플로우 진입]
     end
 ```
 
-**로컬 안전망이 발동하는 상황:**
+**Heartbeat 예약 실행이 실패하는 상황 및 보완:**
 
-| 상황 | Silent Push | 로컬 반복 알림 | 결과 |
-|------|-------------|----------------|------|
-| 정상 동작 (09:30) | 수신 → heartbeat 성공 | 매번 재예약되어 09:40 알림 표시 안 됨 | 정상 |
-| 앱 스와이프 종료 (Android MIUI) | **랜덤 차단** | **당일 09:40 표시, 이후 매일 09:40 반복** | 사용자가 탭하면 복구 |
-| 앱 강제 종료 (iOS 스와이프) | **미전달** (Apple 정책) | **당일 09:40 표시, 이후 매일 09:40 반복** | 사용자가 탭하면 복구 |
-| 네트워크 장시간 불가 | 미수신 | **당일 09:40 표시, 이후 매일 09:40 반복** | 네트워크 복구 + 앱 실행 시 복구 |
-| 알림 권한 거부 | 영향 없음 | **표시 불가** | 서버 경고로만 대응 |
+| 상황 | WorkManager/BGTask | 앱 열기 자동 전송 | 로컬 안전망 알림 | 결과 |
+|------|-------------------|-----------------|----------------|------|
+| 정상 동작 (09:30) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | 재예약되어 09:40 표시 안 됨 | 정상 |
+| 앱 스와이프 종료 (Android MIUI) | **지연 또는 미실행 가능** | 앱 열면 자동 전송 | **09:40 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
+| 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **09:40 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
+| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **09:40 표시** | 네트워크 복구 + 앱 실행 시 복구 |
+| 알림 권한 거부 | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **표시 불가** | WorkManager/앱 열기로 대응 |
 
 ※ 위 시각은 기본값(09:30) 기준.
-※ 보호자가 시각을 변경하면 `schedule_updated` FCM으로 즉시 반영. FCM 미수신 시에도 대상자가 앱을 실행하거나 포그라운드로 복귀하면 서버 스케줄을 조회하여 자동 동기화됨.
+※ 예약 시각 변경은 대상자 앱에서만 가능. 변경 시 WorkManager 재예약 + 로컬 안전망 알림 재예약이 동시에 수행됨.
 
 
 ## Mermaid 렌더링 방법

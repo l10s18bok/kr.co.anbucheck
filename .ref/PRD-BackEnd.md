@@ -17,7 +17,7 @@
 
 ### 1.2 목적
 스마트폰 사용 패턴을 기반으로 사용자의 안녕을 자동으로 확인하는 크로스 플랫폼(Android/iOS) 시스템의 서버 측 설계.
-클라이언트로부터 heartbeat를 수신하고, 매일 고정 시각(기본 09:30) + 2시간 내 미수신 시 보호자에게 FCM Push 경고를 발송하며, Android/iOS 기기에 매일 고정 시각에 FCM Silent Push(heartbeat_trigger)를 발송하는 역할을 담당한다.
+클라이언트로부터 heartbeat를 수신하고, 매일 고정 시각(기본 09:30) + 2시간 내 미수신 시 보호자에게 FCM Push 경고를 발송하는 역할을 담당한다. heartbeat 트리거는 서버가 아닌 클라이언트(WorkManager/BGTaskScheduler)가 자체적으로 수행한다.
 
 **기술 스택:** Python + FastAPI + PostgreSQL (asyncpg) + Railway
 
@@ -70,13 +70,12 @@
 │  │ API Router   │  │  Scheduler   │  │   Push Service     │  │
 │  │             │  │ (APScheduler)│  │ (firebase-admin)   │  │
 │  │ · 사용자 등록│  │              │  │                    │  │
-│  │ · heartbeat │  │ · heartbeat  │  │ · Silent Push 발송 │  │
-│  │ · 대상자    │  │   트리거 FCM │  │   (iOS/Android     │  │
-│  │   연결 관리 │  │   발송 (매일 │  │    heartbeat 트리거│  │
-│  │ · 구독 관리  │  │   고정 시각) │  │ · 일반 Push 발송   │  │
-│  │ · FCM 토큰  │  │ · 경고 생성  │  │   (보호자 알림)    │  │
-│  │ · FCM 토큰  │  │ · 경고 생성  │  │                    │  │
-│  │   갱신      │  │   (미수신 시) │  │                    │  │
+│  │ · heartbeat │  │ · 경고 생성  │  │ · 일반 Push 발송   │  │
+│  │ · 대상자    │  │   (미수신 시) │  │   (보호자 알림)    │  │
+│  │   연결 관리 │  │ · 구독 만료  │  │                    │  │
+│  │ · 구독 관리  │  │   체크       │  │ ※ Silent Push 미사용│  │
+│  │ · FCM 토큰  │  │              │  │   (클라이언트 자체  │  │
+│  │   갱신      │  │              │  │    스케줄링)       │  │
 │  └──────┬──────┘  └──────┬───────┘  └─────────┬──────────┘  │
 │         │               │                    │              │
 │         └───────────────┼────────────────────┘              │
@@ -93,11 +92,11 @@
 
 | | Android 기기 | iOS 기기 |
 |--|-------------|----------|
-| heartbeat 트리거 | **서버가 매일 고정 시각에 FCM Silent Push 발송** | **서버가 매일 고정 시각에 FCM Silent Push 발송** |
-| 서버 추가 작업 | 기기별 고정 시각에 heartbeat_trigger Push 발송 | 기기별 고정 시각에 heartbeat_trigger Push 발송 |
+| heartbeat 트리거 | **클라이언트 WorkManager가 예약 시각에 자체 실행** | **클라이언트 BGTaskScheduler가 예약 시각에 자체 실행** |
+| 서버 역할 | heartbeat 수신 + 미수신 시 경고 생성 (트리거 발송 없음) | heartbeat 수신 + 미수신 시 경고 생성 (트리거 발송 없음) |
 | 확인 주기 | 매일 고정 시각 (기본 09:30) | 매일 고정 시각 (기본 09:30) |
-| 시각 변경 | 서버가 변경된 시각에 맞춰 FCM Push 발송 | 서버가 변경된 시각에 맞춰 FCM Push 발송 |
-| 클라이언트 스케줄러 | 불필요 (WorkManager 제거) | 불필요 |
+| 시각 변경 | 대상자가 서버에 저장 → 클라이언트가 WorkManager 재예약 | 대상자가 서버에 저장 → 클라이언트가 BGTask 재예약 |
+| Silent Push | **미사용** | **미사용** |
 
 
 ### 2.3 대상자-보호자 연결 메커니즘
@@ -266,9 +265,9 @@ server/
 │   ├── heartbeat_service.py        # heartbeat 비즈니스 로직
 │   ├── alert_service.py            # 경고 생성/클리어/보호자 Push 발송
 │   ├── subject_service.py          # 대상자-보호자 연결 관리
-│   ├── push_service.py             # Silent Push / 일반 Push 발송
+│   ├── push_service.py             # 일반 Push 발송 (보호자 경고 알림만, Silent Push 미사용)
 │   ├── subscription_service.py     # 구독 상태 관리
-│   └── scheduler.py                # APScheduler 경고 체크 + Silent Push + 구독 만료
+│   └── scheduler.py                # APScheduler 경고 체크 + 구독 만료 (Silent Push 스케줄 제거됨)
 ├── models/
 │   ├── user.py                     # Pydantic 모델 (요청/응답 스키마)
 │   ├── device.py
@@ -642,13 +641,10 @@ Response: 200 OK
 }
 ```
 
-- **대상자 본인** 또는 **보호자** 모두 호출 가능
-- 보호자가 호출 시: 해당 대상자가 본인에게 연결된 대상자인지 권한 검증
-- 대상자가 호출 시: 본인 기기만 변경 가능
+- **대상자 본인만** 호출 가능 (보호자는 heartbeat 시각 변경 불가)
 - 선택 범위: 06:00 ~ 21:00 (30분 단위)
 - 서버에서 `devices.heartbeat_hour`, `devices.heartbeat_minute` 갱신
-- iOS: 다음 Silent Push가 변경된 시각에 발송됨
-- Android: 대상자 기기가 다음 heartbeat 시 응답의 `heartbeat_hour/minute`를 확인하여 WorkManager 재스케줄링
+- 클라이언트가 변경 후 WorkManager/BGTask + 로컬 알림 재예약
 
 
 ### 4.14 앱 버전 체크 (강제 업데이트)
@@ -966,28 +962,15 @@ ON CONFLICT (platform) DO NOTHING;
 ## 6. 서버 스케줄러
 
 
-### 6.1 iOS/Android Silent Push 발송 (매일 고정 시각)
-```
-실행 주기: 매 분 정각 (APScheduler CronTrigger(second=0))
+### 6.1 Heartbeat 트리거 (클라이언트 자체 스케줄링)
 
-처리 흐름:
-1. 현재 시각(KST)이 각 기기의 heartbeat 시각(heartbeat_hour:heartbeat_minute)에
-   해당하는 대상자 기기 조회 (iOS/Android 공통)
-   SELECT d.fcm_token, d.device_id, d.platform
-   FROM devices d
-   JOIN users u ON d.user_id = u.id
-   WHERE u.role = 'subject'
-     AND d.heartbeat_hour = :current_hour
-     AND d.heartbeat_minute = :current_minute
-     AND d.fcm_token IS NOT NULL
+서버는 heartbeat 트리거 Silent Push를 발송하지 않는다.
+클라이언트(대상자 앱)가 WorkManager(Android) / BGTaskScheduler(iOS)를 사용하여 예약 시각에 자체적으로 heartbeat를 전송한다.
 
-2. 조회된 각 기기에 Silent Push 발송 (type: heartbeat_trigger)
-3. FCM 토큰 무효화 시 해당 기기의 fcm_token을 NULL로 갱신
-
-※ 기본값: heartbeat_hour=9, heartbeat_minute=30 (KST 기준)
-※ 보호자/대상자가 시각 변경 시 devices 테이블의 heartbeat_hour/minute 갱신
-※ CronTrigger(second=0): 매 분 0초에 실행 — 서버 재시작 후에도 정각에 동기화됨
-```
+서버의 역할:
+- heartbeat 수신 및 `last_seen` 갱신
+- 미수신 시 경고 생성 (6.2 참조)
+- `/api/v1/devices/me` 엔드포인트에서 heartbeat 시각 제공 (클라이언트 동기화용)
 
 
 ### 6.2 경고 생성 스케줄러 (고정 시각 기반 + 등급별 판정)
@@ -1190,8 +1173,8 @@ ON CONFLICT (platform) DO NOTHING;
 | `fastapi` | 웹 프레임워크 (API 자동 문서화, Swagger UI) |
 | `uvicorn` | ASGI 서버 (FastAPI 실행) |
 | `asyncpg` | PostgreSQL 비동기 드라이버 |
-| `apscheduler` | 스케줄러 (Silent Push, 경고 체크, 구독 만료) |
-| `firebase-admin` | FCM/APNs Push 발송 (Silent Push + 일반 Push) |
+| `apscheduler` | 스케줄러 (경고 체크, 구독 만료) |
+| `firebase-admin` | FCM Push 발송 (보호자 경고 알림만) |
 | `pydantic` | 요청/응답 데이터 검증 (FastAPI 내장) |
 | `python-dotenv` | 환경변수 로드 (.env 파일) |
 
@@ -1217,7 +1200,7 @@ python-dotenv==1.1.*
 | 구성요소 | 서비스 | 비고 |
 |----------|--------|------|
 | **Python 서버 + PostgreSQL** | Railway | Git push 자동 배포, HTTPS 자동, PostgreSQL 플러그인 포함 월 $5~10 |
-| **Push** | FCM (Firebase Cloud Messaging) | Silent Push + 일반 Push, 무제한 무료 |
+| **Push** | FCM (Firebase Cloud Messaging) | 보호자 경고 Push만 (Silent Push 미사용), 무제한 무료 |
 
 
 ### 10.2 서버 배포 (Railway)
@@ -1303,7 +1286,7 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 |------|------|
 | 서버 응답 시간 | heartbeat API p99 < 200ms |
 | 서버 가용성 | ≥ 99.5% |
-| Silent Push 발송 성공률 | ≥ 98% |
+| 보호자 경고 Push 발송 성공률 | ≥ 98% |
 | 경고 생성 정확도 | 거짓 경고 ≤ 5% |
 | 보호자 Push 전달률 | ≥ 95% |
 
@@ -1331,7 +1314,7 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 |------|--------|
 | 1단계: DB + 사용자 등록/연결 API | FastAPI 서버, PostgreSQL 스키마, 사용자 등록, 고유 코드 생성, 대상자 연결 API |
 | 2단계: Heartbeat + 경고 | heartbeat 수신, 경고 생성/클리어 로직 |
-| 3단계: Push 서비스 | Silent Push 발송, 보호자 FCM Push 발송 |
-| 4단계: 스케줄러 | APScheduler — iOS Silent Push 주기, 경고 체크, 구독 만료 체크 |
+| 3단계: Push 서비스 | 보호자 FCM Push 발송 (Silent Push 미사용) |
+| 4단계: 스케줄러 | APScheduler — 경고 체크, 구독 만료 체크 |
 | 5단계: 구독/결제 API | 구독 상태 관리, 영수증 검증, 구독 복원 |
 | 6단계: Railway 배포 + 통합 테스트 | Railway 배포, E2E 테스트 |

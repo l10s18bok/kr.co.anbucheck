@@ -44,18 +44,6 @@ class SubjectRemoteDatasource {
     }
   }
 
-  /// POST /api/v1/subjects/{inviteCode}/trigger-heartbeat — 수동 heartbeat 트리거 발송
-  Future<void> triggerHeartbeat(String deviceToken, String inviteCode) async {
-    final result = await ApiClientFactory.instance.post<dynamic>(
-      ApiEndpoints.subjectTriggerHeartbeat(inviteCode),
-      {},
-      headers: _auth(deviceToken),
-    );
-    if (!result.isOk) {
-      throw Exception('heartbeat 트리거 실패 (${result.statusCode}): ${result.bodyString}');
-    }
-  }
-
   /// PUT /api/v1/alerts/clear-all — 특정 대상자의 활성 경고 전부 해제
   Future<void> clearAllAlerts(String deviceToken, int subjectUserId) async {
     final result = await ApiClientFactory.instance.put<dynamic>(

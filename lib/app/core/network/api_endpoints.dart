@@ -52,13 +52,6 @@ class ApiEndpoints {
   static String subjectUnlink(int guardianId) =>
       '/api/v1/subjects/$guardianId/unlink';
 
-  /// POST /api/v1/subjects/{inviteCode}/trigger-heartbeat
-  /// - 보호자가 대상자에게 수동으로 heartbeat 트리거 Silent Push 발송
-  /// - 테스트 또는 긴급 확인 목적으로 사용
-  /// ※ 대상자 앱에서는 호출하지 않음
-  static String subjectTriggerHeartbeat(String inviteCode) =>
-      '/api/v1/subjects/$inviteCode/trigger-heartbeat';
-
   // ────────────────────────────────────────────────
   // [보호자 전용] 구독 (인앱 결제)
   // ────────────────────────────────────────────────
@@ -114,9 +107,9 @@ class ApiEndpoints {
   /// - 대상자·보호자 모두 사용 가능
   static const String devicesMe = '/api/v1/devices/me';
 
-  /// PUT /api/v1/devices/{deviceId}/heartbeat-schedule  { scheduled_time: "09:30" }
-  /// - 대상자 전용: 서버가 FCM Silent Push(heartbeat_trigger)를 발송할 고정 시각 설정
-  /// - 기본값 09:30, 변경 시 서버 APScheduler 스케줄도 즉시 갱신됨
+  /// PUT /api/v1/devices/{deviceId}/heartbeat-schedule  { heartbeat_hour, heartbeat_minute }
+  /// - 대상자 전용: heartbeat 예약 시각 변경
+  /// - 기본값 09:30, 변경 시 WorkManager/BGTaskScheduler 재예약
   /// ※ 보호자 앱에서는 호출하지 않음
   static String heartbeatSchedule(String deviceId) =>
       '/api/v1/devices/$deviceId/heartbeat-schedule';

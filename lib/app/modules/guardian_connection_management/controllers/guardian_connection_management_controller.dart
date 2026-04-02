@@ -4,7 +4,6 @@ import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
-import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -54,29 +53,6 @@ class GuardianConnectionManagementController extends BaseController {
   void goToAddSubject() {
     Get.toNamed(AppRoutes.guardianAddSubject)
         ?.then((_) => _loadSubjects(force: true));
-  }
-
-  Future<void> updateSchedule(int index, int hour, int minute) async {
-    final subject = _subjects[index];
-    if (subject.deviceId == null) return;
-    final deviceToken = await _tokenDs.getDeviceToken();
-    if (deviceToken == null) return;
-    try {
-      await DeviceRemoteDatasource()
-          .updateHeartbeatSchedule(deviceToken, subject.deviceId!, hour, minute);
-      _svc.updateSchedule(subject.code, hour, minute);
-      _subjects[index] = ConnectedSubject(
-        guardianId: subject.guardianId,
-        alias: subject.alias,
-        code: subject.code,
-        deviceId: subject.deviceId,
-        heartbeatHour: hour,
-        heartbeatMinute: minute,
-      );
-    } catch (_) {
-      Get.snackbar('오류', '시각 변경에 실패했습니다.',
-          snackPosition: SnackPosition.BOTTOM);
-    }
   }
 
   Future<void> saveAlias(int index, String newAlias) async {

@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
-import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
-import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 대시보드 컨트롤러
@@ -85,32 +83,6 @@ class GuardianDashboardController extends BaseController {
           const order = ['normal', 'info', 'caution', 'warning', 'urgent'];
           return order.indexOf(a) >= order.indexOf(b) ? a : b;
         });
-  }
-
-  /// 트리거 발송 중인 대상자 코드 집합 (더블탭 방지)
-  final _triggeringCodes = <String>{};
-
-  /// 수동 heartbeat 트리거 발송 — 테스트/긴급 확인 목적
-  Future<void> triggerHeartbeat(String inviteCode) async {
-    if (_triggeringCodes.contains(inviteCode)) return;
-    _triggeringCodes.add(inviteCode);
-    final deviceToken = await TokenLocalDatasource().getDeviceToken();
-    if (deviceToken == null) {
-      _triggeringCodes.remove(inviteCode);
-      return;
-    }
-    try {
-      await SubjectRemoteDatasource().triggerHeartbeat(deviceToken, inviteCode);
-      Get.snackbar('전송 완료', '대상자에게 안부 확인 신호를 보냈습니다.',
-          snackPosition: SnackPosition.BOTTOM);
-    } catch (e) {
-      final msg = e.toString().contains('502')
-          ? 'FCM 토큰 만료 — 대상자가 앱을 다시 열어야 합니다.'
-          : '신호 전송에 실패했습니다.';
-      Get.snackbar('오류', msg, snackPosition: SnackPosition.BOTTOM);
-    } finally {
-      _triggeringCodes.remove(inviteCode);
-    }
   }
 
   /// 안전확인 완료 처리 — 서버 경고 클리어 후 로컬 상태 갱신

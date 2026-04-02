@@ -51,9 +51,14 @@
 	<true/>
 	<key>NSMotionUsageDescription</key>
 	<string>걸음수를 측정하여 안부 확인에 활용합니다</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>workmanager.background.task</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -1,62 +1,21 @@
 import 'dart:io';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
-import 'package:anbucheck/app/modules/subject_home/controllers/subject_home_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
-import 'package:anbucheck/firebase_options.dart';
 
 /// FCM 백그라운드 메시지 핸들러 (top-level 함수 필수)
+/// heartbeat 트리거는 WorkManager/BGTaskScheduler로 전환 — FCM은 보호자 알림만 처리
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint('[FCM] 백그라운드 메시지 수신: ${message.messageId}');
-
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // 백그라운드 isolate는 main()을 거치지 않으므로 timezone 별도 초기화
-  // LocalAlarmService.schedule()의 tz.TZDateTime.now(tz.local) 정상 동작에 필요
-  tz.initializeTimeZones();
-  try {
-    final localTzName = await FlutterTimezone.getLocalTimezone();
-    tzlib.setLocalLocation(tzlib.getLocation(localTzName));
-  } catch (_) {
-    tzlib.setLocalLocation(tzlib.getLocation('Asia/Seoul'));
-  }
-
-  final type = message.data['type'];
-
-  // heartbeat 관련 처리 (대상자 모드 전용)
-  if (type == 'heartbeat_trigger' || type == 'schedule_updated') {
-    ApiClientFactory.init(type: HttpClientType.getConnect);
-    final role = await TokenLocalDatasource().getUserRole();
-    if (role != 'subject') return;
-
-    if (type == 'heartbeat_trigger') {
-      // heartbeat 전송 성공 시 _sendOrSavePending 내부에서 로컬 알림 재예약됨
-      await HeartbeatService().execute();
-    } else {
-      final hour = int.tryParse(message.data['hour'] ?? '') ?? 9;
-      final minute = int.tryParse(message.data['minute'] ?? '') ?? 30;
-      await TokenLocalDatasource().saveHeartbeatSchedule(hour, minute);
-      await LocalAlarmService.schedule(hour, minute);
-      debugPrint('[FCM] heartbeat 스케줄 갱신: $hour:${minute.toString().padLeft(2, '0')}');
-    }
-    return;
-  }
-
-  debugPrint('[FCM] 백그라운드 보호자 알림 수신: $type');
+  debugPrint('[FCM] 백그라운드 메시지 수신: ${message.data['type']}');
 }
 
 /// 로컬 알림 탭 핸들러 (top-level 함수 필수)
@@ -254,31 +213,6 @@ class FcmService extends GetxService {
   /// 포그라운드 메시지 처리
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
     debugPrint('[FCM] 포그라운드 메시지: ${message.data['type']}');
-
-    // 포그라운드 heartbeat 트리거 (대상자 모드 전용)
-    if (message.data['type'] == 'heartbeat_trigger') {
-      final role = await TokenLocalDatasource().getUserRole();
-      if (role == 'subject') {
-        await HeartbeatService().execute();
-        try {
-          await Get.find<SubjectHomeController>().reloadHeartbeatState();
-        } catch (_) {}
-      }
-      return;
-    }
-
-    // schedule_updated: 로컬 저장 + 로컬 안전망 알림 재예약 + UI 갱신
-    if (message.data['type'] == 'schedule_updated') {
-      final hour = int.tryParse(message.data['hour'] ?? '') ?? 9;
-      final minute = int.tryParse(message.data['minute'] ?? '') ?? 30;
-      await TokenLocalDatasource().saveHeartbeatSchedule(hour, minute);
-      await LocalAlarmService.schedule(hour, minute);
-      debugPrint('[FCM] heartbeat 스케줄 갱신: $hour:${minute.toString().padLeft(2, '0')}');
-      try {
-        Get.find<SubjectHomeController>().loadScheduleFromLocal();
-      } catch (_) {}
-      return;
-    }
 
     final notification = message.notification;
     if (notification == null) return;

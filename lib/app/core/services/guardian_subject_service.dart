@@ -78,14 +78,6 @@ class GuardianSubjectService extends GetxService {
     subjects[idx] = subjects[idx].copyWith(alias: alias);
   }
 
-  /// 특정 대상자 heartbeat 시각 로컬 업데이트
-  void updateSchedule(String inviteCode, int hour, int minute) {
-    final idx = subjects.indexWhere((s) => s.inviteCode == inviteCode);
-    if (idx == -1) return;
-    subjects[idx] =
-        subjects[idx].copyWith(heartbeatHour: hour, heartbeatMinute: minute);
-  }
-
   /// 특정 대상자 경고 해제 — 서버 API 호출 후 로컬 캐시 갱신
   Future<void> clearAlerts(String inviteCode) async {
     final idx = subjects.indexWhere((s) => s.inviteCode == inviteCode);

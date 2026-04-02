@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
@@ -112,8 +113,7 @@ mixin HeartbeatScheduleMixin on GetxController {
     await onHeartbeatTimeChanged(hour, minute);
   }
 
-  /// 시각 변경 후 서버 전송 → 성공 시 로컬 저장 + UI 반영
-  /// 서버가 변경된 시각에 맞춰 FCM Silent Push를 발송하므로 클라이언트 스케줄러 불필요
+  /// 시각 변경 후 서버 전송 → 성공 시 로컬 저장 + WorkManager/로컬알림 재예약
   Future<void> onHeartbeatTimeChanged(int hour, int minute) async {
     final tokenDs = TokenLocalDatasource();
     try {
@@ -126,7 +126,9 @@ mixin HeartbeatScheduleMixin on GetxController {
       heartbeatHour.value = hour;
       heartbeatMinute.value = minute;
       _applyToHeartbeatTime(hour, minute);
-      // 대상자 모드: 로컬 안전망 알림 재예약 (변경된 시각 + 10분)
+      // WorkManager 재예약 (heartbeat 백그라운드 실행)
+      await HeartbeatWorkerService.schedule(hour, minute);
+      // 로컬 안전망 알림 재예약 (변경된 시각 + 10분)
       await LocalAlarmService.schedule(hour, minute);
     } catch (e) {
       Get.snackbar('시각 변경 실패', '서버에 반영되지 않았습니다.',

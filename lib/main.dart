@@ -8,6 +8,7 @@ import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/firebase_options.dart';
 
 void main() async {
@@ -32,6 +33,9 @@ void main() async {
 
   // FCM 백그라운드 핸들러 등록
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  // WorkManager 초기화 (heartbeat 백그라운드 예약)
+  await HeartbeatWorkerService.init();
 
   // FCM 서비스 초기화 (ApiClientFactory 이후에 호출)
   await Get.putAsync(() => FcmService().init());
