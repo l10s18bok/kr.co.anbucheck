@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:anbucheck/app/core/services/theme_service.dart';
 
 /// Anbu 디자인 시스템 컬러
 /// 대상자 모드(Teal) / 보호자 모드(Indigo) 듀얼 모드 지원
+/// Surface·텍스트·아웃라인은 다크모드 자동 전환
 abstract class AppColors {
+  // ──────────────────────────────────────────
+  // 다크모드 판별 — ThemeService.isDarkMode 즉시 반영
+  // ──────────────────────────────────────────
+  static bool get _isDark => Get.find<ThemeService>().isDarkMode.value;
+
   // ──────────────────────────────────────────
   // 대상자 모드 (Senior Mode - Teal)
   // ──────────────────────────────────────────
@@ -20,23 +28,34 @@ abstract class AppColors {
   static const Color guardianPrimaryFixed = Color(0xFFDDE1FF);
 
   // ──────────────────────────────────────────
-  // Surface 계층 (Tonal Layering)
+  // Surface 계층 (Tonal Layering) — 다크모드 자동 전환
   // ──────────────────────────────────────────
-  static const Color surface = Color(0xFFF9F9F9);
-  static const Color surfaceContainerLow = Color(0xFFF3F3F3);
-  static const Color surfaceContainerLowest = Color(0xFFFFFFFF);
-  static const Color surfaceContainer = Color(0xFFEDEDED);
-  static const Color surfaceContainerHigh = Color(0xFFE6E6E6);
-  static const Color surfaceContainerHighest = Color(0xFFE0E0E0);
+  static Color get surface =>
+      _isDark ? const Color(0xFF121212) : const Color(0xFFF9F9F9);
+  static Color get surfaceContainerLow =>
+      _isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF3F3F3);
+  static Color get surfaceContainerLowest =>
+      _isDark ? const Color(0xFF0E0E0E) : const Color(0xFFFFFFFF);
+  static Color get surfaceContainer =>
+      _isDark ? const Color(0xFF222222) : const Color(0xFFEDEDED);
+  static Color get surfaceContainerHigh =>
+      _isDark ? const Color(0xFF2C2C2C) : const Color(0xFFE6E6E6);
+  static Color get surfaceContainerHighest =>
+      _isDark ? const Color(0xFF363636) : const Color(0xFFE0E0E0);
 
   // ──────────────────────────────────────────
-  // 텍스트 (순수 검정 #000000 금지)
+  // 텍스트 (순수 검정 #000000 금지) — 다크모드 자동 전환
   // ──────────────────────────────────────────
-  static const Color onSurface = Color(0xFF1A1C1C);
-  static const Color onSurfaceVariant = Color(0xFF3F4948);
-  static const Color textPrimary = Color(0xFF1A1C1C);
-  static const Color textSecondary = Color(0xFF3F4948);
-  static const Color textTertiary = Color(0xFF757575);
+  static Color get onSurface =>
+      _isDark ? const Color(0xFFE6E6E6) : const Color(0xFF1A1C1C);
+  static Color get onSurfaceVariant =>
+      _isDark ? const Color(0xFFB0B0B0) : const Color(0xFF3F4948);
+  static Color get textPrimary =>
+      _isDark ? const Color(0xFFE6E6E6) : const Color(0xFF1A1C1C);
+  static Color get textSecondary =>
+      _isDark ? const Color(0xFFB0B0B0) : const Color(0xFF3F4948);
+  static Color get textTertiary =>
+      _isDark ? const Color(0xFF8A8A8A) : const Color(0xFF757575);
 
   // ──────────────────────────────────────────
   // 상태 컬러
@@ -56,11 +75,14 @@ abstract class AppColors {
   static const Color alertUrgent = Color(0xFFF44336);
 
   // ──────────────────────────────────────────
-  // 아웃라인 / 구분선
+  // 아웃라인 / 구분선 — 다크모드 자동 전환
   // ──────────────────────────────────────────
-  static const Color outline = Color(0xFF6F7978);
-  static const Color outlineVariant = Color(0xFFBEC9C7);
+  static Color get outline =>
+      _isDark ? const Color(0xFF5A5A5A) : const Color(0xFF6F7978);
+  static Color get outlineVariant =>
+      _isDark ? const Color(0xFF3A3A3A) : const Color(0xFFBEC9C7);
 
   // Glassmorphism용
-  static const Color glassSurface = Color(0xCCF9F9F9); // surface 80%
+  static Color get glassSurface =>
+      _isDark ? const Color(0xCC121212) : const Color(0xCCF9F9F9);
 }

@@ -196,15 +196,18 @@ class _NotificationCard extends StatelessWidget {
     return '$period $h:$m';
   }
 
-  Color get _backgroundColor => switch (item.level) {
-        AlertLevel.urgent  => const Color(0xFFFFEBEE),
-        AlertLevel.warning => const Color(0xFFFFF3E0),
-        AlertLevel.caution => const Color(0xFFFFFDE7),
-        AlertLevel.info    => item.title.contains('배터리')
-            ? const Color(0xFFEDE7F6) // 파스텔 연한 보라
-            : const Color(0xFFE3F2FD),
-        AlertLevel.health  => const Color(0xFFE8F5E9),
-      };
+  Color get _backgroundColor {
+    final dark = Get.isDarkMode;
+    return switch (item.level) {
+      AlertLevel.urgent  => dark ? const Color(0xFF4E0000) : const Color(0xFFFFEBEE),
+      AlertLevel.warning => dark ? const Color(0xFF4E2000) : const Color(0xFFFFE0B2),
+      AlertLevel.caution => dark ? const Color(0xFF2E2E00) : const Color(0xFFFFF9C4),
+      AlertLevel.info    => item.title.contains('배터리')
+          ? (dark ? const Color(0xFF2A1540) : const Color(0xFFEDE7F6))
+          : (dark ? const Color(0xFF1A2540) : const Color(0xFFE3F2FD)),
+      AlertLevel.health  => dark ? const Color(0xFF0A3A2A) : const Color(0xFFE8F5E9),
+    };
+  }
 
   Color get _iconColor => switch (item.level) {
         AlertLevel.urgent  => const Color(0xFFE53935),

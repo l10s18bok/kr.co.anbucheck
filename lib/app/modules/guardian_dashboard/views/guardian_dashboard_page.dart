@@ -179,11 +179,20 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                           'urgent'  => const Color(0xFFE53935),
                           _         => const Color(0xFF00685E),
                         };
+                        final dark = Get.isDarkMode;
                         final bgColor = switch (level) {
-                          'caution' => const Color(0xFFFFFDE7).withValues(alpha: 0.6),
-                          'warning' => const Color(0xFFFFF3E0).withValues(alpha: 0.6),
-                          'urgent'  => const Color(0xFFFFEBEE).withValues(alpha: 0.6),
-                          _         => const Color(0xFFE8F5E9).withValues(alpha: 0.5),
+                          'caution' => dark
+                              ? const Color(0xFF2E2E00).withValues(alpha: 0.6)
+                              : const Color(0xFFFFF9C4).withValues(alpha: 0.6),
+                          'warning' => dark
+                              ? const Color(0xFF4E2000).withValues(alpha: 0.6)
+                              : const Color(0xFFFFE0B2).withValues(alpha: 0.6),
+                          'urgent'  => dark
+                              ? const Color(0xFF4E0000).withValues(alpha: 0.6)
+                              : const Color(0xFFFFEBEE).withValues(alpha: 0.6),
+                          _         => dark
+                              ? const Color(0xFF0A3A2A).withValues(alpha: 0.5)
+                              : const Color(0xFFE8F5E9).withValues(alpha: 0.5),
                         };
                         final statusLabel = switch (level) {
                           'caution' => '주의',

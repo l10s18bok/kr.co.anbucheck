@@ -7,6 +7,7 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
+import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/modules/guardian_settings/controllers/guardian_settings_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -21,7 +22,10 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) BackPressHandler.onBackPressed();
       },
-      child: Scaffold(
+      child: Obx(() {
+      // 다크모드 전환 시 즉시 리빌드
+      Get.find<ThemeService>().isDarkMode.value;
+      return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -54,18 +58,33 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                             size: 28.w, color: AppColors.onSurfaceVariant),
                       ),
                       SizedBox(width: AppSpacing.lg),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('안부 수호자',
-                              style: AppTextTheme.bodyLarge(
-                                  fw: FontWeight.w600)),
-                          SizedBox(height: 2.h),
-                          Text('iOS 17.2',
-                              style: AppTextTheme.bodySmall(
-                                  color: AppColors.textTertiary)),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('안부 수호자',
+                                style: AppTextTheme.bodyLarge(
+                                    fw: FontWeight.w600)),
+                            SizedBox(height: 2.h),
+                            Text('iOS 17.2',
+                                style: AppTextTheme.bodySmall(
+                                    color: AppColors.textTertiary)),
+                          ],
+                        ),
                       ),
+                      Obx(() {
+                        final themeSvc = Get.find<ThemeService>();
+                        return GestureDetector(
+                          onTap: themeSvc.toggle,
+                          child: Icon(
+                            themeSvc.isDarkMode.value
+                                ? Icons.light_mode_rounded
+                                : Icons.dark_mode_rounded,
+                            size: 24.w,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -287,7 +306,8 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
             ),
       ),
       bottomNavigationBar: _buildBottomNav(),
-    ),
+    );
+    }),
     );
   }
 

@@ -10,6 +10,7 @@ import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
+import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/modules/subject_home/controllers/subject_home_controller.dart';
 
 /// 대상자 홈 페이지 — 시안 _9 기준
@@ -447,6 +448,27 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               color: const Color(0xFFB2DFDB),
               child: Stack(
                 children: [
+                  // 다크모드 토글 (좌상단)
+                  Positioned(
+                    top: 4.h,
+                    left: 4.w,
+                    child: Obx(() {
+                      final themeSvc = Get.find<ThemeService>();
+                      return GestureDetector(
+                        onTap: themeSvc.toggle,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.w),
+                          child: Icon(
+                            themeSvc.isDarkMode.value
+                                ? Icons.light_mode_rounded
+                                : Icons.dark_mode_rounded,
+                            size: 24.w,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
                   // 닫기 버튼 (우상단 끝)
                   Positioned(
                     top: 4.h,
@@ -485,7 +507,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                 ],
               ),
             ),
-            const Divider(color: AppColors.surfaceContainerHigh, height: 1),
+            Divider(color: AppColors.surfaceContainerHigh, height: 1),
 
             // 법적 문서 링크
             ListTile(

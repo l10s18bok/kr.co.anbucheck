@@ -30,7 +30,7 @@ class AddSubjectButton extends StatelessWidget {
               Container(
                 width: 36.w,
                 height: 36.w,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.surfaceContainerLow,
                   shape: BoxShape.circle,
                 ),
