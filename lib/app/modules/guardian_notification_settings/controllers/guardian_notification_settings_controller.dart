@@ -3,14 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
-import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/notification_settings_remote_datasource.dart';
 
 /// 보호자 알림 설정 컨트롤러
-/// PRD: 등급별 알림 토글, 방해금지모드, heartbeat 시각 변경
-class GuardianNotificationSettingsController extends BaseController
-    with HeartbeatScheduleMixin {
+/// - 개별 스위치 ↔ "전체 알림 받기" 양방향 동기화
+/// - 화면 닫힐 때 변경 사항이 있으면 1회만 API 호출
+class GuardianNotificationSettingsController extends BaseController {
   final _tokenDs = TokenLocalDatasource();
   final _remoteDs = NotificationSettingsRemoteDatasource();
 
@@ -25,10 +24,22 @@ class GuardianNotificationSettingsController extends BaseController
   final dndStartTime = '오후 10:00'.obs;
   final dndEndTime = '오전 07:00'.obs;
 
+  /// 서버에서 로드한 초기 설정값 (변경 감지용)
+  Map<String, dynamic>? _initialSettings;
+
+  /// 설정이 로드 완료되었는지 여부
+  bool _loaded = false;
+
   @override
   void onInit() {
     super.onInit();
     _loadSettings();
+  }
+
+  @override
+  void onClose() {
+    _saveIfChanged();
+    super.onClose();
   }
 
   Future<void> _loadSettings() async {
@@ -46,16 +57,20 @@ class GuardianNotificationSettingsController extends BaseController
       final end = data['dnd_end'] as String?;
       if (start != null) dndStartTime.value = _hhmm24ToDisplay(start);
       if (end != null) dndEndTime.value = _hhmm24ToDisplay(end);
+
+      // "전체 알림 받기" 초기 동기화: 개별 스위치 하나라도 OFF면 OFF
+      _syncAllSwitch();
+
+      // 초기 스냅샷 저장
+      _initialSettings = _currentPayload();
+      _loaded = true;
     } catch (_) {
       // 네트워크 실패 시 기본값 유지
     }
   }
 
-  Future<void> _saveSettings() async {
-    final token = await _tokenDs.getDeviceToken();
-    if (token == null) return;
-    try {
-      await _remoteDs.updateSettings(token, {
+  /// 현재 설정값을 API 페이로드 형태로 반환
+  Map<String, dynamic> _currentPayload() => {
         'all_enabled': allNotifications.value,
         'urgent_enabled': urgentEnabled.value,
         'warning_enabled': warningEnabled.value,
@@ -64,7 +79,27 @@ class GuardianNotificationSettingsController extends BaseController
         'dnd_enabled': dndEnabled.value,
         'dnd_start': dndEnabled.value ? _displayToHhmm24(dndStartTime.value) : null,
         'dnd_end': dndEnabled.value ? _displayToHhmm24(dndEndTime.value) : null,
-      });
+      };
+
+  /// 초기 설정과 현재 설정을 비교하여 변경 시에만 저장
+  Future<void> _saveIfChanged() async {
+    if (!_loaded || _initialSettings == null) return;
+    final current = _currentPayload();
+
+    // 변경 사항 없으면 스킵
+    bool changed = false;
+    for (final key in current.keys) {
+      if (current[key] != _initialSettings![key]) {
+        changed = true;
+        break;
+      }
+    }
+    if (!changed) return;
+
+    final token = await _tokenDs.getDeviceToken();
+    if (token == null) return;
+    try {
+      await _remoteDs.updateSettings(token, current);
     } catch (_) {
       // 네트워크 실패 시 무시
     }
@@ -92,20 +127,44 @@ class GuardianNotificationSettingsController extends BaseController
     return '$period ${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 
+  /// 개별 스위치 상태에서 "전체 알림 받기" 자동 계산
+  void _syncAllSwitch() {
+    allNotifications.value =
+        urgentEnabled.value && warningEnabled.value &&
+        cautionEnabled.value && infoEnabled.value;
+  }
+
   void toggleAll(bool value) {
     allNotifications.value = value;
     urgentEnabled.value = value;
     warningEnabled.value = value;
     cautionEnabled.value = value;
     infoEnabled.value = value;
-    _saveSettings();
   }
 
-  void toggleUrgent(bool v) { urgentEnabled.value = v; _saveSettings(); }
-  void toggleWarning(bool v) { warningEnabled.value = v; _saveSettings(); }
-  void toggleCaution(bool v) { cautionEnabled.value = v; _saveSettings(); }
-  void toggleInfo(bool v) { infoEnabled.value = v; _saveSettings(); }
-  void toggleDnd(bool v) { dndEnabled.value = v; _saveSettings(); }
+  void toggleUrgent(bool v) {
+    urgentEnabled.value = v;
+    _syncAllSwitch();
+  }
+
+  void toggleWarning(bool v) {
+    warningEnabled.value = v;
+    _syncAllSwitch();
+  }
+
+  void toggleCaution(bool v) {
+    cautionEnabled.value = v;
+    _syncAllSwitch();
+  }
+
+  void toggleInfo(bool v) {
+    infoEnabled.value = v;
+    _syncAllSwitch();
+  }
+
+  void toggleDnd(bool v) {
+    dndEnabled.value = v;
+  }
 
   Future<void> showDndStartPicker() async {
     await _showTimePicker(dndStartTime);
@@ -149,7 +208,6 @@ class GuardianNotificationSettingsController extends BaseController
     );
     if (picked != null) {
       target.value = _formatTime(picked.hour, picked.minute);
-      dndEnabled.value = false; // 시각 변경 시 스위치 OFF
     }
   }
 
@@ -179,7 +237,6 @@ class GuardianNotificationSettingsController extends BaseController
                     onPressed: () {
                       target.value =
                           _formatTime(selectedTime.hour, selectedTime.minute);
-                      dndEnabled.value = false; // 시각 변경 시 스위치 OFF
                       Navigator.pop(context);
                     },
                   ),
