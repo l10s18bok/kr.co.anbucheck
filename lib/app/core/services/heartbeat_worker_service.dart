@@ -5,7 +5,6 @@ import 'package:timezone/timezone.dart' as tzlib;
 import 'package:workmanager/workmanager.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
-import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 
 /// WorkManager 백그라운드 콜백 (top-level 함수 필수)
@@ -40,13 +39,16 @@ void heartbeatWorkerCallback() {
         return true;
       }
 
-      await HeartbeatService().execute();
+      // 예정 시각 전이면 전송하지 않음 (periodic 태스크 조기 실행 방지)
+      final (hour, minute) = await tokenDs.getHeartbeatSchedule();
+      final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
+      if (now.isBefore(scheduled)) {
+        debugPrint('[HeartbeatWorker] 예정 시각($hour:$minute) 전 — skip');
+        return true;
+      }
 
-      // 로컬 안전망 알림: heartbeat 성공 → 내일 알람으로 재예약
-      try {
-        final (hour, minute) = await tokenDs.getHeartbeatSchedule();
-        await LocalAlarmService.schedule(hour, minute, nextDay: true);
-      } catch (_) {}
+      await HeartbeatService().execute();
+      // LocalAlarm 재예약은 HeartbeatService.execute() 내부에서 처리
 
       // 다음 날 동일 시각 재예약
       await HeartbeatWorkerService.scheduleNextDay();
