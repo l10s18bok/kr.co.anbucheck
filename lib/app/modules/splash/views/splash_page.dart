@@ -35,7 +35,7 @@ class SplashPage extends GetWidget<SplashController> {
               Lottie.asset(
                 'assets/lottie/splash_heart_signal.json',
                 width: 280.w,
-                height: 92.w,
+                height: 124.w,
                 fit: BoxFit.contain,
                 repeat: false,
               ),
