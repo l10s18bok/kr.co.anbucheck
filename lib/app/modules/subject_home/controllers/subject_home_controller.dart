@@ -160,10 +160,14 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     await _autoSendHeartbeatIfNeeded();
   }
 
-  /// 앱 열기 시 예약 시각이 지났고 오늘 미전송 상태이면 heartbeat 자동 전송
+  /// 앱 열기 시 오늘 미전송 상태이면 heartbeat 자동 전송
+  /// 예정시각 1시간 전부터 조기 전송 허용 (공백 시간 방지)
   Future<void> _autoSendHeartbeatIfNeeded() async {
     if (isReportedToday) return;
-    if (isScheduleInFuture) return;
+    final now = DateTime.now();
+    final scheduled = DateTime(
+        now.year, now.month, now.day, heartbeatHour.value, heartbeatMinute.value);
+    if (now.isBefore(scheduled.subtract(const Duration(hours: 1)))) return;
     // 구독 만료 시 heartbeat 전송 안함
     final active = await _tokenDs.getSubscriptionActive();
     if (!active) return;
