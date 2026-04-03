@@ -541,8 +541,11 @@ Day 4+: 추가 알림 없음 (향후 정책 변경 가능)
                            · 알림 ID: 0x57656C6C (고정 — 중복 발송 시 덮어씀)
                            · 메시지: "💛 안부 확인 / 잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요."
                            · 서버 FCM Push 없음 — 네트워크 없어도 동작
-                         - 1회 → 주의 등급 발생
-                         - 2회 이상 → 경고 등급 발생
+                         → suspicious_count 기반 보호자 경고 에스컬레이션:
+                           - suspicious_count=1 → 주의(caution) 등급 생성 + 보호자 Push + notification_event 저장
+                           - suspicious_count=2 → 경고(warning) 등급 생성 + 보호자 Push + notification_event 저장
+                           - suspicious_count≥3 → 긴급(urgent) 등급 생성 + 보호자 Push + notification_event 저장 (매일 반복)
+                           - 보호자 경고 클리어 시 suspicious_count 리셋 → 다음 suspicious부터 1차 재시작
 ```
 
 
@@ -552,8 +555,8 @@ Day 4+: 추가 알림 없음 (향후 정책 변경 가능)
 
 | 등급 | 조건 | 발송 |
 |------|------|------|
-| 🚨 긴급 | 경고 3회 이상 누적 | 매일 반복, 보호자 확인까지 종료 없음 |
-| ⚠ 경고 | 미수신 2회 이상 OR suspicious 2회 이상 | 1~2회 다음날 재발송 |
+| 🚨 긴급 | 미수신 3회+ OR suspicious 3회+ | 매일 반복, 보호자 확인까지 종료 없음 |
+| ⚠ 경고 | 미수신 2회 OR suspicious 2회 | 1~2회 다음날 재발송 |
 | ⚠ 주의 | 미수신 1회 OR suspicious 1회 | 1회 발송 |
 | 🔵 정보 | 배터리 < 20% / 자동 heartbeat 정상 수신 / 정상복귀 / 수동 heartbeat | DND 적용 (시간 외 소리, 시간 내 조용) |
 
@@ -578,9 +581,10 @@ Day 4+: 추가 알림 없음 (향후 정책 변경 가능)
             ├─ manual = true  → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
             └─ manual = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
 
-    suspicious 수신 (heartbeat는 수신 중)
-        ├─ 1회 → 주의 등급
-        └─ 2회 이상 → 경고 등급
+    suspicious 수신 (heartbeat는 수신 중, suspicious_count 기반)
+        ├─ 1회 → 주의(caution) 등급
+        ├─ 2회 → 경고(warning) 등급
+        └─ 3회+ → 긴급(urgent) 등급 (매일 반복)
 
 ※ DND(방해금지): 보호자가 시간대 설정 가능 (기본 OFF)
 ※ 긴급 등급은 DND 무관하게 항상 발송

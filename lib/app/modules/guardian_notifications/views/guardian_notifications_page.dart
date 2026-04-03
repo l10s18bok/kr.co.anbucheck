@@ -34,54 +34,192 @@ class GuardianNotificationsPage
           ],
         ),
         actions: [
-          Obx(() => IconButton(
-            icon: Icon(Icons.refresh_rounded,
-                color: AppColors.onSurfaceVariant, size: 22.w),
-            onPressed: controller.isLoading ? null : controller.load,
-          )),
+          IconButton(
+            icon: Icon(Icons.help_outline_rounded,
+                color: AppColors.onSurface, size: 22.w),
+            onPressed: () => _showAlertLevelGuide(context),
+          ),
         ],
       ),
-      body: Obx(() {
-        final items = controller.notifications;
+      body: Stack(
+        children: [
+          Obx(() {
+            final items = controller.notifications;
 
-        if (items.isEmpty) {
-          return const _EmptyState();
-        }
+            if (items.isEmpty && !controller.isLoading) {
+              return const _EmptyState();
+            }
 
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: AppSpacing.lg),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('오늘',
+                          style: AppTextTheme.labelMedium(
+                              color: const Color(0xFF4355B9), fw: FontWeight.w600)),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: controller.isLoading ? null : () => _confirmDeleteAll(context),
+                            child: Icon(Icons.delete_outline_rounded,
+                                size: 20.w,
+                                color: controller.isLoading
+                                    ? const Color(0xFFE53935).withValues(alpha: 0.4)
+                                    : const Color(0xFFE53935)),
+                          ),
+                          SizedBox(width: 20.w),
+                          GestureDetector(
+                            onTap: controller.isLoading ? null : controller.load,
+                            child: Icon(Icons.refresh_rounded,
+                                size: 20.w,
+                                color: controller.isLoading
+                                    ? const Color(0xFF4355B9).withValues(alpha: 0.4)
+                                    : const Color(0xFF4355B9)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: AppSpacing.md),
+                  ...items.map((item) => _NotificationCard(item: item)),
+                  SizedBox(height: AppSpacing.sp6),
+                ],
+              ),
+            );
+          }),
+          Obx(() => controller.isLoading
+              ? Container(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  child: const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF4355B9)),
+                  ),
+                )
+              : const SizedBox.shrink()),
+        ],
+      ),
+      bottomNavigationBar: _buildBottomNav(),
+    ),
+    );
+  }
+
+  void _confirmDeleteAll(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: AppColors.surfaceContainerLowest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+        title: Text('알림 전체 삭제', style: AppTextTheme.headlineSmall()),
+        content: Text('오늘 받은 알림을 모두 삭제하시겠습니까?', style: AppTextTheme.bodyMedium()),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('취소', style: AppTextTheme.bodyLarge(color: AppColors.textTertiary)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              controller.deleteAll();
+            },
+            child: Text('삭제', style: AppTextTheme.bodyLarge(color: const Color(0xFFE53935), fw: FontWeight.w600)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAlertLevelGuide(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: AppColors.surfaceContainerLowest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+        title: Text('알림 등급 안내', style: AppTextTheme.headlineSmall()),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _alertGuideItem(
+                icon: Icons.check_circle_rounded,
+                color: const Color(0xFF4CAF50),
+                title: '정상',
+                description: '대상자의 안부가 정상적으로 확인됨',
+              ),
+              SizedBox(height: AppSpacing.lg),
+              _alertGuideItem(
+                icon: Icons.info_rounded,
+                color: const Color(0xFFFFC107),
+                title: '주의',
+                description: '다음 중 하나에 해당합니다.\n'
+                    '1. 오늘 예정된 안부 확인이 아직 없음\n'
+                    '2. 안부는 수신되었으나 폰 사용 흔적이 없음',
+              ),
+              SizedBox(height: AppSpacing.lg),
+              _alertGuideItem(
+                icon: Icons.warning_amber_rounded,
+                color: const Color(0xFFFF9800),
+                title: '경고',
+                description: '다음 중 하나에 해당합니다.\n'
+                    '1. 2일 연속으로 안부 확인이 되지 않음\n'
+                    '2. 2일 연속 폰 사용 흔적이 없음',
+              ),
+              SizedBox(height: AppSpacing.lg),
+              _alertGuideItem(
+                icon: Icons.error_rounded,
+                color: const Color(0xFFE53935),
+                title: '긴급',
+                description: '장기간 안부 확인이 없거나,\n'
+                    '3일 이상 폰 사용이 없음',
+              ),
+              SizedBox(height: AppSpacing.lg),
+              Divider(color: AppColors.outlineVariant),
+              SizedBox(height: AppSpacing.md),
+              _alertGuideItem(
+                icon: Icons.notifications_rounded,
+                color: const Color(0xFF4355B9),
+                title: '정보',
+                description: '걸음수, 배터리 부족 등 참고용 알림\n일반적인 상태 정보 전달',
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('확인', style: AppTextTheme.bodyLarge(color: const Color(0xFF4355B9), fw: FontWeight.w600)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _alertGuideItem({
+    required IconData icon,
+    required Color color,
+    required String title,
+    required String description,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 22.w, color: color),
+        SizedBox(width: AppSpacing.md),
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: AppSpacing.lg),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('오늘',
-                      style: AppTextTheme.labelMedium(
-                          color: const Color(0xFF4355B9), fw: FontWeight.w600)),
-                  Obx(() => GestureDetector(
-                    onTap: controller.isLoading ? null : controller.deleteAll,
-                    child: Text(
-                      '전체 삭제',
-                      style: AppTextTheme.labelSmall(
-                          color: controller.isLoading
-                              ? AppColors.textTertiary.withValues(alpha: 0.4)
-                              : AppColors.textTertiary,
-                          fw: FontWeight.w500),
-                    ),
-                  )),
-                ],
-              ),
-              SizedBox(height: AppSpacing.md),
-              ...items.map((item) => _NotificationCard(item: item)),
-              SizedBox(height: AppSpacing.sp6),
+              Text(title, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
+              SizedBox(height: 2.h),
+              Text(description, style: AppTextTheme.bodySmall(color: AppColors.textSecondary)),
             ],
           ),
-        );
-      }),
-      bottomNavigationBar: _buildBottomNav(),
-    ),
+        ),
+      ],
     );
   }
 

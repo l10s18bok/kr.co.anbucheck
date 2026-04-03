@@ -148,9 +148,9 @@ guardians: { subject_user_id:1, guardian_user_id:2 }
 
 | 등급 | 조건 | 발송 |
 |------|------|------|
-| 🚨 긴급 | 경고 3회 이상 누적 | 매일 반복, 보호자 확인까지 종료 없음 |
-| ⚠ 경고 | 미수신 2회 이상 | 1~2회 다음날 재발송 |
-| ⚠ 주의 | 미수신 1회 | 1회 발송 |
+| 🚨 긴급 | 미수신 3회+ OR suspicious 3회+ | 매일 반복, 보호자 확인까지 종료 없음 |
+| ⚠ 경고 | 미수신 2회 OR suspicious 2회 | 1~2회 다음날 재발송 |
+| ⚠ 주의 | 미수신 1회 OR suspicious 1회 | 1회 발송 |
 | 🔵 정보 | 배터리 ≤ 10% / 자동 heartbeat 정상 수신 / 정상복귀 / 수동 heartbeat | DND 적용 (시간 외 소리, 시간 내 조용) |
 
 ```
@@ -165,8 +165,11 @@ heartbeat 수신 → last_seen 갱신
       │       ├─ manual = true  → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
       │       └─ manual = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
       └─ true  → warning/urgent → caution 하향 (정상 복귀 알림 없음)
-               → 대상자에게 wellbeing_check 발송 (보호자 경고 없음)
-               → 보호자 경고는 heartbeat 미수신 시에만 발생
+               → suspicious_count 기반 보호자 경고 에스컬레이션:
+                 ├─ 1회 (suspicious_count=1) → 주의(caution) 등급 생성 + 보호자 Push (중복 방지)
+                 ├─ 2회 (suspicious_count=2) → 경고(warning) 등급 생성 + 보호자 Push (warning/urgent 없을 때만)
+                 ├─ 3회+ (suspicious_count≥3) → 긴급(urgent) 등급 생성 + 보호자 Push (매일 반복)
+                 └─ 보호자 경고 클리어 시 suspicious_count 리셋 → 다음 suspicious부터 1차 재시작
 
 [heartbeat 미수신 시 (기기별 고정 시각 + 2시간 경과 시 체크)]
 지정 시각 + 2시간 내 미수신 대상자 감지 (기본: 09:30 → 11:30 체크)
@@ -461,10 +464,12 @@ Response: 200 OK
     - 활성 경고 있으면 → 완전 해소 + 보호자 Push "정상 복귀" (정보 등급 DND 적용)
     - 활성 경고 없고 `manual` = true → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
     - 활성 경고 없고 `manual` = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
-  - `suspicious` = true → warning/urgent 경고를 caution으로 하향 (정상 복귀 알림 없음)
-    - 1회 → 주의 등급 발생 (caution 중복 방지)
-    - 2회 이상 → 경고 등급 발생 (warning/urgent 없을 때만)
-  - 보호자 설정 "안부 확인 알림 ON" 시 → 대상자에게 안부 확인 Push 발송 (suspicious 2회+)
+  - `suspicious` = true:
+    - 기존 warning/urgent 경고 → caution으로 하향 (정상 복귀 알림 없음)
+    - suspicious_count=1 → 주의(caution) 등급 생성 + 보호자 Push + notification_event 저장 (중복 방지)
+    - suspicious_count=2 → 경고(warning) 등급 생성 + 보호자 Push + notification_event 저장 (warning/urgent 없을 때만)
+    - suspicious_count≥3 → 긴급(urgent) 등급 생성 + 보호자 Push + notification_event 저장 (매일 반복, days_inactive 반영)
+    - 보호자 경고 클리어 시 suspicious_count 리셋 → 다음 suspicious부터 1차 재시작
 
 
 ### 4.7 구독 상태 확인 (보호자용)
