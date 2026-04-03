@@ -18,7 +18,7 @@ class OnboardingController extends BaseController {
 
   late final String mode;
 
-  static const int totalPages = 3;
+  static const int totalPages = 4;
 
   final _tokenDs = TokenLocalDatasource();
   final _nicknameDs = NicknameLocalDatasource();

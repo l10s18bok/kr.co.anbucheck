@@ -5,9 +5,10 @@ import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/onboarding/controllers/onboarding_controller.dart';
+import 'package:anbucheck/app/modules/onboarding/views/onboarding_illustration.dart';
 
-/// 대상자 온보딩 페이지
-/// PRD 7.3: 3단계 서비스 소개 (자동 전송 / 보호자 안심 / 개인정보 미수집)
+/// 온보딩 페이지
+/// 4스텝 감정 흐름: 공감 → 해결 → 신뢰 → 연결
 class OnboardingPage extends GetWidget<OnboardingController> {
   const OnboardingPage({super.key});
 
@@ -18,71 +19,60 @@ class OnboardingPage extends GetWidget<OnboardingController> {
       body: SafeArea(
         child: Column(
           children: [
-            // 페이지 콘텐츠
+            // 페이지 콘텐츠 (일러스트 상단 60% + 텍스트 하단)
             Expanded(
-              child: PageView(
+              child: PageView.builder(
                 controller: controller.pageController,
                 onPageChanged: controller.onPageChanged,
-                children: [
-                  _OnboardingStep(
-                    icon: Icons.schedule_send_rounded,
-                    title: 'onboarding_title_1'.tr,
-                    description: 'onboarding_desc_1'.tr,
-                  ),
-                  _OnboardingStep(
-                    icon: Icons.shield_rounded,
-                    title: 'onboarding_title_2'.tr,
-                    description: 'onboarding_desc_2'.tr,
-                  ),
-                  _OnboardingStep(
-                    icon: Icons.lock_rounded,
-                    title: 'onboarding_title_3'.tr,
-                    description: 'onboarding_desc_3'.tr,
-                  ),
-                ],
+                itemCount: OnboardingController.totalPages,
+                itemBuilder: (context, index) => _OnboardingStep(
+                  step: index,
+                  title: 'onboarding_title_${index + 1}'.tr,
+                  description: 'onboarding_desc_${index + 1}'.tr,
+                ),
               ),
             ),
 
-            // 페이지 인디케이터
-            Obx(() => _PageIndicator(
-                  currentPage: controller.currentPage,
-                  totalPages: OnboardingController.totalPages,
-                )),
-            SizedBox(height: AppSpacing.sp6),
-
-            // 하단 버튼
+            // 하단 영역 (인디케이터 + 버튼)
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: AppSpacing.horizontalMargin,
               ),
               child: Column(
                 children: [
+                  // 페이지 인디케이터
+                  Obx(() => _PageIndicator(
+                        currentPage: controller.currentPage,
+                        totalPages: OnboardingController.totalPages,
+                      )),
+                  SizedBox(height: AppSpacing.sp6),
+
+                  // 메인 버튼
                   SizedBox(
                     width: double.infinity,
-                    child: Obx(() => ElevatedButton(
-                          onPressed: controller.nextPage,
-                          child: Text(
-                            controller.currentPage <
-                                    OnboardingController.totalPages - 1
-                                ? '다음'.tr
-                                : '시작하기'.tr,
-                            style: AppTextTheme.labelLarge(),
+                    height: 56.h,
+                    child: Obx(() {
+                      final isLastPage = controller.currentPage ==
+                          OnboardingController.totalPages - 1;
+                      return ElevatedButton(
+                        onPressed: controller.nextPage,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.seniorPrimary,
+                          foregroundColor: AppColors.seniorOnPrimary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
-                        )),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          isLastPage ? '시작하기'.tr : '다음'.tr,
+                          style: AppTextTheme.labelLarge(
+                            color: AppColors.seniorOnPrimary,
+                          ),
+                        ),
+                      );
+                    }),
                   ),
-                  SizedBox(height: AppSpacing.sm),
-                  Obx(() => controller.currentPage <
-                          OnboardingController.totalPages - 1
-                      ? TextButton(
-                          onPressed: controller.completeOnboarding,
-                          child: Text(
-                            '건너뛰기'.tr,
-                            style: AppTextTheme.bodyMedium(
-                              color: AppColors.textTertiary,
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink()),
                   SizedBox(height: AppSpacing.lg),
                 ],
               ),
@@ -94,13 +84,15 @@ class OnboardingPage extends GetWidget<OnboardingController> {
   }
 }
 
+/// 온보딩 각 스텝
+/// 상단 60%: 일러스트 / 하단 40%: 텍스트
 class _OnboardingStep extends StatelessWidget {
-  final IconData icon;
+  final int step;
   final String title;
   final String description;
 
   const _OnboardingStep({
-    required this.icon,
+    required this.step,
     required this.title,
     required this.description,
   });
@@ -110,32 +102,37 @@ class _OnboardingStep extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 120.w,
-            height: 120.w,
-            decoration: BoxDecoration(
-              color: AppColors.seniorPrimary.withValues(alpha: 0.08),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              icon,
-              size: 56.w,
-              color: AppColors.seniorPrimary,
+          // 상단 일러스트 영역 (60%)
+          Expanded(
+            flex: 6,
+            child: Center(
+              child: OnboardingIllustration(step: step),
             ),
           ),
-          SizedBox(height: AppSpacing.sp8),
-          Text(
-            title,
-            style: AppTextTheme.headlineLarge(),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: AppSpacing.lg),
-          Text(
-            description,
-            style: AppTextTheme.bodyLarge(color: AppColors.textSecondary),
-            textAlign: TextAlign.center,
+
+          // 하단 텍스트 영역 (40%)
+          Expanded(
+            flex: 4,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: AppSpacing.lg),
+                Text(
+                  title,
+                  style: AppTextTheme.headlineLarge(),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: AppSpacing.lg),
+                Text(
+                  description,
+                  style: AppTextTheme.bodyLarge(
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -143,6 +140,7 @@ class _OnboardingStep extends StatelessWidget {
   }
 }
 
+/// 페이지 인디케이터 (애니메이션 적용)
 class _PageIndicator extends StatelessWidget {
   final int currentPage;
   final int totalPages;
@@ -159,14 +157,15 @@ class _PageIndicator extends StatelessWidget {
       children: List.generate(totalPages, (index) {
         final isActive = index == currentPage;
         return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
           margin: EdgeInsets.symmetric(horizontal: 4.w),
-          width: isActive ? 24.w : 8.w,
+          width: isActive ? 28.w : 8.w,
           height: 8.w,
           decoration: BoxDecoration(
             color: isActive
                 ? AppColors.seniorPrimary
-                : AppColors.seniorPrimary.withValues(alpha: 0.2),
+                : AppColors.seniorPrimary.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(4.r),
           ),
         );

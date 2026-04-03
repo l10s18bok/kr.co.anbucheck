@@ -36,13 +36,15 @@ abstract class EnUs {
     'permission_battery_desc': 'Required to reliably send\nheartbeats in the background',
     'permission_allow': 'Allow Permissions',
 
-    // Subject Onboarding
-    'onboarding_title_1': 'Automatically sends\nyour check-in daily',
-    'onboarding_desc_1': 'A survival check signal is sent\nautomatically at a set time each day.\nNo action needed from you.',
-    'onboarding_title_2': 'Delivers peace of mind\nto your guardian',
-    'onboarding_desc_2': 'When the signal is received normally,\nyour guardian can rest easy.\nAnomalies will be reported.',
-    'onboarding_title_3': 'No personal information\nis collected',
-    'onboarding_desc_3': 'No names, phone numbers,\nor personal data is collected.\nThis is a safe service.',
+    // Subject Onboarding (4 steps: Empathy → Solution → Connection → Trust)
+    'onboarding_title_1': 'Worried about someone\nliving alone?',
+    'onboarding_desc_1': 'Even from far away,\nyou wonder if they\'re okay.\nAnbu is here with you.',
+    'onboarding_title_2': 'Wellness checks\nwithout a single word',
+    'onboarding_desc_2': 'Just by using their smartphone,\na daily wellness signal\nis sent automatically.',
+    'onboarding_title_3': 'Share wellness\nwith your loved ones',
+    'onboarding_desc_3': 'Daily check-ins build up\ninto lasting peace of mind.\nLet\'s get started.',
+    'onboarding_title_4': 'No names, no phone numbers\n— nothing collected',
+    'onboarding_desc_4': 'Only one signal is delivered:\n"I\'m doing fine."\nYour information stays safe.',
 
     // Subject Home
     'subject_home_greeting': 'Hello, good day',

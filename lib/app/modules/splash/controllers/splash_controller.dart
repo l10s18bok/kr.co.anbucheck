@@ -35,8 +35,11 @@ class SplashController extends BaseController {
     // 네이티브 스플래시 제거 → Flutter Splash 화면 표시
     FlutterNativeSplash.remove();
 
-    // 서비스 초기화 (Flutter Splash 화면이 보이는 동안 진행)
-    await _initServices();
+    // 서비스 초기화 + 최소 스플래시 시간 보장 (애니메이션 1회 완료)
+    await Future.wait([
+      _initServices(),
+      Future.delayed(const Duration(milliseconds: 2000)),
+    ]);
 
     // 1. 버전 체크 (실패해도 계속 진행)
     final forceUpdate = await _checkVersion();

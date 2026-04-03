@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/modules/splash/controllers/splash_controller.dart';
 
-/// 스플래시 페이지 — 시안 _7 기준
-/// 연한 민트/세이지 배경, 둥근 사각형 하트 아이콘, 브랜드 텍스트, 로딩 점
+/// 스플래시 페이지
+/// 연한 민트/세이지 배경, 하트 시그널 Lottie 애니메이션, 브랜드 텍스트
 class SplashPage extends GetWidget<SplashController> {
   const SplashPage({super.key});
 
@@ -30,14 +31,13 @@ class SplashPage extends GetWidget<SplashController> {
             children: [
               const Spacer(flex: 3),
 
-              // 앱 아이콘
-              ClipRRect(
-                borderRadius: BorderRadius.circular(24.r),
-                child: Image.asset(
-                  'assets/icon/app_icon.png',
-                  width: 100.w,
-                  height: 100.w,
-                ),
+              // 하트 시그널 Lottie 애니메이션
+              Lottie.asset(
+                'assets/lottie/splash_heart_signal.json',
+                width: 280.w,
+                height: 92.w,
+                fit: BoxFit.contain,
+                repeat: false,
               ),
               SizedBox(height: 32.h),
 

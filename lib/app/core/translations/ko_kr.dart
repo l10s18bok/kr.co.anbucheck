@@ -36,13 +36,15 @@ abstract class KoKr {
     'permission_battery_desc': '백그라운드에서 안정적으로\nheartbeat를 전송하기 위해 필요합니다',
     'permission_allow': '권한 허용하기',
 
-    // 대상자 온보딩
-    'onboarding_title_1': '매일 자동으로\n안부를 전합니다',
-    'onboarding_desc_1': '매일 정해진 시각에 자동으로\n안부 확인 신호를 보냅니다.\n별도 조작이 필요 없어요.',
-    'onboarding_title_2': '보호자에게\n안심을 전달합니다',
-    'onboarding_desc_2': '신호가 정상 수신되면\n보호자는 안심할 수 있습니다.\n이상 감지 시 보호자에게 알립니다.',
-    'onboarding_title_3': '개인정보는\n수집하지 않습니다',
-    'onboarding_desc_3': '이름, 전화번호 등\n개인정보는 일절 수집하지 않습니다.\n안전한 서비스입니다.',
+    // 대상자 온보딩 (4스텝: 공감 → 해결 → 연결 → 신뢰)
+    'onboarding_title_1': '혼자 사는 소중한 사람,\n걱정되시나요?',
+    'onboarding_desc_1': '멀리 떨어져 있어도\n괜찮은지 궁금한 그 마음.\n안부가 함께합니다.',
+    'onboarding_title_2': '안부는\n말없이도 전해집니다',
+    'onboarding_desc_2': '스마트폰을 사용하는 것만으로\n하루 한 번, 자동으로\n안부 신호를 보냅니다.',
+    'onboarding_title_3': '소중한 사람과\n안부를 나누세요',
+    'onboarding_desc_3': '매일의 안부가 쌓여\n서로의 안심이 됩니다.\n지금 시작해 보세요.',
+    'onboarding_title_4': '이름도, 전화번호도\n수집하지 않습니다',
+    'onboarding_desc_4': '오직 \'잘 지내고 있다\'는\n안부 신호 하나만 전달합니다.\n당신의 정보는 안전합니다.',
 
     // 대상자 홈
     'subject_home_greeting': '오늘도 안녕하세요',
