@@ -128,18 +128,12 @@ mixin HeartbeatScheduleMixin on GetxController {
       _applyToHeartbeatTime(hour, minute);
       // WorkManager 재예약 (heartbeat 백그라운드 실행)
       await HeartbeatWorkerService.schedule(hour, minute);
-      // 시각 변경 시 lastHeartbeatDate 초기화 → 새 시각에 다시 전송되도록
-      final prefs = await tokenDs.getLastHeartbeatDate();
-      if (prefs != null) {
-        await tokenDs.saveLastHeartbeatDate('');
-      }
-      // 로컬 안전망 알림 재예약 (새 시각 기준 오늘)
-      await LocalAlarmService.schedule(hour, minute, nextDay: false);
-
+      // 로컬 안전망 알림 재예약 (오늘 이미 전송했으면 내일로)
       final lastDate = await tokenDs.getLastHeartbeatDate();
       final now = DateTime.now();
       final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
       final isNextDay = lastDate == today;
+      await LocalAlarmService.schedule(hour, minute, nextDay: isNextDay);
       final period = hour < 12 ? '오전' : '오후';
       final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
       final timeStr = '$period ${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';

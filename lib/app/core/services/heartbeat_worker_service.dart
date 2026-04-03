@@ -39,14 +39,6 @@ void heartbeatWorkerCallback() {
         return true;
       }
 
-      // 예정 시각 전이면 전송하지 않음 (periodic 태스크 조기 실행 방지)
-      final (hour, minute) = await tokenDs.getHeartbeatSchedule();
-      final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
-      if (now.isBefore(scheduled)) {
-        debugPrint('[HeartbeatWorker] 예정 시각($hour:$minute) 전 — skip');
-        return true;
-      }
-
       await HeartbeatService().execute();
       // LocalAlarm 재예약은 HeartbeatService.execute() 내부에서 처리
 

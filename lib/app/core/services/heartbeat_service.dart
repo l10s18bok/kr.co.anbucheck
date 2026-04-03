@@ -17,15 +17,51 @@ const _gyroThreshold  = 0.3;  // rad/s
 
 /// Heartbeat 수집 → suspicious 판정 → 서버 전송 (오프라인 시 큐 저장)
 class HeartbeatService {
+  /// 동일 isolate 내 중복 실행 방지 (execute + sendPending 공유)
+  static bool _busy = false;
+
   final _sensorDs     = SensorLocalDatasource();
   final _heartbeatDs  = HeartbeatLocalDatasource();
   final _tokenDs      = TokenLocalDatasource();
   final _battery      = Battery();
   final _connectivity = Connectivity();
 
+  /// 오늘 이미 전송했는지 SharedPreferences에서 직접 확인
+  Future<bool> _isAlreadySentToday() async {
+    final lastDate = await _tokenDs.getLastHeartbeatDate();
+    final now = DateTime.now();
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    return lastDate == today;
+  }
+
   /// heartbeat 1회 실행
   /// [manual] 대상자가 직접 버튼을 눌러 전송한 경우 true
   Future<void> execute({bool manual = false}) async {
+    if (_busy) return;
+    _busy = true;
+    try {
+      // 전송 직전 lastDate 재확인 (cross-isolate 레이스 방어)
+      if (!manual && await _isAlreadySentToday()) return;
+
+      // 보류 큐가 있으면 먼저 전송 (오프라인 큐 + 새 전송 중복 방지)
+      final deviceToken = await _tokenDs.getDeviceToken();
+      if (deviceToken != null) {
+        final pending = await _heartbeatDs.getPending();
+        if (pending != null) {
+          await _sendPendingInternal(deviceToken);
+          // pending 전송 성공 시 오늘 기록이 갱신되었으므로 새 전송 불필요
+          if (!manual && await _isAlreadySentToday()) return;
+        }
+      }
+
+      await _executeInternal(manual: manual);
+    } finally {
+      _busy = false;
+    }
+  }
+
+  Future<void> _executeInternal({bool manual = false}) async {
     final deviceId    = await _tokenDs.getDeviceId();
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceId == null || deviceToken == null) return;
@@ -82,6 +118,16 @@ class HeartbeatService {
 
   /// 보류 중인 heartbeat 재전송 (네트워크 복구 시 호출)
   Future<void> sendPending(String deviceToken) async {
+    if (_busy) return;
+    _busy = true;
+    try {
+      await _sendPendingInternal(deviceToken);
+    } finally {
+      _busy = false;
+    }
+  }
+
+  Future<void> _sendPendingInternal(String deviceToken) async {
     final payload = await _heartbeatDs.getPending();
     if (payload == null) return;
     try {

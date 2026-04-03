@@ -162,9 +162,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
   /// 앱 열기 시 오늘 미전송 상태이면 heartbeat 자동 전송
   /// 예정시각 1시간 전부터 조기 전송 허용 (공백 시간 방지)
-  // TODO: 테스트 완료 후 자동 전송 복원 필요
   Future<void> _autoSendHeartbeatIfNeeded() async {
-    return; // 테스트용: 자동 전송 임시 비활성화
     if (isReportedToday) return;
     final now = DateTime.now();
     final scheduled = DateTime(
