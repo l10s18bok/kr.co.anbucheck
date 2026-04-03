@@ -126,6 +126,9 @@ mixin HeartbeatScheduleMixin on GetxController {
       heartbeatHour.value = hour;
       heartbeatMinute.value = minute;
       _applyToHeartbeatTime(hour, minute);
+      // 예약시각 변경 시 하루 1회 제한 리셋 (재테스트 가능)
+      await tokenDs.saveLastHeartbeatDate('');
+      await tokenDs.saveLastHeartbeatTime('');
       // WorkManager 재예약 (heartbeat 백그라운드 실행)
       await HeartbeatWorkerService.schedule(hour, minute);
       // 로컬 안전망 알림 재예약

@@ -28,21 +28,21 @@ void heartbeatWorkerCallback() {
       final role = await tokenDs.getUserRole();
       if (role != 'subject') return true;
 
-      // 1시간 쿨다운: 마지막 전송 후 1시간 이내면 스킵
+      // 예약시각 이전이면 실행하지 않음 (iOS 조기 실행 방어)
+      final (hour, minute) = await tokenDs.getHeartbeatSchedule();
+      final now = DateTime.now();
+      final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
+      if (now.isBefore(scheduled)) {
+        debugPrint('[HeartbeatWorker] 예약시각 이전 — 스킵 (현재: ${now.hour}:${now.minute}, 예약: $hour:$minute)');
+        return true;
+      }
+
+      // 오늘 이미 전송했으면 스킵 (하루 1회 제한)
       final lastDate = await tokenDs.getLastHeartbeatDate();
-      final lastTime = await tokenDs.getLastHeartbeatTime();
-      if (lastDate != null && lastTime != null && lastTime.contains(':')) {
-        final parts = lastTime.split(':');
-        final now = DateTime.now();
-        final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-        if (lastDate == today) {
-          final lastDt = DateTime(now.year, now.month, now.day,
-              int.parse(parts[0]), int.parse(parts[1]));
-          if (now.difference(lastDt).inMinutes < 60) {
-            await HeartbeatWorkerService.scheduleNextDay();
-            return true;
-          }
-        }
+      final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      if (lastDate == today) {
+        debugPrint('[HeartbeatWorker] 오늘 이미 전송 완료 — 스킵');
+        return true;
       }
 
       await HeartbeatService().execute();
