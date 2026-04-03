@@ -28,8 +28,24 @@ void heartbeatWorkerCallback() {
       final role = await tokenDs.getUserRole();
       if (role != 'subject') return true;
 
+      // 1시간 쿨다운: 마지막 전송 후 1시간 이내면 스킵
+      final lastDate = await tokenDs.getLastHeartbeatDate();
+      final lastTime = await tokenDs.getLastHeartbeatTime();
+      if (lastDate != null && lastTime != null && lastTime.contains(':')) {
+        final parts = lastTime.split(':');
+        final now = DateTime.now();
+        final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+        if (lastDate == today) {
+          final lastDt = DateTime(now.year, now.month, now.day,
+              int.parse(parts[0]), int.parse(parts[1]));
+          if (now.difference(lastDt).inMinutes < 60) {
+            await HeartbeatWorkerService.scheduleNextDay();
+            return true;
+          }
+        }
+      }
+
       await HeartbeatService().execute();
-      // LocalAlarm 재예약은 HeartbeatService.execute() 내부에서 처리
 
       // 다음 날 동일 시각 재예약
       await HeartbeatWorkerService.scheduleNextDay();
@@ -72,8 +88,8 @@ class HeartbeatWorkerService {
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
-    // 2차 보조: periodic (iOS Background Fetch — 최소 15분 간격, OS 재량 실행)
-    // 콜백 내에서 당일 중복 전송을 방지하므로 안전
+    // 2차 보조: periodic (iOS Background Fetch 안전망)
+    // 콜백 내 1시간 쿨다운으로 중복 전송 방지
     await Workmanager().registerPeriodicTask(
       _periodicUniqueName,
       _taskName,
