@@ -26,31 +26,44 @@ void heartbeatWorkerCallback() {
 
       final tokenDs = TokenLocalDatasource();
       final role = await tokenDs.getUserRole();
+      print('[HeartbeatWorker] role=$role');
       if (role != 'subject') return true;
 
-      // 예약시각 이전이면 실행하지 않음 (iOS 조기 실행 방어)
+      // 예약시각 2분 전 이상이면 실행하지 않음 (iOS 조기 실행 방어)
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
       final now = DateTime.now();
       final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
-      if (now.isBefore(scheduled)) {
-        debugPrint('[HeartbeatWorker] 예약시각 이전 — 스킵 (현재: ${now.hour}:${now.minute}, 예약: $hour:$minute)');
+      print('[HeartbeatWorker] 현재: ${now.hour}:${now.minute}:${now.second}, 예약: $hour:$minute');
+      if (now.isBefore(scheduled.subtract(const Duration(minutes: 2)))) {
+        print('[HeartbeatWorker] 예약시각 이전 — 스킵');
         return true;
       }
 
       // 오늘 이미 전송했으면 스킵 (하루 1회 제한)
       final lastDate = await tokenDs.getLastHeartbeatDate();
       final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      print('[HeartbeatWorker] lastDate=$lastDate, today=$today');
       if (lastDate == today) {
-        debugPrint('[HeartbeatWorker] 오늘 이미 전송 완료 — 스킵');
+        print('[HeartbeatWorker] 오늘 이미 전송 완료 — 스킵');
         return true;
       }
 
+      final deviceId = await tokenDs.getDeviceId();
+      final deviceToken = await tokenDs.getDeviceToken();
+      print('[HeartbeatWorker] deviceId=$deviceId, deviceToken=${deviceToken != null ? '${deviceToken.substring(0, 10)}...' : 'null'}');
+      if (deviceId == null || deviceToken == null) {
+        print('[HeartbeatWorker] deviceId 또는 deviceToken이 null — 전송 불가');
+        return true;
+      }
+
+      print('[HeartbeatWorker] heartbeat 전송 시작');
       await HeartbeatService().execute();
+      print('[HeartbeatWorker] heartbeat 전송 완료');
 
       // 다음 날 동일 시각 재예약
       await HeartbeatWorkerService.scheduleNextDay();
     } catch (e) {
-      debugPrint('[HeartbeatWorker] 실행 실패: $e');
+      print('[HeartbeatWorker] 실행 실패: $e');
     }
     return true;
   });

@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
@@ -135,11 +136,13 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   @override
   void onResumed() {
     super.onResumed();
-    _reloadLocalState();
-    _syncScheduleFromServer();
+    _reloadLocalState().then((_) => _syncScheduleFromServer());
   }
 
   Future<void> _reloadLocalState() async {
+    // 백그라운드 isolate에서 변경된 값을 메인 isolate에 반영
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
   }
