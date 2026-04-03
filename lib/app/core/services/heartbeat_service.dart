@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'package:battery_plus/battery_plus.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -23,7 +23,6 @@ class HeartbeatService {
   final _heartbeatDs  = HeartbeatLocalDatasource();
   final _tokenDs      = TokenLocalDatasource();
   final _battery      = Battery();
-  final _connectivity = Connectivity();
 
   /// heartbeat 1회 실행
   /// [manual] 대상자가 직접 버튼을 눌러 전송한 경우 true
@@ -59,13 +58,16 @@ class HeartbeatService {
     bool suspicious = false;
     if (!manual) {
       stepsDelta = await _getStepsDelta();
+      print('[HeartbeatService] stepsDelta=$stepsDelta');
       if (stepsDelta != null && stepsDelta > 0) {
         // 걸음수 변화 있음 → 즉시 정상 판정
         suspicious = false;
       } else {
         // 걸음수 변화 없거나 권한 거부 → 가속도/자이로로 보완 판정
         final sensor = await _collectSensor();
+        print('[HeartbeatService] sensor=${sensor != null ? 'accel(${sensor.accelX.toStringAsFixed(2)},${sensor.accelY.toStringAsFixed(2)},${sensor.accelZ.toStringAsFixed(2)}) gyro(${sensor.gyroX.toStringAsFixed(2)},${sensor.gyroY.toStringAsFixed(2)},${sensor.gyroZ.toStringAsFixed(2)})' : 'null'}');
         suspicious = await _calcSuspicious(sensor);
+        print('[HeartbeatService] suspicious=$suspicious');
         if (sensor != null) {
           await _sensorDs.saveSnapshot(
             accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
@@ -91,14 +93,7 @@ class HeartbeatService {
       batteryLevel: batteryLevel,
     );
 
-    final results = await _connectivity.checkConnectivity();
-    final isOnline = results.any((r) => r != ConnectivityResult.none);
-
-    if (isOnline) {
-      await _sendOrSavePending(request, deviceToken);
-    } else {
-      await _heartbeatDs.savePending(request.toJson());
-    }
+    await _sendOrSavePending(request, deviceToken);
   }
 
   /// 보류 중인 heartbeat 재전송 (네트워크 복구 시 호출)
@@ -132,12 +127,20 @@ class HeartbeatService {
   // ── private ──────────────────────────────────────────────
 
   Future<void> _sendOrSavePending(HeartbeatRequest request, String deviceToken) async {
-    try {
-      await HeartbeatRemoteDatasource(deviceToken).send(request);
-    } catch (_) {
-      // 전송 실패 시 큐에 저장 (네트워크 복구 후 재전송)
-      await _heartbeatDs.savePending(request.toJson());
-      return;
+    final remote = HeartbeatRemoteDatasource(deviceToken);
+    for (var attempt = 1; attempt <= 3; attempt++) {
+      try {
+        await remote.send(request);
+        print('[HeartbeatService] API 전송 성공 (시도 $attempt)');
+        break;
+      } catch (e) {
+        print('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
+        if (attempt == 3) {
+          await _heartbeatDs.savePending(request.toJson());
+          return;
+        }
+        await Future.delayed(Duration(seconds: attempt * 5));
+      }
     }
 
     // 전송 성공 — 이후 작업 실패가 pending 큐를 오염시키지 않도록 분리
@@ -150,6 +153,9 @@ class HeartbeatService {
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
     await _tokenDs.saveLastHeartbeatDate(today);
     await _tokenDs.saveLastHeartbeatTime(timeStr);
+
+    // 전송 성공 → 데드맨 스위치 알림 취소
+    await LocalAlarmService.cancel();
   }
 
   Future<int?> _getBatteryLevel() async {

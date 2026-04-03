@@ -22,7 +22,7 @@ void heartbeatWorkerCallback() {
         tzlib.setLocalLocation(tzlib.getLocation('Asia/Seoul'));
       }
 
-      ApiClientFactory.init(type: HttpClientType.getConnect);
+      ApiClientFactory.init(type: HttpClientType.dio);
 
       final tokenDs = TokenLocalDatasource();
       final role = await tokenDs.getUserRole();
@@ -56,6 +56,8 @@ void heartbeatWorkerCallback() {
         return true;
       }
 
+      // DNS 안정화 대기 (셀룰러 네트워크 백그라운드 실행 시 DNS 지연 방어)
+      await Future.delayed(const Duration(seconds: 10));
       print('[HeartbeatWorker] heartbeat 전송 시작');
       await HeartbeatService().execute();
       print('[HeartbeatWorker] heartbeat 전송 완료');
