@@ -163,7 +163,6 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   /// 앱 열기 시 오늘 미전송 상태이면 heartbeat 자동 전송
   /// 예정시각 1시간 전부터 조기 전송 허용 (공백 시간 방지)
   Future<void> _autoSendHeartbeatIfNeeded() async {
-    if (isReportedToday) return;
     final now = DateTime.now();
     final scheduled = DateTime(
         now.year, now.month, now.day, heartbeatHour.value, heartbeatMinute.value);
@@ -199,11 +198,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       applySchedule(hour, minute);
       // 서버 기준 시각으로 WorkManager 및 로컬 안전망 알림 재예약
       await HeartbeatWorkerService.schedule(hour, minute);
-      // 오늘 이미 heartbeat 전송했으면 데드맨 스위치는 내일로
-      final lastDate = await _tokenDs.getLastHeartbeatDate();
-      final syncNow = DateTime.now();
-      final syncToday = '${syncNow.year}-${syncNow.month.toString().padLeft(2, '0')}-${syncNow.day.toString().padLeft(2, '0')}';
-      await LocalAlarmService.schedule(hour, minute, nextDay: lastDate == syncToday);
+      await LocalAlarmService.schedule(hour, minute);
     } catch (_) {
       // 실패 시 로컬 저장값 유지
     }

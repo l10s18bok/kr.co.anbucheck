@@ -37,8 +37,8 @@ class LocalAlarmService {
     debugPrint('[LocalAlarm] 플러그인 자체 초기화 완료 (백그라운드 isolate)');
   }
 
-  /// [nextDay] true이면 내일 알람으로 강제 예약 (heartbeat 전송 성공 후 사용)
-  static Future<void> schedule(int heartbeatHour, int heartbeatMinute, {bool nextDay = false}) async {
+  /// 예약시각 + 10분에 로컬 안전망 알림 예약
+  static Future<void> schedule(int heartbeatHour, int heartbeatMinute) async {
     await _ensureInitialized();
     await cancel();
 
@@ -52,8 +52,8 @@ class LocalAlarmService {
       now.year, now.month, now.day,
       alarmHour, alarmMinute,
     );
-    // heartbeat 성공 후에는 내일로 강제, 그 외에는 오늘 시각이 지났으면 내일로
-    if (nextDay || scheduled.isBefore(now)) {
+    // 오늘 시각이 지났으면 내일로
+    if (scheduled.isBefore(now)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
 

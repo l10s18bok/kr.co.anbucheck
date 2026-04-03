@@ -28,17 +28,6 @@ void heartbeatWorkerCallback() {
       final role = await tokenDs.getUserRole();
       if (role != 'subject') return true;
 
-      // 오늘 이미 전송했는지 확인
-      final now = DateTime.now();
-      final today =
-          '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-      final lastDate = await tokenDs.getLastHeartbeatDate();
-      if (lastDate == today) {
-        // 이미 전송 완료 — 다음 날 재예약만 수행
-        await HeartbeatWorkerService.scheduleNextDay();
-        return true;
-      }
-
       await HeartbeatService().execute();
       // LocalAlarm 재예약은 HeartbeatService.execute() 내부에서 처리
 

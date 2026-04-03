@@ -4,7 +4,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -26,32 +25,18 @@ class HeartbeatService {
   final _battery      = Battery();
   final _connectivity = Connectivity();
 
-  /// 오늘 이미 전송했는지 SharedPreferences에서 직접 확인
-  Future<bool> _isAlreadySentToday() async {
-    final lastDate = await _tokenDs.getLastHeartbeatDate();
-    final now = DateTime.now();
-    final today =
-        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    return lastDate == today;
-  }
-
   /// heartbeat 1회 실행
   /// [manual] 대상자가 직접 버튼을 눌러 전송한 경우 true
   Future<void> execute({bool manual = false}) async {
     if (_busy) return;
     _busy = true;
     try {
-      // 전송 직전 lastDate 재확인 (cross-isolate 레이스 방어)
-      if (!manual && await _isAlreadySentToday()) return;
-
-      // 보류 큐가 있으면 먼저 전송 (오프라인 큐 + 새 전송 중복 방지)
+      // 보류 큐가 있으면 먼저 전송
       final deviceToken = await _tokenDs.getDeviceToken();
       if (deviceToken != null) {
         final pending = await _heartbeatDs.getPending();
         if (pending != null) {
           await _sendPendingInternal(deviceToken);
-          // pending 전송 성공 시 오늘 기록이 갱신되었으므로 새 전송 불필요
-          if (!manual && await _isAlreadySentToday()) return;
         }
       }
 
@@ -141,9 +126,6 @@ class HeartbeatService {
           '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
       await _tokenDs.saveLastHeartbeatDate(today);
       await _tokenDs.saveLastHeartbeatTime(timeStr);
-
-      final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
-      await LocalAlarmService.schedule(hour, minute, nextDay: true);
     } catch (_) {}
   }
 
@@ -168,13 +150,6 @@ class HeartbeatService {
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
     await _tokenDs.saveLastHeartbeatDate(today);
     await _tokenDs.saveLastHeartbeatTime(timeStr);
-
-    // 로컬 안전망 알림: 오늘 heartbeat 성공 → 내일 알람으로 재예약
-    // 백그라운드 isolate에서 tz 미초기화 등으로 실패해도 전송 결과에 영향 없음
-    try {
-      final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
-      await LocalAlarmService.schedule(hour, minute, nextDay: true);
-    } catch (_) {}
   }
 
   Future<int?> _getBatteryLevel() async {
