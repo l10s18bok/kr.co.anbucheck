@@ -190,12 +190,42 @@ abstract class AppTheme {
         ),
       );
 
+  // ──────────────────────────────────────────
+  // 다이얼로그·스낵바 테마 — 다크모드에서도 라이트 색상 고정
+  // ──────────────────────────────────────────
+  static const _lightSnackBarTheme = SnackBarThemeData(
+    backgroundColor: Color(0xFFFFFFFF),
+    contentTextStyle: TextStyle(color: _lightOnSurface),
+    actionTextColor: _lightOnSurfaceVariant,
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+    ),
+  );
+
+  static const _lightDialogTheme = DialogThemeData(
+    backgroundColor: _lightSurfaceContainerLowest,
+    titleTextStyle: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w700,
+      color: _lightOnSurface,
+    ),
+    contentTextStyle: TextStyle(
+      fontSize: 14,
+      color: _lightOnSurfaceVariant,
+    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+  );
+
+
   /// 대상자 모드 다크 테마 (Teal)
   static ThemeData get seniorDarkTheme => ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
         primaryColor: const Color(0xFF70F5E2),
         scaffoldBackgroundColor: _darkSurface,
+        dialogTheme: _lightDialogTheme,
+        snackBarTheme: _lightSnackBarTheme,
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFF70F5E2),
           primaryContainer: Color(0xFF008377),
@@ -271,6 +301,8 @@ abstract class AppTheme {
         useMaterial3: true,
         brightness: Brightness.dark,
         primaryColor: const Color(0xFFDDE1FF),
+        dialogTheme: _lightDialogTheme,
+        snackBarTheme: _lightSnackBarTheme,
         scaffoldBackgroundColor: _darkSurface,
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFFDDE1FF),

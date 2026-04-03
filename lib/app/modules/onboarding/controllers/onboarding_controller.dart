@@ -134,7 +134,7 @@ class OnboardingController extends BaseController {
     }
 
     if (role == 'subject') {
-      // 대상자 최초 등록 시 로컬 안전망 알림 예약 (기본 09:40, 매일 반복)
+      // 로컬 안전망 알림 예약 (기본 09:40, 매일 반복)
       final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
       await LocalAlarmService.schedule(hour, minute);
       Get.offNamed(AppRoutes.subjectHome);

@@ -48,6 +48,13 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               onTap: () => Get.rawSnackbar(
                 message: 'subject_home_guardian_count'.trParams({'count': '${controller.guardianCount}'}),
                 snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.white,
+                messageText: Text(
+                  'subject_home_guardian_count'.trParams({'count': '${controller.guardianCount}'}),
+                  style: AppTextTheme.bodyMedium(color: const Color(0xFF1A1C1C)),
+                ),
+                borderRadius: 12,
+                margin: EdgeInsets.symmetric(horizontal: 40.w, vertical: 32.h),
               ),
               child: Padding(
               padding: EdgeInsets.only(right: 16.w),
@@ -622,13 +629,14 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
     scaffoldKey.currentState?.closeDrawer();
     Get.dialog(
       AlertDialog(
-        title: Text('탈퇴', style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
+        title: Text('탈퇴', style: AppTextTheme.headlineSmall(
+            fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
         content: Text('계정과 모든 데이터가 삭제됩니다.\n정말 탈퇴하시겠습니까?',
-            style: AppTextTheme.bodyMedium()),
+            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: Text('취소', style: AppTextTheme.bodyMedium(color: AppColors.textSecondary)),
+            child: Text('취소', style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
           ),
           TextButton(
             onPressed: () {

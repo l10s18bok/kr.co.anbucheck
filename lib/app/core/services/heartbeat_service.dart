@@ -146,7 +146,11 @@ class HeartbeatService {
       final current = await Pedometer.stepCountStream.first
           .timeout(const Duration(seconds: 2));
       final prevSteps = await _sensorDs.getLastSteps();
-      if (prevSteps == null) return null; // 첫 heartbeat
+      if (prevSteps == null) {
+        // 첫 heartbeat — 기준점 저장 후 0 반환
+        await _sensorDs.saveLastSteps(current.steps.toInt());
+        return 0;
+      }
       final delta = current.steps.toInt() - prevSteps;
       return delta > 0 ? delta : 0;
     } catch (_) {
@@ -184,7 +188,14 @@ class HeartbeatService {
     if (current == null) return false;
 
     final prev = await _sensorDs.getSnapshot();
-    if (prev['accel_x'] == null) return false; // 이전 값 없음 → 첫 heartbeat
+    if (prev['accel_x'] == null) {
+      // 첫 heartbeat — 기준점 저장 후 정상 판정
+      await _sensorDs.saveSnapshot(
+        accelX: current.accelX, accelY: current.accelY, accelZ: current.accelZ,
+        gyroX: current.gyroX, gyroY: current.gyroY, gyroZ: current.gyroZ,
+      );
+      return false;
+    }
 
     final accelDelta = sqrt(
       pow((current.accelX - (prev['accel_x'] ?? 0)), 2) +
