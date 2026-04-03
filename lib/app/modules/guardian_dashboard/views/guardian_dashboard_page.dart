@@ -572,7 +572,7 @@ class _SubjectCardState extends State<_SubjectCard>
 
             // 주의 상태 — 액션 버튼
             if (widget.showActionButtons) ...[
-              SizedBox(height: 8.h),
+              SizedBox(height: 30.h),
               Row(
                 children: [
                   // 전화 버튼

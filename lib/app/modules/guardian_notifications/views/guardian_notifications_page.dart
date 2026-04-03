@@ -34,11 +34,14 @@ class GuardianNotificationsPage
           ],
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.help_outline_rounded,
-                color: AppColors.onSurface, size: 22.w),
-            onPressed: () => _showAlertLevelGuide(context),
-          ),
+          Obx(() => IconButton(
+            icon: Icon(Icons.refresh_rounded,
+                color: controller.isLoading
+                    ? AppColors.onSurface.withValues(alpha: 0.4)
+                    : AppColors.onSurface,
+                size: 26.w),
+            onPressed: controller.isLoading ? null : controller.load,
+          )),
         ],
       ),
       body: Stack(
@@ -67,19 +70,17 @@ class GuardianNotificationsPage
                           GestureDetector(
                             onTap: controller.isLoading ? null : () => _confirmDeleteAll(context),
                             child: Icon(Icons.delete_outline_rounded,
-                                size: 20.w,
+                                size: 28.w,
                                 color: controller.isLoading
                                     ? const Color(0xFFE53935).withValues(alpha: 0.4)
                                     : const Color(0xFFE53935)),
                           ),
                           SizedBox(width: 20.w),
                           GestureDetector(
-                            onTap: controller.isLoading ? null : controller.load,
-                            child: Icon(Icons.refresh_rounded,
-                                size: 20.w,
-                                color: controller.isLoading
-                                    ? const Color(0xFF4355B9).withValues(alpha: 0.4)
-                                    : const Color(0xFF4355B9)),
+                            onTap: () => _showAlertLevelGuide(context),
+                            child: Icon(Icons.help_outline_rounded,
+                                size: 28.w,
+                                color: const Color(0xFF4355B9)),
                           ),
                         ],
                       ),
