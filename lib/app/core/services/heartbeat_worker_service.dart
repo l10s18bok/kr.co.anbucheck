@@ -115,7 +115,7 @@ class HeartbeatWorkerService {
         _uniqueName,
         _taskName,
         initialDelay: delay,
-        existingWorkPolicy: ExistingWorkPolicy.replace,
+        existingWorkPolicy: ExistingWorkPolicy.keep,
         constraints: Constraints(networkType: NetworkType.connected),
       );
     } catch (_) {}

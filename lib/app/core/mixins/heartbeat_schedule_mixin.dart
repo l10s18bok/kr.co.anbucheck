@@ -139,11 +139,15 @@ mixin HeartbeatScheduleMixin on GetxController {
       final message = '오늘 $timeStr에 안부 확인이 예약되었습니다.';
       Get.snackbar('', message,
           snackPosition: SnackPosition.TOP,
-          duration: const Duration(seconds: 2));
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.white,
+          colorText: const Color(0xFF1a1c1c));
     } catch (e) {
       Get.snackbar('시각 변경 실패', '서버에 반영되지 않았습니다.',
           snackPosition: SnackPosition.TOP,
-          duration: const Duration(seconds: 2));
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.white,
+          colorText: const Color(0xFF1a1c1c));
     }
   }
 }
