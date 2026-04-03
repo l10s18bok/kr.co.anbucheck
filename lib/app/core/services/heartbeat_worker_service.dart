@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tzlib;
@@ -8,17 +7,13 @@ import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
-import 'package:anbucheck/firebase_options.dart';
 
 /// WorkManager 백그라운드 콜백 (top-level 함수 필수)
 @pragma('vm:entry-point')
 void heartbeatWorkerCallback() {
   Workmanager().executeTask((taskName, inputData) async {
+    WidgetsFlutterBinding.ensureInitialized();
     try {
-      WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform);
-
       // 백그라운드 isolate timezone 초기화
       tz.initializeTimeZones();
       try {
