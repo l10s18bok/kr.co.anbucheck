@@ -20,15 +20,22 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   bool _isLoaded = false;
 
   @override
-  void initState() {
-    super.initState();
-    _loadAd();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_bannerAd == null) _loadAd();
   }
 
-  void _loadAd() {
+  void _loadAd() async {
+    final width = MediaQuery.of(context).size.width.truncate();
+    final adSize = await AdSize.getAnchoredAdaptiveBannerAdSize(
+      Orientation.portrait,
+      width,
+    );
+    if (adSize == null) return;
+
     _bannerAd = BannerAd(
       adUnitId: AdConfig.bannerAdUnitId,
-      size: AdSize.banner,
+      size: adSize,
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
