@@ -6,7 +6,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
 import 'package:anbucheck/app/modules/guardian_notification_settings/controllers/guardian_notification_settings_controller.dart';
-import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 알림 설정 페이지 — 시안 _2 기준
 class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSettingsController> {
@@ -192,45 +192,10 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: GuardianBottomNav(currentIndex: (Get.arguments as int?) ?? 2),
     );
   }
 
-  Widget _buildBottomNav() {
-    final fromIndex = (Get.arguments as int?) ?? 2;
-    return BottomNavigationBar(
-      currentIndex: fromIndex,
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.surfaceContainerLowest,
-      selectedItemColor: const Color(0xFF4355B9),
-      unselectedItemColor: AppColors.onSurfaceVariant,
-      elevation: 0,
-      selectedFontSize: 12.sp,
-      unselectedFontSize: 12.sp,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-        BottomNavigationBarItem(icon: Icon(Icons.link_rounded), label: '연결'),
-        BottomNavigationBarItem(icon: Icon(Icons.notifications_rounded), label: '알림'),
-        BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-      ],
-      onTap: (index) {
-        switch (index) {
-          case 0:
-            Get.offNamed(AppRoutes.guardianDashboard);
-            break;
-          case 1:
-            Get.offNamed(AppRoutes.guardianConnectionManagement);
-            break;
-          case 2:
-            Get.offNamed(AppRoutes.guardianNotifications);
-            break;
-          case 3:
-            Get.offNamed(AppRoutes.guardianSettings);
-            break;
-        }
-      },
-    );
-  }
 }
 
 class _AlertToggleTile extends StatelessWidget {

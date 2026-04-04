@@ -6,7 +6,7 @@ import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_add_subject/controllers/guardian_add_subject_controller.dart';
-import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 대상자 연결 페이지 — 시안 _1 기준
 /// 인디고 테마, 고유코드(8자리)+별칭 입력, 하단 네비게이션
@@ -182,28 +182,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
           ],
         ),
       ),
-      // 하단 네비게이션
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.surfaceContainerLowest,
-        selectedItemColor: const Color(0xFF4355B9),
-        unselectedItemColor: AppColors.onSurfaceVariant,
-        elevation: 0,
-        selectedFontSize: 12.sp,
-        unselectedFontSize: 12.sp,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.link_rounded), label: '연결'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_rounded), label: '알림'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings_rounded), label: '설정'),
-        ],
-        onTap: (index) {
-          if (index == 0) Get.offNamed(AppRoutes.guardianDashboard);
-        },
-      ),
+      bottomNavigationBar: const GuardianBottomNav(currentIndex: 1),
     );
   }
 }

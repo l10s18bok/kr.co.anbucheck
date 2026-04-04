@@ -6,7 +6,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
-import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 알림 목록 페이지 — 당일 알림만 표시 (서버 API 기반)
 class GuardianNotificationsPage
@@ -70,7 +70,7 @@ class GuardianNotificationsPage
                           GestureDetector(
                             onTap: controller.isLoading ? null : () => _confirmDeleteAll(context),
                             child: Icon(Icons.delete_outline_rounded,
-                                size: 28.w,
+                                size: 24.w,
                                 color: controller.isLoading
                                     ? const Color(0xFFE53935).withValues(alpha: 0.4)
                                     : const Color(0xFFE53935)),
@@ -79,7 +79,7 @@ class GuardianNotificationsPage
                           GestureDetector(
                             onTap: () => _showAlertLevelGuide(context),
                             child: Icon(Icons.help_outline_rounded,
-                                size: 28.w,
+                                size: 24.w,
                                 color: const Color(0xFF4355B9)),
                           ),
                         ],
@@ -103,7 +103,7 @@ class GuardianNotificationsPage
               : const SizedBox.shrink()),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: const GuardianBottomNav(currentIndex: 2),
     ),
     );
   }
@@ -224,38 +224,6 @@ class GuardianNotificationsPage
     );
   }
 
-  Widget _buildBottomNav() {
-    return BottomNavigationBar(
-      currentIndex: 2,
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.surfaceContainerLowest,
-      selectedItemColor: const Color(0xFF4355B9),
-      unselectedItemColor: AppColors.onSurfaceVariant,
-      elevation: 0,
-      selectedFontSize: 12.sp,
-      unselectedFontSize: 12.sp,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-        BottomNavigationBarItem(icon: Icon(Icons.link_rounded), label: '연결'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_rounded), label: '알림'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.settings_rounded), label: '설정'),
-      ],
-      onTap: (index) {
-        switch (index) {
-          case 0:
-            Get.offNamed(AppRoutes.guardianDashboard);
-          case 1:
-            Get.offNamed(AppRoutes.guardianConnectionManagement);
-          case 2:
-            break;
-          case 3:
-            Get.offNamed(AppRoutes.guardianSettings);
-        }
-      },
-    );
-  }
 }
 
 // ─── 알림 카드 ─────────────────────────────────────────────────────────────────

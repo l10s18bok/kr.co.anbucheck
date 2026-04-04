@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
@@ -14,17 +17,30 @@ class GuardianSettingsController extends BaseController {
   RxInt get maxSubjects => _svc.maxSubjects;
 
   final appVersion = ''.obs;
+  final osVersion = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
     _svc.load();
     _loadAppVersion();
+    _loadOsVersion();
   }
 
   Future<void> _loadAppVersion() async {
     final info = await PackageInfo.fromPlatform();
     appVersion.value = '${info.version} (${info.buildNumber})';
+  }
+
+  Future<void> _loadOsVersion() async {
+    final deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      final android = await deviceInfo.androidInfo;
+      osVersion.value = 'Android ${android.version.release}';
+    } else if (Platform.isIOS) {
+      final ios = await deviceInfo.iosInfo;
+      osVersion.value = 'iOS ${ios.systemVersion}';
+    }
   }
 
   void goToConnectionManagement() {

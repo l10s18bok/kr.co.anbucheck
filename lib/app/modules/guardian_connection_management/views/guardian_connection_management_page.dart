@@ -7,7 +7,7 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/controllers/guardian_connection_management_controller.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
-import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 연결 관리 페이지 — 시안 _4 기준
 class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManagementController> {
@@ -149,44 +149,11 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: const GuardianBottomNav(currentIndex: 1),
     ),
     );
   }
 
-  Widget _buildBottomNav() {
-    return BottomNavigationBar(
-      currentIndex: 1,
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.surfaceContainerLowest,
-      selectedItemColor: const Color(0xFF4355B9),
-      unselectedItemColor: AppColors.onSurfaceVariant,
-      elevation: 0,
-      selectedFontSize: 12.sp,
-      unselectedFontSize: 12.sp,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-        BottomNavigationBarItem(icon: Icon(Icons.link_rounded), label: '연결'),
-        BottomNavigationBarItem(icon: Icon(Icons.notifications_rounded), label: '알림'),
-        BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-      ],
-      onTap: (index) {
-        switch (index) {
-          case 0:
-            Get.offNamed(AppRoutes.guardianDashboard);
-            break;
-          case 1:
-            break; // 현재 페이지
-          case 2:
-            Get.offNamed(AppRoutes.guardianNotifications);
-            break;
-          case 3:
-            Get.offNamed(AppRoutes.guardianSettings);
-            break;
-        }
-      },
-    );
-  }
 }
 
 class _SubjectListTile extends StatelessWidget {

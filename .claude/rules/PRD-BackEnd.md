@@ -17,7 +17,7 @@
 
 ### 1.2 목적
 스마트폰 사용 패턴을 기반으로 사용자의 안녕을 자동으로 확인하는 크로스 플랫폼(Android/iOS) 시스템의 서버 측 설계.
-클라이언트로부터 heartbeat를 수신하고, 매일 고정 시각(기본 09:30) + 2시간 내 미수신 시 보호자에게 FCM Push 경고를 발송하며, Android/iOS 기기에 매일 고정 시각에 FCM Silent Push(heartbeat_trigger)를 발송하는 역할을 담당한다.
+클라이언트로부터 heartbeat를 수신하고, 매일 고정 시각(기본 09:30) + 2시간 내 미수신 시 보호자에게 FCM Push 경고를 발송하는 역할을 담당한다. Heartbeat 트리거는 클라이언트 자체 스케줄링(WorkManager/BGTaskScheduler)으로 동작하며, 서버는 Silent Push를 발송하지 않는다.
 
 **기술 스택:** Python + FastAPI + PostgreSQL (asyncpg) + Railway
 
@@ -70,13 +70,13 @@
 │  │ API Router   │  │  Scheduler   │  │   Push Service     │  │
 │  │             │  │ (APScheduler)│  │ (firebase-admin)   │  │
 │  │ · 사용자 등록│  │              │  │                    │  │
-│  │ · heartbeat │  │ · heartbeat  │  │ · Silent Push 발송 │  │
-│  │ · 대상자    │  │   트리거 FCM │  │   (iOS/Android     │  │
-│  │   연결 관리 │  │   발송 (매일 │  │    heartbeat 트리거│  │
-│  │ · 구독 관리  │  │   고정 시각) │  │ · 일반 Push 발송   │  │
-│  │ · FCM 토큰  │  │ · 경고 생성  │  │   (보호자 알림)    │  │
-│  │ · FCM 토큰  │  │ · 경고 생성  │  │                    │  │
-│  │   갱신      │  │   (미수신 시) │  │                    │  │
+│  │ · heartbeat │  │ · 미수신     │  │ · 일반 Push 발송   │  │
+│  │ · 대상자    │  │   경고 체크  │  │   (보호자 알림)    │  │
+│  │   연결 관리 │  │   (매 1분)   │  │                    │  │
+│  │ · 구독 관리  │  │ · 경고 생성  │  │                    │  │
+│  │ · FCM 토큰  │  │   (미수신 시) │  │                    │  │
+│  │ · 알림 설정 │  │ · 구독 만료  │  │                    │  │
+│  │   갱신      │  │   체크       │  │                    │  │
 │  └──────┬──────┘  └──────┬───────┘  └─────────┬──────────┘  │
 │         │               │                    │              │
 │         └───────────────┼────────────────────┘              │
@@ -93,11 +93,11 @@
 
 | | Android 기기 | iOS 기기 |
 |--|-------------|----------|
-| heartbeat 트리거 | **서버가 매일 고정 시각에 FCM Silent Push 발송** | **서버가 매일 고정 시각에 FCM Silent Push 발송** |
-| 서버 추가 작업 | 기기별 고정 시각에 heartbeat_trigger Push 발송 | 기기별 고정 시각에 heartbeat_trigger Push 발송 |
+| heartbeat 트리거 | **클라이언트 WorkManager** (OS 네이티브 스케줄링) | **클라이언트 BGTaskScheduler** (OS 네이티브 스케줄링) |
+| 서버 역할 | heartbeat 수신 + 미수신 시 경고 생성 | heartbeat 수신 + 미수신 시 경고 생성 |
 | 확인 주기 | 매일 고정 시각 (기본 09:30) | 매일 고정 시각 (기본 09:30) |
-| 시각 변경 | 서버가 변경된 시각에 맞춰 FCM Push 발송 | 서버가 변경된 시각에 맞춰 FCM Push 발송 |
-| 클라이언트 스케줄러 | 불필요 (WorkManager 제거) | 불필요 |
+| 미수신 체크 | 기기별 heartbeat 시각 + 2시간 경과 시 서버가 매 1분 체크 | 동일 |
+| 시각 변경 | 대상자가 변경 → 서버 DB 갱신 → 클라이언트 WorkManager 재예약 | 대상자가 변경 → 서버 DB 갱신 → 클라이언트 BGTask 재예약 |
 
 
 ### 2.3 대상자-보호자 연결 메커니즘
@@ -257,33 +257,36 @@ server/
 ├── config.py                       # 환경변수 기반 설정
 ├── database.py                     # PostgreSQL 연결 풀 (asyncpg) + 테이블 초기화
 ├── routers/
-│   ├── user.py                     # POST /api/v1/users (사용자 등록)
+│   ├── user.py                     # POST /api/v1/users, DELETE /api/v1/users/me
 │   ├── heartbeat.py                # POST /api/v1/heartbeat
-│   ├── subject.py                  # POST /api/v1/subjects/link, GET /api/v1/subjects
-│   ├── alert.py                    # GET /api/v1/alerts, PUT /api/v1/alerts/{id}/clear, PUT /api/v1/alerts/clear-all
-│   ├── device.py                   # PUT /api/v1/devices/fcm-token, PATCH heartbeat-schedule
+│   ├── subject.py                  # POST /api/v1/subjects/link, GET /api/v1/subjects, DELETE unlink
+│   ├── alert.py                    # GET /api/v1/alerts, PUT clear, PUT clear-all
+│   ├── device.py                   # GET /api/v1/devices/me, PUT fcm-token, PATCH/PUT heartbeat-schedule
 │   ├── app_version.py              # GET /api/v1/app/version-check, PUT/GET /api/v1/admin/app-version
-│   └── subscription.py             # GET/POST /api/v1/subscription
+│   ├── subscription.py             # GET/POST /api/v1/subscription
+│   ├── guardian_notification_settings.py  # GET/PUT /api/v1/guardian/notification-settings
+│   └── notifications.py            # GET/DELETE /api/v1/notifications
 ├── services/
 │   ├── user_service.py             # 사용자 등록, invite_code 생성
 │   ├── heartbeat_service.py        # heartbeat 비즈니스 로직
-│   ├── alert_service.py            # 경고 생성/클리어/보호자 Push 발송
+│   ├── alert_service.py            # 경고 생성/클리어/보호자 Push 발송, DND 판정
 │   ├── subject_service.py          # 대상자-보호자 연결 관리
-│   ├── push_service.py             # Silent Push / 일반 Push 발송
+│   ├── push_service.py             # 일반 Push 발송 (보호자 경고 알림)
 │   ├── subscription_service.py     # 구독 상태 관리
-│   └── scheduler.py                # APScheduler 경고 체크 + Silent Push + 구독 만료
+│   └── scheduler.py                # APScheduler 미수신 경고 체크 + 구독 만료 + 정리 작업
 ├── models/
 │   ├── user.py                     # Pydantic 모델 (요청/응답 스키마)
 │   ├── device.py
 │   ├── guardian.py
 │   ├── alert.py
 │   ├── heartbeat.py
-│   └── subscription.py
+│   ├── subscription.py
+│   ├── app_version.py
+│   └── notification_settings.py
 ├── middleware/
 │   └── auth.py                     # device_token 기반 인증 (FastAPI Depends)
 ├── requirements.txt                # Python 패키지 목록
-├── Procfile                        # Railway 배포용 (web: uvicorn main:app)
-└── firebase-service-account.json   # FCM 인증 키 (환경변수로 대체 가능)
+└── Dockerfile                      # Railway 배포용 (python main.py)
 ```
 
 
@@ -303,21 +306,25 @@ Body:
     "device_id": "uuid-v4",
     "fcm_token": "fcm-token-string",
     "platform": "android",
-    "os_version": "Android 14"
+    "os_version": "Android 14",
+    "timezone": "Asia/Seoul"
   }
 }
 Response: 201 Created
 {
   "user_id": 1,
   "invite_code": "K7M-4PXR",
-  "device_token": "generated-bearer-token"
+  "device_token": "generated-bearer-token",
+  "existing_role": null
 }
 ```
 
 - 기기 정보와 역할만 전송
-- `invite_code`는 서버가 생성 (7자리 영숫자, UNIQUE 보장)
-- `device_token`은 **만료 없이 무제한** 유효
-- 대상자는 구독(subscription) 없음 — 결제는 보호자가 담당
+- `invite_code`��� 서버가 생성 (7자리 영숫자, UNIQUE 보장)
+- `device_token`은 **만료 없이 무제한** ��효
+- `timezone`: IANA 타임존 문자열 (기본값 `Asia/Seoul`)
+- `existing_role`: 동일 device_id로 재등록 시 기존 역할 반환 (요청 role과 다를 때만 포함, 동일하면 `null`)
+- 대��자는 구독(subscription) 없음 — 결제는 보���자가 담당
 - 서버는 `users`, `devices` 테이블에 각각 레코드 생성
 
 
@@ -393,7 +400,11 @@ Response: 200 OK
       "invite_code": "K7M-4PXR",
       "last_seen": "2026-03-18T14:32:00+09:00",
       "status": "normal",
-      "alert": null
+      "alert": null,
+      "device_id": "uuid-v4",
+      "heartbeat_hour": 9,
+      "heartbeat_minute": 30,
+      "battery_level": 85
     }
   ],
   "max_subjects": 5,
@@ -403,6 +414,9 @@ Response: 200 OK
 
 - `status`: `normal` (정상), `warning` (경고)
 - `alert`: 활성 경고가 있으면 `{ "id": 10, "days_inactive": 2 }`, 없으면 `null`
+- `device_id`: 대상자 기기 고유 ID
+- `heartbeat_hour`, `heartbeat_minute`: 대상자의 heartbeat 예약 시각
+- `battery_level`: 마지막 heartbeat 시 배터리 잔량 (0~100, 없으면 `null`)
 - 이름 없음 — 클라이언트가 로컬 별칭과 `invite_code`를 매칭하여 표시
 
 
@@ -440,10 +454,12 @@ Body:
 {
   "device_id": "uuid-v4",
   "timestamp": "2026-03-18T14:32:00+09:00",
+  "manual": false,
   "steps_delta": 342,
   "suspicious": false,
   "battery_level": 85
 }
+// manual: 사용자가 직접 "안부 보고하기" 버튼을 눌렀을 때 true (기본값 false)
 // steps_delta: 이전 heartbeat 이후 걸음수 증가량 (권한 거부 시 null)
 Response: 200 OK
 {
@@ -654,13 +670,11 @@ Response: 200 OK
 }
 ```
 
-- **대상자 본인** 또는 **보호자** 모두 호출 가능
-- 보호자가 호출 시: 해당 대상자가 본인에게 연결된 대상자인지 권한 검증
-- 대상자가 호출 시: 본인 기기만 변경 가능
-- 선택 범위: 06:00 ~ 21:00 (30분 단위)
+- **대상자 본인만** 변경 가능 (보호자가 호출 시 403 Forbidden)
+- 대상자 본인 기기(device_id + user_id) 검증
+- 허용 범위: 00:00 ~ 23:59 (시: 0~23, 분: 0~59)
 - 서버에서 `devices.heartbeat_hour`, `devices.heartbeat_minute` 갱신
-- iOS: 다음 Silent Push가 변경된 시각에 발송됨
-- Android: 대상자 기기가 다음 heartbeat 시 응답의 `heartbeat_hour/minute`를 확인하여 WorkManager 재스케줄링
+- 클라이언트가 응답 수신 후 WorkManager/BGTask + 로컬 안전망 알림 재예약
 
 
 ### 4.14 앱 버전 체크 (강제 업데이트)
@@ -772,7 +786,72 @@ Response: 200 OK
 - 플랫폼별(android/ios) 독립 관리
 
 
-### 4.16 알림 목록 조회 (보호자용)
+### 4.16 기기 정보 조회
+```
+GET /api/v1/devices/me
+Headers:
+  Authorization: Bearer <device_token>
+Response: 200 OK
+{
+  "device_id": "uuid-v4",
+  "heartbeat_hour": 9,
+  "heartbeat_minute": 30,
+  "last_seen": "2026-03-18T14:32:00+09:00",
+  "subscription_active": true,
+  "guardian_count": 1
+}
+```
+
+- 대상자/보호자 모두 호출 가능
+- `subscription_active`: 대상자는 연결된 보호자 중 활성 구독 존재 여부, 보호자는 본인 구독 상태
+- `guardian_count`: 대상자에 연결된 보호자 수
+- 앱 포그라운드 진입 시 서버 스케줄 동기화 용도
+
+
+### 4.17 보호자 알림 설정 조회/변경
+```
+GET /api/v1/guardian/notification-settings
+Headers:
+  Authorization: Bearer <device_token>
+Response: 200 OK
+{
+  "all_enabled": true,
+  "urgent_enabled": true,
+  "warning_enabled": true,
+  "caution_enabled": true,
+  "info_enabled": true,
+  "dnd_enabled": false,
+  "dnd_start": null,
+  "dnd_end": null
+}
+```
+
+```
+PUT /api/v1/guardian/notification-settings
+Headers:
+  Authorization: Bearer <device_token>
+Body:
+{
+  "all_enabled": true,
+  "urgent_enabled": true,
+  "warning_enabled": true,
+  "caution_enabled": true,
+  "info_enabled": true,
+  "dnd_enabled": true,
+  "dnd_start": "22:00",
+  "dnd_end": "08:00"
+}
+Response: 200 OK
+{ ... 동일 구조 ... }
+```
+
+- 보호자만 호출 가능
+- `dnd_start`, `dnd_end`: HH:MM 형식, 자정 넘김(22:00~08:00) 지원
+- 긴급 등급은 DND 무관하게 항상 Push 발송
+- 알림 설정이 없으면 기본값(전체 ON) 자동 생성
+
+
+### 4.18 알림 목록 조회 (보호자용)
 ```
 GET /api/v1/notifications
 Headers:
@@ -795,6 +874,7 @@ Response: 200 OK
 ```
 
 - 보호자에 연결된 **모든 대상자**의 당일 알림 이벤트를 조회
+- 해당 보호자가 이미 숨김(dismiss) 처리한 알림은 제외 (`dismissed_notifications` 테이블 참조)
 - 알림은 대상자 중심(`notification_events`) 테이블에 저장되므로, 같은 대상자를 보는 모든 보호자가 동일한 알림을 볼 수 있음
 - 보호자별 알림 설정(`guardian_notification_settings`)에 따라 서버에서 필터링하여 반환
   - `all_enabled = false` → 전체 비활성
@@ -803,7 +883,7 @@ Response: 200 OK
 - 파싱 실패 시 기본값 KST(+09:00) 적용
 
 
-### 4.17 알림 전체 삭제 (보호자용)
+### 4.19 알림 전체 숨김 (보호자용)
 ```
 DELETE /api/v1/notifications
 Headers:
@@ -815,11 +895,12 @@ Response: 200 OK
 }
 ```
 
-- 보호자에 연결된 대상자의 당일 알림 이벤트를 전체 삭제
-- 다른 보호자도 동일 대상자의 알림이 삭제됨 (대상자 중심 데이터이므로)
+- 보호자별 숨김(dismiss) 방식: `dismissed_notifications` 테이블에 해당 보호자의 숨김 기록을 저장
+- **다른 보호자에게는 영향 없음** — 동일 대상자의 알림은 다른 보호자에게 여전히 표시됨
+- `notification_events` 원본 데이터는 삭제되지 않음 (자정 정리 스케줄러가 삭제)
 
 
-### 4.18 사용자 탈퇴
+### 4.20 사용자 탈퇴
 ```
 DELETE /api/v1/users/me
 Headers:
@@ -874,6 +955,7 @@ CREATE TABLE IF NOT EXISTS devices (
     os_version      TEXT,
     fcm_token       TEXT,
     steps_delta     INTEGER,                           -- 마지막 heartbeat 이후 걸음수 증가량 (권한 거부 시 NULL)
+    last_steps      INTEGER,                           -- 마이그레이션 호환용 이전 걸음수
     battery_level   INTEGER,                           -- 마지막 배터리 잔량 (0~100)
     suspicious_count INTEGER DEFAULT 0,                -- 연속 suspicious 횟수
     heartbeat_hour  INTEGER NOT NULL DEFAULT 9,        -- heartbeat 시각 (시, 0~23, 기본 9)
@@ -892,10 +974,10 @@ CREATE INDEX IF NOT EXISTS idx_devices_heartbeat_time ON devices (heartbeat_hour
 
 -- 보호자-대상자 매핑 테이블
 CREATE TABLE IF NOT EXISTS guardians (
-    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    id                  SERIAL PRIMARY KEY,
     subject_user_id     INTEGER NOT NULL REFERENCES users(id),
     guardian_user_id    INTEGER NOT NULL REFERENCES users(id),
-    created_at          TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE(subject_user_id, guardian_user_id)
 );
 
@@ -934,7 +1016,7 @@ CREATE TABLE IF NOT EXISTS alerts (
                         -- cleared/resolved/false_alarm 확정 시 행 즉시 삭제 (이력 미보관)
     days_inactive       INTEGER NOT NULL DEFAULT 1,
     last_seen_at        TIMESTAMPTZ NOT NULL,
-    push_pending        BOOLEAN NOT NULL DEFAULT FALSE,    -- 발송 시간대 외 보류 플래그
+    push_count          INTEGER NOT NULL DEFAULT 0,        -- 발송된 Push 횟수 (최대 5회)
     last_push_at        TIMESTAMPTZ,                       -- 마지막 Push 발송 시각
     resolved_at         TIMESTAMPTZ,
     note                TEXT,
@@ -952,7 +1034,7 @@ CREATE TABLE IF NOT EXISTS heartbeat_logs (
     steps_delta     INTEGER,                           -- heartbeat 이후 걸음수 증가량 (권한 거부 시 NULL)
     suspicious      INTEGER DEFAULT 0,                 -- 활동 지표 미달 (0/1)
     battery_level   INTEGER,
-    client_ts       TIMESTAMPTZ NOT NULL,
+    client_ts       TEXT NOT NULL,                      -- 클라이언트 제공 타임스탬프 (문자열)
     server_ts       TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -992,6 +1074,18 @@ CREATE TABLE IF NOT EXISTS notification_events (
 CREATE INDEX IF NOT EXISTS idx_ne_subject_created ON notification_events (subject_user_id, created_at DESC);
 
 
+-- 알림 숨김 테이블 (보호자별 — 다른 보호자에 영향 없음)
+CREATE TABLE IF NOT EXISTS dismissed_notifications (
+    id                  SERIAL PRIMARY KEY,
+    guardian_user_id    INTEGER NOT NULL REFERENCES users(id),
+    event_id            INTEGER NOT NULL REFERENCES notification_events(id) ON DELETE CASCADE,
+    dismissed_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(guardian_user_id, event_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_dn_guardian ON dismissed_notifications (guardian_user_id);
+
+
 -- 보호자 알림 설정 테이블
 CREATE TABLE IF NOT EXISTS guardian_notification_settings (
     guardian_user_id  INTEGER PRIMARY KEY REFERENCES users(id),
@@ -1028,33 +1122,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ## 6. 서버 스케줄러
 
 
-### 6.1 iOS/Android Silent Push 발송 (매일 고정 시각)
-```
-실행 주기: 매 분 정각 (APScheduler CronTrigger(second=0))
-
-처리 흐름:
-1. 현재 시각(KST)이 각 기기의 heartbeat 시각(heartbeat_hour:heartbeat_minute)에
-   해당하는 대상자 기기 조회 (iOS/Android 공통)
-   SELECT d.fcm_token, d.device_id, d.platform
-   FROM devices d
-   JOIN users u ON d.user_id = u.id
-   WHERE u.role = 'subject'
-     AND d.heartbeat_hour = :current_hour
-     AND d.heartbeat_minute = :current_minute
-     AND d.fcm_token IS NOT NULL
-
-2. 조회된 기기 전체에 Silent Push 병렬 발송 (asyncio.gather + asyncio.to_thread)
-   - FCM firebase-admin SDK의 send()는 동기 블로킹 함수이므로 asyncio.to_thread로 스레드 풀에서 실행
-   - 모든 기기에 대한 FCM I/O를 동시에 처리하여 N건 순차 발송 대비 응답 시간 대폭 단축
-3. FCM 발송 결과 수집 후 토큰 무효화 기기 DB 업데이트 (순차 — 커넥션 공유)
-
-※ 기본값: heartbeat_hour=9, heartbeat_minute=30 (KST 기준)
-※ 보호자/대상자가 시각 변경 시 devices 테이블의 heartbeat_hour/minute 갱신
-※ CronTrigger(second=0): 매 분 0초에 실행 — 서버 재시작 후에도 정각에 동기화됨
-```
-
-
-### 6.2 경고 생성 스케줄러 (고정 시각 기반 + 등급별 판정)
+### 6.1 경고 생성 스케줄러 (고정 시각 기반 + 등급별 판정)
 
 > 📊 상세 플로우차트: [heartbeat_flowchart.md](heartbeat_flowchart.md) — 차트 3 참조
 
@@ -1070,7 +1138,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
    JOIN devices d ON u.id = d.user_id
    WHERE u.role = 'subject'
      AND (d.heartbeat_hour * 60 + d.heartbeat_minute + 120) = :current_minutes_of_day
-     AND d.last_seen < datetime('now', 'start of day')
+     AND d.last_seen < $2  -- 오늘 KST 자정을 UTC로 변환한 값
 
    ※ 기본: heartbeat_hour=9, heartbeat_minute=30 → 11:30(690분)에 체크
 
@@ -1079,7 +1147,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
    b. 보호자 구독 활성 → 등급 판정 진행
 
 3. 등급 판정 (누적 미수신 횟수 기반):
-   a. battery_level ≤ 10%
+   a. battery_level < 20%
       → 정보 등급 1회 발송 후 종료 (이후 상향 없음, 소리 없음)
       → heartbeat 수신 시 자동 해소
 
@@ -1093,7 +1161,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
       → 긴급 등급: "즉시 확인이 필요합니다"
 
    e. urgent 활성 (긴급 지속)
-      → 긴급 반복: days_inactive 증가, 매일 반복 발송
+      → 긴급 반복: days_inactive 증가, push_count 증가, Push 발송은 최대 5회까지
 
 4. DND(방해금지) 설정 반영:
    - 보호자별 DND 시간대 설정 가능 (기본 OFF)
@@ -1112,7 +1180,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ```
 
 
-### 6.3 구독 만료 체크 (보호자 기준)
+### 6.2 구독 만료 체크 (보호자 기준)
 ```
 실행 주기: 매일 00:00 KST
 
@@ -1121,7 +1189,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
    JOIN subscriptions s ON u.id = s.user_id
    WHERE u.role = 'guardian'
      AND s.plan IN ('free_trial', 'yearly')
-     AND s.expires_at < datetime('now')
+     AND s.expires_at < NOW()
 
 2. 조회된 각 보호자:
    a. subscriptions.plan = 'expired'로 변경
@@ -1134,14 +1202,14 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ```
 
 
-### 6.4 보호자 미연결 대상자 자동 정리
+### 6.3 보호자 미연결 대상자 자동 정리
 ```
 실행 주기: 매일 03:00 KST
 
 처리 흐름:
 1. SELECT u.id FROM users u
    WHERE u.role = 'subject'
-     AND u.created_at < datetime('now', '-30 days')
+     AND u.created_at < NOW() - INTERVAL '30 days'
      AND NOT EXISTS (
        SELECT 1 FROM guardians g WHERE g.subject_user_id = u.id
      )
@@ -1160,7 +1228,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ```
 
 
-### 6.5 당일 알림 자정 정리
+### 6.4 당일 알림 자정 정리
 ```
 실행 주기: 매일 00:00 KST
 
@@ -1180,7 +1248,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ```
 
 
-### 6.6 heartbeat_logs 30일 초과 삭제
+### 6.5 heartbeat_logs 30일 초과 삭제
 ```
 실행 주기: 매일 04:00 KST
 
@@ -1191,7 +1259,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ```
 
 
-### 6.7 보호자 Push 발송 실패 처리
+### 6.6 보호자 Push 발송 실패 처리
 ```
 실행 주기: Push 발송 시마다
 
@@ -1283,7 +1351,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ```
 fastapi==0.115.*
 uvicorn==0.34.*
-aiosqlite==0.21.*
+asyncpg==0.30.*
 apscheduler==3.11.*
 firebase-admin==6.6.*
 python-dotenv==1.1.*
@@ -1323,10 +1391,17 @@ python-dotenv==1.1.*
   - `FIREBASE_CREDENTIALS`: FCM 인증 키 JSON
   - `ADMIN_SECRET_KEY`: Admin API 인증 키 (Postman에서 앱 버전 설정 시 사용)
 
-**Procfile (Railway 배포 설정):**
+**Dockerfile (Railway 배포 설정):**
+```dockerfile
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["python", "main.py"]
 ```
-web: uvicorn main:app --host 0.0.0.0 --port $PORT
-```
+
+- `main.py`에서 `PORT` 환경변수를 읽어 uvicorn 직접 실행
 
 
 ### 10.3 데이터베이스 (PostgreSQL)
@@ -1358,6 +1433,7 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 | API | 메서드 | 용도 |
 |-----|--------|------|
 | `/api/v1/users` | POST | 사용자 등록 (대상자/보호자) |
+| `/api/v1/users/me` | DELETE | 사용자 탈퇴 (계정 및 관련 데이터 전체 삭제) |
 | `/api/v1/heartbeat` | POST | 안부 확인 heartbeat 수신 |
 | `/api/v1/subjects/link` | POST | 고유 코드로 대상자 연결 (보호자용) |
 | `/api/v1/subjects` | GET | 연결된 대상자 목록 조회 (보호자용) |
@@ -1368,14 +1444,17 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 | `/api/v1/alerts` | GET | 대상자별 경고 목록 조회 (보호자용) |
 | `/api/v1/alerts/{id}/clear` | PUT | 개별 경고 클리어 (보호자가 건강 확인 후) |
 | `/api/v1/alerts/clear-all` | PUT | 대상자별 모든 활성 경고 일괄 클리어 + 적응형 주기 복원 |
-| `/api/v1/notifications` | GET | 당일 알림 목록 조회 (보호자용, 대상자 중심 + 설정 필터링) |
-| `/api/v1/notifications` | DELETE | 당일 알림 전체 삭제 (보호자용) |
-| `/api/v1/users/me` | DELETE | 사용자 탈퇴 (계정 및 관련 데이터 전체 삭제) |
+| `/api/v1/devices/me` | GET | 기기 정보 조회 (스케줄 동기화, 구독 상태 확인) |
 | `/api/v1/devices/fcm-token` | PUT | FCM 토큰 갱신 |
-| `/api/v1/devices/{device_id}/heartbeat-schedule` | PATCH | heartbeat 시각 변경 (대상자/보호자) |
+| `/api/v1/devices/{device_id}/heartbeat-schedule` | PATCH/PUT | heartbeat 시각 변경 (대상자만) |
+| `/api/v1/notifications` | GET | 당일 알림 목록 조회 (보호자용, 대상자 중심 + 설정 필터링) |
+| `/api/v1/notifications` | DELETE | 당일 알림 전체 숨김 (보호자별, 다른 보호자 영향 없음) |
+| `/api/v1/guardian/notification-settings` | GET | 보호자 알림 설정 조회 |
+| `/api/v1/guardian/notification-settings` | PUT | 보호자 알림 설정 변경 (등급별 ON/OFF, DND) |
 | `/api/v1/app/version-check` | GET | 앱 버전 체크 (강제 업데이트 판정) |
 | `/api/v1/admin/app-version` | PUT | 앱 버전 설정 (Admin, Postman용) |
 | `/api/v1/admin/app-version` | GET | 앱 버전 설정 조회 (Admin, Postman용) |
+| `/health` | GET | 헬스체크 |
 
 > FrontEnd 상세는 [PRD-FrontEnd.md](PRD-FrontEnd.md) 참조
 
@@ -1389,7 +1468,7 @@ web: uvicorn main:app --host 0.0.0.0 --port $PORT
 |------|------|
 | 서버 응답 시간 | heartbeat API p99 < 200ms |
 | 서버 가용성 | ≥ 99.5% |
-| Silent Push 발송 성공률 | ≥ 98% |
+| 경고 Push 발송 성공률 | ≥ 98% |
 | 경고 생성 정확도 | 거짓 경고 ≤ 5% |
 | 보호자 Push 전달률 | ≥ 95% |
 
