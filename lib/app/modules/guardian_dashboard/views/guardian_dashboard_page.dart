@@ -80,6 +80,67 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
           children: [
             SizedBox(height: 8.h),
 
+            // 구독 만료 안내 배너
+            Obx(() {
+              if (controller.isSubscriptionActive.value) {
+                return const SizedBox.shrink();
+              }
+              return Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(bottom: AppSpacing.md),
+                padding: EdgeInsets.all(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF3E0),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(
+                    color: const Color(0xFFE65100).withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.warning_amber_rounded,
+                            size: 18.w, color: const Color(0xFFE65100)),
+                        SizedBox(width: 6.w),
+                        Text('구독이 만료되었습니다',
+                            style: AppTextTheme.bodyMedium(
+                                color: const Color(0xFFE65100),
+                                fw: FontWeight.w700)),
+                      ],
+                    ),
+                    SizedBox(height: 6.h),
+                    Text('경고 알림이 발송되지 않고 있습니다.\n구독을 갱신하여 보호 서비스를 계속하세요.',
+                        style: AppTextTheme.bodySmall(
+                            color: const Color(0xFF4E2C00))),
+                    SizedBox(height: 10.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 40.h,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // TODO: 인앱 결제 SDK 연동 후 구현
+                          Get.snackbar('안내', '결제 기능 준비 중입니다.',
+                              snackPosition: SnackPosition.BOTTOM);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFE65100),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                        ),
+                        child: Text('구독하기',
+                            style: AppTextTheme.labelMedium(
+                                color: Colors.white, fw: FontWeight.w600)),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+
             // 상단 레이블
             Text(
               '오늘의 안부 요약',

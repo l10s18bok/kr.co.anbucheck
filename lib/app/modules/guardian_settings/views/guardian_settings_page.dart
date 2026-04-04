@@ -176,15 +176,24 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                       Row(
                         children: [
                           _PremiumButton(
-                            label: '구독 취소',
+                            label: '구독 관리',
                             filled: false,
-                            onTap: () {},
+                            onTap: () => launchUrl(
+                              Uri.parse(GetPlatform.isIOS
+                                  ? 'https://apps.apple.com/account/subscriptions'
+                                  : 'https://play.google.com/store/account/subscriptions'),
+                              mode: LaunchMode.externalApplication,
+                            ),
                           ),
                           SizedBox(width: AppSpacing.md),
                           _PremiumButton(
-                            label: '구독 관리',
+                            label: '구독하기',
                             filled: true,
-                            onTap: () {},
+                            onTap: () {
+                              // TODO: 인앱 결제 SDK 연동 후 구현
+                              Get.snackbar('안내', '결제 기능 준비 중입니다.',
+                                  snackPosition: SnackPosition.BOTTOM);
+                            },
                           ),
                         ],
                       ),

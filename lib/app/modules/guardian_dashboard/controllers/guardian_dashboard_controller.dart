@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
+import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 대시보드 컨트롤러
@@ -14,7 +15,11 @@ class GuardianDashboardController extends BaseController {
   /// 전화 후 앱 복귀 시 강조할 대상자 코드
   final highlightedInviteCode = RxnString();
 
+  /// 구독 활성 여부
+  final isSubscriptionActive = true.obs;
+
   final _svc = Get.find<GuardianSubjectService>();
+  final _tokenDs = TokenLocalDatasource();
 
   @override
   void onInit() {
@@ -22,6 +27,7 @@ class GuardianDashboardController extends BaseController {
     // subjects 데이터 변경 시 자동 반영 (FCM 수신 후 서비스 갱신 포함)
     ever(_svc.subjects, (_) => _mapSubjects());
     _loadSubjects();
+    _loadSubscriptionStatus();
   }
 
   /// 앱이 포그라운드로 복귀 — 강제 갱신
@@ -29,6 +35,11 @@ class GuardianDashboardController extends BaseController {
   void onResumed() {
     super.onResumed();
     _loadSubjects(force: true);
+    _loadSubscriptionStatus();
+  }
+
+  Future<void> _loadSubscriptionStatus() async {
+    isSubscriptionActive.value = await _tokenDs.getSubscriptionActive();
   }
 
   /// 전화 버튼 탭 — 해당 대상자를 강조 대상으로 등록

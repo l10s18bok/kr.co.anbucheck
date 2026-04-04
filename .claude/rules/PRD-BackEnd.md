@@ -1130,7 +1130,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 3. 구독 만료 시 동작:
    - 대상자 heartbeat는 계속 정상 수신 (대상자 앱에 영향 없음)
    - 해당 보호자에게 경고 알림 발송 중단
-   - 보호자 앱 실행 시 결제 페이지로 자동 전환 (클라이언트 처리)
+   - 보호자 대시보드는 정상 접근 가능 (대상자 목록·상태 조회 가능, 상단에 구독 만료 안내 배너 표시)
 ```
 
 
@@ -1222,15 +1222,15 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 
 ### 7.3 앱 재설치 시 동작
 **대상자 앱 재설치:**
-- 재등록하여 새 계정 생성 (새 invite_code, 새 device_token)
-- 보호자와 재연결 필요 (새 고유 코드 전달)
+- 재등록 시 서버가 device_id로 기존 계정 조회 → 기존 계정 자동 복원
+- 기존 invite_code 유지, device_token만 재발급
+- 보호자 연결 유지 → 재연결 불필요
 - 결제 관련 동작 없음 (대상자는 무료)
 
 **보호자 앱 재설치:**
-- 재등록하여 새 계정 생성 (새 device_token)
-- 대상자와 재연결 필요 (고유 코드 재입력)
-- 유료 구독은 Apple/Google `restoreTransactions`로 복구 가능
-- 개인정보를 수집하지 않으므로 계정 복구 로직 자체가 불필요
+- 재등록 시 서버가 device_id로 기존 계정 조회 → 기존 계정 자동 복원
+- 기존 구독·대상자 연결 유지, device_token만 재발급
+- 대상자 재연결 불필요 (로컬 별칭만 재설정 필요)
 
 
 ---
