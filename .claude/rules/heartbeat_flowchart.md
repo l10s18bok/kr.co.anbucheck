@@ -109,8 +109,8 @@ flowchart TD
     WellbeingCheck --> Wait1([⏱ 다음 heartbeat 대기<br/>보호자 경고는 미수신 시에만 발생])
 
     StatusNormal --> SaveNoti[보호자 알림 DB 저장<br/>guardian_notifications<br/>alert_level: info<br/>is_push_sent: true/false]
-    SaveNoti --> StepsNoti{steps_delta 있음?}
-    StepsNoti -->|YES| StepsCompare[어제 last_steps와 비교<br/>오늘 걸음수 정보 알림 DB 저장<br/>is_push_sent = false<br/>Push 발송 없음<br/>last_steps 갱신]
+    SaveNoti --> StepsNoti{steps_delta > 0?}
+    StepsNoti -->|YES| StepsCompare[활동 감지 알림 DB 저장<br/>🚶 활동 감지<br/>오늘 정상적인 활동이 확인되었습니다<br/>Push 발송 없음]
     StepsNoti -->|NO| End3([완료])
     StepsCompare --> End3
 ```

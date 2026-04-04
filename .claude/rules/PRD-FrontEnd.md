@@ -787,7 +787,7 @@ void onMessageReceived(RemoteMessage message) {
 | alert_level | Push 발송 | DB 저장 | 내용 |
 |-------------|-----------|---------|------|
 | info | ✅ (DND 적용) | ✅ | 자동 안부 완료, 수동 안부, 정상 복귀, 배터리 부족 |
-| info (걸음수) | ❌ | ✅ | 어제 vs 오늘 걸음수 비교 (steps_delta 있을 때만 생성) |
+| health (활동 감지) | ❌ | ✅ | 활동 감지 알림 (steps_delta > 0일 때만 생성) |
 | caution | ✅ | ✅ | 미수신 or suspicious = true 1회 |
 | warning | ✅ | ✅ | 미수신 or suspicious = true 2회 이상 |
 | urgent | ✅ | ✅ | 미수신 or suspicious = true 3회 이상 |
