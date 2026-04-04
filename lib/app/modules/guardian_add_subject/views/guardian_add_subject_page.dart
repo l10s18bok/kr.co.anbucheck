@@ -21,7 +21,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.onSurface, size: 24.w),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.onSurface, size: 20.w),
           onPressed: () => Get.back(),
         ),
         title: Text('보호 대상자 연결', style: AppTextTheme.headlineSmall()),
@@ -34,10 +34,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
             SizedBox(height: AppSpacing.sp6),
 
             // 안내 문구
-            Text(
-              '연결할 보호 대상자의 고유 코드\n와 별칭을 입력해주세요.',
-              style: AppTextTheme.headlineLarge(),
-            ),
+            Text('연결할 보호 대상자의 고유 코드\n와 별칭을 입력해주세요.', style: AppTextTheme.headlineLarge()),
             SizedBox(height: AppSpacing.sm),
             Text(
               '보호 대상자의 앱을 연결하여 실시간 건강 상태\n및 활동을 확인할 수 있습니다.',
@@ -47,11 +44,8 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
 
             // 고유 코드 입력
             Text(
-              '고유 코드 (8자리)',
-              style: AppTextTheme.labelMedium(
-                color: AppColors.onSurface,
-                fw: FontWeight.w600,
-              ),
+              '고유 코드 (7자리)',
+              style: AppTextTheme.labelMedium(color: AppColors.onSurface, fw: FontWeight.w600),
             ),
             SizedBox(height: AppSpacing.sm),
             TextField(
@@ -61,32 +55,26 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
               keyboardType: TextInputType.visiblePassword,
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
-                TextInputFormatter.withFunction((old, next) =>
-                    next.copyWith(text: next.text.toUpperCase())),
+                TextInputFormatter.withFunction(
+                  (old, next) => next.copyWith(text: next.text.toUpperCase()),
+                ),
               ],
               decoration: InputDecoration(
-                hintText: '1234-5678',
+                hintText: '123-4567',
                 hintStyle: AppTextTheme.bodyLarge(color: AppColors.textTertiary),
                 filled: true,
                 fillColor: AppColors.surfaceContainerLowest,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(
-                    color: AppColors.outlineVariant.withValues(alpha: 0.3),
-                  ),
+                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(
-                    color: AppColors.outlineVariant.withValues(alpha: 0.3),
-                  ),
+                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF4355B9),
-                    width: 2,
-                  ),
+                  borderSide: const BorderSide(color: Color(0xFF4355B9), width: 2),
                 ),
               ),
             ),
@@ -95,14 +83,10 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
             // 코드 안내
             Row(
               children: [
-                Icon(Icons.info_outline_rounded,
-                    size: 14.w, color: AppColors.textTertiary),
+                Icon(Icons.info_outline_rounded, size: 14.w, color: AppColors.textTertiary),
                 SizedBox(width: 4.w),
                 Expanded(
-                  child: Text(
-                    '고유 코드는 보호 대상자의 앱에서 확인할 수 있습니다.',
-                    style: AppTextTheme.bodySmall(),
-                  ),
+                  child: Text('고유 코드는 보호 대상자 앱에서 확인할 수 있습니다.', style: AppTextTheme.bodySmall()),
                 ),
               ],
             ),
@@ -111,10 +95,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
             // 대상자 별칭
             Text(
               '보호 대상자 별칭',
-              style: AppTextTheme.labelMedium(
-                color: AppColors.onSurface,
-                fw: FontWeight.w600,
-              ),
+              style: AppTextTheme.labelMedium(color: AppColors.onSurface, fw: FontWeight.w600),
             ),
             SizedBox(height: AppSpacing.sm),
             TextField(
@@ -127,22 +108,15 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                 fillColor: AppColors.surfaceContainerLowest,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(
-                    color: AppColors.outlineVariant.withValues(alpha: 0.3),
-                  ),
+                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(
-                    color: AppColors.outlineVariant.withValues(alpha: 0.3),
-                  ),
+                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF4355B9),
-                    width: 2,
-                  ),
+                  borderSide: const BorderSide(color: Color(0xFF4355B9), width: 2),
                 ),
               ),
             ),
@@ -152,32 +126,26 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
             SizedBox(
               width: double.infinity,
               height: 56.h,
-              child: Obx(() => ElevatedButton(
-                    onPressed: controller.isCodeValid
-                        ? controller.connectSubject
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4355B9),
-                      disabledBackgroundColor:
-                          const Color(0xFF4355B9).withValues(alpha: 0.3),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.link_rounded, size: 20.w),
-                        SizedBox(width: 8.w),
-                        Text(
-                          '연결하기',
-                          style: AppTextTheme.labelLarge(),
-                        ),
-                      ],
-                    ),
-                  )),
+              child: Obx(
+                () => ElevatedButton(
+                  onPressed: controller.isCodeValid ? controller.connectSubject : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4355B9),
+                    disabledBackgroundColor: const Color(0xFF4355B9).withValues(alpha: 0.3),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+                    elevation: 0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.link_rounded, size: 20.w),
+                      SizedBox(width: 8.w),
+                      Text('연결하기', style: AppTextTheme.labelLarge()),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),

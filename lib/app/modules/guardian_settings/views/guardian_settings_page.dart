@@ -73,7 +73,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                                     fw: FontWeight.w600)),
                             SizedBox(height: 2.h),
                             Obx(() => Text(
-                                controller.osVersion.value,
+                                '앱버전 : v${controller.appVersion.value}',
                                 style: AppTextTheme.bodySmall(
                                     color: AppColors.textTertiary))),
                           ],
@@ -81,14 +81,28 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                       ),
                       Obx(() {
                         final themeSvc = Get.find<ThemeService>();
+                        final isDark = themeSvc.isDarkMode.value;
                         return GestureDetector(
                           onTap: themeSvc.toggle,
-                          child: Icon(
-                            themeSvc.isDarkMode.value
-                                ? Icons.light_mode_rounded
-                                : Icons.dark_mode_rounded,
-                            size: 24.w,
-                            color: AppColors.onSurfaceVariant,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                isDark
+                                    ? Icons.light_mode_rounded
+                                    : Icons.dark_mode_rounded,
+                                size: 24.w,
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                              SizedBox(height: 2.h),
+                              Text(
+                                isDark ? '라이트모드' : '다크모드',
+                                style: AppTextTheme.labelSmall(
+                                  color: AppColors.textTertiary,
+                                  fw: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       }),
@@ -144,15 +158,19 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                         color: AppColors.textTertiary, fw: FontWeight.w600)),
                 SizedBox(height: AppSpacing.md),
 
-                // 프리미엄 구독 카드
-                Container(
+                // 구독 카드
+                Obx(() {
+                  final isPremium = controller.isSubscriptionActive.value;
+                  return Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(AppSpacing.sp4),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [Color(0xFF4355B9), Color(0xFF5C6BC0)],
+                      colors: isPremium
+                          ? [const Color(0xFF4355B9), const Color(0xFF5C6BC0)]
+                          : [const Color(0xFF607D8B), const Color(0xFF90A4AE)],
                     ),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
@@ -161,7 +179,10 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.verified_rounded,
+                          Icon(
+                              isPremium
+                                  ? Icons.verified_rounded
+                                  : Icons.card_giftcard_rounded,
                               size: 18.w, color: Colors.white70),
                           SizedBox(width: 6.w),
                           Text('현재 멤버십',
@@ -170,37 +191,36 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                         ],
                       ),
                       SizedBox(height: AppSpacing.md),
-                      Text('프리미엄 구독 중',
+                      Text(
+                          isPremium ? '프리미엄 구독 중' : '무료 체험 중',
                           style: AppTextTheme.headlineMedium(
                               color: Colors.white, fw: FontWeight.w700)),
                       SizedBox(height: AppSpacing.lg),
-                      Row(
-                        children: [
-                          _PremiumButton(
-                            label: '구독 관리',
-                            filled: false,
-                            onTap: () => launchUrl(
-                              Uri.parse(GetPlatform.isIOS
-                                  ? 'https://apps.apple.com/account/subscriptions'
-                                  : 'https://play.google.com/store/account/subscriptions'),
-                              mode: LaunchMode.externalApplication,
-                            ),
+                      if (isPremium)
+                        _PremiumButton(
+                          label: '구독 관리',
+                          filled: false,
+                          onTap: () => launchUrl(
+                            Uri.parse(GetPlatform.isIOS
+                                ? 'https://apps.apple.com/account/subscriptions'
+                                : 'https://play.google.com/store/account/subscriptions'),
+                            mode: LaunchMode.externalApplication,
                           ),
-                          SizedBox(width: AppSpacing.md),
-                          _PremiumButton(
-                            label: '구독하기',
-                            filled: true,
-                            onTap: () {
-                              // TODO: 인앱 결제 SDK 연동 후 구현
-                              Get.snackbar('안내', '결제 기능 준비 중입니다.',
-                                  snackPosition: SnackPosition.BOTTOM);
-                            },
-                          ),
-                        ],
-                      ),
+                        )
+                      else
+                        _PremiumButton(
+                          label: '구독하기',
+                          filled: true,
+                          onTap: () {
+                            // TODO: 인앱 결제 SDK 연동 후 구현
+                            Get.snackbar('안내', '결제 기능 준비 중입니다.',
+                                snackPosition: SnackPosition.BOTTOM);
+                          },
+                        ),
                     ],
                   ),
-                ),
+                );
+                }),
                 SizedBox(height: AppSpacing.lg),
 
                 // 알림 설정
@@ -231,12 +251,6 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                 ),
                 SizedBox(height: AppSpacing.sp6),
 
-                // 앱 정보 섹션
-                Text('앱 정보',
-                    style: AppTextTheme.labelMedium(
-                        color: AppColors.textTertiary, fw: FontWeight.w600)),
-                SizedBox(height: AppSpacing.md),
-
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(AppSpacing.lg),
@@ -248,28 +262,15 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.info_outline_rounded,
+                          Icon(Icons.description_outlined,
                               size: 20.w, color: AppColors.onSurfaceVariant),
                           SizedBox(width: AppSpacing.md),
-                          Text('앱 정보',
+                          Text('약관',
                               style: AppTextTheme.bodyLarge(
                                   fw: FontWeight.w600)),
                         ],
                       ),
                       SizedBox(height: AppSpacing.lg),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('현재 버전',
-                              style: AppTextTheme.bodyMedium(
-                                  color: AppColors.textSecondary)),
-                          Obx(() => Text(
-                              'v${controller.appVersion.value}',
-                              style: AppTextTheme.bodyMedium(
-                                  fw: FontWeight.w600))),
-                        ],
-                      ),
-                      SizedBox(height: AppSpacing.md),
                       GestureDetector(
                         onTap: () => launchUrl(Uri.parse(AppConstants.privacyPolicyUrl), mode: LaunchMode.externalApplication),
                         child: Row(
@@ -311,7 +312,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                               color: AppColors.textTertiary,
                               fw: FontWeight.w600)),
                       SizedBox(height: 4.h),
-                      Text('© 2024 Guardian Tech Inc.',
+                      Text('© 2024 TNS Inc.',
                           style: AppTextTheme.labelSmall(
                               color: AppColors.textTertiary)),
                     ],
@@ -345,17 +346,19 @@ class _PremiumButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 10.h),
         decoration: BoxDecoration(
           color: filled ? Colors.white : Colors.transparent,
           border: filled ? null : Border.all(color: Colors.white54),
           borderRadius: BorderRadius.circular(24.r),
         ),
+        alignment: Alignment.center,
         child: Text(
           label,
-          style: AppTextTheme.labelMedium(
+          style: AppTextTheme.bodyMedium(
             color: filled ? const Color(0xFF4355B9) : Colors.white,
-            fw: FontWeight.w600,
+            fw: FontWeight.w700,
           ),
         ),
       ),

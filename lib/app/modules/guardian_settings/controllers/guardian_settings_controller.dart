@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
+import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 설정 컨트롤러
@@ -18,6 +19,7 @@ class GuardianSettingsController extends BaseController {
 
   final appVersion = ''.obs;
   final osVersion = ''.obs;
+  final isSubscriptionActive = true.obs;
 
   @override
   void onInit() {
@@ -25,11 +27,17 @@ class GuardianSettingsController extends BaseController {
     _svc.load();
     _loadAppVersion();
     _loadOsVersion();
+    _loadSubscription();
   }
 
   Future<void> _loadAppVersion() async {
     final info = await PackageInfo.fromPlatform();
     appVersion.value = '${info.version} (${info.buildNumber})';
+  }
+
+  Future<void> _loadSubscription() async {
+    final tokenDs = Get.find<TokenLocalDatasource>();
+    isSubscriptionActive.value = await tokenDs.getSubscriptionActive();
   }
 
   Future<void> _loadOsVersion() async {
