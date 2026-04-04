@@ -87,6 +87,7 @@ class LocalAlarmService {
 
   /// 로컬 안전망 알림 취소
   static Future<void> cancel() async {
-    await _plugin?.cancel(_alarmId);
+    await _ensureInitialized();
+    await _plugin!.cancel(_alarmId);
   }
 }
