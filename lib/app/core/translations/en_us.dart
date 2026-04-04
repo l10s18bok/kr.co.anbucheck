@@ -32,8 +32,6 @@ abstract class EnUs {
     'permission_title': 'Permissions needed\nto use the app',
     'permission_notification': 'Notification Permission',
     'permission_notification_desc': 'Required to receive survival check\nresults and emergency alerts',
-    'permission_battery': 'Battery Optimization Exclusion',
-    'permission_battery_desc': 'Required to reliably send\nheartbeats in the background',
     'permission_allow': 'Allow Permissions',
 
     // Subject Onboarding (4 steps: Empathy → Solution → Connection → Trust)

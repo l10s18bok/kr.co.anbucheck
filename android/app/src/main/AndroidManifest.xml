@@ -3,8 +3,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- 걸음수 감지 (Android 10+) -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
-    <!-- 배터리 최적화 제외 -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <!-- 정확한 알람 예약 (Android 13+, 사용자 승인 불필요) -->
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
     <!-- 재부팅 후 예약 알림 복구 -->

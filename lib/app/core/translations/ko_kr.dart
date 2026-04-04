@@ -32,8 +32,6 @@ abstract class KoKr {
     'permission_title': '앱 사용을 위해\n권한이 필요합니다',
     'permission_notification': '알림 권한',
     'permission_notification_desc': '안부 확인 결과와 긴급 알림을\n받기 위해 필요합니다',
-    'permission_battery': '배터리 최적화 제외',
-    'permission_battery_desc': '백그라운드에서 안정적으로\nheartbeat를 전송하기 위해 필요합니다',
     'permission_allow': '권한 허용하기',
 
     // 대상자 온보딩 (4스텝: 공감 → 해결 → 연결 → 신뢰)

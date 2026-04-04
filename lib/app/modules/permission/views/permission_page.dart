@@ -53,21 +53,6 @@ class PermissionPage extends GetWidget<PermissionController> {
                 ),
               ],
 
-              // 배터리 최적화 카드 (대상자 모드 + Android + 중국산 OEM만)
-              if (controller.isSubjectMode && Platform.isAndroid)
-                Obx(() => controller.needsBatteryOptimization.value
-                    ? Column(
-                        children: [
-                          SizedBox(height: AppSpacing.lg),
-                          const _PermissionCard(
-                            icon: Icons.battery_saver_rounded,
-                            title: '배터리 최적화 제외',
-                            description: '매일 자동 안부 전송과 알림이 정상 동작하기 위해 필요합니다',
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink(),),
-
               const Spacer(),
 
               // 권한 허용 버튼
