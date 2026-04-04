@@ -500,16 +500,14 @@ class _SubjectCardState extends State<_SubjectCard>
               ],
             ),
 
-            // 활동량 라벨
-            if (widget.activityLabel != null) ...[
-              SizedBox(height: 6.h),
-              Text(widget.activityLabel!,
-                  style:
-                      AppTextTheme.bodySmall(color: AppColors.textSecondary)),
-            ],
-
-            // 활동 차트 — 웨이브 애니메이션
+            // 정상: 활동량 라벨 + 차트
             if (widget.showChart) ...[
+              if (widget.activityLabel != null) ...[
+                SizedBox(height: 6.h),
+                Text(widget.activityLabel!,
+                    style:
+                        AppTextTheme.bodySmall(color: AppColors.textSecondary)),
+              ],
               SizedBox(height: 8.h),
               Expanded(
                 child: AnimatedBuilder(
@@ -552,15 +550,34 @@ class _SubjectCardState extends State<_SubjectCard>
               ),
             ],
 
-            const SizedBox(height: 3),
+            // 경고: 활동 라벨 (왼쪽 정렬, 닉네임-버튼 수직 중앙)
+            if (widget.showActionButtons && widget.activityLabel != null) ...[
+              const Spacer(),
+              Row(
+                children: [
+                  Icon(Icons.info_outline_rounded,
+                      size: 18.w, color: widget.statusColor),
+                  SizedBox(width: 6.w),
+                  Text(widget.activityLabel!,
+                      style: AppTextTheme.bodyLarge(
+                        color: widget.statusColor,
+                        fw: FontWeight.w700,
+                      )),
+                ],
+              ),
+              const Spacer(),
+            ],
 
-            // 마지막 확인 시간
-            Text(widget.lastCheck,
-                style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
+            // 정상: 마지막 확인 시간 (차트 아래)
+            if (!widget.showActionButtons) ...[
+              const SizedBox(height: 3),
+              Text(widget.lastCheck,
+                  style:
+                      AppTextTheme.bodySmall(color: AppColors.textTertiary)),
+            ],
 
             // 주의 상태 — 액션 버튼
             if (widget.showActionButtons) ...[
-              SizedBox(height: 30.h),
               Row(
                 children: [
                   // 전화 버튼
@@ -635,6 +652,10 @@ class _SubjectCardState extends State<_SubjectCard>
                   ),
                 ],
               ),
+              SizedBox(height: 8.h),
+              Text(widget.lastCheck,
+                  style:
+                      AppTextTheme.bodySmall(color: AppColors.textTertiary)),
             ],
           ],
         ),
