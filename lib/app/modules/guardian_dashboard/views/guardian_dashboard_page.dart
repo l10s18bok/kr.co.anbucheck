@@ -8,6 +8,7 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
+import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
@@ -319,48 +320,8 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
             AddSubjectButton(onTap: controller.goToAddSubject),
             SizedBox(height: AppSpacing.sp6),
 
-            // 프리미엄 배너
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(AppSpacing.lg),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLow,
-                borderRadius: BorderRadius.circular(14.r),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'PREMIUM SERVICE',
-                          style: AppTextTheme.labelSmall(
-                            color: AppColors.textTertiary,
-                            fw: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          '실버 케어 전문가와\n실시간 상담하세요',
-                          style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 48.w,
-                    height: 48.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerHigh,
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Icon(Icons.headset_mic_rounded,
-                        size: 24.w, color: AppColors.onSurfaceVariant),
-                  ),
-                ],
-              ),
-            ),
+            // 광고 배너
+            const BannerAdWidget(),
             SizedBox(height: AppSpacing.sp6),
           ],
         ),

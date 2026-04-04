@@ -8,6 +8,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
@@ -134,7 +135,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             SizedBox(height: AppSpacing.sp6),
 
             // 광고 배너
-            _buildAdBanner(),
+            const BannerAdWidget(),
             SizedBox(height: AppSpacing.sp6),
           ],
         ),
@@ -438,48 +439,6 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
     return Icons.battery_alert_rounded;
   }
 
-  /// 광고 배너 영역
-  Widget _buildAdBanner() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 48.w,
-            height: 48.w,
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Icon(Icons.image_rounded, size: 24.w, color: AppColors.onSurfaceVariant),
-          ),
-          SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'ADVERTISEMENT',
-                  style: AppTextTheme.labelSmall(
-                    color: AppColors.textTertiary,
-                    fw: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                Text('시니어를 위한 프리미엄 건강 관리 서비스', style: AppTextTheme.bodyMedium()),
-              ],
-            ),
-          ),
-          Icon(Icons.open_in_new_rounded, size: 18.w, color: AppColors.onSurfaceVariant),
-        ],
-      ),
-    );
-  }
 
   /// Navigation Drawer
   Widget _buildDrawer(GlobalKey<ScaffoldState> scaffoldKey) {
