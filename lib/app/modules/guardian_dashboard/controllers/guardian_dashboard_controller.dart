@@ -155,7 +155,7 @@ class SubjectStatus {
 
   String get activityLabel {
     if (isNormal) return '활동량: 안정적임';
-    if (!isNormal) return '안부 확인이 필요합니다';
+    if (!isNormal) return '안전 확인이 필요합니다';
     return '';
   }
 }

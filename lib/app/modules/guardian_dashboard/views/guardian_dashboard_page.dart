@@ -282,7 +282,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             onCall: () => controller.onCallTapped(subject.inviteCode),
                             onConfirmSafety: () =>
                                 controller.confirmSafety(subject.inviteCode),
-                            batteryLevel: subject.batteryLevel,
+                            batteryLevel: isNormal ? subject.batteryLevel : null,
                           );
                         });
                       },
