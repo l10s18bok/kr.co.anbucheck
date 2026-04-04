@@ -1,0 +1,14 @@
+windows/
+macos/
+linux/
+stitch_/
+web/
+test/
+build/
+.dart_tool/
+.idea/
+.metadata
+app.iml
+build.yaml
+pubspec.lock
+.flutter-plugins-dependencies

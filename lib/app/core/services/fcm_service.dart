@@ -59,12 +59,19 @@ void _handleNotificationTap(String type) {
   }
 }
 
-/// 안부 확인 알림 탭 시 suspicious=false heartbeat 전송
+/// 안부 확인 알림 탭 시 suspicious=false heartbeat 전송 (하루 1회 중복 체크)
 Future<void> _sendWellbeingHeartbeat() async {
   try {
     ApiClientFactory.init(type: HttpClientType.getConnect);
-    final role = await TokenLocalDatasource().getUserRole();
+    final tokenDs = TokenLocalDatasource();
+    final role = await tokenDs.getUserRole();
     if (role != 'subject') return;
+
+    final now = DateTime.now();
+    final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    final lastDate = await tokenDs.getLastHeartbeatDate();
+    if (lastDate == today) return;
+
     await HeartbeatService().execute(manual: true);
   } catch (_) {}
 }
@@ -148,6 +155,22 @@ class FcmService extends GetxService {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _handleMessageOpenedApp(initialMessage);
         });
+      }
+    } catch (_) {}
+
+    // 앱 종료 상태에서 로컬 알림 탭하여 앱 열기
+    try {
+      final launchDetails =
+          await _localNotifications.getNotificationAppLaunchDetails();
+      if (launchDetails != null &&
+          launchDetails.didNotificationLaunchApp &&
+          launchDetails.notificationResponse != null) {
+        final payload = launchDetails.notificationResponse!.payload;
+        if (payload != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _handleNotificationTap(payload);
+          });
+        }
       }
     } catch (_) {}
 

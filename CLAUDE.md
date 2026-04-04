@@ -12,7 +12,6 @@
 - **패키지명**: `kr.co.anbucheck.live` / pubspec name: `anbucheck`
 
 ## 프로젝트 구조
-
 ```
 lib/
 ├── main.dart
@@ -67,14 +66,17 @@ lib/
 
 ## 참조 문서
 
-| 문서 | 경로 | 참조 시점 |
-|------|------|-----------|
-| 프론트엔드 PRD | `.ref/PRD-FrontEnd.md` | UI 구현, 화면 설계, 로컬 저장소 정책 |
-| 백엔드 PRD | `.ref/PRD-BackEnd.md` | API 명세, 요청/응답, DB 스키마 |
-| Heartbeat 플로우 | `.ref/heartbeat_flowchart.md` | heartbeat 수집·전송·경고 플로우 |
+| 문서             | 경로                                   | 참조 시점                            |
+| ---------------- | -------------------------------------- | ------------------------------------ |
+| 프론트엔드 PRD   | `.claude/rules/PRD-FrontEnd.md`        | UI 구현, 화면 설계, 로컬 저장소 정책 |
+| 백엔드 PRD       | `.claude/rules/PRD-BackEnd.md`         | API 명세, 요청/응답, DB 스키마       |
+| Heartbeat 플로우 | `.claude/rules/heartbeat_flowchart.md` | heartbeat 수집·전송·경고 플로우      |
 
 ## 규칙
-
+0. 파일을 읽기전에 항상 qmd로 검색
+   - qmd search "query"
+   - qmd vsearch "query"
+   - qmd query "query"
 1. 모든 응답·주석·커밋 메시지 **한글** 작성
 2. 불확실하면 추론 금지 — **코드를 직접 찾아보고** 답변
 3. 새 페이지 모듈은 반드시 `.claude/skills/getx-module/SKILL.md` 절차 준수
@@ -90,6 +92,14 @@ lib/
 - 최소 버튼 높이 64px / 터치 영역 48×48dp
 - 순수 검정 `#000000` 금지 → `#1a1c1c` 사용
 - 수평 마진 `spacing.5` / 수직 그룹 간격 `spacing.8`
+
+## 작업 원칙
+
+1. skills/memory 내용 신뢰 — 이미 아는 파일 재읽기 금지
+2. 추측성 도구 호출 금지
+3. 독립적 도구 호출은 반드시 병렬 실행
+4. 출력 20줄 이상이면 서브에이전트로 위임
+5. 사용자가 이미 말한 내용 반복 금지
 
 ## 빌드
 
