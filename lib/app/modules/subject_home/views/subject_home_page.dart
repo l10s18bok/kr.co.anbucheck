@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:battery_plus/battery_plus.dart';
@@ -36,7 +35,6 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
         leading: IconButton(
           icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
           onPressed: () => scaffoldKey.currentState?.openDrawer(),

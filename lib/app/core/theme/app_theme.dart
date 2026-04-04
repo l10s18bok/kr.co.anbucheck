@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Anbu 테마 시스템
 /// - 대상자 모드(Teal): seniorTheme / seniorDarkTheme
@@ -69,6 +70,7 @@ abstract class AppTheme {
           foregroundColor: _lightOnSurface,
           elevation: 0,
           scrolledUnderElevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
         dividerColor: Colors.transparent,
         dividerTheme: const DividerThemeData(color: Colors.transparent),
@@ -145,6 +147,7 @@ abstract class AppTheme {
           foregroundColor: _lightOnSurface,
           elevation: 0,
           scrolledUnderElevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
         dividerColor: Colors.transparent,
         dividerTheme: const DividerThemeData(color: Colors.transparent),
@@ -251,6 +254,7 @@ abstract class AppTheme {
           foregroundColor: _darkOnSurface,
           elevation: 0,
           scrolledUnderElevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         dividerColor: Colors.transparent,
         dividerTheme: const DividerThemeData(color: Colors.transparent),
@@ -329,6 +333,7 @@ abstract class AppTheme {
           foregroundColor: _darkOnSurface,
           elevation: 0,
           scrolledUnderElevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         dividerColor: Colors.transparent,
         dividerTheme: const DividerThemeData(color: Colors.transparent),
