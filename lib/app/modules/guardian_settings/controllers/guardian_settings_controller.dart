@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 설정 컨트롤러
@@ -20,6 +21,7 @@ class GuardianSettingsController extends BaseController {
   final appVersion = ''.obs;
   final osVersion = ''.obs;
   final isSubscriptionActive = true.obs;
+  final subscriptionPlan = ''.obs; // free_trial, yearly, expired
 
   @override
   void onInit() {
@@ -36,8 +38,22 @@ class GuardianSettingsController extends BaseController {
   }
 
   Future<void> _loadSubscription() async {
-    final tokenDs = Get.find<TokenLocalDatasource>();
-    isSubscriptionActive.value = await tokenDs.getSubscriptionActive();
+    final tokenDs = TokenLocalDatasource();
+    final deviceToken = await tokenDs.getDeviceToken();
+    if (deviceToken == null) return;
+
+    try {
+      final deviceDs = DeviceRemoteDatasource();
+      final data = await deviceDs.getMyDevice(deviceToken);
+      final active = data['subscription_active'] as bool? ?? false;
+      final plan = data['subscription_plan'] as String? ?? '';
+      isSubscriptionActive.value = active;
+      subscriptionPlan.value = plan;
+      await tokenDs.saveSubscriptionActive(active);
+    } catch (_) {
+      // 서버 실패 시 로컬 캐시 사용
+      isSubscriptionActive.value = await tokenDs.getSubscriptionActive();
+    }
   }
 
   Future<void> _loadOsVersion() async {

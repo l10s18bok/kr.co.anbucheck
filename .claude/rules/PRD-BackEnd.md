@@ -798,12 +798,17 @@ Response: 200 OK
   "heartbeat_minute": 30,
   "last_seen": "2026-03-18T14:32:00+09:00",
   "subscription_active": true,
+  "subscription_plan": "free_trial",
   "guardian_count": 1
 }
 ```
 
 - 대상자/보호자 모두 호출 가능
 - `subscription_active`: 대상자는 연결된 보호자 중 활성 구독 존재 여부, 보호자는 본인 구독 상태
+- `subscription_plan`: 보호자의 현재 구독 플랜 (`free_trial` / `yearly` / `expired`, 대상자는 `null`)
+  - `free_trial`: 보호자 등록 시 서버 자동 생성 (3개월)
+  - `yearly`: 인앱 결제 완료 후 영수증 검증 시 서버가 변경
+  - `expired`: 서버 스케줄러가 만료 시 자동 변경
 - `guardian_count`: 대상자에 연결된 보호자 수
 - 앱 포그라운드 진입 시 서버 스케줄 동기화 용도
 

@@ -160,7 +160,8 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
 
                 // 구독 카드
                 Obx(() {
-                  final isPremium = controller.isSubscriptionActive.value;
+                  final plan = controller.subscriptionPlan.value;
+                  final isPremium = plan == 'yearly';
                   return Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(AppSpacing.sp4),

@@ -144,7 +144,7 @@ class TokenLocalDatasource {
   // ── 구독 활성화 여부 ──────────────────────────────────────
   Future<bool> getSubscriptionActive() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_keySubscriptionActive) ?? true; // 미설정 시 활성으로 간주
+    return prefs.getBool(_keySubscriptionActive) ?? false; // 미설정 시 무료 체험으로 간주
   }
 
   Future<void> saveSubscriptionActive(bool active) async {
