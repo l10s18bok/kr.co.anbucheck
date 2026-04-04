@@ -154,10 +154,10 @@ class HeartbeatService {
     await _tokenDs.saveLastHeartbeatDate(today);
     await _tokenDs.saveLastHeartbeatTime(timeStr);
 
-    // 전송 성공 → 데드맨 스위치 알림 취소 후 다음날 재예약
+    // 전송 성공 → 데드맨 스위치 알림 취소 후 내일로 재예약
     await LocalAlarmService.cancel();
     final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
-    await LocalAlarmService.schedule(hour, minute);
+    await LocalAlarmService.schedule(hour, minute, forceNextDay: true);
   }
 
   Future<int?> _getBatteryLevel() async {

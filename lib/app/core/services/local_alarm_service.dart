@@ -38,7 +38,8 @@ class LocalAlarmService {
   }
 
   /// 예약시각 + 10분에 로컬 안전망 알림 예약
-  static Future<void> schedule(int heartbeatHour, int heartbeatMinute) async {
+  /// [forceNextDay] heartbeat 전송 성공 후 호출 시 true — 오늘 알림 방지, 내일로 강제
+  static Future<void> schedule(int heartbeatHour, int heartbeatMinute, {bool forceNextDay = false}) async {
     await _ensureInitialized();
     await cancel();
 
@@ -52,8 +53,8 @@ class LocalAlarmService {
       now.year, now.month, now.day,
       alarmHour, alarmMinute,
     );
-    // 오늘 시각이 지났으면 내일로
-    if (scheduled.isBefore(now)) {
+    // heartbeat 성공 후에는 내일로 강제, 그 외에는 오늘 시각이 지났으면 내일로
+    if (forceNextDay || scheduled.isBefore(now)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
 
