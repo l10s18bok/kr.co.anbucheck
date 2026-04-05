@@ -67,6 +67,7 @@ class GuardianDashboardController extends BaseController {
 
   /// _svc.subjects → subjects 매핑 (ever 콜백 및 직접 호출 공용)
   void _mapSubjects() {
+    const alertOrder = ['urgent', 'warning', 'caution', 'info', 'normal'];
     subjects.value = _svc.subjects.map((s) => SubjectStatus(
           guardianId: s.guardianId,
           inviteCode: s.inviteCode,
@@ -75,7 +76,13 @@ class GuardianDashboardController extends BaseController {
           lastCheck: _formatLastSeen(s.lastSeen),
           daysInactive: s.alertDaysInactive,
           batteryLevel: s.batteryLevel,
-        )).toList();
+        )).toList()
+      ..sort((a, b) {
+        final ai = alertOrder.indexOf(a.alertLevel);
+        final bi = alertOrder.indexOf(b.alertLevel);
+        return (ai < 0 ? alertOrder.length : ai)
+            .compareTo(bi < 0 ? alertOrder.length : bi);
+      });
   }
 
   String _formatLastSeen(String? lastSeen) {
