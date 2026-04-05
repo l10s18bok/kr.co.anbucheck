@@ -129,14 +129,18 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     _checkNotificationPermission();
     _initBattery();
     _initConnectivity();
+    // 앱 진입 시 ���약시각 경과 + 미전송이면 heartbeat 자동 전송
+    _checkAndSendHeartbeat();
   }
 
-
-  /// 앱 포그라운드 복귀 시 로컬 상태 + 서버 스케줄 재동기화
+  /// 앱 포그라운드 복귀 시 로컬 상태 + 서버 스케줄 재동기화 + heartbeat 자동 전송
   @override
   void onResumed() {
     super.onResumed();
-    _reloadLocalState().then((_) => _syncScheduleFromServer());
+    _reloadLocalState().then((_) {
+      _syncScheduleFromServer();
+      _checkAndSendHeartbeat();
+    });
   }
 
   Future<void> _reloadLocalState() async {
@@ -145,6 +149,15 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     await prefs.reload();
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
+  }
+
+  /// 예약시각 경과 + 오늘 미전송이면 heartbeat 자동 전송 + UI 갱신
+  Future<void> _checkAndSendHeartbeat() async {
+    if (isReportedToday) return;
+    if (isScheduleInFuture) return;
+
+    await HeartbeatService().execute(manual: false);
+    await _reloadLocalState();
   }
 
   /// FCM heartbeat_trigger 수신 후 UI 갱신용 (FcmService에서 호출)

@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -50,7 +51,18 @@ class HeartbeatService {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceId == null || deviceToken == null) return;
 
-    final timestamp    = DateTime.now().toUtc().toIso8601String();
+    // 하루 1회 중복 전송 방어 (SharedPreferences reload로 isolate 간 동기화)
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    final now = DateTime.now();
+    final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    final lastDate = await _tokenDs.getLastHeartbeatDate();
+    if (lastDate == today) {
+      print('[HeartbeatService] 오늘 이미 전송 완료 — 스킵');
+      return;
+    }
+
+    final timestamp    = now.toUtc().toIso8601String();
     final batteryLevel = await _getBatteryLevel();
 
     // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false

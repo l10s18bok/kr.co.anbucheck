@@ -3,6 +3,7 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tzlib;
 import 'package:workmanager/workmanager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -38,6 +39,10 @@ void heartbeatWorkerCallback() {
         print('[HeartbeatWorker] 예약시각 이전 — 스킵');
         return true;
       }
+
+      // 메인 isolate에서 저장한 값을 백그라운드 isolate에 반영
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.reload();
 
       // 오늘 이미 전송했으면 스킵 (하루 1회 제한)
       final lastDate = await tokenDs.getLastHeartbeatDate();

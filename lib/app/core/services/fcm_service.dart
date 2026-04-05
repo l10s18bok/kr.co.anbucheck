@@ -3,9 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
-import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
@@ -27,6 +25,8 @@ void onDidReceiveNotificationResponse(NotificationResponse response) {
 }
 
 /// 알림 탭 시 라우팅
+/// 대상자 로컬 알림(데드맨/suspicious)은 앱을 포그라운드로 올리기만 함
+/// → 홈 화면 onInit/onResumed에서 heartbeat 미전송 체크 + 자동 전송
 void _handleNotificationTap(String type) {
   switch (type) {
     case 'alert':
@@ -41,39 +41,14 @@ void _handleNotificationTap(String type) {
     case 'alert_info':
       Get.toNamed(AppRoutes.guardianDashboard);
       break;
-    case 'heartbeat':
-      Get.toNamed(AppRoutes.subjectHome);
-      break;
-    // 로컬 안전망 알림 탭 — heartbeat 즉시 전송 후 홈으로 이동
+    // 대상자 로컬 알림 탭 — 앱 포그라운드 전환만 (heartbeat는 홈 화면에서 처리)
     case LocalAlarmService.alarmPayload:
-      _sendWellbeingHeartbeat();
-      Get.toNamed(AppRoutes.subjectHome);
-      break;
-    // suspicious=true 판정 알림 탭 — suspicious=false로 heartbeat 즉시 전송
     case 'wellbeing_check':
-      _sendWellbeingHeartbeat();
-      Get.toNamed(AppRoutes.subjectHome);
+    case 'heartbeat':
       break;
     default:
       break;
   }
-}
-
-/// 안부 확인 알림 탭 시 suspicious=false heartbeat 전송 (하루 1회 중복 체크)
-Future<void> _sendWellbeingHeartbeat() async {
-  try {
-    ApiClientFactory.init(type: HttpClientType.getConnect);
-    final tokenDs = TokenLocalDatasource();
-    final role = await tokenDs.getUserRole();
-    if (role != 'subject') return;
-
-    final now = DateTime.now();
-    final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    final lastDate = await tokenDs.getLastHeartbeatDate();
-    if (lastDate == today) return;
-
-    await HeartbeatService().execute(manual: true);
-  } catch (_) {}
 }
 
 /// FCM 푸시 알림 서비스
