@@ -26,16 +26,20 @@ class GuardianDashboardController extends BaseController {
     super.onInit();
     // subjects 데이터 변경 시 자동 반영 (FCM 수신 후 서비스 갱신 포함)
     ever(_svc.subjects, (_) => _mapSubjects());
-    _loadSubjects();
-    _loadSubscriptionStatus();
+    _loadSubjectsAndSubscription();
   }
 
   /// 앱이 포그라운드로 복귀 — 강제 갱신
   @override
   void onResumed() {
     super.onResumed();
-    _loadSubjects(force: true);
-    _loadSubscriptionStatus();
+    _loadSubjectsAndSubscription(force: true);
+  }
+
+  /// 대상자 로드 완료 후 구독 상태 읽기 (서비스가 로컬에 저장한 값)
+  Future<void> _loadSubjectsAndSubscription({bool force = false}) async {
+    await _loadSubjects(force: force);
+    await _loadSubscriptionStatus();
   }
 
   Future<void> _loadSubscriptionStatus() async {
