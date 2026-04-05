@@ -66,7 +66,7 @@ flowchart TD
 
     Queue --> LocalNoti1[대상자 로컬 알림<br/>📱 인터넷 연결이 꺼져 있습니다<br/>안부 확인이 전송되지 않고 있으며<br/>보호자에게 경고가 발생할 수 있습니다]
 
-    Send --> AlarmReset[로컬 안전망 알림 갱신<br/>기존 알림 취소<br/>다음날 같은 시각으로 재예약<br/>heartbeat 시각 + 10분<br/>기본 09:40, 매일 반복]
+    Send --> AlarmReset[로컬 안전망 알림 갱신<br/>기존 알림 취소<br/>다음날 같은 시각으로 재예약<br/>heartbeat 시각 + 30분<br/>기본 10:00, 매일 반복]
 
     AlarmReset --> SaveEnd[센서 값 로컬 저장<br/>완료]
 
@@ -232,14 +232,14 @@ flowchart TD
 
 > **1차**: WorkManager(Android) / BGTaskScheduler(iOS)가 예약 시각에 heartbeat를 백그라운드 실행한다. one-off 태스크(정확한 시각)와 periodic 태스크(iOS: BGAppRefreshTask, Android: WorkManager 주기)를 병행 등록하여 실행 확률을 높인다. 콜백 내 `lastHeartbeatDate` 검사로 당일 중복 전송을 방지한다.
 > **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다.
-> **3차**: 로컬 알림 안전망 (heartbeat 시각 + 10분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열리고 자동 전송된다.
+> **3차**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열리고 자동 전송된다.
 
 ```mermaid
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
         Install --> FirstWM[WorkManager one-off + periodic 태스크 예약<br/>heartbeat 시각 기본 09:30]
-        FirstWM --> FirstAlarm[로컬 안전망 알림 예약<br/>heartbeat 시각 + 10분<br/>기본 매일 09:40]
+        FirstWM --> FirstAlarm[로컬 안전망 알림 예약<br/>heartbeat 시각 + 30분<br/>기본 매일 10:00]
     end
 
     FirstAlarm --> Wait
@@ -247,7 +247,7 @@ flowchart TD
     subgraph 정상주기[정상 동작 주기]
         Wait([다음 heartbeat 대기])
         Wait -->|WorkManager/BGTaskScheduler 실행| Collect[heartbeat 수집 및 서버 전송]
-        Collect --> Reschedule[다음날 같은 시각으로<br/>WorkManager 재예약 +<br/>로컬 안전망 알림 재예약<br/>heartbeat 시각 + 10분]
+        Collect --> Reschedule[다음날 같은 시각으로<br/>WorkManager 재예약 +<br/>로컬 안전망 알림 재예약<br/>heartbeat 시각 + 30분]
         Reschedule --> Wait
         Wait -->|앱 실행 또는 포그라운드 복귀| AutoSend{예약 시각 지남<br/>AND 오늘 미전송?}
         AutoSend -->|YES| Collect
@@ -255,7 +255,7 @@ flowchart TD
         ServerSync --> Wait
     end
 
-    Wait -->|WorkManager 미실행<br/>heartbeat 시각 + 10분 경과| Alarm
+    Wait -->|WorkManager 미실행<br/>heartbeat 시각 + 30분 경과| Alarm
 
     subgraph 안전망[안전망 동작 — 로컬 알림]
         Alarm[OS가 로컬 알림 표시<br/>📱 안부 확인이 필요합니다<br/>이 메시지 알림을 한 번 터치해 주세요]
@@ -276,10 +276,10 @@ flowchart TD
 
 | 상황 | WorkManager/BGTask | 앱 열기 자동 전송 | 로컬 안전망 알림 | 결과 |
 |------|-------------------|-----------------|----------------|------|
-| 정상 동작 (09:30) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | 재예약되어 09:40 표시 안 됨 | 정상 |
-| 앱 스와이프 종료 (Android MIUI) | **지연 또는 미실행 가능** | 앱 열면 자동 전송 | **09:40 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
-| 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **09:40 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
-| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **09:40 표시** | 네트워크 복구 + 앱 실행 시 복구 |
+| 정상 동작 (09:30) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | 재예약되어 10:00 표시 안 됨 | 정상 |
+| 앱 스와이프 종료 (Android MIUI) | **지연 또는 미실행 가능** | 앱 열면 자동 전송 | **10:00 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
+| 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **10:00 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
+| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **10:00 표시** | 네트워크 복구 + 앱 실행 시 복구 |
 | 알림 권한 거부 | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **표시 불가** | WorkManager/앱 열기로 대응 |
 
 ※ 위 시각은 기본값(09:30) 기준.
