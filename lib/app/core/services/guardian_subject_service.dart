@@ -58,6 +58,11 @@ class GuardianSubjectService extends GetxService {
 
       maxSubjects.value = data['max_subjects'] as int? ?? 5;
       canAddMore.value = data['can_add_more'] as bool? ?? true;
+
+      // 구독 상태 동기화 (추가 API 호출 없이 /subjects 응답에서 처리)
+      final subscriptionActive = data['subscription_active'] as bool? ?? true;
+      await _tokenDs.saveSubscriptionActive(subscriptionActive);
+
       _lastFetched = DateTime.now();
     } catch (_) {
       // 호출부에서 에러 처리
