@@ -186,6 +186,11 @@ class GuardianNotificationsPage
                 title: '정보',
                 description: '걸음수, 배터리 부족 등 참고용 알림\n일반적인 상태 정보 전달',
               ),
+              SizedBox(height: AppSpacing.md),
+              Text(
+                '※ 걸음수 데이터를 수집하지 못한 경우 활동 정보가 표시되지 않을 수 있습니다.',
+                style: AppTextTheme.bodySmall(color: AppColors.textTertiary).copyWith(fontSize: 11.sp),
+              ),
             ],
           ),
         ),

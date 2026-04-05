@@ -110,7 +110,7 @@ flowchart TD
 
     StatusNormal --> SaveNoti[보호자 알림 DB 저장<br/>guardian_notifications<br/>alert_level: info<br/>is_push_sent: true/false]
     SaveNoti --> StepsNoti{steps_delta > 0?}
-    StepsNoti -->|YES| StepsCompare[활동 감지 알림 DB 저장<br/>🚶 활동 감지<br/>오늘 정상적인 활동이 확인되었습니다<br/>Push 발송 없음]
+    StepsNoti -->|YES| StepsCompare[활동 정보 알림 DB 저장<br/>🚶 활동 정보<br/>M/D 오전/오후 HH:MM ~ M/D 오전/오후 HH:MM 사이 N보를 걸으셨습니다.<br/>Push 발송 없음]
     StepsNoti -->|NO| End3([완료])
     StepsCompare --> End3
 ```

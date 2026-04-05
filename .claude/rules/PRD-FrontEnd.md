@@ -787,7 +787,7 @@ void onMessageReceived(RemoteMessage message) {
 | alert_level | Push 발송 | DB 저장 | 내용 |
 |-------------|-----------|---------|------|
 | info | ✅ (DND 적용) | ✅ | 자동 안부 완료, 수동 안부, 정상 복귀, 배터리 부족 |
-| health (활동 감지) | ❌ | ✅ | 활동 감지 알림 (steps_delta > 0일 때만 생성) |
+| health (활동 정보) | ❌ | ✅ | 활동 정보 알림 — 이전~현재 heartbeat 사이 걸음수 표시 (steps_delta > 0일 때만 생성) |
 | caution | ✅ | ✅ | 미수신 or suspicious = true 1회 |
 | warning | ✅ | ✅ | 미수신 or suspicious = true 2회 이상 |
 | urgent | ✅ | ✅ | 미수신 or suspicious = true 3회 이상 |
@@ -1582,7 +1582,7 @@ ios/Runner/
 ```
 
 - Lottie 애니메이션 없음 — 아이콘 + 웨이브 애니메이션 기반 UI
-- 대상자 카드는 PageView로 좌우 슬라이드 전환
+- 대상자 카드는 PageView로 좌우 슬라이드 전환, **경고 등급순 정렬** (긴급 → 경고 → 주의 → 정보 → 정상)
 - 카드 좌측 보더 색상이 경고 등급에 따라 변경 (정상: 초록, 주의: 노랑, 경고: 주황, 긴급: 빨강)
 - 배터리 표시는 정상 상태일 때만 표시 (주의/경고/긴급 등급에서는 배터리 아이콘·퍼센트 숨김)
 - 경고 상태(주의/경고/긴급)일 때 활동 라벨: "안전 확인이 필요합니다"
