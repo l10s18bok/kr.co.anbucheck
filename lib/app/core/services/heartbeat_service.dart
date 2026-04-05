@@ -51,15 +51,17 @@ class HeartbeatService {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceId == null || deviceToken == null) return;
 
-    // 하루 1회 중복 전송 방어 (SharedPreferences reload로 isolate 간 동기화)
+    // 하루 1회 중복 전송 방어 (manual=true는 무조건 전송 — suspicious 알림 응답 등)
     final prefs = await SharedPreferences.getInstance();
     await prefs.reload();
     final now = DateTime.now();
-    final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    final lastDate = await _tokenDs.getLastHeartbeatDate();
-    if (lastDate == today) {
-      print('[HeartbeatService] 오늘 이미 전송 완료 — 스킵');
-      return;
+    if (!manual) {
+      final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      final lastDate = await _tokenDs.getLastHeartbeatDate();
+      if (lastDate == today) {
+        print('[HeartbeatService] 오늘 이미 전송 완료 — 스킵');
+        return;
+      }
     }
 
     final timestamp    = now.toUtc().toIso8601String();

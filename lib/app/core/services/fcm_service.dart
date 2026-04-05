@@ -4,9 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
+import 'package:anbucheck/app/modules/subject_home/controllers/subject_home_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// FCM 백그라운드 메시지 핸들러 (top-level 함수 필수)
@@ -25,8 +27,8 @@ void onDidReceiveNotificationResponse(NotificationResponse response) {
 }
 
 /// 알림 탭 시 라우팅
-/// 대상자 로컬 알림(데드맨/suspicious)은 앱을 포그라운드로 올리기만 함
-/// → 홈 화면 onInit/onResumed에서 heartbeat 미전송 체크 + 자동 전송
+/// 데드맨 알림: 앱 포그라운드 전환만 → 홈 화면에서 미전송 체크 + 자동 전송
+/// suspicious 알림: 사용자 생존 응답 — manual=true heartbeat 즉시 재전송
 void _handleNotificationTap(String type) {
   switch (type) {
     case 'alert':
@@ -41,14 +43,28 @@ void _handleNotificationTap(String type) {
     case 'alert_info':
       Get.toNamed(AppRoutes.guardianDashboard);
       break;
-    // 대상자 로컬 알림 탭 — 앱 포그라운드 전환만 (heartbeat는 홈 화면에서 처리)
+    // 데드맨 알림 탭 — 앱 포그라운드 전환만 (heartbeat는 홈 화면에서 처리)
     case LocalAlarmService.alarmPayload:
-    case 'wellbeing_check':
     case 'heartbeat':
+      break;
+    // suspicious 알림 탭 — 사용자 생존 응답, manual=true heartbeat 재전송
+    case 'wellbeing_check':
+      _sendWellbeingResponse();
       break;
     default:
       break;
   }
+}
+
+/// suspicious 알림 탭 시 manual=true heartbeat 재전송 + UI 갱신
+/// 이미 오늘 전송했어도 무조건 재전송 (사용자 생존 확인 목적)
+Future<void> _sendWellbeingResponse() async {
+  try {
+    await HeartbeatService().execute(manual: true);
+    if (Get.isRegistered<SubjectHomeController>()) {
+      Get.find<SubjectHomeController>().reloadHeartbeatState();
+    }
+  } catch (_) {}
 }
 
 /// FCM 푸시 알림 서비스
