@@ -34,13 +34,16 @@ class GuardianNotificationsPage
           ],
         ),
         actions: [
-          Obx(() => IconButton(
-            icon: Icon(Icons.refresh_rounded,
-                color: controller.isLoading
-                    ? AppColors.onSurface.withValues(alpha: 0.4)
-                    : AppColors.onSurface,
-                size: 26.w),
-            onPressed: controller.isLoading ? null : controller.load,
+          Obx(() => Padding(
+            padding: EdgeInsets.only(right: AppSpacing.horizontalMargin - 12.w),
+            child: IconButton(
+              icon: Icon(Icons.refresh_rounded,
+                  color: controller.isLoading
+                      ? const Color(0xFF4355B9).withValues(alpha: 0.4)
+                      : const Color(0xFF4355B9),
+                  size: 24.w),
+              onPressed: controller.isLoading ? null : controller.load,
+            ),
           )),
         ],
       ),
@@ -62,7 +65,7 @@ class GuardianNotificationsPage
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('오늘',
+                      Text('오늘 받은 알림',
                           style: AppTextTheme.labelMedium(
                               color: const Color(0xFF4355B9), fw: FontWeight.w600)),
                       Row(
@@ -80,7 +83,7 @@ class GuardianNotificationsPage
                             onTap: () => _showAlertLevelGuide(context),
                             child: Icon(Icons.help_outline_rounded,
                                 size: 24.w,
-                                color: const Color(0xFF4355B9)),
+                                color: AppColors.textTertiary),
                           ),
                         ],
                       ),
