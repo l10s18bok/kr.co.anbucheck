@@ -64,6 +64,18 @@ lib/
 
 각 모듈은 `bindings/`, `controllers/`, `views/` 3개 파일로 구성.
 
+## 핵심 파일 (Heartbeat 3계층 구조)
+
+이 앱의 핵심은 "사용자 조작 없이 매일 heartbeat가 확실히 전송되는 것"이다.
+아래 4개 파일이 3계층 전송 구조를 각각 담당하며, 어느 하나가 망가져도 안부 확인 서비스가 무너진다.
+
+| 계층 | 파일 | 역할 |
+|------|------|------|
+| 공통 | `lib/app/core/services/heartbeat_service.dart` | heartbeat 1회 실행의 전체 로직: 센서 수집 → suspicious 판정 → 서버 전송 → 실패 시 큐 저장 → 데드맨 알림 재예약. 오탐/미탐, 중복 전송, 데이터 누락 모두 이 파일에서 발생 |
+| 1차 | `lib/app/core/services/heartbeat_worker_service.dart` | WorkManager/BGTaskScheduler 백그라운드 예약 실행. 사용자가 앱을 안 열어도 매일 heartbeat 실행. one-off(다음날 재예약 체인) + periodic(OS 자동 반복) 병행 |
+| 2차 | `lib/app/modules/subject_home/controllers/subject_home_controller.dart` | 앱 열기/복귀 시 안전망. onInit/onResumed에서 예약시각 경과 + 미전송 시 자동 전송. 서버 스케줄 동기화로 WorkManager 체인 복구도 담당 |
+| 3차 | `lib/app/core/services/fcm_service.dart` | 로컬 알림 탭 라우팅. 데드맨 알림 탭 → 앱 포그라운드 전환만 (홈 화면에서 자동 전송). suspicious 알림 탭 → manual=true heartbeat 즉시 재전송 |
+
 ## 참조 문서
 
 | 문서             | 경로                                   | 참조 시점                            |
