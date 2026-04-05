@@ -118,6 +118,20 @@ class _ModeCard extends StatelessWidget {
             colors: gradientColors,
           ),
           borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.25),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+              spreadRadius: 0,
+            ),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+              spreadRadius: 0,
+            ),
+          ],
         ),
         child: Column(
           children: [
@@ -146,22 +160,12 @@ class _ModeCard extends StatelessWidget {
                       title,
                       style: AppTextTheme.headlineSmall(color: AppColors.onSurface),
                     ),
-                    SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.sm),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: AppSpacing.lg,
-                          vertical: AppSpacing.sm,
-                        ),
-                        decoration: BoxDecoration(
-                          color: buttonColor,
-                          borderRadius: BorderRadius.circular(24.r),
-                        ),
-                        child: Text(
-                          buttonLabel,
-                          style: AppTextTheme.labelMedium(color: Colors.white),
-                        ),
+                      child: Text(
+                        buttonLabel,
+                        style: AppTextTheme.bodyMedium(color: buttonColor),
                       ),
                     ),
                   ],
