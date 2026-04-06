@@ -297,8 +297,6 @@ abstract class FrFr {
     'local_notification_channel': 'Alertes de bien-être',
     'local_notification_channel_desc':
         'Notifications du service de bien-être',
-    'local_alarm_title': '📱 Vérification du bien-être nécessaire',
-    'local_alarm_body': 'Veuillez appuyer sur cette notification.',
 
     // ── Divers ──
     'back_press_exit':
@@ -309,5 +307,32 @@ abstract class FrFr {
     'error_timeout': 'La requête a expiré.',
     'error_network': 'Veuillez vérifier votre connexion internet.',
     'error_unauthorized': 'Authentification requise.',
+
+    // ── Corps des notifications ──
+    'noti_auto_report_body':
+        'La vérification de bien-être programmée a été reçue aujourd\'hui.',
+    'noti_manual_report_body':
+        'La personne protégée a envoyé manuellement une vérification de bien-être.',
+    'noti_battery_low_body':
+        'La batterie du téléphone est inférieure à 20 %. Une recharge peut être nécessaire.',
+    'noti_battery_dead_body':
+        'Le téléphone semble s\'être éteint à cause d\'une batterie déchargée. Dernier niveau de batterie : @battery_level %. Il se rétablira après la recharge.',
+    'noti_caution_suspicious_body':
+        'Un signal de bien-être a été reçu, mais aucun signe d\'utilisation du téléphone n\'a été détecté. Veuillez vérifier en personne.',
+    'noti_caution_missing_body':
+        'La vérification de bien-être prévue aujourd\'hui n\'a pas encore été reçue. Veuillez vérifier en personne.',
+    'noti_warning_body':
+        'Les vérifications de bien-être ont été manquées consécutivement. Veuillez vérifier en personne.',
+    'noti_urgent_body':
+        'Aucune vérification de bien-être depuis @days jour(s). Une vérification immédiate est requise.',
+    'noti_steps_body': '@from_time ~ @to_time : @steps pas effectués.',
+
+    // ── Notifications locales ──
+    'local_alarm_title': '📱 Vérification de bien-être nécessaire',
+    'local_alarm_body': 'Veuillez appuyer sur cette notification.',
+    'wellbeing_check_title': '💛 Vérification de bien-être',
+    'wellbeing_check_body':
+        'Comment allez-vous ? Veuillez appuyer sur cette notification.',
+    'noti_channel_name': 'Alertes Anbu',
   };
 }

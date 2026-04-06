@@ -256,8 +256,6 @@ abstract class KoKr {
     // ── 로컬 알림 ──
     'local_notification_channel': '안부 알림',
     'local_notification_channel_desc': '안부 확인 서비스 알림',
-    'local_alarm_title': '📱 안부 확인이 필요합니다',
-    'local_alarm_body': '이 메시지 알림을 한 번 터치해 주세요.',
 
     // ── 기타 ──
     'back_press_exit': '뒤로 버튼 한번 더 누르면 종료됩니다.',
@@ -267,5 +265,27 @@ abstract class KoKr {
     'error_timeout': '요청 시간이 초과되었습니다.',
     'error_network': '네트워크 연결을 확인해주세요.',
     'error_unauthorized': '인증이 필요합니다.',
+
+    // ── 알림 본문 ──
+    'noti_auto_report_body': '오늘 예정시각에 안부 확인이 정상 수신되었습니다.',
+    'noti_manual_report_body': '보호 대상자가 직접 안부 확인을 보냈습니다.',
+    'noti_battery_low_body': '폰 배터리가 20% 미만입니다. 충전이 필요할 수 있습니다.',
+    'noti_battery_dead_body':
+        '폰이 배터리 방전으로 꺼진 것 같습니다. 마지막 배터리 잔량: @battery_level%. 충전 후 자동으로 정상 복귀됩니다.',
+    'noti_caution_suspicious_body':
+        '안부는 수신되었으나 폰 사용 흔적이 없습니다. 직접 확인해 주세요.',
+    'noti_caution_missing_body':
+        '오늘 예정된 안부 확인이 아직 없습니다. 직접 확인해 주세요.',
+    'noti_warning_body':
+        '연속으로 안부 확인이 되지 않고 있습니다. 직접 확인이 필요합니다.',
+    'noti_urgent_body': '@days일간 안부 확인이 없습니다. 즉시 확인이 필요합니다.',
+    'noti_steps_body': '@from_time ~ @to_time 사이 @steps보를 걸으셨습니다.',
+
+    // ── 로컬 알림 ──
+    'local_alarm_title': '📱 안부 확인이 필요합니다',
+    'local_alarm_body': '이 메시지 알림을 한 번 터치해 주세요.',
+    'wellbeing_check_title': '💛 안부 확인',
+    'wellbeing_check_body': '잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요.',
+    'noti_channel_name': '안부 알림',
   };
 }

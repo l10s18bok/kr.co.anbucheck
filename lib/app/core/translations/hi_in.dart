@@ -288,8 +288,6 @@ abstract class HiIn {
     'local_notification_channel': 'कुशलता अलर्ट',
     'local_notification_channel_desc':
         'कुशलता जांच सेवा सूचनाएं',
-    'local_alarm_title': '📱 कुशलता जांच आवश्यक',
-    'local_alarm_body': 'कृपया इस सूचना पर टैप करें।',
 
     // ── अन्य ──
     'back_press_exit': 'बाहर निकलने के लिए फिर से दबाएं।',
@@ -299,5 +297,33 @@ abstract class HiIn {
     'error_timeout': 'अनुरोध का समय समाप्त हो गया।',
     'error_network': 'कृपया अपना नेटवर्क कनेक्शन जांचें।',
     'error_unauthorized': 'प्रमाणीकरण आवश्यक है।',
+
+    // ── सूचना सामग्री ──
+    'noti_auto_report_body':
+        'आज की निर्धारित कुशलता जांच प्राप्त हुई।',
+    'noti_manual_report_body':
+        'संरक्षित व्यक्ति ने मैन्युअल रूप से कुशलता जांच भेजी।',
+    'noti_battery_low_body':
+        'फोन की बैटरी 20% से कम है। चार्जिंग की आवश्यकता हो सकती है।',
+    'noti_battery_dead_body':
+        'फोन बैटरी खत्म होने से बंद हो गया लगता है। अंतिम बैटरी स्तर: @battery_level%। चार्ज करने के बाद स्वतः ठीक हो जाएगा।',
+    'noti_caution_suspicious_body':
+        'कुशलता संकेत प्राप्त हुआ, लेकिन फोन उपयोग के कोई संकेत नहीं हैं। कृपया व्यक्तिगत रूप से जांचें।',
+    'noti_caution_missing_body':
+        'आज की निर्धारित कुशलता जांच अभी तक प्राप्त नहीं हुई है। कृपया व्यक्तिगत रूप से जांचें।',
+    'noti_warning_body':
+        'कुशलता जांच लगातार छूट रही है। कृपया व्यक्तिगत रूप से सत्यापित करें।',
+    'noti_urgent_body':
+        '@days दिनों से कुशलता जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps कदम चले।',
+
+    // ── स्थानीय सूचनाएँ ──
+    'local_alarm_title': '📱 कुशलता जांच आवश्यक है',
+    'local_alarm_body': 'कृपया इस सूचना पर टैप करें।',
+    'wellbeing_check_title': '💛 कुशलता जांच',
+    'wellbeing_check_body':
+        'क्या आप ठीक हैं? कृपया इस सूचना पर टैप करें।',
+    'noti_channel_name': 'Anbu सूचनाएँ',
   };
 }

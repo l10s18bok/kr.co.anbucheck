@@ -1,15 +1,25 @@
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
+import 'package:get/get.dart';
 
 /// 기기 관련 원격 저장소
 class DeviceRemoteDatasource {
   Map<String, String> _auth(String token) => {'Authorization': 'Bearer $token'};
 
-  /// PUT /api/v1/devices/fcm-token — FCM 토큰 갱신
+  /// 기기 locale 문자열 반환 (예: 'ko_KR', 'en_US').
+  String _localeString() {
+    final locale = Get.deviceLocale;
+    if (locale == null) return 'en_US';
+    final lang = locale.languageCode;
+    final country = locale.countryCode ?? '';
+    return country.isNotEmpty ? '${lang}_$country' : lang;
+  }
+
+  /// PUT /api/v1/devices/fcm-token — FCM 토큰 + locale 갱신
   Future<void> updateFcmToken(String deviceToken, String fcmToken) async {
     final result = await ApiClientFactory.instance.put<dynamic>(
       ApiEndpoints.devicesFcmToken,
-      {'fcm_token': fcmToken},
+      {'fcm_token': fcmToken, 'locale': _localeString()},
       headers: _auth(deviceToken),
     );
     if (!result.isOk) {

@@ -305,8 +305,6 @@ abstract class PtBr {
     'local_notification_channel': 'Alertas de bem-estar',
     'local_notification_channel_desc':
         'Notificações do serviço de verificação de bem-estar',
-    'local_alarm_title': '📱 Verificação de bem-estar necessária',
-    'local_alarm_body': 'Por favor, toque nesta notificação.',
 
     // ── Diversos ──
     'back_press_exit': 'Pressione voltar novamente para sair.',
@@ -316,5 +314,33 @@ abstract class PtBr {
     'error_timeout': 'A solicitação expirou.',
     'error_network': 'Verifique sua conexão de rede.',
     'error_unauthorized': 'Autenticação necessária.',
+
+    // ── Corpo das notificações ──
+    'noti_auto_report_body':
+        'A verificação de bem-estar agendada foi recebida hoje.',
+    'noti_manual_report_body':
+        'A pessoa protegida enviou manualmente uma verificação de bem-estar.',
+    'noti_battery_low_body':
+        'A bateria do celular está abaixo de 20%. Pode ser necessário carregar.',
+    'noti_battery_dead_body':
+        'O celular parece ter desligado por bateria esgotada. Último nível de bateria: @battery_level%. Será restaurado após o carregamento.',
+    'noti_caution_suspicious_body':
+        'Um sinal de bem-estar foi recebido, mas não há sinais de uso do celular. Por favor, verifique pessoalmente.',
+    'noti_caution_missing_body':
+        'A verificação de bem-estar agendada para hoje ainda não foi recebida. Por favor, verifique pessoalmente.',
+    'noti_warning_body':
+        'Verificações de bem-estar foram perdidas consecutivamente. Por favor, verifique pessoalmente.',
+    'noti_urgent_body':
+        'Sem verificação de bem-estar há @days dia(s). Verificação imediata necessária.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps passos dados.',
+
+    // ── Notificações locais ──
+    'local_alarm_title': '📱 Verificação de bem-estar necessária',
+    'local_alarm_body': 'Por favor, toque nesta notificação.',
+    'wellbeing_check_title': '💛 Verificação de bem-estar',
+    'wellbeing_check_body':
+        'Está tudo bem? Por favor, toque nesta notificação.',
+    'noti_channel_name': 'Alertas Anbu',
   };
 }

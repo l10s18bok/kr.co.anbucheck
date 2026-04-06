@@ -290,8 +290,6 @@ abstract class ViVn {
     'local_notification_channel': 'Canh bao suc khoe',
     'local_notification_channel_desc':
         'Thong bao dich vu kiem tra suc khoe',
-    'local_alarm_title': '📱 Can kiem tra suc khoe',
-    'local_alarm_body': 'Vui long nhan vao thong bao nay.',
 
     // ── Khac ──
     'back_press_exit': 'Nhan lai de thoat.',
@@ -301,5 +299,33 @@ abstract class ViVn {
     'error_timeout': 'Yeu cau da het thoi gian.',
     'error_network': 'Vui long kiem tra ket noi mang.',
     'error_unauthorized': 'Can xac thuc.',
+
+    // ── Noi dung thong bao ──
+    'noti_auto_report_body':
+        'Kiem tra suc khoe theo lich da duoc nhan hom nay.',
+    'noti_manual_report_body':
+        'Nguoi duoc bao ve da gui kiem tra suc khoe thu cong.',
+    'noti_battery_low_body':
+        'Pin dien thoai duoi 20%. Co the can sac.',
+    'noti_battery_dead_body':
+        'Dien thoai co ve da tat do het pin. Muc pin cuoi: @battery_level%. Se phuc hoi sau khi sac.',
+    'noti_caution_suspicious_body':
+        'Da nhan tin hieu suc khoe nhung khong co dau hieu su dung dien thoai. Vui long kiem tra truc tiep.',
+    'noti_caution_missing_body':
+        'Kiem tra suc khoe theo lich hom nay chua duoc nhan. Vui long kiem tra truc tiep.',
+    'noti_warning_body':
+        'Kiem tra suc khoe da bi bo lo lien tiep. Vui long xac minh truc tiep.',
+    'noti_urgent_body':
+        'Khong co kiem tra suc khoe trong @days ngay. Can xac minh ngay lap tuc.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps buoc di.',
+
+    // ── Thông báo cục bộ ──
+    'local_alarm_title': '📱 Cần kiểm tra sức khỏe',
+    'local_alarm_body': 'Vui lòng chạm vào thông báo này.',
+    'wellbeing_check_title': '💛 Kiểm tra sức khỏe',
+    'wellbeing_check_body':
+        'Bạn có khỏe không? Vui lòng chạm vào thông báo này.',
+    'noti_channel_name': 'Cảnh báo Anbu',
   };
 }

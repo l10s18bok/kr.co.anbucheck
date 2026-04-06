@@ -297,8 +297,6 @@ abstract class EsEs {
     'local_notification_channel': 'Alertas de bienestar',
     'local_notification_channel_desc':
         'Notificaciones del servicio de bienestar',
-    'local_alarm_title': '📱 Verificación de bienestar necesaria',
-    'local_alarm_body': 'Pulse esta notificación, por favor.',
 
     // ── Otros ──
     'back_press_exit': 'Pulse de nuevo para salir de la aplicación.',
@@ -308,5 +306,33 @@ abstract class EsEs {
     'error_timeout': 'La solicitud ha expirado.',
     'error_network': 'Compruebe su conexión a internet.',
     'error_unauthorized': 'Se requiere autenticación.',
+
+    // ── Cuerpo de notificaciones ──
+    'noti_auto_report_body':
+        'La verificación de bienestar programada se recibió hoy.',
+    'noti_manual_report_body':
+        'La persona protegida envió manualmente una verificación de bienestar.',
+    'noti_battery_low_body':
+        'La batería del teléfono está por debajo del 20 %. Puede ser necesario cargarlo.',
+    'noti_battery_dead_body':
+        'El teléfono parece haberse apagado por batería agotada. Último nivel de batería: @battery_level %. Se recuperará después de cargar.',
+    'noti_caution_suspicious_body':
+        'Se recibió una señal de bienestar, pero no hay indicios de uso del teléfono. Por favor, verifique en persona.',
+    'noti_caution_missing_body':
+        'La verificación de bienestar programada para hoy aún no se ha recibido. Por favor, verifique en persona.',
+    'noti_warning_body':
+        'Las verificaciones de bienestar se han perdido consecutivamente. Por favor, verifique en persona.',
+    'noti_urgent_body':
+        'Sin verificación de bienestar durante @days día(s). Se requiere verificación inmediata.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps pasos caminados.',
+
+    // ── Notificaciones locales ──
+    'local_alarm_title': '📱 Verificación de bienestar necesaria',
+    'local_alarm_body': 'Por favor, toque esta notificación.',
+    'wellbeing_check_title': '💛 Verificación de bienestar',
+    'wellbeing_check_body':
+        '¿Se encuentra bien? Por favor, toque esta notificación.',
+    'noti_channel_name': 'Alertas Anbu',
   };
 }

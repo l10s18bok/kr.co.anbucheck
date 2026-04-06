@@ -256,8 +256,6 @@ abstract class JaJp {
     // ── ローカル通知 ──
     'local_notification_channel': '安否確認の通知',
     'local_notification_channel_desc': '安否確認サービスの通知',
-    'local_alarm_title': '📱 安否確認が必要です',
-    'local_alarm_body': 'この通知を一度タップしてください。',
 
     // ── その他 ──
     'back_press_exit': 'もう一度戻るボタンを押すと終了します。',
@@ -267,5 +265,31 @@ abstract class JaJp {
     'error_timeout': 'リクエストがタイムアウトしました。',
     'error_network': 'ネットワーク接続を確認してください。',
     'error_unauthorized': '認証が必要です。',
+
+    // ── 通知本文 ──
+    'noti_auto_report_body':
+        '本日の予定時刻に安否確認が正常に受信されました。',
+    'noti_manual_report_body':
+        '対象者が手動で安否確認を送信しました。',
+    'noti_battery_low_body':
+        'スマホのバッテリーが20%未満です。充電が必要かもしれません。',
+    'noti_battery_dead_body':
+        'スマホがバッテリー切れで電源が落ちたようです。最後のバッテリー残量: @battery_level%。充電後に自動復旧します。',
+    'noti_caution_suspicious_body':
+        '安否信号は受信されましたが、スマホの使用形跡がありません。直接ご確認ください。',
+    'noti_caution_missing_body':
+        '本日予定の安否確認がまだ届いていません。直接ご確認ください。',
+    'noti_warning_body':
+        '安否確認が連続して届いていません。直接のご確認が必要です。',
+    'noti_urgent_body':
+        '@days日間安否確認がありません。直ちに確認が必要です。',
+    'noti_steps_body': '@from_time ～ @to_time の間に@steps歩歩きました。',
+
+    // ── ローカル通知 ──
+    'local_alarm_title': '📱 安否確認が必要です',
+    'local_alarm_body': 'この通知をタップしてください。',
+    'wellbeing_check_title': '💛 安否確認',
+    'wellbeing_check_body': 'お元気ですか？この通知をタップしてください。',
+    'noti_channel_name': 'Anbu通知',
   };
 }

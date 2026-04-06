@@ -13,6 +13,7 @@ import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.dart';
+import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/firebase_options.dart';
 
@@ -87,6 +88,9 @@ class SplashController extends BaseController {
 
     // FCM 서비스 초기화
     await Get.putAsync(() => FcmService().init());
+
+    // 로컬 알림 번역 문자열 캐시 (백그라운드 isolate용)
+    await NotificationTextCache.cacheAll();
   }
 
   /// 버전 체크 — 강제 업데이트 필요 시 true 반환

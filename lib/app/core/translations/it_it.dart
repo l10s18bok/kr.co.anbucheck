@@ -301,8 +301,6 @@ abstract class ItIt {
     'local_notification_channel': 'Avvisi benessere',
     'local_notification_channel_desc':
         'Notifiche del servizio di verifica del benessere',
-    'local_alarm_title': '📱 Verifica del benessere necessaria',
-    'local_alarm_body': 'Tocchi questa notifica, per favore.',
 
     // ── Varie ──
     'back_press_exit': 'Prema di nuovo indietro per uscire.',
@@ -312,5 +310,32 @@ abstract class ItIt {
     'error_timeout': 'La richiesta è scaduta.',
     'error_network': 'Verifichi la connessione di rete.',
     'error_unauthorized': 'Autenticazione necessaria.',
+
+    // ── Corpo delle notifiche ──
+    'noti_auto_report_body':
+        'La verifica di benessere programmata è stata ricevuta oggi.',
+    'noti_manual_report_body':
+        'La persona protetta ha inviato manualmente una verifica di benessere.',
+    'noti_battery_low_body':
+        'La batteria del telefono è inferiore al 20 %. Potrebbe essere necessario ricaricare.',
+    'noti_battery_dead_body':
+        'Il telefono sembra essersi spento per batteria scarica. Ultimo livello batteria: @battery_level %. Si ripristinerà dopo la ricarica.',
+    'noti_caution_suspicious_body':
+        'È stato ricevuto un segnale di benessere, ma non ci sono segni di utilizzo del telefono. Verifichi di persona.',
+    'noti_caution_missing_body':
+        'La verifica di benessere prevista per oggi non è ancora arrivata. Verifichi di persona.',
+    'noti_warning_body':
+        'Le verifiche di benessere sono state mancate consecutivamente. È necessaria una verifica di persona.',
+    'noti_urgent_body':
+        'Nessuna verifica di benessere da @days giorno/i. È necessaria una verifica immediata.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps passi percorsi.',
+
+    // ── Notifiche locali ──
+    'local_alarm_title': '📱 Verifica di benessere necessaria',
+    'local_alarm_body': 'Per favore, tocca questa notifica.',
+    'wellbeing_check_title': '💛 Verifica di benessere',
+    'wellbeing_check_body':
+        'Come sta? Per favore, tocca questa notifica.',
+    'noti_channel_name': 'Avvisi Anbu',
   };
 }

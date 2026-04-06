@@ -290,8 +290,6 @@ abstract class SvSe {
     'local_notification_channel': 'Valmaendeaviseringar',
     'local_notification_channel_desc':
         'Aviseringar for valmaendetjansten',
-    'local_alarm_title': '📱 Valmaendekontroll behovs',
-    'local_alarm_body': 'Tryck pa denna avisering.',
 
     // ── Ovrigt ──
     'back_press_exit': 'Tryck tillbaka igen for att avsluta.',
@@ -301,5 +299,33 @@ abstract class SvSe {
     'error_timeout': 'Forfragan tog for lang tid.',
     'error_network': 'Kontrollera din natverksanslutning.',
     'error_unauthorized': 'Autentisering kravs.',
+
+    // ── Aviseringsinnehall ──
+    'noti_auto_report_body':
+        'Den schemalagda valmaendekontrollen mottogs idag.',
+    'noti_manual_report_body':
+        'Den skyddade personen skickade manuellt en valmaendekontroll.',
+    'noti_battery_low_body':
+        'Telefonens batteri ar under 20%. Laddning kan behovas.',
+    'noti_battery_dead_body':
+        'Telefonen verkar ha stangts av pa grund av tomt batteri. Senaste batteriniva: @battery_level%. Den aterstalls efter laddning.',
+    'noti_caution_suspicious_body':
+        'En valmaendesignal mottogs men inga tecken pa telefonanvandning. Kontrollera personligen.',
+    'noti_caution_missing_body':
+        'Dagens schemalagda valmaendekontroll har inte mottagits an. Kontrollera personligen.',
+    'noti_warning_body':
+        'Valmaendekontroller har missats i foljd. Verifiera personligen.',
+    'noti_urgent_body':
+        'Ingen valmaendekontroll pa @days dag(ar). Omedelbar verifiering kravs.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps steg.',
+
+    // ── Lokala aviseringar ──
+    'local_alarm_title': '📱 Välmåendekontroll behövs',
+    'local_alarm_body': 'Vänligen tryck på denna avisering.',
+    'wellbeing_check_title': '💛 Välmåendekontroll',
+    'wellbeing_check_body':
+        'Mår du bra? Vänligen tryck på denna avisering.',
+    'noti_channel_name': 'Anbu-aviseringar',
   };
 }

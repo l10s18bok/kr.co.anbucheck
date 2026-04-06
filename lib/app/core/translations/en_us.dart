@@ -255,8 +255,6 @@ abstract class EnUs {
     // ── Local Notifications ──
     'local_notification_channel': 'Wellness Alerts',
     'local_notification_channel_desc': 'Wellness check service notifications',
-    'local_alarm_title': '📱 Wellness check needed',
-    'local_alarm_body': 'Please tap this notification.',
 
     // ── Misc ──
     'back_press_exit': 'Press back again to exit.',
@@ -266,5 +264,31 @@ abstract class EnUs {
     'error_timeout': 'Request timed out.',
     'error_network': 'Please check your network connection.',
     'error_unauthorized': 'Authentication required.',
+
+    // ── Notification Bodies ──
+    'noti_auto_report_body':
+        'Scheduled wellness check was received today.',
+    'noti_manual_report_body':
+        'The subject sent a manual wellness check.',
+    'noti_battery_low_body':
+        'Phone battery is below 20%. Charging may be needed.',
+    'noti_battery_dead_body':
+        'Phone appears to have shut down due to a dead battery. Last battery level: @battery_level%. It will recover after charging.',
+    'noti_caution_suspicious_body':
+        'A wellness signal was received, but there are no signs of phone usage. Please check in person.',
+    'noti_caution_missing_body':
+        "Today's scheduled wellness check has not been received yet. Please check in person.",
+    'noti_warning_body':
+        'Wellness checks have been missed consecutively. Please verify in person.',
+    'noti_urgent_body':
+        'No wellness check for @days day(s). Immediate verification is required.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps steps walked.',
+
+    // ── Local Notifications ──
+    'local_alarm_title': '📱 Wellness check needed',
+    'local_alarm_body': 'Please tap this notification.',
+    'wellbeing_check_title': '💛 Wellness Check',
+    'wellbeing_check_body': 'Are you doing well? Please tap this notification.',
+    'noti_channel_name': 'Anbu Alerts',
   };
 }

@@ -302,8 +302,6 @@ abstract class NlNl {
     'local_notification_channel': 'Welzijnsmeldingen',
     'local_notification_channel_desc':
         'Meldingen van de welzijnscontroleservice',
-    'local_alarm_title': '📱 Welzijnscontrole nodig',
-    'local_alarm_body': 'Tik op deze melding, alstublieft.',
 
     // ── Overig ──
     'back_press_exit': 'Druk nogmaals op terug om af te sluiten.',
@@ -313,5 +311,33 @@ abstract class NlNl {
     'error_timeout': 'Het verzoek is verlopen.',
     'error_network': 'Controleer uw netwerkverbinding.',
     'error_unauthorized': 'Authenticatie vereist.',
+
+    // ── Meldingsteksten ──
+    'noti_auto_report_body':
+        'De geplande welzijnscontrole is vandaag ontvangen.',
+    'noti_manual_report_body':
+        'De beschermde persoon heeft handmatig een welzijnscontrole verzonden.',
+    'noti_battery_low_body':
+        'De batterij van de telefoon is onder 20 %. Opladen kan nodig zijn.',
+    'noti_battery_dead_body':
+        'De telefoon lijkt uitgeschakeld door een lege batterij. Laatste batterijniveau: @battery_level %. Het herstelt automatisch na opladen.',
+    'noti_caution_suspicious_body':
+        'Er is een welzijnssignaal ontvangen, maar er zijn geen tekenen van telefoongebruik. Controleer persoonlijk.',
+    'noti_caution_missing_body':
+        'De geplande welzijnscontrole van vandaag is nog niet ontvangen. Controleer persoonlijk.',
+    'noti_warning_body':
+        'Welzijnscontroles zijn achtereenvolgens gemist. Controleer persoonlijk.',
+    'noti_urgent_body':
+        'Geen welzijnscontrole gedurende @days dag(en). Onmiddellijke controle vereist.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps stappen gelopen.',
+
+    // ── Lokale meldingen ──
+    'local_alarm_title': '📱 Welzijnscontrole nodig',
+    'local_alarm_body': 'Tik op deze melding.',
+    'wellbeing_check_title': '💛 Welzijnscontrole',
+    'wellbeing_check_body':
+        'Gaat het goed met u? Tik op deze melding.',
+    'noti_channel_name': 'Anbu-meldingen',
   };
 }

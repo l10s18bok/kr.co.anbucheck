@@ -1,5 +1,6 @@
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
+import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tzlib;
 
 /// 사용자 등록/삭제 원격 저장소
@@ -21,6 +22,15 @@ class UserRemoteDatasource {
     return tzlib.local.name;
   }
 
+  /// 기기 locale 문자열 반환 (예: 'ko_KR', 'en_US').
+  String _localeString() {
+    final locale = Get.deviceLocale;
+    if (locale == null) return 'en_US';
+    final lang = locale.languageCode;
+    final country = locale.countryCode ?? '';
+    return country.isNotEmpty ? '${lang}_$country' : lang;
+  }
+
   /// POST /api/v1/users
   Future<Map<String, dynamic>> register({
     required String role,
@@ -39,6 +49,7 @@ class UserRemoteDatasource {
           'platform': platform,
           'os_version': osVersion,
           'timezone': _timezoneString(),
+          'locale': _localeString(),
         },
       },
     );

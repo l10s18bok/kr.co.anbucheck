@@ -290,7 +290,7 @@ class _NotificationCard extends StatelessWidget {
                           style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
                         ),
                         TextSpan(
-                          text: item.body,
+                          text: _localizedBody,
                           style: AppTextTheme.bodyMedium(),
                         ),
                       ],
@@ -312,13 +312,36 @@ class _NotificationCard extends StatelessWidget {
     return '$period $h:$m';
   }
 
+  /// message_key 기반 로컬 번역 본문 (없으면 서버 제공 body 사용)
+  String get _localizedBody {
+    final key = item.messageKey;
+    final p = item.messageParams ?? {};
+    if (key == null) return item.body;
+    return switch (key) {
+      'auto_report'         => 'noti_auto_report_body'.tr,
+      'manual_report'       => 'noti_manual_report_body'.tr,
+      'battery_low'         => 'noti_battery_low_body'.tr,
+      'battery_dead'        => 'noti_battery_dead_body'.trParams({'battery_level': '${p['battery_level'] ?? ''}'}),
+      'caution_suspicious'  => 'noti_caution_suspicious_body'.tr,
+      'caution_missing'     => 'noti_caution_missing_body'.tr,
+      'warning'             => 'noti_warning_body'.tr,
+      'urgent'              => 'noti_urgent_body'.trParams({'days': '${p['days'] ?? ''}'}),
+      'steps'               => 'noti_steps_body'.trParams({
+                                  'from_time': '${p['from_time'] ?? ''}',
+                                  'to_time': '${p['to_time'] ?? ''}',
+                                  'steps': '${p['steps'] ?? ''}',
+                                }),
+      _                     => item.body,
+    };
+  }
+
   Color get _backgroundColor {
     final dark = Get.isDarkMode;
     return switch (item.level) {
       AlertLevel.urgent  => dark ? const Color(0xFF4E0000) : const Color(0xFFFFEBEE),
       AlertLevel.warning => dark ? const Color(0xFF4E2000) : const Color(0xFFFFE0B2),
       AlertLevel.caution => dark ? const Color(0xFF2E2E00) : const Color(0xFFFFF9C4),
-      AlertLevel.info    => item.title.contains('배터리')
+      AlertLevel.info    => item.isBatteryRelated
           ? (dark ? const Color(0xFF2A1540) : const Color(0xFFEDE7F6))
           : (dark ? const Color(0xFF1A2540) : const Color(0xFFE3F2FD)),
       AlertLevel.health  => dark ? const Color(0xFF0A3A2A) : const Color(0xFFE8F5E9),
@@ -329,8 +352,8 @@ class _NotificationCard extends StatelessWidget {
         AlertLevel.urgent  => const Color(0xFFE53935),
         AlertLevel.warning => const Color(0xFFFF9800),
         AlertLevel.caution => const Color(0xFFFFC107),
-        AlertLevel.info    => item.title.contains('배터리')
-            ? const Color(0xFF7B1FA2) // 보라
+        AlertLevel.info    => item.isBatteryRelated
+            ? const Color(0xFF7B1FA2)
             : const Color(0xFF4355B9),
         AlertLevel.health  => const Color(0xFF43A047),
       };
@@ -339,7 +362,7 @@ class _NotificationCard extends StatelessWidget {
         AlertLevel.urgent  => Icons.error_rounded,
         AlertLevel.warning => Icons.warning_amber_rounded,
         AlertLevel.caution => Icons.info_rounded,
-        AlertLevel.info    => item.title.contains('배터리')
+        AlertLevel.info    => item.isBatteryRelated
             ? Icons.battery_alert_rounded
             : Icons.notifications_rounded,
         AlertLevel.health  => Icons.directions_walk_rounded,

@@ -290,8 +290,6 @@ abstract class DeDe {
     'local_notification_channel': 'Wohlbefindens-Meldungen',
     'local_notification_channel_desc':
         'Benachrichtigungen des Wohlbefindens-Dienstes',
-    'local_alarm_title': '📱 Wohlbefindens-Check erforderlich',
-    'local_alarm_body': 'Bitte tippen Sie auf diese Benachrichtigung.',
 
     // ── Sonstiges ──
     'back_press_exit': 'Noch einmal drücken, um die App zu beenden.',
@@ -301,5 +299,32 @@ abstract class DeDe {
     'error_timeout': 'Zeitüberschreitung der Anfrage.',
     'error_network': 'Bitte überprüfen Sie Ihre Internetverbindung.',
     'error_unauthorized': 'Authentifizierung erforderlich.',
+
+    // ── Benachrichtigungstexte ──
+    'noti_auto_report_body':
+        'Die geplante Wohlbefindens-Prüfung wurde heute empfangen.',
+    'noti_manual_report_body':
+        'Die Schutzperson hat manuell eine Wohlbefindens-Prüfung gesendet.',
+    'noti_battery_low_body':
+        'Der Akkustand des Telefons liegt unter 20 %. Aufladen könnte nötig sein.',
+    'noti_battery_dead_body':
+        'Das Telefon scheint wegen eines leeren Akkus ausgeschaltet zu sein. Letzter Akkustand: @battery_level %. Es wird nach dem Laden automatisch wiederhergestellt.',
+    'noti_caution_suspicious_body':
+        'Ein Wohlbefindens-Signal wurde empfangen, aber es gibt keine Anzeichen für Telefonnutzung. Bitte persönlich nachsehen.',
+    'noti_caution_missing_body':
+        'Die geplante Wohlbefindens-Prüfung für heute steht noch aus. Bitte persönlich nachsehen.',
+    'noti_warning_body':
+        'Wohlbefindens-Prüfungen wurden hintereinander versäumt. Bitte persönlich überprüfen.',
+    'noti_urgent_body':
+        'Seit @days Tag(en) keine Wohlbefindens-Prüfung. Sofortige Überprüfung erforderlich.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps Schritte gegangen.',
+
+    // ── Lokale Benachrichtigungen ──
+    'local_alarm_title': '📱 Wohlbefindens-Prüfung erforderlich',
+    'local_alarm_body': 'Bitte tippen Sie auf diese Benachrichtigung.',
+    'wellbeing_check_title': '💛 Wohlbefindens-Prüfung',
+    'wellbeing_check_body':
+        'Geht es Ihnen gut? Bitte tippen Sie auf diese Benachrichtigung.',
+    'noti_channel_name': 'Anbu-Benachrichtigungen',
   };
 }

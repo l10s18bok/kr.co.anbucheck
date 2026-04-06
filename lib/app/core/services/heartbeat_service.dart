@@ -9,6 +9,7 @@ import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/heartbeat_remote_datasource.dart';
+import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/data/models/heartbeat_request.dart';
 
 /// 센서 변화 임계값 (가속도/자이로 — 걸음수 0일 때만 사용)
@@ -255,24 +256,32 @@ class HeartbeatService {
     return accelDelta < _accelThreshold && gyroDelta < _gyroThreshold;
   }
 
-  /// suspicious=true 판정 시 대상자에게 로컬 알림 즉시 발송
-  /// 서버 왕복 없이 즉각 표시 — 네트워크 없어도 동작
+  /// suspicious=true 판정 시 대상자에게 로��� 알림 즉�� 발송
+  /// 서버 왕복 없�� 즉각 표시 — 네트워크 없어도 동작
   Future<void> _showWellbeingCheckNotification() async {
     try {
+      // 백그라운드 isolate에서는 GetX .tr 사용 불가 �� SharedPreferences 캐시 사용
+      final title = await NotificationTextCache.get(
+          'wellbeing_check_title', fallback: '💛 Wellness Check');
+      final body = await NotificationTextCache.get(
+          'wellbeing_check_body', fallback: 'Are you doing well? Please tap this notification.');
+      final channelName = await NotificationTextCache.get(
+          'noti_channel_name', fallback: 'Anbu Alerts');
+
       final plugin = FlutterLocalNotificationsPlugin();
       await plugin.show(
-        0x57656C6C, // 고정 ID ('Well' hex) — 중복 발송 시 덮어씀
-        '💛 안부 확인',
-        '잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요.',
-        const NotificationDetails(
+        0x57656C6C, // 고��� ID ('Well' hex) — 중복 발송 시 덮어씀
+        title,
+        body,
+        NotificationDetails(
           android: AndroidNotificationDetails(
             'anbu_alerts',
-            '안부 알림',
+            channelName,
             importance: Importance.high,
             priority: Priority.high,
             icon: '@mipmap/ic_launcher',
           ),
-          iOS: DarwinNotificationDetails(
+          iOS: const DarwinNotificationDetails(
             presentAlert: true,
             presentSound: true,
           ),

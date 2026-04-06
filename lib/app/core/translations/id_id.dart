@@ -290,8 +290,6 @@ abstract class IdId {
     'local_notification_channel': 'Peringatan Kesejahteraan',
     'local_notification_channel_desc':
         'Notifikasi layanan pemeriksaan kesejahteraan',
-    'local_alarm_title': '📱 Pemeriksaan kesejahteraan diperlukan',
-    'local_alarm_body': 'Silakan ketuk notifikasi ini.',
 
     // ── Lain-lain ──
     'back_press_exit': 'Tekan kembali sekali lagi untuk keluar.',
@@ -301,5 +299,33 @@ abstract class IdId {
     'error_timeout': 'Waktu permintaan habis.',
     'error_network': 'Silakan periksa koneksi jaringan Anda.',
     'error_unauthorized': 'Autentikasi diperlukan.',
+
+    // ── Isi Notifikasi ──
+    'noti_auto_report_body':
+        'Pemeriksaan kesejahteraan terjadwal telah diterima hari ini.',
+    'noti_manual_report_body':
+        'Orang yang dilindungi mengirim pemeriksaan kesejahteraan secara manual.',
+    'noti_battery_low_body':
+        'Baterai ponsel di bawah 20%. Mungkin perlu diisi daya.',
+    'noti_battery_dead_body':
+        'Ponsel tampaknya mati karena baterai habis. Level baterai terakhir: @battery_level%. Akan pulih setelah diisi daya.',
+    'noti_caution_suspicious_body':
+        'Sinyal kesejahteraan diterima, tetapi tidak ada tanda penggunaan ponsel. Silakan periksa langsung.',
+    'noti_caution_missing_body':
+        'Pemeriksaan kesejahteraan terjadwal hari ini belum diterima. Silakan periksa langsung.',
+    'noti_warning_body':
+        'Pemeriksaan kesejahteraan terlewat berturut-turut. Silakan verifikasi langsung.',
+    'noti_urgent_body':
+        'Tidak ada pemeriksaan kesejahteraan selama @days hari. Verifikasi segera diperlukan.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps langkah.',
+
+    // ── Notifikasi lokal ──
+    'local_alarm_title': '📱 Pemeriksaan kesejahteraan diperlukan',
+    'local_alarm_body': 'Silakan ketuk notifikasi ini.',
+    'wellbeing_check_title': '💛 Pemeriksaan Kesejahteraan',
+    'wellbeing_check_body':
+        'Apakah Anda baik-baik saja? Silakan ketuk notifikasi ini.',
+    'noti_channel_name': 'Peringatan Anbu',
   };
 }

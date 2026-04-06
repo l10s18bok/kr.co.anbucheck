@@ -292,8 +292,6 @@ abstract class PlPl {
     'local_notification_channel': 'Alerty samopoczucia',
     'local_notification_channel_desc':
         'Powiadomienia uslugi sprawdzania samopoczucia',
-    'local_alarm_title': '📱 Wymagane sprawdzenie samopoczucia',
-    'local_alarm_body': 'Prosze dotknac tego powiadomienia.',
 
     // ── Inne ──
     'back_press_exit': 'Nacisnij ponownie, aby wyjsc.',
@@ -303,5 +301,33 @@ abstract class PlPl {
     'error_timeout': 'Uplynal czas zadania.',
     'error_network': 'Prosze sprawdzic polaczenie sieciowe.',
     'error_unauthorized': 'Wymagane uwierzytelnienie.',
+
+    // ── Tresci powiadomien ──
+    'noti_auto_report_body':
+        'Zaplanowane sprawdzenie samopoczucia zostalo odebrane dzisiaj.',
+    'noti_manual_report_body':
+        'Osoba chroniona reczne wyslala sprawdzenie samopoczucia.',
+    'noti_battery_low_body':
+        'Bateria telefonu ponizej 20%. Moze byc potrzebne ladowanie.',
+    'noti_battery_dead_body':
+        'Telefon wydaje sie byc wylaczony z powodu rozladowanej baterii. Ostatni poziom baterii: @battery_level%. Przywroci sie po naladowaniu.',
+    'noti_caution_suspicious_body':
+        'Odebrano sygnal samopoczucia, ale brak oznak korzystania z telefonu. Prosze sprawdzic osobiscie.',
+    'noti_caution_missing_body':
+        'Zaplanowane na dzisiaj sprawdzenie samopoczucia nie zostalo jeszcze odebrane. Prosze sprawdzic osobiscie.',
+    'noti_warning_body':
+        'Sprawdzenia samopoczucia zostaly pominiete z rzedu. Prosze zweryfikowac osobiscie.',
+    'noti_urgent_body':
+        'Brak sprawdzenia samopoczucia od @days dni. Wymagana natychmiastowa weryfikacja.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps krokow.',
+
+    // ── Powiadomienia lokalne ──
+    'local_alarm_title': '📱 Wymagane sprawdzenie samopoczucia',
+    'local_alarm_body': 'Proszę dotknąć tego powiadomienia.',
+    'wellbeing_check_title': '💛 Sprawdzenie samopoczucia',
+    'wellbeing_check_body':
+        'Czy wszystko w porządku? Proszę dotknąć tego powiadomienia.',
+    'noti_channel_name': 'Powiadomienia Anbu',
   };
 }

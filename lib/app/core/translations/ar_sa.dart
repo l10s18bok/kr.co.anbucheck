@@ -281,8 +281,6 @@ abstract class ArSa {
     // ── الإشعارات المحلية ──
     'local_notification_channel': 'إشعارات الاطمئنان',
     'local_notification_channel_desc': 'إشعارات خدمة الاطمئنان على السلامة',
-    'local_alarm_title': '📱 مطلوب الاطمئنان على سلامتك',
-    'local_alarm_body': 'يرجى الضغط على هذا الإشعار.',
 
     // ── متنوع ──
     'back_press_exit': 'اضغط رجوع مرة أخرى للخروج.',
@@ -292,5 +290,33 @@ abstract class ArSa {
     'error_timeout': 'انتهت مهلة الطلب.',
     'error_network': 'يرجى التحقق من اتصالك بالشبكة.',
     'error_unauthorized': 'المصادقة مطلوبة.',
+
+    // ── نصوص الإشعارات ──
+    'noti_auto_report_body':
+        'تم استلام فحص الاطمئنان المجدول اليوم.',
+    'noti_manual_report_body':
+        'قام الشخص المحمي بإرسال فحص اطمئنان يدوي.',
+    'noti_battery_low_body':
+        'بطارية الهاتف أقل من 20%. قد يحتاج إلى الشحن.',
+    'noti_battery_dead_body':
+        'يبدو أن الهاتف قد انطفأ بسبب نفاد البطارية. آخر مستوى للبطارية: @battery_level%. سيتعافى بعد الشحن.',
+    'noti_caution_suspicious_body':
+        'تم استلام إشارة اطمئنان، لكن لا توجد علامات على استخدام الهاتف. يرجى التحقق شخصياً.',
+    'noti_caution_missing_body':
+        'لم يتم استلام فحص الاطمئنان المجدول لليوم بعد. يرجى التحقق شخصياً.',
+    'noti_warning_body':
+        'تم تفويت فحوصات الاطمئنان بشكل متتالٍ. يرجى التحقق شخصياً.',
+    'noti_urgent_body':
+        'لا يوجد فحص اطمئنان منذ @days يوم/أيام. التحقق الفوري مطلوب.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps خطوة.',
+
+    // ── الإشعارات المحلية ──
+    'local_alarm_title': '📱 يلزم التحقق من السلامة',
+    'local_alarm_body': 'يرجى الضغط على هذا الإشعار.',
+    'wellbeing_check_title': '💛 التحقق من السلامة',
+    'wellbeing_check_body':
+        'هل أنت بخير؟ يرجى الضغط على هذا الإشعار.',
+    'noti_channel_name': 'تنبيهات Anbu',
   };
 }

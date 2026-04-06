@@ -256,8 +256,6 @@ abstract class ZhCn {
     // ── 本地通知 ──
     'local_notification_channel': '问安通知',
     'local_notification_channel_desc': '问安服务通知',
-    'local_alarm_title': '📱 需要确认平安',
-    'local_alarm_body': '请轻触此通知。',
 
     // ── 其他 ──
     'back_press_exit': '再按一次返回键退出应用。',
@@ -267,5 +265,26 @@ abstract class ZhCn {
     'error_timeout': '请求超时。',
     'error_network': '请检查网络连接。',
     'error_unauthorized': '需要验证身份。',
+
+    // ── 通知正文 ──
+    'noti_auto_report_body': '今天的定时问安已正常收到。',
+    'noti_manual_report_body': '对象者手动发送了问安。',
+    'noti_battery_low_body': '手机电量低于20%，可能需要充电。',
+    'noti_battery_dead_body':
+        '手机似乎因电量耗尽而关机。最后电量：@battery_level%。充电后将自动恢复。',
+    'noti_caution_suspicious_body':
+        '已收到问安信号，但未检测到手机使用痕迹。请亲自确认。',
+    'noti_caution_missing_body':
+        '今天预定的问安尚未收到。请亲自确认。',
+    'noti_warning_body': '问安已连续未收到。请亲自核实。',
+    'noti_urgent_body': '已@days天未收到问安。需要立即确认。',
+    'noti_steps_body': '@from_time ~ @to_time：走了@steps步。',
+
+    // ── 本地通知 ──
+    'local_alarm_title': '📱 需要确认安否',
+    'local_alarm_body': '请点击此通知。',
+    'wellbeing_check_title': '💛 安否确认',
+    'wellbeing_check_body': '您还好吗？请点击此通知。',
+    'noti_channel_name': 'Anbu提醒',
   };
 }

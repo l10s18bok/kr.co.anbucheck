@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/notification_remote_datasource.dart';
 import 'package:anbucheck/app/domain/entities/notification_entity.dart';
@@ -21,6 +23,17 @@ class NotificationRepositoryImpl implements NotificationRepository {
       final inviteCode = row['invite_code'] as String?;
       final nickname = nicknames[inviteCode ?? ''];
 
+      // message_params: JSON 문자열 또는 Map
+      Map<String, dynamic>? params;
+      final rawParams = row['message_params'];
+      if (rawParams is String && rawParams.isNotEmpty) {
+        try {
+          params = Map<String, dynamic>.from(jsonDecode(rawParams) as Map);
+        } catch (_) {}
+      } else if (rawParams is Map) {
+        params = Map<String, dynamic>.from(rawParams);
+      }
+
       return NotificationEntity(
         id: row['id'] as int?,
         title: row['title'] as String,
@@ -32,6 +45,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
         inviteCode: inviteCode,
         nickname: nickname,
         receivedAt: DateTime.parse(row['created_at'] as String).toLocal(),
+        messageKey: row['message_key'] as String?,
+        messageParams: params,
       );
     }).toList();
   }

@@ -286,8 +286,6 @@ abstract class TrTr {
     'local_notification_channel': 'Hal Hatır Bildirimleri',
     'local_notification_channel_desc':
         'Hal hatır sorgulama hizmeti bildirimleri',
-    'local_alarm_title': '📱 Hal hatır kontrolü gerekli',
-    'local_alarm_body': 'Lütfen bu bildirime dokunun.',
 
     // ── Diğer ──
     'back_press_exit': 'Çıkmak için geri tuşuna tekrar basın.',
@@ -297,5 +295,33 @@ abstract class TrTr {
     'error_timeout': 'İstek zaman aşımına uğradı.',
     'error_network': 'Lütfen ağ bağlantınızı kontrol edin.',
     'error_unauthorized': 'Kimlik doğrulama gerekli.',
+
+    // ── Bildirim Metinleri ──
+    'noti_auto_report_body':
+        'Planlanan hal hatır kontrolü bugün alındı.',
+    'noti_manual_report_body':
+        'Korunan kişi manuel olarak hal hatır kontrolü gönderdi.',
+    'noti_battery_low_body':
+        'Telefon pili %20\'nin altında. Şarj etmek gerekebilir.',
+    'noti_battery_dead_body':
+        'Telefon pil bitmesi nedeniyle kapanmış görünüyor. Son pil seviyesi: %@battery_level. Şarj edildikten sonra otomatik olarak düzelecektir.',
+    'noti_caution_suspicious_body':
+        'Hal hatır sinyali alındı ancak telefon kullanım belirtisi yok. Lütfen bizzat kontrol edin.',
+    'noti_caution_missing_body':
+        'Bugün planlanan hal hatır kontrolü henüz alınmadı. Lütfen bizzat kontrol edin.',
+    'noti_warning_body':
+        'Hal hatır kontrolleri art arda kaçırıldı. Lütfen bizzat doğrulayın.',
+    'noti_urgent_body':
+        '@days gündür hal hatır kontrolü yok. Acil doğrulama gerekli.',
+    'noti_steps_body':
+        '@from_time ~ @to_time: @steps adım atıldı.',
+
+    // ── Yerel bildirimler ──
+    'local_alarm_title': '📱 Sağlık kontrolü gerekli',
+    'local_alarm_body': 'Lütfen bu bildirime dokunun.',
+    'wellbeing_check_title': '💛 Sağlık Kontrolü',
+    'wellbeing_check_body':
+        'İyi misiniz? Lütfen bu bildirime dokunun.',
+    'noti_channel_name': 'Anbu Uyarıları',
   };
 }
