@@ -88,9 +88,9 @@ abstract class DeDe {
     'onboarding_role_guardian': 'Betreuer',
     'onboarding_already_registered_title': 'Gerät bereits registriert',
     'onboarding_already_registered_message':
-        'Dieses Gerät ist bereits im @roleLabel-Modus registriert.\nMöchten Sie als @roleLabel fortfahren?\n\nOder zum @newRoleLabel-Modus wechseln?\nBeim Wechsel werden alle vorhandenen Daten gelöscht.',
-    'onboarding_change_mode': 'Zum @newRoleLabel-Modus wechseln',
-    'onboarding_continue_mode': 'Als @roleLabel fortfahren',
+        'Dieses Gerät ist bereits im "@roleLabel"-Modus registriert.\nMöchten Sie als "@roleLabel" fortfahren?\n\nOder zum "@newRoleLabel"-Modus wechseln?\nBeim Wechsel werden alle vorhandenen Daten gelöscht.',
+    'onboarding_change_mode': 'Zum "@newRoleLabel"-Modus wechseln',
+    'onboarding_continue_mode': 'Als "@roleLabel" fortfahren',
     'onboarding_registration_failed_title': 'Registrierung fehlgeschlagen',
     'onboarding_registration_failed_message':
         'Verbindung zum Server nicht möglich. Bitte versuchen Sie es später erneut.',

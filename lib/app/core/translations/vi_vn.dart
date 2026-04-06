@@ -89,9 +89,9 @@ abstract class ViVn {
     'onboarding_role_guardian': 'Nguoi bao ve',
     'onboarding_already_registered_title': 'Thiet bi da duoc dang ky',
     'onboarding_already_registered_message':
-        'Thiet bi nay da duoc dang ky o che do @roleLabel.\nTiep tuc voi @roleLabel?\n\nHay chuyen sang che do @newRoleLabel?\nChuyen doi se xoa tat ca du lieu hien co.',
-    'onboarding_change_mode': 'Chuyen sang che do @newRoleLabel',
-    'onboarding_continue_mode': 'Tiep tuc voi @roleLabel',
+        'Thiet bi nay da duoc dang ky o che do "@roleLabel".\nTiep tuc voi "@roleLabel"?\n\nHay chuyen sang che do "@newRoleLabel"?\nChuyen doi se xoa tat ca du lieu hien co.',
+    'onboarding_change_mode': 'Chuyen sang che do "@newRoleLabel"',
+    'onboarding_continue_mode': 'Tiep tuc voi "@roleLabel"',
     'onboarding_registration_failed_title': 'Dang ky that bai',
     'onboarding_registration_failed_message':
         'Khong the ket noi den may chu. Vui long thu lai sau.',

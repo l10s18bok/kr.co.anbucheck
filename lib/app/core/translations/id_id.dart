@@ -88,9 +88,9 @@ abstract class IdId {
     'onboarding_role_guardian': 'Penjaga',
     'onboarding_already_registered_title': 'Perangkat Sudah Terdaftar',
     'onboarding_already_registered_message':
-        'Perangkat ini sudah terdaftar dalam mode @roleLabel.\nLanjutkan sebagai @roleLabel?\n\nAtau beralih ke mode @newRoleLabel?\nBeralih akan menghapus semua data yang ada.',
-    'onboarding_change_mode': 'Beralih ke mode @newRoleLabel',
-    'onboarding_continue_mode': 'Lanjutkan sebagai @roleLabel',
+        'Perangkat ini sudah terdaftar dalam mode "@roleLabel".\nLanjutkan sebagai "@roleLabel"?\n\nAtau beralih ke mode "@newRoleLabel"?\nBeralih akan menghapus semua data yang ada.',
+    'onboarding_change_mode': 'Beralih ke mode "@newRoleLabel"',
+    'onboarding_continue_mode': 'Lanjutkan sebagai "@roleLabel"',
     'onboarding_registration_failed_title': 'Pendaftaran Gagal',
     'onboarding_registration_failed_message':
         'Tidak dapat terhubung ke server. Silakan coba lagi nanti.',

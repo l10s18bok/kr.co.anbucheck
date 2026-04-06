@@ -78,9 +78,9 @@ abstract class ZhTw {
     'onboarding_role_guardian': '守護者',
     'onboarding_already_registered_title': '裝置已註冊',
     'onboarding_already_registered_message':
-        '此裝置已註冊為 @roleLabel 模式。\n是否繼續使用 @roleLabel 模式？\n\n或者切換到 @newRoleLabel 模式？\n切換後所有已有資料將被刪除。',
-    'onboarding_change_mode': '切換到 @newRoleLabel 模式',
-    'onboarding_continue_mode': '繼續使用 @roleLabel 模式',
+        '此裝置已註冊為 "@roleLabel" 模式。\n是否繼續使用 "@roleLabel" 模式？\n\n或者切換到 "@newRoleLabel" 模式？\n切換後所有已有資料將被刪除。',
+    'onboarding_change_mode': '切換到 "@newRoleLabel" 模式',
+    'onboarding_continue_mode': '繼續使用 "@roleLabel" 模式',
     'onboarding_registration_failed_title': '註冊失敗',
     'onboarding_registration_failed_message': '無法連線至伺服器，請稍後再試。',
 

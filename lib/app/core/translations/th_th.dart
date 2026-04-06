@@ -88,9 +88,9 @@ abstract class ThTh {
     'onboarding_role_guardian': 'ผู้ดูแล',
     'onboarding_already_registered_title': 'อุปกรณ์ลงทะเบียนแล้ว',
     'onboarding_already_registered_message':
-        'อุปกรณ์นี้ลงทะเบียนในโหมด @roleLabel แล้ว\nดำเนินต่อเป็น @roleLabel?\n\nหรือเปลี่ยนเป็นโหมด @newRoleLabel?\nการเปลี่ยนจะลบข้อมูลทั้งหมด',
-    'onboarding_change_mode': 'เปลี่ยนเป็นโหมด @newRoleLabel',
-    'onboarding_continue_mode': 'ดำเนินต่อเป็น @roleLabel',
+        'อุปกรณ์นี้ลงทะเบียนในโหมด "@roleLabel" แล้ว\nดำเนินต่อเป็น "@roleLabel"?\n\nหรือเปลี่ยนเป็นโหมด "@newRoleLabel"?\nการเปลี่ยนจะลบข้อมูลทั้งหมด',
+    'onboarding_change_mode': 'เปลี่ยนเป็นโหมด "@newRoleLabel"',
+    'onboarding_continue_mode': 'ดำเนินต่อเป็น "@roleLabel"',
     'onboarding_registration_failed_title': 'การลงทะเบียนล้มเหลว',
     'onboarding_registration_failed_message':
         'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาลองใหม่ภายหลัง',

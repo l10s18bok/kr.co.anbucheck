@@ -96,9 +96,9 @@ abstract class NlNl {
     'onboarding_role_guardian': 'Beschermer',
     'onboarding_already_registered_title': 'Apparaat al geregistreerd',
     'onboarding_already_registered_message':
-        'Dit apparaat is al geregistreerd in @roleLabel-modus.\nDoorgaan als @roleLabel?\n\nOf wisselen naar @newRoleLabel-modus?\nBij het wisselen worden alle bestaande gegevens verwijderd.',
-    'onboarding_change_mode': 'Wissel naar @newRoleLabel-modus',
-    'onboarding_continue_mode': 'Doorgaan als @roleLabel',
+        'Dit apparaat is al geregistreerd in "@roleLabel"-modus.\nDoorgaan als "@roleLabel"?\n\nOf wisselen naar "@newRoleLabel"-modus?\nBij het wisselen worden alle bestaande gegevens verwijderd.',
+    'onboarding_change_mode': 'Wissel naar "@newRoleLabel"-modus',
+    'onboarding_continue_mode': 'Doorgaan als "@roleLabel"',
     'onboarding_registration_failed_title': 'Registratie mislukt',
     'onboarding_registration_failed_message':
         'Kan geen verbinding maken met de server. Probeer het later opnieuw.',

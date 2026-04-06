@@ -93,9 +93,9 @@ abstract class EsEs {
     'onboarding_role_guardian': 'Protector',
     'onboarding_already_registered_title': 'Dispositivo ya registrado',
     'onboarding_already_registered_message':
-        'Este dispositivo ya está registrado en modo @roleLabel.\n¿Desea continuar como @roleLabel?\n\n¿O cambiar al modo @newRoleLabel?\nAl cambiar se eliminarán todos los datos existentes.',
-    'onboarding_change_mode': 'Cambiar al modo @newRoleLabel',
-    'onboarding_continue_mode': 'Continuar como @roleLabel',
+        'Este dispositivo ya está registrado en modo "@roleLabel".\n¿Desea continuar como "@roleLabel"?\n\n¿O cambiar al modo "@newRoleLabel"?\nAl cambiar se eliminarán todos los datos existentes.',
+    'onboarding_change_mode': 'Cambiar al modo "@newRoleLabel"',
+    'onboarding_continue_mode': 'Continuar como "@roleLabel"',
     'onboarding_registration_failed_title': 'Error de registro',
     'onboarding_registration_failed_message':
         'No se pudo conectar con el servidor. Inténtelo de nuevo más tarde.',

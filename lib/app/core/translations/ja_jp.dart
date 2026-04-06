@@ -78,9 +78,9 @@ abstract class JaJp {
     'onboarding_role_guardian': '見守り人',
     'onboarding_already_registered_title': 'すでに登録済みの端末です',
     'onboarding_already_registered_message':
-        'この端末はすでに@roleLabelモードで登録されています。\n@roleLabelモードのまま続けますか？\n\nまたは@newRoleLabelモードに変更しますか？\n変更すると既存のデータはすべて削除されます。',
-    'onboarding_change_mode': '@newRoleLabelモードに変更',
-    'onboarding_continue_mode': '@roleLabelモードで続ける',
+        'この端末はすでに"@roleLabel"モードで登録されています。\n"@roleLabel"モードのまま続けますか？\n\nまたは"@newRoleLabel"モードに変更しますか？\n変更すると既存のデータはすべて削除されます。',
+    'onboarding_change_mode': '"@newRoleLabel"モードに変更',
+    'onboarding_continue_mode': '"@roleLabel"モードで続ける',
     'onboarding_registration_failed_title': '登録に失敗しました',
     'onboarding_registration_failed_message': 'サーバーに接続できません。しばらくしてからもう一度お試しください。',
 

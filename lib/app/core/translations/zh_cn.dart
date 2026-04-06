@@ -78,9 +78,9 @@ abstract class ZhCn {
     'onboarding_role_guardian': '守护者',
     'onboarding_already_registered_title': '设备已注册',
     'onboarding_already_registered_message':
-        '此设备已注册为 @roleLabel 模式。\n是否继续使用 @roleLabel 模式？\n\n或者切换到 @newRoleLabel 模式？\n切换后所有已有数据将被删除。',
-    'onboarding_change_mode': '切换到 @newRoleLabel 模式',
-    'onboarding_continue_mode': '继续使用 @roleLabel 模式',
+        '此设备已注册为 "@roleLabel" 模式。\n是否继续使用 "@roleLabel" 模式？\n\n或者切换到 "@newRoleLabel" 模式？\n切换后所有已有数据将被删除。',
+    'onboarding_change_mode': '切换到 "@newRoleLabel" 模式',
+    'onboarding_continue_mode': '继续使用 "@roleLabel" 模式',
     'onboarding_registration_failed_title': '注册失败',
     'onboarding_registration_failed_message': '无法连接到服务器，请稍后再试。',
 

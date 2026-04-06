@@ -95,9 +95,9 @@ abstract class ItIt {
     'onboarding_role_guardian': 'Guardiano',
     'onboarding_already_registered_title': 'Dispositivo già registrato',
     'onboarding_already_registered_message':
-        'Questo dispositivo è già registrato in modalità @roleLabel.\nDesidera continuare come @roleLabel?\n\nOppure passare alla modalità @newRoleLabel?\nIl cambio eliminerà tutti i dati esistenti.',
-    'onboarding_change_mode': 'Passa alla modalità @newRoleLabel',
-    'onboarding_continue_mode': 'Continua come @roleLabel',
+        'Questo dispositivo è già registrato in modalità "@roleLabel".\nDesidera continuare come "@roleLabel"?\n\nOppure passare alla modalità "@newRoleLabel"?\nIl cambio eliminerà tutti i dati esistenti.',
+    'onboarding_change_mode': 'Passa alla modalità "@newRoleLabel"',
+    'onboarding_continue_mode': 'Continua come "@roleLabel"',
     'onboarding_registration_failed_title': 'Registrazione non riuscita',
     'onboarding_registration_failed_message':
         'Impossibile connettersi al server. Riprovi più tardi.',

@@ -87,9 +87,9 @@ abstract class ArSa {
     'onboarding_role_guardian': 'حارس',
     'onboarding_already_registered_title': 'الجهاز مسجل بالفعل',
     'onboarding_already_registered_message':
-        'هذا الجهاز مسجل بالفعل في وضع @roleLabel.\nهل تريد المتابعة كـ @roleLabel؟\n\nأم التبديل إلى وضع @newRoleLabel؟\nسيؤدي التبديل إلى حذف جميع البيانات.',
-    'onboarding_change_mode': 'التبديل إلى @newRoleLabel',
-    'onboarding_continue_mode': 'المتابعة كـ @roleLabel',
+        'هذا الجهاز مسجل بالفعل في وضع "@roleLabel".\nهل تريد المتابعة كـ "@roleLabel"؟\n\nأم التبديل إلى وضع "@newRoleLabel"؟\nسيؤدي التبديل إلى حذف جميع البيانات.',
+    'onboarding_change_mode': 'التبديل إلى "@newRoleLabel"',
+    'onboarding_continue_mode': 'المتابعة كـ "@roleLabel"',
     'onboarding_registration_failed_title': 'فشل التسجيل',
     'onboarding_registration_failed_message':
         'تعذر الاتصال بالخادم. يرجى المحاولة لاحقاً.',
