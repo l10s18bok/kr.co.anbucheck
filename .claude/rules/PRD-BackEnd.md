@@ -1340,7 +1340,134 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ---
 
 
-## 9. Python 핵심 패키지
+## 9. 알림 다국어(i18n) 설계
+
+
+### 9.1 개요
+
+서버는 20개 언어로 Push 알림 메시지를 발송하며, `notification_events`에 `message_key`/`message_params`를 저장하여 클라이언트가 로컬 언어로 재렌더링할 수 있도록 한다.
+
+**지원 언어 (20개):**
+ko_KR, en_US, ja_JP, zh_CN, zh_TW, de_DE, fr_FR, es_ES, it_IT, nl_NL, pt_BR, ru_RU, ar_SA, tr_TR, pl_PL, vi_VN, th_TH, sv_SE, hi_IN, id_ID
+
+
+### 9.2 기기 locale 저장
+
+클라이언트가 기기 등록(`POST /api/v1/users`) 및 FCM 토큰 갱신(`PUT /api/v1/devices/fcm-token`) 시 `locale` 필드를 전달한다. 서버는 `devices.locale` 컬럼에 저장한다.
+
+```sql
+-- devices 테이블 locale 컬럼
+locale TEXT NOT NULL DEFAULT 'ko_KR'
+```
+
+- 기본값: `ko_KR` (미전달 시)
+- 형식: `{languageCode}_{countryCode}` (예: `en_US`, `ja_JP`)
+
+
+### 9.3 서버 Push 메시지 다국어 발송
+
+`i18n/messages.py`에 20개 언어별 메시지 딕셔너리를 관리한다.
+
+```python
+# i18n/messages.py
+MESSAGES: dict[str, dict[str, str]] = {
+    "ko_KR": {
+        "push_battery_low_title": "🔋 폰 배터리 부족",
+        "push_caution_title": "⚠ 주의",
+        "push_warning_title": "⚠ 경고",
+        "push_urgent_title": "🚨 긴급",
+        "push_auto_report_title": "✅ 오늘 안부 확인 완료",
+        ...
+    },
+    "en_US": {
+        "push_battery_low_title": "🔋 Low Battery",
+        ...
+    },
+    # ... 20개 언어
+}
+
+def get_message(locale: str, key: str, **kwargs) -> str:
+    """locale별 메시지 반환. 미지원 locale → en_US fallback."""
+    msgs = MESSAGES.get(locale, MESSAGES["en_US"])
+    template = msgs.get(key, MESSAGES["en_US"].get(key, key))
+    return template.format(**kwargs) if kwargs else template
+```
+
+**Push 발송 흐름:**
+```
+heartbeat 수신 / 미수신 판정
+    ↓
+보호자 목록 조회 (guardians + devices JOIN → fcm_token, locale 획득)
+    ↓
+각 보호자의 locale로 get_message() 호출 → 번역된 title/body 생성
+    ↓
+FCM Push 발송 (보호자별 locale 독립)
+```
+
+- 모든 push_service 함수는 `locale: str = "ko_KR"` 파라미터를 수신
+- 탈퇴 Push, 구독 만료 Push 등도 동일하게 locale 적용
+
+
+### 9.4 notification_events 다국어 저장
+
+`notification_events` 테이블에 `message_key`와 `message_params`를 추가 저장한다.
+`title`/`body` 컬럼은 ko_KR 기본값으로 저장하며, 클라이언트가 `message_key`로 로컬 번역을 렌더링할 수 있다.
+
+```sql
+-- notification_events 테이블 추가 컬럼
+message_key    TEXT,          -- 클라이언트 번역 키 (예: 'auto_report', 'urgent')
+message_params TEXT,          -- JSON 파라미터 (예: '{"days": 3}')
+```
+
+**message_key 목록:**
+
+| message_key | alert_level | 설명 | params |
+|---|---|---|---|
+| `auto_report` | info | 자동 안부 확인 완료 | - |
+| `manual_report` | info | 수동 안부 확인 | - |
+| `battery_low` | info | 배터리 20% 미만 | - |
+| `battery_dead` | info | 배터리 방전 추정 | `{"battery_level": 15}` |
+| `caution_suspicious` | caution | 폰 사용 흔적 없음 | - |
+| `caution_missing` | caution | 안부 미수신 1회 | - |
+| `warning` | warning | 연속 미수신 | - |
+| `urgent` | urgent | 긴급 확인 필요 | `{"days": 3}` |
+| `steps` | health | 걸음수 활동 정보 | `{"from_time": "...", "to_time": "...", "steps": "342"}` |
+
+**API 응답 (GET /api/v1/notifications):**
+```json
+{
+  "notifications": [
+    {
+      "id": 1,
+      "subject_user_id": 1,
+      "invite_code": "K7M-4PXR",
+      "alert_level": "info",
+      "title": "✅ 오늘 안부 확인 완료",
+      "body": "보호 대상자가 오늘 예정시각에 알림을 보냈습니다.",
+      "message_key": "auto_report",
+      "message_params": null,
+      "created_at": "2026-04-06T09:32:00+00:00"
+    }
+  ]
+}
+```
+
+
+### 9.5 프로젝트 구조
+
+```
+server/
+├── i18n/
+│   ├── __init__.py
+│   └── messages.py              # 20개 언어 Push 메시지 딕셔너리 + get_message()
+├── ...
+```
+
+
+---
+
+
+## 10. Python 핵심 패키지
 
 | 패키지 | 용도 |
 |--------|------|
@@ -1366,7 +1493,7 @@ python-dotenv==1.1.*
 ---
 
 
-## 10. 배포 및 인프라
+## 11. 배포 및 인프라
 
 
 ### 10.1 인프라 구성
@@ -1433,7 +1560,7 @@ CMD ["python", "main.py"]
 ---
 
 
-## 11. 연동 API 목록 (FrontEnd 참조)
+## 12. 연동 API 목록 (FrontEnd 참조)
 
 | API | 메서드 | 용도 |
 |-----|--------|------|
@@ -1467,7 +1594,7 @@ CMD ["python", "main.py"]
 ---
 
 
-## 12. 성공 지표 (서버)
+## 13. 성공 지표 (서버)
 
 | 지표 | 목표 |
 |------|------|
@@ -1481,7 +1608,7 @@ CMD ["python", "main.py"]
 ---
 
 
-## 13. 향후 확장 (v2.0+, 참고용)
+## 14. 향후 확장 (v2.0+, 참고용)
 
 - **알림 채널 확장**: 경고 발생 시 SMS, 카카오톡, 이메일 자동 발송
 - **보호자 웹 대시보드**: 관리 대상자 목록, 실시간 상태 모니터링 UI
@@ -1495,7 +1622,7 @@ CMD ["python", "main.py"]
 ---
 
 
-## 14. 개발 일정 (예상)
+## 15. 개발 일정 (예상)
 
 | 단계 | 산출물 |
 |------|--------|

@@ -1829,13 +1829,147 @@ ios/Runner/
 ---
 
 
-## 12. 보안 (클라이언트)
+## 12. 알림 다국어(i18n) 설계
+
+
+### 12.1 개요
+
+앱은 20개 언어를 지원하며, 서버 Push 알림과 클라이언트 로컬 알림 모두 사용자의 기기 locale에 맞춰 번역된 메시지를 표시한다.
+
+**지원 언어 (20개):**
+ko_KR, en_US, ja_JP, zh_CN, zh_TW, de_DE, fr_FR, es_ES, it_IT, nl_NL, pt_BR, ru_RU, ar_SA, tr_TR, pl_PL, vi_VN, th_TH, sv_SE, hi_IN, id_ID
+
+
+### 12.2 기기 locale 전달
+
+클라이언트는 다음 2개 시점에 기기 locale을 서버에 전달한다:
+- **기기 등록 시** (`POST /api/v1/users`): `device.locale` 필드로 전달
+- **FCM 토큰 갱신 시** (`PUT /api/v1/devices/fcm-token`): `locale` 필드로 전달
+
+```dart
+// 기기 locale 문자열 생성 (예: 'ko_KR', 'en_US')
+String _localeString() {
+  final locale = Get.deviceLocale;
+  if (locale == null) return 'en_US';
+  final lang = locale.languageCode;
+  final country = locale.countryCode ?? '';
+  return country.isNotEmpty ? '${lang}_$country' : lang;
+}
+```
+
+- `Get.deviceLocale`로 시스템 locale 감지 (하드코딩 금지)
+- 앱 시작 시 `locale: Get.deviceLocale`, `fallbackLocale: Locale('en', 'US')`로 설정
+
+
+### 12.3 서버 Push 알림 (보호자)
+
+서버가 보호자의 `devices.locale`을 참조하여 해당 언어로 Push 메시지를 구성한다.
+클라이언트는 별도 처리 없이 OS가 표시하는 Push 알림을 그대로 수신한다.
+
+**선택 근거:** 앱이 완전히 종료된 상태에서도 Push 알림이 번역되어야 하므로, 서버 측에서 locale별 메시지를 생성하여 발송한다. (data-only push 방식은 앱 종료 시 기본 언어로만 표시되는 문제)
+
+
+### 12.4 보호자 알림 목록 (message_key 기반 클라이언트 번역)
+
+서버 `notification_events` 테이블에 `message_key`와 `message_params`(JSON)를 함께 저장한다.
+클라이언트는 알림 목록 화면에서 `message_key`를 기반으로 GetX `.tr` / `.trParams()`로 로컬 번역 렌더링한다.
+
+**message_key 목록:**
+
+| message_key | 등급 | 설명 | params |
+|---|---|---|---|
+| `auto_report` | info | 자동 안부 확인 완료 | - |
+| `manual_report` | info | 수동 안부 확인 | - |
+| `battery_low` | info | 배터리 20% 미만 | - |
+| `battery_dead` | info | 배터리 방전 추정 | `battery_level` |
+| `caution_suspicious` | caution | 폰 사용 흔적 없음 | - |
+| `caution_missing` | caution | 안부 미수신 1회 | - |
+| `warning` | warning | 연속 미수신 | - |
+| `urgent` | urgent | 긴급 확인 필요 | `days` |
+| `steps` | health | 걸음수 활동 정보 | `from_time`, `to_time`, `steps` |
+
+**클라이언트 번역 키 매핑:**
+```dart
+// message_key → 클라이언트 .tr 키
+'auto_report'        → 'noti_auto_report_body'.tr
+'battery_dead'       → 'noti_battery_dead_body'.trParams({'battery_level': '...'})
+'urgent'             → 'noti_urgent_body'.trParams({'days': '...'})
+'steps'              → 'noti_steps_body'.trParams({...})
+// message_key가 없으면 서버 제공 body(fallback) 사용
+```
+
+**아이콘/색상 분기:**
+- 기존 `item.title.contains('배터리')` → `item.isBatteryRelated` (messageKey 기반)
+- `NotificationEntity.isBatteryRelated`: `messageKey == 'battery_low' || messageKey == 'battery_dead'`
+
+
+### 12.5 대상자 로컬 알림 (백그라운드 isolate 번역)
+
+WorkManager/BGTaskScheduler 콜백은 별도 isolate에서 실행되므로 GetX `.tr`이 동작하지 않는다.
+**SharedPreferences 캐시 방식**으로 해결한다:
+
+```
+[포그라운드 — Splash 초기화 시]
+    NotificationTextCache.cacheAll()
+    → GetX .tr로 번역 문자열을 SharedPreferences에 저장
+    → 키: 'noti_text_local_alarm_title', 'noti_text_wellbeing_check_body' 등
+
+[백그라운드 isolate — WorkManager/BGTask 콜백]
+    NotificationTextCache.get('local_alarm_title', fallback: 'Wellness check needed')
+    → SharedPreferences에서 캐시된 번역 문자열 읽기
+    → 캐시 없으면 영문 fallback 사용
+```
+
+**대상 로컬 알림 (2건):**
+
+| 알림 | 캐시 키 | 한국어 기본값 |
+|---|---|---|
+| 데드맨 스위치 | `local_alarm_title`, `local_alarm_body` | 📱 안부 확인이 필요합니다 / 이 메시지 알림을 한 번 터치해 주세요. |
+| suspicious 안부 확인 | `wellbeing_check_title`, `wellbeing_check_body` | 💛 안부 확인 / 잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요. |
+| Android 채널명 | `noti_channel_name` | 안부 알림 |
+
+
+### 12.6 번역 파일 구조
+
+```
+lib/app/core/translations/
+├── ko_kr.dart    # 한국어 (기본)
+├── en_us.dart    # 영어 (fallback)
+├── ja_jp.dart    # 일본어
+├── zh_cn.dart    # 중국어 간체
+├── zh_tw.dart    # 중국어 번체
+├── de_de.dart    # 독일어
+├── fr_fr.dart    # 프랑스어
+├── es_es.dart    # 스페인어
+├── it_it.dart    # 이탈리아어
+├── nl_nl.dart    # 네덜란드어
+├── pt_br.dart    # 포르투갈어
+├── ru_ru.dart    # 러시아어
+├── ar_sa.dart    # 아랍어
+├── tr_tr.dart    # 터키어
+├── pl_pl.dart    # 폴란드어
+├── vi_vn.dart    # 베트남어
+├── th_th.dart    # 태국어
+├── sv_se.dart    # 스웨덴어
+├── hi_in.dart    # 힌디어
+└── id_id.dart    # 인도네시아어
+```
+
+- 앱 이름 브랜드 규칙: 한국어만 "안부", 나머지 19개 언어는 "Anbu"
+- UI 문자열 추가/변경 시 반드시 20개 파일 동시 반영
+- GetX `.tr` / `.trParams()` 사용 (하드코딩 한글 금지)
+
+
+---
+
+
+## 13. 보안 (클라이언트)
 
 - 기기 등록 시 서버에서 발급받은 `device_token`을 `shared_preferences`에 안전하게 저장
 - 모든 API 호출에 `Authorization: Bearer <device_token>` 사용
 - HTTPS 필수 (TLS 1.2+)
 - **개인정보 미수집**: 이름, 전화번호, 위치정보, 사용 앱 목록 등 일절 수집하지 않음
-- 수집 데이터 최소화: device_id, 센서 스냅샷(가속도+자이로), 앱 버전
+- 수집 데이터 최소화: device_id, 센서 스냅샷(가속도+자이로), 앱 버전, locale
 - 인앱 결제 영수증은 서버에서 Apple/Google 서버와 직접 검증
 - 대상자 별칭은 보호자 앱 로컬에만 저장, 서버에 전송되지 않음
 
@@ -1843,7 +1977,7 @@ ios/Runner/
 ---
 
 
-## 13. 배포
+## 14. 배포
 
 - **Android**: Google Play 스토어 (내부 테스트 → 프로덕션)
 - **iOS**: App Store (TestFlight → 프로덕션)
@@ -1864,7 +1998,7 @@ ios/Runner/
 ---
 
 
-## 14. 성공 지표 (클라이언트)
+## 15. 성공 지표 (클라이언트)
 
 | 지표                        | 목표                       |
 | --------------------------- | -------------------------- |
@@ -1877,7 +2011,7 @@ ios/Runner/
 ---
 
 
-## 15. 연동 API 목록 (BackEnd 참조)
+## 16. 연동 API 목록 (BackEnd 참조)
 
 | API                            | 메서드 | 용도                                                   |
 | ------------------------------ | ------ | ------------------------------------------------------ |
