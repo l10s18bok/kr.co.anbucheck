@@ -248,6 +248,7 @@ abstract class ArSa {
     'connection_managed_count': 'عدد المتابَعين ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'المتابَعون المتصلون',
+    'connection_empty': 'لا يوجد أشخاص محميون متصلون',
     'connection_unlink_warning':
         'سيؤدي إلغاء الربط إلى حذف بيانات المتابَع.',
     'connection_unlink_warning_detail':

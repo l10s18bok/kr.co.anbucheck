@@ -252,6 +252,7 @@ abstract class RuRu {
     'connection_managed_count': 'Количество подопечных ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Подключённые подопечные',
+    'connection_empty': 'Нет подключённых подопечных',
     'connection_unlink_warning':
         'При отвязке данные подопечного будут удалены.',
     'connection_unlink_warning_detail':

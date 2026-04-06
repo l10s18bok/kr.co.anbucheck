@@ -88,27 +88,45 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
               Expanded(
                 child: Container(
                   color: AppColors.surfaceContainerLow,
-                  child: Scrollbar(
-                    controller: controller.listScrollController,
-                    thumbVisibility: true,
-                    child: ListView.builder(
-                      controller: controller.listScrollController,
-                      padding: EdgeInsets.all(AppSpacing.md),
-                      itemCount: controller.subjects.length,
-                      itemBuilder: (_, index) {
-                        final subject = controller.subjects[index];
-                        return _SubjectListTile(
-                          alias: subject.alias,
-                          code: subject.code,
-                          heartbeatHour: subject.heartbeatHour,
-                          heartbeatMinute: subject.heartbeatMinute,
-                          hasDevice: subject.deviceId != null,
-                          onSaveAlias: (newAlias) => controller.saveAlias(index, newAlias),
-                          onDelete: () => controller.deleteSubject(index),
-                        );
-                      },
-                    ),
-                  ),
+                  child: controller.subjects.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.person_off_rounded,
+                                size: 80.w,
+                                color: AppColors.textTertiary.withValues(alpha: 0.4),
+                              ),
+                              SizedBox(height: AppSpacing.lg),
+                              Text(
+                                'connection_empty'.tr,
+                                style: AppTextTheme.bodyLarge(color: AppColors.textTertiary),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Scrollbar(
+                          controller: controller.listScrollController,
+                          thumbVisibility: true,
+                          child: ListView.builder(
+                            controller: controller.listScrollController,
+                            padding: EdgeInsets.all(AppSpacing.md),
+                            itemCount: controller.subjects.length,
+                            itemBuilder: (_, index) {
+                              final subject = controller.subjects[index];
+                              return _SubjectListTile(
+                                alias: subject.alias,
+                                code: subject.code,
+                                heartbeatHour: subject.heartbeatHour,
+                                heartbeatMinute: subject.heartbeatMinute,
+                                hasDevice: subject.deviceId != null,
+                                onSaveAlias: (newAlias) => controller.saveAlias(index, newAlias),
+                                onDelete: () => controller.deleteSubject(index),
+                              );
+                            },
+                          ),
+                        ),
                 ),
               ),
 

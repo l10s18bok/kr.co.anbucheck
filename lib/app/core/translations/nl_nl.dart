@@ -264,6 +264,7 @@ abstract class NlNl {
     'connection_managed_count': 'Beheerde beschermelingen ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Verbonden beschermelingen',
+    'connection_empty': 'Geen verbonden beschermden',
     'connection_unlink_warning':
         'Bij ontkoppeling worden de gegevens van de beschermeling verwijderd.',
     'connection_unlink_warning_detail':

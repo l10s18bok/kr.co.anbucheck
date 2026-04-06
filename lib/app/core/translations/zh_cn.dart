@@ -223,6 +223,7 @@ abstract class ZhCn {
     'connection_managed_count': '管理的被守护者人数 ',
     'connection_managed_count_value': '@current / @max 人',
     'connection_connected_subjects': '已连接的被守护者',
+    'connection_empty': '没有连接的保护对象',
     'connection_unlink_warning':
         '解除连接后，该被守护者的数据将被删除。',
     'connection_unlink_warning_detail':

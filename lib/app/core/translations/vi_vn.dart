@@ -254,6 +254,7 @@ abstract class ViVn {
     'connection_managed_count': 'So nguoi duoc bao ve ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Nguoi duoc bao ve da ket noi',
+    'connection_empty': 'Không có đối tượng bảo vệ nào được kết nối',
     'connection_unlink_warning':
         'Ngat ket noi se xoa du lieu cua nguoi duoc bao ve.',
     'connection_unlink_warning_detail':

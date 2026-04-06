@@ -223,6 +223,7 @@ abstract class JaJp {
     'connection_managed_count': '管理中の対象者数 ',
     'connection_managed_count_value': '@current / @max人',
     'connection_connected_subjects': '接続中の対象者',
+    'connection_empty': '接続された見守り対象者がいません',
     'connection_unlink_warning':
         '接続を解除すると、この対象者のデータは削除されます。',
     'connection_unlink_warning_detail':

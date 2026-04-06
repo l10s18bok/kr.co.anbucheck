@@ -223,6 +223,7 @@ abstract class KoKr {
     'connection_managed_count': '관리 보호 대상자 수 ',
     'connection_managed_count_value': '@current / @max명',
     'connection_connected_subjects': '연결된 보호 대상자',
+    'connection_empty': '연결된 보호 대상자가 없습니다',
     'connection_unlink_warning':
         '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.',
     'connection_unlink_warning_detail':

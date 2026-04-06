@@ -254,6 +254,7 @@ abstract class DeDe {
     'connection_managed_count': 'Verwaltete Schutzpersonen ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Verbundene Schutzpersonen',
+    'connection_empty': 'Keine verbundenen Schutzpersonen',
     'connection_unlink_warning':
         'Beim Trennen werden die Daten der Schutzperson gelöscht.',
     'connection_unlink_warning_detail':

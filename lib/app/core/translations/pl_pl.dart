@@ -255,6 +255,7 @@ abstract class PlPl {
     'connection_managed_count': 'Liczba podopiecznych ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Polaczeni podopieczni',
+    'connection_empty': 'Brak połączonych podopiecznych',
     'connection_unlink_warning':
         'Odlaczenie spowoduje usuniecie danych podopiecznego.',
     'connection_unlink_warning_detail':
