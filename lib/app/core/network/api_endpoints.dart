@@ -22,6 +22,10 @@ class ApiEndpoints {
   /// - 현재 사용자 계정 및 관련 데이터 전체 삭제 (탈퇴)
   static const String usersMe = '/api/v1/users/me';
 
+  /// GET /api/v1/users/check-device?device_id=xxx
+  /// - 기존 등록 여부 확인 (순수 조회, 데이터 수정 없음)
+  static const String usersCheckDevice = '/api/v1/users/check-device';
+
   // ────────────────────────────────────────────────
   // [대상자 전용] 안부 확인 Heartbeat
   // ────────────────────────────────────────────────

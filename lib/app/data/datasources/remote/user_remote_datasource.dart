@@ -5,6 +5,19 @@ import 'package:timezone/timezone.dart' as tzlib;
 
 /// 사용자 등록/삭제 원격 저장소
 class UserRemoteDatasource {
+  /// GET /api/v1/users/check-device — 기존 등록 여부 확인 (순수 조회)
+  /// 반환: { "exists": true, "role": "subject" } 또는 { "exists": false }
+  Future<Map<String, dynamic>> checkDevice(String deviceId) async {
+    final result = await ApiClientFactory.instance.get<dynamic>(
+      ApiEndpoints.usersCheckDevice,
+      query: {'device_id': deviceId},
+    );
+    if (!result.isOk) {
+      return {'exists': false};
+    }
+    return Map<String, dynamic>.from(result.body as Map);
+  }
+
   /// DELETE /api/v1/users/me — 계정 및 관련 데이터 전체 삭제 (모드 변경 시)
   Future<void> deleteMe(String deviceToken) async {
     final result = await ApiClientFactory.instance.delete<void>(

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
-import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
@@ -21,7 +20,6 @@ class OnboardingController extends BaseController {
   static const int totalPages = 4;
 
   final _tokenDs = TokenLocalDatasource();
-  final _nicknameDs = NicknameLocalDatasource();
   final _userDs = UserRemoteDatasource();
 
   @override
@@ -59,70 +57,6 @@ class OnboardingController extends BaseController {
         fcmToken: fcmToken,
         platform: platform,
       );
-
-      // 기존 기기에 다른 role로 가입 시도 시 다이얼로그
-      final existingRole = response['existing_role'] as String?;
-      if (existingRole != null) {
-        isLoading = false;
-        final roleLabel = existingRole == 'subject'
-            ? 'onboarding_role_subject'.tr
-            : 'onboarding_role_guardian'.tr;
-        final newRoleLabel = mode == 'subject'
-            ? 'onboarding_role_subject'.tr
-            : 'onboarding_role_guardian'.tr;
-        // 'keep' | 'change' | null(취소)
-        final choice = await Get.dialog<String>(
-          barrierDismissible: false,
-          AlertDialog(
-            title: Text('onboarding_already_registered_title'.tr),
-            content: Text(
-              'onboarding_already_registered_message'.trParams({
-                'roleLabel': roleLabel,
-                'newRoleLabel': newRoleLabel,
-              }),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => exit(0),
-                child: Text('common_cancel'.tr),
-              ),
-              TextButton(
-                onPressed: () => Get.back(result: 'change'),
-                child: Text('onboarding_change_mode'.trParams({
-                  'newRoleLabel': newRoleLabel,
-                })),
-              ),
-              TextButton(
-                onPressed: () => Get.back(result: 'keep'),
-                child: Text('onboarding_continue_mode'.trParams({
-                  'roleLabel': roleLabel,
-                })),
-              ),
-            ],
-          ),
-        );
-
-        if (choice == 'keep') {
-          isLoading = true;
-          await _saveAndNavigate(response, existingRole);
-          return;
-        }
-
-        // 변경 → 서버 계정 삭제 후 새 모드로 재등록
-        isLoading = true;
-        final oldToken = response['device_token'] as String?;
-        if (oldToken != null) {
-          try {
-            await _userDs.deleteMe(oldToken);
-          } catch (_) {
-            // 204 No Content 파싱 오류 무시 — 삭제는 서버에서 완료됨
-          }
-        }
-        await _tokenDs.clear();
-        await _nicknameDs.clearAll();
-        await completeOnboarding();
-        return;
-      }
 
       await _saveAndNavigate(response, mode);
     } catch (e) {
