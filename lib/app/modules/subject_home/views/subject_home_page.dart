@@ -108,7 +108,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
 
             // Bento 그리드 (배터리 + 통신)
             _buildBentoGrid(),
-            SizedBox(height: AppSpacing.sp6),
+            SizedBox(height: AppSpacing.lg),
 
             // 지금 바로 안전 보고하기 버튼
             _buildReportButton(),
