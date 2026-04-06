@@ -12,7 +12,8 @@ class GuardianAddSubjectController extends BaseController {
   final aliasController = TextEditingController();
 
   final _isCodeValid = false.obs;
-  bool get isCodeValid => _isCodeValid.value;
+  final _isAliasValid = false.obs;
+  bool get isFormValid => _isCodeValid.value && _isAliasValid.value;
 
   final _tokenDs = TokenLocalDatasource();
   final _nicknameDs = NicknameLocalDatasource();
@@ -23,9 +24,13 @@ class GuardianAddSubjectController extends BaseController {
     _isCodeValid.value = RegExp(r'^[A-Z0-9]{3}-[A-Z0-9]{4}$').hasMatch(value.trim().toUpperCase());
   }
 
+  void onAliasChanged(String value) {
+    _isAliasValid.value = value.trim().isNotEmpty;
+  }
+
   /// 대상자 연결 — 서버 API + 별칭 로컬 저장
   Future<void> connectSubject() async {
-    if (!_isCodeValid.value) return;
+    if (!isFormValid) return;
 
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) {

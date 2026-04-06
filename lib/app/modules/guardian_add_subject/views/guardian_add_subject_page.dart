@@ -54,6 +54,9 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
               style: AppTextTheme.bodyLarge(),
               keyboardType: TextInputType.visiblePassword,
               textCapitalization: TextCapitalization.characters,
+              autocorrect: false,
+              enableSuggestions: false,
+              autofillHints: const [],
               inputFormatters: [
                 TextInputFormatter.withFunction(
                   (old, next) => next.copyWith(text: next.text.toUpperCase()),
@@ -100,6 +103,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
             SizedBox(height: AppSpacing.sm),
             TextField(
               controller: controller.aliasController,
+              onChanged: controller.onAliasChanged,
               style: AppTextTheme.bodyLarge(),
               decoration: InputDecoration(
                 hintText: 'add_subject_alias_hint'.tr,
@@ -128,7 +132,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
               height: 56.h,
               child: Obx(
                 () => ElevatedButton(
-                  onPressed: controller.isCodeValid ? controller.connectSubject : null,
+                  onPressed: controller.isFormValid ? controller.connectSubject : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF4355B9),
                     disabledBackgroundColor: const Color(0xFF4355B9).withValues(alpha: 0.3),
