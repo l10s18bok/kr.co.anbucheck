@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 
@@ -10,9 +11,11 @@ class HeartbeatScheduleTile extends StatelessWidget {
   final VoidCallback onTap;
   final Color color;
   final Color backgroundColor;
-  final String label;
+  final String? _label;
   final String? subLabel;
   final Color? timeColor;
+
+  String get label => _label ?? 'heartbeat_schedule_change'.tr;
 
   const HeartbeatScheduleTile({
     super.key,
@@ -20,10 +23,10 @@ class HeartbeatScheduleTile extends StatelessWidget {
     required this.onTap,
     required this.color,
     required this.backgroundColor,
-    this.label = '안부 확인 시각 변경',
+    String? label,
     this.subLabel,
     this.timeColor,
-  });
+  }) : _label = label;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class HeartbeatScheduleTile extends StatelessWidget {
             ),
             SizedBox(height: 6.h),
             Text(
-              subLabel ?? '매일 $heartbeatTime',
+              subLabel ?? 'heartbeat_daily_time'.trParams({'time': heartbeatTime}),
               style: AppTextTheme.bodySmall(
                 color: (timeColor ?? color).withValues(alpha: 0.8),
                 fw: FontWeight.w700,

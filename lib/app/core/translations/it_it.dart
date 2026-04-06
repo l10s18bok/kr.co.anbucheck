@@ -1,0 +1,316 @@
+abstract class ItIt {
+  static const Map<String, String> translations = {
+    // ── Comune ──
+    'common_confirm': 'Conferma',
+    'common_cancel': 'Annulla',
+    'common_save': 'Salva',
+    'common_delete': 'Elimina',
+    'common_close': 'Chiudi',
+    'common_next': 'Avanti',
+    'common_previous': 'Indietro',
+    'common_start': 'Inizia',
+    'common_skip': 'Salta',
+    'common_later': 'Dopo',
+    'common_loading': 'Caricamento...',
+    'common_error': 'Errore',
+    'common_complete': 'Fatto',
+    'common_notice': 'Avviso',
+    'common_unlink': 'Scollega',
+    'common_am': 'AM',
+    'common_pm': 'PM',
+    'common_normal': 'Normale',
+    'common_connected': 'Connesso',
+    'common_disconnected': 'Non connesso',
+
+    // ── Brand dell'app ──
+    'app_name': 'Anbu',
+    'app_brand': 'Anbu',
+    'app_tagline': 'Verifichiamo il Suo benessere.',
+    'app_service_desc': 'Servizio automatico di verifica del benessere',
+    'app_guardian_title': 'Anbu Guardiano',
+    'app_copyright': '© 2024 TNS Inc.',
+
+    // ── Splash ──
+    'splash_loading': 'Verifica in corso...',
+
+    // ── Aggiornamento ──
+    'update_required_title': 'Aggiornamento necessario',
+    'update_required_message':
+        "Per continuare a usare l'app, aggiorni alla versione @version.",
+    'update_button': 'Aggiorna',
+    'update_available_title': 'Aggiornamento disponibile',
+    'update_available_message': 'La versione @version è disponibile.',
+
+    // ── Selezione modalità ──
+    'mode_select_title': 'Scelga il Suo ruolo',
+    'mode_select_subtitle':
+        'Questo ci aiuta a configurare le funzionalità più adatte a Lei',
+    'mode_subject_title':
+        'Desidero che la mia\nsicurezza venga monitorata',
+    'mode_subject_button': 'Voglio essere protetto →',
+    'mode_guardian_title':
+        'Desidero vegliare su\nuna persona cara',
+    'mode_guardian_button': 'Inizia come guardiano →',
+    'mode_select_notice':
+        'La disposizione dello schermo e le notifiche varieranno in base alla Sua scelta',
+
+    // ── Permessi ──
+    'permission_title':
+        "Per utilizzare l'app\nsono necessari dei permessi",
+    'permission_notification': 'Permesso notifiche',
+    'permission_notification_subject_desc':
+        'Necessario per ricevere gli avvisi di verifica del benessere',
+    'permission_notification_guardian_desc':
+        'Necessario per ricevere le notifiche sullo stato di sicurezza dei Suoi assistiti',
+    'permission_activity': 'Riconoscimento attività',
+    'permission_activity_desc':
+        "Utilizzato per rilevare i passi e verificare l'attività",
+    'permission_activity_dialog_title': 'Informazioni sul permesso attività',
+    'permission_activity_dialog_message':
+        'Utilizzato per rilevare i passi e verificare l\'attività.\nSelezioni "Consenti" nella schermata successiva.',
+    'permission_notification_required_title':
+        'Permesso notifiche necessario',
+    'permission_notification_required_message':
+        'Il permesso notifiche è necessario per il servizio di verifica del benessere.\nLo abiliti nelle Impostazioni.',
+    'permission_go_to_settings': 'Vai alle Impostazioni',
+
+    // ── Onboarding ──
+    'onboarding_title_1':
+        'Si preoccupa per qualcuno\nche vive da solo?',
+    'onboarding_desc_1':
+        'Anche da lontano,\nsi chiede se stia bene.\nAnbu è qui per Lei.',
+    'onboarding_title_2':
+        'La verifica del benessere\navviene senza una parola',
+    'onboarding_desc_2':
+        'Semplicemente usando lo smartphone,\nun segnale giornaliero\nviene inviato automaticamente.',
+    'onboarding_title_3':
+        'Condivida il benessere\ncon i Suoi cari',
+    'onboarding_desc_3':
+        'I controlli quotidiani si accumulano\nin una tranquillità duratura.\nIniziamo.',
+    'onboarding_title_4':
+        'Nessun nome, nessun numero\ndi telefono raccolto',
+    'onboarding_desc_4':
+        'Viene trasmesso un solo segnale:\n"Sto bene."\nLe Sue informazioni sono al sicuro.',
+    'onboarding_role_subject': 'Assistito',
+    'onboarding_role_guardian': 'Guardiano',
+    'onboarding_already_registered_title': 'Dispositivo già registrato',
+    'onboarding_already_registered_message':
+        'Questo dispositivo è già registrato in modalità @roleLabel.\nDesidera continuare come @roleLabel?\n\nOppure passare alla modalità @newRoleLabel?\nIl cambio eliminerà tutti i dati esistenti.',
+    'onboarding_change_mode': 'Passa alla modalità @newRoleLabel',
+    'onboarding_continue_mode': 'Continua come @roleLabel',
+    'onboarding_registration_failed_title': 'Registrazione non riuscita',
+    'onboarding_registration_failed_message':
+        'Impossibile connettersi al server. Riprovi più tardi.',
+
+    // ── Home assistito ──
+    'subject_home_share_title': 'Condivida il Suo codice di sicurezza',
+    'subject_home_guardian_count': 'Guardiani connessi: @count',
+    'subject_home_check_title_last': 'Ultima verifica',
+    'subject_home_check_title_scheduled': 'Prossima verifica prevista',
+    'subject_home_check_title_checking': 'Verifica in corso',
+    'subject_home_check_body_reported': 'Segnalato alle @time',
+    'subject_home_check_body_scheduled': 'Previsto alle @time',
+    'subject_home_check_body_waiting': 'In attesa dalle @time',
+    'subject_home_battery_status': 'Stato batteria',
+    'subject_home_battery_charging': 'In carica',
+    'subject_home_battery_full': 'Carica completa',
+    'subject_home_battery_low': 'Batteria scarica',
+    'subject_home_connectivity_status': 'Connettività',
+    'subject_home_report_loading': 'Invio segnalazione...',
+    'subject_home_report_button': 'Segnala ora che sta bene',
+    'subject_home_report_desc':
+        'Faccia sapere al Suo guardiano che sta bene',
+    'subject_home_share_text':
+        "Controlli come sto con l'app Anbu!\nCodice invito: @code",
+    'subject_home_share_subject': 'Codice invito Anbu',
+    'subject_home_code_copied': 'Codice copiato',
+
+    // ── Drawer assistito ──
+    'drawer_light_mode': 'Modalità chiara',
+    'drawer_dark_mode': 'Modalità scura',
+    'drawer_privacy_policy': 'Informativa sulla privacy',
+    'drawer_terms': 'Termini di servizio',
+    'drawer_withdraw': 'Elimina account',
+    'drawer_withdraw_message':
+        'Il Suo account e tutti i dati verranno eliminati.\nÈ sicuro/a?',
+
+    // ── Dashboard guardiano ──
+    'guardian_status_normal': 'Normale',
+    'guardian_status_caution': 'Attenzione',
+    'guardian_status_warning': 'Avviso',
+    'guardian_status_urgent': 'Urgente',
+    'guardian_status_confirmed': 'Sicurezza confermata',
+    'guardian_subscription_expired': 'Abbonamento scaduto',
+    'guardian_subscription_expired_message':
+        'Le notifiche di avviso non vengono inviate.\nRinnovi il Suo abbonamento per continuare la protezione.',
+    'guardian_subscribe': 'Abbonati',
+    'guardian_payment_preparing':
+        'La funzione di pagamento sarà disponibile a breve.',
+    'guardian_today_summary': 'Riepilogo benessere di oggi',
+    'guardian_no_subjects': 'Nessun assistito connesso.',
+    'guardian_checking_subjects':
+        'Attualmente monitoriamo\n@count assistito/i.',
+    'guardian_subject_list': 'Lista assistiti',
+    'guardian_call_now': 'Chiama ora',
+    'guardian_confirm_safety': 'Conferma sicurezza',
+    'guardian_no_check_history': 'Nessun controllo registrato',
+    'guardian_last_check_now': 'Ultimo controllo: adesso',
+    'guardian_last_check_minutes': 'Ultimo controllo: @minutes min fa',
+    'guardian_last_check_hours': 'Ultimo controllo: @hours ore fa',
+    'guardian_last_check_days': 'Ultimo controllo: @days giorno/i fa',
+    'guardian_activity_stable': 'Attività: stabile',
+    'guardian_safety_needed': 'Verifica di sicurezza necessaria',
+    'guardian_error_load_subjects':
+        'Impossibile caricare la lista degli assistiti.',
+    'guardian_error_clear_alerts':
+        'Impossibile cancellare gli avvisi.',
+
+    // ── Aggiunta assistito ──
+    'add_subject_title': 'Collega assistito',
+    'add_subject_guide_title':
+        "Inserisca il codice univoco dell'assistito\ne un soprannome.",
+    'add_subject_guide_subtitle':
+        "Colleghi l'app dell'assistito per monitorare\nla sua salute e attività in tempo reale.",
+    'add_subject_code_label': 'Codice univoco (7 cifre)',
+    'add_subject_code_hint': '123-4567',
+    'add_subject_code_info':
+        "Il codice univoco si trova nell'app dell'assistito.",
+    'add_subject_alias_label': "Soprannome dell'assistito",
+    'add_subject_alias_hint': 'Es: Mamma, Papà',
+    'add_subject_connect': 'Collega',
+    'add_subject_error_login': 'Accesso necessario.',
+    'add_subject_success': 'Assistito collegato con successo.',
+    'add_subject_error_invalid_code': 'Codice non valido.',
+    'add_subject_error_already_connected': 'Già collegato.',
+    'add_subject_error_failed':
+        'Collegamento non riuscito. Riprovi più tardi.',
+    'add_subject_button': 'Aggiungi nuovo assistito',
+
+    // ── Impostazioni guardiano ──
+    'settings_title': 'Impostazioni',
+    'settings_light_mode': 'Modalità chiara',
+    'settings_dark_mode': 'Modalità scura',
+    'settings_connection_management': 'Gestione connessioni',
+    'settings_managed_subjects': 'Assistiti gestiti',
+    'settings_managed_subjects_count': '@current / @max',
+    'settings_subscription_service': 'Abbonamento e servizio',
+    'settings_current_membership': 'Abbonamento attuale',
+    'settings_premium': 'Premium attivo',
+    'settings_free_trial': 'Prova gratuita',
+    'settings_manage_subscription': "Gestisci l'abbonamento",
+    'settings_notification': 'Impostazioni notifiche',
+    'settings_terms_section': 'Legale',
+    'settings_privacy_policy': 'Informativa sulla privacy',
+    'settings_terms': 'Termini di servizio',
+    'settings_app_version': 'Versione: v@version',
+
+    // ── Notifiche guardiano ──
+    'notifications_title': 'Notifiche',
+    'notifications_today': 'Notifiche di oggi',
+    'notifications_empty': 'Nessuna notifica oggi',
+    'notifications_delete_all_title': 'Elimina tutte le notifiche',
+    'notifications_delete_all_message':
+        'Eliminare tutte le notifiche di oggi?',
+    'notifications_delete_failed':
+        'Impossibile eliminare le notifiche.',
+    'notifications_guide_title': 'Guida ai livelli di notifica',
+    'notifications_level_health': 'Normale',
+    'notifications_level_health_desc':
+        "Il benessere dell'assistito è stato confermato normalmente",
+    'notifications_level_caution': 'Attenzione',
+    'notifications_level_caution_desc':
+        "Uno dei seguenti:\n1. Il controllo programmato di oggi non è stato ricevuto\n2. Controllo ricevuto ma nessun utilizzo del telefono rilevato",
+    'notifications_level_warning': 'Avviso',
+    'notifications_level_warning_desc':
+        'Uno dei seguenti:\n1. Nessun controllo per 2 giorni consecutivi\n2. Nessun utilizzo del telefono per 2 giorni consecutivi',
+    'notifications_level_urgent': 'Urgente',
+    'notifications_level_urgent_desc':
+        'Nessun controllo per un periodo prolungato,\no nessun utilizzo del telefono per più di 3 giorni',
+    'notifications_level_info': 'Info',
+    'notifications_level_info_desc':
+        'Notifiche informative come\nnumero di passi o batteria scarica',
+    'notifications_activity_note':
+        "※ Le informazioni sull'attività potrebbero non essere visualizzate se i dati dei passi non sono stati raccolti.",
+
+    // ── Impostazioni notifiche guardiano ──
+    'notification_settings_title': 'Impostazioni notifiche',
+    'notification_settings_push': 'Notifiche push',
+    'notification_settings_all': 'Tutte le notifiche',
+    'notification_settings_all_desc':
+        'Attiva o disattiva tutte le categorie di notifica contemporaneamente.',
+    'notification_settings_level_section': 'Impostazioni per livello',
+    'notification_settings_urgent': 'Avvisi urgenti',
+    'notification_settings_urgent_desc':
+        'Gli avvisi urgenti non possono essere disattivati',
+    'notification_settings_warning': 'Avvisi di avviso',
+    'notification_settings_warning_desc':
+        'Avviso quando non ci sono controlli per 2 giorni consecutivi',
+    'notification_settings_caution': 'Avvisi di attenzione',
+    'notification_settings_caution_desc':
+        'Avviso quando il controllo di oggi non è stato effettuato',
+    'notification_settings_info': 'Avvisi informativi',
+    'notification_settings_info_desc':
+        'Avvisi generali come numero di passi e stato della batteria',
+    'notification_settings_dnd': 'Non disturbare',
+    'notification_settings_dnd_start': 'Ora di inizio',
+    'notification_settings_dnd_end': 'Ora di fine',
+    'notification_settings_dnd_note':
+        '※ Gli avvisi urgenti vengono recapitati anche durante la modalità Non disturbare',
+    'notification_settings_dnd_start_default': '22:00',
+    'notification_settings_dnd_end_default': '07:00',
+
+    // ── Gestione connessioni guardiano ──
+    'connection_title': 'Gestione connessioni',
+    'connection_managed_count': 'Assistiti gestiti ',
+    'connection_managed_count_value': '@current / @max',
+    'connection_connected_subjects': 'Assistiti connessi',
+    'connection_unlink_warning':
+        "Lo scollegamento eliminerà i dati dell'assistito.",
+    'connection_unlink_warning_detail':
+        "I dati precedenti non potranno essere recuperati dopo un nuovo collegamento.\nDovrà reinserire il codice dell'assistito.",
+    'connection_heartbeat_schedule': 'Ogni giorno alle @time',
+    'connection_heartbeat_report_time':
+        "L'orario di segnalazione del benessere è ",
+    'connection_subject_label': 'Assistito',
+    'connection_change_only_in_app':
+        "può essere modificato solo nell'app",
+    'connection_edit_title': 'Modifica assistito',
+    'connection_alias_label': 'Soprannome',
+    'connection_unlink_title': 'Scollega',
+    'connection_unlink_confirm': 'Scollegare @alias?',
+    'connection_unlink_success': 'Scollegamento riuscito.',
+    'connection_unlink_failed': 'Scollegamento non riuscito.',
+    'connection_load_failed': 'Impossibile caricare la lista.',
+
+    // ── Navigazione inferiore guardiano ──
+    'nav_home': 'Home',
+    'nav_connection': 'Connessioni',
+    'nav_notification': 'Avvisi',
+    'nav_settings': 'Impostazioni',
+
+    // ── Heartbeat ──
+    'heartbeat_schedule_change': "Cambia l'orario di verifica",
+    'heartbeat_daily_time': 'Ogni giorno alle @time',
+    'heartbeat_scheduled_today':
+        'Verifica del benessere programmata alle @time oggi.',
+    'heartbeat_change_failed_title': "Modifica dell'orario non riuscita",
+    'heartbeat_change_failed_message':
+        'Impossibile aggiornare sul server.',
+
+    // ── Notifiche locali ──
+    'local_notification_channel': 'Avvisi benessere',
+    'local_notification_channel_desc':
+        'Notifiche del servizio di verifica del benessere',
+    'local_alarm_title': '📱 Verifica del benessere necessaria',
+    'local_alarm_body': 'Tocchi questa notifica, per favore.',
+
+    // ── Varie ──
+    'back_press_exit': 'Prema di nuovo indietro per uscire.',
+
+    // ── Errori API ──
+    'error_unknown': 'Si è verificato un errore sconosciuto.',
+    'error_timeout': 'La richiesta è scaduta.',
+    'error_network': 'Verifichi la connessione di rete.',
+    'error_unauthorized': 'Autenticazione necessaria.',
+  };
+}

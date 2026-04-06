@@ -1,0 +1,271 @@
+abstract class ZhTw {
+  static const Map<String, String> translations = {
+    // ── 通用 ──
+    'common_confirm': '確認',
+    'common_cancel': '取消',
+    'common_save': '儲存',
+    'common_delete': '刪除',
+    'common_close': '關閉',
+    'common_next': '下一步',
+    'common_previous': '上一步',
+    'common_start': '開始使用',
+    'common_skip': '跳過',
+    'common_later': '稍後',
+    'common_loading': '載入中...',
+    'common_error': '錯誤',
+    'common_complete': '完成',
+    'common_notice': '提示',
+    'common_unlink': '解除',
+    'common_am': '上午',
+    'common_pm': '下午',
+    'common_normal': '正常',
+    'common_connected': '已連線',
+    'common_disconnected': '未連線',
+
+    // ── 應用品牌 ──
+    'app_name': 'Anbu',
+    'app_brand': 'Anbu',
+    'app_tagline': '關心您的平安',
+    'app_service_desc': '自動問安服務',
+    'app_guardian_title': 'Anbu 守護者',
+    'app_copyright': '© 2024 TNS Inc.',
+
+    // ── 啟動頁 ──
+    'splash_loading': '正在確認平安...',
+
+    // ── 更新 ──
+    'update_required_title': '需要更新',
+    'update_required_message': '請更新至版本 @version 以繼續使用應用程式。',
+    'update_button': '更新',
+    'update_available_title': '有新版本',
+    'update_available_message': '新版本 @version 已發佈。',
+
+    // ── 模式選擇 ──
+    'mode_select_title': '請選擇您的角色',
+    'mode_select_subtitle': '我們將根據您的選擇配置相應功能',
+    'mode_subject_title': '我希望有人關注我的安全',
+    'mode_subject_button': '成為被守護者 →',
+    'mode_guardian_title': '我想守護家人的安全',
+    'mode_guardian_button': '成為守護者 →',
+    'mode_select_notice': '介面佈局和通知設定將根據您的選擇有所不同',
+
+    // ── 權限請求 ──
+    'permission_title': '使用應用程式\n需要以下權限',
+    'permission_notification': '通知權限',
+    'permission_notification_subject_desc': '接收問安提醒時需要此權限',
+    'permission_notification_guardian_desc': '接收被守護者安全狀態提醒時需要此權限',
+    'permission_activity': '身體活動權限',
+    'permission_activity_desc': '用於偵測步數以確認活動狀態',
+    'permission_activity_dialog_title': '身體活動權限說明',
+    'permission_activity_dialog_message':
+        '用於偵測步數以確認活動狀態。\n請在下一個畫面中選擇「允許」。',
+    'permission_notification_required_title': '需要通知權限',
+    'permission_notification_required_message':
+        '問安服務需要通知權限。\n請在設定中開啟通知權限。',
+    'permission_go_to_settings': '前往設定',
+
+    // ── 引導頁 ──
+    'onboarding_title_1': '擔心獨居的親人\n過得好不好？',
+    'onboarding_desc_1': '即使相隔萬里，\n也牽掛著他們是否安好。\nAnbu 與您同在。',
+    'onboarding_title_2': '不用說一句話，\n平安自然傳達',
+    'onboarding_desc_2': '只要使用手機，\n每天自動發送一次\n平安訊號。',
+    'onboarding_title_3': '與親人\n互報平安',
+    'onboarding_desc_3': '每天的問安匯聚成\n彼此的安心。\n現在就開始吧。',
+    'onboarding_title_4': '不收集姓名，\n也不收集電話號碼',
+    'onboarding_desc_4':
+        '只傳遞一個訊號：\n「我一切安好。」\n您的資訊絕對安全。',
+    'onboarding_role_subject': '被守護者',
+    'onboarding_role_guardian': '守護者',
+    'onboarding_already_registered_title': '裝置已註冊',
+    'onboarding_already_registered_message':
+        '此裝置已註冊為 @roleLabel 模式。\n是否繼續使用 @roleLabel 模式？\n\n或者切換到 @newRoleLabel 模式？\n切換後所有已有資料將被刪除。',
+    'onboarding_change_mode': '切換到 @newRoleLabel 模式',
+    'onboarding_continue_mode': '繼續使用 @roleLabel 模式',
+    'onboarding_registration_failed_title': '註冊失敗',
+    'onboarding_registration_failed_message': '無法連線至伺服器，請稍後再試。',
+
+    // ── 被守護者首頁 ──
+    'subject_home_share_title': '請分享您的安全碼',
+    'subject_home_guardian_count': '已連線守護者：@count 人',
+    'subject_home_check_title_last': '上次問安',
+    'subject_home_check_title_scheduled': '預定報告時間',
+    'subject_home_check_title_checking': '正在確認平安',
+    'subject_home_check_body_reported': '@time 已正常報告',
+    'subject_home_check_body_scheduled': '@time 預定報告',
+    'subject_home_check_body_waiting': '@time 等待報告中',
+    'subject_home_battery_status': '電池狀態',
+    'subject_home_battery_charging': '充電中',
+    'subject_home_battery_full': '已充滿',
+    'subject_home_battery_low': '電量不足',
+    'subject_home_connectivity_status': '網路連線狀態',
+    'subject_home_report_loading': '正在報告平安...',
+    'subject_home_report_button': '立即報告安全',
+    'subject_home_report_desc': '讓守護者知道您一切安好',
+    'subject_home_share_text': '請用 Anbu 應用程式查看我的平安！\n邀請碼：@code',
+    'subject_home_share_subject': 'Anbu 邀請碼',
+    'subject_home_code_copied': '邀請碼已複製',
+
+    // ── 被守護者側邊欄 ──
+    'drawer_light_mode': '淺色模式',
+    'drawer_dark_mode': '深色模式',
+    'drawer_privacy_policy': '隱私權政策',
+    'drawer_terms': '使用條款',
+    'drawer_withdraw': '註銷帳號',
+    'drawer_withdraw_message': '帳號及所有資料將被刪除。\n確定要註銷嗎？',
+
+    // ── 守護者儀表板 ──
+    'guardian_status_normal': '正常',
+    'guardian_status_caution': '注意',
+    'guardian_status_warning': '警告',
+    'guardian_status_urgent': '緊急',
+    'guardian_status_confirmed': '安全已確認',
+    'guardian_subscription_expired': '訂閱已過期',
+    'guardian_subscription_expired_message':
+        '警報通知已停止發送。\n請續訂以繼續守護服務。',
+    'guardian_subscribe': '訂閱',
+    'guardian_payment_preparing': '付款功能正在準備中。',
+    'guardian_today_summary': '今日問安總結',
+    'guardian_no_subjects': '尚無已連線的被守護者。',
+    'guardian_checking_subjects': '正在關注\n@count 位被守護者的平安。',
+    'guardian_subject_list': '被守護者列表',
+    'guardian_call_now': '立即撥打電話',
+    'guardian_confirm_safety': '確認安全',
+    'guardian_no_check_history': '尚無確認紀錄',
+    'guardian_last_check_now': '上次確認：剛剛',
+    'guardian_last_check_minutes': '上次確認：@minutes 分鐘前',
+    'guardian_last_check_hours': '上次確認：@hours 小時前',
+    'guardian_last_check_days': '上次確認：@days 天前',
+    'guardian_activity_stable': '活動量：穩定',
+    'guardian_safety_needed': '需要確認安全',
+    'guardian_error_load_subjects': '載入被守護者列表失敗。',
+    'guardian_error_clear_alerts': '解除警報失敗。',
+
+    // ── 守護者新增被守護者 ──
+    'add_subject_title': '連結被守護者',
+    'add_subject_guide_title': '請輸入被守護者的專屬碼\n和別名。',
+    'add_subject_guide_subtitle': '連結被守護者的應用程式後，\n可以即時查看其健康狀態和活動情況。',
+    'add_subject_code_label': '專屬碼（7位）',
+    'add_subject_code_hint': '123-4567',
+    'add_subject_code_info': '專屬碼可在被守護者的應用程式中找到。',
+    'add_subject_alias_label': '被守護者別名',
+    'add_subject_alias_hint': '例如：媽媽、爸爸',
+    'add_subject_connect': '連結',
+    'add_subject_error_login': '請先登入。',
+    'add_subject_success': '被守護者已成功連結。',
+    'add_subject_error_invalid_code': '無效的邀請碼。',
+    'add_subject_error_already_connected': '該被守護者已連結。',
+    'add_subject_error_failed': '連結失敗，請稍後再試。',
+    'add_subject_button': '新增被守護者',
+
+    // ── 守護者設定 ──
+    'settings_title': '設定',
+    'settings_light_mode': '淺色模式',
+    'settings_dark_mode': '深色模式',
+    'settings_connection_management': '連線管理',
+    'settings_managed_subjects': '管理的被守護者人數',
+    'settings_managed_subjects_count': '@current / @max 人',
+    'settings_subscription_service': '訂閱與服務',
+    'settings_current_membership': '目前會員',
+    'settings_premium': '進階訂閱中',
+    'settings_free_trial': '免費試用中',
+    'settings_manage_subscription': '管理訂閱',
+    'settings_notification': '通知設定',
+    'settings_terms_section': '條款',
+    'settings_privacy_policy': '隱私權政策',
+    'settings_terms': '使用條款',
+    'settings_app_version': '應用版本：v@version',
+
+    // ── 守護者通知 ──
+    'notifications_title': '通知',
+    'notifications_today': '今日通知',
+    'notifications_empty': '今天沒有通知',
+    'notifications_delete_all_title': '刪除全部通知',
+    'notifications_delete_all_message': '確定要刪除今天的所有通知嗎？',
+    'notifications_delete_failed': '刪除通知失敗。',
+    'notifications_guide_title': '通知等級說明',
+    'notifications_level_health': '正常',
+    'notifications_level_health_desc': '被守護者的平安已正常確認',
+    'notifications_level_caution': '注意',
+    'notifications_level_caution_desc':
+        '以下情況之一：\n1. 今天預定的問安尚未收到\n2. 已收到問安但未偵測到手機使用痕跡',
+    'notifications_level_warning': '警告',
+    'notifications_level_warning_desc':
+        '以下情況之一：\n1. 連續2天未收到問安\n2. 連續2天未偵測到手機使用',
+    'notifications_level_urgent': '緊急',
+    'notifications_level_urgent_desc': '長時間未收到問安，\n或連續3天以上未使用手機',
+    'notifications_level_info': '資訊',
+    'notifications_level_info_desc': '步數、電量不足等參考性通知\n一般狀態資訊',
+    'notifications_activity_note':
+        '※ 如果無法採集步數資料，活動資訊可能不會顯示。',
+
+    // ── 守護者通知設定 ──
+    'notification_settings_title': '通知設定',
+    'notification_settings_push': '推播通知',
+    'notification_settings_all': '接收全部通知',
+    'notification_settings_all_desc': '一鍵開啟或關閉所有類別的通知。',
+    'notification_settings_level_section': '依等級設定通知',
+    'notification_settings_urgent': '緊急通知',
+    'notification_settings_urgent_desc': '緊急通知無法關閉',
+    'notification_settings_warning': '警告通知',
+    'notification_settings_warning_desc': '連續2天未確認平安時通知',
+    'notification_settings_caution': '注意通知',
+    'notification_settings_caution_desc': '當天未確認平安時通知',
+    'notification_settings_info': '資訊通知',
+    'notification_settings_info_desc': '步數、電池狀態等一般通知',
+    'notification_settings_dnd': '勿擾時間設定',
+    'notification_settings_dnd_start': '開始時間',
+    'notification_settings_dnd_end': '結束時間',
+    'notification_settings_dnd_note': '※ 緊急通知在勿擾模式下仍會送達',
+    'notification_settings_dnd_start_default': '晚上 10:00',
+    'notification_settings_dnd_end_default': '早上 7:00',
+
+    // ── 守護者連線管理 ──
+    'connection_title': '連線管理',
+    'connection_managed_count': '管理的被守護者人數 ',
+    'connection_managed_count_value': '@current / @max 人',
+    'connection_connected_subjects': '已連線的被守護者',
+    'connection_unlink_warning':
+        '解除連結後，該被守護者的資料將被刪除。',
+    'connection_unlink_warning_detail':
+        '重新連結後無法恢復之前的紀錄，\n需要重新輸入被守護者的邀請碼。',
+    'connection_heartbeat_schedule': '每天 @time',
+    'connection_heartbeat_report_time': '問安報告時間為 ',
+    'connection_subject_label': '被守護者',
+    'connection_change_only_in_app': '僅可在應用程式中更改',
+    'connection_edit_title': '編輯被守護者',
+    'connection_alias_label': '別名',
+    'connection_unlink_title': '解除連結',
+    'connection_unlink_confirm': '確定要解除與 @alias 的連結嗎？',
+    'connection_unlink_success': '已成功解除連結。',
+    'connection_unlink_failed': '解除連結失敗。',
+    'connection_load_failed': '載入列表失敗。',
+
+    // ── 守護者底部導覽 ──
+    'nav_home': '首頁',
+    'nav_connection': '連線',
+    'nav_notification': '通知',
+    'nav_settings': '設定',
+
+    // ── Heartbeat 相關 ──
+    'heartbeat_schedule_change': '更改問安時間',
+    'heartbeat_daily_time': '每天 @time',
+    'heartbeat_scheduled_today': '今天 @time 已預約問安。',
+    'heartbeat_change_failed_title': '更改時間失敗',
+    'heartbeat_change_failed_message': '未能同步至伺服器。',
+
+    // ── 本地通知 ──
+    'local_notification_channel': '問安通知',
+    'local_notification_channel_desc': '問安服務通知',
+    'local_alarm_title': '📱 需要確認平安',
+    'local_alarm_body': '請輕觸此通知。',
+
+    // ── 其他 ──
+    'back_press_exit': '再按一次返回鍵退出應用程式。',
+
+    // ── API 錯誤 ──
+    'error_unknown': '發生了未知錯誤。',
+    'error_timeout': '請求逾時。',
+    'error_network': '請檢查網路連線。',
+    'error_unauthorized': '需要驗證身分。',
+  };
+}

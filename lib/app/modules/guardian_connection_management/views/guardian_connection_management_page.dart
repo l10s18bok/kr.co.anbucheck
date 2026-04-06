@@ -30,7 +30,7 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
           children: [
             Icon(Icons.link_rounded, size: 22.w, color: AppColors.onSurface),
             SizedBox(width: 8.w),
-            Text('연결관리', style: AppTextTheme.headlineSmall()),
+            Text('connection_title'.tr, style: AppTextTheme.headlineSmall()),
           ],
         ),
       ),
@@ -64,9 +64,9 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                     RichText(
                       text: TextSpan(
                         children: [
-                          TextSpan(text: '관리 보호 대상자 수 ', style: AppTextTheme.headlineMedium()),
+                          TextSpan(text: 'connection_managed_count'.tr, style: AppTextTheme.headlineMedium()),
                           TextSpan(
-                            text: '${controller.subjects.length} / ${controller.maxSubjects}명',
+                            text: 'connection_managed_count_value'.trParams({'current': '${controller.subjects.length}', 'max': '${controller.maxSubjects}'}),
                             style: AppTextTheme.headlineMedium(
                               color: const Color(0xFF4355B9),
                               fw: FontWeight.w700,
@@ -81,7 +81,7 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
               SizedBox(height: AppSpacing.lg),
 
               // 연결된 대상자 섹션
-              Text('연결된 보호 대상자', style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
+              Text('connection_connected_subjects'.tr, style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
               SizedBox(height: AppSpacing.lg),
 
               // 대상자 리스트 (남은 공간 채움, 내부 스크롤)
@@ -135,9 +135,8 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                     SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
-                        '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.'
-                        '재연결 시 이전의 기록을 복구할 수 없으며,\n'
-                        '보호 대상자 코드를 다시 입력해야 합니다.',
+                        '${'connection_unlink_warning'.tr}'
+                        '${'connection_unlink_warning_detail'.tr}',
                         style: AppTextTheme.bodySmall(color: const Color(0xFFE65100)),
                       ),
                     ),
@@ -176,7 +175,7 @@ class _SubjectListTile extends StatelessWidget {
   });
 
   String get _timeLabel {
-    final period = heartbeatHour < 12 ? '오전' : '오후';
+    final period = heartbeatHour < 12 ? 'common_am'.tr : 'common_pm'.tr;
     final h = heartbeatHour == 0 ? 12 : (heartbeatHour > 12 ? heartbeatHour - 12 : heartbeatHour);
     final m = heartbeatMinute.toString().padLeft(2, '0');
     return '매일 $period ${h.toString().padLeft(2, '0')}:$m';
@@ -262,15 +261,15 @@ class _SubjectListTile extends StatelessWidget {
                 text: TextSpan(
                   style: AppTextTheme.labelSmall(color: Colors.white70),
                   children: [
-                    const TextSpan(text: '안부 보고시간은 '),
+                    TextSpan(text: 'connection_heartbeat_report_time'.tr),
                     TextSpan(
-                      text: '보호 대상자',
+                      text: 'connection_subject_label'.tr,
                       style: AppTextTheme.labelSmall(
                         color: Colors.white,
                         fw: FontWeight.w600,
                       ),
                     ),
-                    const TextSpan(text: ' 앱에서만 변경 가능합니다'),
+                    TextSpan(text: ' ${'connection_change_only_in_app'.tr}'),
                   ],
                 ),
               ),
@@ -320,12 +319,12 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('보호 대상자 편집', style: AppTextTheme.headlineSmall()),
+      title: Text('connection_edit_title'.tr, style: AppTextTheme.headlineSmall()),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('별칭', style: AppTextTheme.labelMedium(color: AppColors.textSecondary)),
+          Text('connection_alias_label'.tr, style: AppTextTheme.labelMedium(color: AppColors.textSecondary)),
           SizedBox(height: AppSpacing.sm),
           TextField(
             controller: _aliasController,
@@ -350,11 +349,11 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('취소', style: AppTextTheme.bodyMedium(color: AppColors.textSecondary)),
+          child: Text('common_cancel'.tr, style: AppTextTheme.bodyMedium(color: AppColors.textSecondary)),
         ),
         TextButton(
           onPressed: _save,
-          child: Text('저장', style: AppTextTheme.bodyMedium(color: AppColors.onSurface)),
+          child: Text('common_save'.tr, style: AppTextTheme.bodyMedium(color: AppColors.onSurface)),
         ),
       ],
     );

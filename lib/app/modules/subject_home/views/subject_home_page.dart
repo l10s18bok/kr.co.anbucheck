@@ -39,7 +39,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
           onPressed: () => scaffoldKey.currentState?.openDrawer(),
         ),
-        title: Text('안부', style: AppTextTheme.headlineSmall()),
+        title: Text('app_name'.tr, style: AppTextTheme.headlineSmall()),
         actions: [
           Obx(() {
             if (!controller.isGuardianConnected) return const SizedBox.shrink();
@@ -89,7 +89,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
 
             // 안전 코드 공유 안내
             Text(
-              '나의 안전 코드를 공유해 주세요',
+              'subject_home_share_title'.tr,
               style: AppTextTheme.headlineMedium(
                 color: Get.find<ThemeService>().isDarkMode.value
                     ? const Color(0xFF80CBC4)
@@ -325,7 +325,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     ],
                   ),
                   SizedBox(height: AppSpacing.sm),
-                  Text('배터리 상태', style: AppTextTheme.bodySmall()),
+                  Text('subject_home_battery_status'.tr, style: AppTextTheme.bodySmall()),
                   SizedBox(height: 2.h),
                   Text(
                     controller.batteryStateText,
@@ -362,10 +362,10 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     ],
                   ),
                   SizedBox(height: AppSpacing.sm),
-                  Text('통신 연결 상태', style: AppTextTheme.bodySmall()),
+                  Text('subject_home_connectivity_status'.tr, style: AppTextTheme.bodySmall()),
                   SizedBox(height: 2.h),
                   Text(
-                    controller.isConnected ? '정상' : '연결 없음',
+                    controller.isConnected ? 'common_normal'.tr : 'common_disconnected'.tr,
                     style: AppTextTheme.headlineSmall(color: connectColor, fw: FontWeight.w700),
                   ),
                 ],
@@ -409,14 +409,14 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     Icon(Icons.verified_user_rounded, size: 24.w, color: Colors.white),
                   SizedBox(width: 8.w),
                   Text(
-                    sending ? '안부 보고 중...' : '지금 바로 안전 보고하기',
+                    sending ? 'subject_home_report_loading'.tr : 'subject_home_report_button'.tr,
                     style: AppTextTheme.headlineSmall(color: Colors.white, fw: FontWeight.w700),
                   ),
                 ],
               ),
               SizedBox(height: 4.h),
               Text(
-                '보호자에게 걱정 말라고 알려주세요',
+                'subject_home_report_desc'.tr,
                 style: AppTextTheme.bodySmall(color: Colors.white.withValues(alpha: 0.8)),
               ),
             ],
@@ -518,7 +518,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                   color: AppColors.onSurfaceVariant,
                 ),
                 title: Text(
-                  isDark ? '라이트 모드' : '다크 모드',
+                  isDark ? 'drawer_light_mode'.tr : 'drawer_dark_mode'.tr,
                   style: AppTextTheme.bodyLarge(),
                 ),
                 onTap: () {
@@ -533,13 +533,13 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             // 법적 문서 링크
             ListTile(
               leading: Icon(Icons.description_outlined, size: 22.w, color: AppColors.onSurfaceVariant),
-              title: Text('개인정보처리방침', style: AppTextTheme.bodyLarge()),
+              title: Text('drawer_privacy_policy'.tr, style: AppTextTheme.bodyLarge()),
               trailing: Icon(Icons.open_in_new_rounded, size: 18.w, color: AppColors.onSurfaceVariant),
               onTap: () => launchUrl(Uri.parse(AppConstants.privacyPolicyUrl), mode: LaunchMode.externalApplication),
             ),
             ListTile(
               leading: Icon(Icons.gavel_rounded, size: 22.w, color: AppColors.onSurfaceVariant),
-              title: Text('이용약관', style: AppTextTheme.bodyLarge()),
+              title: Text('drawer_terms'.tr, style: AppTextTheme.bodyLarge()),
               trailing: Icon(Icons.open_in_new_rounded, size: 18.w, color: AppColors.onSurfaceVariant),
               onTap: () => launchUrl(Uri.parse(AppConstants.termsOfServiceUrl), mode: LaunchMode.externalApplication),
             ),
@@ -551,7 +551,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             // 탈퇴 메뉴 (하단)
             ListTile(
               leading: Icon(Icons.logout_rounded, color: Colors.redAccent, size: 22.w),
-              title: Text('탈퇴', style: AppTextTheme.bodyLarge(color: Colors.redAccent)),
+              title: Text('drawer_withdraw'.tr, style: AppTextTheme.bodyLarge(color: Colors.redAccent)),
               onTap: () => _showDeleteConfirm(scaffoldKey),
             ),
 
@@ -586,21 +586,21 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
     scaffoldKey.currentState?.closeDrawer();
     Get.dialog(
       AlertDialog(
-        title: Text('탈퇴', style: AppTextTheme.headlineSmall(
+        title: Text('drawer_withdraw'.tr, style: AppTextTheme.headlineSmall(
             fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
-        content: Text('계정과 모든 데이터가 삭제됩니다.\n정말 탈퇴하시겠습니까?',
+        content: Text('drawer_withdraw_message'.tr,
             style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: Text('취소', style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+            child: Text('common_cancel'.tr, style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
           ),
           TextButton(
             onPressed: () {
               Get.back();
               controller.deleteAccount();
             },
-            child: Text('탈퇴', style: AppTextTheme.bodyMedium(color: AppColors.error)),
+            child: Text('drawer_withdraw'.tr, style: AppTextTheme.bodyMedium(color: AppColors.error)),
           ),
         ],
       ),

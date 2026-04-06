@@ -35,7 +35,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
           children: [
             Icon(Icons.settings_rounded, size: 22.w, color: AppColors.onSurface),
             SizedBox(width: 8.w),
-            Text('설정', style: AppTextTheme.headlineSmall()),
+            Text('settings_title'.tr, style: AppTextTheme.headlineSmall()),
           ],
         ),
         actions: const [],
@@ -68,12 +68,12 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('안부 수호자',
+                            Text('app_guardian_title'.tr,
                                 style: AppTextTheme.bodyLarge(
                                     fw: FontWeight.w600)),
                             SizedBox(height: 2.h),
                             Obx(() => Text(
-                                '앱버전 : v${controller.appVersion.value}',
+                                'settings_app_version'.trParams({'version': controller.appVersion.value}),
                                 style: AppTextTheme.bodySmall(
                                     color: AppColors.textTertiary))),
                           ],
@@ -96,7 +96,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                               ),
                               SizedBox(height: 2.h),
                               Text(
-                                isDark ? '라이트모드' : '다크모드',
+                                isDark ? 'settings_light_mode'.tr : 'settings_dark_mode'.tr,
                                 style: AppTextTheme.labelSmall(
                                   color: AppColors.textTertiary,
                                   fw: FontWeight.w500,
@@ -126,7 +126,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                           Icon(Icons.people_alt_rounded,
                               size: 22.w, color: AppColors.onSurfaceVariant),
                           SizedBox(width: AppSpacing.md),
-                          Text('연결 관리',
+                          Text('settings_connection_management'.tr,
                               style: AppTextTheme.bodyLarge(
                                   fw: FontWeight.w600)),
                         ],
@@ -135,11 +135,11 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('관리 보호 대상자 수',
+                          Text('settings_managed_subjects'.tr,
                               style: AppTextTheme.bodyMedium(
                                   color: AppColors.textSecondary)),
                           Obx(() => Text(
-                                '${controller.subjects.length} / ${controller.maxSubjects.value}명',
+                                'settings_managed_subjects_count'.trParams({'current': controller.subjects.length.toString(), 'max': controller.maxSubjects.value.toString()}),
                                 style: AppTextTheme.headlineSmall(
                                   color: const Color(0xFF4355B9),
                                   fw: FontWeight.w700,
@@ -153,7 +153,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                 SizedBox(height: AppSpacing.sp6),
 
                 // 구독 및 서비스 섹션
-                Text('구독 및 서비스',
+                Text('settings_subscription_service'.tr,
                     style: AppTextTheme.labelMedium(
                         color: AppColors.textTertiary, fw: FontWeight.w600)),
                 SizedBox(height: AppSpacing.md),
@@ -186,20 +186,20 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                                   : Icons.card_giftcard_rounded,
                               size: 18.w, color: Colors.white70),
                           SizedBox(width: 6.w),
-                          Text('현재 멤버십',
+                          Text('settings_current_membership'.tr,
                               style: AppTextTheme.labelSmall(
                                   color: Colors.white70, fw: FontWeight.w600)),
                         ],
                       ),
                       SizedBox(height: AppSpacing.md),
                       Text(
-                          isPremium ? '프리미엄 구독 중' : '무료 체험 중',
+                          isPremium ? 'settings_premium'.tr : 'settings_free_trial'.tr,
                           style: AppTextTheme.headlineMedium(
                               color: Colors.white, fw: FontWeight.w700)),
                       SizedBox(height: AppSpacing.lg),
                       if (isPremium)
                         _PremiumButton(
-                          label: '구독 관리',
+                          label: 'settings_manage_subscription'.tr,
                           filled: false,
                           onTap: () => launchUrl(
                             Uri.parse(GetPlatform.isIOS
@@ -210,11 +210,11 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                         )
                       else
                         _PremiumButton(
-                          label: '구독하기',
+                          label: 'guardian_subscribe'.tr,
                           filled: true,
                           onTap: () {
                             // TODO: 인앱 결제 SDK 연동 후 구현
-                            Get.snackbar('안내', '결제 기능 준비 중입니다.',
+                            Get.snackbar('common_notice'.tr, 'guardian_payment_preparing'.tr,
                                 snackPosition: SnackPosition.BOTTOM);
                           },
                         ),
@@ -240,7 +240,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                             size: 22.w, color: AppColors.onSurfaceVariant),
                         SizedBox(width: AppSpacing.md),
                         Expanded(
-                          child: Text('알림 설정',
+                          child: Text('settings_notification'.tr,
                               style: AppTextTheme.bodyLarge(
                                   fw: FontWeight.w600)),
                         ),
@@ -266,7 +266,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                           Icon(Icons.description_outlined,
                               size: 20.w, color: AppColors.onSurfaceVariant),
                           SizedBox(width: AppSpacing.md),
-                          Text('약관',
+                          Text('settings_terms_section'.tr,
                               style: AppTextTheme.bodyLarge(
                                   fw: FontWeight.w600)),
                         ],
@@ -277,7 +277,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('개인정보처리방침',
+                            Text('settings_privacy_policy'.tr,
                                 style: AppTextTheme.bodyMedium(
                                     color: AppColors.textSecondary)),
                             Icon(Icons.open_in_new_rounded,
@@ -291,7 +291,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('이용약관',
+                            Text('settings_terms'.tr,
                                 style: AppTextTheme.bodyMedium(
                                     color: AppColors.textSecondary)),
                             Icon(Icons.open_in_new_rounded,

@@ -1,0 +1,313 @@
+abstract class FrFr {
+  static const Map<String, String> translations = {
+    // ── Commun ──
+    'common_confirm': 'Confirmer',
+    'common_cancel': 'Annuler',
+    'common_save': 'Enregistrer',
+    'common_delete': 'Supprimer',
+    'common_close': 'Fermer',
+    'common_next': 'Suivant',
+    'common_previous': 'Précédent',
+    'common_start': 'Commencer',
+    'common_skip': 'Passer',
+    'common_later': 'Plus tard',
+    'common_loading': 'Chargement...',
+    'common_error': 'Erreur',
+    'common_complete': 'Terminé',
+    'common_notice': 'Information',
+    'common_unlink': 'Dissocier',
+    'common_am': 'AM',
+    'common_pm': 'PM',
+    'common_normal': 'Normal',
+    'common_connected': 'Connecté',
+    'common_disconnected': 'Déconnecté',
+
+    // ── Marque ──
+    'app_name': 'Anbu',
+    'app_brand': 'Anbu',
+    'app_tagline': 'Nous veillons sur votre bien-être.',
+    'app_service_desc': 'Service automatique de suivi du bien-être',
+    'app_guardian_title': 'Protecteur Anbu',
+    'app_copyright': '© 2024 TNS Inc.',
+
+    // ── Splash ──
+    'splash_loading': 'Vérification du bien-être...',
+
+    // ── Mise à jour ──
+    'update_required_title': 'Mise à jour requise',
+    'update_required_message':
+        'Veuillez mettre à jour vers la version @version pour continuer à utiliser l\'application.',
+    'update_button': 'Mettre à jour',
+    'update_available_title': 'Mise à jour disponible',
+    'update_available_message': 'La version @version est disponible.',
+
+    // ── Choix du mode ──
+    'mode_select_title': 'Choisissez votre rôle',
+    'mode_select_subtitle':
+        'Ce choix nous permet de configurer les fonctionnalités adaptées à votre situation',
+    'mode_subject_title': 'Je souhaite que l\'on\nveille sur moi',
+    'mode_subject_button': 'Être protégé(e) →',
+    'mode_guardian_title': 'Je souhaite veiller\nsur un proche',
+    'mode_guardian_button': 'Devenir protecteur →',
+    'mode_select_notice':
+        'L\'interface et les notifications seront adaptées selon votre choix',
+
+    // ── Autorisations ──
+    'permission_title': 'Des autorisations sont\nnécessaires',
+    'permission_notification': 'Notifications',
+    'permission_notification_subject_desc':
+        'Nécessaire pour recevoir les alertes de bien-être',
+    'permission_notification_guardian_desc':
+        'Nécessaire pour recevoir les alertes sur la sécurité de vos proches',
+    'permission_activity': 'Reconnaissance d\'activité',
+    'permission_activity_desc':
+        'Utilisée pour détecter les pas et confirmer l\'activité',
+    'permission_activity_dialog_title':
+        'À propos de l\'autorisation d\'activité',
+    'permission_activity_dialog_message':
+        'Utilisée pour détecter les pas et confirmer l\'activité.\nVeuillez appuyer sur « Autoriser » à l\'écran suivant.',
+    'permission_notification_required_title':
+        'Autorisation de notification requise',
+    'permission_notification_required_message':
+        'L\'autorisation de notification est nécessaire pour le service de bien-être.\nVeuillez l\'activer dans les Réglages.',
+    'permission_go_to_settings': 'Ouvrir les Réglages',
+
+    // ── Présentation ──
+    'onboarding_title_1':
+        'Vous vous inquiétez pour\nquelqu\'un qui vit seul ?',
+    'onboarding_desc_1':
+        'Même à distance,\non se demande si tout va bien.\nAnbu est là pour vous.',
+    'onboarding_title_2':
+        'Le bien-être se transmet\nsans un mot',
+    'onboarding_desc_2':
+        'Rien qu\'en utilisant son smartphone,\nun signal quotidien de bien-être\nest envoyé automatiquement.',
+    'onboarding_title_3':
+        'Partagez le bien-être\navec vos proches',
+    'onboarding_desc_3':
+        'Les vérifications quotidiennes\ncréent une tranquillité d\'esprit durable.\nCommencez dès maintenant.',
+    'onboarding_title_4':
+        'Ni nom, ni numéro de téléphone\n— rien n\'est collecté',
+    'onboarding_desc_4':
+        'Un seul signal est transmis :\n« Je vais bien. »\nVos données restent en sécurité.',
+    'onboarding_role_subject': 'Personne protégée',
+    'onboarding_role_guardian': 'Protecteur',
+    'onboarding_already_registered_title': 'Appareil déjà enregistré',
+    'onboarding_already_registered_message':
+        'Cet appareil est déjà enregistré en mode @roleLabel.\nSouhaitez-vous continuer en @roleLabel ?\n\nOu passer en mode @newRoleLabel ?\nLe changement supprimera toutes les données existantes.',
+    'onboarding_change_mode': 'Passer en mode @newRoleLabel',
+    'onboarding_continue_mode': 'Continuer en @roleLabel',
+    'onboarding_registration_failed_title': 'Échec de l\'inscription',
+    'onboarding_registration_failed_message':
+        'Impossible de se connecter au serveur. Veuillez réessayer plus tard.',
+
+    // ── Accueil (Personne protégée) ──
+    'subject_home_share_title': 'Partagez votre code de sécurité',
+    'subject_home_guardian_count': 'Protecteurs connectés : @count',
+    'subject_home_check_title_last': 'Dernière vérification',
+    'subject_home_check_title_scheduled': 'Prochaine vérification prévue',
+    'subject_home_check_title_checking': 'Vérification en cours',
+    'subject_home_check_body_reported': 'Signalé à @time',
+    'subject_home_check_body_scheduled': 'Prévu à @time',
+    'subject_home_check_body_waiting': 'En attente depuis @time',
+    'subject_home_battery_status': 'Niveau de batterie',
+    'subject_home_battery_charging': 'En charge',
+    'subject_home_battery_full': 'Pleine',
+    'subject_home_battery_low': 'Batterie faible',
+    'subject_home_connectivity_status': 'État de la connexion',
+    'subject_home_report_loading': 'Envoi en cours...',
+    'subject_home_report_button': 'Signaler mon bien-être maintenant',
+    'subject_home_report_desc':
+        'Rassurez votre protecteur en lui montrant que vous allez bien',
+    'subject_home_share_text':
+        'Veillez sur moi avec l\'application Anbu !\nCode d\'invitation : @code',
+    'subject_home_share_subject': 'Code d\'invitation Anbu',
+    'subject_home_code_copied': 'Code copié',
+
+    // ── Menu latéral (Personne protégée) ──
+    'drawer_light_mode': 'Mode clair',
+    'drawer_dark_mode': 'Mode sombre',
+    'drawer_privacy_policy': 'Politique de confidentialité',
+    'drawer_terms': 'Conditions d\'utilisation',
+    'drawer_withdraw': 'Supprimer le compte',
+    'drawer_withdraw_message':
+        'Votre compte et toutes vos données seront supprimés.\nÊtes-vous sûr(e) ?',
+
+    // ── Tableau de bord (Protecteur) ──
+    'guardian_status_normal': 'Normal',
+    'guardian_status_caution': 'Attention',
+    'guardian_status_warning': 'Alerte',
+    'guardian_status_urgent': 'Urgent',
+    'guardian_status_confirmed': 'Sécurité confirmée',
+    'guardian_subscription_expired': 'Abonnement expiré',
+    'guardian_subscription_expired_message':
+        'Les alertes ne sont plus envoyées.\nRenouvelez votre abonnement pour maintenir la protection.',
+    'guardian_subscribe': 'S\'abonner',
+    'guardian_payment_preparing':
+        'La fonctionnalité de paiement sera bientôt disponible.',
+    'guardian_today_summary': 'Résumé du jour',
+    'guardian_no_subjects': 'Aucune personne protégée connectée.',
+    'guardian_checking_subjects':
+        'Suivi en cours pour\n@count personne(s).',
+    'guardian_subject_list': 'Liste des personnes protégées',
+    'guardian_call_now': 'Appeler maintenant',
+    'guardian_confirm_safety': 'Confirmer la sécurité',
+    'guardian_no_check_history': 'Aucun historique',
+    'guardian_last_check_now': 'Dernière vérif. : à l\'instant',
+    'guardian_last_check_minutes': 'Dernière vérif. : il y a @minutes min',
+    'guardian_last_check_hours': 'Dernière vérif. : il y a @hours h',
+    'guardian_last_check_days': 'Dernière vérif. : il y a @days jour(s)',
+    'guardian_activity_stable': 'Activité : stable',
+    'guardian_safety_needed': 'Vérification de sécurité nécessaire',
+    'guardian_error_load_subjects':
+        'Impossible de charger la liste des personnes protégées.',
+    'guardian_error_clear_alerts': 'Impossible de lever les alertes.',
+
+    // ── Ajouter une personne protégée ──
+    'add_subject_title': 'Associer une personne protégée',
+    'add_subject_guide_title':
+        'Saisissez le code unique\net un surnom.',
+    'add_subject_guide_subtitle':
+        'Associez l\'application d\'un proche\npour suivre son état en temps réel.',
+    'add_subject_code_label': 'Code unique (7 caractères)',
+    'add_subject_code_hint': '123-4567',
+    'add_subject_code_info':
+        'Le code unique se trouve dans l\'application de la personne protégée.',
+    'add_subject_alias_label': 'Surnom',
+    'add_subject_alias_hint': 'ex. : Maman, Papa',
+    'add_subject_connect': 'Associer',
+    'add_subject_error_login': 'Connexion requise.',
+    'add_subject_success': 'Personne protégée associée avec succès.',
+    'add_subject_error_invalid_code': 'Code non valide.',
+    'add_subject_error_already_connected': 'Déjà associé(e).',
+    'add_subject_error_failed':
+        'Échec de l\'association. Veuillez réessayer.',
+    'add_subject_button': 'Ajouter une personne protégée',
+
+    // ── Paramètres (Protecteur) ──
+    'settings_title': 'Paramètres',
+    'settings_light_mode': 'Mode clair',
+    'settings_dark_mode': 'Mode sombre',
+    'settings_connection_management': 'Gestion des connexions',
+    'settings_managed_subjects': 'Personnes protégées suivies',
+    'settings_managed_subjects_count': '@current / @max',
+    'settings_subscription_service': 'Abonnement & service',
+    'settings_current_membership': 'Abonnement actuel',
+    'settings_premium': 'Premium actif',
+    'settings_free_trial': 'Essai gratuit',
+    'settings_manage_subscription': 'Gérer l\'abonnement',
+    'settings_notification': 'Paramètres de notification',
+    'settings_terms_section': 'Mentions légales',
+    'settings_privacy_policy': 'Politique de confidentialité',
+    'settings_terms': 'Conditions d\'utilisation',
+    'settings_app_version': 'Version : v@version',
+
+    // ── Notifications (Protecteur) ──
+    'notifications_title': 'Notifications',
+    'notifications_today': 'Notifications du jour',
+    'notifications_empty': 'Aucune notification aujourd\'hui',
+    'notifications_delete_all_title': 'Supprimer toutes les notifications',
+    'notifications_delete_all_message':
+        'Supprimer toutes les notifications du jour ?',
+    'notifications_delete_failed':
+        'Impossible de supprimer les notifications.',
+    'notifications_guide_title': 'Guide des niveaux de notification',
+    'notifications_level_health': 'Normal',
+    'notifications_level_health_desc':
+        'Le bien-être de la personne protégée a été confirmé',
+    'notifications_level_caution': 'Attention',
+    'notifications_level_caution_desc':
+        'L\'un des cas suivants :\n1. La vérification prévue aujourd\'hui est manquante\n2. Signal reçu mais aucune utilisation du téléphone détectée',
+    'notifications_level_warning': 'Alerte',
+    'notifications_level_warning_desc':
+        'L\'un des cas suivants :\n1. Aucune vérification depuis 2 jours consécutifs\n2. Aucune utilisation du téléphone depuis 2 jours consécutifs',
+    'notifications_level_urgent': 'Urgent',
+    'notifications_level_urgent_desc':
+        'Aucune vérification depuis longtemps\nou aucune utilisation du téléphone depuis 3 jours ou plus',
+    'notifications_level_info': 'Info',
+    'notifications_level_info_desc':
+        'Informations de référence telles que\nle nombre de pas ou la batterie faible',
+    'notifications_activity_note':
+        '※ Les données d\'activité peuvent ne pas s\'afficher si le nombre de pas n\'a pas pu être relevé.',
+
+    // ── Paramètres de notification (Protecteur) ──
+    'notification_settings_title': 'Paramètres de notification',
+    'notification_settings_push': 'Notifications push',
+    'notification_settings_all': 'Toutes les notifications',
+    'notification_settings_all_desc':
+        'Activer ou désactiver toutes les catégories de notification en une fois.',
+    'notification_settings_level_section': 'Réglages par niveau',
+    'notification_settings_urgent': 'Alertes urgentes',
+    'notification_settings_urgent_desc':
+        'Les alertes urgentes ne peuvent pas être désactivées',
+    'notification_settings_warning': 'Alertes d\'alerte',
+    'notification_settings_warning_desc':
+        'Alerte après 2 jours consécutifs sans vérification',
+    'notification_settings_caution': 'Alertes d\'attention',
+    'notification_settings_caution_desc':
+        'Alerte en cas de vérification manquante aujourd\'hui',
+    'notification_settings_info': 'Alertes d\'information',
+    'notification_settings_info_desc':
+        'Alertes générales comme le nombre de pas et le niveau de batterie',
+    'notification_settings_dnd': 'Ne pas déranger',
+    'notification_settings_dnd_start': 'Heure de début',
+    'notification_settings_dnd_end': 'Heure de fin',
+    'notification_settings_dnd_note':
+        '※ Les alertes urgentes sont transmises même en mode « Ne pas déranger »',
+    'notification_settings_dnd_start_default': '22:00',
+    'notification_settings_dnd_end_default': '07:00',
+
+    // ── Gestion des connexions ──
+    'connection_title': 'Gestion des connexions',
+    'connection_managed_count': 'Personnes protégées suivies ',
+    'connection_managed_count_value': '@current / @max',
+    'connection_connected_subjects': 'Personnes protégées connectées',
+    'connection_unlink_warning':
+        'La dissociation supprimera les données de cette personne.',
+    'connection_unlink_warning_detail':
+        'Les données précédentes ne pourront pas être récupérées après une nouvelle association.\nVous devrez saisir à nouveau le code de la personne.',
+    'connection_heartbeat_schedule': 'Tous les jours à @time',
+    'connection_heartbeat_report_time': 'L\'heure du rapport est ',
+    'connection_subject_label': 'Personne protégée',
+    'connection_change_only_in_app':
+        'modifiable uniquement dans l\'application',
+    'connection_edit_title': 'Modifier la personne protégée',
+    'connection_alias_label': 'Surnom',
+    'connection_unlink_title': 'Dissocier',
+    'connection_unlink_confirm': 'Dissocier @alias ?',
+    'connection_unlink_success': 'Dissociation réussie.',
+    'connection_unlink_failed': 'Échec de la dissociation.',
+    'connection_load_failed': 'Impossible de charger la liste.',
+
+    // ── Navigation inférieure ──
+    'nav_home': 'Accueil',
+    'nav_connection': 'Connexion',
+    'nav_notification': 'Alertes',
+    'nav_settings': 'Paramètres',
+
+    // ── Heartbeat ──
+    'heartbeat_schedule_change': 'Modifier l\'heure de vérification',
+    'heartbeat_daily_time': 'Tous les jours à @time',
+    'heartbeat_scheduled_today':
+        'Vérification du bien-être prévue aujourd\'hui à @time.',
+    'heartbeat_change_failed_title': 'Échec du changement d\'heure',
+    'heartbeat_change_failed_message':
+        'La modification n\'a pas pu être enregistrée sur le serveur.',
+
+    // ── Notifications locales ──
+    'local_notification_channel': 'Alertes de bien-être',
+    'local_notification_channel_desc':
+        'Notifications du service de bien-être',
+    'local_alarm_title': '📱 Vérification du bien-être nécessaire',
+    'local_alarm_body': 'Veuillez appuyer sur cette notification.',
+
+    // ── Divers ──
+    'back_press_exit':
+        'Appuyez à nouveau pour quitter l\'application.',
+
+    // ── Erreurs API ──
+    'error_unknown': 'Une erreur inconnue est survenue.',
+    'error_timeout': 'La requête a expiré.',
+    'error_network': 'Veuillez vérifier votre connexion internet.',
+    'error_unauthorized': 'Authentification requise.',
+  };
+}

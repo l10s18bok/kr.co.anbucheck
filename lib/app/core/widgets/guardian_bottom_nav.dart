@@ -43,15 +43,15 @@ class GuardianBottomNav extends StatelessWidget {
           elevation: 0,
           selectedFontSize: 12.sp,
           unselectedFontSize: 12.sp,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.home_rounded), label: '홈'),
+                icon: const Icon(Icons.home_rounded), label: 'nav_home'.tr),
             BottomNavigationBarItem(
-                icon: Icon(Icons.link_rounded), label: '연결'),
+                icon: const Icon(Icons.link_rounded), label: 'nav_connection'.tr),
             BottomNavigationBarItem(
-                icon: Icon(Icons.notifications_rounded), label: '알림'),
+                icon: const Icon(Icons.notifications_rounded), label: 'nav_notification'.tr),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings_rounded), label: '설정'),
+                icon: const Icon(Icons.settings_rounded), label: 'nav_settings'.tr),
           ],
           onTap: (index) {
             if (index == currentIndex) return;

@@ -51,7 +51,7 @@ class GuardianConnectionManagementController extends BaseController {
             heartbeatMinute: s.heartbeatMinute,
           )).toList();
     } catch (_) {
-      Get.snackbar('오류', '목록을 불러오지 못했습니다.',
+      Get.snackbar('common_error'.tr, 'connection_load_failed'.tr,
           snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading = false;
@@ -95,10 +95,10 @@ class GuardianConnectionManagementController extends BaseController {
       await _nicknameDs.remove(subject.code);
       _svc.removeByGuardianId(subject.guardianId);
       _subjects.removeAt(index);
-      Get.snackbar('완료', '연결이 해제되었습니다.',
+      Get.snackbar('common_complete'.tr, 'connection_unlink_success'.tr,
           snackPosition: SnackPosition.BOTTOM);
     } catch (_) {
-      Get.snackbar('오류', '연결 해제에 실패했습니다.',
+      Get.snackbar('common_error'.tr, 'connection_unlink_failed'.tr,
           snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading = false;
@@ -117,16 +117,16 @@ class _ConfirmUnlinkDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('연결 해제'),
-      content: Text('$alias 연결을 해제하시겠습니까?'),
+      title: Text('connection_unlink_title'.tr),
+      content: Text('connection_unlink_confirm'.trParams({'alias': alias})),
       actions: [
         TextButton(
           onPressed: () => Get.back(result: false),
-          child: const Text('취소'),
+          child: Text('common_cancel'.tr),
         ),
         TextButton(
           onPressed: () => Get.back(result: true),
-          child: const Text('해제'),
+          child: Text('common_unlink'.tr),
         ),
       ],
     );

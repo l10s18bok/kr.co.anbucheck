@@ -1,0 +1,305 @@
+abstract class SvSe {
+  static const Map<String, String> translations = {
+    // ── Allmant ──
+    'common_confirm': 'Bekrafta',
+    'common_cancel': 'Avbryt',
+    'common_save': 'Spara',
+    'common_delete': 'Radera',
+    'common_close': 'Stang',
+    'common_next': 'Nasta',
+    'common_previous': 'Foregaende',
+    'common_start': 'Kom igang',
+    'common_skip': 'Hoppa over',
+    'common_later': 'Senare',
+    'common_loading': 'Laddar...',
+    'common_error': 'Fel',
+    'common_complete': 'Klart',
+    'common_notice': 'Meddelande',
+    'common_unlink': 'Koppla fran',
+    'common_am': 'fm',
+    'common_pm': 'em',
+    'common_normal': 'Normal',
+    'common_connected': 'Ansluten',
+    'common_disconnected': 'Ej ansluten',
+
+    // ── Appvarumarke ──
+    'app_name': 'Anbu',
+    'app_brand': 'Anbu',
+    'app_tagline': 'Kontrollerar ditt valmaende.',
+    'app_service_desc': 'Automatisk valmaendekontroll',
+    'app_guardian_title': 'Anbu-vardare',
+    'app_copyright': '© 2024 TNS Inc.',
+
+    // ── Splash ──
+    'splash_loading': 'Kontrollerar valmaende...',
+
+    // ── Uppdatering ──
+    'update_required_title': 'Uppdatering kravs',
+    'update_required_message':
+        'Uppdatera till version @version for att fortsatta anvanda appen.',
+    'update_button': 'Uppdatera',
+    'update_available_title': 'Uppdatering tillganglig',
+    'update_available_message': 'Version @version ar tillganglig.',
+
+    // ── Valj lage ──
+    'mode_select_title': 'Valj din roll',
+    'mode_select_subtitle':
+        'Detta hjalper oss att stalla in ratt funktioner for dig',
+    'mode_subject_title': 'Jag vill att min sakerhet\novervakas',
+    'mode_subject_button': 'Bli skyddad →',
+    'mode_guardian_title':
+        'Jag vill vaka over\nnagon jag bryr mig om',
+    'mode_guardian_button': 'Borja som vardare →',
+    'mode_select_notice':
+        'Skarmlayout och aviseringar anpassas efter ditt val',
+
+    // ── Behorigheter ──
+    'permission_title': 'Behorigheter kravs\nfor att anvanda appen',
+    'permission_notification': 'Aviseringsbehorighet',
+    'permission_notification_subject_desc':
+        'Kravs for att ta emot valmaendeaviseringar',
+    'permission_notification_guardian_desc':
+        'Kravs for att ta emot sakerhetsaviseringar for dina skyddspersoner',
+    'permission_activity': 'Aktivitetsigenkanning',
+    'permission_activity_desc':
+        'Anvands for att upptacka steg och bekrafta aktivitet',
+    'permission_activity_dialog_title': 'Info om aktivitetsbehorighet',
+    'permission_activity_dialog_message':
+        'Anvands for att upptacka steg och bekrafta aktivitet.\nTryck pa "Tillat" pa nasta skarm.',
+    'permission_notification_required_title':
+        'Aviseringsbehorighet kravs',
+    'permission_notification_required_message':
+        'Aviseringsbehorighet kravs for valmaendetjansten.\nAktivera den i Installningar.',
+    'permission_go_to_settings': 'Ga till Installningar',
+
+    // ── Introduktion ──
+    'onboarding_title_1': 'Orolig for nagon\nsom bor ensam?',
+    'onboarding_desc_1':
+        'Aven pa avstand\nundrar du om allt ar bra.\nAnbu finns har for dig.',
+    'onboarding_title_2': 'Valmaendekontroll\nutan ett enda ord',
+    'onboarding_desc_2':
+        'Bara genom att anvanda sin smartphone\nskickas en daglig signal\nautomatiskt.',
+    'onboarding_title_3': 'Dela omtanke\nmed dina narstaende',
+    'onboarding_desc_3':
+        'Dagliga kontroller bygger\nvaraktig trygghet.\nLat oss borja.',
+    'onboarding_title_4':
+        'Inga namn, inga telefonnummer\n— inget samlas in',
+    'onboarding_desc_4':
+        'Bara en signal levereras:\n"Jag mar bra."\nDin information ar trygg.',
+    'onboarding_role_subject': 'Skyddsperson',
+    'onboarding_role_guardian': 'Vardare',
+    'onboarding_already_registered_title': 'Enheten ar redan registrerad',
+    'onboarding_already_registered_message':
+        'Denna enhet ar redan registrerad i @roleLabel-lage.\nFortsatt som @roleLabel?\n\nEller byt till @newRoleLabel-lage?\nByte raderar all befintlig data.',
+    'onboarding_change_mode': 'Byt till @newRoleLabel-lage',
+    'onboarding_continue_mode': 'Fortsatt som @roleLabel',
+    'onboarding_registration_failed_title': 'Registrering misslyckades',
+    'onboarding_registration_failed_message':
+        'Kan inte ansluta till servern. Forsok igen senare.',
+
+    // ── Skyddspersonens startsida ──
+    'subject_home_share_title': 'Dela din sakerhetskod',
+    'subject_home_guardian_count': 'Anslutna vardare: @count',
+    'subject_home_check_title_last': 'Senaste kontrollen',
+    'subject_home_check_title_scheduled': 'Schemalagd kontrolltid',
+    'subject_home_check_title_checking': 'Kontrollerar valmaende',
+    'subject_home_check_body_reported': 'Rapporterad kl. @time',
+    'subject_home_check_body_scheduled': 'Schemalagd kl. @time',
+    'subject_home_check_body_waiting': 'Vantar sedan @time',
+    'subject_home_battery_status': 'Batteristatus',
+    'subject_home_battery_charging': 'Laddar',
+    'subject_home_battery_full': 'Fullt',
+    'subject_home_battery_low': 'Lagt batteri',
+    'subject_home_connectivity_status': 'Anslutning',
+    'subject_home_report_loading': 'Rapporterar...',
+    'subject_home_report_button': 'Rapportera sakerhet nu',
+    'subject_home_report_desc': 'Lat din vardare veta att du mar bra',
+    'subject_home_share_text':
+        'Kolla in pa mig med Anbu-appen!\nInbjudningskod: @code',
+    'subject_home_share_subject': 'Anbu-inbjudningskod',
+    'subject_home_code_copied': 'Koden kopierad',
+
+    // ── Skyddspersonens meny ──
+    'drawer_light_mode': 'Ljust lage',
+    'drawer_dark_mode': 'Morkt lage',
+    'drawer_privacy_policy': 'Integritetspolicy',
+    'drawer_terms': 'Anvandarvillkor',
+    'drawer_withdraw': 'Radera konto',
+    'drawer_withdraw_message':
+        'Ditt konto och all data raderas.\nAr du saker?',
+
+    // ── Vardarens instrumentpanel ──
+    'guardian_status_normal': 'Normal',
+    'guardian_status_caution': 'Forsiktighet',
+    'guardian_status_warning': 'Varning',
+    'guardian_status_urgent': 'Bradskande',
+    'guardian_status_confirmed': 'Sakerhet bekraftad',
+    'guardian_subscription_expired': 'Prenumerationen har gatt ut',
+    'guardian_subscription_expired_message':
+        'Aviseringar skickas inte.\nFornya prenumerationen for att fortsatta skyddet.',
+    'guardian_subscribe': 'Prenumerera',
+    'guardian_payment_preparing': 'Betalningsfunktionen kommer snart.',
+    'guardian_today_summary': 'Dagens valmaendesammanfattning',
+    'guardian_no_subjects': 'Inga anslutna skyddspersoner.',
+    'guardian_checking_subjects':
+        'Kontrollerar for narvarande\n@count skyddsperson(er).',
+    'guardian_subject_list': 'Lista over skyddspersoner',
+    'guardian_call_now': 'Ring nu',
+    'guardian_confirm_safety': 'Bekrafta sakerhet',
+    'guardian_no_check_history': 'Ingen kontrollhistorik',
+    'guardian_last_check_now': 'Senaste kontroll: just nu',
+    'guardian_last_check_minutes': 'Senaste kontroll: @minutes min sedan',
+    'guardian_last_check_hours': 'Senaste kontroll: @hours tim sedan',
+    'guardian_last_check_days': 'Senaste kontroll: @days dag(ar) sedan',
+    'guardian_activity_stable': 'Aktivitet: Stabil',
+    'guardian_safety_needed': 'Sakerhetskontroll behovs',
+    'guardian_error_load_subjects':
+        'Kunde inte ladda skyddspersoner.',
+    'guardian_error_clear_alerts': 'Kunde inte rensa aviseringar.',
+
+    // ── Lagg till skyddsperson ──
+    'add_subject_title': 'Anslut skyddsperson',
+    'add_subject_guide_title':
+        'Ange skyddspersonens unika kod\noch ett alias.',
+    'add_subject_guide_subtitle':
+        'Anslut en skyddspersons app for att overvaka\nhalsa och aktivitet i realtid.',
+    'add_subject_code_label': 'Unik kod (7 siffror)',
+    'add_subject_code_hint': '123-4567',
+    'add_subject_code_info':
+        'Den unika koden finns i skyddspersonens app.',
+    'add_subject_alias_label': 'Skyddspersonens alias',
+    'add_subject_alias_hint': 't.ex. Mamma, Pappa',
+    'add_subject_connect': 'Anslut',
+    'add_subject_error_login': 'Inloggning kravs.',
+    'add_subject_success': 'Skyddsperson ansluten.',
+    'add_subject_error_invalid_code': 'Ogiltig kod.',
+    'add_subject_error_already_connected': 'Redan ansluten.',
+    'add_subject_error_failed':
+        'Anslutningen misslyckades. Forsok igen.',
+    'add_subject_button': 'Lagg till ny skyddsperson',
+
+    // ── Vardarens installningar ──
+    'settings_title': 'Installningar',
+    'settings_light_mode': 'Ljust lage',
+    'settings_dark_mode': 'Morkt lage',
+    'settings_connection_management': 'Anslutningshantering',
+    'settings_managed_subjects': 'Antal skyddspersoner',
+    'settings_managed_subjects_count': '@current / @max',
+    'settings_subscription_service': 'Prenumeration och tjanst',
+    'settings_current_membership': 'Nuvarande medlemskap',
+    'settings_premium': 'Premium aktivt',
+    'settings_free_trial': 'Gratis provperiod',
+    'settings_manage_subscription': 'Hantera prenumeration',
+    'settings_notification': 'Aviseringsinstellningar',
+    'settings_terms_section': 'Juridiskt',
+    'settings_privacy_policy': 'Integritetspolicy',
+    'settings_terms': 'Anvandarvillkor',
+    'settings_app_version': 'Version: v@version',
+
+    // ── Vardarens aviseringar ──
+    'notifications_title': 'Aviseringar',
+    'notifications_today': 'Dagens aviseringar',
+    'notifications_empty': 'Inga aviseringar idag',
+    'notifications_delete_all_title': 'Radera alla aviseringar',
+    'notifications_delete_all_message':
+        'Radera alla dagens aviseringar?',
+    'notifications_delete_failed': 'Kunde inte radera aviseringar.',
+    'notifications_guide_title': 'Guide for aviseringsniva',
+    'notifications_level_health': 'Normal',
+    'notifications_level_health_desc':
+        'Skyddspersonens valmaende ar normalt bekraftat',
+    'notifications_level_caution': 'Forsiktighet',
+    'notifications_level_caution_desc':
+        'Nagot av foljande:\n1. Dagens schemalagda kontroll saknas\n2. Kontroll mottagen men ingen telefonanvandning upptackt',
+    'notifications_level_warning': 'Varning',
+    'notifications_level_warning_desc':
+        'Nagot av foljande:\n1. Ingen kontroll pa 2 dagar i rad\n2. Ingen telefonanvandning pa 2 dagar i rad',
+    'notifications_level_urgent': 'Bradskande',
+    'notifications_level_urgent_desc':
+        'Ingen kontroll under langre tid,\neller ingen telefonanvandning pa 3+ dagar',
+    'notifications_level_info': 'Info',
+    'notifications_level_info_desc':
+        'Referensaviseringar som\nstegantal eller lagt batteri',
+    'notifications_activity_note':
+        '※ Aktivitetsinformation kanske inte visas om stegdata inte kunde samlas in.',
+
+    // ── Vardarens aviseringsinstellningar ──
+    'notification_settings_title': 'Aviseringsinstellningar',
+    'notification_settings_push': 'Push-aviseringar',
+    'notification_settings_all': 'Alla aviseringar',
+    'notification_settings_all_desc':
+        'Aktivera eller inaktivera alla aviseringskategorier samtidigt.',
+    'notification_settings_level_section': 'Nivainstellningar',
+    'notification_settings_urgent': 'Bradskande aviseringar',
+    'notification_settings_urgent_desc':
+        'Bradskande aviseringar kan inte inaktiveras',
+    'notification_settings_warning': 'Varningsaviseringar',
+    'notification_settings_warning_desc':
+        'Avisering vid utebliven kontroll 2 dagar i rad',
+    'notification_settings_caution': 'Forsiktighetsaviseringar',
+    'notification_settings_caution_desc':
+        'Avisering nar dagens kontroll saknas',
+    'notification_settings_info': 'Informationsaviseringar',
+    'notification_settings_info_desc':
+        'Allmanna aviseringar som stegantal och batteristatus',
+    'notification_settings_dnd': 'Stor ej',
+    'notification_settings_dnd_start': 'Starttid',
+    'notification_settings_dnd_end': 'Sluttid',
+    'notification_settings_dnd_note':
+        '※ Bradskande aviseringar levereras aven under Stor ej',
+    'notification_settings_dnd_start_default': '22:00',
+    'notification_settings_dnd_end_default': '07:00',
+
+    // ── Vardarens anslutningshantering ──
+    'connection_title': 'Anslutningshantering',
+    'connection_managed_count': 'Antal skyddspersoner ',
+    'connection_managed_count_value': '@current / @max',
+    'connection_connected_subjects': 'Anslutna skyddspersoner',
+    'connection_unlink_warning':
+        'Frankopling raderar skyddspersonens data.',
+    'connection_unlink_warning_detail':
+        'Tidigare poster kan inte aterstallas efter ateranslutning.\nDu behover ange skyddspersonens kod igen.',
+    'connection_heartbeat_schedule': 'Dagligen kl. @time',
+    'connection_heartbeat_report_time': 'Valmaenderapporttid: ',
+    'connection_subject_label': 'Skyddsperson',
+    'connection_change_only_in_app': 'kan bara andras i appen',
+    'connection_edit_title': 'Redigera skyddsperson',
+    'connection_alias_label': 'Alias',
+    'connection_unlink_title': 'Koppla fran',
+    'connection_unlink_confirm': 'Koppla fran @alias?',
+    'connection_unlink_success': 'Frankoppling lyckades.',
+    'connection_unlink_failed': 'Frankoppling misslyckades.',
+    'connection_load_failed': 'Kunde inte ladda listan.',
+
+    // ── Vardarens nedre navigation ──
+    'nav_home': 'Hem',
+    'nav_connection': 'Anslut',
+    'nav_notification': 'Aviseringar',
+    'nav_settings': 'Installningar',
+
+    // ── Heartbeat ──
+    'heartbeat_schedule_change': 'Andra kontrolltid',
+    'heartbeat_daily_time': 'Dagligen kl. @time',
+    'heartbeat_scheduled_today':
+        'Valmaendekontroll schemalagd kl. @time idag.',
+    'heartbeat_change_failed_title': 'Tidandring misslyckades',
+    'heartbeat_change_failed_message':
+        'Kunde inte uppdatera pa servern.',
+
+    // ── Lokala aviseringar ──
+    'local_notification_channel': 'Valmaendeaviseringar',
+    'local_notification_channel_desc':
+        'Aviseringar for valmaendetjansten',
+    'local_alarm_title': '📱 Valmaendekontroll behovs',
+    'local_alarm_body': 'Tryck pa denna avisering.',
+
+    // ── Ovrigt ──
+    'back_press_exit': 'Tryck tillbaka igen for att avsluta.',
+
+    // ── API-fel ──
+    'error_unknown': 'Ett okant fel uppstod.',
+    'error_timeout': 'Forfragan tog for lang tid.',
+    'error_network': 'Kontrollera din natverksanslutning.',
+    'error_unauthorized': 'Autentisering kravs.',
+  };
+}

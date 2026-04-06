@@ -43,7 +43,7 @@ class SplashPage extends GetWidget<SplashController> {
 
               // 브랜드명
               Text(
-                '안부 (Anbu)',
+                'app_brand'.tr,
                 style: AppTextTheme.headlineLarge(
                   color: const Color(0xFF1A1C1C),
                 ),
@@ -52,7 +52,7 @@ class SplashPage extends GetWidget<SplashController> {
 
               // 부제
               Text(
-                '당신의 안부를 확인합니다.\n(Checking your wellbeing.)',
+                'app_tagline'.tr,
                 style: AppTextTheme.bodyMedium(
                   color: const Color(0xFF3F4948),
                 ),
@@ -63,7 +63,7 @@ class SplashPage extends GetWidget<SplashController> {
 
               // 하단 서비스 설명
               Text(
-                '자동 안부 확인 서비스',
+                'app_service_desc'.tr,
                 style: AppTextTheme.bodySmall(
                   color: const Color(0xFF6F7978),
                 ),

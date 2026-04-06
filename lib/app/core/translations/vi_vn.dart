@@ -1,0 +1,305 @@
+abstract class ViVn {
+  static const Map<String, String> translations = {
+    // ── Chung ──
+    'common_confirm': 'Xac nhan',
+    'common_cancel': 'Huy',
+    'common_save': 'Luu',
+    'common_delete': 'Xoa',
+    'common_close': 'Dong',
+    'common_next': 'Tiep theo',
+    'common_previous': 'Quay lai',
+    'common_start': 'Bat dau',
+    'common_skip': 'Bo qua',
+    'common_later': 'De sau',
+    'common_loading': 'Dang tai...',
+    'common_error': 'Loi',
+    'common_complete': 'Hoan thanh',
+    'common_notice': 'Thong bao',
+    'common_unlink': 'Ngat ket noi',
+    'common_am': 'SA',
+    'common_pm': 'CH',
+    'common_normal': 'Binh thuong',
+    'common_connected': 'Da ket noi',
+    'common_disconnected': 'Mat ket noi',
+
+    // ── Thuong hieu ──
+    'app_name': 'Anbu',
+    'app_brand': 'Anbu',
+    'app_tagline': 'Kiem tra suc khoe cua ban.',
+    'app_service_desc': 'Dich vu kiem tra suc khoe tu dong',
+    'app_guardian_title': 'Nguoi bao ve Anbu',
+    'app_copyright': '© 2024 TNS Inc.',
+
+    // ── Splash ──
+    'splash_loading': 'Dang kiem tra suc khoe...',
+
+    // ── Cap nhat ──
+    'update_required_title': 'Can cap nhat',
+    'update_required_message':
+        'Vui long cap nhat len phien ban @version de tiep tuc su dung ung dung.',
+    'update_button': 'Cap nhat',
+    'update_available_title': 'Co ban cap nhat moi',
+    'update_available_message': 'Phien ban @version da co san.',
+
+    // ── Chon che do ──
+    'mode_select_title': 'Chon vai tro cua ban',
+    'mode_select_subtitle':
+        'Dieu nay giup chung toi thiet lap cac tinh nang phu hop cho ban',
+    'mode_subject_title': 'Toi muon su an toan cua toi\nduoc theo doi',
+    'mode_subject_button': 'Duoc bao ve →',
+    'mode_guardian_title':
+        'Toi muon theo doi\nnguoi than yeu cua toi',
+    'mode_guardian_button': 'Bat dau voi tu cach nguoi bao ve →',
+    'mode_select_notice':
+        'Giao dien va thong bao se khac nhau tuy theo lua chon cua ban',
+
+    // ── Quyen ──
+    'permission_title': 'Can cap quyen\nde su dung ung dung',
+    'permission_notification': 'Quyen thong bao',
+    'permission_notification_subject_desc':
+        'Can thiet de nhan thong bao kiem tra suc khoe',
+    'permission_notification_guardian_desc':
+        'Can thiet de nhan thong bao ve tinh trang an toan cua nguoi duoc bao ve',
+    'permission_activity': 'Nhan dien hoat dong',
+    'permission_activity_desc':
+        'Dung de phat hien buoc chan va xac nhan hoat dong',
+    'permission_activity_dialog_title': 'Thong tin quyen hoat dong',
+    'permission_activity_dialog_message':
+        'Dung de phat hien buoc chan va xac nhan hoat dong.\nVui long nhan "Cho phep" tren man hinh tiep theo.',
+    'permission_notification_required_title': 'Can quyen thong bao',
+    'permission_notification_required_message':
+        'Quyen thong bao la bat buoc cho dich vu kiem tra suc khoe.\nVui long bat trong Cai dat.',
+    'permission_go_to_settings': 'Di den Cai dat',
+
+    // ── Gioi thieu ──
+    'onboarding_title_1': 'Ban lo lang cho nguoi\nsong mot minh?',
+    'onboarding_desc_1':
+        'Du o xa,\nban van tu hoi ho co khoe khong.\nAnbu o day cung ban.',
+    'onboarding_title_2': 'Kiem tra suc khoe\nkhong can noi mot loi',
+    'onboarding_desc_2':
+        'Chi can su dung dien thoai,\nmoi ngay mot tin hieu suc khoe\nduoc gui tu dong.',
+    'onboarding_title_3': 'Chia se su quan tam\nvoi nguoi than yeu',
+    'onboarding_desc_3':
+        'Nhung lan kiem tra hang ngay tich luy\nthanh su an tam lau dai.\nHay bat dau nao.',
+    'onboarding_title_4':
+        'Khong ten, khong so dien thoai\n— khong thu thap gi ca',
+    'onboarding_desc_4':
+        'Chi mot tin hieu duoc gui:\n"Toi van khoe."\nThong tin cua ban luon an toan.',
+    'onboarding_role_subject': 'Nguoi duoc bao ve',
+    'onboarding_role_guardian': 'Nguoi bao ve',
+    'onboarding_already_registered_title': 'Thiet bi da duoc dang ky',
+    'onboarding_already_registered_message':
+        'Thiet bi nay da duoc dang ky o che do @roleLabel.\nTiep tuc voi @roleLabel?\n\nHay chuyen sang che do @newRoleLabel?\nChuyen doi se xoa tat ca du lieu hien co.',
+    'onboarding_change_mode': 'Chuyen sang che do @newRoleLabel',
+    'onboarding_continue_mode': 'Tiep tuc voi @roleLabel',
+    'onboarding_registration_failed_title': 'Dang ky that bai',
+    'onboarding_registration_failed_message':
+        'Khong the ket noi den may chu. Vui long thu lai sau.',
+
+    // ── Trang chu nguoi duoc bao ve ──
+    'subject_home_share_title': 'Chia se ma an toan cua ban',
+    'subject_home_guardian_count': 'Nguoi bao ve da ket noi: @count',
+    'subject_home_check_title_last': 'Lan kiem tra cuoi',
+    'subject_home_check_title_scheduled': 'Thoi gian kiem tra da len lich',
+    'subject_home_check_title_checking': 'Dang kiem tra suc khoe',
+    'subject_home_check_body_reported': 'Da bao cao luc @time',
+    'subject_home_check_body_scheduled': 'Da len lich luc @time',
+    'subject_home_check_body_waiting': 'Dang cho tu @time',
+    'subject_home_battery_status': 'Tinh trang pin',
+    'subject_home_battery_charging': 'Dang sac',
+    'subject_home_battery_full': 'Day',
+    'subject_home_battery_low': 'Pin yeu',
+    'subject_home_connectivity_status': 'Ket noi',
+    'subject_home_report_loading': 'Dang bao cao...',
+    'subject_home_report_button': 'Bao cao an toan ngay',
+    'subject_home_report_desc':
+        'Cho nguoi bao ve biet ban van khoe',
+    'subject_home_share_text':
+        'Kiem tra suc khoe cua toi qua ung dung Anbu!\nMa moi: @code',
+    'subject_home_share_subject': 'Ma moi Anbu',
+    'subject_home_code_copied': 'Da sao chep ma',
+
+    // ── Ngon keo nguoi duoc bao ve ──
+    'drawer_light_mode': 'Che do sang',
+    'drawer_dark_mode': 'Che do toi',
+    'drawer_privacy_policy': 'Chinh sach bao mat',
+    'drawer_terms': 'Dieu khoan su dung',
+    'drawer_withdraw': 'Xoa tai khoan',
+    'drawer_withdraw_message':
+        'Tai khoan va tat ca du lieu se bi xoa.\nBan co chac khong?',
+
+    // ── Bang dieu khien nguoi bao ve ──
+    'guardian_status_normal': 'Binh thuong',
+    'guardian_status_caution': 'Chu y',
+    'guardian_status_warning': 'Canh bao',
+    'guardian_status_urgent': 'Khan cap',
+    'guardian_status_confirmed': 'Da xac nhan an toan',
+    'guardian_subscription_expired': 'Goi dang ky da het han',
+    'guardian_subscription_expired_message':
+        'Thong bao canh bao khong duoc gui.\nGia han dang ky de tiep tuc bao ve.',
+    'guardian_subscribe': 'Dang ky',
+    'guardian_payment_preparing': 'Tinh nang thanh toan sap co.',
+    'guardian_today_summary': 'Tom tat suc khoe hom nay',
+    'guardian_no_subjects': 'Chua co nguoi duoc bao ve nao.',
+    'guardian_checking_subjects':
+        'Dang kiem tra\n@count nguoi duoc bao ve.',
+    'guardian_subject_list': 'Danh sach nguoi duoc bao ve',
+    'guardian_call_now': 'Goi ngay',
+    'guardian_confirm_safety': 'Xac nhan an toan',
+    'guardian_no_check_history': 'Chua co lich su kiem tra',
+    'guardian_last_check_now': 'Lan kiem tra cuoi: vua xong',
+    'guardian_last_check_minutes': 'Lan kiem tra cuoi: @minutes phut truoc',
+    'guardian_last_check_hours': 'Lan kiem tra cuoi: @hours gio truoc',
+    'guardian_last_check_days': 'Lan kiem tra cuoi: @days ngay truoc',
+    'guardian_activity_stable': 'Hoat dong: On dinh',
+    'guardian_safety_needed': 'Can kiem tra an toan',
+    'guardian_error_load_subjects':
+        'Khong the tai danh sach nguoi duoc bao ve.',
+    'guardian_error_clear_alerts': 'Khong the xoa canh bao.',
+
+    // ── Them nguoi duoc bao ve ──
+    'add_subject_title': 'Ket noi nguoi duoc bao ve',
+    'add_subject_guide_title':
+        'Nhap ma duy nhat cua nguoi duoc bao ve\nva ten goi.',
+    'add_subject_guide_subtitle':
+        'Ket noi ung dung cua nguoi duoc bao ve de theo doi\nsuc khoe va hoat dong theo thoi gian thuc.',
+    'add_subject_code_label': 'Ma duy nhat (7 ky tu)',
+    'add_subject_code_hint': '123-4567',
+    'add_subject_code_info':
+        'Ma duy nhat co the tim thay trong ung dung cua nguoi duoc bao ve.',
+    'add_subject_alias_label': 'Ten goi nguoi duoc bao ve',
+    'add_subject_alias_hint': 'VD: Me, Bo',
+    'add_subject_connect': 'Ket noi',
+    'add_subject_error_login': 'Can dang nhap.',
+    'add_subject_success': 'Ket noi nguoi duoc bao ve thanh cong.',
+    'add_subject_error_invalid_code': 'Ma khong hop le.',
+    'add_subject_error_already_connected': 'Da ket noi roi.',
+    'add_subject_error_failed':
+        'Ket noi that bai. Vui long thu lai.',
+    'add_subject_button': 'Them nguoi duoc bao ve moi',
+
+    // ── Cai dat nguoi bao ve ──
+    'settings_title': 'Cai dat',
+    'settings_light_mode': 'Che do sang',
+    'settings_dark_mode': 'Che do toi',
+    'settings_connection_management': 'Quan ly ket noi',
+    'settings_managed_subjects': 'So nguoi duoc bao ve',
+    'settings_managed_subjects_count': '@current / @max',
+    'settings_subscription_service': 'Dang ky & Dich vu',
+    'settings_current_membership': 'Thanh vien hien tai',
+    'settings_premium': 'Premium dang hoat dong',
+    'settings_free_trial': 'Dung thu mien phi',
+    'settings_manage_subscription': 'Quan ly dang ky',
+    'settings_notification': 'Cai dat thong bao',
+    'settings_terms_section': 'Phap ly',
+    'settings_privacy_policy': 'Chinh sach bao mat',
+    'settings_terms': 'Dieu khoan su dung',
+    'settings_app_version': 'Phien ban: v@version',
+
+    // ── Thong bao nguoi bao ve ──
+    'notifications_title': 'Thong bao',
+    'notifications_today': 'Thong bao hom nay',
+    'notifications_empty': 'Khong co thong bao hom nay',
+    'notifications_delete_all_title': 'Xoa tat ca thong bao',
+    'notifications_delete_all_message':
+        'Xoa tat ca thong bao hom nay?',
+    'notifications_delete_failed': 'Khong the xoa thong bao.',
+    'notifications_guide_title': 'Huong dan cap do thong bao',
+    'notifications_level_health': 'Binh thuong',
+    'notifications_level_health_desc':
+        'Suc khoe cua nguoi duoc bao ve da duoc xac nhan binh thuong',
+    'notifications_level_caution': 'Chu y',
+    'notifications_level_caution_desc':
+        'Mot trong cac truong hop sau:\n1. Chua co kiem tra da len lich hom nay\n2. Da nhan kiem tra nhung khong phat hien su dung dien thoai',
+    'notifications_level_warning': 'Canh bao',
+    'notifications_level_warning_desc':
+        'Mot trong cac truong hop sau:\n1. Khong kiem tra trong 2 ngay lien tiep\n2. Khong su dung dien thoai trong 2 ngay lien tiep',
+    'notifications_level_urgent': 'Khan cap',
+    'notifications_level_urgent_desc':
+        'Khong kiem tra trong thoi gian dai,\nhoac khong su dung dien thoai tu 3 ngay tro len',
+    'notifications_level_info': 'Thong tin',
+    'notifications_level_info_desc':
+        'Thong bao tham khao nhu\nso buoc chan hoac pin yeu',
+    'notifications_activity_note':
+        '※ Thong tin hoat dong co the khong hien thi neu khong thu thap duoc du lieu buoc chan.',
+
+    // ── Cai dat thong bao nguoi bao ve ──
+    'notification_settings_title': 'Cai dat thong bao',
+    'notification_settings_push': 'Thong bao day',
+    'notification_settings_all': 'Tat ca thong bao',
+    'notification_settings_all_desc':
+        'Bat hoac tat tat ca cac loai thong bao cung mot luc.',
+    'notification_settings_level_section': 'Cai dat theo cap do',
+    'notification_settings_urgent': 'Canh bao khan cap',
+    'notification_settings_urgent_desc':
+        'Khong the tat canh bao khan cap',
+    'notification_settings_warning': 'Canh bao muc do cao',
+    'notification_settings_warning_desc':
+        'Canh bao khi khong kiem tra trong 2 ngay lien tiep',
+    'notification_settings_caution': 'Canh bao chu y',
+    'notification_settings_caution_desc':
+        'Canh bao khi chua kiem tra hom nay',
+    'notification_settings_info': 'Thong bao thong tin',
+    'notification_settings_info_desc':
+        'Thong bao chung nhu so buoc chan va tinh trang pin',
+    'notification_settings_dnd': 'Khong lam phien',
+    'notification_settings_dnd_start': 'Thoi gian bat dau',
+    'notification_settings_dnd_end': 'Thoi gian ket thuc',
+    'notification_settings_dnd_note':
+        '※ Canh bao khan cap van duoc gui trong che do Khong lam phien',
+    'notification_settings_dnd_start_default': '22:00',
+    'notification_settings_dnd_end_default': '7:00',
+
+    // ── Quan ly ket noi nguoi bao ve ──
+    'connection_title': 'Quan ly ket noi',
+    'connection_managed_count': 'So nguoi duoc bao ve ',
+    'connection_managed_count_value': '@current / @max',
+    'connection_connected_subjects': 'Nguoi duoc bao ve da ket noi',
+    'connection_unlink_warning':
+        'Ngat ket noi se xoa du lieu cua nguoi duoc bao ve.',
+    'connection_unlink_warning_detail':
+        'Cac ban ghi truoc do khong the khoi phuc sau khi ket noi lai.\nBan se can nhap lai ma cua nguoi duoc bao ve.',
+    'connection_heartbeat_schedule': 'Hang ngay luc @time',
+    'connection_heartbeat_report_time': 'Thoi gian bao cao suc khoe: ',
+    'connection_subject_label': 'Nguoi duoc bao ve',
+    'connection_change_only_in_app': 'chi co the thay doi trong ung dung',
+    'connection_edit_title': 'Chinh sua nguoi duoc bao ve',
+    'connection_alias_label': 'Ten goi',
+    'connection_unlink_title': 'Ngat ket noi',
+    'connection_unlink_confirm': 'Ngat ket noi @alias?',
+    'connection_unlink_success': 'Da ngat ket noi thanh cong.',
+    'connection_unlink_failed': 'Khong the ngat ket noi.',
+    'connection_load_failed': 'Khong the tai danh sach.',
+
+    // ── Thanh dieu huong duoi nguoi bao ve ──
+    'nav_home': 'Trang chu',
+    'nav_connection': 'Ket noi',
+    'nav_notification': 'Canh bao',
+    'nav_settings': 'Cai dat',
+
+    // ── Heartbeat ──
+    'heartbeat_schedule_change': 'Doi thoi gian kiem tra',
+    'heartbeat_daily_time': 'Hang ngay luc @time',
+    'heartbeat_scheduled_today':
+        'Kiem tra suc khoe da len lich luc @time hom nay.',
+    'heartbeat_change_failed_title': 'Doi thoi gian that bai',
+    'heartbeat_change_failed_message':
+        'Khong the cap nhat tren may chu.',
+
+    // ── Thong bao cuc bo ──
+    'local_notification_channel': 'Canh bao suc khoe',
+    'local_notification_channel_desc':
+        'Thong bao dich vu kiem tra suc khoe',
+    'local_alarm_title': '📱 Can kiem tra suc khoe',
+    'local_alarm_body': 'Vui long nhan vao thong bao nay.',
+
+    // ── Khac ──
+    'back_press_exit': 'Nhan lai de thoat.',
+
+    // ── Loi API ──
+    'error_unknown': 'Da xay ra loi khong xac dinh.',
+    'error_timeout': 'Yeu cau da het thoi gian.',
+    'error_network': 'Vui long kiem tra ket noi mang.',
+    'error_unauthorized': 'Can xac thuc.',
+  };
+}

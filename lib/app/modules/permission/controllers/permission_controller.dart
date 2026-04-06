@@ -58,15 +58,14 @@ class PermissionController extends BaseController {
   Future<void> _showActivityRecognitionRationaleDialog() async {
     await Get.dialog<void>(
       AlertDialog(
-        title: const Text('신체 활동 권한 안내'),
-        content: const Text(
-          '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.\n'
-          '다음 화면에서 "허용"을 선택해 주세요.',
+        title: Text('permission_activity_dialog_title'.tr),
+        content: Text(
+          'permission_activity_dialog_message'.tr,
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('확인'),
+            child: Text('common_confirm'.tr),
           ),
         ],
       ),
@@ -77,19 +76,18 @@ class PermissionController extends BaseController {
   Future<bool> _showPermissionDeniedDialog() async {
     final result = await Get.dialog<bool>(
       AlertDialog(
-        title: const Text('알림 권한이 필요합니다'),
-        content: const Text(
-          '안부 확인 서비스를 이용하려면 알림 권한이 필요합니다.\n'
-          '설정에서 알림 권한을 허용해 주세요.',
+        title: Text('permission_notification_required_title'.tr),
+        content: Text(
+          'permission_notification_required_message'.tr,
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
-            child: const Text('나중에'),
+            child: Text('common_later'.tr),
           ),
           TextButton(
             onPressed: () => Get.back(result: true),
-            child: const Text('설정으로 이동'),
+            child: Text('permission_go_to_settings'.tr),
           ),
         ],
       ),

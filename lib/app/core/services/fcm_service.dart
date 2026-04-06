@@ -76,10 +76,11 @@ class FcmService extends GetxService {
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
   /// Android 알림 채널
+  // TODO: i18n — 채널명은 앱 초기화 시점에 생성되므로 .tr이 동작하지 않을 수 있음
   static const _androidChannel = AndroidNotificationChannel(
     'anbu_alerts',
-    '안부 알림',
-    description: '안부 확인 서비스 알림',
+    '안부 알림', // local_notification_channel
+    description: '안부 확인 서비스 알림', // local_notification_channel_desc
     importance: Importance.high,
   );
 
@@ -235,7 +236,7 @@ class FcmService extends GetxService {
     // 시스템 알림 표시
     _localNotifications.show(
       message.hashCode,
-      notification.title ?? '안부',
+      notification.title ?? 'app_name'.tr,
       notification.body ?? '',
       NotificationDetails(
         android: AndroidNotificationDetails(

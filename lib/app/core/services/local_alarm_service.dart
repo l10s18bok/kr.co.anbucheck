@@ -13,7 +13,8 @@ class LocalAlarmService {
   static FlutterLocalNotificationsPlugin? _plugin;
 
   static const _androidChannelId = 'anbu_alerts';
-  static const _androidChannelName = '안부 알림';
+  // TODO: i18n — 채널명은 앱 초기화 시점에 생성되므로 .tr이 동작하지 않을 수 있음
+  static const _androidChannelName = '안부 알림'; // local_notification_channel
 
   /// FcmService 초기화 후 반드시 호출 — 초기화된 플러그인 인스턴스 공유
   static void setPlugin(FlutterLocalNotificationsPlugin plugin) {
@@ -60,6 +61,8 @@ class LocalAlarmService {
 
     debugPrint('[LocalAlarm] 예약 시도: ${scheduled.toString()} (heartbeat $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')} + 30분)');
 
+    // 로컬 알림 본문은 백그라운드 isolate에서 호출될 수 있어 .tr 사용 불가 — 하드코딩 유지
+    // TODO: i18n — local_alarm_title, local_alarm_body
     await _plugin!.zonedSchedule(
       _alarmId,
       '📱 안부 확인이 필요합니다',

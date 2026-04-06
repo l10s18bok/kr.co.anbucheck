@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 
@@ -39,7 +40,7 @@ class AddSubjectButton extends StatelessWidget {
               ),
               SizedBox(height: 10.h),
               Text(
-                '새로운 보호 대상자 추가',
+                'add_subject_button'.tr,
                 style: AppTextTheme.bodyMedium(
                   color: AppColors.textSecondary,
                   fw: FontWeight.w500,

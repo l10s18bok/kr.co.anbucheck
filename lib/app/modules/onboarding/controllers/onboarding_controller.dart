@@ -64,31 +64,39 @@ class OnboardingController extends BaseController {
       final existingRole = response['existing_role'] as String?;
       if (existingRole != null) {
         isLoading = false;
-        final roleLabel = existingRole == 'subject' ? '보호 대상자' : '보호자';
-        final newRoleLabel = mode == 'subject' ? '보호 대상자' : '보호자';
+        final roleLabel = existingRole == 'subject'
+            ? 'onboarding_role_subject'.tr
+            : 'onboarding_role_guardian'.tr;
+        final newRoleLabel = mode == 'subject'
+            ? 'onboarding_role_subject'.tr
+            : 'onboarding_role_guardian'.tr;
         // 'keep' | 'change' | null(취소)
         final choice = await Get.dialog<String>(
           barrierDismissible: false,
           AlertDialog(
-            title: const Text('이미 등록된 기기'),
+            title: Text('onboarding_already_registered_title'.tr),
             content: Text(
-              '이 기기는 이미 $roleLabel 모드로 등록되어 있습니다.\n'
-              '$roleLabel 모드로 계속하시겠습니까?\n\n'
-              '아니면 $newRoleLabel 모드로 변경하시겠습니까?\n'
-              '변경하시면 기존 저장 내용은 모두 삭제됩니다.',
+              'onboarding_already_registered_message'.trParams({
+                'roleLabel': roleLabel,
+                'newRoleLabel': newRoleLabel,
+              }),
             ),
             actions: [
               TextButton(
                 onPressed: () => exit(0),
-                child: const Text('취소'),
+                child: Text('common_cancel'.tr),
               ),
               TextButton(
                 onPressed: () => Get.back(result: 'change'),
-                child: Text('$newRoleLabel 모드로 변경'),
+                child: Text('onboarding_change_mode'.trParams({
+                  'newRoleLabel': newRoleLabel,
+                })),
               ),
               TextButton(
                 onPressed: () => Get.back(result: 'keep'),
-                child: Text('$roleLabel 모드로 계속'),
+                child: Text('onboarding_continue_mode'.trParams({
+                  'roleLabel': roleLabel,
+                })),
               ),
             ],
           ),
@@ -115,8 +123,8 @@ class OnboardingController extends BaseController {
       await _saveAndNavigate(response, mode);
     } catch (e) {
       Get.snackbar(
-        '등록 실패',
-        '서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+        'onboarding_registration_failed_title'.tr,
+        'onboarding_registration_failed_message'.tr,
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {

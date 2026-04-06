@@ -23,7 +23,7 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
           icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.onSurface, size: 20.w),
           onPressed: () => Get.back(),
         ),
-        title: Text('알림 설정', style: AppTextTheme.headlineSmall()),
+        title: Text('notification_settings_title'.tr, style: AppTextTheme.headlineSmall()),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
@@ -35,7 +35,7 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
 
               // 푸시 알림 섹션
               Text(
-                '푸시 알림',
+                'notification_settings_push'.tr,
                 style: AppTextTheme.labelMedium(color: AppColors.textTertiary, fw: FontWeight.w600),
               ),
               SizedBox(height: AppSpacing.md),
@@ -53,10 +53,10 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('전체 알림 받기', style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
+                          Text('notification_settings_all'.tr, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
                           SizedBox(height: 2.h),
                           Text(
-                            '모든 카테고리, 알림을 일괄 활성/비활성합니다.',
+                            'notification_settings_all_desc'.tr,
                             style: AppTextTheme.bodySmall(color: AppColors.textTertiary),
                           ),
                         ],
@@ -74,17 +74,17 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
 
               // 등급별 알림 설정
               Text(
-                '등급별 알림 설정',
+                'notification_settings_level_section'.tr,
                 style: AppTextTheme.labelMedium(color: AppColors.textTertiary, fw: FontWeight.w600),
               ),
               SizedBox(height: AppSpacing.md),
 
               // 긴급 알림 — 항상 ON, 비활성화
-              const _AlertToggleTile(
+              _AlertToggleTile(
                 icon: Icons.error_rounded,
-                iconColor: Color(0xFFE53935),
-                title: '긴급 알림',
-                subtitle: '긴급 알림은 해제할 수 없습니다',
+                iconColor: const Color(0xFFE53935),
+                title: 'notification_settings_urgent'.tr,
+                subtitle: 'notification_settings_urgent_desc'.tr,
                 value: true,
                 enabled: false,
               ),
@@ -93,8 +93,8 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
               _AlertToggleTile(
                 icon: Icons.warning_amber_rounded,
                 iconColor: const Color(0xFFFF9800),
-                title: '경고 알림',
-                subtitle: '연속 2일 안부 미확인 시 알림',
+                title: 'notification_settings_warning'.tr,
+                subtitle: 'notification_settings_warning_desc'.tr,
                 value: controller.warningEnabled.value,
                 onChanged: controller.toggleWarning,
               ),
@@ -103,8 +103,8 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
               _AlertToggleTile(
                 icon: Icons.info_rounded,
                 iconColor: const Color(0xFFFFC107),
-                title: '주의 알림',
-                subtitle: '당일 안부 미확인 시 알림',
+                title: 'notification_settings_caution'.tr,
+                subtitle: 'notification_settings_caution_desc'.tr,
                 value: controller.cautionEnabled.value,
                 onChanged: controller.toggleCaution,
               ),
@@ -113,8 +113,8 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
               _AlertToggleTile(
                 icon: Icons.notifications_rounded,
                 iconColor: const Color(0xFF4355B9),
-                title: '정보 알림',
-                subtitle: '걸음수, 배터리 상태 등 일반 알림',
+                title: 'notification_settings_info'.tr,
+                subtitle: 'notification_settings_info_desc'.tr,
                 value: controller.infoEnabled.value,
                 onChanged: controller.toggleInfo,
               ),
@@ -140,7 +140,7 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                         ),
                         SizedBox(width: AppSpacing.md),
                         Expanded(
-                          child: Text('방해금지 시각 설정', style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
+                          child: Text('notification_settings_dnd'.tr, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
                         ),
                         Switch(
                           value: controller.dndEnabled.value,
@@ -159,7 +159,7 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                               onTap: controller.showDndStartPicker,
                               color: const Color(0xFF4355B9),
                               backgroundColor: const Color(0xFFE8EAF6),
-                              label: '시작 시각',
+                              label: 'notification_settings_dnd_start'.tr,
                               subLabel: controller.dndStartTime.value,
                             ),
                           ),
@@ -172,7 +172,7 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                               onTap: controller.showDndEndPicker,
                               color: const Color(0xFF4355B9),
                               backgroundColor: const Color(0xFFE8EAF6),
-                              label: '종료 시각',
+                              label: 'notification_settings_dnd_end'.tr,
                               subLabel: controller.dndEndTime.value,
                             ),
                           ),
@@ -181,7 +181,7 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                     ),
                     SizedBox(height: AppSpacing.sm),
                     Text(
-                      '※ 긴급 알림은 방해금지모드 중에도 수신됩니다',
+                      'notification_settings_dnd_note'.tr,
                       style: AppTextTheme.bodySmall(color: AppColors.textTertiary),
                     ),
                   ],

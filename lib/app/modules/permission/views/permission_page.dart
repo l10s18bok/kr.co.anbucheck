@@ -29,7 +29,7 @@ class PermissionPage extends GetWidget<PermissionController> {
             children: [
               SizedBox(height: AppSpacing.sp10),
               Text(
-                '앱 사용을 위해\n권한이 필요합니다',
+                'permission_title'.tr,
                 style: AppTextTheme.displaySmall(),
               ),
               SizedBox(height: AppSpacing.sp8),
@@ -37,19 +37,19 @@ class PermissionPage extends GetWidget<PermissionController> {
               // 알림 권한 카드 (공통)
               _PermissionCard(
                 icon: Icons.notifications_rounded,
-                title: '알림 권한',
+                title: 'permission_notification'.tr,
                 description: controller.isSubjectMode
-                    ? '안부 확인 알림을 받기 위해 필요합니다'
-                    : '보호 대상자의 안전 상태 알림을 받기 위해 필요합니다',
+                    ? 'permission_notification_subject_desc'.tr
+                    : 'permission_notification_guardian_desc'.tr,
               ),
 
               // 걸음수 / 신체 활동 카드 (대상자 모드 + Android만)
               if (controller.isSubjectMode && Platform.isAndroid) ...[
                 SizedBox(height: AppSpacing.lg),
-                const _PermissionCard(
+                _PermissionCard(
                   icon: Icons.directions_walk_rounded,
-                  title: '신체 활동 권한',
-                  description: '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다',
+                  title: 'permission_activity'.tr,
+                  description: 'permission_activity_desc'.tr,
                 ),
               ],
 
@@ -61,7 +61,7 @@ class PermissionPage extends GetWidget<PermissionController> {
                 child: ElevatedButton(
                   onPressed: controller.requestPermissions,
                   child: Text(
-                    '확인',
+                    'common_confirm'.tr,
                     style: AppTextTheme.labelLarge(),
                   ),
                 ),

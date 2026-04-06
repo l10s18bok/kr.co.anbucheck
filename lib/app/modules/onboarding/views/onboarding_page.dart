@@ -65,7 +65,7 @@ class OnboardingPage extends GetWidget<OnboardingController> {
                           elevation: 0,
                         ),
                         child: Text(
-                          isLastPage ? '시작하기'.tr : '다음'.tr,
+                          isLastPage ? 'common_start'.tr : 'common_next'.tr,
                           style: AppTextTheme.labelLarge(
                             color: AppColors.seniorOnPrimary,
                           ),

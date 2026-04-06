@@ -44,7 +44,7 @@ class GuardianNotificationsController extends BaseController {
       await _deleteAllNotifications();
       notifications.clear();
     } catch (_) {
-      Get.snackbar('오류', '알림 삭제에 실패했습니다.',
+      Get.snackbar('common_error'.tr, 'notifications_delete_failed'.tr,
           snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading = false;

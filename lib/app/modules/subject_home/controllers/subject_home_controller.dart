@@ -74,10 +74,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
   String get checkCardTitle {
     switch (checkCardState) {
-      case 'reported': return '마지막 안부 확인';
-      case 'pending':  return '안부보고 예정시각';
-      case 'waiting':  return '안부 확인 중';
-      default:         return '안부보고 예정시각';
+      case 'reported': return 'subject_home_check_title_last'.tr;
+      case 'pending':  return 'subject_home_check_title_scheduled'.tr;
+      case 'waiting':  return 'subject_home_check_title_checking'.tr;
+      default:         return 'subject_home_check_title_scheduled'.tr;
     }
   }
 
@@ -88,10 +88,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
             ? _lastHeartbeatTime.value
             : heartbeatTime.value;
         final displayTime = formatTo12Hour(raw);
-        return '$displayTime 정상 보고됨';
-      case 'pending':  return '${heartbeatTime.value} 보고 예정';
-      case 'waiting':  return '${heartbeatTime.value} 보고 대기 중';
-      default:         return '${heartbeatTime.value} 보고 예정';
+        return 'subject_home_check_body_reported'.trParams({'time': displayTime});
+      case 'pending':  return 'subject_home_check_body_scheduled'.trParams({'time': heartbeatTime.value});
+      case 'waiting':  return 'subject_home_check_body_waiting'.trParams({'time': heartbeatTime.value});
+      default:         return 'subject_home_check_body_scheduled'.trParams({'time': heartbeatTime.value});
     }
   }
 
@@ -107,10 +107,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       _batteryLevel.value < 30 && _batteryState.value != BatteryState.charging;
 
   String get batteryStateText {
-    if (_batteryState.value == BatteryState.charging) return '충전 중';
-    if (_batteryState.value == BatteryState.full) return '완충';
-    if (_batteryLevel.value < 30) return '충전 필요';
-    return '정상';
+    if (_batteryState.value == BatteryState.charging) return 'subject_home_battery_charging'.tr;
+    if (_batteryState.value == BatteryState.full) return 'subject_home_battery_full'.tr;
+    if (_batteryLevel.value < 30) return 'subject_home_battery_low'.tr;
+    return 'common_normal'.tr;
   }
 
   // 네트워크 상태
@@ -118,7 +118,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   final _isConnected = false.obs;
   bool get isConnected => _isConnected.value;
 
-  String get connectivityText => _isConnected.value ? '연결됨' : '연결 없음';
+  String get connectivityText => _isConnected.value ? 'common_connected'.tr : 'common_disconnected'.tr;
 
   final _tokenDs = TokenLocalDatasource();
 
@@ -259,8 +259,8 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   void shareInviteCode() {
     SharePlus.instance.share(
       ShareParams(
-        text: '안부(Anbu) 앱에서 제 안부를 확인해 주세요!\n초대 코드: ${_inviteCode.value}',
-        subject: '안부 앱 초대 코드',
+        text: 'subject_home_share_text'.trParams({'code': _inviteCode.value}),
+        subject: 'subject_home_share_subject'.tr,
       ),
     );
   }

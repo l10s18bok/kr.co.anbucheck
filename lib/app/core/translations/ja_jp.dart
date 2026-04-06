@@ -1,0 +1,271 @@
+abstract class JaJp {
+  static const Map<String, String> translations = {
+    // ── 共通 ──
+    'common_confirm': '確認',
+    'common_cancel': 'キャンセル',
+    'common_save': '保存',
+    'common_delete': '削除',
+    'common_close': '閉じる',
+    'common_next': '次へ',
+    'common_previous': '前へ',
+    'common_start': 'はじめる',
+    'common_skip': 'スキップ',
+    'common_later': 'あとで',
+    'common_loading': '読み込み中...',
+    'common_error': 'エラー',
+    'common_complete': '完了',
+    'common_notice': 'お知らせ',
+    'common_unlink': '解除',
+    'common_am': '午前',
+    'common_pm': '午後',
+    'common_normal': '正常',
+    'common_connected': '接続済み',
+    'common_disconnected': '未接続',
+
+    // ── アプリブランド ──
+    'app_name': 'Anbu',
+    'app_brand': 'Anbu',
+    'app_tagline': 'あなたの安否を確認します。',
+    'app_service_desc': '自動安否確認サービス',
+    'app_guardian_title': 'Anbu 見守り人',
+    'app_copyright': '© 2024 TNS Inc.',
+
+    // ── スプラッシュ ──
+    'splash_loading': '安否を確認しています...',
+
+    // ── アップデート ──
+    'update_required_title': 'アップデートが必要です',
+    'update_required_message': 'バージョン@versionへのアップデートが必要です。',
+    'update_button': 'アップデート',
+    'update_available_title': 'アップデートのお知らせ',
+    'update_available_message': '新しいバージョン(@version)が利用可能です。',
+
+    // ── モード選択 ──
+    'mode_select_title': '役割を選んでください',
+    'mode_select_subtitle': 'お選びいただいた役割に合わせて機能を設定します',
+    'mode_subject_title': '自分の安全を知らせたい',
+    'mode_subject_button': '見守られる側になる →',
+    'mode_guardian_title': '大切な人の安全を見守りたい',
+    'mode_guardian_button': '見守る側になる →',
+    'mode_select_notice': '選択により画面構成と通知設定が異なります',
+
+    // ── 権限リクエスト ──
+    'permission_title': 'アプリの利用に\n権限が必要です',
+    'permission_notification': '通知の権限',
+    'permission_notification_subject_desc': '安否確認の通知を受け取るために必要です',
+    'permission_notification_guardian_desc': '見守り対象者の安全状態の通知を受け取るために必要です',
+    'permission_activity': '身体活動の権限',
+    'permission_activity_desc': '歩数を検出して活動状況を確認するために使用されます',
+    'permission_activity_dialog_title': '身体活動の権限について',
+    'permission_activity_dialog_message':
+        '歩数を検出して活動状況を確認するために使用されます。\n次の画面で「許可」を選択してください。',
+    'permission_notification_required_title': '通知の権限が必要です',
+    'permission_notification_required_message':
+        '安否確認サービスをご利用いただくには通知の権限が必要です。\n設定から通知の権限を許可してください。',
+    'permission_go_to_settings': '設定を開く',
+
+    // ── オンボーディング ──
+    'onboarding_title_1': 'ひとり暮らしの大切な人、\n心配ではありませんか？',
+    'onboarding_desc_1': '離れていても\n元気かどうか気になる、\nその気持ちにAnbuが寄り添います。',
+    'onboarding_title_2': '安否は\n言葉がなくても伝わります',
+    'onboarding_desc_2': 'スマートフォンを使うだけで\n1日1回、自動的に\n安否の信号を送ります。',
+    'onboarding_title_3': '大切な人と\n安否を分かち合いましょう',
+    'onboarding_desc_3': '毎日の安否確認が積み重なり\nお互いの安心につながります。\n今すぐはじめましょう。',
+    'onboarding_title_4': '名前も電話番号も\n収集しません',
+    'onboarding_desc_4':
+        "お伝えするのは\n「元気です」という\n安否の信号だけです。\nあなたの情報は安全です。",
+    'onboarding_role_subject': '見守り対象者',
+    'onboarding_role_guardian': '見守り人',
+    'onboarding_already_registered_title': 'すでに登録済みの端末です',
+    'onboarding_already_registered_message':
+        'この端末はすでに@roleLabelモードで登録されています。\n@roleLabelモードのまま続けますか？\n\nまたは@newRoleLabelモードに変更しますか？\n変更すると既存のデータはすべて削除されます。',
+    'onboarding_change_mode': '@newRoleLabelモードに変更',
+    'onboarding_continue_mode': '@roleLabelモードで続ける',
+    'onboarding_registration_failed_title': '登録に失敗しました',
+    'onboarding_registration_failed_message': 'サーバーに接続できません。しばらくしてからもう一度お試しください。',
+
+    // ── 対象者ホーム ──
+    'subject_home_share_title': '安全コードを共有してください',
+    'subject_home_guardian_count': '見守り人の数：@count人',
+    'subject_home_check_title_last': '最終安否確認',
+    'subject_home_check_title_scheduled': '安否報告の予定時刻',
+    'subject_home_check_title_checking': '安否確認中',
+    'subject_home_check_body_reported': '@time 正常に報告済み',
+    'subject_home_check_body_scheduled': '@time に報告予定',
+    'subject_home_check_body_waiting': '@time 報告待ち',
+    'subject_home_battery_status': 'バッテリー状態',
+    'subject_home_battery_charging': '充電中',
+    'subject_home_battery_full': '満充電',
+    'subject_home_battery_low': '充電が必要です',
+    'subject_home_connectivity_status': '通信状態',
+    'subject_home_report_loading': '安否を報告しています...',
+    'subject_home_report_button': '今すぐ安全を報告する',
+    'subject_home_report_desc': '見守り人に元気であることを伝えましょう',
+    'subject_home_share_text': 'Anbuアプリで私の安否を確認してください！\n招待コード：@code',
+    'subject_home_share_subject': 'Anbu 招待コード',
+    'subject_home_code_copied': 'コードをコピーしました',
+
+    // ── 対象者ドロワー ──
+    'drawer_light_mode': 'ライトモード',
+    'drawer_dark_mode': 'ダークモード',
+    'drawer_privacy_policy': 'プライバシーポリシー',
+    'drawer_terms': '利用規約',
+    'drawer_withdraw': '退会',
+    'drawer_withdraw_message': 'アカウントとすべてのデータが削除されます。\n本当に退会しますか？',
+
+    // ── 見守りダッシュボード ──
+    'guardian_status_normal': '正常',
+    'guardian_status_caution': '注意',
+    'guardian_status_warning': '警告',
+    'guardian_status_urgent': '緊急',
+    'guardian_status_confirmed': '安全確認済み',
+    'guardian_subscription_expired': 'サブスクリプションの期限が切れました',
+    'guardian_subscription_expired_message':
+        '警告の通知が送信されていません。\nサブスクリプションを更新して見守りサービスを続けましょう。',
+    'guardian_subscribe': 'サブスクリプション登録',
+    'guardian_payment_preparing': '決済機能は準備中です。',
+    'guardian_today_summary': '今日の安否まとめ',
+    'guardian_no_subjects': '見守り対象者が登録されていません。',
+    'guardian_checking_subjects': '現在@count人の安否を\n確認しています。',
+    'guardian_subject_list': '見守り対象者リスト',
+    'guardian_call_now': '今すぐ電話する',
+    'guardian_confirm_safety': '安全確認完了',
+    'guardian_no_check_history': '確認履歴なし',
+    'guardian_last_check_now': '最終確認：たった今',
+    'guardian_last_check_minutes': '最終確認：@minutes分前',
+    'guardian_last_check_hours': '最終確認：@hours時間前',
+    'guardian_last_check_days': '最終確認：@days日前',
+    'guardian_activity_stable': '活動量：安定',
+    'guardian_safety_needed': '安全確認が必要です',
+    'guardian_error_load_subjects': '対象者リストの読み込みに失敗しました。',
+    'guardian_error_clear_alerts': '警告の解除に失敗しました。',
+
+    // ── 見守り対象者の追加 ──
+    'add_subject_title': '見守り対象者の接続',
+    'add_subject_guide_title': '接続する対象者の固有コード\nとニックネームを入力してください。',
+    'add_subject_guide_subtitle': '対象者のアプリを接続して、健康状態や\n活動をリアルタイムで確認できます。',
+    'add_subject_code_label': '固有コード（7桁）',
+    'add_subject_code_hint': '123-4567',
+    'add_subject_code_info': '固有コードは対象者のアプリで確認できます。',
+    'add_subject_alias_label': '対象者のニックネーム',
+    'add_subject_alias_hint': '例：おばあちゃん、お父さん',
+    'add_subject_connect': '接続する',
+    'add_subject_error_login': 'ログインが必要です。',
+    'add_subject_success': '対象者が接続されました。',
+    'add_subject_error_invalid_code': '無効なコードです。',
+    'add_subject_error_already_connected': 'すでに接続されています。',
+    'add_subject_error_failed': '接続に失敗しました。しばらくしてからもう一度お試しください。',
+    'add_subject_button': '新しい対象者を追加',
+
+    // ── 見守り設定 ──
+    'settings_title': '設定',
+    'settings_light_mode': 'ライトモード',
+    'settings_dark_mode': 'ダークモード',
+    'settings_connection_management': '接続管理',
+    'settings_managed_subjects': '管理中の対象者数',
+    'settings_managed_subjects_count': '@current / @max人',
+    'settings_subscription_service': 'サブスクリプション',
+    'settings_current_membership': '現在のプラン',
+    'settings_premium': 'プレミアム利用中',
+    'settings_free_trial': '無料体験中',
+    'settings_manage_subscription': 'サブスクリプション管理',
+    'settings_notification': '通知設定',
+    'settings_terms_section': '規約',
+    'settings_privacy_policy': 'プライバシーポリシー',
+    'settings_terms': '利用規約',
+    'settings_app_version': 'アプリバージョン：v@version',
+
+    // ── 見守り通知 ──
+    'notifications_title': '通知',
+    'notifications_today': '今日の通知',
+    'notifications_empty': '今日の通知はありません',
+    'notifications_delete_all_title': '通知をすべて削除',
+    'notifications_delete_all_message': '今日の通知をすべて削除しますか？',
+    'notifications_delete_failed': '通知の削除に失敗しました。',
+    'notifications_guide_title': '通知レベルの説明',
+    'notifications_level_health': '正常',
+    'notifications_level_health_desc': '対象者の安否が正常に確認されました',
+    'notifications_level_caution': '注意',
+    'notifications_level_caution_desc':
+        '以下のいずれかに該当します。\n1. 本日予定の安否確認がまだありません\n2. 安否は受信しましたがスマホの使用形跡がありません',
+    'notifications_level_warning': '警告',
+    'notifications_level_warning_desc':
+        '以下のいずれかに該当します。\n1. 2日連続で安否確認ができていません\n2. 2日連続でスマホの使用形跡がありません',
+    'notifications_level_urgent': '緊急',
+    'notifications_level_urgent_desc': '長期間安否確認がないか、\n3日以上スマホの使用がありません',
+    'notifications_level_info': '情報',
+    'notifications_level_info_desc': '歩数やバッテリー不足など\n参考情報の通知です',
+    'notifications_activity_note':
+        '※ 歩数データを取得できなかった場合、活動情報が表示されないことがあります。',
+
+    // ── 見守り通知設定 ──
+    'notification_settings_title': '通知設定',
+    'notification_settings_push': 'プッシュ通知',
+    'notification_settings_all': 'すべての通知を受け取る',
+    'notification_settings_all_desc': 'すべてのカテゴリの通知を一括で有効／無効にします。',
+    'notification_settings_level_section': 'レベル別の通知設定',
+    'notification_settings_urgent': '緊急通知',
+    'notification_settings_urgent_desc': '緊急通知はオフにできません',
+    'notification_settings_warning': '警告通知',
+    'notification_settings_warning_desc': '2日連続で安否未確認の場合に通知します',
+    'notification_settings_caution': '注意通知',
+    'notification_settings_caution_desc': '当日の安否未確認の場合に通知します',
+    'notification_settings_info': '情報通知',
+    'notification_settings_info_desc': '歩数やバッテリー状態などの一般的な通知です',
+    'notification_settings_dnd': 'おやすみモードの時間設定',
+    'notification_settings_dnd_start': '開始時刻',
+    'notification_settings_dnd_end': '終了時刻',
+    'notification_settings_dnd_note': '※ 緊急通知はおやすみモード中でも届きます',
+    'notification_settings_dnd_start_default': '午後 10:00',
+    'notification_settings_dnd_end_default': '午前 07:00',
+
+    // ── 見守り接続管理 ──
+    'connection_title': '接続管理',
+    'connection_managed_count': '管理中の対象者数 ',
+    'connection_managed_count_value': '@current / @max人',
+    'connection_connected_subjects': '接続中の対象者',
+    'connection_unlink_warning':
+        '接続を解除すると、この対象者のデータは削除されます。',
+    'connection_unlink_warning_detail':
+        '再接続しても以前の記録は復元できません。\n対象者のコードを再度入力する必要があります。',
+    'connection_heartbeat_schedule': '毎日 @time',
+    'connection_heartbeat_report_time': '安否報告時刻は ',
+    'connection_subject_label': '見守り対象者',
+    'connection_change_only_in_app': 'アプリでのみ変更できます',
+    'connection_edit_title': '対象者の編集',
+    'connection_alias_label': 'ニックネーム',
+    'connection_unlink_title': '接続解除',
+    'connection_unlink_confirm': '@aliasの接続を解除しますか？',
+    'connection_unlink_success': '接続を解除しました。',
+    'connection_unlink_failed': '接続の解除に失敗しました。',
+    'connection_load_failed': 'リストの読み込みに失敗しました。',
+
+    // ── 見守りボトムナビゲーション ──
+    'nav_home': 'ホーム',
+    'nav_connection': '接続',
+    'nav_notification': '通知',
+    'nav_settings': '設定',
+
+    // ── Heartbeat関連 ──
+    'heartbeat_schedule_change': '安否確認時刻の変更',
+    'heartbeat_daily_time': '毎日 @time',
+    'heartbeat_scheduled_today': '本日@timeに安否確認が予約されています。',
+    'heartbeat_change_failed_title': '時刻の変更に失敗しました',
+    'heartbeat_change_failed_message': 'サーバーに反映されませんでした。',
+
+    // ── ローカル通知 ──
+    'local_notification_channel': '安否確認の通知',
+    'local_notification_channel_desc': '安否確認サービスの通知',
+    'local_alarm_title': '📱 安否確認が必要です',
+    'local_alarm_body': 'この通知を一度タップしてください。',
+
+    // ── その他 ──
+    'back_press_exit': 'もう一度戻るボタンを押すと終了します。',
+
+    // ── APIエラー ──
+    'error_unknown': '不明なエラーが発生しました。',
+    'error_timeout': 'リクエストがタイムアウトしました。',
+    'error_network': 'ネットワーク接続を確認してください。',
+    'error_unauthorized': '認証が必要です。',
+  };
+}

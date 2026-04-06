@@ -19,7 +19,7 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('안부 (Anbu)', style: AppTextTheme.headlineSmall()),
+        title: Text('app_brand'.tr, style: AppTextTheme.headlineSmall()),
       ),
       body: SafeArea(
         child: Padding(
@@ -30,10 +30,10 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
               SizedBox(height: AppSpacing.xs),
 
               // 제목
-              Text('역할을 선택하세요', style: AppTextTheme.displaySmall()),
+              Text('mode_select_title'.tr, style: AppTextTheme.displaySmall()),
               SizedBox(height: AppSpacing.sm),
               Text(
-                '이 선택은 사용자에게 맞는 기능을 설정하는 데 사용됩니다',
+                'mode_select_subtitle'.tr,
                 style: AppTextTheme.bodyMedium(color: AppColors.textTertiary),
               ),
 
@@ -44,8 +44,8 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
                 child: _ModeCard(
                   gradientColors: const [Color(0xFFE0F2F1), Color(0xFFC8E6C9)],
                   illustrationPath: 'assets/illustrations/select_dependent.svg',
-                  title: '나의 안전을 알리고 싶어요',
-                  buttonLabel: '보호 받을래요 →',
+                  title: 'mode_subject_title'.tr,
+                  buttonLabel: 'mode_subject_button'.tr,
                   buttonColor: const Color(0xFF00685E),
                   onTap: controller.selectSubjectMode,
                 ),
@@ -57,8 +57,8 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
                 child: _ModeCard(
                   gradientColors: const [Color(0xFFE8EAF6), Color(0xFFDDE1FF)],
                   illustrationPath: 'assets/illustrations/select_guardian.svg',
-                  title: '가족의 안전을 관리합니다',
-                  buttonLabel: '보호자로 시작할게요 →',
+                  title: 'mode_guardian_title'.tr,
+                  buttonLabel: 'mode_guardian_button'.tr,
                   buttonColor: const Color(0xFF4355B9),
                   onTap: controller.selectGuardianMode,
                 ),
@@ -75,7 +75,7 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
                     children: [
                       Icon(Icons.info_outline, size: 14.w, color: AppColors.textTertiary),
                       SizedBox(width: 4.w),
-                      Text('위 선택에 따라 화면 구성과 알림 설정이 달라집니다', style: AppTextTheme.bodySmall()),
+                      Text('mode_select_notice'.tr, style: AppTextTheme.bodySmall()),
                     ],
                   ),
                 ),

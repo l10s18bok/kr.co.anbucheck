@@ -1,0 +1,303 @@
+abstract class RuRu {
+  static const Map<String, String> translations = {
+    // ── Общие ──
+    'common_confirm': 'Подтвердить',
+    'common_cancel': 'Отмена',
+    'common_save': 'Сохранить',
+    'common_delete': 'Удалить',
+    'common_close': 'Закрыть',
+    'common_next': 'Далее',
+    'common_previous': 'Назад',
+    'common_start': 'Начать',
+    'common_skip': 'Пропустить',
+    'common_later': 'Позже',
+    'common_loading': 'Загрузка...',
+    'common_error': 'Ошибка',
+    'common_complete': 'Готово',
+    'common_notice': 'Уведомление',
+    'common_unlink': 'Отвязать',
+    'common_am': 'ДП',
+    'common_pm': 'ПП',
+    'common_normal': 'Норма',
+    'common_connected': 'Подключено',
+    'common_disconnected': 'Нет связи',
+
+    // ── Бренд приложения ──
+    'app_name': 'Anbu',
+    'app_brand': 'Anbu',
+    'app_tagline': 'Проверяем, что у вас всё хорошо.',
+    'app_service_desc': 'Автоматическая проверка самочувствия',
+    'app_guardian_title': 'Anbu Опекун',
+    'app_copyright': '© 2024 TNS Inc.',
+
+    // ── Заставка ──
+    'splash_loading': 'Проверяем самочувствие...',
+
+    // ── Обновление ──
+    'update_required_title': 'Требуется обновление',
+    'update_required_message':
+        'Для продолжения использования приложения необходимо обновиться до версии @version.',
+    'update_button': 'Обновить',
+    'update_available_title': 'Доступно обновление',
+    'update_available_message': 'Доступна версия @version.',
+
+    // ── Выбор режима ──
+    'mode_select_title': 'Выберите вашу роль',
+    'mode_select_subtitle':
+        'Это поможет настроить подходящие для вас функции',
+    'mode_subject_title': 'Хочу, чтобы за моей\nбезопасностью следили',
+    'mode_subject_button': 'Быть под защитой →',
+    'mode_guardian_title': 'Хочу присматривать за\nблизким человеком',
+    'mode_guardian_button': 'Стать опекуном →',
+    'mode_select_notice':
+        'Интерфейс и уведомления будут зависеть от вашего выбора',
+
+    // ── Разрешения ──
+    'permission_title': 'Для работы приложения\nнеобходимы разрешения',
+    'permission_notification': 'Разрешение на уведомления',
+    'permission_notification_subject_desc':
+        'Необходимо для получения уведомлений о проверке самочувствия',
+    'permission_notification_guardian_desc':
+        'Необходимо для получения уведомлений о состоянии подопечных',
+    'permission_activity': 'Распознавание активности',
+    'permission_activity_desc':
+        'Используется для подсчёта шагов и подтверждения активности',
+    'permission_activity_dialog_title': 'Информация о разрешении',
+    'permission_activity_dialog_message':
+        'Используется для подсчёта шагов и подтверждения активности.\nПожалуйста, нажмите «Разрешить» на следующем экране.',
+    'permission_notification_required_title':
+        'Требуется разрешение на уведомления',
+    'permission_notification_required_message':
+        'Для работы сервиса проверки самочувствия необходимо разрешение на уведомления.\nПожалуйста, включите его в настройках.',
+    'permission_go_to_settings': 'Перейти в настройки',
+
+    // ── Онбординг ──
+    'onboarding_title_1': 'Беспокоитесь о близком\nчеловеке, живущем одном?',
+    'onboarding_desc_1':
+        'Даже на расстоянии\nвы хотите знать, всё ли у них хорошо.\nAnbu — рядом с вами.',
+    'onboarding_title_2': 'Проверка самочувствия\nбез единого слова',
+    'onboarding_desc_2':
+        'Просто пользуясь смартфоном,\nкаждый день автоматически\nотправляется сигнал о самочувствии.',
+    'onboarding_title_3': 'Делитесь новостями\nс близкими людьми',
+    'onboarding_desc_3':
+        'Ежедневные проверки создают\nвзаимное спокойствие.\nНачните прямо сейчас.',
+    'onboarding_title_4': 'Ни имён, ни номеров телефонов\n— ничего не собираем',
+    'onboarding_desc_4':
+        'Передаётся только один сигнал:\n«У меня всё хорошо.»\nВаши данные в безопасности.',
+    'onboarding_role_subject': 'Подопечный',
+    'onboarding_role_guardian': 'Опекун',
+    'onboarding_already_registered_title': 'Устройство уже зарегистрировано',
+    'onboarding_already_registered_message':
+        'Это устройство уже зарегистрировано в режиме @roleLabel.\nПродолжить как @roleLabel?\n\nИли переключиться в режим @newRoleLabel?\nПри переключении все данные будут удалены.',
+    'onboarding_change_mode': 'Переключиться на @newRoleLabel',
+    'onboarding_continue_mode': 'Продолжить как @roleLabel',
+    'onboarding_registration_failed_title': 'Ошибка регистрации',
+    'onboarding_registration_failed_message':
+        'Не удалось подключиться к серверу. Пожалуйста, попробуйте позже.',
+
+    // ── Главная подопечного ──
+    'subject_home_share_title': 'Поделитесь вашим кодом безопасности',
+    'subject_home_guardian_count': 'Подключённые опекуны: @count',
+    'subject_home_check_title_last': 'Последняя проверка',
+    'subject_home_check_title_scheduled': 'Запланированное время',
+    'subject_home_check_title_checking': 'Проверка самочувствия',
+    'subject_home_check_body_reported': 'Отчёт в @time',
+    'subject_home_check_body_scheduled': 'Запланировано на @time',
+    'subject_home_check_body_waiting': 'Ожидание с @time',
+    'subject_home_battery_status': 'Состояние батареи',
+    'subject_home_battery_charging': 'Заряжается',
+    'subject_home_battery_full': 'Полностью заряжено',
+    'subject_home_battery_low': 'Низкий заряд',
+    'subject_home_connectivity_status': 'Состояние связи',
+    'subject_home_report_loading': 'Отправка отчёта...',
+    'subject_home_report_button': 'Сообщить, что всё хорошо',
+    'subject_home_report_desc': 'Сообщите опекуну, что у вас всё в порядке',
+    'subject_home_share_text':
+        'Проверяйте моё самочувствие через приложение Anbu!\nКод приглашения: @code',
+    'subject_home_share_subject': 'Код приглашения Anbu',
+    'subject_home_code_copied': 'Код скопирован',
+
+    // ── Боковое меню подопечного ──
+    'drawer_light_mode': 'Светлая тема',
+    'drawer_dark_mode': 'Тёмная тема',
+    'drawer_privacy_policy': 'Политика конфиденциальности',
+    'drawer_terms': 'Условия использования',
+    'drawer_withdraw': 'Удалить аккаунт',
+    'drawer_withdraw_message':
+        'Ваш аккаунт и все данные будут удалены.\nВы уверены?',
+
+    // ── Панель опекуна ──
+    'guardian_status_normal': 'Норма',
+    'guardian_status_caution': 'Внимание',
+    'guardian_status_warning': 'Предупреждение',
+    'guardian_status_urgent': 'Срочно',
+    'guardian_status_confirmed': 'Безопасность подтверждена',
+    'guardian_subscription_expired': 'Подписка истекла',
+    'guardian_subscription_expired_message':
+        'Уведомления о тревогах не отправляются.\nПродлите подписку для продолжения защиты.',
+    'guardian_subscribe': 'Подписаться',
+    'guardian_payment_preparing': 'Функция оплаты скоро будет доступна.',
+    'guardian_today_summary': 'Сводка за сегодня',
+    'guardian_no_subjects': 'Нет подключённых подопечных.',
+    'guardian_checking_subjects':
+        'В настоящее время проверяется\n@count подопечный(ых).',
+    'guardian_subject_list': 'Список подопечных',
+    'guardian_call_now': 'Позвонить сейчас',
+    'guardian_confirm_safety': 'Подтвердить безопасность',
+    'guardian_no_check_history': 'Нет истории проверок',
+    'guardian_last_check_now': 'Последняя проверка: только что',
+    'guardian_last_check_minutes': 'Последняя проверка: @minutes мин назад',
+    'guardian_last_check_hours': 'Последняя проверка: @hours ч назад',
+    'guardian_last_check_days': 'Последняя проверка: @days дн назад',
+    'guardian_activity_stable': 'Активность: стабильная',
+    'guardian_safety_needed': 'Необходима проверка безопасности',
+    'guardian_error_load_subjects':
+        'Не удалось загрузить список подопечных.',
+    'guardian_error_clear_alerts': 'Не удалось сбросить тревоги.',
+
+    // ── Добавление подопечного ──
+    'add_subject_title': 'Привязка подопечного',
+    'add_subject_guide_title':
+        'Введите уникальный код подопечного\nи задайте имя.',
+    'add_subject_guide_subtitle':
+        'Привяжите приложение подопечного для\nотслеживания состояния здоровья и активности.',
+    'add_subject_code_label': 'Уникальный код (7 символов)',
+    'add_subject_code_hint': '123-4567',
+    'add_subject_code_info':
+        'Уникальный код можно найти в приложении подопечного.',
+    'add_subject_alias_label': 'Имя подопечного',
+    'add_subject_alias_hint': 'Напр.: мама, папа',
+    'add_subject_connect': 'Привязать',
+    'add_subject_error_login': 'Требуется авторизация.',
+    'add_subject_success': 'Подопечный успешно подключён.',
+    'add_subject_error_invalid_code': 'Недействительный код.',
+    'add_subject_error_already_connected': 'Уже подключён.',
+    'add_subject_error_failed':
+        'Не удалось подключить. Пожалуйста, попробуйте позже.',
+    'add_subject_button': 'Добавить подопечного',
+
+    // ── Настройки опекуна ──
+    'settings_title': 'Настройки',
+    'settings_light_mode': 'Светлая тема',
+    'settings_dark_mode': 'Тёмная тема',
+    'settings_connection_management': 'Управление подключениями',
+    'settings_managed_subjects': 'Количество подопечных',
+    'settings_managed_subjects_count': '@current / @max',
+    'settings_subscription_service': 'Подписка и сервис',
+    'settings_current_membership': 'Текущая подписка',
+    'settings_premium': 'Премиум активна',
+    'settings_free_trial': 'Бесплатный период',
+    'settings_manage_subscription': 'Управление подпиской',
+    'settings_notification': 'Настройки уведомлений',
+    'settings_terms_section': 'Правовая информация',
+    'settings_privacy_policy': 'Политика конфиденциальности',
+    'settings_terms': 'Условия использования',
+    'settings_app_version': 'Версия: v@version',
+
+    // ── Уведомления опекуна ──
+    'notifications_title': 'Уведомления',
+    'notifications_today': 'Сегодняшние уведомления',
+    'notifications_empty': 'Сегодня уведомлений нет',
+    'notifications_delete_all_title': 'Удалить все уведомления',
+    'notifications_delete_all_message':
+        'Удалить все сегодняшние уведомления?',
+    'notifications_delete_failed': 'Не удалось удалить уведомления.',
+    'notifications_guide_title': 'Уровни уведомлений',
+    'notifications_level_health': 'Норма',
+    'notifications_level_health_desc':
+        'Самочувствие подопечного подтверждено',
+    'notifications_level_caution': 'Внимание',
+    'notifications_level_caution_desc':
+        'Возможна одна из причин:\n1. Сегодняшняя проверка не поступила\n2. Проверка получена, но использование телефона не обнаружено',
+    'notifications_level_warning': 'Предупреждение',
+    'notifications_level_warning_desc':
+        'Возможна одна из причин:\n1. Нет проверки 2 дня подряд\n2. Телефон не используется 2 дня подряд',
+    'notifications_level_urgent': 'Срочно',
+    'notifications_level_urgent_desc':
+        'Длительное отсутствие проверки\nили телефон не используется 3 и более дней',
+    'notifications_level_info': 'Информация',
+    'notifications_level_info_desc':
+        'Справочные уведомления: количество шагов,\nнизкий заряд батареи и т.д.',
+    'notifications_activity_note':
+        '※ Информация об активности может не отображаться, если данные о шагах недоступны.',
+
+    // ── Настройки уведомлений опекуна ──
+    'notification_settings_title': 'Настройки уведомлений',
+    'notification_settings_push': 'Push-уведомления',
+    'notification_settings_all': 'Все уведомления',
+    'notification_settings_all_desc':
+        'Включить или отключить все категории уведомлений одновременно.',
+    'notification_settings_level_section': 'Настройки по уровням',
+    'notification_settings_urgent': 'Срочные тревоги',
+    'notification_settings_urgent_desc':
+        'Срочные тревоги невозможно отключить',
+    'notification_settings_warning': 'Предупреждения',
+    'notification_settings_warning_desc':
+        'Уведомление при отсутствии проверки 2 дня подряд',
+    'notification_settings_caution': 'Уведомления «Внимание»',
+    'notification_settings_caution_desc':
+        'Уведомление при отсутствии сегодняшней проверки',
+    'notification_settings_info': 'Информационные уведомления',
+    'notification_settings_info_desc':
+        'Общие уведомления: шаги, состояние батареи и т.д.',
+    'notification_settings_dnd': 'Режим «Не беспокоить»',
+    'notification_settings_dnd_start': 'Начало',
+    'notification_settings_dnd_end': 'Окончание',
+    'notification_settings_dnd_note':
+        '※ Срочные тревоги доставляются даже в режиме «Не беспокоить»',
+    'notification_settings_dnd_start_default': '22:00',
+    'notification_settings_dnd_end_default': '07:00',
+
+    // ── Управление подключениями опекуна ──
+    'connection_title': 'Управление подключениями',
+    'connection_managed_count': 'Количество подопечных ',
+    'connection_managed_count_value': '@current / @max',
+    'connection_connected_subjects': 'Подключённые подопечные',
+    'connection_unlink_warning':
+        'При отвязке данные подопечного будут удалены.',
+    'connection_unlink_warning_detail':
+        'Предыдущие записи не подлежат восстановлению.\nВам потребуется заново ввести код подопечного.',
+    'connection_heartbeat_schedule': 'Ежедневно в @time',
+    'connection_heartbeat_report_time': 'Время отчёта о самочувствии — ',
+    'connection_subject_label': 'Подопечный',
+    'connection_change_only_in_app': 'можно изменить только в приложении',
+    'connection_edit_title': 'Редактировать подопечного',
+    'connection_alias_label': 'Имя',
+    'connection_unlink_title': 'Отвязать',
+    'connection_unlink_confirm': 'Отвязать @alias?',
+    'connection_unlink_success': 'Успешно отвязано.',
+    'connection_unlink_failed': 'Не удалось отвязать.',
+    'connection_load_failed': 'Не удалось загрузить список.',
+
+    // ── Нижняя навигация опекуна ──
+    'nav_home': 'Главная',
+    'nav_connection': 'Связи',
+    'nav_notification': 'Тревоги',
+    'nav_settings': 'Настройки',
+
+    // ── Heartbeat ──
+    'heartbeat_schedule_change': 'Изменить время проверки',
+    'heartbeat_daily_time': 'Ежедневно в @time',
+    'heartbeat_scheduled_today':
+        'Проверка самочувствия запланирована на @time сегодня.',
+    'heartbeat_change_failed_title': 'Ошибка изменения времени',
+    'heartbeat_change_failed_message':
+        'Не удалось сохранить изменения на сервере.',
+
+    // ── Локальные уведомления ──
+    'local_notification_channel': 'Уведомления о самочувствии',
+    'local_notification_channel_desc':
+        'Уведомления сервиса проверки самочувствия',
+    'local_alarm_title': '📱 Необходима проверка самочувствия',
+    'local_alarm_body': 'Пожалуйста, нажмите на это уведомление.',
+
+    // ── Разное ──
+    'back_press_exit': 'Нажмите «Назад» ещё раз для выхода.',
+
+    // ── Ошибки API ──
+    'error_unknown': 'Произошла неизвестная ошибка.',
+    'error_timeout': 'Время ожидания истекло.',
+    'error_network': 'Пожалуйста, проверьте подключение к сети.',
+    'error_unauthorized': 'Требуется авторизация.',
+  };
+}

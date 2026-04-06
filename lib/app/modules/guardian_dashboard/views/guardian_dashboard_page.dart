@@ -46,10 +46,10 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               _         => const Color(0xFFE8F5E9),
             };
             final label = switch (level) {
-              'caution' => '주의',
-              'warning' => '경고',
-              'urgent'  => '긴급',
-              _         => '정상',
+              'caution' => 'guardian_status_caution'.tr,
+              'warning' => 'guardian_status_warning'.tr,
+              'urgent'  => 'guardian_status_urgent'.tr,
+              _         => 'guardian_status_normal'.tr,
             };
             return Padding(
               padding: EdgeInsets.only(right: 16.w),
@@ -105,14 +105,14 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                         Icon(Icons.warning_amber_rounded,
                             size: 18.w, color: const Color(0xFFE65100)),
                         SizedBox(width: 6.w),
-                        Text('구독이 만료되었습니다',
+                        Text('guardian_subscription_expired'.tr,
                             style: AppTextTheme.bodyMedium(
                                 color: const Color(0xFFE65100),
                                 fw: FontWeight.w700)),
                       ],
                     ),
                     SizedBox(height: 6.h),
-                    Text('경고 알림이 발송되지 않고 있습니다.\n구독을 갱신하여 보호 서비스를 계속하세요.',
+                    Text('guardian_subscription_expired_message'.tr,
                         style: AppTextTheme.bodySmall(
                             color: const Color(0xFF4E2C00))),
                     SizedBox(height: 10.h),
@@ -122,7 +122,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                       child: ElevatedButton(
                         onPressed: () {
                           // TODO: 인앱 결제 SDK 연동 후 구현
-                          Get.snackbar('안내', '결제 기능 준비 중입니다.',
+                          Get.snackbar('common_notice'.tr, 'guardian_payment_preparing'.tr,
                               snackPosition: SnackPosition.BOTTOM);
                         },
                         style: ElevatedButton.styleFrom(
@@ -132,7 +132,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             borderRadius: BorderRadius.circular(10.r),
                           ),
                         ),
-                        child: Text('구독하기',
+                        child: Text('guardian_subscribe'.tr,
                             style: AppTextTheme.labelMedium(
                                 color: Colors.white, fw: FontWeight.w600)),
                       ),
@@ -144,7 +144,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
 
             // 상단 레이블
             Text(
-              '오늘의 안부 요약',
+              'guardian_today_summary'.tr,
               style: AppTextTheme.labelMedium(
                 color: AppColors.textTertiary,
                 fw: FontWeight.w500,
@@ -156,8 +156,8 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
             Obx(() {
               final count = controller.subjects.length;
               final text = count == 0
-                  ? '연결된 보호 대상자가 없습니다.'
-                  : '현재 $count명의 안부를\n확인 중입니다.';
+                  ? 'guardian_no_subjects'.tr
+                  : 'guardian_checking_subjects'.trParams({'count': count.toString()});
               return Text(
                 text,
                 style: AppTextTheme.headlineMedium(fw: FontWeight.w700),
@@ -169,7 +169,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('보호 대상자 리스트',
+                Text('guardian_subject_list'.tr,
                     style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
                 Flexible(
                   child: Obx(() {
@@ -186,11 +186,11 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                       'warning': Color(0xFFE65100),
                       'urgent':  Color(0xFFE53935),
                     };
-                    const labels = {
-                      'normal':  '정상',
-                      'caution': '주의',
-                      'warning': '경고',
-                      'urgent':  '긴급',
+                    final labels = {
+                      'normal':  'guardian_status_normal'.tr,
+                      'caution': 'guardian_status_caution'.tr,
+                      'warning': 'guardian_status_warning'.tr,
+                      'urgent':  'guardian_status_urgent'.tr,
                     };
                     final items = counts.entries
                         .where((e) => e.value > 0)
@@ -257,10 +257,10 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                               : const Color(0xFFE8F5E9).withValues(alpha: 0.5),
                         };
                         final statusLabel = switch (level) {
-                          'caution' => '주의',
-                          'warning' => '경고',
-                          'urgent'  => '긴급',
-                          _         => '안전확인됨',
+                          'caution' => 'guardian_status_caution'.tr,
+                          'warning' => 'guardian_status_warning'.tr,
+                          'urgent'  => 'guardian_status_urgent'.tr,
+                          _         => 'guardian_status_confirmed'.tr,
                         };
 
                         return Obx(() {
@@ -601,7 +601,7 @@ class _SubjectCardState extends State<_SubjectCard>
                                 size: 15.w, color: widget.statusColor),
                             SizedBox(width: 4.w),
                             Text(
-                              '지금 바로 전화',
+                              'guardian_call_now'.tr,
                               style: AppTextTheme.labelSmall(
                                 color: widget.statusColor,
                                 fw: FontWeight.w600,
@@ -640,7 +640,7 @@ class _SubjectCardState extends State<_SubjectCard>
                         onTap: widget.onConfirmSafety,
                         child: Center(
                           child: Text(
-                            '안전확인 완료',
+                            'guardian_confirm_safety'.tr,
                             style: AppTextTheme.labelSmall(
                               color: Colors.white,
                               fw: FontWeight.w600,

@@ -62,7 +62,7 @@ class GuardianDashboardController extends BaseController {
       await _svc.load(force: force);
       _mapSubjects();
     } catch (e) {
-      Get.snackbar('오류', '보호 대상자 목록을 불러오지 못했습니다.',
+      Get.snackbar('common_error'.tr, 'guardian_error_load_subjects'.tr,
           snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading = false;
@@ -90,14 +90,14 @@ class GuardianDashboardController extends BaseController {
   }
 
   String _formatLastSeen(String? lastSeen) {
-    if (lastSeen == null) return '확인 기록 없음';
+    if (lastSeen == null) return 'guardian_no_check_history'.tr;
     final dt = DateTime.tryParse(lastSeen);
-    if (dt == null) return '확인 기록 없음';
+    if (dt == null) return 'guardian_no_check_history'.tr;
     final diff = DateTime.now().difference(dt);
-    if (diff.inMinutes < 1) return '마지막 확인: 방금 전';
-    if (diff.inHours < 1) return '마지막 확인: ${diff.inMinutes}분 전';
-    if (diff.inHours < 24) return '마지막 확인: ${diff.inHours}시간 전';
-    return '마지막 확인: ${diff.inDays}일 전';
+    if (diff.inMinutes < 1) return 'guardian_last_check_now'.tr;
+    if (diff.inHours < 1) return 'guardian_last_check_minutes'.trParams({'minutes': diff.inMinutes.toString()});
+    if (diff.inHours < 24) return 'guardian_last_check_hours'.trParams({'hours': diff.inHours.toString()});
+    return 'guardian_last_check_days'.trParams({'days': diff.inDays.toString()});
   }
 
   /// 대상자 목록에서 가장 높은 알림 등급 반환
@@ -117,7 +117,7 @@ class GuardianDashboardController extends BaseController {
     try {
       await _svc.clearAlerts(inviteCode);
     } catch (_) {
-      Get.snackbar('오류', '경고 해제에 실패했습니다.',
+      Get.snackbar('common_error'.tr, 'guardian_error_clear_alerts'.tr,
           snackPosition: SnackPosition.BOTTOM);
     }
   }
@@ -165,8 +165,8 @@ class SubjectStatus {
   bool get isUrgent => alertLevel == 'urgent';
 
   String get activityLabel {
-    if (isNormal) return '활동량: 안정적임';
-    if (!isNormal) return '안전 확인이 필요합니다';
+    if (isNormal) return 'guardian_activity_stable'.tr;
+    if (!isNormal) return 'guardian_safety_needed'.tr;
     return '';
   }
 }

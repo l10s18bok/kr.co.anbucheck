@@ -24,7 +24,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.onSurface, size: 20.w),
           onPressed: () => Get.back(),
         ),
-        title: Text('보호 대상자 연결', style: AppTextTheme.headlineSmall()),
+        title: Text('add_subject_title'.tr, style: AppTextTheme.headlineSmall()),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
@@ -34,17 +34,17 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
             SizedBox(height: AppSpacing.sp6),
 
             // 안내 문구
-            Text('연결할 보호 대상자의 고유 코드\n와 별칭을 입력해주세요.', style: AppTextTheme.headlineLarge()),
+            Text('add_subject_guide_title'.tr, style: AppTextTheme.headlineLarge()),
             SizedBox(height: AppSpacing.sm),
             Text(
-              '보호 대상자의 앱을 연결하여 실시간 건강 상태\n및 활동을 확인할 수 있습니다.',
+              'add_subject_guide_subtitle'.tr,
               style: AppTextTheme.bodyMedium(color: AppColors.textTertiary),
             ),
             SizedBox(height: AppSpacing.sp8),
 
             // 고유 코드 입력
             Text(
-              '고유 코드 (7자리)',
+              'add_subject_code_label'.tr,
               style: AppTextTheme.labelMedium(color: AppColors.onSurface, fw: FontWeight.w600),
             ),
             SizedBox(height: AppSpacing.sm),
@@ -86,7 +86,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                 Icon(Icons.info_outline_rounded, size: 14.w, color: AppColors.textTertiary),
                 SizedBox(width: 4.w),
                 Expanded(
-                  child: Text('고유 코드는 보호 대상자 앱에서 확인할 수 있습니다.', style: AppTextTheme.bodySmall()),
+                  child: Text('add_subject_code_info'.tr, style: AppTextTheme.bodySmall()),
                 ),
               ],
             ),
@@ -94,7 +94,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
 
             // 대상자 별칭
             Text(
-              '보호 대상자 별칭',
+              'add_subject_alias_label'.tr,
               style: AppTextTheme.labelMedium(color: AppColors.onSurface, fw: FontWeight.w600),
             ),
             SizedBox(height: AppSpacing.sm),
@@ -102,7 +102,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
               controller: controller.aliasController,
               style: AppTextTheme.bodyLarge(),
               decoration: InputDecoration(
-                hintText: '예: 어머니, 아버지',
+                hintText: 'add_subject_alias_hint'.tr,
                 hintStyle: AppTextTheme.bodyLarge(color: AppColors.textTertiary),
                 filled: true,
                 fillColor: AppColors.surfaceContainerLowest,
@@ -141,7 +141,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                     children: [
                       Icon(Icons.link_rounded, size: 20.w),
                       SizedBox(width: 8.w),
-                      Text('연결하기', style: AppTextTheme.labelLarge()),
+                      Text('add_subject_connect'.tr, style: AppTextTheme.labelLarge()),
                     ],
                   ),
                 ),

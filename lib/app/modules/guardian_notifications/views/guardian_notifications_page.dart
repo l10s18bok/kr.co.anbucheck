@@ -30,7 +30,7 @@ class GuardianNotificationsPage
           children: [
             Icon(Icons.notifications_rounded, size: 22.w, color: AppColors.onSurface),
             SizedBox(width: 8.w),
-            Text('알림', style: AppTextTheme.headlineSmall()),
+            Text('notifications_title'.tr, style: AppTextTheme.headlineSmall()),
           ],
         ),
         actions: [
@@ -65,7 +65,7 @@ class GuardianNotificationsPage
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('오늘 받은 알림',
+                      Text('notifications_today'.tr,
                           style: AppTextTheme.labelMedium(
                               color: const Color(0xFF4355B9), fw: FontWeight.w600)),
                       Row(
@@ -117,19 +117,19 @@ class GuardianNotificationsPage
       builder: (_) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerLowest,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-        title: Text('알림 전체 삭제', style: AppTextTheme.headlineSmall()),
-        content: Text('오늘 받은 알림을 모두 삭제하시겠습니까?', style: AppTextTheme.bodyMedium()),
+        title: Text('notifications_delete_all_title'.tr, style: AppTextTheme.headlineSmall()),
+        content: Text('notifications_delete_all_message'.tr, style: AppTextTheme.bodyMedium()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('취소', style: AppTextTheme.bodyLarge(color: AppColors.textTertiary)),
+            child: Text('common_cancel'.tr, style: AppTextTheme.bodyLarge(color: AppColors.textTertiary)),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               controller.deleteAll();
             },
-            child: Text('삭제', style: AppTextTheme.bodyLarge(color: const Color(0xFFE53935), fw: FontWeight.w600)),
+            child: Text('common_delete'.tr, style: AppTextTheme.bodyLarge(color: const Color(0xFFE53935), fw: FontWeight.w600)),
           ),
         ],
       ),
@@ -142,7 +142,7 @@ class GuardianNotificationsPage
       builder: (_) => AlertDialog(
         backgroundColor: AppColors.surfaceContainerLowest,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-        title: Text('알림 등급 안내', style: AppTextTheme.headlineSmall()),
+        title: Text('notifications_guide_title'.tr, style: AppTextTheme.headlineSmall()),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,34 +151,29 @@ class GuardianNotificationsPage
               _alertGuideItem(
                 icon: Icons.check_circle_rounded,
                 color: const Color(0xFF4CAF50),
-                title: '정상',
-                description: '대상자의 안부가 정상적으로 확인됨',
+                title: 'notifications_level_health'.tr,
+                description: 'notifications_level_health_desc'.tr,
               ),
               SizedBox(height: AppSpacing.lg),
               _alertGuideItem(
                 icon: Icons.info_rounded,
                 color: const Color(0xFFFFC107),
-                title: '주의',
-                description: '다음 중 하나에 해당합니다.\n'
-                    '1. 오늘 예정된 안부 확인이 아직 없음\n'
-                    '2. 안부는 수신되었으나 폰 사용 흔적이 없음',
+                title: 'notifications_level_caution'.tr,
+                description: 'notifications_level_caution_desc'.tr,
               ),
               SizedBox(height: AppSpacing.lg),
               _alertGuideItem(
                 icon: Icons.warning_amber_rounded,
                 color: const Color(0xFFFF9800),
-                title: '경고',
-                description: '다음 중 하나에 해당합니다.\n'
-                    '1. 2일 연속으로 안부 확인이 되지 않음\n'
-                    '2. 2일 연속 폰 사용 흔적이 없음',
+                title: 'notifications_level_warning'.tr,
+                description: 'notifications_level_warning_desc'.tr,
               ),
               SizedBox(height: AppSpacing.lg),
               _alertGuideItem(
                 icon: Icons.error_rounded,
                 color: const Color(0xFFE53935),
-                title: '긴급',
-                description: '장기간 안부 확인이 없거나,\n'
-                    '3일 이상 폰 사용이 없음',
+                title: 'notifications_level_urgent'.tr,
+                description: 'notifications_level_urgent_desc'.tr,
               ),
               SizedBox(height: AppSpacing.lg),
               Divider(color: AppColors.outlineVariant),
@@ -186,12 +181,12 @@ class GuardianNotificationsPage
               _alertGuideItem(
                 icon: Icons.notifications_rounded,
                 color: const Color(0xFF4355B9),
-                title: '정보',
-                description: '걸음수, 배터리 부족 등 참고용 알림\n일반적인 상태 정보 전달',
+                title: 'notifications_level_info'.tr,
+                description: 'notifications_level_info_desc'.tr,
               ),
               SizedBox(height: AppSpacing.md),
               Text(
-                '※ 걸음수 데이터를 수집하지 못한 경우 활동 정보가 표시되지 않을 수 있습니다.',
+                'notifications_activity_note'.tr,
                 style: AppTextTheme.bodySmall(color: AppColors.textTertiary).copyWith(fontSize: 11.sp),
               ),
             ],
@@ -200,7 +195,7 @@ class GuardianNotificationsPage
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('확인', style: AppTextTheme.bodyLarge(color: const Color(0xFF4355B9), fw: FontWeight.w600)),
+            child: Text('common_confirm'.tr, style: AppTextTheme.bodyLarge(color: const Color(0xFF4355B9), fw: FontWeight.w600)),
           ),
         ],
       ),
@@ -311,7 +306,7 @@ class _NotificationCard extends StatelessWidget {
   }
 
   String _formatTime(DateTime dt) {
-    final period = dt.hour < 12 ? '오전' : '오후';
+    final period = dt.hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
     final h = dt.hour == 0 ? 12 : (dt.hour > 12 ? dt.hour - 12 : dt.hour);
     final m = dt.minute.toString().padLeft(2, '0');
     return '$period $h:$m';
@@ -351,11 +346,11 @@ class _NotificationCard extends StatelessWidget {
       };
 
   String get _levelLabel => switch (item.level) {
-        AlertLevel.urgent  => '긴급',
-        AlertLevel.warning => '경고',
-        AlertLevel.caution => '주의',
-        AlertLevel.info    => '정보',
-        AlertLevel.health  => '건강',
+        AlertLevel.urgent  => 'notifications_level_urgent'.tr,
+        AlertLevel.warning => 'notifications_level_warning'.tr,
+        AlertLevel.caution => 'notifications_level_caution'.tr,
+        AlertLevel.info    => 'notifications_level_info'.tr,
+        AlertLevel.health  => 'notifications_level_health'.tr,
       };
 }
 
@@ -377,7 +372,7 @@ class _EmptyState extends StatelessWidget {
           ),
           SizedBox(height: AppSpacing.lg),
           Text(
-            '오늘 받은 알림이 없습니다',
+            'notifications_empty'.tr,
             style: AppTextTheme.bodyLarge(color: AppColors.textTertiary),
           ),
         ],

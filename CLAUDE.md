@@ -85,10 +85,10 @@ lib/
 | Heartbeat 플로우 | `.claude/rules/heartbeat_flowchart.md` | heartbeat 수집·전송·경고 플로우      |
 
 ## 규칙
-0. 파일을 읽기전에 항상 qmd로 검색
-   - qmd search "query"
-   - qmd vsearch "query"
-   - qmd query "query"
+0. 코드 파악이 필요할 때 파일을 직접 읽기 전에 qmd로 먼저 검색
+   - `qmd query "검색어"` — 권장 (하이브리드 검색)
+   - `qmd search "검색어"` — 키워드 정확 매칭
+   - `qmd vsearch "검색어"` — 의미 유사도 검색
 1. 모든 응답·주석·커밋 메시지 **한글** 작성
 2. 불확실하면 추론 금지 — **코드를 직접 찾아보고** 답변
 3. 새 페이지 모듈은 반드시 `.claude/skills/getx-module/SKILL.md` 절차 준수
@@ -96,6 +96,11 @@ lib/
 5. Domain 레이어는 순수 Dart만 사용 (Flutter/GetX import 금지)
 6. Freezed 모델은 `abstract class`로 선언
 7. 모듈 생성 후 `flutter analyze` 실행
+8. **다국어 번역 필수** — UI에 새 문자열 추가·변경 시 반드시 20개 언어 번역 파일에 동시 반영
+   - 번역 파일: `lib/app/core/translations/` 아래 20개 파일
+   - 대상 언어: ko_KR, en_US, ja_JP, zh_CN, zh_TW, de_DE, fr_FR, es_ES, it_IT, nl_NL, pt_BR, ru_RU, ar_SA, tr_TR, pl_PL, vi_VN, th_TH, sv_SE, hi_IN, id_ID
+   - 앱 이름 브랜드 규칙: 한국어만 "안부", 나머지 19개 언어는 "Anbu"
+   - 하드코딩 한글 텍스트 금지 — 반드시 `'key'.tr` 사용
 
 ## 디자인 시스템
 

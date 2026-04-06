@@ -29,7 +29,7 @@ class GuardianAddSubjectController extends BaseController {
 
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) {
-      Get.snackbar('오류', '로그인이 필요합니다.', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('common_error'.tr, 'add_subject_error_login'.tr, snackPosition: SnackPosition.BOTTOM);
       return;
     }
 
@@ -45,14 +45,14 @@ class GuardianAddSubjectController extends BaseController {
       }
 
       Get.back(result: true);
-      Get.snackbar('완료', '보호 대상자가 연결되었습니다.', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('common_complete'.tr, 'add_subject_success'.tr, snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
       final msg = e.toString().contains('404')
-          ? '유효하지 않은 코드입니다.'
+          ? 'add_subject_error_invalid_code'.tr
           : e.toString().contains('409')
-              ? '이미 연결된 보호 대상자입니다.'
-              : '연결에 실패했습니다. 잠시 후 다시 시도해 주세요.';
-      Get.snackbar('오류', msg, snackPosition: SnackPosition.BOTTOM);
+              ? 'add_subject_error_already_connected'.tr
+              : 'add_subject_error_failed'.tr;
+      Get.snackbar('common_error'.tr, msg, snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading = false;
     }

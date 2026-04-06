@@ -10,7 +10,7 @@ import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.d
 /// Heartbeat 시각 변경 기능 Mixin
 /// 대상자/보호자 컨트롤러에서 공통으로 사용
 mixin HeartbeatScheduleMixin on GetxController {
-  final heartbeatTime = '오전 09:30'.obs;
+  late final heartbeatTime = '${'common_am'.tr} 09:30'.obs;
   final heartbeatHour = 9.obs;
   final heartbeatMinute = 30.obs;
 
@@ -37,8 +37,8 @@ mixin HeartbeatScheduleMixin on GetxController {
 
   (int hour, int minute) _parseTime() {
     final text = heartbeatTime.value;
-    final isPm = text.contains('오후');
-    final timePart = text.replaceAll(RegExp(r'[오전오후\s]'), '');
+    final isPm = text.contains('common_pm'.tr);
+    final timePart = text.replaceAll(RegExp('(${'common_am'.tr}|${'common_pm'.tr}|\\s)'), '');
     final parts = timePart.split(':');
     var hour = int.parse(parts[0]);
     final minute = int.parse(parts[1]);
@@ -74,11 +74,11 @@ mixin HeartbeatScheduleMixin on GetxController {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CupertinoButton(
-                    child: const Text('취소'),
+                    child: Text('common_cancel'.tr),
                     onPressed: () => Navigator.pop(context),
                   ),
                   CupertinoButton(
-                    child: const Text('확인'),
+                    child: Text('common_confirm'.tr),
                     onPressed: () async {
                       Navigator.pop(context);
                       await _updateTime(selectedTime.hour, selectedTime.minute);
@@ -103,7 +103,7 @@ mixin HeartbeatScheduleMixin on GetxController {
   }
 
   void _applyToHeartbeatTime(int hour, int minute) {
-    final period = hour < 12 ? '오전' : '오후';
+    final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
     final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
     final m = minute.toString().padLeft(2, '0');
     heartbeatTime.value = '$period ${displayHour.toString().padLeft(2, '0')}:$m';
@@ -133,17 +133,17 @@ mixin HeartbeatScheduleMixin on GetxController {
       await HeartbeatWorkerService.schedule(hour, minute);
       // 로컬 안전망 알림 재예약
       await LocalAlarmService.schedule(hour, minute);
-      final period = hour < 12 ? '오전' : '오후';
+      final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
       final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
       final timeStr = '$period ${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-      final message = '오늘 $timeStr에 안부 확인이 예약되었습니다.';
+      final message = 'heartbeat_scheduled_today'.trParams({'time': timeStr});
       Get.snackbar('', message,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 2),
           backgroundColor: Colors.white,
           colorText: const Color(0xFF1a1c1c));
     } catch (e) {
-      Get.snackbar('시각 변경 실패', '서버에 반영되지 않았습니다.',
+      Get.snackbar('heartbeat_change_failed_title'.tr, 'heartbeat_change_failed_message'.tr,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 2),
           backgroundColor: Colors.white,

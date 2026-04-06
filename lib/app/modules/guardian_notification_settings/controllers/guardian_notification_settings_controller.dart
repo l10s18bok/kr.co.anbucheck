@@ -22,8 +22,8 @@ class GuardianNotificationSettingsController extends BaseController {
   final dndEnabled = false.obs;
 
   // 방해금지모드 시간 (기본: 22:00 ~ 07:00)
-  final dndStartTime = '오후 10:00'.obs;
-  final dndEndTime = '오전 07:00'.obs;
+  late final dndStartTime = 'notification_settings_dnd_start_default'.tr.obs;
+  late final dndEndTime = 'notification_settings_dnd_end_default'.tr.obs;
 
   /// 서버에서 로드한 초기 설정값 (변경 감지용)
   Map<String, dynamic>? _initialSettings;
@@ -108,8 +108,8 @@ class GuardianNotificationSettingsController extends BaseController {
 
   /// "오후 10:00" → "22:00"
   String _displayToHhmm24(String display) {
-    final isPm = display.contains('오후');
-    final timePart = display.replaceAll(RegExp(r'[오전오후\s]'), '');
+    final isPm = display.contains('common_pm'.tr);
+    final timePart = display.replaceAll('common_am'.tr, '').replaceAll('common_pm'.tr, '').trim();
     final parts = timePart.split(':');
     var hour = int.parse(parts[0]);
     final minute = int.parse(parts[1]);
@@ -123,7 +123,7 @@ class GuardianNotificationSettingsController extends BaseController {
     final parts = hhmm.split(':');
     final hour = int.parse(parts[0]);
     final minute = int.parse(parts[1]);
-    final period = hour < 12 ? '오전' : '오후';
+    final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
     final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
     return '$period ${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
@@ -184,8 +184,8 @@ class GuardianNotificationSettingsController extends BaseController {
   }
 
   (int, int) _parseTimeString(String text) {
-    final isPm = text.contains('오후');
-    final timePart = text.replaceAll(RegExp(r'[오전오후\s]'), '');
+    final isPm = text.contains('common_pm'.tr);
+    final timePart = text.replaceAll('common_am'.tr, '').replaceAll('common_pm'.tr, '').trim();
     final parts = timePart.split(':');
     var hour = int.parse(parts[0]);
     final minute = int.parse(parts[1]);
@@ -195,7 +195,7 @@ class GuardianNotificationSettingsController extends BaseController {
   }
 
   String _formatTime(int hour, int minute) {
-    final period = hour < 12 ? '오전' : '오후';
+    final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
     final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
     final m = minute.toString().padLeft(2, '0');
     return '$period ${displayHour.toString().padLeft(2, '0')}:$m';
@@ -230,12 +230,12 @@ class GuardianNotificationSettingsController extends BaseController {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CupertinoButton(
-                    child: Text('취소',
+                    child: Text('common_cancel'.tr,
                         style: TextStyle(color: AppColors.textSecondary)),
                     onPressed: () => Navigator.pop(context),
                   ),
                   CupertinoButton(
-                    child: Text('확인',
+                    child: Text('common_confirm'.tr,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.primary)),
                     onPressed: () {

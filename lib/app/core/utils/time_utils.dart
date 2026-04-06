@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 /// "HH:mm" (24시간제) → "오전/오후 H:mm" (12시간제) 변환
 String formatTo12Hour(String hhmm) {
   final parts = hhmm.split(':');
@@ -7,7 +9,7 @@ String formatTo12Hour(String hhmm) {
   final minute = parts[1];
   if (hour == null) return hhmm;
 
-  final period = hour < 12 ? '오전' : '오후';
+  final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
   final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
   return '$period $displayHour:$minute';
 }

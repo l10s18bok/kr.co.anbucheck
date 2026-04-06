@@ -20,8 +20,8 @@ class BackPressHandler {
             children: [
               Image.asset('assets/icon/app_icon.png', width: 20, height: 20),
               const SizedBox(width: 8),
-              const Text('뒤로 버튼 한번 더 누르면 종료됩니다.',
-                  style: TextStyle(color: Color(0xFF1a1c1c))),
+              Text('back_press_exit'.tr,
+                  style: const TextStyle(color: Color(0xFF1a1c1c))),
             ],
           ),
           backgroundColor: Colors.white,

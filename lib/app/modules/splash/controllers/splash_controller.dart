@@ -114,14 +114,14 @@ class SplashController extends BaseController {
   Future<void> _showForceUpdateDialog(String version, String storeUrl) async {
     await Get.dialog(
       AlertDialog(
-        title: const Text('업데이트 필요'),
-        content: Text('새 버전($version)으로 업데이트해야 앱을 사용할 수 있습니다.'),
+        title: Text('update_required_title'.tr),
+        content: Text('update_required_message'.trParams({'version': version})),
         actions: [
           TextButton(
             onPressed: () {
               // TODO: url_launcher로 스토어 이동
             },
-            child: const Text('업데이트'),
+            child: Text('update_button'.tr),
           ),
         ],
       ),
@@ -131,13 +131,13 @@ class SplashController extends BaseController {
 
   void _showOptionalUpdateSnackbar(String version) {
     Get.snackbar(
-      '업데이트 안내',
-      '새 버전($version)이 있습니다.',
+      'update_available_title'.tr,
+      'update_available_message'.trParams({'version': version}),
       snackPosition: SnackPosition.BOTTOM,
       duration: const Duration(seconds: 4),
       mainButton: TextButton(
         onPressed: () => Get.back(),
-        child: const Text('나중에'),
+        child: Text('common_later'.tr),
       ),
     );
   }
