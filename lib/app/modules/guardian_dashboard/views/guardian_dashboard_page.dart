@@ -64,9 +64,12 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                   children: [
                     Icon(Icons.warning_amber_rounded, size: 14.w, color: color),
                     SizedBox(width: 3.w),
-                    Text(label,
-                        style: AppTextTheme.labelSmall(
-                            color: color, fw: FontWeight.w600)),
+                    Flexible(
+                      child: Text(label,
+                          style: AppTextTheme.labelSmall(
+                              color: color, fw: FontWeight.w600),
+                          overflow: TextOverflow.ellipsis),
+                    ),
                   ],
                 ),
               ),
@@ -600,11 +603,14 @@ class _SubjectCardState extends State<_SubjectCard>
                             Icon(Icons.phone_rounded,
                                 size: 15.w, color: widget.statusColor),
                             SizedBox(width: 4.w),
-                            Text(
-                              'guardian_call_now'.tr,
-                              style: AppTextTheme.labelSmall(
-                                color: widget.statusColor,
-                                fw: FontWeight.w600,
+                            Flexible(
+                              child: Text(
+                                'guardian_call_now'.tr,
+                                style: AppTextTheme.labelSmall(
+                                  color: widget.statusColor,
+                                  fw: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],

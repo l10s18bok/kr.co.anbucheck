@@ -408,9 +408,12 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                   else
                     Icon(Icons.verified_user_rounded, size: 24.w, color: Colors.white),
                   SizedBox(width: 8.w),
-                  Text(
-                    sending ? 'subject_home_report_loading'.tr : 'subject_home_report_button'.tr,
-                    style: AppTextTheme.headlineSmall(color: Colors.white, fw: FontWeight.w700),
+                  Flexible(
+                    child: Text(
+                      sending ? 'subject_home_report_loading'.tr : 'subject_home_report_button'.tr,
+                      style: AppTextTheme.headlineSmall(color: Colors.white, fw: FontWeight.w700),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),

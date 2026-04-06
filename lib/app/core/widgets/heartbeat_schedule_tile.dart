@@ -47,9 +47,12 @@ class HeartbeatScheduleTile extends StatelessWidget {
               children: [
                 Icon(Icons.schedule_rounded, size: 22.w, color: color),
                 SizedBox(width: 8.w),
-                Text(
-                  label,
-                  style: AppTextTheme.labelLarge(color: color),
+                Flexible(
+                  child: Text(
+                    label,
+                    style: AppTextTheme.labelLarge(color: color),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),

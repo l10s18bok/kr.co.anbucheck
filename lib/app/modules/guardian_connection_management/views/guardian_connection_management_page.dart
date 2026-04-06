@@ -30,7 +30,7 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
           children: [
             Icon(Icons.link_rounded, size: 22.w, color: AppColors.onSurface),
             SizedBox(width: 8.w),
-            Text('connection_title'.tr, style: AppTextTheme.headlineSmall()),
+            Flexible(child: Text('connection_title'.tr, style: AppTextTheme.headlineSmall(), overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),

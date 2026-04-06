@@ -30,7 +30,7 @@ class GuardianNotificationsPage
           children: [
             Icon(Icons.notifications_rounded, size: 22.w, color: AppColors.onSurface),
             SizedBox(width: 8.w),
-            Text('notifications_title'.tr, style: AppTextTheme.headlineSmall()),
+            Flexible(child: Text('notifications_title'.tr, style: AppTextTheme.headlineSmall(), overflow: TextOverflow.ellipsis)),
           ],
         ),
         actions: [

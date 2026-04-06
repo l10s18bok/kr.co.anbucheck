@@ -35,7 +35,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
           children: [
             Icon(Icons.settings_rounded, size: 22.w, color: AppColors.onSurface),
             SizedBox(width: 8.w),
-            Text('settings_title'.tr, style: AppTextTheme.headlineSmall()),
+            Flexible(child: Text('settings_title'.tr, style: AppTextTheme.headlineSmall(), overflow: TextOverflow.ellipsis)),
           ],
         ),
         actions: const [],

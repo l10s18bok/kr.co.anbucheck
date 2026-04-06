@@ -18,7 +18,7 @@ class App extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'app',
           translations: AppTranslations(),
-          locale: const Locale('ko', 'KR'),
+          locale: Get.deviceLocale,
           fallbackLocale: const Locale('en', 'US'),
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,

@@ -141,7 +141,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                     children: [
                       Icon(Icons.link_rounded, size: 20.w),
                       SizedBox(width: 8.w),
-                      Text('add_subject_connect'.tr, style: AppTextTheme.labelLarge()),
+                      Flexible(child: Text('add_subject_connect'.tr, style: AppTextTheme.labelLarge(), overflow: TextOverflow.ellipsis)),
                     ],
                   ),
                 ),
