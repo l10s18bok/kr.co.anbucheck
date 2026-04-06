@@ -48,7 +48,7 @@
         <!-- AdMob App ID (테스트용 — 출시 전 실제 ID로 교체) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-5477604587043205~8973493189"/>
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
