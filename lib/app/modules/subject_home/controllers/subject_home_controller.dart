@@ -74,7 +74,12 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
   String get checkCardTitle {
     switch (checkCardState) {
-      case 'reported': return 'subject_home_check_title_last'.tr;
+      case 'reported':
+        final date = _lastHeartbeatDate.value;
+        if (date.isNotEmpty) {
+          return '${'subject_home_check_title_last'.tr} : $date';
+        }
+        return 'subject_home_check_title_last'.tr;
       case 'pending':  return 'subject_home_check_title_scheduled'.tr;
       case 'waiting':  return 'subject_home_check_title_checking'.tr;
       default:         return 'subject_home_check_title_scheduled'.tr;

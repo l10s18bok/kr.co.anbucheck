@@ -118,7 +118,9 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             Obx(
               () => HeartbeatScheduleTile(
                 heartbeatTime: controller.heartbeatTime.value,
-                onTap: controller.showTimePickerDialog,
+                onTap: controller.isGuardianConnected
+                    ? controller.showTimePickerDialog
+                    : () {},
                 color: Get.find<ThemeService>().isDarkMode.value
                     ? const Color(0xFF80CBC4)
                     : const Color(0xFF00685E),
@@ -381,14 +383,15 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
   Widget _buildReportButton() {
     return Obx(() {
       final sending = controller.isReporting;
+      final disabled = !controller.isGuardianConnected;
       return GestureDetector(
-        onTap: sending ? null : controller.reportNow,
+        onTap: (sending || disabled) ? null : controller.reportNow,
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 20.h),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: sending
+              colors: (sending || disabled)
                   ? [const Color(0xFF4A7C78), const Color(0xFF4A7C78)]
                   : [const Color(0xFF00685E), const Color(0xFF008377)],
             ),
