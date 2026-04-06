@@ -3,6 +3,7 @@ abstract class PlPl {
     // ── Ogolne ──
     'common_confirm': 'Potwierdz',
     'common_cancel': 'Anuluj',
+    'common_continue': 'Kontynuuj',
     'common_save': 'Zapisz',
     'common_delete': 'Usun',
     'common_close': 'Zamknij',
@@ -92,8 +93,6 @@ abstract class PlPl {
     'onboarding_already_registered_title': 'Urzadzenie juz zarejestrowane',
     'onboarding_already_registered_message':
         'To urzadzenie jest juz zarejestrowane w trybie "@roleLabel".\nKontynuowac jako "@roleLabel"?\n\nCzy przejsc na tryb "@newRoleLabel"?\nZmiana usunie wszystkie istniejace dane.',
-    'onboarding_change_mode': 'Przejdz na tryb "@newRoleLabel"',
-    'onboarding_continue_mode': 'Kontynuuj jako "@roleLabel"',
     'onboarding_registration_failed_title': 'Rejestracja nie powiodla sie',
     'onboarding_registration_failed_message':
         'Nie mozna polaczyc z serwerem. Prosze sprobowac ponownie pozniej.',

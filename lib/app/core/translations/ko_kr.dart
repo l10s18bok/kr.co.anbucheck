@@ -3,6 +3,7 @@ abstract class KoKr {
     // ── 공통 ──
     'common_confirm': '확인',
     'common_cancel': '취소',
+    'common_continue': '계속',
     'common_save': '저장',
     'common_delete': '삭제',
     'common_close': '닫기',
@@ -79,8 +80,6 @@ abstract class KoKr {
     'onboarding_already_registered_title': '이미 등록된 기기',
     'onboarding_already_registered_message':
         '이 기기는 이미 "@roleLabel" 모드로 등록되어 있습니다.\n"@roleLabel" 모드로 계속하시겠습니까?\n\n아니면 "@newRoleLabel" 모드로 변경하시겠습니까?\n변경하시면 기존 저장 내용은 모두 삭제됩니다.',
-    'onboarding_change_mode': '"@newRoleLabel" 모드로 변경',
-    'onboarding_continue_mode': '"@roleLabel" 모드로 계속',
     'onboarding_registration_failed_title': '등록 실패',
     'onboarding_registration_failed_message': '서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.',
 

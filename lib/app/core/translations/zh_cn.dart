@@ -3,6 +3,7 @@ abstract class ZhCn {
     // ── 通用 ──
     'common_confirm': '确认',
     'common_cancel': '取消',
+    'common_continue': '继续',
     'common_save': '保存',
     'common_delete': '删除',
     'common_close': '关闭',
@@ -79,8 +80,6 @@ abstract class ZhCn {
     'onboarding_already_registered_title': '设备已注册',
     'onboarding_already_registered_message':
         '此设备已注册为 "@roleLabel" 模式。\n是否继续使用 "@roleLabel" 模式？\n\n或者切换到 "@newRoleLabel" 模式？\n切换后所有已有数据将被删除。',
-    'onboarding_change_mode': '切换到 "@newRoleLabel" 模式',
-    'onboarding_continue_mode': '继续使用 "@roleLabel" 模式',
     'onboarding_registration_failed_title': '注册失败',
     'onboarding_registration_failed_message': '无法连接到服务器，请稍后再试。',
 

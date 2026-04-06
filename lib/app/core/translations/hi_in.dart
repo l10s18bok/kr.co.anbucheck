@@ -3,6 +3,7 @@ abstract class HiIn {
     // ── सामान्य ──
     'common_confirm': 'पुष्टि करें',
     'common_cancel': 'रद्द करें',
+    'common_continue': 'जारी रखें',
     'common_save': 'सहेजें',
     'common_delete': 'हटाएं',
     'common_close': 'बंद करें',
@@ -88,8 +89,6 @@ abstract class HiIn {
     'onboarding_already_registered_title': 'डिवाइस पहले से पंजीकृत',
     'onboarding_already_registered_message':
         'यह डिवाइस पहले से "@roleLabel" मोड में पंजीकृत है।\n"@roleLabel" के रूप में जारी रखें?\n\nया "@newRoleLabel" मोड में बदलें?\nबदलने से सभी मौजूदा डेटा हट जाएगा।',
-    'onboarding_change_mode': '"@newRoleLabel" मोड में बदलें',
-    'onboarding_continue_mode': '"@roleLabel" के रूप में जारी रखें',
     'onboarding_registration_failed_title': 'पंजीकरण विफल',
     'onboarding_registration_failed_message':
         'सर्वर से कनेक्ट नहीं हो पा रहा। कृपया बाद में पुनः प्रयास करें।',

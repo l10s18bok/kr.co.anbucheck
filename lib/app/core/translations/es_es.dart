@@ -3,6 +3,7 @@ abstract class EsEs {
     // ── General ──
     'common_confirm': 'Confirmar',
     'common_cancel': 'Cancelar',
+    'common_continue': 'Continuar',
     'common_save': 'Guardar',
     'common_delete': 'Eliminar',
     'common_close': 'Cerrar',
@@ -94,8 +95,6 @@ abstract class EsEs {
     'onboarding_already_registered_title': 'Dispositivo ya registrado',
     'onboarding_already_registered_message':
         'Este dispositivo ya está registrado en modo "@roleLabel".\n¿Desea continuar como "@roleLabel"?\n\n¿O cambiar al modo "@newRoleLabel"?\nAl cambiar se eliminarán todos los datos existentes.',
-    'onboarding_change_mode': 'Cambiar al modo "@newRoleLabel"',
-    'onboarding_continue_mode': 'Continuar como "@roleLabel"',
     'onboarding_registration_failed_title': 'Error de registro',
     'onboarding_registration_failed_message':
         'No se pudo conectar con el servidor. Inténtelo de nuevo más tarde.',

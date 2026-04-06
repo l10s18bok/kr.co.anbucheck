@@ -3,6 +3,7 @@ abstract class JaJp {
     // ── 共通 ──
     'common_confirm': '確認',
     'common_cancel': 'キャンセル',
+    'common_continue': '続ける',
     'common_save': '保存',
     'common_delete': '削除',
     'common_close': '閉じる',
@@ -79,8 +80,6 @@ abstract class JaJp {
     'onboarding_already_registered_title': 'すでに登録済みの端末です',
     'onboarding_already_registered_message':
         'この端末はすでに"@roleLabel"モードで登録されています。\n"@roleLabel"モードのまま続けますか？\n\nまたは"@newRoleLabel"モードに変更しますか？\n変更すると既存のデータはすべて削除されます。',
-    'onboarding_change_mode': '"@newRoleLabel"モードに変更',
-    'onboarding_continue_mode': '"@roleLabel"モードで続ける',
     'onboarding_registration_failed_title': '登録に失敗しました',
     'onboarding_registration_failed_message': 'サーバーに接続できません。しばらくしてからもう一度お試しください。',
 

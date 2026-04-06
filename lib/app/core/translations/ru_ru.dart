@@ -3,6 +3,7 @@ abstract class RuRu {
     // ── Общие ──
     'common_confirm': 'Подтвердить',
     'common_cancel': 'Отмена',
+    'common_continue': 'Продолжить',
     'common_save': 'Сохранить',
     'common_delete': 'Удалить',
     'common_close': 'Закрыть',
@@ -89,8 +90,6 @@ abstract class RuRu {
     'onboarding_already_registered_title': 'Устройство уже зарегистрировано',
     'onboarding_already_registered_message':
         'Это устройство уже зарегистрировано в режиме "@roleLabel".\nПродолжить как "@roleLabel"?\n\nИли переключиться в режим "@newRoleLabel"?\nПри переключении все данные будут удалены.',
-    'onboarding_change_mode': 'Переключиться на "@newRoleLabel"',
-    'onboarding_continue_mode': 'Продолжить как "@roleLabel"',
     'onboarding_registration_failed_title': 'Ошибка регистрации',
     'onboarding_registration_failed_message':
         'Не удалось подключиться к серверу. Пожалуйста, попробуйте позже.',

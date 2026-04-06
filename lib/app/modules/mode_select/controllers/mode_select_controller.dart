@@ -56,28 +56,14 @@ class ModeSelectController extends BaseController {
                 child: Text('common_cancel'.tr),
               ),
               TextButton(
-                onPressed: () => Get.back(result: 'keep'),
-                child: Text('onboarding_continue_mode'.trParams({
-                  'roleLabel': roleLabel,
-                })),
-              ),
-              TextButton(
                 onPressed: () => Get.back(result: 'change'),
-                child: Text('onboarding_change_mode'.trParams({
-                  'newRoleLabel': newRoleLabel,
-                })),
+                child: Text('common_continue'.tr),
               ),
             ],
           ),
         );
 
-        if (choice == 'cancel' || choice == null) return;
-
-        if (choice == 'keep') {
-          // 기존 모드 유지 → 기존 역할로 권한 안내 진입
-          Get.toNamed(AppRoutes.permission, arguments: {'mode': existingRole});
-          return;
-        }
+        if (choice != 'change') return;
 
         // 변경 선택 → 기존 계정 삭제 후 새 모드로 진행
         isLoading = true;

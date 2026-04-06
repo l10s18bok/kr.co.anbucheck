@@ -3,6 +3,7 @@ abstract class PtBr {
     // ── Comum ──
     'common_confirm': 'Confirmar',
     'common_cancel': 'Cancelar',
+    'common_continue': 'Continuar',
     'common_save': 'Salvar',
     'common_delete': 'Excluir',
     'common_close': 'Fechar',
@@ -97,8 +98,6 @@ abstract class PtBr {
     'onboarding_already_registered_title': 'Dispositivo já registrado',
     'onboarding_already_registered_message':
         'Este dispositivo já está registrado no modo "@roleLabel".\nDeseja continuar como "@roleLabel"?\n\nOu mudar para o modo "@newRoleLabel"?\nA mudança excluirá todos os dados existentes.',
-    'onboarding_change_mode': 'Mudar para modo "@newRoleLabel"',
-    'onboarding_continue_mode': 'Continuar como "@roleLabel"',
     'onboarding_registration_failed_title': 'Registro falhou',
     'onboarding_registration_failed_message':
         'Não foi possível conectar ao servidor. Tente novamente mais tarde.',

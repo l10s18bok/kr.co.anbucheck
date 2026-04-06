@@ -3,6 +3,7 @@ abstract class EnUs {
     // ── Common ──
     'common_confirm': 'Confirm',
     'common_cancel': 'Cancel',
+    'common_continue': 'Continue',
     'common_save': 'Save',
     'common_delete': 'Delete',
     'common_close': 'Close',
@@ -78,8 +79,6 @@ abstract class EnUs {
     'onboarding_already_registered_title': 'Device Already Registered',
     'onboarding_already_registered_message':
         'This device is already registered in "@roleLabel" mode.\nContinue as "@roleLabel"?\n\nOr switch to "@newRoleLabel" mode?\nSwitching will delete all existing data.',
-    'onboarding_change_mode': 'Switch to "@newRoleLabel" mode',
-    'onboarding_continue_mode': 'Continue as "@roleLabel"',
     'onboarding_registration_failed_title': 'Registration Failed',
     'onboarding_registration_failed_message': 'Cannot connect to server. Please try again later.',
 

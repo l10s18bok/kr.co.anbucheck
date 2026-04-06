@@ -3,6 +3,7 @@ abstract class FrFr {
     // ── Commun ──
     'common_confirm': 'Confirmer',
     'common_cancel': 'Annuler',
+    'common_continue': 'Continuer',
     'common_save': 'Enregistrer',
     'common_delete': 'Supprimer',
     'common_close': 'Fermer',
@@ -94,8 +95,6 @@ abstract class FrFr {
     'onboarding_already_registered_title': 'Appareil déjà enregistré',
     'onboarding_already_registered_message':
         'Cet appareil est déjà enregistré en mode "@roleLabel".\nSouhaitez-vous continuer en "@roleLabel" ?\n\nOu passer en mode "@newRoleLabel" ?\nLe changement supprimera toutes les données existantes.',
-    'onboarding_change_mode': 'Passer en mode "@newRoleLabel"',
-    'onboarding_continue_mode': 'Continuer en "@roleLabel"',
     'onboarding_registration_failed_title': 'Échec de l\'inscription',
     'onboarding_registration_failed_message':
         'Impossible de se connecter au serveur. Veuillez réessayer plus tard.',

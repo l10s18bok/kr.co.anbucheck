@@ -3,6 +3,7 @@ abstract class SvSe {
     // ── Allmant ──
     'common_confirm': 'Bekrafta',
     'common_cancel': 'Avbryt',
+    'common_continue': 'Fortsätt',
     'common_save': 'Spara',
     'common_delete': 'Radera',
     'common_close': 'Stang',
@@ -91,8 +92,6 @@ abstract class SvSe {
     'onboarding_already_registered_title': 'Enheten ar redan registrerad',
     'onboarding_already_registered_message':
         'Denna enhet ar redan registrerad i "@roleLabel"-lage.\nFortsatt som "@roleLabel"?\n\nEller byt till "@newRoleLabel"-lage?\nByte raderar all befintlig data.',
-    'onboarding_change_mode': 'Byt till "@newRoleLabel"-lage',
-    'onboarding_continue_mode': 'Fortsatt som "@roleLabel"',
     'onboarding_registration_failed_title': 'Registrering misslyckades',
     'onboarding_registration_failed_message':
         'Kan inte ansluta till servern. Forsok igen senare.',

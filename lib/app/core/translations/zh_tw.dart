@@ -3,6 +3,7 @@ abstract class ZhTw {
     // ── 通用 ──
     'common_confirm': '確認',
     'common_cancel': '取消',
+    'common_continue': '繼續',
     'common_save': '儲存',
     'common_delete': '刪除',
     'common_close': '關閉',
@@ -79,8 +80,6 @@ abstract class ZhTw {
     'onboarding_already_registered_title': '裝置已註冊',
     'onboarding_already_registered_message':
         '此裝置已註冊為 "@roleLabel" 模式。\n是否繼續使用 "@roleLabel" 模式？\n\n或者切換到 "@newRoleLabel" 模式？\n切換後所有已有資料將被刪除。',
-    'onboarding_change_mode': '切換到 "@newRoleLabel" 模式',
-    'onboarding_continue_mode': '繼續使用 "@roleLabel" 模式',
     'onboarding_registration_failed_title': '註冊失敗',
     'onboarding_registration_failed_message': '無法連線至伺服器，請稍後再試。',
 

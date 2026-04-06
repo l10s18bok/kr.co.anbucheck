@@ -3,6 +3,7 @@ abstract class NlNl {
     // ── Algemeen ──
     'common_confirm': 'Bevestigen',
     'common_cancel': 'Annuleren',
+    'common_continue': 'Doorgaan',
     'common_save': 'Opslaan',
     'common_delete': 'Verwijderen',
     'common_close': 'Sluiten',
@@ -97,8 +98,6 @@ abstract class NlNl {
     'onboarding_already_registered_title': 'Apparaat al geregistreerd',
     'onboarding_already_registered_message':
         'Dit apparaat is al geregistreerd in "@roleLabel"-modus.\nDoorgaan als "@roleLabel"?\n\nOf wisselen naar "@newRoleLabel"-modus?\nBij het wisselen worden alle bestaande gegevens verwijderd.',
-    'onboarding_change_mode': 'Wissel naar "@newRoleLabel"-modus',
-    'onboarding_continue_mode': 'Doorgaan als "@roleLabel"',
     'onboarding_registration_failed_title': 'Registratie mislukt',
     'onboarding_registration_failed_message':
         'Kan geen verbinding maken met de server. Probeer het later opnieuw.',

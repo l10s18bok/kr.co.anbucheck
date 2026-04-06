@@ -3,6 +3,7 @@ abstract class TrTr {
     // ── Genel ──
     'common_confirm': 'Onayla',
     'common_cancel': 'İptal',
+    'common_continue': 'Devam',
     'common_save': 'Kaydet',
     'common_delete': 'Sil',
     'common_close': 'Kapat',
@@ -88,8 +89,6 @@ abstract class TrTr {
     'onboarding_already_registered_title': 'Cihaz Zaten Kayıtlı',
     'onboarding_already_registered_message':
         'Bu cihaz zaten "@roleLabel" modunda kayıtlı.\n"@roleLabel" olarak devam etmek ister misiniz?\n\nYoksa "@newRoleLabel" moduna geçmek mi?\nGeçiş yaparsanız tüm veriler silinecektir.',
-    'onboarding_change_mode': '"@newRoleLabel" moduna geç',
-    'onboarding_continue_mode': '"@roleLabel" olarak devam et',
     'onboarding_registration_failed_title': 'Kayıt Başarısız',
     'onboarding_registration_failed_message':
         'Sunucuya bağlanılamadı. Lütfen daha sonra tekrar deneyin.',

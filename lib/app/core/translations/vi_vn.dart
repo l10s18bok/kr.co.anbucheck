@@ -3,6 +3,7 @@ abstract class ViVn {
     // ── Chung ──
     'common_confirm': 'Xac nhan',
     'common_cancel': 'Huy',
+    'common_continue': 'Tiep tuc',
     'common_save': 'Luu',
     'common_delete': 'Xoa',
     'common_close': 'Dong',
@@ -90,8 +91,6 @@ abstract class ViVn {
     'onboarding_already_registered_title': 'Thiet bi da duoc dang ky',
     'onboarding_already_registered_message':
         'Thiet bi nay da duoc dang ky o che do "@roleLabel".\nTiep tuc voi "@roleLabel"?\n\nHay chuyen sang che do "@newRoleLabel"?\nChuyen doi se xoa tat ca du lieu hien co.',
-    'onboarding_change_mode': 'Chuyen sang che do "@newRoleLabel"',
-    'onboarding_continue_mode': 'Tiep tuc voi "@roleLabel"',
     'onboarding_registration_failed_title': 'Dang ky that bai',
     'onboarding_registration_failed_message':
         'Khong the ket noi den may chu. Vui long thu lai sau.',
