@@ -11,8 +11,10 @@ class UserRemoteDatasource {
       '${ApiEndpoints.users}/me',
       headers: {'Authorization': 'Bearer $deviceToken'},
     );
-    if (!result.isOk && result.statusCode != 204) {
-      throw Exception('계정 삭제 실패 (${result.statusCode})');
+    // 204 No Content 또는 200~299 모두 성공으로 처리
+    final code = result.statusCode;
+    if (!result.isOk && code != null && code != 204) {
+      throw Exception('계정 삭제 실패 ($code)');
     }
   }
 

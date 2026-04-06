@@ -70,11 +70,12 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
               Center(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: AppSpacing.sp4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 4.w,
                     children: [
                       Icon(Icons.info_outline, size: 14.w, color: AppColors.textTertiary),
-                      SizedBox(width: 4.w),
                       Text('mode_select_notice'.tr, style: AppTextTheme.bodySmall()),
                     ],
                   ),
@@ -140,36 +141,26 @@ class _ModeCard extends StatelessWidget {
               flex: 3,
               child: Padding(
                 padding: EdgeInsets.all(AppSpacing.md),
-                child: SvgPicture.asset(
-                  illustrationPath,
-                  fit: BoxFit.contain,
-                ),
+                child: SvgPicture.asset(illustrationPath, fit: BoxFit.contain),
               ),
             ),
 
             // 하단: 제목 + 버튼 (세로 배치)
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.sp4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      style: AppTextTheme.headlineSmall(color: AppColors.onSurface),
-                    ),
-                    SizedBox(height: AppSpacing.sm),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        buttonLabel,
-                        style: AppTextTheme.bodyMedium(color: buttonColor),
-                      ),
-                    ),
-                  ],
-                ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(AppSpacing.sp4, 0, AppSpacing.sp4, AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextTheme.bodyLarge(color: AppColors.onSurface, fw: FontWeight.w600),
+                  ),
+                  SizedBox(height: AppSpacing.sm),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(buttonLabel, style: AppTextTheme.bodyMedium(color: buttonColor)),
+                  ),
+                ],
               ),
             ),
           ],

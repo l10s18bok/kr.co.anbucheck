@@ -112,7 +112,11 @@ class OnboardingController extends BaseController {
         isLoading = true;
         final oldToken = response['device_token'] as String?;
         if (oldToken != null) {
-          await _userDs.deleteMe(oldToken);
+          try {
+            await _userDs.deleteMe(oldToken);
+          } catch (_) {
+            // 204 No Content 파싱 오류 무시 — 삭제는 서버에서 완료됨
+          }
         }
         await _tokenDs.clear();
         await _nicknameDs.clearAll();
