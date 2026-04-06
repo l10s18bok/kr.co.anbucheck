@@ -156,6 +156,13 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     if (isReportedToday) return;
     if (isScheduleInFuture) return;
 
+    // 최초 설치 직후 (한 번도 전송한 적 없음) → 센서 기준값만 저장, 서버 전송 스킵
+    final lastDate = await _tokenDs.getLastHeartbeatDate();
+    if (lastDate == null || lastDate.isEmpty) {
+      await HeartbeatService().saveSensorBaseline();
+      return;
+    }
+
     await HeartbeatService().execute(manual: false);
     await _reloadLocalState();
   }

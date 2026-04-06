@@ -111,6 +111,26 @@ class HeartbeatService {
     await _sendOrSavePending(request, deviceToken);
   }
 
+  /// 센서 기준값만 로컬에 저장 (서버 전송 없음)
+  /// 최초 설치 직후 보호자 미연결 상태에서 호출
+  Future<void> saveSensorBaseline() async {
+    // 걸음수 기준점 저장
+    try {
+      final current = await Pedometer.stepCountStream.first
+          .timeout(const Duration(seconds: 2));
+      await _sensorDs.saveLastSteps(current.steps.toInt());
+    } catch (_) {}
+
+    // 가속도/자이로 기준점 저장
+    final sensor = await _collectSensor();
+    if (sensor != null) {
+      await _sensorDs.saveSnapshot(
+        accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
+        gyroX: sensor.gyroX, gyroY: sensor.gyroY, gyroZ: sensor.gyroZ,
+      );
+    }
+  }
+
   /// 보류 중인 heartbeat 재전송 (네트워크 복구 시 호출)
   Future<void> sendPending(String deviceToken) async {
     if (_busy) return;
