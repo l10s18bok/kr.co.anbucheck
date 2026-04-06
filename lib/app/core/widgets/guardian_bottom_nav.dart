@@ -38,8 +38,12 @@ class GuardianBottomNav extends StatelessWidget {
           currentIndex: currentIndex,
           type: BottomNavigationBarType.fixed,
           backgroundColor: AppColors.surfaceContainerLowest,
-          selectedItemColor: const Color(0xFF1A1C1C),
-          unselectedItemColor: const Color(0xFFD5D5D5),
+          selectedItemColor: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : const Color(0xFF1A1C1C),
+          unselectedItemColor: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white.withValues(alpha: 0.4)
+              : const Color(0xFFD5D5D5),
           elevation: 0,
           selectedFontSize: 12.sp,
           unselectedFontSize: 12.sp,
