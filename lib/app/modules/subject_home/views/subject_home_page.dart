@@ -322,7 +322,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                       ),
                     )
                   else
-                    Icon(Icons.emergency_rounded, size: 24.w, color: const Color(0xFFB71C1C)),
+                    Icon(Icons.volunteer_activism_rounded, size: 24.w, color: const Color(0xFFB71C1C)),
                   SizedBox(width: 8.w),
                   Flexible(
                     child: Text(
