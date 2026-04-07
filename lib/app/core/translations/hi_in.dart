@@ -111,6 +111,14 @@ abstract class HiIn {
     'subject_home_report_button': 'अभी सुरक्षा रिपोर्ट करें',
     'subject_home_report_desc':
         'अपने अभिभावक को बताएं कि आप ठीक हैं',
+    'subject_home_emergency_button': 'मुझे मदद चाहिए',
+    'subject_home_emergency_desc': 'अभिभावकों को आपातकालीन अलर्ट भेजता है',
+    'subject_home_emergency_loading': 'आपातकालीन अलर्ट भेजा जा रहा है...',
+    'subject_home_emergency_sent': 'आपातकालीन अलर्ट भेज दिया गया',
+    'subject_home_emergency_failed': 'आपातकालीन अलर्ट भेजने में विफल',
+    'subject_home_emergency_confirm_title': 'आपातकालीन सहायता अनुरोध',
+    'subject_home_emergency_confirm_body': 'सभी अभिभावकों को आपातकालीन अलर्ट भेजा जाएगा।\nक्या आप वाकई मदद का अनुरोध करना चाहते हैं?',
+    'subject_home_emergency_confirm_send': 'आपातकालीन अनुरोध भेजें',
     'subject_home_share_text':
         'Anbu ऐप से मेरी कुशलता जांचें!\nआमंत्रण कोड: @code',
     'subject_home_share_subject': 'Anbu आमंत्रण कोड',
@@ -317,6 +325,8 @@ abstract class HiIn {
         '@days दिनों से कुशलता जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps कदम चले।',
+    'noti_emergency_body': 'संरक्षित व्यक्ति ने सीधे मदद का अनुरोध किया है। कृपया तुरंत जांचें।',
+    'noti_resolved_body': 'संरक्षित व्यक्ति की स्वास्थ्य जाँच सामान्य हो गई है।',
 
     // ── स्थानीय सूचनाएँ ──
     'local_alarm_title': '📱 कुशलता जांच आवश्यक है',

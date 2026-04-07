@@ -111,6 +111,14 @@ abstract class RuRu {
     'subject_home_report_loading': 'Отправка отчёта...',
     'subject_home_report_button': 'Сообщить, что всё хорошо',
     'subject_home_report_desc': 'Сообщите опекуну, что у вас всё в порядке',
+    'subject_home_emergency_button': 'Мне нужна помощь',
+    'subject_home_emergency_desc': 'Отправляет экстренное оповещение вашим опекунам',
+    'subject_home_emergency_loading': 'Отправка экстренного оповещения...',
+    'subject_home_emergency_sent': 'Экстренное оповещение отправлено',
+    'subject_home_emergency_failed': 'Не удалось отправить экстренное оповещение',
+    'subject_home_emergency_confirm_title': 'Запрос экстренной помощи',
+    'subject_home_emergency_confirm_body': 'Экстренное оповещение будет отправлено всем вашим опекунам.\nВы уверены, что хотите запросить помощь?',
+    'subject_home_emergency_confirm_send': 'Отправить экстренный запрос',
     'subject_home_share_text':
         'Проверяйте моё самочувствие через приложение Anbu!\nКод приглашения: @code',
     'subject_home_share_subject': 'Код приглашения Anbu',
@@ -317,6 +325,8 @@ abstract class RuRu {
         'Нет проверки самочувствия @days дн. Требуется немедленная проверка.',
     'noti_steps_body':
         '@from_time ~ @to_time: пройдено @steps шагов.',
+    'noti_emergency_body': 'Подопечный лично запросил помощь. Пожалуйста, проверьте немедленно.',
+    'noti_resolved_body': 'Проверка здоровья подопечного вернулась в норму.',
 
     // ── Локальные уведомления ──
     'local_alarm_title': '📱 Требуется проверка самочувствия',

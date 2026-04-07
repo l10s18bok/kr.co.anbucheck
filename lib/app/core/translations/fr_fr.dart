@@ -117,6 +117,14 @@ abstract class FrFr {
     'subject_home_report_button': 'Signaler mon bien-être maintenant',
     'subject_home_report_desc':
         'Rassurez votre protecteur en lui montrant que vous allez bien',
+    'subject_home_emergency_button': "J'ai besoin d'aide",
+    'subject_home_emergency_desc': "Envoie une alerte d'urgence à vos protecteurs",
+    'subject_home_emergency_loading': "Envoi de l'alerte d'urgence...",
+    'subject_home_emergency_sent': "L'alerte d'urgence a été envoyée",
+    'subject_home_emergency_failed': "Échec de l'envoi de l'alerte d'urgence",
+    'subject_home_emergency_confirm_title': "Demande d'aide d'urgence",
+    'subject_home_emergency_confirm_body': "Une alerte d'urgence sera envoyée à tous vos protecteurs.\nÊtes-vous sûr de vouloir demander de l'aide ?",
+    'subject_home_emergency_confirm_send': "Envoyer la demande d'urgence",
     'subject_home_share_text':
         'Veillez sur moi avec l\'application Anbu !\nCode d\'invitation : @code',
     'subject_home_share_subject': 'Code d\'invitation Anbu',
@@ -326,6 +334,8 @@ abstract class FrFr {
     'noti_urgent_body':
         'Aucune vérification de bien-être depuis @days jour(s). Une vérification immédiate est requise.',
     'noti_steps_body': '@from_time ~ @to_time : @steps pas effectués.',
+    'noti_emergency_body': "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
+    'noti_resolved_body': 'Le bilan de santé du protégé est revenu à la normale.',
 
     // ── Notifications locales ──
     'local_alarm_title': '📱 Vérification de bien-être nécessaire',

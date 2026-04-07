@@ -100,6 +100,14 @@ abstract class ZhTw {
     'subject_home_report_loading': '正在報告平安...',
     'subject_home_report_button': '立即報告安全',
     'subject_home_report_desc': '讓守護者知道您一切安好',
+    'subject_home_emergency_button': '我需要幫助',
+    'subject_home_emergency_desc': '向監護人發送緊急警報',
+    'subject_home_emergency_loading': '正在發送緊急警報...',
+    'subject_home_emergency_sent': '緊急警報已發送',
+    'subject_home_emergency_failed': '緊急警報發送失敗',
+    'subject_home_emergency_confirm_title': '緊急求助',
+    'subject_home_emergency_confirm_body': '將向所有監護人發送緊急警報。\n確定要請求幫助嗎？',
+    'subject_home_emergency_confirm_send': '發送緊急請求',
     'subject_home_share_text': '請用 Anbu 應用程式查看我的平安！\n邀請碼：@code',
     'subject_home_share_subject': 'Anbu 邀請碼',
     'subject_home_code_copied': '邀請碼已複製',
@@ -279,6 +287,8 @@ abstract class ZhTw {
     'noti_warning_body': '問安已連續未收到。請親自核實。',
     'noti_urgent_body': '已@days天未收到問安。需要立即確認。',
     'noti_steps_body': '@from_time ~ @to_time：走了@steps步。',
+    'noti_emergency_body': '被監護人直接請求了幫助。請立即確認。',
+    'noti_resolved_body': '已恢復正常。被監護人的安全狀況已正常確認。',
 
     // ── 本地通知 ──
     'local_alarm_title': '📱 需要確認安否',

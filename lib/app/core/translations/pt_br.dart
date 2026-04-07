@@ -120,6 +120,14 @@ abstract class PtBr {
     'subject_home_report_button': 'Reportar segurança agora',
     'subject_home_report_desc':
         'Avise seu guardião de que você está bem',
+    'subject_home_emergency_button': 'Preciso de ajuda',
+    'subject_home_emergency_desc': 'Envia um alerta de emergência aos seus guardiões',
+    'subject_home_emergency_loading': 'Enviando alerta de emergência...',
+    'subject_home_emergency_sent': 'Alerta de emergência enviado',
+    'subject_home_emergency_failed': 'Falha ao enviar alerta de emergência',
+    'subject_home_emergency_confirm_title': 'Pedido de ajuda de emergência',
+    'subject_home_emergency_confirm_body': 'Um alerta de emergência será enviado a todos os seus guardiões.\nTem certeza de que deseja pedir ajuda?',
+    'subject_home_emergency_confirm_send': 'Enviar pedido de emergência',
     'subject_home_share_text':
         'Verifique como estou pelo app Anbu!\nCódigo de convite: @code',
     'subject_home_share_subject': 'Código de convite Anbu',
@@ -334,6 +342,8 @@ abstract class PtBr {
         'Sem verificação de bem-estar há @days dia(s). Verificação imediata necessária.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps passos dados.',
+    'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
+    'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',
 
     // ── Notificações locais ──
     'local_alarm_title': '📱 Verificação de bem-estar necessária',

@@ -117,6 +117,14 @@ abstract class EsEs {
     'subject_home_report_button': 'Reportar bienestar ahora',
     'subject_home_report_desc':
         'Haga saber a su protector que se encuentra bien',
+    'subject_home_emergency_button': 'Necesito ayuda',
+    'subject_home_emergency_desc': 'Envía una alerta de emergencia a sus guardianes',
+    'subject_home_emergency_loading': 'Enviando alerta de emergencia...',
+    'subject_home_emergency_sent': 'La alerta de emergencia ha sido enviada',
+    'subject_home_emergency_failed': 'Error al enviar la alerta de emergencia',
+    'subject_home_emergency_confirm_title': 'Solicitud de ayuda de emergencia',
+    'subject_home_emergency_confirm_body': 'Se enviará una alerta de emergencia a todos sus guardianes.\n¿Está seguro de que desea solicitar ayuda?',
+    'subject_home_emergency_confirm_send': 'Enviar solicitud de emergencia',
     'subject_home_share_text':
         '¡Cuide de mí con la aplicación Anbu!\nCódigo de invitación: @code',
     'subject_home_share_subject': 'Código de invitación Anbu',
@@ -326,6 +334,8 @@ abstract class EsEs {
         'Sin verificación de bienestar durante @days día(s). Se requiere verificación inmediata.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps pasos caminados.',
+    'noti_emergency_body': 'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',
+    'noti_resolved_body': 'La verificación de bienestar del protegido ha vuelto a la normalidad.',
 
     // ── Notificaciones locales ──
     'local_alarm_title': '📱 Verificación de bienestar necesaria',

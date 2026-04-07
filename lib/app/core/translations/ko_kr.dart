@@ -100,6 +100,14 @@ abstract class KoKr {
     'subject_home_report_loading': '안부 보고 중...',
     'subject_home_report_button': '지금 바로 안전 보고하기',
     'subject_home_report_desc': '보호자에게 걱정 말라고 알려주세요',
+    'subject_home_emergency_button': '도움이 필요해요',
+    'subject_home_emergency_desc': '보호자에게 긴급 상황을 알립니다',
+    'subject_home_emergency_loading': '긴급 알림 전송 중...',
+    'subject_home_emergency_sent': '긴급 알림이 전송되었습니다',
+    'subject_home_emergency_failed': '긴급 알림 전송에 실패했습니다',
+    'subject_home_emergency_confirm_title': '긴급 도움 요청',
+    'subject_home_emergency_confirm_body': '보호자 전원에게 긴급 알림이 발송됩니다.\n정말 도움을 요청하시겠습니까?',
+    'subject_home_emergency_confirm_send': '긴급 요청 보내기',
     'subject_home_share_text': '안부(Anbu) 앱에서 제 안부를 확인해 주세요!\n초대 코드: @code',
     'subject_home_share_subject': '안부 앱 초대 코드',
     'subject_home_code_copied': '코드가 복사되었습니다',
@@ -280,6 +288,8 @@ abstract class KoKr {
         '연속으로 안부 확인이 되지 않고 있습니다. 직접 확인이 필요합니다.',
     'noti_urgent_body': '@days일간 안부 확인이 없습니다. 즉시 확인이 필요합니다.',
     'noti_steps_body': '@from_time ~ @to_time 사이 @steps보를 걸으셨습니다.',
+    'noti_emergency_body': '보호 대상자가 직접 도움을 요청했습니다. 즉시 확인해 주세요.',
+    'noti_resolved_body': '정상 복귀되었습니다. 보호 대상자의 안부가 정상적으로 확인되었습니다.',
 
     // ── 로컬 알림 ──
     'local_alarm_title': '📱 안부 확인이 필요합니다',

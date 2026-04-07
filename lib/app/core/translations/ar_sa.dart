@@ -110,6 +110,14 @@ abstract class ArSa {
     'subject_home_report_loading': 'جارٍ الإبلاغ...',
     'subject_home_report_button': 'أبلغ عن سلامتك الآن',
     'subject_home_report_desc': 'أخبر حارسك أنك بخير',
+    'subject_home_emergency_button': 'أحتاج مساعدة',
+    'subject_home_emergency_desc': 'يرسل تنبيه طوارئ إلى الأوصياء',
+    'subject_home_emergency_loading': 'جاري إرسال تنبيه الطوارئ...',
+    'subject_home_emergency_sent': 'تم إرسال تنبيه الطوارئ',
+    'subject_home_emergency_failed': 'فشل إرسال تنبيه الطوارئ',
+    'subject_home_emergency_confirm_title': 'طلب مساعدة طارئة',
+    'subject_home_emergency_confirm_body': 'سيتم إرسال تنبيه طوارئ إلى جميع الأوصياء.\nهل أنت متأكد من طلب المساعدة؟',
+    'subject_home_emergency_confirm_send': 'إرسال طلب الطوارئ',
     'subject_home_share_text':
         'اطمئن عليّ من خلال تطبيق Anbu!\nرمز الدعوة: @code',
     'subject_home_share_subject': 'رمز دعوة Anbu',
@@ -310,6 +318,8 @@ abstract class ArSa {
         'لا يوجد فحص اطمئنان منذ @days يوم/أيام. التحقق الفوري مطلوب.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps خطوة.',
+    'noti_emergency_body': 'طلب الشخص المحمي المساعدة مباشرة. يرجى التحقق فوراً.',
+    'noti_resolved_body': 'عاد فحص سلامة الشخص المحمي إلى الوضع الطبيعي.',
 
     // ── الإشعارات المحلية ──
     'local_alarm_title': '📱 يلزم التحقق من السلامة',

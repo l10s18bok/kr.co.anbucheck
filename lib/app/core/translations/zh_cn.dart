@@ -100,6 +100,14 @@ abstract class ZhCn {
     'subject_home_report_loading': '正在报告平安...',
     'subject_home_report_button': '立即报告安全',
     'subject_home_report_desc': '让守护者知道您一切安好',
+    'subject_home_emergency_button': '我需要帮助',
+    'subject_home_emergency_desc': '向监护人发送紧急警报',
+    'subject_home_emergency_loading': '正在发送紧急警报...',
+    'subject_home_emergency_sent': '紧急警报已发送',
+    'subject_home_emergency_failed': '紧急警报发送失败',
+    'subject_home_emergency_confirm_title': '紧急求助',
+    'subject_home_emergency_confirm_body': '将向所有监护人发送紧急警报。\n确定要请求帮助吗？',
+    'subject_home_emergency_confirm_send': '发送紧急请求',
     'subject_home_share_text': '请用 Anbu 应用查看我的平安！\n邀请码：@code',
     'subject_home_share_subject': 'Anbu 邀请码',
     'subject_home_code_copied': '邀请码已复制',
@@ -279,6 +287,8 @@ abstract class ZhCn {
     'noti_warning_body': '问安已连续未收到。请亲自核实。',
     'noti_urgent_body': '已@days天未收到问安。需要立即确认。',
     'noti_steps_body': '@from_time ~ @to_time：走了@steps步。',
+    'noti_emergency_body': '被监护人直接请求了帮助。请立即确认。',
+    'noti_resolved_body': '已恢复正常。被监护人的健康状况已正常确认。',
 
     // ── 本地通知 ──
     'local_alarm_title': '📱 需要确认安否',

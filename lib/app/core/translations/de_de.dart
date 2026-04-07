@@ -111,6 +111,14 @@ abstract class DeDe {
     'subject_home_report_loading': 'Wird gemeldet...',
     'subject_home_report_button': 'Jetzt Wohlbefinden melden',
     'subject_home_report_desc': 'Lassen Sie Ihren Betreuer wissen, dass es Ihnen gut geht',
+    'subject_home_emergency_button': 'Ich brauche Hilfe',
+    'subject_home_emergency_desc': 'Sendet einen Notruf an Ihre Betreuer',
+    'subject_home_emergency_loading': 'Notruf wird gesendet...',
+    'subject_home_emergency_sent': 'Notruf wurde gesendet',
+    'subject_home_emergency_failed': 'Notruf konnte nicht gesendet werden',
+    'subject_home_emergency_confirm_title': 'Nothilfe anfordern',
+    'subject_home_emergency_confirm_body': 'Ein Notruf wird an alle Ihre Betreuer gesendet.\nMöchten Sie wirklich Hilfe anfordern?',
+    'subject_home_emergency_confirm_send': 'Notruf senden',
     'subject_home_share_text':
         'Schauen Sie mit der Anbu-App nach mir!\nEinladungscode: @code',
     'subject_home_share_subject': 'Anbu Einladungscode',
@@ -318,6 +326,8 @@ abstract class DeDe {
     'noti_urgent_body':
         'Seit @days Tag(en) keine Wohlbefindens-Prüfung. Sofortige Überprüfung erforderlich.',
     'noti_steps_body': '@from_time ~ @to_time: @steps Schritte gegangen.',
+    'noti_emergency_body': 'Die betreute Person hat direkt um Hilfe gebeten. Bitte sofort überprüfen.',
+    'noti_resolved_body': 'Der Wellness-Check der betreuten Person ist wieder normal.',
 
     // ── Lokale Benachrichtigungen ──
     'local_alarm_title': '📱 Wohlbefindens-Prüfung erforderlich',

@@ -99,6 +99,14 @@ abstract class EnUs {
     'subject_home_report_loading': 'Reporting...',
     'subject_home_report_button': 'Report Safety Now',
     'subject_home_report_desc': 'Let your guardian know you\'re okay',
+    'subject_home_emergency_button': 'I need help',
+    'subject_home_emergency_desc': 'Sends an emergency alert to your guardians',
+    'subject_home_emergency_loading': 'Sending emergency alert...',
+    'subject_home_emergency_sent': 'Emergency alert has been sent',
+    'subject_home_emergency_failed': 'Failed to send emergency alert',
+    'subject_home_emergency_confirm_title': 'Emergency Help Request',
+    'subject_home_emergency_confirm_body': 'An emergency alert will be sent to all your guardians.\nAre you sure you want to request help?',
+    'subject_home_emergency_confirm_send': 'Send Emergency Request',
     'subject_home_share_text': 'Check on me with the Anbu app!\nInvite code: @code',
     'subject_home_share_subject': 'Anbu Invite Code',
     'subject_home_code_copied': 'Code copied',
@@ -283,6 +291,8 @@ abstract class EnUs {
     'noti_urgent_body':
         'No wellness check for @days day(s). Immediate verification is required.',
     'noti_steps_body': '@from_time ~ @to_time: @steps steps walked.',
+    'noti_emergency_body': 'The subject has directly requested help. Please check immediately.',
+    'noti_resolved_body': 'The subject\'s wellness check has returned to normal.',
 
     // ── Local Notifications ──
     'local_alarm_title': '📱 Wellness check needed',

@@ -114,6 +114,14 @@ abstract class PlPl {
     'subject_home_report_loading': 'Zglaszanie...',
     'subject_home_report_button': 'Zglos bezpieczenstwo teraz',
     'subject_home_report_desc': 'Powiadom opiekuna, ze wszystko w porzadku',
+    'subject_home_emergency_button': 'Potrzebuję pomocy',
+    'subject_home_emergency_desc': 'Wysyła alarm awaryjny do opiekunów',
+    'subject_home_emergency_loading': 'Wysyłanie alarmu awaryjnego...',
+    'subject_home_emergency_sent': 'Alarm awaryjny został wysłany',
+    'subject_home_emergency_failed': 'Nie udało się wysłać alarmu awaryjnego',
+    'subject_home_emergency_confirm_title': 'Prośba o pomoc awaryjną',
+    'subject_home_emergency_confirm_body': 'Alarm awaryjny zostanie wysłany do wszystkich opiekunów.\nCzy na pewno chcesz poprosić o pomoc?',
+    'subject_home_emergency_confirm_send': 'Wyślij prośbę awaryjną',
     'subject_home_share_text':
         'Sprawdz moje samopoczucie w aplikacji Anbu!\nKod zaproszenia: @code',
     'subject_home_share_subject': 'Kod zaproszenia Anbu',
@@ -321,6 +329,8 @@ abstract class PlPl {
         'Brak sprawdzenia samopoczucia od @days dni. Wymagana natychmiastowa weryfikacja.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps krokow.',
+    'noti_emergency_body': 'Osoba pod opieką bezpośrednio poprosiła o pomoc. Proszę natychmiast sprawdzić.',
+    'noti_resolved_body': 'Kontrola dobrostanu podopiecznego wróciła do normy.',
 
     // ── Powiadomienia lokalne ──
     'local_alarm_title': '📱 Wymagane sprawdzenie samopoczucia',

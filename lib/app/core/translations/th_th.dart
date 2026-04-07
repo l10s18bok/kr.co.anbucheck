@@ -112,6 +112,14 @@ abstract class ThTh {
     'subject_home_report_button': 'รายงานความปลอดภัยตอนนี้',
     'subject_home_report_desc':
         'แจ้งผู้ดูแลว่าคุณสบายดี',
+    'subject_home_emergency_button': 'ฉันต้องการความช่วยเหลือ',
+    'subject_home_emergency_desc': 'ส่งการแจ้งเตือนฉุกเฉินไปยังผู้ดูแล',
+    'subject_home_emergency_loading': 'กำลังส่งการแจ้งเตือนฉุกเฉิน...',
+    'subject_home_emergency_sent': 'ส่งการแจ้งเตือนฉุกเฉินแล้ว',
+    'subject_home_emergency_failed': 'ไม่สามารถส่งการแจ้งเตือนฉุกเฉินได้',
+    'subject_home_emergency_confirm_title': 'ขอความช่วยเหลือฉุกเฉิน',
+    'subject_home_emergency_confirm_body': 'การแจ้งเตือนฉุกเฉินจะถูกส่งไปยังผู้ดูแลทั้งหมด\nคุณแน่ใจหรือไม่ที่จะขอความช่วยเหลือ?',
+    'subject_home_emergency_confirm_send': 'ส่งคำขอฉุกเฉิน',
     'subject_home_share_text':
         'ตรวจสอบความเป็นอยู่ของฉันผ่านแอป Anbu!\nรหัสเชิญ: @code',
     'subject_home_share_subject': 'รหัสเชิญ Anbu',
@@ -318,6 +326,8 @@ abstract class ThTh {
         'ไม่มีการตรวจสอบความเป็นอยู่เป็นเวลา @days วัน จำเป็นต้องยืนยันทันที',
     'noti_steps_body':
         '@from_time ~ @to_time: เดิน @steps ก้าว',
+    'noti_emergency_body': 'ผู้ถูกดูแลขอความช่วยเหลือโดยตรง กรุณาตรวจสอบทันที',
+    'noti_resolved_body': 'การตรวจสอบสุขภาพของผู้ได้รับการดูแลกลับสู่ปกติแล้ว',
 
     // ── การแจ้งเตือนในเครื่อง ──
     'local_alarm_title': '📱 ต้องตรวจสอบความเป็นอยู่',

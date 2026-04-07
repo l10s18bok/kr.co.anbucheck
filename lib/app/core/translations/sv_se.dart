@@ -113,6 +113,14 @@ abstract class SvSe {
     'subject_home_report_loading': 'Rapporterar...',
     'subject_home_report_button': 'Rapportera sakerhet nu',
     'subject_home_report_desc': 'Lat din vardare veta att du mar bra',
+    'subject_home_emergency_button': 'Jag behöver hjälp',
+    'subject_home_emergency_desc': 'Skickar ett nödlarm till dina vårdgivare',
+    'subject_home_emergency_loading': 'Skickar nödlarm...',
+    'subject_home_emergency_sent': 'Nödlarmet har skickats',
+    'subject_home_emergency_failed': 'Det gick inte att skicka nödlarmet',
+    'subject_home_emergency_confirm_title': 'Nödhjälpbegäran',
+    'subject_home_emergency_confirm_body': 'Ett nödlarm skickas till alla dina vårdgivare.\nÄr du säker på att du vill begära hjälp?',
+    'subject_home_emergency_confirm_send': 'Skicka nödbegäran',
     'subject_home_share_text':
         'Kolla in pa mig med Anbu-appen!\nInbjudningskod: @code',
     'subject_home_share_subject': 'Anbu-inbjudningskod',
@@ -319,6 +327,8 @@ abstract class SvSe {
         'Ingen valmaendekontroll pa @days dag(ar). Omedelbar verifiering kravs.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps steg.',
+    'noti_emergency_body': 'Den skyddade personen har direkt begärt hjälp. Kontrollera omedelbart.',
+    'noti_resolved_body': 'Hälsokontrollen för den skyddade personen har återgått till det normala.',
 
     // ── Lokala aviseringar ──
     'local_alarm_title': '📱 Välmåendekontroll behövs',

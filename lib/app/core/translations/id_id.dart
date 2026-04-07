@@ -112,6 +112,14 @@ abstract class IdId {
     'subject_home_report_button': 'Laporkan Keselamatan Sekarang',
     'subject_home_report_desc':
         'Beritahu penjaga Anda bahwa Anda baik-baik saja',
+    'subject_home_emergency_button': 'Saya butuh bantuan',
+    'subject_home_emergency_desc': 'Mengirim peringatan darurat ke wali Anda',
+    'subject_home_emergency_loading': 'Mengirim peringatan darurat...',
+    'subject_home_emergency_sent': 'Peringatan darurat telah dikirim',
+    'subject_home_emergency_failed': 'Gagal mengirim peringatan darurat',
+    'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
+    'subject_home_emergency_confirm_body': 'Peringatan darurat akan dikirim ke semua wali Anda.\nApakah Anda yakin ingin meminta bantuan?',
+    'subject_home_emergency_confirm_send': 'Kirim permintaan darurat',
     'subject_home_share_text':
         'Pantau kesejahteraan saya melalui aplikasi Anbu!\nKode undangan: @code',
     'subject_home_share_subject': 'Kode Undangan Anbu',
@@ -319,6 +327,8 @@ abstract class IdId {
         'Tidak ada pemeriksaan kesejahteraan selama @days hari. Verifikasi segera diperlukan.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps langkah.',
+    'noti_emergency_body': 'Orang yang dilindungi langsung meminta bantuan. Harap segera periksa.',
+    'noti_resolved_body': 'Pemeriksaan kesejahteraan orang yang dilindungi telah kembali normal.',
 
     // ── Notifikasi lokal ──
     'local_alarm_title': '📱 Pemeriksaan kesejahteraan diperlukan',

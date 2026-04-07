@@ -110,6 +110,14 @@ abstract class TrTr {
     'subject_home_report_loading': 'Bildiriliyor...',
     'subject_home_report_button': 'Şimdi Güvenliğini Bildir',
     'subject_home_report_desc': 'Koruyucunuza iyi olduğunuzu bildirin',
+    'subject_home_emergency_button': 'Yardıma ihtiyacım var',
+    'subject_home_emergency_desc': 'Koruyucularınıza acil durum uyarısı gönderir',
+    'subject_home_emergency_loading': 'Acil durum uyarısı gönderiliyor...',
+    'subject_home_emergency_sent': 'Acil durum uyarısı gönderildi',
+    'subject_home_emergency_failed': 'Acil durum uyarısı gönderilemedi',
+    'subject_home_emergency_confirm_title': 'Acil yardım talebi',
+    'subject_home_emergency_confirm_body': 'Tüm koruyucularınıza acil durum uyarısı gönderilecektir.\nYardım istemek istediğinizden emin misiniz?',
+    'subject_home_emergency_confirm_send': 'Acil talep gönder',
     'subject_home_share_text':
         'Anbu uygulamasıyla hal hatırımı sorun!\nDavet kodu: @code',
     'subject_home_share_subject': 'Anbu Davet Kodu',
@@ -315,6 +323,8 @@ abstract class TrTr {
         '@days gündür hal hatır kontrolü yok. Acil doğrulama gerekli.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps adım atıldı.',
+    'noti_emergency_body': 'Korunan kişi doğrudan yardım istedi. Lütfen hemen kontrol edin.',
+    'noti_resolved_body': 'Korunan kişinin sağlık kontrolü normale döndü.',
 
     // ── Yerel bildirimler ──
     'local_alarm_title': '📱 Sağlık kontrolü gerekli',

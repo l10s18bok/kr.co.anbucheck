@@ -113,6 +113,14 @@ abstract class ViVn {
     'subject_home_report_button': 'Bao cao an toan ngay',
     'subject_home_report_desc':
         'Cho nguoi bao ve biet ban van khoe',
+    'subject_home_emergency_button': 'Tôi cần giúp đỡ',
+    'subject_home_emergency_desc': 'Gửi cảnh báo khẩn cấp đến người giám hộ',
+    'subject_home_emergency_loading': 'Đang gửi cảnh báo khẩn cấp...',
+    'subject_home_emergency_sent': 'Cảnh báo khẩn cấp đã được gửi',
+    'subject_home_emergency_failed': 'Gửi cảnh báo khẩn cấp thất bại',
+    'subject_home_emergency_confirm_title': 'Yêu cầu trợ giúp khẩn cấp',
+    'subject_home_emergency_confirm_body': 'Cảnh báo khẩn cấp sẽ được gửi đến tất cả người giám hộ.\nBạn có chắc chắn muốn yêu cầu trợ giúp không?',
+    'subject_home_emergency_confirm_send': 'Gửi yêu cầu khẩn cấp',
     'subject_home_share_text':
         'Kiem tra suc khoe cua toi qua ung dung Anbu!\nMa moi: @code',
     'subject_home_share_subject': 'Ma moi Anbu',
@@ -319,6 +327,8 @@ abstract class ViVn {
         'Khong co kiem tra suc khoe trong @days ngay. Can xac minh ngay lap tuc.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps buoc di.',
+    'noti_emergency_body': 'Người được bảo vệ đã trực tiếp yêu cầu giúp đỡ. Vui lòng kiểm tra ngay.',
+    'noti_resolved_body': 'Kiểm tra sức khỏe của người được bảo vệ đã trở lại bình thường.',
 
     // ── Thông báo cục bộ ──
     'local_alarm_title': '📱 Cần kiểm tra sức khỏe',

@@ -119,6 +119,14 @@ abstract class ItIt {
     'subject_home_report_button': 'Segnala ora che sta bene',
     'subject_home_report_desc':
         'Faccia sapere al Suo guardiano che sta bene',
+    'subject_home_emergency_button': 'Ho bisogno di aiuto',
+    'subject_home_emergency_desc': "Invia un'allerta di emergenza ai tuoi tutori",
+    'subject_home_emergency_loading': "Invio dell'allerta di emergenza...",
+    'subject_home_emergency_sent': "L'allerta di emergenza è stata inviata",
+    'subject_home_emergency_failed': "Invio dell'allerta di emergenza fallito",
+    'subject_home_emergency_confirm_title': 'Richiesta di aiuto di emergenza',
+    'subject_home_emergency_confirm_body': "Un'allerta di emergenza verrà inviata a tutti i tuoi tutori.\nSei sicuro di voler richiedere aiuto?",
+    'subject_home_emergency_confirm_send': 'Invia richiesta di emergenza',
     'subject_home_share_text':
         "Controlli come sto con l'app Anbu!\nCodice invito: @code",
     'subject_home_share_subject': 'Codice invito Anbu',
@@ -329,6 +337,8 @@ abstract class ItIt {
     'noti_urgent_body':
         'Nessuna verifica di benessere da @days giorno/i. È necessaria una verifica immediata.',
     'noti_steps_body': '@from_time ~ @to_time: @steps passi percorsi.',
+    'noti_emergency_body': "La persona assistita ha richiesto direttamente aiuto. Verificare immediatamente.",
+    'noti_resolved_body': 'Il controllo benessere dell\'assistito è tornato nella norma.',
 
     // ── Notifiche locali ──
     'local_alarm_title': '📱 Verifica di benessere necessaria',

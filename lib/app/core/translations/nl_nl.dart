@@ -120,6 +120,14 @@ abstract class NlNl {
     'subject_home_report_button': 'Meld nu dat het goed gaat',
     'subject_home_report_desc':
         'Laat uw beschermer weten dat het goed met u gaat',
+    'subject_home_emergency_button': 'Ik heb hulp nodig',
+    'subject_home_emergency_desc': 'Stuurt een noodmelding naar uw beschermers',
+    'subject_home_emergency_loading': 'Noodmelding wordt verzonden...',
+    'subject_home_emergency_sent': 'Noodmelding is verzonden',
+    'subject_home_emergency_failed': 'Noodmelding kon niet worden verzonden',
+    'subject_home_emergency_confirm_title': 'Noodhulpverzoek',
+    'subject_home_emergency_confirm_body': 'Er wordt een noodmelding naar al uw beschermers gestuurd.\nWeet u zeker dat u hulp wilt vragen?',
+    'subject_home_emergency_confirm_send': 'Noodverzoek verzenden',
     'subject_home_share_text':
         'Controleer hoe het met me gaat via de Anbu-app!\nUitnodigingscode: @code',
     'subject_home_share_subject': 'Anbu-uitnodigingscode',
@@ -331,6 +339,8 @@ abstract class NlNl {
         'Geen welzijnscontrole gedurende @days dag(en). Onmiddellijke controle vereist.',
     'noti_steps_body':
         '@from_time ~ @to_time: @steps stappen gelopen.',
+    'noti_emergency_body': 'De beschermde persoon heeft rechtstreeks om hulp gevraagd. Controleer onmiddellijk.',
+    'noti_resolved_body': 'De welzijnscontrole van de beschermde persoon is weer normaal.',
 
     // ── Lokale meldingen ──
     'local_alarm_title': '📱 Welzijnscontrole nodig',

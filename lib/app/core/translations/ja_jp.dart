@@ -100,6 +100,14 @@ abstract class JaJp {
     'subject_home_report_loading': '安否を報告しています...',
     'subject_home_report_button': '今すぐ安全を報告する',
     'subject_home_report_desc': '見守り人に元気であることを伝えましょう',
+    'subject_home_emergency_button': '助けが必要です',
+    'subject_home_emergency_desc': '保護者に緊急事態を知らせます',
+    'subject_home_emergency_loading': '緊急通知を送信中...',
+    'subject_home_emergency_sent': '緊急通知が送信されました',
+    'subject_home_emergency_failed': '緊急通知の送信に失敗しました',
+    'subject_home_emergency_confirm_title': '緊急ヘルプリクエスト',
+    'subject_home_emergency_confirm_body': 'すべての保護者に緊急通知が送信されます。\n本当に助けを求めますか？',
+    'subject_home_emergency_confirm_send': '緊急リクエストを送信',
     'subject_home_share_text': 'Anbuアプリで私の安否を確認してください！\n招待コード：@code',
     'subject_home_share_subject': 'Anbu 招待コード',
     'subject_home_code_copied': 'コードをコピーしました',
@@ -284,6 +292,8 @@ abstract class JaJp {
     'noti_urgent_body':
         '@days日間安否確認がありません。直ちに確認が必要です。',
     'noti_steps_body': '@from_time ～ @to_time の間に@steps歩歩きました。',
+    'noti_emergency_body': '対象者が直接助けを求めました。すぐに確認してください。',
+    'noti_resolved_body': '正常に復帰しました。見守り対象者の安否が正常に確認されました。',
 
     // ── ローカル通知 ──
     'local_alarm_title': '📱 安否確認が必要です',
