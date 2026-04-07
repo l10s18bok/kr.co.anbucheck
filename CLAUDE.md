@@ -47,6 +47,7 @@ lib/
     │   │   │               # NotificationLocalDatasource
     │   │   └── remote/     # UserRemoteDatasource, DeviceRemoteDatasource,
     │   │                   # HeartbeatRemoteDatasource, SubjectRemoteDatasource,
+    │   │                   # EmergencyRemoteDatasource,
     │   │                   # NotificationSettingsRemoteDatasource, VersionRemoteDatasource
     │   ├── models/         # HeartbeatRequest, NotificationModel
     │   └── repositories/   # NotificationRepositoryImpl

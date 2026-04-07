@@ -196,6 +196,15 @@ heartbeat 수신 → last_seen 갱신
 [보호자가 경고 클리어 시]
 활성 경고 전부 삭제 + suspicious_count 리셋
 이후 heartbeat가 여전히 없으면 → 다음 날 같은 시각에 1차 경고부터 재시작
+
+[대상자 긴급 도움 요청 (POST /api/v1/emergency)]
+대상자가 앱에서 직접 긴급 버튼 탭 → 확인 다이얼로그 → 전송
+  ├─ 기존 경고 에스컬레이션(suspicious_count, days_inactive)과 완전히 독립
+  ├─ 즉시 urgent 등급 경고 생성 (caution→warning→urgent 단계 생략)
+  │   · alerts 테이블: alert_level='urgent', note='emergency_request'
+  │   · notification_events 테이블: message_key='emergency'
+  ├─ 연결된 보호자 전원에게 긴급 Push 발송 (DND 무시, 구독 만료 무관)
+  └─ 기존 카운터(suspicious_count, days_inactive) 변경하지 않음
 ```
 
 - 경고는 **서버에서 직접 보호자 기기에 FCM Push**로 발송
@@ -234,6 +243,12 @@ heartbeat 수신 → last_seen 갱신
 {
   "notification": { "title": "🚨 긴급: 대상자 확인 필요", "body": "안부 확인이 없으며 마지막 확인 시 폰 사용 흔적도 없었습니다. 즉시 확인이 필요합니다." },
   "data": { "type": "alert_urgent", "subject_user_id": "1", "invite_code": "K7M-4PXR" }
+}
+
+// 긴급 등급 — 대상자 직접 긴급 도움 요청
+{
+  "notification": { "title": "🚨 긴급 도움 요청", "body": "보호 대상자가 직접 도움을 요청했습니다. 즉시 확인해 주세요." },
+  "data": { "type": "alert_emergency", "subject_user_id": "1", "invite_code": "K7M-4PXR" }
 }
 
 // 정보 등급 — 자동 heartbeat 정상 수신
@@ -277,11 +292,13 @@ server/
 │   ├── app_version.py              # GET /api/v1/app/version-check, PUT/GET /api/v1/admin/app-version
 │   ├── subscription.py             # GET/POST /api/v1/subscription
 │   ├── guardian_notification_settings.py  # GET/PUT /api/v1/guardian/notification-settings
-│   └── notifications.py            # GET/DELETE /api/v1/notifications
+│   ├── notifications.py            # GET/DELETE /api/v1/notifications
+│   └── emergency.py                # POST /api/v1/emergency (긴급 도움 요청)
 ├── services/
 │   ├── user_service.py             # 사용자 등록, invite_code 생성
 │   ├── heartbeat_service.py        # heartbeat 비즈니스 로직
 │   ├── alert_service.py            # 경고 생성/클리어/보호자 Push 발송, DND 판정
+│   ├── emergency_service.py        # 긴급 도움 요청 처리 (즉시 urgent 경고 생성 + Push)
 │   ├── subject_service.py          # 대상자-보호자 연결 관리
 │   ├── push_service.py             # 일반 Push 발송 (보호자 경고 알림)
 │   ├── subscription_service.py     # 구독 상태 관리
@@ -500,7 +517,33 @@ Response: 200 OK
     - 보호자 경고 클리어 시 suspicious_count 리셋 → 다음 suspicious부터 1차 재시작
 
 
-### 4.7 구독 상태 확인 (보호자용)
+### 4.7 긴급 도움 요청 (대상자 전용)
+```
+POST /api/v1/emergency
+Headers:
+  Authorization: Bearer <device_token>  (대상자)
+Body:
+{
+  "device_id": "uuid-v4"
+}
+Response: 200 OK
+{
+  "status": "ok",
+  "message": "긴급 알림이 전송되었습니다"
+}
+```
+
+- **대상자만** 호출 가능 (`require_subject` 인증, 보호자가 호출 시 403)
+- 기존 heartbeat 경고 에스컬레이션(suspicious_count, days_inactive)과 **완전히 독립** 동작
+- 즉시 urgent 등급 경고 생성 (caution→warning→urgent 단계를 거치지 않음)
+- `alerts` 테이블에 `alert_level='urgent'`, `note='emergency_request'`로 저장
+- `notification_events` 테이블에 `message_key='emergency'`로 저장
+- 연결된 보호자 전원에게 긴급 Push 발송 (DND 무시, `asyncio.gather` 병렬)
+- 보호자 구독 만료와 무관하게 항상 발송
+- 클라이언트에서 확인 다이얼로그를 표시하여 오탐 방지
+
+
+### 4.8 구독 상태 확인 (보호자용) 
 ```
 GET /api/v1/subscription
 Headers:
@@ -518,7 +561,7 @@ Response: 200 OK
 - 보호자만 호출 가능 (대상자가 호출 시 403)
 
 
-### 4.8 구독 갱신 (인앱 결제 영수증 검증, 보호자용)
+### 4.9 구독 갱신 (인앱 결제 영수증 검증, 보호자용)
 ```
 POST /api/v1/subscription/verify
 Headers:
@@ -540,7 +583,7 @@ Response: 200 OK
 - 단일 상품 (`anbu_yearly`) — 대상자 최대 5명, 티어 구분 없음
 
 
-### 4.9 구독 복원 (보호자 앱 재설치 시)
+### 4.10 구독 복원 (보호자 앱 재설치 시)
 ```
 POST /api/v1/subscription/restore
 Headers:
@@ -565,7 +608,7 @@ Response: 200 OK
 - 인앱 결제는 보호자의 Apple ID / Google 계정에 귀속되므로 개인정보 없이도 복구 가능
 
 
-### 4.10 경고 목록 조회 (보호자용)
+### 4.11 경고 목록 조회 (보호자용)
 ```
 GET /api/v1/alerts?subject_user_id={id}
 Headers:
@@ -591,7 +634,7 @@ Response: 200 OK
 - 이름 없음 — `invite_code`로 식별, 클라이언트가 로컬 별칭과 매칭
 
 
-### 4.11 경고 클리어 (보호자용)
+### 4.12 경고 클리어 (보호자용)
 
 #### 4.11.1 개별 경고 클리어
 ```
@@ -645,7 +688,7 @@ Response: 200 OK
 - 보호자 본인에게 연결된 대상자의 경고만 클리어 가능 (권한 검증)
 
 
-### 4.12 FCM 토큰 갱신
+### 4.13 FCM 토큰 갱신
 ```
 PUT /api/v1/devices/fcm-token
 Headers:
@@ -663,7 +706,7 @@ Response: 200 OK
 - FCM 토큰은 OS에 의해 주기적으로 변경될 수 있으므로 앱 시작 시마다 확인/갱신
 
 
-### 4.13 Heartbeat 시각 변경
+### 4.14 Heartbeat 시각 변경
 ```
 PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 Headers:
@@ -689,7 +732,7 @@ Response: 200 OK
 - 클라이언트가 응답 수신 후 WorkManager/BGTask + 로컬 안전망 알림 재예약
 
 
-### 4.14 앱 버전 체크 (강제 업데이트)
+### 4.15 앱 버전 체크 (강제 업데이트)
 ```
 GET /api/v1/app/version-check?platform=android&current_version=1.0.0
 Response: 200 OK
@@ -720,7 +763,7 @@ client_version >= latest_version → 최신 상태
 **관리:** Admin API(4.15)로 Postman에서 직접 설정
 
 
-### 4.15 앱 버전 설정 (Admin API)
+### 4.16 앱 버전 설정 (Admin API)
 
 > 별도 관리자 페이지 없이 **Postman에서 직접 호출**하여 버전을 관리한다.
 > `ADMIN_SECRET_KEY` 환경변수로 인증한다.
@@ -798,7 +841,7 @@ Response: 200 OK
 - 플랫폼별(android/ios) 독립 관리
 
 
-### 4.16 기기 정보 조회
+### 4.17 기기 정보 조회
 ```
 GET /api/v1/devices/me
 Headers:
@@ -825,7 +868,7 @@ Response: 200 OK
 - 앱 포그라운드 진입 시 서버 스케줄 동기화 용도
 
 
-### 4.17 보호자 알림 설정 조회/변경
+### 4.18 보호자 알림 설정 조회/변경
 ```
 GET /api/v1/guardian/notification-settings
 Headers:
@@ -868,7 +911,7 @@ Response: 200 OK
 - 알림 설정이 없으면 기본값(전체 ON) 자동 생성
 
 
-### 4.18 알림 목록 조회 (보호자용)
+### 4.19 알림 목록 조회 (보호자용)
 ```
 GET /api/v1/notifications
 Headers:
@@ -900,7 +943,7 @@ Response: 200 OK
 - 파싱 실패 시 기본값 KST(+09:00) 적용
 
 
-### 4.19 알림 전체 숨김 (보호자용)
+### 4.20 알림 전체 숨김 (보호자용)
 ```
 DELETE /api/v1/notifications
 Headers:
@@ -917,7 +960,7 @@ Response: 200 OK
 - `notification_events` 원본 데이터는 삭제되지 않음 (자정 정리 스케줄러가 삭제)
 
 
-### 4.20 사용자 탈퇴
+### 4.21 사용자 탈퇴
 ```
 DELETE /api/v1/users/me
 Headers:
@@ -1444,6 +1487,7 @@ message_params TEXT,          -- JSON 파라미터 (예: '{"days": 3}')
 | `warning` | warning | 연속 미수신 | - |
 | `urgent` | urgent | 긴급 확인 필요 | `{"days": 3}` |
 | `steps` | health | 걸음수 활동 정보 | `{"from_time": "...", "to_time": "...", "steps": "342"}` |
+| `emergency` | urgent | 긴급 도움 요청 (대상자 직접) | - |
 
 **API 응답 (GET /api/v1/notifications):**
 ```json
@@ -1598,6 +1642,7 @@ CMD ["python", "main.py"]
 | `/api/v1/app/version-check` | GET | 앱 버전 체크 (강제 업데이트 판정) |
 | `/api/v1/admin/app-version` | PUT | 앱 버전 설정 (Admin, Postman용) |
 | `/api/v1/admin/app-version` | GET | 앱 버전 설정 조회 (Admin, Postman용) |
+| `/api/v1/emergency` | POST | 긴급 도움 요청 (대상자 → 보호자 전원 즉시 urgent Push, 에스컬레이션 독립) |
 | `/health` | GET | 헬스체크 |
 
 > FrontEnd 상세는 [PRD-FrontEnd.md](PRD-FrontEnd.md) 참조

@@ -5,6 +5,7 @@
 | 등급 | 조건 | 발송 |
 |------|------|------|
 | 🚨 긴급 | 경고 3회 이상 누적 | 매일 반복, 보호자 확인까지 종료 없음 |
+| 🚨 긴급 | 대상자 긴급 도움 요청 (POST /api/v1/emergency) | 즉시 1회 발송 (에스컬레이션 독립) |
 | ⚠ 경고 | 미수신 2회 이상 | 1~2회 다음날 재발송 |
 | ⚠ 주의 | 미수신 1회 | 1회 발송 |
 | 🔵 정보 | 배터리 < 20% (마지막 heartbeat 기준) | 1회 발송, 이후 상향 없음 |
@@ -228,7 +229,49 @@ flowchart TD
 ```
 
 
-## 7. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)
+## 7. 대상자 긴급 도움 요청 플로우
+
+> 대상자가 앱에서 직접 긴급 버튼을 눌러 보호자 전원에게 즉시 urgent 알림을 발송하는 플로우.
+> 기존 heartbeat 경고 에스컬레이션(suspicious_count, days_inactive)과 완전히 독립 동작한다.
+
+```mermaid
+flowchart TD
+    Start([대상자: 🚨 도움이 필요해요 버튼 탭])
+    Start --> Confirm{확인 다이얼로그<br/>보호자 전원에게 긴급 알림이<br/>발송됩니다. 정말 도움을<br/>요청하시겠습니까?}
+
+    Confirm -->|취소| End0([종료])
+    Confirm -->|긴급 요청 보내기| Send[POST /api/v1/emergency<br/>device_id 전송]
+
+    Send --> Auth{require_subject<br/>인증 확인}
+    Auth -->|실패| Error([에러 — 대상자만 호출 가능])
+    Auth -->|성공| CreateAlert[alerts 테이블에 즉시 생성<br/>alert_level: urgent<br/>note: emergency_request<br/>days_inactive: 0]
+
+    CreateAlert --> SaveNoti[notification_events 저장<br/>message_key: emergency<br/>alert_level: urgent]
+
+    SaveNoti --> FindGuardians[연결된 보호자 전원 조회<br/>guardians + devices JOIN]
+
+    FindGuardians --> Push[보호자 전원에게 긴급 Push 발송<br/>asyncio.gather 병렬 처리<br/>DND 무시, 구독 만료 무관]
+
+    Push --> Response([200 OK 응답<br/>긴급 알림이 전송되었습니다])
+
+    style CreateAlert fill:#FFEBEE,stroke:#B71C1C
+    style Push fill:#FFEBEE,stroke:#B71C1C
+```
+
+**긴급 도움 요청의 특성:**
+
+| 항목 | 동작 |
+|------|------|
+| 경고 등급 | 즉시 urgent (caution→warning→urgent 단계 생략) |
+| 기존 카운터 | suspicious_count, days_inactive 변경 없음 |
+| DND | 무시 (항상 발송) |
+| 구독 상태 | 무관 (만료되어도 발송) |
+| 보호자 범위 | 연결된 전원 |
+| 반복 발송 | 없음 (1회 즉시 발송) |
+| 클라이언트 | 확인 다이얼로그로 오탐 방지 |
+
+
+## 8. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)
 
 > **1차**: WorkManager(Android) / BGTaskScheduler(iOS)가 예약 시각에 heartbeat를 백그라운드 실행한다. one-off 태스크(정확한 시각)와 periodic 태스크(iOS: BGAppRefreshTask, Android: WorkManager 주기)를 병행 등록하여 실행 확률을 높인다. 콜백 내 `lastHeartbeatDate` 검사로 당일 중복 전송을 방지한다.
 > **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다.

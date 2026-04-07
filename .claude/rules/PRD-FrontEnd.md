@@ -1531,16 +1531,16 @@ ios/Runner/
 │  │  보호자: 1명 연결됨     │  │
 │  └───────────────────────┘  │
 │                             │
-│  Bento 그리드               │
-│  ┌──────────┬────────────┐  │
-│  │ 🔋 배터리 │ 📶 통신상태 │  │
-│  │  85%     │  연결됨     │  │
-│  └──────────┴────────────┘  │
-│                             │
 │  [📱 지금 안부 보고하기]     │  ← 즉시 heartbeat 전송
 │                             │
 │  확인 시각: 매일 09:30       │
 │  [⏰ 시각 변경]              │
+│                             │
+│  ┌───────────────────────┐  │
+│  │  🚨 도움이 필요해요     │  │  ← 긴급 도움 요청
+│  │  보호자에게 긴급 상황을  │  │    배경 #FFEBEE, 텍스트 #B71C1C
+│  │  알립니다               │  │    확인 다이얼로그 후 전송
+│  └───────────────────────┘  │
 │                             │
 │  ┌───────────────────────┐  │
 │  │   하단 고정 배너 광고   │  │
@@ -1557,7 +1557,10 @@ ios/Runner/
 - Lottie 애니메이션 없음 — 아이콘 기반 UI
 - Drawer 메뉴에서 다크모드 전환, 약관, 탈퇴 기능 제공
 - "지금 안부 보고하기" 버튼으로 수동 heartbeat 즉시 전송 가능 (manual = true)
-- 배터리·통신 상태를 Bento 그리드로 실시간 표시
+- "도움이 필요해요" 긴급 버튼으로 보호자 전원에게 즉시 긴급 알림 발송 (POST /api/v1/emergency)
+  - 확인 다이얼로그 표시 후 전송 (오탐 방지)
+  - 기존 heartbeat 경고 에스컬레이션(suspicious_count, days_inactive)과 독립 동작
+  - 버튼 색상: 배경 `#FFEBEE`, 텍스트/테두리 `#B71C1C` (긴급 등급 색상 통일)
 
 
 ### 9.4 대상자 모드 - 설정 화면
@@ -1907,6 +1910,7 @@ String _localeString() {
 | `warning` | warning | 연속 미수신 | - |
 | `urgent` | urgent | 긴급 확인 필요 | `days` |
 | `steps` | health | 걸음수 활동 정보 | `from_time`, `to_time`, `steps` |
+| `emergency` | urgent | 긴급 도움 요청 (대상자 직접) | - |
 
 **클라이언트 번역 키 매핑:**
 ```dart
@@ -2051,6 +2055,7 @@ lib/app/core/translations/
 | `/api/v1/alerts/{id}/clear`    | PUT    | 개별 경고 클리어 (보호자가 건강 확인 후)               |
 | `/api/v1/alerts/clear-all`     | PUT    | 대상자별 모든 활성 경고 일괄 클리어 + 적응형 주기 복원 |
 | `/api/v1/devices/fcm-token`    | PUT    | FCM 토큰 갱신                                          |
+| `/api/v1/emergency`            | POST   | 긴급 도움 요청 (대상자 → 보호자 전원 긴급 Push)       |
 | `/api/v1/app/version-check`    | GET    | 앱 버전 체크 (강제 업데이트 판정)                      |
 
 > API 상세 스펙은 [PRD-BackEnd.md](PRD-BackEnd.md) 참조
