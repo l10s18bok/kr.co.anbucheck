@@ -24,6 +24,8 @@ class GuardianDashboardController extends BaseController {
   @override
   void onInit() {
     super.onInit();
+    // 서비스에 이미 캐시된 데이터가 있으면 즉시 반영 (타이밍 문제 방지)
+    if (_svc.subjects.isNotEmpty) _mapSubjects();
     // subjects 데이터 변경 시 자동 반영 (FCM 수신 후 서비스 갱신 포함)
     ever(_svc.subjects, (_) => _mapSubjects());
     _loadSubjectsAndSubscription();

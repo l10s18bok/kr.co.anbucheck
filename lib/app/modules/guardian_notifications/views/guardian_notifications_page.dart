@@ -34,17 +34,23 @@ class GuardianNotificationsPage
           ],
         ),
         actions: [
-          Obx(() => Padding(
+          Obx(() => IconButton(
+            icon: Icon(Icons.refresh_rounded,
+                color: controller.isLoading
+                    ? const Color(0xFF4355B9).withValues(alpha: 0.4)
+                    : const Color(0xFF4355B9),
+                size: 24.w),
+            onPressed: controller.isLoading ? null : controller.load,
+          )),
+          Padding(
             padding: EdgeInsets.only(right: AppSpacing.horizontalMargin - 12.w),
             child: IconButton(
-              icon: Icon(Icons.refresh_rounded,
-                  color: controller.isLoading
-                      ? const Color(0xFF4355B9).withValues(alpha: 0.4)
-                      : const Color(0xFF4355B9),
-                  size: 24.w),
-              onPressed: controller.isLoading ? null : controller.load,
+              icon: Icon(Icons.help_outline_rounded,
+                  size: 24.w,
+                  color: AppColors.textTertiary),
+              onPressed: () => _showAlertLevelGuide(Get.context!),
             ),
-          )),
+          ),
         ],
       ),
       body: Stack(
@@ -68,24 +74,13 @@ class GuardianNotificationsPage
                       Text('notifications_today'.tr,
                           style: AppTextTheme.labelMedium(
                               color: const Color(0xFF4355B9), fw: FontWeight.w600)),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: controller.isLoading ? null : () => _confirmDeleteAll(context),
-                            child: Icon(Icons.delete_outline_rounded,
-                                size: 24.w,
-                                color: controller.isLoading
-                                    ? const Color(0xFFE53935).withValues(alpha: 0.4)
-                                    : const Color(0xFFE53935)),
-                          ),
-                          SizedBox(width: 20.w),
-                          GestureDetector(
-                            onTap: () => _showAlertLevelGuide(context),
-                            child: Icon(Icons.help_outline_rounded,
-                                size: 24.w,
-                                color: AppColors.textTertiary),
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: controller.isLoading ? null : () => _confirmDeleteAll(context),
+                        child: Icon(Icons.delete_outline_rounded,
+                            size: 24.w,
+                            color: controller.isLoading
+                                ? const Color(0xFFE53935).withValues(alpha: 0.4)
+                                : const Color(0xFFE53935)),
                       ),
                     ],
                   ),
