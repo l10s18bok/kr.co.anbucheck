@@ -35,6 +35,7 @@ void _handleNotificationTap(String type) {
     case 'alert_urgent':
     case 'alert_warning':
     case 'alert_caution':
+    case 'alert_emergency':
       Get.toNamed(AppRoutes.guardianNotifications);
       break;
     case 'alert_resolved':
@@ -272,6 +273,7 @@ class FcmService extends GetxService {
     const guardianTypes = {
       'auto_report', 'manual_report', 'alert_resolved',
       'alert_info', 'alert_caution', 'alert_warning', 'alert_urgent',
+      'alert_emergency',
     };
     if (!guardianTypes.contains(type)) return;
     try {

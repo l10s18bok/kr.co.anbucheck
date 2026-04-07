@@ -5,6 +5,7 @@ import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -78,6 +79,17 @@ class OnboardingController extends BaseController {
     if (role == 'subject' && response['invite_code'] != null) {
       await _tokenDs.saveInviteCode(response['invite_code'] as String);
     }
+
+    // 등록 완료 후 FCM 토큰 서버 갱신 (등록 시 토큰이 아직 미발급이었을 수 있음)
+    try {
+      final fcm = Get.find<FcmService>();
+      if (fcm.token != null) {
+        await DeviceRemoteDatasource().updateFcmToken(
+          response['device_token'] as String,
+          fcm.token!,
+        );
+      }
+    } catch (_) {}
 
     if (role == 'subject') {
       // 로컬 안전망 알림 예약 (기본 10:00, 매일 반복)

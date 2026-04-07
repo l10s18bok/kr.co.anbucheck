@@ -326,6 +326,8 @@ class _NotificationCard extends StatelessWidget {
                                   'to_time': '${p['to_time'] ?? ''}',
                                   'steps': '${p['steps'] ?? ''}',
                                 }),
+      'emergency'           => 'noti_emergency_body'.tr,
+      'resolved'            => 'noti_resolved_body'.tr,
       _                     => item.body,
     };
   }
