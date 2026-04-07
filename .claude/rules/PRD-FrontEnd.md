@@ -53,31 +53,57 @@
 
 ### 1.7 앱 구조
 하나의 앱에서 **"보호 대상자 모드"**와 **"보호자 모드"**를 선택하는 구조:
-- 보호 대상자 모드: heartbeat 전송, 안부 확인 서비스 동작
-- 보호자 모드: Push 알림 수신, 대상자 상태 확인
+- 보호 대상자 모드: heartbeat 전송, 안부 확인 서비스 동작 **(Android 전용)**
+- 보호자 모드: Push 알림 수신, 대상자 상태 확인 **(Android + iOS)**
+
+
+### 1.8 플랫폼별 모드 제한
+
+| 플랫폼 | 대상자 모드 | 보호자 모드 | 모드 선택 화면 |
+|--------|------------|------------|--------------|
+| **Android** | ✅ 지원 | ✅ 지원 | 표시 (대상자/보호자 선택) |
+| **iOS** | ❌ 미지원 | ✅ 전용 | **스킵** (Splash → 바로 권한 화면) |
+
+**iOS 보호자 전용 사유:**
+- iOS BGTaskScheduler는 앱 스와이프 강제 종료 시 백그라운드 태스크가 미실행되어 heartbeat 전송 신뢰성을 보장할 수 없음
+- 대상자 모드의 핵심인 "매일 heartbeat가 확실히 전송되는 것"을 iOS에서는 구조적으로 충족 불가
+- App Store 심사 시 "보호자 모니터링 앱"으로 포지셔닝 (Background Mode 선언 부담 제거)
+
+**App Store 심사 유의사항:**
+- 앱 설명/스크린샷: 보호자 기능만 표시
+- 심사 메모: "대상자 기기에서 자동 전송되는 안부 신호를 보호자가 모니터링하는 앱" (Android 언급 금지)
+- 앱 카테고리: Health & Fitness 또는 Lifestyle
+
+**구현:** `splash_controller.dart`에서 `Platform.isIOS` 분기 → `AppRoutes.permission`(guardian)으로 직행
 
 ```
 [앱 최초 실행]
-Splash → 버전 체크 → 모드 선택
+Splash → 버전 체크 → 플랫폼 분기
     │
     ├─ 버전 체크 (GET /api/v1/app/version-check)
     │   ├─ force_update = true → 강제 업데이트 다이얼로그 → 스토어 이동
     │   ├─ force_update = false → 선택적 업데이트 안내 (건너뛰기 가능)
     │   └─ 서버 응답 실패 → 건너뛰고 정상 진행
     │
-    └─ 모드 선택
-        ├─ "나의 안전을 확인받고 싶어요" → [보호 대상자 모드]
-        │   권한 요청 안내 화면 (모드 선택 후 진입)
-        │   ├─ 알림 권한 (필수)
-        │   ├─ 신체 활동 권한 (Android만, 걸음수 감지용)
-        │   └─ [확인] 탭 → OS 권한 팝업 순차 표시
-        │   Onboarding (서비스 소개/동작 안내) → 서버 등록 (자동) → Home (고유 코드 표시)
-        │
-        └─ "소중한 사람을 지켜보고 싶어요" → [보호자 모드]
-            권한 요청 안내 화면 (모드 선택 후 진입)
-            ├─ 알림 권한 (필수)
-            └─ [확인] 탭 → OS 권한 팝업 순차 표시
-            Onboarding → 서버 등록 (자동) → 대시보드 (보호 대상자 추가 대기)
+    ├─ [Android] 모드 선택
+    │   ├─ "나의 안전을 확인받고 싶어요" → [보호 대상자 모드]
+    │   │   권한 요청 안내 화면 (모드 선택 후 진입)
+    │   │   ├─ 알림 권한 (필수)
+    │   │   ├─ 신체 활동 권한 (걸음수 감지용)
+    │   │   └─ [확인] 탭 → OS 권한 팝업 순차 표시
+    │   │   Onboarding (서비스 소개/동작 안내) → 서버 등록 (자동) → Home (고유 코드 표시)
+    │   │
+    │   └─ "소중한 사람을 지켜보고 싶어요" → [보호자 모드]
+    │       권한 요청 안내 화면 (모드 선택 후 진입)
+    │       ├─ 알림 권한 (필수)
+    │       └─ [확인] 탭 → OS 권한 팝업 순차 표시
+    │       Onboarding → 서버 등록 (자동) → 대시보드 (보호 대상자 추가 대기)
+    │
+    └─ [iOS] 모드 선택 스킵 → 보호자 모드 직행
+        권한 요청 안내 화면 (보호자 모드 자동 설정)
+        ├─ 알림 권한 (필수)
+        └─ [확인] 탭 → OS 권한 팝업 표시
+        Onboarding → 서버 등록 (자동) → 대시보드 (보호 대상자 추가 대기)
 ```
 
 
@@ -1734,26 +1760,20 @@ ios/Runner/
 <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 ```
 
-### iOS (Info.plist)
+### iOS (Info.plist) — 보호자 전용
+
+> iOS는 보호자 모드만 지원하므로 heartbeat 관련 백그라운드 권한이 불필요하다.
+
 ```xml
 <key>UIBackgroundModes</key>
 <array>
-    <string>fetch</string>
-    <string>processing</string>
     <string>remote-notification</string>
-</array>
-<key>NSMotionUsageDescription</key>
-<string>걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다</string>
-<key>BGTaskSchedulerPermittedIdentifiers</key>
-<array>
-    <string>workmanager.background.task</string>
 </array>
 ```
 
-> 센서 조회(`sensors_plus`)는 별도 권한이 필요하지 않다.
-> 걸음수(`pedometer`)는 Android: `ACTIVITY_RECOGNITION` 런타임 권한, iOS: `NSMotionUsageDescription` 필요.
-> 배터리 최적화 제외(`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`) 권한은 제거됨.
-> 로컬 알림(`flutter_local_notifications`)은 iOS에서 **알림 권한**(UNAuthorizationOptions)을 런타임에 요청해야 한다.
+> iOS는 보호자 전용이므로 `fetch`, `processing`, `BGTaskSchedulerPermittedIdentifiers`, `NSMotionUsageDescription` 불필요.
+> 센서 조회, 걸음수, 배터리 최적화 관련 권한도 iOS에서는 불필요.
+> 알림 권한(UNAuthorizationOptions)만 런타임에 요청하면 된다.
 > 이 권한은 FCM Push 수신에도 필수이므로, 모드 선택 후 권한 요청 안내 화면(9.0)에서 한 번만 요청하면 된다.
 
 
@@ -1985,14 +2005,18 @@ lib/app/core/translations/
 
 ### 앱 심사 대응
 
-| 심사 포인트                | 대응                                                    |
-| -------------------------- | ------------------------------------------------------- |
-| 백그라운드 실행 사유 (iOS) | `fetch` + `processing` + `remote-notification` 선언 — BGTaskScheduler 기반 매일 1회 실행 |
-| 배터리 소모 (Android)      | WorkManager 사용, Foreground Service 없음 — 매일 1회 순간 기동 후 종료                    |
-| 카테고리                   | Health & Fitness 또는 Lifestyle                         |
-| 인앱 결제                  | Apple/Google 공식 인앱 결제 API 사용 (수수료 정책 준수) |
-| 광고                       | AdMob 공식 SDK, 하단 고정 배너만 사용                   |
-| 개인정보                   | 이름/전화번호 미수집, 개인정보처리방침 최소화           |
+| 심사 포인트                | Android                                                   | iOS (보호자 전용)                                          |
+| -------------------------- | --------------------------------------------------------- | ---------------------------------------------------------- |
+| 모드                       | 대상자 + 보호자 모두 지원                                  | **보호자 모드만 지원** (모드 선택 화면 스킵)                |
+| 백그라운드 실행             | WorkManager 기반 매일 1회 heartbeat 전송                   | 백그라운드 실행 불필요 (heartbeat 전송 없음, Push 수신만)   |
+| Background Mode 선언       | -                                                         | `remote-notification`만 필요 (`fetch`, `processing` 불필요) |
+| 배터리 소모                | WorkManager, Foreground Service 없음 — 매일 1회 순간 기동  | 최소 (Push 수신만)                                          |
+| 카테고리                   | Health & Fitness 또는 Lifestyle                            | Health & Fitness 또는 Lifestyle                             |
+| 앱 설명                    | 대상자·보호자 기능 모두 안내                                | **"보호자 모니터링 앱"으로 포지셔닝** (Android 언급 금지)   |
+| 심사 메모                  | -                                                         | "대상자 기기에서 자동 전송되는 안부 신호를 보호자가 모니터링하는 앱" |
+| 인앱 결제                  | Google 공식 인앱 결제 API (수수료 정책 준수)               | Apple 공식 인앱 결제 API (수수료 정책 준수)                 |
+| 광고                       | AdMob 공식 SDK, 하단 고정 배너만 사용                      | AdMob 공식 SDK, 하단 고정 배너만 사용                       |
+| 개인정보                   | 이름/전화번호 미수집, 개인정보처리방침 최소화              | 이름/전화번호 미수집, 개인정보처리방침 최소화               |
 
 
 ---

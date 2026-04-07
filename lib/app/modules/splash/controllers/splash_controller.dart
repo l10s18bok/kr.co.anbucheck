@@ -57,7 +57,12 @@ class SplashController extends BaseController {
         Get.offNamed(AppRoutes.guardianDashboard);
       }
     } else {
-      Get.offNamed(AppRoutes.modeSelect);
+      // iOS는 보호자 전용 — 모드 선택 스킵, 바로 권한 화면으로 이동
+      if (Platform.isIOS) {
+        Get.offNamed(AppRoutes.permission, arguments: {'mode': 'guardian'});
+      } else {
+        Get.offNamed(AppRoutes.modeSelect);
+      }
     }
   }
 

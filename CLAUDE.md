@@ -3,6 +3,15 @@
 독거노인·1인 가구의 안녕을 자동으로 확인하는 Android/iOS 앱.
 하나의 앱에서 **대상자 모드** (heartbeat 전송, Teal 테마)와 **보호자 모드** (Push 수신, Indigo 테마)를 선택.
 
+## 플랫폼별 모드 제한
+
+- **Android**: 대상자 모드 + 보호자 모드 모두 지원 (모드 선택 화면 표시)
+- **iOS**: 보호자 모드 전용 (모드 선택 화면 스킵, Splash → 바로 권한 화면으로 이동)
+  - iOS BGTaskScheduler의 불안정성(앱 스와이프 종료 시 미실행) 때문에 대상자 heartbeat 전송 신뢰성을 보장할 수 없음
+  - App Store 심사 시 "보호자 모니터링 앱"으로 포지셔닝
+  - 심사 메모에 Android 언급 금지 — "대상자 기기에서 자동 전송되는 안부 신호를 보호자가 모니터링하는 앱"
+  - 분기 코드: `splash_controller.dart` → `Platform.isIOS` 시 `AppRoutes.permission`(guardian)으로 직행
+
 ## 기술 스택
 
 - **Flutter** 3.41.5 / Dart 3.11.3
