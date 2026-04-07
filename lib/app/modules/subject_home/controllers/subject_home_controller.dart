@@ -17,6 +17,7 @@ import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
+import 'package:anbucheck/app/data/datasources/remote/emergency_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 대상자 홈 컨트롤러
@@ -298,6 +299,33 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   /// 연락처 선택 → 전화 걸기 (안전 보고)
   Future<void> openPhoneDialer() async {
     await PhoneUtils.pickContactAndCall();
+  }
+
+  /// 긴급 도움 요청 전송 중 상태
+  final _isSendingEmergency = false.obs;
+  bool get isSendingEmergency => _isSendingEmergency.value;
+
+  /// 긴급 도움 요청: urgent alert 즉시 생성 + 보호자 전원에게 긴급 Push 발송
+  Future<void> sendEmergency() async {
+    if (_isSendingEmergency.value) return;
+    _isSendingEmergency.value = true;
+    try {
+      final deviceToken = await _tokenDs.getDeviceToken();
+      final deviceId = await _tokenDs.getDeviceId();
+      if (deviceToken == null || deviceId == null) return;
+      await EmergencyRemoteDatasource(deviceToken).send(deviceId);
+      Get.rawSnackbar(
+        message: 'subject_home_emergency_sent'.tr,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (_) {
+      Get.rawSnackbar(
+        message: 'subject_home_emergency_failed'.tr,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      _isSendingEmergency.value = false;
+    }
   }
 
   // ── 앱 버전 ────────────────────────────────────────

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:battery_plus/battery_plus.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
@@ -106,10 +105,6 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             _buildLastCheckCard(),
             SizedBox(height: AppSpacing.lg),
 
-            // Bento 그리드 (배터리 + 통신)
-            _buildBentoGrid(),
-            SizedBox(height: AppSpacing.lg),
-
             // 지금 바로 안전 보고하기 버튼
             _buildReportButton(),
             SizedBox(height: AppSpacing.lg),
@@ -132,6 +127,10 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     : const Color(0xFFE0F2F1),
               ),
             ),
+            SizedBox(height: AppSpacing.lg),
+
+            // 긴급 도움 요청 버튼
+            _buildEmergencyButton(),
             SizedBox(height: AppSpacing.sp6),
 
             // 광고 배너
@@ -286,97 +285,112 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
     });
   }
 
-  /// Bento 그리드 (배터리 + 통신 상태)
-  Widget _buildBentoGrid() {
+  /// 긴급 도움 요청 버튼
+  Widget _buildEmergencyButton() {
     return Obx(() {
-      final dark = Get.find<ThemeService>().isDarkMode.value;
-      final batteryLow = controller.isBatteryLow;
-      final batteryColor = batteryLow
-          ? const Color(0xFFD32F2F)
-          : (dark ? const Color(0xFF80CBC4) : const Color(0xFF00685E));
-      final disconnected = !controller.isConnected;
-      final connectColor = disconnected
-          ? const Color(0xFFE64A19)
-          : (dark ? const Color(0xFF80CBC4) : const Color(0xFF00685E));
-
-      return Row(
-        children: [
-          // 배터리 상태
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(AppSpacing.lg),
-              decoration: BoxDecoration(
-                color: batteryLow ? const Color(0xFFFFEBEE) : AppColors.surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(
-                        _getBatteryIcon(controller.batteryState, controller.batteryLevel),
-                        size: 24.w,
-                        color: batteryColor,
-                      ),
-                      Text(
-                        '${controller.batteryLevel}%',
-                        style: AppTextTheme.headlineSmall(color: batteryColor, fw: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: AppSpacing.sm),
-                  Text('subject_home_battery_status'.tr, style: AppTextTheme.bodySmall()),
-                  SizedBox(height: 2.h),
-                  Text(
-                    controller.batteryStateText,
-                    style: AppTextTheme.headlineSmall(color: batteryColor, fw: FontWeight.w700),
-                  ),
-                ],
-              ),
+      final sending = controller.isSendingEmergency;
+      final disabled = !controller.isGuardianConnected;
+      return GestureDetector(
+        onTap: (sending || disabled) ? null : () => _showEmergencyConfirm(),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 20.h),
+          decoration: BoxDecoration(
+            color: (sending || disabled)
+                ? const Color(0xFFFFCDD2)
+                : const Color(0xFFFFEBEE),
+            borderRadius: BorderRadius.circular(20.r),
+            border: Border.all(
+              color: (sending || disabled)
+                  ? const Color(0xFFE57373)
+                  : const Color(0xFFB71C1C),
+              width: 1.5,
             ),
           ),
-          SizedBox(width: AppSpacing.md),
-          // 통신 연결 상태
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(AppSpacing.lg),
-              decoration: BoxDecoration(
-                color: disconnected ? const Color(0xFFFBE9E7) : AppColors.surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(
-                        controller.isConnected ? Icons.wifi_rounded : Icons.wifi_off_rounded,
-                        size: 24.w,
-                        color: connectColor,
+                  if (sending)
+                    SizedBox(
+                      width: 24.w,
+                      height: 24.w,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: Color(0xFFB71C1C),
                       ),
-                      Text(
-                        controller.connectivityText,
-                        style: AppTextTheme.headlineSmall(color: connectColor, fw: FontWeight.w700),
+                    )
+                  else
+                    Icon(Icons.emergency_rounded, size: 24.w, color: const Color(0xFFB71C1C)),
+                  SizedBox(width: 8.w),
+                  Flexible(
+                    child: Text(
+                      sending
+                          ? 'subject_home_emergency_loading'.tr
+                          : 'subject_home_emergency_button'.tr,
+                      style: AppTextTheme.headlineSmall(
+                        color: const Color(0xFFB71C1C),
+                        fw: FontWeight.w700,
                       ),
-                    ],
-                  ),
-                  SizedBox(height: AppSpacing.sm),
-                  Text('subject_home_connectivity_status'.tr, style: AppTextTheme.bodySmall()),
-                  SizedBox(height: 2.h),
-                  Text(
-                    controller.isConnected ? 'common_normal'.tr : 'common_disconnected'.tr,
-                    style: AppTextTheme.headlineSmall(color: connectColor, fw: FontWeight.w700),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
+              ),
+              SizedBox(height: 4.h),
+              Text(
+                'subject_home_emergency_desc'.tr,
+                style: AppTextTheme.bodySmall(
+                  color: const Color(0xFFB71C1C).withValues(alpha: 0.7),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  /// 긴급 도움 요청 확인 다이얼로���
+  void _showEmergencyConfirm() {
+    Get.dialog(
+      AlertDialog(
+        title: Text(
+          'subject_home_emergency_confirm_title'.tr,
+          style: AppTextTheme.headlineSmall(
+            fw: FontWeight.w700,
+            color: const Color(0xFFB71C1C),
+          ),
+        ),
+        content: Text(
+          'subject_home_emergency_confirm_body'.tr,
+          style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'common_cancel'.tr,
+              style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              controller.sendEmergency();
+            },
+            child: Text(
+              'subject_home_emergency_confirm_send'.tr,
+              style: AppTextTheme.bodyMedium(
+                color: const Color(0xFFB71C1C),
+                fw: FontWeight.w700,
               ),
             ),
           ),
         ],
-      );
-    });
+      ),
+    );
   }
 
   /// 지금 바로 안전 보고하기 버튼
@@ -431,18 +445,6 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
       );
     });
   }
-
-  /// 배터리 잔량에 따른 아이콘
-  IconData _getBatteryIcon(BatteryState state, int level) {
-    if (state == BatteryState.charging) return Icons.battery_charging_full_rounded;
-    if (level >= 90) return Icons.battery_full_rounded;
-    if (level >= 70) return Icons.battery_6_bar_rounded;
-    if (level >= 50) return Icons.battery_5_bar_rounded;
-    if (level >= 30) return Icons.battery_3_bar_rounded;
-    if (level >= 15) return Icons.battery_2_bar_rounded;
-    return Icons.battery_alert_rounded;
-  }
-
 
   /// Navigation Drawer
   Widget _buildDrawer(GlobalKey<ScaffoldState> scaffoldKey) {

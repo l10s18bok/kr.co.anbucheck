@@ -37,6 +37,13 @@ class ApiEndpoints {
   /// ※ 보호자 앱에서는 절대 호출하지 않음
   static const String heartbeat = '/api/v1/heartbeat';
 
+  /// POST /api/v1/emergency
+  /// - 대상자가 긴급 도움 요청 버튼을 눌렀을 때 호출
+  /// - 서버: urgent alert 즉시 생성 + 보호자 전원에게 긴급 Push 발송 (DND 무시)
+  /// - 기존 경고 에스컬레이션(caution→warning→urgent)을 거치지 않고 즉시 긴급
+  /// ※ 보호자 앱에서는 절대 호출하지 않음
+  static const String emergency = '/api/v1/emergency';
+
   // ────────────────────────────────────────────────
   // [보호자 전용] 대상자 연결 관리
   // ────────────────────────────────────────────────
