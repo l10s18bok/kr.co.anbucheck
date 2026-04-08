@@ -39,6 +39,7 @@ void _handleNotificationTap(String type) {
       Get.toNamed(AppRoutes.guardianNotifications);
       break;
     case 'alert_resolved':
+    case 'alert_cleared':
     case 'auto_report':
     case 'manual_report':
     case 'alert_info':
@@ -271,7 +272,7 @@ class FcmService extends GetxService {
   /// → ever()로 등록된 GuardianDashboardController가 자동 반응
   void _refreshSubjectsIfNeeded(String? type) {
     const guardianTypes = {
-      'auto_report', 'manual_report', 'alert_resolved',
+      'auto_report', 'manual_report', 'alert_resolved', 'alert_cleared',
       'alert_info', 'alert_caution', 'alert_warning', 'alert_urgent',
       'alert_emergency',
     };

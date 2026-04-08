@@ -328,6 +328,7 @@ class _NotificationCard extends StatelessWidget {
                                 }),
       'emergency'           => 'noti_emergency_body'.tr,
       'resolved'            => 'noti_resolved_body'.tr,
+      'cleared_by_guardian' => 'noti_cleared_by_guardian_body'.tr,
       _                     => item.body,
     };
   }

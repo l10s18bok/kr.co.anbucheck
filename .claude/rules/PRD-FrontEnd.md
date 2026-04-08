@@ -1911,6 +1911,7 @@ String _localeString() {
 | `urgent` | urgent | 긴급 확인 필요 | `days` |
 | `steps` | health | 걸음수 활동 정보 | `from_time`, `to_time`, `steps` |
 | `emergency` | urgent | 긴급 도움 요청 (대상자 직접) | - |
+| `cleared_by_guardian` | info | 보호자 수동 경고 클리어 (다른 보호자에게 발송) | - |
 
 **클라이언트 번역 키 매핑:**
 ```dart
@@ -1919,6 +1920,7 @@ String _localeString() {
 'battery_dead'       → 'noti_battery_dead_body'.trParams({'battery_level': '...'})
 'urgent'             → 'noti_urgent_body'.trParams({'days': '...'})
 'steps'              → 'noti_steps_body'.trParams({...})
+'cleared_by_guardian' → 'noti_cleared_by_guardian_body'.tr
 // message_key가 없으면 서버 제공 body(fallback) 사용
 ```
 

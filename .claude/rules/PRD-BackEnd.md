@@ -1488,6 +1488,7 @@ message_params TEXT,          -- JSON 파라미터 (예: '{"days": 3}')
 | `urgent` | urgent | 긴급 확인 필요 | `{"days": 3}` |
 | `steps` | health | 걸음수 활동 정보 | `{"from_time": "...", "to_time": "...", "steps": "342"}` |
 | `emergency` | urgent | 긴급 도움 요청 (대상자 직접) | - |
+| `cleared_by_guardian` | info | 보호자 수동 경고 클리어 (다른 보호자에게 발송) | - |
 
 **API 응답 (GET /api/v1/notifications):**
 ```json
