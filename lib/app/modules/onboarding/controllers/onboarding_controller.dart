@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
@@ -51,12 +52,14 @@ class OnboardingController extends BaseController {
       final deviceId = await _tokenDs.getOrCreateDeviceId();
       final fcmToken = Get.find<FcmService>().token ?? '';
       final platform = Platform.isIOS ? 'ios' : 'android';
+      final osVersion = await _getOsVersion();
 
       final response = await _userDs.register(
         role: mode,
         deviceId: deviceId,
         fcmToken: fcmToken,
         platform: platform,
+        osVersion: osVersion,
       );
 
       await _saveAndNavigate(response, mode);
@@ -99,6 +102,18 @@ class OnboardingController extends BaseController {
     } else {
       Get.offNamed(AppRoutes.guardianDashboard);
     }
+  }
+
+  Future<String> _getOsVersion() async {
+    final deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      final android = await deviceInfo.androidInfo;
+      return 'Android ${android.version.release}';
+    } else if (Platform.isIOS) {
+      final ios = await deviceInfo.iosInfo;
+      return 'iOS ${ios.systemVersion}';
+    }
+    return '';
   }
 
   @override

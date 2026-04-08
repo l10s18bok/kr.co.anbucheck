@@ -1,11 +1,15 @@
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/network/api_client.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
 import 'package:anbucheck/app/core/network/api_response.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
+import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// GetConnect 기반 ApiClient 구현체 (컴포지션 방식)
@@ -102,7 +106,7 @@ class GetConnectClient extends ApiClient {
   }
 }
 
-/// 401 응답 시 로컬 데이터 초기화 + 모드 선택 화면 이동
+/// 401 응답 시 자동 재등록 시도 → 실패 시 로컬 초기화 + 모드 선택 화면 이동
 /// 중복 호출 방지를 위한 플래그
 bool _handlingUnauthorized = false;
 
@@ -110,9 +114,62 @@ Future<void> _handleUnauthorized() async {
   if (_handlingUnauthorized) return;
   _handlingUnauthorized = true;
   try {
+    final tokenDs = TokenLocalDatasource();
+    final deviceId = await tokenDs.getDeviceId();
+    final savedRole = await tokenDs.getUserRole();
+
+    // 로컬에 deviceId + role이 남아 있으면 서버 확인 후 자동 재등록 시도
+    if (deviceId != null && savedRole != null) {
+      try {
+        final check = await UserRemoteDatasource().checkDevice(deviceId);
+        if (check['exists'] == true) {
+          final role = check['role'] as String? ?? savedRole;
+
+          // FCM 토큰 (미등록이면 빈 문자열로 진행 — 등록 후 갱신됨)
+          String fcmToken = '';
+          try {
+            fcmToken = Get.find<FcmService>().token ?? '';
+          } catch (_) {}
+
+          final platform = Platform.isIOS ? 'ios' : 'android';
+          final osVersion = await _getOsVersion();
+
+          final response = await UserRemoteDatasource().register(
+            role: role,
+            deviceId: deviceId,
+            fcmToken: fcmToken,
+            platform: platform,
+            osVersion: osVersion,
+          );
+
+          // 로컬 토큰 갱신
+          await tokenDs.saveDeviceToken(response['device_token'] as String);
+          await tokenDs.saveUserId(response['user_id'] as int);
+          await tokenDs.saveUserRole(role);
+          if (role == 'subject' && response['invite_code'] != null) {
+            await tokenDs.saveInviteCode(response['invite_code'] as String);
+          }
+
+          // 홈 화면으로 이동
+          if (role == 'subject') {
+            final (hour, minute) = await tokenDs.getHeartbeatSchedule();
+            await LocalAlarmService.schedule(hour, minute);
+            Get.offAllNamed(AppRoutes.subjectHome);
+          } else {
+            Get.offAllNamed(AppRoutes.guardianDashboard);
+          }
+          '[401 복구] 자동 재등록 성공 → $role 홈으로 이동'.printLog();
+          return;
+        }
+      } catch (e) {
+        '[401 복구] 자동 재등록 실패: $e → 모드 선택으로 이동'.printLog();
+      }
+    }
+
+    // 재등록 불가 → 기존 로직: 로컬 초기화 + 모드 선택
     await HeartbeatWorkerService.cancel();
     await LocalAlarmService.cancel();
-    await TokenLocalDatasource().clear();
+    await tokenDs.clear();
     Get.offAllNamed(AppRoutes.modeSelect);
     Get.snackbar('', '계정 정보가 만료되었습니다. 다시 등록해 주세요.',
         snackPosition: SnackPosition.TOP,
@@ -120,6 +177,19 @@ Future<void> _handleUnauthorized() async {
   } finally {
     _handlingUnauthorized = false;
   }
+}
+
+/// OS 버전 문자열 반환
+Future<String> _getOsVersion() async {
+  final deviceInfo = DeviceInfoPlugin();
+  if (Platform.isAndroid) {
+    final android = await deviceInfo.androidInfo;
+    return 'Android ${android.version.release}';
+  } else if (Platform.isIOS) {
+    final ios = await deviceInfo.iosInfo;
+    return 'iOS ${ios.systemVersion}';
+  }
+  return '';
 }
 
 /// 내부 GetConnect 래퍼 (시그니처 충돌 방지)
