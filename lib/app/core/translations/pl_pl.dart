@@ -168,9 +168,9 @@ abstract class PlPl {
     // ── Dodawanie podopiecznego ──
     'add_subject_title': 'Polacz podopiecznego',
     'add_subject_guide_title':
-        'Wprowadz unikalny kod podopiecznego\ni alias.',
+        'Wprowadz unikalny kod podopiecznego i alias.',
     'add_subject_guide_subtitle':
-        'Polacz aplikacje podopiecznego, aby monitorowac\njego zdrowie i aktywnosc w czasie rzeczywistym.',
+        'Polacz aplikacje podopiecznego, aby monitorowac jego zdrowie i aktywnosc w czasie rzeczywistym.',
     'add_subject_code_label': 'Unikalny kod (7 znakow)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -331,6 +331,8 @@ abstract class PlPl {
         '@from_time ~ @to_time: @steps krokow.',
     'noti_emergency_body': 'Osoba pod opieką bezpośrednio poprosiła o pomoc. Proszę natychmiast sprawdzić.',
     'noti_resolved_body': 'Kontrola dobrostanu podopiecznego wróciła do normy.',
+    'noti_cleared_by_guardian_title': '✅ Bezpieczeństwo potwierdzone',
+    'noti_cleared_by_guardian_body': 'Jeden z opiekunów osobiście potwierdził bezpieczeństwo.',
 
     // ── Powiadomienia lokalne ──
     'local_alarm_title': '📱 Wymagane sprawdzenie samopoczucia',

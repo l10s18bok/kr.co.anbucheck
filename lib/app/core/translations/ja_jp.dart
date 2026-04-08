@@ -149,8 +149,8 @@ abstract class JaJp {
 
     // ── 見守り対象者の追加 ──
     'add_subject_title': '見守り対象者の接続',
-    'add_subject_guide_title': '接続する対象者の固有コード\nとニックネームを入力してください。',
-    'add_subject_guide_subtitle': '対象者のアプリを接続して、健康状態や\n活動をリアルタイムで確認できます。',
+    'add_subject_guide_title': '接続する対象者の固有コードとニックネームを入力してください。',
+    'add_subject_guide_subtitle': '対象者のアプリを接続して、健康状態や活動をリアルタイムで確認できます。',
     'add_subject_code_label': '固有コード（7桁）',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info': '固有コードは対象者のアプリで確認できます。',
@@ -294,6 +294,8 @@ abstract class JaJp {
     'noti_steps_body': '@from_time ～ @to_time の間に@steps歩歩きました。',
     'noti_emergency_body': '対象者が直接助けを求めました。すぐに確認してください。',
     'noti_resolved_body': '正常に復帰しました。見守り対象者の安否が正常に確認されました。',
+    'noti_cleared_by_guardian_title': '✅ 安否確認完了',
+    'noti_cleared_by_guardian_body': '保護者の一人が対象者の安全を直接確認しました。',
 
     // ── ローカル通知 ──
     'local_alarm_title': '📱 安否確認が必要です',

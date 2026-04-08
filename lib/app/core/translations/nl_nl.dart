@@ -176,9 +176,9 @@ abstract class NlNl {
     // ── Beschermeling toevoegen ──
     'add_subject_title': 'Beschermeling koppelen',
     'add_subject_guide_title':
-        'Voer de unieke code van de beschermeling\nen een bijnaam in.',
+        'Voer de unieke code van de beschermeling en een bijnaam in.',
     'add_subject_guide_subtitle':
-        'Koppel de app van een beschermeling om\ngezondheid en activiteit in realtime te volgen.',
+        'Koppel de app van een beschermeling om gezondheid en activiteit in realtime te volgen.',
     'add_subject_code_label': 'Unieke code (7 cijfers)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -341,6 +341,8 @@ abstract class NlNl {
         '@from_time ~ @to_time: @steps stappen gelopen.',
     'noti_emergency_body': 'De beschermde persoon heeft rechtstreeks om hulp gevraagd. Controleer onmiddellijk.',
     'noti_resolved_body': 'De welzijnscontrole van de beschermde persoon is weer normaal.',
+    'noti_cleared_by_guardian_title': '✅ Controle bevestigd',
+    'noti_cleared_by_guardian_body': 'Een van de beschermers heeft de veiligheid persoonlijk bevestigd.',
 
     // ── Lokale meldingen ──
     'local_alarm_title': '📱 Welzijnscontrole nodig',

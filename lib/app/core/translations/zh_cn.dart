@@ -149,8 +149,8 @@ abstract class ZhCn {
 
     // ── 守护者添加被守护者 ──
     'add_subject_title': '连接被守护者',
-    'add_subject_guide_title': '请输入被守护者的专属码\n和别名。',
-    'add_subject_guide_subtitle': '连接被守护者的应用后，\n可以实时查看其健康状态和活动情况。',
+    'add_subject_guide_title': '请输入被守护者的专属码和别名。',
+    'add_subject_guide_subtitle': '连接被守护者的应用后，可以实时查看其健康状态和活动情况。',
     'add_subject_code_label': '专属码（7位）',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info': '专属码可在被守护者的应用中找到。',
@@ -289,6 +289,8 @@ abstract class ZhCn {
     'noti_steps_body': '@from_time ~ @to_time：走了@steps步。',
     'noti_emergency_body': '被监护人直接请求了帮助。请立即确认。',
     'noti_resolved_body': '已恢复正常。被监护人的健康状况已正常确认。',
+    'noti_cleared_by_guardian_title': '✅ 安全确认完成',
+    'noti_cleared_by_guardian_body': '一位守护者已亲自确认了被守护人的安全。',
 
     // ── 本地通知 ──
     'local_alarm_title': '📱 需要确认安否',

@@ -167,9 +167,9 @@ abstract class ViVn {
     // ── Them nguoi duoc bao ve ──
     'add_subject_title': 'Ket noi nguoi duoc bao ve',
     'add_subject_guide_title':
-        'Nhap ma duy nhat cua nguoi duoc bao ve\nva ten goi.',
+        'Nhap ma duy nhat cua nguoi duoc bao ve va ten goi.',
     'add_subject_guide_subtitle':
-        'Ket noi ung dung cua nguoi duoc bao ve de theo doi\nsuc khoe va hoat dong theo thoi gian thuc.',
+        'Ket noi ung dung cua nguoi duoc bao ve de theo doi suc khoe va hoat dong theo thoi gian thuc.',
     'add_subject_code_label': 'Ma duy nhat (7 ky tu)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -329,6 +329,8 @@ abstract class ViVn {
         '@from_time ~ @to_time: @steps buoc di.',
     'noti_emergency_body': 'Người được bảo vệ đã trực tiếp yêu cầu giúp đỡ. Vui lòng kiểm tra ngay.',
     'noti_resolved_body': 'Kiểm tra sức khỏe của người được bảo vệ đã trở lại bình thường.',
+    'noti_cleared_by_guardian_title': '✅ Xác nhận an toàn',
+    'noti_cleared_by_guardian_body': 'Một trong các người bảo vệ đã trực tiếp xác nhận sự an toàn.',
 
     // ── Thông báo cục bộ ──
     'local_alarm_title': '📱 Cần kiểm tra sức khỏe',

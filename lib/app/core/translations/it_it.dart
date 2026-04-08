@@ -175,9 +175,9 @@ abstract class ItIt {
     // ── Aggiunta assistito ──
     'add_subject_title': 'Collega assistito',
     'add_subject_guide_title':
-        "Inserisca il codice univoco dell'assistito\ne un soprannome.",
+        "Inserisca il codice univoco dell'assistito e un soprannome.",
     'add_subject_guide_subtitle':
-        "Colleghi l'app dell'assistito per monitorare\nla sua salute e attività in tempo reale.",
+        "Colleghi l'app dell'assistito per monitorare la sua salute e attività in tempo reale.",
     'add_subject_code_label': 'Codice univoco (7 cifre)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -339,6 +339,8 @@ abstract class ItIt {
     'noti_steps_body': '@from_time ~ @to_time: @steps passi percorsi.',
     'noti_emergency_body': "La persona assistita ha richiesto direttamente aiuto. Verificare immediatamente.",
     'noti_resolved_body': 'Il controllo benessere dell\'assistito è tornato nella norma.',
+    'noti_cleared_by_guardian_title': '✅ Verifica confermata',
+    'noti_cleared_by_guardian_body': 'Uno dei tutori ha confermato personalmente la sicurezza.',
 
     // ── Notifiche locali ──
     'local_alarm_title': '📱 Verifica di benessere necessaria',

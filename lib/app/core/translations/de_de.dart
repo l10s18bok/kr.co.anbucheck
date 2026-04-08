@@ -166,9 +166,9 @@ abstract class DeDe {
     // ── Schutzperson hinzufügen ──
     'add_subject_title': 'Schutzperson verbinden',
     'add_subject_guide_title':
-        'Geben Sie den Einladungscode\nund einen Spitznamen ein.',
+        'Geben Sie den Einladungscode und einen Spitznamen ein.',
     'add_subject_guide_subtitle':
-        'Verbinden Sie die App einer Schutzperson,\num deren Zustand in Echtzeit zu verfolgen.',
+        'Verbinden Sie die App einer Schutzperson, um deren Zustand in Echtzeit zu verfolgen.',
     'add_subject_code_label': 'Einladungscode (7 Zeichen)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -328,6 +328,8 @@ abstract class DeDe {
     'noti_steps_body': '@from_time ~ @to_time: @steps Schritte gegangen.',
     'noti_emergency_body': 'Die betreute Person hat direkt um Hilfe gebeten. Bitte sofort überprüfen.',
     'noti_resolved_body': 'Der Wellness-Check der betreuten Person ist wieder normal.',
+    'noti_cleared_by_guardian_title': '✅ Sicherheit bestätigt',
+    'noti_cleared_by_guardian_body': 'Einer der Betreuer hat die Sicherheit persönlich bestätigt.',
 
     // ── Lokale Benachrichtigungen ──
     'local_alarm_title': '📱 Wohlbefindens-Prüfung erforderlich',

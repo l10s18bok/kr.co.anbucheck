@@ -167,9 +167,9 @@ abstract class SvSe {
     // ── Lagg till skyddsperson ──
     'add_subject_title': 'Anslut skyddsperson',
     'add_subject_guide_title':
-        'Ange skyddspersonens unika kod\noch ett alias.',
+        'Ange skyddspersonens unika kod och ett alias.',
     'add_subject_guide_subtitle':
-        'Anslut en skyddspersons app for att overvaka\nhalsa och aktivitet i realtid.',
+        'Anslut en skyddspersons app for att overvaka halsa och aktivitet i realtid.',
     'add_subject_code_label': 'Unik kod (7 siffror)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -329,6 +329,8 @@ abstract class SvSe {
         '@from_time ~ @to_time: @steps steg.',
     'noti_emergency_body': 'Den skyddade personen har direkt begärt hjälp. Kontrollera omedelbart.',
     'noti_resolved_body': 'Hälsokontrollen för den skyddade personen har återgått till det normala.',
+    'noti_cleared_by_guardian_title': '✅ Säkerhet bekräftad',
+    'noti_cleared_by_guardian_body': 'En av vårdnadshavarna har personligen bekräftat säkerheten.',
 
     // ── Lokala aviseringar ──
     'local_alarm_title': '📱 Välmåendekontroll behövs',

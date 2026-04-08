@@ -172,9 +172,9 @@ abstract class EsEs {
     // ── Agregar persona protegida ──
     'add_subject_title': 'Vincular persona protegida',
     'add_subject_guide_title':
-        'Introduzca el código único\ny un apodo.',
+        'Introduzca el código único y un apodo.',
     'add_subject_guide_subtitle':
-        'Vincule la aplicación de un ser querido\npara seguir su estado en tiempo real.',
+        'Vincule la aplicación de un ser querido para seguir su estado en tiempo real.',
     'add_subject_code_label': 'Código único (7 caracteres)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -336,6 +336,8 @@ abstract class EsEs {
         '@from_time ~ @to_time: @steps pasos caminados.',
     'noti_emergency_body': 'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',
     'noti_resolved_body': 'La verificación de bienestar del protegido ha vuelto a la normalidad.',
+    'noti_cleared_by_guardian_title': '✅ Verificación confirmada',
+    'noti_cleared_by_guardian_body': 'Uno de los protectores ha confirmado personalmente la seguridad.',
 
     // ── Notificaciones locales ──
     'local_alarm_title': '📱 Verificación de bienestar necesaria',

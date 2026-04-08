@@ -164,9 +164,9 @@ abstract class TrTr {
     // ── Takip Edilen Ekleme ──
     'add_subject_title': 'Takip Edilen Bağla',
     'add_subject_guide_title':
-        'Takip edilenin benzersiz kodunu\nve bir takma ad girin.',
+        'Takip edilenin benzersiz kodunu ve bir takma ad girin.',
     'add_subject_guide_subtitle':
-        'Sağlık durumunu ve aktivitesini\ngerçek zamanlı izlemek için bağlayın.',
+        'Sağlık durumunu ve aktivitesini gerçek zamanlı izlemek için bağlayın.',
     'add_subject_code_label': 'Benzersiz Kod (7 hane)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -325,6 +325,8 @@ abstract class TrTr {
         '@from_time ~ @to_time: @steps adım atıldı.',
     'noti_emergency_body': 'Korunan kişi doğrudan yardım istedi. Lütfen hemen kontrol edin.',
     'noti_resolved_body': 'Korunan kişinin sağlık kontrolü normale döndü.',
+    'noti_cleared_by_guardian_title': '✅ Güvenlik onaylandı',
+    'noti_cleared_by_guardian_body': 'Koruyuculardan biri güvenliğini bizzat doğruladı.',
 
     // ── Yerel bildirimler ──
     'local_alarm_title': '📱 Sağlık kontrolü gerekli',

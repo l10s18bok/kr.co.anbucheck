@@ -149,8 +149,8 @@ abstract class ZhTw {
 
     // ── 守護者新增被守護者 ──
     'add_subject_title': '連結被守護者',
-    'add_subject_guide_title': '請輸入被守護者的專屬碼\n和別名。',
-    'add_subject_guide_subtitle': '連結被守護者的應用程式後，\n可以即時查看其健康狀態和活動情況。',
+    'add_subject_guide_title': '請輸入被守護者的專屬碼和別名。',
+    'add_subject_guide_subtitle': '連結被守護者的應用程式後，可以即時查看其健康狀態和活動情況。',
     'add_subject_code_label': '專屬碼（7位）',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info': '專屬碼可在被守護者的應用程式中找到。',
@@ -289,6 +289,8 @@ abstract class ZhTw {
     'noti_steps_body': '@from_time ~ @to_time：走了@steps步。',
     'noti_emergency_body': '被監護人直接請求了幫助。請立即確認。',
     'noti_resolved_body': '已恢復正常。被監護人的安全狀況已正常確認。',
+    'noti_cleared_by_guardian_title': '✅ 安全確認完成',
+    'noti_cleared_by_guardian_body': '一位守護者已親自確認了被守護者的安全。',
 
     // ── 本地通知 ──
     'local_alarm_title': '📱 需要確認安否',

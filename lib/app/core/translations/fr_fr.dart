@@ -172,9 +172,9 @@ abstract class FrFr {
     // ── Ajouter une personne protégée ──
     'add_subject_title': 'Associer une personne protégée',
     'add_subject_guide_title':
-        'Saisissez le code unique\net un surnom.',
+        'Saisissez le code unique et un surnom.',
     'add_subject_guide_subtitle':
-        'Associez l\'application d\'un proche\npour suivre son état en temps réel.',
+        'Associez l\'application d\'un proche pour suivre son état en temps réel.',
     'add_subject_code_label': 'Code unique (7 caractères)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -336,6 +336,8 @@ abstract class FrFr {
     'noti_steps_body': '@from_time ~ @to_time : @steps pas effectués.',
     'noti_emergency_body': "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
     'noti_resolved_body': 'Le bilan de santé du protégé est revenu à la normale.',
+    'noti_cleared_by_guardian_title': '✅ Vérification confirmée',
+    'noti_cleared_by_guardian_body': "Un des protecteurs a personnellement confirmé la sécurité.",
 
     // ── Notifications locales ──
     'local_alarm_title': '📱 Vérification de bien-être nécessaire',

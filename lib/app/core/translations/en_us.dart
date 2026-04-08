@@ -148,8 +148,8 @@ abstract class EnUs {
 
     // ── Guardian Add Subject ──
     'add_subject_title': 'Link Subject',
-    'add_subject_guide_title': 'Enter the subject\'s unique code\nand an alias.',
-    'add_subject_guide_subtitle': 'Link a subject\'s app to monitor\ntheir health and activity in real-time.',
+    'add_subject_guide_title': 'Enter the subject\'s unique code and an alias.',
+    'add_subject_guide_subtitle': 'Link a subject\'s app to monitor their health and activity in real-time.',
     'add_subject_code_label': 'Unique Code (7 digits)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'The unique code can be found in the subject\'s app.',
@@ -293,6 +293,8 @@ abstract class EnUs {
     'noti_steps_body': '@from_time ~ @to_time: @steps steps walked.',
     'noti_emergency_body': 'The subject has directly requested help. Please check immediately.',
     'noti_resolved_body': 'The subject\'s wellness check has returned to normal.',
+    'noti_cleared_by_guardian_title': '✅ Wellness Check Confirmed',
+    'noti_cleared_by_guardian_body': 'One of the guardians has personally confirmed the subject\'s safety.',
 
     // ── Local Notifications ──
     'local_alarm_title': '📱 Wellness check needed',

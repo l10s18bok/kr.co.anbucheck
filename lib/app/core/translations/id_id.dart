@@ -167,9 +167,9 @@ abstract class IdId {
     // ── Penjaga Tambah Orang yang Dilindungi ──
     'add_subject_title': 'Hubungkan Orang yang Dilindungi',
     'add_subject_guide_title':
-        'Masukkan kode unik orang yang dilindungi\ndan alias.',
+        'Masukkan kode unik orang yang dilindungi dan alias.',
     'add_subject_guide_subtitle':
-        'Hubungkan aplikasi orang yang dilindungi untuk memantau\nkesehatan dan aktivitas secara real-time.',
+        'Hubungkan aplikasi orang yang dilindungi untuk memantau kesehatan dan aktivitas secara real-time.',
     'add_subject_code_label': 'Kode Unik (7 digit)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -329,6 +329,8 @@ abstract class IdId {
         '@from_time ~ @to_time: @steps langkah.',
     'noti_emergency_body': 'Orang yang dilindungi langsung meminta bantuan. Harap segera periksa.',
     'noti_resolved_body': 'Pemeriksaan kesejahteraan orang yang dilindungi telah kembali normal.',
+    'noti_cleared_by_guardian_title': '✅ Keamanan dikonfirmasi',
+    'noti_cleared_by_guardian_body': 'Salah satu pelindung telah memastikan keamanan secara langsung.',
 
     // ── Notifikasi lokal ──
     'local_alarm_title': '📱 Pemeriksaan kesejahteraan diperlukan',

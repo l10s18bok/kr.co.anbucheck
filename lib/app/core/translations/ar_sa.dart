@@ -163,9 +163,9 @@ abstract class ArSa {
     // ── إضافة متابَع ──
     'add_subject_title': 'ربط متابَع',
     'add_subject_guide_title':
-        'أدخل الرمز الفريد للمتابَع\nوحدد اسماً له.',
+        'أدخل الرمز الفريد للمتابَع وحدد اسماً له.',
     'add_subject_guide_subtitle':
-        'اربط تطبيق المتابَع لمراقبة\nحالته الصحية ونشاطه.',
+        'اربط تطبيق المتابَع لمراقبة حالته الصحية ونشاطه.',
     'add_subject_code_label': 'الرمز الفريد (7 أحرف)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -320,6 +320,8 @@ abstract class ArSa {
         '@from_time ~ @to_time: @steps خطوة.',
     'noti_emergency_body': 'طلب الشخص المحمي المساعدة مباشرة. يرجى التحقق فوراً.',
     'noti_resolved_body': 'عاد فحص سلامة الشخص المحمي إلى الوضع الطبيعي.',
+    'noti_cleared_by_guardian_title': '✅ تم تأكيد السلامة',
+    'noti_cleared_by_guardian_body': 'أحد الأوصياء تحقق شخصياً من سلامة الشخص المحمي.',
 
     // ── الإشعارات المحلية ──
     'local_alarm_title': '📱 يلزم التحقق من السلامة',

@@ -179,9 +179,9 @@ abstract class PtBr {
     // ── Adicionar protegido ──
     'add_subject_title': 'Vincular protegido',
     'add_subject_guide_title':
-        'Insira o código único do protegido\ne um apelido.',
+        'Insira o código único do protegido e um apelido.',
     'add_subject_guide_subtitle':
-        'Vincule o app do protegido para monitorar\nsaúde e atividade em tempo real.',
+        'Vincule o app do protegido para monitorar saúde e atividade em tempo real.',
     'add_subject_code_label': 'Código único (7 dígitos)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
@@ -344,6 +344,8 @@ abstract class PtBr {
         '@from_time ~ @to_time: @steps passos dados.',
     'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
     'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',
+    'noti_cleared_by_guardian_title': '✅ Verificação confirmada',
+    'noti_cleared_by_guardian_body': 'Um dos protetores confirmou pessoalmente a segurança.',
 
     // ── Notificações locais ──
     'local_alarm_title': '📱 Verificação de bem-estar necessária',

@@ -149,8 +149,8 @@ abstract class KoKr {
 
     // ── 보호자 대상자 추가 ──
     'add_subject_title': '보호 대상자 연결',
-    'add_subject_guide_title': '연결할 보호 대상자의 고유 코드\n와 별칭을 입력해주세요.',
-    'add_subject_guide_subtitle': '보호 대상자의 앱을 연결하여 실시간 건강 상태\n및 활동을 확인할 수 있습니다.',
+    'add_subject_guide_title': '연결할 보호 대상자의 고유 코드와 별칭을 입력해주세요.',
+    'add_subject_guide_subtitle': '보호 대상자의 앱을 연결하여 실시간 건강 상태 및 활동을 확인할 수 있습니다.',
     'add_subject_code_label': '고유 코드 (7자리)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info': '고유 코드는 보호 대상자 앱에서 확인할 수 있습니다.',
@@ -290,6 +290,8 @@ abstract class KoKr {
     'noti_steps_body': '@from_time ~ @to_time 사이 @steps보를 걸으셨습니다.',
     'noti_emergency_body': '보호 대상자가 직접 도움을 요청했습니다. 즉시 확인해 주세요.',
     'noti_resolved_body': '정상 복귀되었습니다. 보호 대상자의 안부가 정상적으로 확인되었습니다.',
+    'noti_cleared_by_guardian_title': '✅ 안부 확인 완료',
+    'noti_cleared_by_guardian_body': '보호자 중 한 명이 대상자의 안전을 직접 확인했습니다.',
 
     // ── 로컬 알림 ──
     'local_alarm_title': '📱 안부 확인이 필요합니다',
