@@ -463,27 +463,32 @@ class _SubjectCardState extends State<_SubjectCard>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Text(widget.name,
-                        style: AppTextTheme.bodyLarge(fw: FontWeight.w700)),
-                    if (widget.batteryLevel != null) ...[
-                      SizedBox(width: 6.w),
-                      Icon(
-                        _getBatteryIcon(widget.batteryLevel!),
-                        size: 18.w,
-                        color: _getBatteryColor(widget.batteryLevel!),
+                Flexible(
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(widget.name,
+                            style: AppTextTheme.bodyLarge(fw: FontWeight.w700),
+                            overflow: TextOverflow.ellipsis),
                       ),
-                      SizedBox(width: 2.w),
-                      Text(
-                        '${widget.batteryLevel}%',
-                        style: AppTextTheme.labelSmall(
+                      if (widget.batteryLevel != null) ...[
+                        SizedBox(width: 6.w),
+                        Icon(
+                          _getBatteryIcon(widget.batteryLevel!),
+                          size: 18.w,
                           color: _getBatteryColor(widget.batteryLevel!),
-                          fw: FontWeight.w600,
                         ),
-                      ),
+                        SizedBox(width: 2.w),
+                        Text(
+                          '${widget.batteryLevel}%',
+                          style: AppTextTheme.labelSmall(
+                            color: _getBatteryColor(widget.batteryLevel!),
+                            fw: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
                 Container(
                   padding:
