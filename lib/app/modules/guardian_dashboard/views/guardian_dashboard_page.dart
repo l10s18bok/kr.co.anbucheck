@@ -244,7 +244,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                           'urgent'  => const Color(0xFFE53935),
                           _         => const Color(0xFF00685E),
                         };
-                        final dark = Get.isDarkMode;
+                        final dark = AppColors.isDark;
                         final bgColor = switch (level) {
                           'caution' => dark
                               ? const Color(0xFF2E2E00).withValues(alpha: 0.6)

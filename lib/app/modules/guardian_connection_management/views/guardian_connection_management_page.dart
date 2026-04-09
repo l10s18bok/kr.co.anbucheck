@@ -141,7 +141,7 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                 width: double.infinity,
                 padding: EdgeInsets.all(AppSpacing.lg),
                 decoration: BoxDecoration(
-                  color: Get.isDarkMode
+                  color: AppColors.isDark
                       ? const Color(0xFF4E2A00).withValues(alpha: 0.5)
                       : const Color(0xFFFFF3E0).withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12.r),

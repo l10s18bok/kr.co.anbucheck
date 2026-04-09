@@ -334,7 +334,7 @@ class _NotificationCard extends StatelessWidget {
   }
 
   Color get _backgroundColor {
-    final dark = Get.isDarkMode;
+    final dark = AppColors.isDark;
     return switch (item.level) {
       AlertLevel.urgent  => dark ? const Color(0xFF4E0000) : const Color(0xFFFFEBEE),
       AlertLevel.warning => dark ? const Color(0xFF4E2000) : const Color(0xFFFFE0B2),

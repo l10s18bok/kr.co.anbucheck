@@ -10,6 +10,7 @@ abstract class AppColors {
   // 다크모드 판별 — ThemeService.isDarkMode 즉시 반영
   // ──────────────────────────────────────────
   static bool get _isDark => Get.find<ThemeService>().isDarkMode.value;
+  static bool get isDark => _isDark;
 
   // ──────────────────────────────────────────
   // 대상자 모드 (Senior Mode - Teal)
