@@ -33,19 +33,27 @@ class ModeSelectController extends BaseController {
       if (exists && existingRole != null && existingRole != mode) {
         // 기존 역할과 다른 모드 선택 → 경고 다이얼로그
         isLoading = false;
+        final hasInviteCode = check['has_invite_code'] as bool? ?? false;
         final roleLabel = existingRole == 'subject'
             ? 'onboarding_role_subject'.tr
-            : 'onboarding_role_guardian'.tr;
+            : hasInviteCode
+                ? 'onboarding_role_guardian_subject'.tr
+                : 'onboarding_role_guardian'.tr;
         final newRoleLabel = mode == 'subject'
             ? 'onboarding_role_subject'.tr
             : 'onboarding_role_guardian'.tr;
+
+        // G+S는 양쪽 데이터 모두 삭제됨을 안내
+        final messageKey = hasInviteCode
+            ? 'onboarding_already_registered_message_gs'
+            : 'onboarding_already_registered_message';
 
         final choice = await Get.dialog<String>(
           barrierDismissible: false,
           AlertDialog(
             title: Text('onboarding_already_registered_title'.tr),
             content: Text(
-              'onboarding_already_registered_message'.trParams({
+              messageKey.trParams({
                 'roleLabel': roleLabel,
                 'newRoleLabel': newRoleLabel,
               }),

@@ -87,9 +87,12 @@ abstract class IdId {
         'Hanya satu sinyal yang dikirim:\n"Saya baik-baik saja."\nInformasi Anda tetap aman.',
     'onboarding_role_subject': 'Orang yang Dilindungi',
     'onboarding_role_guardian': 'Penjaga',
+    'onboarding_role_guardian_subject': 'Penjaga dan yang dilindungi',
     'onboarding_already_registered_title': 'Perangkat Sudah Terdaftar',
     'onboarding_already_registered_message':
         'Perangkat ini sudah terdaftar dalam mode "@roleLabel".\nLanjutkan sebagai "@roleLabel"?\n\nAtau beralih ke mode "@newRoleLabel"?\nBeralih akan menghapus semua data yang ada.',
+    'onboarding_already_registered_message_gs':
+        'Perangkat ini sudah terdaftar dalam mode "@roleLabel".\nBeralih ke mode "@newRoleLabel" akan menghapus semua data penjaga dan yang dilindungi.',
     'onboarding_registration_failed_title': 'Pendaftaran Gagal',
     'onboarding_registration_failed_message':
         'Tidak dapat terhubung ke server. Silakan coba lagi nanti.',
@@ -203,6 +206,21 @@ abstract class IdId {
     'settings_terms': 'Ketentuan Layanan',
     'settings_app_version': 'Versi: v@version',
 
+    // ── G+S (Penjaga + Yang Dilindungi) ──
+    'gs_enable_button': 'Terima perlindungan juga',
+    'gs_enable_dialog_title': 'Aktifkan perlindungan',
+    'gs_enable_dialog_body':
+        'Anda dapat menerima perlindungan sambil mempertahankan fungsi penjaga.\nKode keamanan akan diterbitkan — bagikan kepada penjaga lain.',
+    'gs_enable_confirm': 'Aktifkan',
+    'gs_enabled_message': 'Perlindungan telah diaktifkan',
+    'gs_enable_failed': 'Gagal mengaktifkan perlindungan',
+    'gs_disable_dialog_title': 'Nonaktifkan perlindungan',
+    'gs_disable_dialog_body':
+        'Menonaktifkan akan menghapus kode keamanan Anda dan menghentikan pengiriman pemeriksaan kesehatan ke penjaga yang terhubung.',
+    'gs_disable_confirm': 'Nonaktifkan',
+    'gs_disabled_message': 'Perlindungan telah dinonaktifkan',
+    'gs_disable_failed': 'Gagal menonaktifkan perlindungan',
+
     // ── Notifikasi Penjaga ──
     'notifications_title': 'Notifikasi',
     'notifications_today': 'Notifikasi Hari Ini',
@@ -266,7 +284,7 @@ abstract class IdId {
     'connection_unlink_warning':
         'Memutuskan koneksi akan menghapus data orang yang dilindungi.',
     'connection_unlink_warning_detail':
-        'Catatan sebelumnya tidak dapat dipulihkan setelah menghubungkan ulang.\nAnda perlu memasukkan kembali kode orang yang dilindungi.',
+        'Catatan sebelumnya tidak dapat dipulihkan setelah menghubungkan ulang. Anda perlu memasukkan kembali kode orang yang dilindungi.',
     'connection_heartbeat_schedule': 'Setiap hari pukul @time',
     'connection_heartbeat_report_time': 'Waktu laporan kesejahteraan: ',
     'connection_subject_label': 'Orang yang Dilindungi',

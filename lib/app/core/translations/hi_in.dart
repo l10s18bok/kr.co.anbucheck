@@ -86,9 +86,12 @@ abstract class HiIn {
         'केवल एक संकेत भेजा जाता है:\n"मैं ठीक हूं।"\nआपकी जानकारी सुरक्षित है।',
     'onboarding_role_subject': 'संरक्षित व्यक्ति',
     'onboarding_role_guardian': 'अभिभावक',
+    'onboarding_role_guardian_subject': 'अभिभावक और संरक्षित',
     'onboarding_already_registered_title': 'डिवाइस पहले से पंजीकृत',
     'onboarding_already_registered_message':
         'यह डिवाइस पहले से "@roleLabel" मोड में पंजीकृत है।\n"@roleLabel" के रूप में जारी रखें?\n\nया "@newRoleLabel" मोड में बदलें?\nबदलने से सभी मौजूदा डेटा हट जाएगा।',
+    'onboarding_already_registered_message_gs':
+        'यह डिवाइस पहले से "@roleLabel" मोड में पंजीकृत है।\n"@newRoleLabel" मोड में बदलने पर अभिभावक और संरक्षित दोनों के डेटा हटा दिए जाएंगे।',
     'onboarding_registration_failed_title': 'पंजीकरण विफल',
     'onboarding_registration_failed_message':
         'सर्वर से कनेक्ट नहीं हो पा रहा। कृपया बाद में पुनः प्रयास करें।',
@@ -201,6 +204,21 @@ abstract class HiIn {
     'settings_terms': 'सेवा की शर्तें',
     'settings_app_version': 'संस्करण: v@version',
 
+    // ── G+S (अभिभावक + संरक्षित) ──
+    'gs_enable_button': 'मेरी भी सुरक्षा करें',
+    'gs_enable_dialog_title': 'सुरक्षा सक्रिय करें',
+    'gs_enable_dialog_body':
+        'आप अभिभावक कार्यक्षमता बनाए रखते हुए सुरक्षा प्राप्त कर सकते हैं।\nएक सुरक्षा कोड जारी किया जाएगा — कृपया इसे अन्य अभिभावकों के साथ साझा करें।',
+    'gs_enable_confirm': 'सक्रिय करें',
+    'gs_enabled_message': 'सुरक्षा सक्रिय हो गई',
+    'gs_enable_failed': 'सुरक्षा सक्रिय करने में विफल',
+    'gs_disable_dialog_title': 'सुरक्षा निष्क्रिय करें',
+    'gs_disable_dialog_body':
+        'सुरक्षा निष्क्रिय करने पर आपका सुरक्षा कोड हटा दिया जाएगा और जुड़े अभिभावकों को जाँच भेजना बंद हो जाएगा।',
+    'gs_disable_confirm': 'निष्क्रिय करें',
+    'gs_disabled_message': 'सुरक्षा निष्क्रिय हो गई',
+    'gs_disable_failed': 'सुरक्षा निष्क्रिय करने में विफल',
+
     // ── अभिभावक सूचनाएं ──
     'notifications_title': 'सूचनाएं',
     'notifications_today': 'आज की सूचनाएं',
@@ -264,7 +282,7 @@ abstract class HiIn {
     'connection_unlink_warning':
         'अनलिंक करने से संरक्षित व्यक्ति का डेटा हट जाएगा।',
     'connection_unlink_warning_detail':
-        'पुनः जोड़ने के बाद पिछले रिकॉर्ड पुनर्प्राप्त नहीं किए जा सकते।\nआपको संरक्षित व्यक्ति का कोड फिर से दर्ज करना होगा।',
+        'पुनः जोड़ने के बाद पिछले रिकॉर्ड पुनर्प्राप्त नहीं किए जा सकते। आपको संरक्षित व्यक्ति का कोड फिर से दर्ज करना होगा।',
     'connection_heartbeat_schedule': 'रोज @time पर',
     'connection_heartbeat_report_time': 'कुशलता रिपोर्ट समय: ',
     'connection_subject_label': 'संरक्षित व्यक्ति',

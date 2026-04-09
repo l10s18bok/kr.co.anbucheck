@@ -89,9 +89,12 @@ abstract class SvSe {
         'Bara en signal levereras:\n"Jag mar bra."\nDin information ar trygg.',
     'onboarding_role_subject': 'Skyddsperson',
     'onboarding_role_guardian': 'Vardare',
+    'onboarding_role_guardian_subject': 'Vårdare och skyddad',
     'onboarding_already_registered_title': 'Enheten ar redan registrerad',
     'onboarding_already_registered_message':
         'Denna enhet ar redan registrerad i "@roleLabel"-lage.\nFortsatt som "@roleLabel"?\n\nEller byt till "@newRoleLabel"-lage?\nByte raderar all befintlig data.',
+    'onboarding_already_registered_message_gs':
+        'Denna enhet är redan registrerad i "@roleLabel"-läge.\nAtt byta till "@newRoleLabel"-läge raderar alla vårdare- och skyddaddata.',
     'onboarding_registration_failed_title': 'Registrering misslyckades',
     'onboarding_registration_failed_message':
         'Kan inte ansluta till servern. Forsok igen senare.',
@@ -203,6 +206,21 @@ abstract class SvSe {
     'settings_terms': 'Anvandarvillkor',
     'settings_app_version': 'Version: v@version',
 
+    // ── G+S (Vårdare + Skyddad) ──
+    'gs_enable_button': 'Få hälsoskydd också',
+    'gs_enable_dialog_title': 'Aktivera hälsoskydd',
+    'gs_enable_dialog_body':
+        'Du kan få hälsoskydd samtidigt som du behåller dina vårdarfunktioner.\nEn säkerhetskod utfärdas — dela den med andra vårdare.',
+    'gs_enable_confirm': 'Aktivera',
+    'gs_enabled_message': 'Hälsoskydd har aktiverats',
+    'gs_enable_failed': 'Kunde inte aktivera hälsoskydd',
+    'gs_disable_dialog_title': 'Inaktivera hälsoskydd',
+    'gs_disable_dialog_body':
+        'Att inaktivera raderar din säkerhetskod och stoppar hälsokontroller till anslutna vårdare.',
+    'gs_disable_confirm': 'Inaktivera',
+    'gs_disabled_message': 'Hälsoskydd har inaktiverats',
+    'gs_disable_failed': 'Kunde inte inaktivera hälsoskydd',
+
     // ── Vardarens aviseringar ──
     'notifications_title': 'Aviseringar',
     'notifications_today': 'Dagens aviseringar',
@@ -266,7 +284,7 @@ abstract class SvSe {
     'connection_unlink_warning':
         'Frankopling raderar skyddspersonens data.',
     'connection_unlink_warning_detail':
-        'Tidigare poster kan inte aterstallas efter ateranslutning.\nDu behover ange skyddspersonens kod igen.',
+        'Tidigare poster kan inte aterstallas efter ateranslutning. Du behover ange skyddspersonens kod igen.',
     'connection_heartbeat_schedule': 'Dagligen kl. @time',
     'connection_heartbeat_report_time': 'Valmaenderapporttid: ',
     'connection_subject_label': 'Skyddsperson',

@@ -92,9 +92,12 @@ abstract class EsEs {
         'Solo se transmite una señal:\n«Estoy bien».\nSu información está segura.',
     'onboarding_role_subject': 'Persona protegida',
     'onboarding_role_guardian': 'Protector',
+    'onboarding_role_guardian_subject': 'Guardián y protegido',
     'onboarding_already_registered_title': 'Dispositivo ya registrado',
     'onboarding_already_registered_message':
         'Este dispositivo ya está registrado en modo "@roleLabel".\n¿Desea continuar como "@roleLabel"?\n\n¿O cambiar al modo "@newRoleLabel"?\nAl cambiar se eliminarán todos los datos existentes.',
+    'onboarding_already_registered_message_gs':
+        'Este dispositivo ya está registrado en modo "@roleLabel".\nCambiar a modo "@newRoleLabel" eliminará todos los datos de guardián y protegido.',
     'onboarding_registration_failed_title': 'Error de registro',
     'onboarding_registration_failed_message':
         'No se pudo conectar con el servidor. Inténtelo de nuevo más tarde.',
@@ -208,6 +211,21 @@ abstract class EsEs {
     'settings_terms': 'Términos de uso',
     'settings_app_version': 'Versión: v@version',
 
+    // ── G+S (Guardián y protegido) ──
+    'gs_enable_button': 'Recibir protección también',
+    'gs_enable_dialog_title': 'Activar protección',
+    'gs_enable_dialog_body':
+        'Puedes recibir protección mientras mantienes tus funciones de guardián.\nSe emitirá un código de seguridad — compártelo con otros guardianes.',
+    'gs_enable_confirm': 'Activar',
+    'gs_enabled_message': 'La protección ha sido activada',
+    'gs_enable_failed': 'Error al activar la protección',
+    'gs_disable_dialog_title': 'Desactivar protección',
+    'gs_disable_dialog_body':
+        'Al desactivar se eliminará tu código de seguridad y se dejará de enviar verificaciones a los guardianes conectados.',
+    'gs_disable_confirm': 'Desactivar',
+    'gs_disabled_message': 'La protección ha sido desactivada',
+    'gs_disable_failed': 'Error al desactivar la protección',
+
     // ── Notificaciones (Protector) ──
     'notifications_title': 'Notificaciones',
     'notifications_today': 'Notificaciones de hoy',
@@ -272,7 +290,7 @@ abstract class EsEs {
     'connection_unlink_warning':
         'Al desvincular se eliminarán los datos de esta persona.',
     'connection_unlink_warning_detail':
-        'Los registros anteriores no se podrán recuperar tras una nueva vinculación.\nDeberá introducir de nuevo el código de la persona.',
+        'Los registros anteriores no se podrán recuperar tras una nueva vinculación. Deberá introducir de nuevo el código de la persona.',
     'connection_heartbeat_schedule': 'Cada día a las @time',
     'connection_heartbeat_report_time': 'La hora de reporte es ',
     'connection_subject_label': 'Persona protegida',

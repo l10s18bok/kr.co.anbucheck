@@ -77,9 +77,12 @@ abstract class ZhCn {
         '只传递一个信号：\n「我一切安好。」\n您的信息绝对安全。',
     'onboarding_role_subject': '被守护者',
     'onboarding_role_guardian': '守护者',
+    'onboarding_role_guardian_subject': '监护人兼被监护人',
     'onboarding_already_registered_title': '设备已注册',
     'onboarding_already_registered_message':
         '此设备已注册为 "@roleLabel" 模式。\n是否继续使用 "@roleLabel" 模式？\n\n或者切换到 "@newRoleLabel" 模式？\n切换后所有已有数据将被删除。',
+    'onboarding_already_registered_message_gs':
+        '此设备已以"@roleLabel"模式注册。\n切换到"@newRoleLabel"模式将删除监护人和被监护人的所有数据。',
     'onboarding_registration_failed_title': '注册失败',
     'onboarding_registration_failed_message': '无法连接到服务器，请稍后再试。',
 
@@ -182,6 +185,19 @@ abstract class ZhCn {
     'settings_terms': '使用条款',
     'settings_app_version': '应用版本：v@version',
 
+    // ── G+S (守护者 + 被守护者) ──
+    'gs_enable_button': '我也要接受安否保护',
+    'gs_enable_dialog_title': '启用安否保护',
+    'gs_enable_dialog_body': '您可以在保持监护人功能的同时接受安否保护。\n启用后将发放安全码，请将您的"安全码"告知其他监护人。',
+    'gs_enable_confirm': '启用',
+    'gs_enabled_message': '安否保护已启用',
+    'gs_enable_failed': '安否保护启用失败',
+    'gs_disable_dialog_title': '禁用安否保护',
+    'gs_disable_dialog_body': '禁用安否保护将删除您的安全码，并停止向已连接的监护人发送安否确认。',
+    'gs_disable_confirm': '禁用',
+    'gs_disabled_message': '安否保护已禁用',
+    'gs_disable_failed': '安否保护禁用失败',
+
     // ── 守护者通知 ──
     'notifications_title': '通知',
     'notifications_today': '今日通知',
@@ -235,7 +251,7 @@ abstract class ZhCn {
     'connection_unlink_warning':
         '解除连接后，该被守护者的数据将被删除。',
     'connection_unlink_warning_detail':
-        '重新连接后无法恢复之前的记录，\n需要重新输入被守护者的邀请码。',
+        '重新连接后无法恢复之前的记录， 需要重新输入被守护者的邀请码。',
     'connection_heartbeat_schedule': '每天 @time',
     'connection_heartbeat_report_time': '问安报告时间为 ',
     'connection_subject_label': '被守护者',

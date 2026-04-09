@@ -88,9 +88,12 @@ abstract class ViVn {
         'Chi mot tin hieu duoc gui:\n"Toi van khoe."\nThong tin cua ban luon an toan.',
     'onboarding_role_subject': 'Nguoi duoc bao ve',
     'onboarding_role_guardian': 'Nguoi bao ve',
+    'onboarding_role_guardian_subject': 'Người giám hộ và được bảo vệ',
     'onboarding_already_registered_title': 'Thiet bi da duoc dang ky',
     'onboarding_already_registered_message':
         'Thiet bi nay da duoc dang ky o che do "@roleLabel".\nTiep tuc voi "@roleLabel"?\n\nHay chuyen sang che do "@newRoleLabel"?\nChuyen doi se xoa tat ca du lieu hien co.',
+    'onboarding_already_registered_message_gs':
+        'Thiết bị này đã được đăng ký ở chế độ "@roleLabel".\nChuyển sang chế độ "@newRoleLabel" sẽ xóa tất cả dữ liệu người giám hộ và người được bảo vệ.',
     'onboarding_registration_failed_title': 'Dang ky that bai',
     'onboarding_registration_failed_message':
         'Khong the ket noi den may chu. Vui long thu lai sau.',
@@ -203,6 +206,21 @@ abstract class ViVn {
     'settings_terms': 'Dieu khoan su dung',
     'settings_app_version': 'Phien ban: v@version',
 
+    // ── G+S (Người giám hộ + Được bảo vệ) ──
+    'gs_enable_button': 'Nhận bảo vệ sức khỏe',
+    'gs_enable_dialog_title': 'Kích hoạt bảo vệ',
+    'gs_enable_dialog_body':
+        'Bạn có thể nhận bảo vệ trong khi giữ nguyên chức năng giám hộ.\nMã an toàn sẽ được cấp — hãy chia sẻ với người giám hộ khác.',
+    'gs_enable_confirm': 'Kích hoạt',
+    'gs_enabled_message': 'Bảo vệ đã được kích hoạt',
+    'gs_enable_failed': 'Không thể kích hoạt bảo vệ',
+    'gs_disable_dialog_title': 'Tắt bảo vệ',
+    'gs_disable_dialog_body':
+        'Tắt bảo vệ sẽ xóa mã an toàn của bạn và ngừng gửi kiểm tra sức khỏe cho người giám hộ đã kết nối.',
+    'gs_disable_confirm': 'Tắt',
+    'gs_disabled_message': 'Bảo vệ đã được tắt',
+    'gs_disable_failed': 'Không thể tắt bảo vệ',
+
     // ── Thong bao nguoi bao ve ──
     'notifications_title': 'Thong bao',
     'notifications_today': 'Thong bao hom nay',
@@ -266,7 +284,7 @@ abstract class ViVn {
     'connection_unlink_warning':
         'Ngat ket noi se xoa du lieu cua nguoi duoc bao ve.',
     'connection_unlink_warning_detail':
-        'Cac ban ghi truoc do khong the khoi phuc sau khi ket noi lai.\nBan se can nhap lai ma cua nguoi duoc bao ve.',
+        'Cac ban ghi truoc do khong the khoi phuc sau khi ket noi lai. Ban se can nhap lai ma cua nguoi duoc bao ve.',
     'connection_heartbeat_schedule': 'Hang ngay luc @time',
     'connection_heartbeat_report_time': 'Thoi gian bao cao suc khoe: ',
     'connection_subject_label': 'Nguoi duoc bao ve',

@@ -76,9 +76,12 @@ abstract class EnUs {
     'onboarding_desc_4': 'Only one signal is delivered:\n"I\'m doing fine."\nYour information stays safe.',
     'onboarding_role_subject': 'Subject',
     'onboarding_role_guardian': 'Guardian',
+    'onboarding_role_guardian_subject': 'Guardian & Subject',
     'onboarding_already_registered_title': 'Device Already Registered',
     'onboarding_already_registered_message':
         'This device is already registered in "@roleLabel" mode.\nContinue as "@roleLabel"?\n\nOr switch to "@newRoleLabel" mode?\nSwitching will delete all existing data.',
+    'onboarding_already_registered_message_gs':
+        'This device is already registered in "@roleLabel" mode.\nSwitching to "@newRoleLabel" mode will delete both guardian and subject data.',
     'onboarding_registration_failed_title': 'Registration Failed',
     'onboarding_registration_failed_message': 'Cannot connect to server. Please try again later.',
 
@@ -181,6 +184,19 @@ abstract class EnUs {
     'settings_terms': 'Terms of Service',
     'settings_app_version': 'Version: v@version',
 
+    // ── G+S (Guardian + Subject) ──
+    'gs_enable_button': 'Get Wellness Protection Too',
+    'gs_enable_dialog_title': 'Enable Wellness Protection',
+    'gs_enable_dialog_body': 'You can receive wellness protection while keeping your guardian features.\nA safety code will be issued — please share it with other guardians.',
+    'gs_enable_confirm': 'Enable',
+    'gs_enabled_message': 'Wellness protection has been enabled',
+    'gs_enable_failed': 'Failed to enable wellness protection',
+    'gs_disable_dialog_title': 'Disable Wellness Protection',
+    'gs_disable_dialog_body': 'Disabling wellness protection will delete your safety code and stop sending wellness checks to connected guardians.',
+    'gs_disable_confirm': 'Disable',
+    'gs_disabled_message': 'Wellness protection has been disabled',
+    'gs_disable_failed': 'Failed to disable wellness protection',
+
     // ── Guardian Notifications ──
     'notifications_title': 'Notifications',
     'notifications_today': 'Today\'s Notifications',
@@ -234,7 +250,7 @@ abstract class EnUs {
     'connection_unlink_warning':
         'Unlinking will delete the subject\'s data.',
     'connection_unlink_warning_detail':
-        'Previous records cannot be recovered after relinking.\nYou will need to re-enter the subject\'s code.',
+        'Previous records cannot be recovered after relinking. You will need to re-enter the subject\'s code.',
     'connection_heartbeat_schedule': 'Daily at @time',
     'connection_heartbeat_report_time': 'Wellness report time is ',
     'connection_subject_label': 'Subject',

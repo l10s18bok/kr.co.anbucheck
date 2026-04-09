@@ -87,9 +87,12 @@ abstract class DeDe {
         'Es wird nur ein Signal übermittelt:\n„Mir geht es gut."\nIhre Daten bleiben sicher.',
     'onboarding_role_subject': 'Schutzperson',
     'onboarding_role_guardian': 'Betreuer',
+    'onboarding_role_guardian_subject': 'Betreuer & Schützling',
     'onboarding_already_registered_title': 'Gerät bereits registriert',
     'onboarding_already_registered_message':
         'Dieses Gerät ist bereits im "@roleLabel"-Modus registriert.\nMöchten Sie als "@roleLabel" fortfahren?\n\nOder zum "@newRoleLabel"-Modus wechseln?\nBeim Wechsel werden alle vorhandenen Daten gelöscht.',
+    'onboarding_already_registered_message_gs':
+        'Dieses Gerät ist bereits im „@roleLabel"-Modus registriert.\nBeim Wechsel zu „@newRoleLabel" werden sowohl Betreuer- als auch Schützlingsdaten gelöscht.',
     'onboarding_registration_failed_title': 'Registrierung fehlgeschlagen',
     'onboarding_registration_failed_message':
         'Verbindung zum Server nicht möglich. Bitte versuchen Sie es später erneut.',
@@ -202,6 +205,19 @@ abstract class DeDe {
     'settings_terms': 'Nutzungsbedingungen',
     'settings_app_version': 'Version: v@version',
 
+    // ── G+S (Betreuer + Schützling) ──
+    'gs_enable_button': 'Auch Wellness-Schutz erhalten',
+    'gs_enable_dialog_title': 'Wellness-Schutz aktivieren',
+    'gs_enable_dialog_body': 'Sie können Wellness-Schutz erhalten und gleichzeitig Ihre Betreuer-Funktionen behalten.\nBei Aktivierung wird ein Sicherheitscode ausgestellt — bitte teilen Sie ihn mit anderen Betreuern.',
+    'gs_enable_confirm': 'Aktivieren',
+    'gs_enabled_message': 'Wellness-Schutz wurde aktiviert',
+    'gs_enable_failed': 'Wellness-Schutz konnte nicht aktiviert werden',
+    'gs_disable_dialog_title': 'Wellness-Schutz deaktivieren',
+    'gs_disable_dialog_body': 'Bei Deaktivierung wird Ihr Sicherheitscode gelöscht und die Wellness-Prüfungen an verbundene Betreuer werden gestoppt.',
+    'gs_disable_confirm': 'Deaktivieren',
+    'gs_disabled_message': 'Wellness-Schutz wurde deaktiviert',
+    'gs_disable_failed': 'Wellness-Schutz konnte nicht deaktiviert werden',
+
     // ── Betreuer-Benachrichtigungen ──
     'notifications_title': 'Benachrichtigungen',
     'notifications_today': 'Heutige Benachrichtigungen',
@@ -266,7 +282,7 @@ abstract class DeDe {
     'connection_unlink_warning':
         'Beim Trennen werden die Daten der Schutzperson gelöscht.',
     'connection_unlink_warning_detail':
-        'Frühere Aufzeichnungen können nach erneuter Verbindung nicht wiederhergestellt werden.\nSie müssen den Code der Schutzperson erneut eingeben.',
+        'Frühere Aufzeichnungen können nach erneuter Verbindung nicht wiederhergestellt werden. Sie müssen den Code der Schutzperson erneut eingeben.',
     'connection_heartbeat_schedule': 'Täglich um @time',
     'connection_heartbeat_report_time': 'Die Meldezeit ist ',
     'connection_subject_label': 'Schutzperson',

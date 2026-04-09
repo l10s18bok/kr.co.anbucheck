@@ -77,9 +77,12 @@ abstract class ZhTw {
         '只傳遞一個訊號：\n「我一切安好。」\n您的資訊絕對安全。',
     'onboarding_role_subject': '被守護者',
     'onboarding_role_guardian': '守護者',
+    'onboarding_role_guardian_subject': '守護者兼被守護者',
     'onboarding_already_registered_title': '裝置已註冊',
     'onboarding_already_registered_message':
         '此裝置已註冊為 "@roleLabel" 模式。\n是否繼續使用 "@roleLabel" 模式？\n\n或者切換到 "@newRoleLabel" 模式？\n切換後所有已有資料將被刪除。',
+    'onboarding_already_registered_message_gs':
+        '此裝置已以「@roleLabel」模式註冊。\n切換到「@newRoleLabel」模式將刪除守護者和被守護者的所有資料。',
     'onboarding_registration_failed_title': '註冊失敗',
     'onboarding_registration_failed_message': '無法連線至伺服器，請稍後再試。',
 
@@ -182,6 +185,19 @@ abstract class ZhTw {
     'settings_terms': '使用條款',
     'settings_app_version': '應用版本：v@version',
 
+    // ── G+S (守護者 + 被守護者) ──
+    'gs_enable_button': '我也要接受安否保護',
+    'gs_enable_dialog_title': '啟用安否保護',
+    'gs_enable_dialog_body': '您可以在保持守護者功能的同時接受安否保護。\n啟用後將發放安全碼，請將您的「安全碼」告知其他守護者。',
+    'gs_enable_confirm': '啟用',
+    'gs_enabled_message': '安否保護已啟用',
+    'gs_enable_failed': '安否保護啟用失敗',
+    'gs_disable_dialog_title': '停用安否保護',
+    'gs_disable_dialog_body': '停用安否保護將刪除您的安全碼，並停止向已連接的守護者發送安否確認。',
+    'gs_disable_confirm': '停用',
+    'gs_disabled_message': '安否保護已停用',
+    'gs_disable_failed': '安否保護停用失敗',
+
     // ── 守護者通知 ──
     'notifications_title': '通知',
     'notifications_today': '今日通知',
@@ -235,7 +251,7 @@ abstract class ZhTw {
     'connection_unlink_warning':
         '解除連結後，該被守護者的資料將被刪除。',
     'connection_unlink_warning_detail':
-        '重新連結後無法恢復之前的紀錄，\n需要重新輸入被守護者的邀請碼。',
+        '重新連結後無法恢復之前的紀錄， 需要重新輸入被守護者的邀請碼。',
     'connection_heartbeat_schedule': '每天 @time',
     'connection_heartbeat_report_time': '問安報告時間為 ',
     'connection_subject_label': '被守護者',

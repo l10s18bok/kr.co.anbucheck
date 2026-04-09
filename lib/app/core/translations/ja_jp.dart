@@ -77,9 +77,12 @@ abstract class JaJp {
         "お伝えするのは\n「元気です」という\n安否の信号だけです。\nあなたの情報は安全です。",
     'onboarding_role_subject': '見守り対象者',
     'onboarding_role_guardian': '見守り人',
+    'onboarding_role_guardian_subject': '保護者兼対象者',
     'onboarding_already_registered_title': 'すでに登録済みの端末です',
     'onboarding_already_registered_message':
         'この端末はすでに"@roleLabel"モードで登録されています。\n"@roleLabel"モードのまま続けますか？\n\nまたは"@newRoleLabel"モードに変更しますか？\n変更すると既存のデータはすべて削除されます。',
+    'onboarding_already_registered_message_gs':
+        'このデバイスは既に「@roleLabel」モードで登録されています。\n「@newRoleLabel」モードに変更すると、保護者と対象者の両方のデータが削除されます。',
     'onboarding_registration_failed_title': '登録に失敗しました',
     'onboarding_registration_failed_message': 'サーバーに接続できません。しばらくしてからもう一度お試しください。',
 
@@ -182,6 +185,19 @@ abstract class JaJp {
     'settings_terms': '利用規約',
     'settings_app_version': 'アプリバージョン：v@version',
 
+    // ── G+S (保護者 + 対象者) ──
+    'gs_enable_button': '私も安否保護を受ける',
+    'gs_enable_dialog_title': '安否保護を有効化',
+    'gs_enable_dialog_body': '保護者機能を維持したまま、自分の安否も保護してもらえます。\n有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
+    'gs_enable_confirm': '有効化',
+    'gs_enabled_message': '安否保護が有効化されました',
+    'gs_enable_failed': '安否保護の有効化に失敗しました',
+    'gs_disable_dialog_title': '安否保護を無効化',
+    'gs_disable_dialog_body': '安否保護を無効化すると、安全コードが削除され、接続された保護者への安否確認の送信が停止されます。',
+    'gs_disable_confirm': '無効化',
+    'gs_disabled_message': '安否保護が無効化されました',
+    'gs_disable_failed': '安否保護の無効化に失敗しました',
+
     // ── 見守り通知 ──
     'notifications_title': '通知',
     'notifications_today': '今日の通知',
@@ -235,7 +251,7 @@ abstract class JaJp {
     'connection_unlink_warning':
         '接続を解除すると、この対象者のデータは削除されます。',
     'connection_unlink_warning_detail':
-        '再接続しても以前の記録は復元できません。\n対象者のコードを再度入力する必要があります。',
+        '再接続しても以前の記録は復元できません。 対象者のコードを再度入力する必要があります。',
     'connection_heartbeat_schedule': '毎日 @time',
     'connection_heartbeat_report_time': '安否報告時刻は ',
     'connection_subject_label': '見守り対象者',

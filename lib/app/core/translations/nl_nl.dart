@@ -95,9 +95,12 @@ abstract class NlNl {
         'Er wordt slechts één signaal verzonden:\n"Het gaat goed met mij."\nUw gegevens zijn veilig.',
     'onboarding_role_subject': 'Beschermeling',
     'onboarding_role_guardian': 'Beschermer',
+    'onboarding_role_guardian_subject': 'Bewaker en beschermde',
     'onboarding_already_registered_title': 'Apparaat al geregistreerd',
     'onboarding_already_registered_message':
         'Dit apparaat is al geregistreerd in "@roleLabel"-modus.\nDoorgaan als "@roleLabel"?\n\nOf wisselen naar "@newRoleLabel"-modus?\nBij het wisselen worden alle bestaande gegevens verwijderd.',
+    'onboarding_already_registered_message_gs':
+        'Dit apparaat is al geregistreerd in "@roleLabel"-modus.\nOverschakelen naar "@newRoleLabel" verwijdert alle bewaker- en beschermdegegevens.',
     'onboarding_registration_failed_title': 'Registratie mislukt',
     'onboarding_registration_failed_message':
         'Kan geen verbinding maken met de server. Probeer het later opnieuw.',
@@ -212,6 +215,21 @@ abstract class NlNl {
     'settings_terms': 'Gebruiksvoorwaarden',
     'settings_app_version': 'Versie: v@version',
 
+    // ── G+S (Bewaker en beschermde) ──
+    'gs_enable_button': 'Ook welzijnsbescherming ontvangen',
+    'gs_enable_dialog_title': 'Welzijnsbescherming activeren',
+    'gs_enable_dialog_body':
+        'U kunt welzijnsbescherming ontvangen terwijl u uw bewakerfuncties behoudt.\nEr wordt een veiligheidscode uitgegeven — deel deze met andere bewakers.',
+    'gs_enable_confirm': 'Activeren',
+    'gs_enabled_message': 'Welzijnsbescherming is geactiveerd',
+    'gs_enable_failed': 'Welzijnsbescherming activeren mislukt',
+    'gs_disable_dialog_title': 'Welzijnsbescherming deactiveren',
+    'gs_disable_dialog_body':
+        'Bij deactivering wordt uw veiligheidscode verwijderd en worden welzijnscontroles aan verbonden bewakers gestopt.',
+    'gs_disable_confirm': 'Deactiveren',
+    'gs_disabled_message': 'Welzijnsbescherming is gedeactiveerd',
+    'gs_disable_failed': 'Welzijnsbescherming deactiveren mislukt',
+
     // ── Meldingen beschermer ──
     'notifications_title': 'Meldingen',
     'notifications_today': 'Meldingen van vandaag',
@@ -276,7 +294,7 @@ abstract class NlNl {
     'connection_unlink_warning':
         'Bij ontkoppeling worden de gegevens van de beschermeling verwijderd.',
     'connection_unlink_warning_detail':
-        'Eerdere gegevens kunnen na opnieuw koppelen niet worden hersteld.\nU moet de code van de beschermeling opnieuw invoeren.',
+        'Eerdere gegevens kunnen na opnieuw koppelen niet worden hersteld. U moet de code van de beschermeling opnieuw invoeren.',
     'connection_heartbeat_schedule': 'Dagelijks om @time',
     'connection_heartbeat_report_time':
         'De welzijnsrapportagetijd is ',

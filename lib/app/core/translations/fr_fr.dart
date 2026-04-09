@@ -92,9 +92,12 @@ abstract class FrFr {
         'Un seul signal est transmis :\n« Je vais bien. »\nVos données restent en sécurité.',
     'onboarding_role_subject': 'Personne protégée',
     'onboarding_role_guardian': 'Protecteur',
+    'onboarding_role_guardian_subject': 'Gardien et protégé',
     'onboarding_already_registered_title': 'Appareil déjà enregistré',
     'onboarding_already_registered_message':
         'Cet appareil est déjà enregistré en mode "@roleLabel".\nSouhaitez-vous continuer en "@roleLabel" ?\n\nOu passer en mode "@newRoleLabel" ?\nLe changement supprimera toutes les données existantes.',
+    'onboarding_already_registered_message_gs':
+        'Cet appareil est déjà enregistré en mode « @roleLabel ».\nPasser en mode « @newRoleLabel » supprimera toutes les données de gardien et de protégé.',
     'onboarding_registration_failed_title': 'Échec de l\'inscription',
     'onboarding_registration_failed_message':
         'Impossible de se connecter au serveur. Veuillez réessayer plus tard.',
@@ -208,6 +211,21 @@ abstract class FrFr {
     'settings_terms': 'Conditions d\'utilisation',
     'settings_app_version': 'Version : v@version',
 
+    // ── G+S (Gardien et protégé) ──
+    'gs_enable_button': 'Recevoir aussi la protection',
+    'gs_enable_dialog_title': 'Activer la protection',
+    'gs_enable_dialog_body':
+        'Vous pouvez recevoir une protection tout en gardant vos fonctions de gardien.\nUn code de sécurité sera émis — veuillez le partager avec d\'autres gardiens.',
+    'gs_enable_confirm': 'Activer',
+    'gs_enabled_message': 'La protection a été activée',
+    'gs_enable_failed': 'Échec de l\'activation de la protection',
+    'gs_disable_dialog_title': 'Désactiver la protection',
+    'gs_disable_dialog_body':
+        'La désactivation supprimera votre code de sécurité et arrêtera l\'envoi des vérifications aux gardiens connectés.',
+    'gs_disable_confirm': 'Désactiver',
+    'gs_disabled_message': 'La protection a été désactivée',
+    'gs_disable_failed': 'Échec de la désactivation de la protection',
+
     // ── Notifications (Protecteur) ──
     'notifications_title': 'Notifications',
     'notifications_today': 'Notifications du jour',
@@ -272,7 +290,7 @@ abstract class FrFr {
     'connection_unlink_warning':
         'La dissociation supprimera les données de cette personne.',
     'connection_unlink_warning_detail':
-        'Les données précédentes ne pourront pas être récupérées après une nouvelle association.\nVous devrez saisir à nouveau le code de la personne.',
+        'Les données précédentes ne pourront pas être récupérées après une nouvelle association. Vous devrez saisir à nouveau le code de la personne.',
     'connection_heartbeat_schedule': 'Tous les jours à @time',
     'connection_heartbeat_report_time': 'L\'heure du rapport est ',
     'connection_subject_label': 'Personne protégée',

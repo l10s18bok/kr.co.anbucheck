@@ -87,9 +87,12 @@ abstract class ThTh {
         'ส่งสัญญาณเดียวเท่านั้น:\n"ฉันสบายดี"\nข้อมูลของคุณปลอดภัย',
     'onboarding_role_subject': 'ผู้อยู่ในการดูแล',
     'onboarding_role_guardian': 'ผู้ดูแล',
+    'onboarding_role_guardian_subject': 'ผู้ดูแลและผู้ได้รับการดูแล',
     'onboarding_already_registered_title': 'อุปกรณ์ลงทะเบียนแล้ว',
     'onboarding_already_registered_message':
         'อุปกรณ์นี้ลงทะเบียนในโหมด "@roleLabel" แล้ว\nดำเนินต่อเป็น "@roleLabel"?\n\nหรือเปลี่ยนเป็นโหมด "@newRoleLabel"?\nการเปลี่ยนจะลบข้อมูลทั้งหมด',
+    'onboarding_already_registered_message_gs':
+        'อุปกรณ์นี้ลงทะเบียนในโหมด "@roleLabel" แล้ว\nการเปลี่ยนเป็นโหมด "@newRoleLabel" จะลบข้อมูลทั้งผู้ดูแลและผู้ได้รับการดูแล',
     'onboarding_registration_failed_title': 'การลงทะเบียนล้มเหลว',
     'onboarding_registration_failed_message':
         'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาลองใหม่ภายหลัง',
@@ -202,6 +205,21 @@ abstract class ThTh {
     'settings_terms': 'ข้อกำหนดการใช้งาน',
     'settings_app_version': 'เวอร์ชัน: v@version',
 
+    // ── G+S (ผู้ดูแล + ผู้ได้รับการดูแล) ──
+    'gs_enable_button': 'รับการดูแลสุขภาพด้วย',
+    'gs_enable_dialog_title': 'เปิดใช้งานการดูแล',
+    'gs_enable_dialog_body':
+        'คุณสามารถรับการดูแลในขณะที่ยังคงฟังก์ชันผู้ดูแลไว้\nรหัสความปลอดภัยจะถูกออก — กรุณาแชร์ให้ผู้ดูแลคนอื่น',
+    'gs_enable_confirm': 'เปิดใช้งาน',
+    'gs_enabled_message': 'เปิดใช้งานการดูแลแล้ว',
+    'gs_enable_failed': 'ไม่สามารถเปิดใช้งานการดูแลได้',
+    'gs_disable_dialog_title': 'ปิดใช้งานการดูแล',
+    'gs_disable_dialog_body':
+        'การปิดใช้งานจะลบรหัสความปลอดภัยและหยุดส่งการตรวจสอบสุขภาพไปยังผู้ดูแลที่เชื่อมต่อ',
+    'gs_disable_confirm': 'ปิดใช้งาน',
+    'gs_disabled_message': 'ปิดใช้งานการดูแลแล้ว',
+    'gs_disable_failed': 'ไม่สามารถปิดใช้งานการดูแลได้',
+
     // ── การแจ้งเตือนผู้ดูแล ──
     'notifications_title': 'การแจ้งเตือน',
     'notifications_today': 'การแจ้งเตือนวันนี้',
@@ -265,7 +283,7 @@ abstract class ThTh {
     'connection_unlink_warning':
         'การยกเลิกเชื่อมต่อจะลบข้อมูลของผู้อยู่ในการดูแล',
     'connection_unlink_warning_detail':
-        'ไม่สามารถกู้คืนบันทึกก่อนหน้าหลังจากเชื่อมต่อใหม่\nคุณจะต้องกรอกรหัสผู้อยู่ในการดูแลอีกครั้ง',
+        'ไม่สามารถกู้คืนบันทึกก่อนหน้าหลังจากเชื่อมต่อใหม่ คุณจะต้องกรอกรหัสผู้อยู่ในการดูแลอีกครั้ง',
     'connection_heartbeat_schedule': 'ทุกวันเวลา @time',
     'connection_heartbeat_report_time': 'เวลารายงานความเป็นอยู่: ',
     'connection_subject_label': 'ผู้อยู่ในการดูแล',

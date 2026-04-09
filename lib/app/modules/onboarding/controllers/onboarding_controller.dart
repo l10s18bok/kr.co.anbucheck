@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
@@ -79,8 +80,16 @@ class OnboardingController extends BaseController {
     await _tokenDs.saveUserId(response['user_id'] as int);
     await _tokenDs.saveUserRole(role);
 
-    if (role == 'subject' && response['invite_code'] != null) {
+    // invite_code가 있으면 저장 (대상자 또는 G+S 재설치 복원)
+    if (response['invite_code'] != null) {
       await _tokenDs.saveInviteCode(response['invite_code'] as String);
+      if (role == 'guardian') {
+        // G+S 복원: 대상자 기능 활성화 + WorkManager/로컬알림 재등록
+        await _tokenDs.saveIsAlsoSubject(true);
+        final (h, m) = await _tokenDs.getHeartbeatSchedule();
+        await HeartbeatWorkerService.schedule(h, m);
+        await LocalAlarmService.schedule(h, m);
+      }
     }
 
     // 등록 완료 후 FCM 토큰 서버 갱신 (등록 시 토큰이 아직 미발급이었을 수 있음)

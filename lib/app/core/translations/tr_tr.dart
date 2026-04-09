@@ -86,9 +86,12 @@ abstract class TrTr {
         'Yalnızca tek bir sinyal iletilir:\n"İyiyim."\nBilgileriniz güvende.',
     'onboarding_role_subject': 'Takip Edilen',
     'onboarding_role_guardian': 'Koruyucu',
+    'onboarding_role_guardian_subject': 'Koruyucu ve korunan',
     'onboarding_already_registered_title': 'Cihaz Zaten Kayıtlı',
     'onboarding_already_registered_message':
         'Bu cihaz zaten "@roleLabel" modunda kayıtlı.\n"@roleLabel" olarak devam etmek ister misiniz?\n\nYoksa "@newRoleLabel" moduna geçmek mi?\nGeçiş yaparsanız tüm veriler silinecektir.',
+    'onboarding_already_registered_message_gs':
+        'Bu cihaz zaten "@roleLabel" modunda kayıtlı.\n"@newRoleLabel" moduna geçmek hem koruyucu hem korunan verilerini silecektir.',
     'onboarding_registration_failed_title': 'Kayıt Başarısız',
     'onboarding_registration_failed_message':
         'Sunucuya bağlanılamadı. Lütfen daha sonra tekrar deneyin.',
@@ -200,6 +203,21 @@ abstract class TrTr {
     'settings_terms': 'Kullanım Koşulları',
     'settings_app_version': 'Sürüm: v@version',
 
+    // ── G+S (Koruyucu + Korunan) ──
+    'gs_enable_button': 'Ben de koruma al',
+    'gs_enable_dialog_title': 'Korumayı etkinleştir',
+    'gs_enable_dialog_body':
+        'Koruyucu özelliklerinizi korurken koruma alabilirsiniz.\nBir güvenlik kodu verilecektir — lütfen diğer koruyucularla paylaşın.',
+    'gs_enable_confirm': 'Etkinleştir',
+    'gs_enabled_message': 'Koruma etkinleştirildi',
+    'gs_enable_failed': 'Koruma etkinleştirilemedi',
+    'gs_disable_dialog_title': 'Korumayı devre dışı bırak',
+    'gs_disable_dialog_body':
+        'Korumayı devre dışı bırakmak güvenlik kodunuzu silecek ve bağlı koruyuculara kontrol gönderimini durduracaktır.',
+    'gs_disable_confirm': 'Devre dışı bırak',
+    'gs_disabled_message': 'Koruma devre dışı bırakıldı',
+    'gs_disable_failed': 'Koruma devre dışı bırakılamadı',
+
     // ── Koruyucu Bildirimler ──
     'notifications_title': 'Bildirimler',
     'notifications_today': 'Bugünkü Bildirimler',
@@ -263,7 +281,7 @@ abstract class TrTr {
     'connection_unlink_warning':
         'Bağlantıyı kesmek takip edilenin verilerini silecektir.',
     'connection_unlink_warning_detail':
-        'Yeniden bağlandıktan sonra önceki kayıtlar kurtarılamaz.\nTakip edilenin kodunu tekrar girmeniz gerekecektir.',
+        'Yeniden bağlandıktan sonra önceki kayıtlar kurtarılamaz. Takip edilenin kodunu tekrar girmeniz gerekecektir.',
     'connection_heartbeat_schedule': 'Her gün @time',
     'connection_heartbeat_report_time': 'Hal hatır rapor zamanı: ',
     'connection_subject_label': 'Takip Edilen',

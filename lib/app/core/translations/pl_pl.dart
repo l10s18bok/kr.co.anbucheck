@@ -90,9 +90,12 @@ abstract class PlPl {
         'Przekazujemy tylko jeden sygnal:\n"Wszystko u mnie dobrze."\nTwoje dane sa bezpieczne.',
     'onboarding_role_subject': 'Podopieczny',
     'onboarding_role_guardian': 'Opiekun',
+    'onboarding_role_guardian_subject': 'Opiekun i podopieczny',
     'onboarding_already_registered_title': 'Urzadzenie juz zarejestrowane',
     'onboarding_already_registered_message':
         'To urzadzenie jest juz zarejestrowane w trybie "@roleLabel".\nKontynuowac jako "@roleLabel"?\n\nCzy przejsc na tryb "@newRoleLabel"?\nZmiana usunie wszystkie istniejace dane.',
+    'onboarding_already_registered_message_gs':
+        'To urządzenie jest już zarejestrowane w trybie „@roleLabel".\nPrzełączenie na tryb „@newRoleLabel" usunie wszystkie dane opiekuna i podopiecznego.',
     'onboarding_registration_failed_title': 'Rejestracja nie powiodla sie',
     'onboarding_registration_failed_message':
         'Nie mozna polaczyc z serwerem. Prosze sprobowac ponownie pozniej.',
@@ -204,6 +207,21 @@ abstract class PlPl {
     'settings_terms': 'Regulamin',
     'settings_app_version': 'Wersja: v@version',
 
+    // ── G+S (Opiekun + Podopieczny) ──
+    'gs_enable_button': 'Otrzymuj też ochronę',
+    'gs_enable_dialog_title': 'Włącz ochronę',
+    'gs_enable_dialog_body':
+        'Możesz otrzymywać ochronę, zachowując funkcje opiekuna.\nZostanie wydany kod bezpieczeństwa — udostępnij go innym opiekunom.',
+    'gs_enable_confirm': 'Włącz',
+    'gs_enabled_message': 'Ochrona została włączona',
+    'gs_enable_failed': 'Nie udało się włączyć ochrony',
+    'gs_disable_dialog_title': 'Wyłącz ochronę',
+    'gs_disable_dialog_body':
+        'Wyłączenie ochrony usunie twój kod bezpieczeństwa i zatrzyma wysyłanie kontroli do połączonych opiekunów.',
+    'gs_disable_confirm': 'Wyłącz',
+    'gs_disabled_message': 'Ochrona została wyłączona',
+    'gs_disable_failed': 'Nie udało się wyłączyć ochrony',
+
     // ── Powiadomienia opiekuna ──
     'notifications_title': 'Powiadomienia',
     'notifications_today': 'Dzisiejsze powiadomienia',
@@ -267,7 +285,7 @@ abstract class PlPl {
     'connection_unlink_warning':
         'Odlaczenie spowoduje usuniecie danych podopiecznego.',
     'connection_unlink_warning_detail':
-        'Poprzednich zapisow nie mozna odzyskac po ponownym polaczeniu.\nBedzie trzeba ponownie wprowadzic kod podopiecznego.',
+        'Poprzednich zapisow nie mozna odzyskac po ponownym polaczeniu. Bedzie trzeba ponownie wprowadzic kod podopiecznego.',
     'connection_heartbeat_schedule': 'Codziennie o @time',
     'connection_heartbeat_report_time': 'Czas raportu samopoczucia: ',
     'connection_subject_label': 'Podopieczny',

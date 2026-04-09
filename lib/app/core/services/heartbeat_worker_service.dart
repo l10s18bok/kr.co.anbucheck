@@ -25,10 +25,15 @@ void heartbeatWorkerCallback() {
 
       ApiClientFactory.init(type: HttpClientType.dio);
 
+      // 메인 isolate에서 저장한 값을 백그라운드 isolate에 반영 (역할 체크 전 필수)
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.reload();
+
       final tokenDs = TokenLocalDatasource();
       final role = await tokenDs.getUserRole();
-      print('[HeartbeatWorker] role=$role');
-      if (role != 'subject') return true;
+      final isAlsoSubject = await tokenDs.getIsAlsoSubject();
+      print('[HeartbeatWorker] role=$role, isAlsoSubject=$isAlsoSubject');
+      if (role != 'subject' && !isAlsoSubject) return true;
 
       // 예약시각 2분 전 이상이면 실행하지 않음 (iOS 조기 실행 방어)
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
@@ -39,10 +44,6 @@ void heartbeatWorkerCallback() {
         print('[HeartbeatWorker] 예약시각 이전 — 스킵');
         return true;
       }
-
-      // 메인 isolate에서 저장한 값을 백그라운드 isolate에 반영
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.reload();
 
       // 오늘 이미 전송했으면 스킵 (하루 1회 제한)
       final lastDate = await tokenDs.getLastHeartbeatDate();

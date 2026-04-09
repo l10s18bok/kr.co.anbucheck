@@ -87,9 +87,12 @@ abstract class RuRu {
         'Передаётся только один сигнал:\n«У меня всё хорошо.»\nВаши данные в безопасности.',
     'onboarding_role_subject': 'Подопечный',
     'onboarding_role_guardian': 'Опекун',
+    'onboarding_role_guardian_subject': 'Опекун и подопечный',
     'onboarding_already_registered_title': 'Устройство уже зарегистрировано',
     'onboarding_already_registered_message':
         'Это устройство уже зарегистрировано в режиме "@roleLabel".\nПродолжить как "@roleLabel"?\n\nИли переключиться в режим "@newRoleLabel"?\nПри переключении все данные будут удалены.',
+    'onboarding_already_registered_message_gs':
+        'Это устройство уже зарегистрировано в режиме «@roleLabel».\nПереключение на режим «@newRoleLabel» удалит все данные опекуна и подопечного.',
     'onboarding_registration_failed_title': 'Ошибка регистрации',
     'onboarding_registration_failed_message':
         'Не удалось подключиться к серверу. Пожалуйста, попробуйте позже.',
@@ -201,6 +204,21 @@ abstract class RuRu {
     'settings_terms': 'Условия использования',
     'settings_app_version': 'Версия: v@version',
 
+    // ── G+S (Опекун + Подопечный) ──
+    'gs_enable_button': 'Получать защиту тоже',
+    'gs_enable_dialog_title': 'Включить защиту',
+    'gs_enable_dialog_body':
+        'Вы можете получать защиту, сохраняя функции опекуна.\nБудет выдан код безопасности — поделитесь им с другими опекунами.',
+    'gs_enable_confirm': 'Включить',
+    'gs_enabled_message': 'Защита включена',
+    'gs_enable_failed': 'Не удалось включить защиту',
+    'gs_disable_dialog_title': 'Отключить защиту',
+    'gs_disable_dialog_body':
+        'При отключении ваш код безопасности будет удалён, и проверки для связанных опекунов прекратятся.',
+    'gs_disable_confirm': 'Отключить',
+    'gs_disabled_message': 'Защита отключена',
+    'gs_disable_failed': 'Не удалось отключить защиту',
+
     // ── Уведомления опекуна ──
     'notifications_title': 'Уведомления',
     'notifications_today': 'Сегодняшние уведомления',
@@ -264,7 +282,7 @@ abstract class RuRu {
     'connection_unlink_warning':
         'При отвязке данные подопечного будут удалены.',
     'connection_unlink_warning_detail':
-        'Предыдущие записи не подлежат восстановлению.\nВам потребуется заново ввести код подопечного.',
+        'Предыдущие записи не подлежат восстановлению. Вам потребуется заново ввести код подопечного.',
     'connection_heartbeat_schedule': 'Ежедневно в @time',
     'connection_heartbeat_report_time': 'Время отчёта о самочувствии — ',
     'connection_subject_label': 'Подопечный',

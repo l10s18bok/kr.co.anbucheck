@@ -95,9 +95,12 @@ abstract class PtBr {
         'Apenas um sinal é transmitido:\n"Estou bem."\nSuas informações estão seguras.',
     'onboarding_role_subject': 'Protegido',
     'onboarding_role_guardian': 'Guardião',
+    'onboarding_role_guardian_subject': 'Guardião e protegido',
     'onboarding_already_registered_title': 'Dispositivo já registrado',
     'onboarding_already_registered_message':
         'Este dispositivo já está registrado no modo "@roleLabel".\nDeseja continuar como "@roleLabel"?\n\nOu mudar para o modo "@newRoleLabel"?\nA mudança excluirá todos os dados existentes.',
+    'onboarding_already_registered_message_gs':
+        'Este dispositivo já está registrado no modo "@roleLabel".\nMudar para o modo "@newRoleLabel" excluirá todos os dados de guardião e protegido.',
     'onboarding_registration_failed_title': 'Registro falhou',
     'onboarding_registration_failed_message':
         'Não foi possível conectar ao servidor. Tente novamente mais tarde.',
@@ -215,6 +218,21 @@ abstract class PtBr {
     'settings_terms': 'Termos de uso',
     'settings_app_version': 'Versão: v@version',
 
+    // ── G+S (Guardião e protegido) ──
+    'gs_enable_button': 'Receber proteção também',
+    'gs_enable_dialog_title': 'Ativar proteção',
+    'gs_enable_dialog_body':
+        'Você pode receber proteção mantendo suas funções de guardião.\nUm código de segurança será emitido — compartilhe-o com outros guardiões.',
+    'gs_enable_confirm': 'Ativar',
+    'gs_enabled_message': 'A proteção foi ativada',
+    'gs_enable_failed': 'Falha ao ativar a proteção',
+    'gs_disable_dialog_title': 'Desativar proteção',
+    'gs_disable_dialog_body':
+        'Ao desativar, seu código de segurança será excluído e as verificações aos guardiões conectados serão interrompidas.',
+    'gs_disable_confirm': 'Desativar',
+    'gs_disabled_message': 'A proteção foi desativada',
+    'gs_disable_failed': 'Falha ao desativar a proteção',
+
     // ── Notificações do guardião ──
     'notifications_title': 'Notificações',
     'notifications_today': 'Notificações de hoje',
@@ -279,7 +297,7 @@ abstract class PtBr {
     'connection_unlink_warning':
         'A desvinculação excluirá os dados do protegido.',
     'connection_unlink_warning_detail':
-        'Os dados anteriores não poderão ser recuperados após uma nova vinculação.\nVocê precisará inserir o código do protegido novamente.',
+        'Os dados anteriores não poderão ser recuperados após uma nova vinculação. Você precisará inserir o código do protegido novamente.',
     'connection_heartbeat_schedule': 'Diariamente às @time',
     'connection_heartbeat_report_time':
         'O horário do relatório de bem-estar é ',

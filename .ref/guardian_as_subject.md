@@ -49,10 +49,11 @@
       │   └─ 데드맨 스위치 로컬 알림 (heartbeat 시각 + 30분)
       │
       └─ 5. UI 활성화 (숨겨둔 위젯 표시)
-          ├─ 안전 코드 카드 (복사/공유 버튼)
+          ├─ 안전 코드 카드 (복사/공유 + 🚫 해제 아이콘)
           ├─ 안부 확인 상태 카드 (마지막 확인 시각)
           ├─ [안부 확인 시각 변경] 타일
-          └─ [지금 안전 보고하기] 수동 전송 버튼
+          ├─ [지금 안전 보고하기] 수동 전송 버튼
+          └─ [🚨 도움이 필요해요] 긴급 도움 요청 버튼
 ```
 
 ### 비활성 상태 — 설정 화면 레이아웃
@@ -90,15 +91,15 @@
 │  ⚙ 설정                  🌙 │  ← 다크모드 토글은 AppBar 오른쪽
 │                             │
 │  ┌───────────────────────┐  │  ← 하나의 통합 카드
-│  │ SAFETY SHARE CODE     │  │
+│  │ SAFETY SHARE CODE  🚫 │  │  ← 해제 아이콘 탭 → 안부 보호 해제 (실제: Icons.exit_to_app)
 │  │ K7M-4PXR  [복사][공유] │  │
 │  │                       │  │
 │  │ ✅ 오전 9:30 정상 보고됨│  │
 │  │ 보호자: 1명 연결됨     │  │
 │  │                       │  │
-│  │ [📱 지금 안전 보고하기] │  │
+│  │ [📱 지금 바로 안전 보고하기] │  │
 │  │ [⏰ 안부 확인 시각 변경]│  │
-│  │ [🚫 안부 보호 해제]    │  │
+│  │ [🚨 도움이 필요해요]   │  │  ← 긴급 도움 요청 (대상자 홈과 동일)
 │  └───────────────────────┘  │
 │                             │
 │  ── 연결 관리 ──             │  ← 히든 (연결 탭에서 확인 가능)
@@ -118,14 +119,16 @@
 - **프로필 카드 제거** — "안부 수호자" 텍스트와 앱 버전은 약관 아래로 이동
 - **다크모드 토글** — AppBar 오른쪽 끝으로 이동
 - **대상자 기능은 하나의 통합 카드** — 안전 코드 + 상태 + 버튼을 한 카드에 집약
+- **안부 보호 해제** — 별도 버튼 제거 → "SAFETY SHARE CODE" 헤더 오른쪽 끝 🚫 아이콘으로 축소 (자주 쓸 일 없는 기능이므로)
+- **긴급 도움 요청** — 대상자 홈의 [🚨 도움이 필요해요] 버튼을 통합 카드 하단에 배치 (대상자와 동일한 UX)
 - 활성화 시 **연결 관리 카드 히든** — 연결 탭(인덱스 1)에서 동일 기능 제공
 - 비활성/해제 시 통합 카드 → [나도 안부 보호 받기] 버튼으로 복원 + 연결 관리 카드 복원
-- 대상자 홈의 위젯(SafetyCodeCard, StatusCard, ManualReportButton, HeartbeatScheduleTile) **재사용**
+- 대상자 홈의 위젯(SafetyCodeCard, StatusCard, ManualReportButton, HeartbeatScheduleTile, EmergencyButton) **재사용**
 
 ### 해제 플로우
 
 ```
-[안부 보호 해제] 탭
+[🚫 아이콘 탭] (SAFETY SHARE CODE 헤더 오른쪽)
   │
   ├─ 확인 다이얼로그
   │   "안부 보호를 해제하시겠습니까?
@@ -470,8 +473,9 @@ await _tokenDs.clear();                 // 로컬 토큰/센서 데이터 전부
 
 4단계: 보호자 설정 화면 UI
   ├─ [나도 안부 보호 받기] 버튼
-  ├─ 활성화 시 히든 영역 표시
-  └─ [안부 보호 해제] 버튼
+  ├─ 활성화 시 통합 카드 표시 (코드 + 상태 + 버튼)
+  ├─ 헤더 🚫 아이콘 → 해제 다이얼로그
+  └─ [🚨 도움이 필요해요] 긴급 버튼
 
 5단계: 테스트
   ├─ 보호자 → 대상자 활성화 → heartbeat 전송 확인
@@ -481,9 +485,283 @@ await _tokenDs.clear();                 // 로컬 토큰/센서 데이터 전부
 ```
 
 
-## 8. 주의사항
+## 8. 모드 변경 및 재설치 시나리오
+
+### 8.1 역할 정의
+
+| 약칭 | 역할 | DB 상태 |
+|------|------|---------|
+| **S** | 대상자 | role=subject, invite_code 있음 |
+| **G** | 보호자 | role=guardian, invite_code 없음 |
+| **G+S** | 보호/대상자 | role=guardian, invite_code 있음 |
+
+### 8.2 전환 경우의 수 (7가지)
+
+#### 모드 변경 (탈퇴 → 재등록) — 4가지
+
+| # | 전환 | 방법 | 처리 |
+|---|------|------|------|
+| 1 | S → G | 탈퇴 → 보호자로 등록 | 기존 v1과 동일 (변경 없음) |
+| 2 | G → S | 탈퇴 → 대상자로 등록 | 기존 v1과 동일 (변경 없음) |
+| 3 | G+S → S | 탈퇴 → 대상자로 등록 | delete_user()에서 invite_code 유무 판단 필요 |
+| 4 | G+S → G | 탈퇴 → 보호자로 등록 | delete_user()에서 invite_code 유무 판단 필요 |
+
+#### 재설치 — 3가지
+
+| # | 상태 | 방법 | 처리 |
+|---|------|------|------|
+| 5 | S 재설치 | device_id로 기존 계정 복원 | 기존 v1과 동일 (변경 없음) |
+| 6 | G 재설치 | device_id로 기존 계정 복원 | 기존 v1과 동일 (변경 없음) |
+| 7 | G+S 재설치 | device_id로 기존 계정 복원 | onboarding에서 invite_code 복원 필요 |
+
+> **앱 내 토글**(G→G+S 활성화, G+S→G 해제)은 설정 화면의 enable-subject / disable-subject로 처리하며, 모드 변경/재설치와 무관하므로 이 매트릭스에 포함하지 않음.
+
+### 8.3 모드 변경 상세 (#3, #4)
+
+G+S 사용자가 모드 변경(탈퇴 → 재등록)하는 경우, 기존 S→G, G→S와 동일한 플로우:
+
+```
+[G+S 모드 변경 플로우]
+앱 → ModeSelectController → 새 role로 register()
+  → 기존 device_id 감지 → existing_role 반환
+  → 사용자 확인 → deleteMe(oldToken)
+  → 로컬 데이터 전부 삭제 (tokenDs.clear + nicknameDs.clearAll)
+  → onboarding → 새 role로 재등록
+```
+
+**서버 delete_user() 수정 (섹션 6 설계 반영):**
+
+```python
+# 기존 v1: role 기반 분기
+if user["role"] == "subject":
+    # 대상자 데이터 삭제
+elif user["role"] == "guardian":
+    # 보호자 데이터 삭제
+
+# v2: invite_code 유무 추가 판단
+if user["invite_code"] is not None:
+    # 대상자 데이터 삭제 (role과 무관)
+    # - heartbeat_logs (device_id 기준)
+    # - alerts (subject_user_id = 본인)
+    # - notification_events (subject_user_id = 본인)
+    # - guardians (subject_user_id = 본인) — 나를 보호하는 보호자 연결
+    # - 나를 보호하던 보호자에게 "대상자 탈퇴" Push 발송
+if user["role"] == "guardian":
+    # 보호자 데이터 삭제
+    # - guardians (guardian_user_id = 본인) — 내가 보호하는 대상자 연결
+    # - guardian_notification_settings
+    # - dismissed_notifications
+    # - subscriptions
+# 공통: devices, users 삭제
+```
+
+이 수정으로 #3(G+S→S), #4(G+S→G) 모두 기존 모드 변경과 동일하게 안전하게 처리됨.
+
+### 8.4 재설치 복원 상세 (#7)
+
+G+S 사용자가 앱을 재설치하면:
+1. 로컬 데이터 전부 소멸
+2. 앱 실행 → splash → 모드 선택
+3. **보호자 모드 선택** → onboarding → `POST /api/v1/users` (role=guardian)
+4. 서버: device_id로 기존 계정 감지 → 기존 invite_code 포함 응답
+
+**문제:** 현재 onboarding은 guardian일 때 invite_code를 저장하지 않음
+
+**해결: onboarding_controller.dart 수정**
+
+```dart
+// 기존 (v1)
+if (role == 'subject' && response['invite_code'] != null) {
+  await _tokenDs.saveInviteCode(response['invite_code'] as String);
+}
+
+// v2: role 무관하게 invite_code가 있으면 대상자 기능 복원
+if (response['invite_code'] != null) {
+  await _tokenDs.saveInviteCode(response['invite_code'] as String);
+  if (role == 'guardian') {
+    // 보호/대상자 복원
+    await _tokenDs.saveIsAlsoSubject(true);
+    await HeartbeatWorkerService.register();   // WorkManager 재등록
+    await LocalAlarmService.register();         // 데드맨 알림 재등록
+  }
+}
+```
+
+서버는 이미 기존 계정의 invite_code를 응답에 포함하므로 (user_service.py L65),
+클라이언트에서 받아서 처리하면 됨. 서버 변경 불필요.
+
+### 8.5 전환 매트릭스 요약
+
+| # | 전환 | 서버 변경 | 클라이언트 변경 | 비고 |
+|---|------|-----------|----------------|------|
+| 1 | S → G | 없음 | 없음 | 기존 v1 그대로 |
+| 2 | G → S | 없음 | 없음 | 기존 v1 그대로 |
+| 3 | G+S → S | delete_user() 수정 | 없음 | 섹션 6 설계 반영 |
+| 4 | G+S → G | delete_user() 수정 | 없음 | 섹션 6 설계 반영 |
+| 5 | S 재설치 | 없음 | 없음 | 기존 v1 그대로 |
+| 6 | G 재설치 | 없음 | 없음 | 기존 v1 그대로 |
+| 7 | G+S 재설치 | 없음 | onboarding invite_code 복원 | 섹션 8.4 참조 |
+
+
+### 8.6 모드 전환 다이얼로그 문구 수정
+
+현재 `ModeSelectController`에서 기존 역할과 다른 모드 선택 시 경고 다이얼로그를 표시한다.
+G+S 상태를 고려하여 roleLabel과 안내 문구를 수정해야 한다.
+
+**현재 (v1):**
+
+```dart
+final roleLabel = existingRole == 'subject'
+    ? 'onboarding_role_subject'.tr    // "보호 대상자"
+    : 'onboarding_role_guardian'.tr;  // "보호자"
+```
+
+**문제:** G+S는 role=guardian이므로 "보호자"로만 표시됨. 대상자 기능도 함께 삭제된다는 안내 없음.
+
+**수정:**
+
+서버 `GET /api/v1/devices/check` 응답에 `has_invite_code` 추가:
+```json
+{
+  "exists": true,
+  "role": "guardian",
+  "has_invite_code": true
+}
+```
+
+클라이언트 분기:
+```dart
+final hasInviteCode = check['has_invite_code'] as bool? ?? false;
+
+final roleLabel = existingRole == 'subject'
+    ? 'onboarding_role_subject'.tr
+    : hasInviteCode
+        ? 'onboarding_role_guardian_subject'.tr  // "보호자 + 대상자"
+        : 'onboarding_role_guardian'.tr;         // "보호자"
+```
+
+**번역 키 추가:**
+
+| 키 | ko_KR | en_US |
+|----|-------|-------|
+| `onboarding_role_guardian_subject` | 보호자 + 대상자 | Guardian + Subject |
+| `onboarding_already_registered_message_gs` | 이 기기는 이미 "@roleLabel" 모드로 등록되어 있습니다.\n"@newRoleLabel" 모드로 변경하시겠습니까?\n\n변경하시면 보호자 데이터와 안부 보호(대상자) 기능이 모두 삭제됩니다. | (20개 언어 번역) |
+
+**다이얼로그 분기:**
+```dart
+final messageKey = hasInviteCode
+    ? 'onboarding_already_registered_message_gs'  // G+S 전용 안내
+    : 'onboarding_already_registered_message';     // 기존 S/G 안내
+```
+
+
+## 9. G+S 추가 시 기존 코드 수정 목록
+
+G+S 기능이 정상 동작하려면, 기존 대상자 전용 코드에서 `role == 'subject'` 체크를
+`invite_code IS NOT NULL` (서버) 또는 `invite_code 존재 여부` (클라이언트)로 통일해야 한다.
+
+### 9.1 서버 수정
+
+| # | 파일 | 위치 | 현재 | 수정 | 비고 |
+|---|------|------|------|------|------|
+| 1 | `scheduler.py` | L52 | `WHERE u.role = 'subject'` | `WHERE u.invite_code IS NOT NULL` | 미수신 경고 체크 |
+| 2 | `scheduler.py` | L256 | `WHERE u.role = 'subject'` | `WHERE u.invite_code IS NOT NULL` | 미연결 대상자 정리 |
+| 3 | `emergency.py` | L15 | `Depends(require_subject)` | `Depends(require_subject_feature)` | G+S도 긴급 요청 가능 |
+| 4 | `subject_service.py` | L11 | `AND role = 'subject'` | 조건 제거 | invite_code로 대상자 연결 (섹션 3.5) |
+| 5 | `user_service.py` | delete_user() | role 기반 분기 | invite_code 유무 추가 판단 | 섹션 6 설계 반영 |
+| 6 | `routers/device.py` | checkDevice | role만 반환 | `has_invite_code` 추가 | 모드 전환 다이얼로그용 |
+
+**require_subject_feature 미들웨어 (신규):**
+```python
+async def require_subject_feature(user=Depends(get_current_user), db=Depends(get_db)):
+    """대상자이거나, invite_code가 있는 보호자(G+S)"""
+    if user["role"] == "subject":
+        return user
+    row = await db.fetchrow("SELECT invite_code FROM users WHERE id = $1", user["user_id"])
+    if row and row["invite_code"]:
+        return user
+    raise HTTPException(403, "대상자 기능이 활성화되어야 합니다")
+```
+
+### 9.2 클라이언트 수정
+
+| # | 파일 | 위치 | 현재 | 수정 | 비고 |
+|---|------|------|------|------|------|
+| 1 | `heartbeat_worker_service.dart` | L31 | `role != 'subject'` → 스킵 | invite_code 유무로 판단 | 백그라운드 heartbeat 실행 |
+| 2 | `onboarding_controller.dart` | L82 | guardian일 때 invite_code 미저장 | role 무관하게 invite_code 저장 + G+S 복원 | 재설치 복원 (섹션 8.4) |
+| 3 | `mode_select_controller.dart` | L36 | roleLabel 2분기 | G+S 3분기 + 안내 문구 | 모드 전환 다이얼로그 (섹션 8.6) |
+| 4 | `guardian_settings_controller` | — | onResumed() 없음 | G+S 시 heartbeat 자동 체크 추가 | 포그라운드 복귀 자동 전송 |
+| 5 | `permission_controller.dart` | L47 | 대상자 모드만 ACTIVITY_RECOGNITION 요청 | G+S 활성화 시에도 요청 | 권한 요청 |
+
+### 9.3 수정 불필요 (변경 없음)
+
+| 파일 | 이유 |
+|------|------|
+| `heartbeat_service.dart` | role 체크 없이 독립 동작 |
+| `heartbeat_schedule_mixin.dart` | role 체크 없음 |
+| `sensor_local_datasource.dart` | role 체크 없음 |
+| `fcm_service.dart` | 알림 탭 라우팅에 role 분기 없음 |
+| `local_alarm_service.dart` | schedule/cancel에 role 체크 없음 |
+| `heartbeat_service.py` (서버) | user_id 기반 처리, role 무관 |
+| `heartbeat.py` (서버) | get_current_user만 사용 |
+| 구독 로직 (서버/클라이언트) | 기존 정책 그대로 |
+
+
+## 10. 구현 중 발견된 이슈 및 수정
+
+### 10.1 enable-subject / disable-subject 인증 헤더 누락 (403 Forbidden)
+
+**증상:** `POST /api/v1/users/enable-subject` 호출 시 403 "Not authenticated" 반환
+
+**원인:** `UserRemoteDatasource.enableSubject()`, `disableSubject()` 메서드에서
+`Authorization: Bearer <deviceToken>` 헤더를 전달하지 않았음.
+이 앱의 `ApiClientFactory`(GetConnect 기반)는 인증 헤더를 자동으로 추가하지 않으며,
+각 DataSource에서 명시적으로 헤더를 전달해야 함.
+
+**수정:**
+
+```dart
+// user_remote_datasource.dart — 기존
+Future<Map<String, dynamic>> enableSubject() async {
+  final result = await ApiClientFactory.instance.post<dynamic>(
+    '${ApiEndpoints.users}/enable-subject',
+    {},
+  );
+
+// 수정: deviceToken 파라미터 추가 + Authorization 헤더 전달
+Future<Map<String, dynamic>> enableSubject(String deviceToken) async {
+  final result = await ApiClientFactory.instance.post<dynamic>(
+    '${ApiEndpoints.users}/enable-subject',
+    {},
+    headers: {'Authorization': 'Bearer $deviceToken'},
+  );
+
+// disableSubject()도 동일하게 수정
+Future<void> disableSubject(String deviceToken) async {
+  final result = await ApiClientFactory.instance.delete<void>(
+    '${ApiEndpoints.users}/disable-subject',
+    headers: {'Authorization': 'Bearer $deviceToken'},
+  );
+```
+
+```dart
+// guardian_settings_controller.dart — 호출부 수정
+Future<void> enableSubjectFeature() async {
+  final deviceToken = await _tokenDs.getDeviceToken();
+  if (deviceToken == null) return;
+  final result = await _userDs.enableSubject(deviceToken);
+
+Future<void> disableSubjectFeature() async {
+  final deviceToken = await _tokenDs.getDeviceToken();
+  if (deviceToken == null) return;
+  await _userDs.disableSubject(deviceToken);
+```
+
+
+## 11. 주의사항
 
 - **모드 전환이 아님**: 기존 `users.role`은 `guardian`으로 유지. `invite_code` 유무로 대상자 기능 판단
 - **대상자 전용 앱과 동일한 heartbeat 로직**: 센서 수집, suspicious 판정, 데드맨 알림 모두 동일하게 동작
 - **보호자 기능에 영향 없음**: 대시보드, 알림, 연결 관리 등 기존 보호자 기능은 그대로 유지
-- **앱 재설치 시**: `is_also_subject` 상태는 서버 `/devices/me` 응답으로 복원 가능
+- **앱 재설치 시**: 서버 응답의 `invite_code` 유무로 대상자 기능 자동 복원
+- **role 체크 통일 원칙**: 대상자 기능 판단은 `role == 'subject'`가 아닌 `invite_code IS NOT NULL`로 통일

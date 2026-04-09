@@ -46,6 +46,31 @@ class UserRemoteDatasource {
     return country.isNotEmpty ? '${lang}_$country' : lang;
   }
 
+  /// POST /api/v1/users/enable-subject — 보호자가 대상자 기능 활성화
+  Future<Map<String, dynamic>> enableSubject(String deviceToken) async {
+    final result = await ApiClientFactory.instance.post<dynamic>(
+      '${ApiEndpoints.users}/enable-subject',
+      {},
+      headers: {'Authorization': 'Bearer $deviceToken'},
+    );
+    if (!result.isOk) {
+      throw Exception('안부 보호 활성화 실패 (${result.statusCode})');
+    }
+    return Map<String, dynamic>.from(result.body as Map);
+  }
+
+  /// DELETE /api/v1/users/disable-subject — 보호자가 대상자 기능 해제
+  Future<void> disableSubject(String deviceToken) async {
+    final result = await ApiClientFactory.instance.delete<void>(
+      '${ApiEndpoints.users}/disable-subject',
+      headers: {'Authorization': 'Bearer $deviceToken'},
+    );
+    final code = result.statusCode;
+    if (!result.isOk && code != null && code != 200) {
+      throw Exception('안부 보호 해제 실패 ($code)');
+    }
+  }
+
   /// POST /api/v1/users
   Future<Map<String, dynamic>> register({
     required String role,

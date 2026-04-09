@@ -94,9 +94,12 @@ abstract class ItIt {
         'Viene trasmesso un solo segnale:\n"Sto bene."\nLe Sue informazioni sono al sicuro.',
     'onboarding_role_subject': 'Assistito',
     'onboarding_role_guardian': 'Guardiano',
+    'onboarding_role_guardian_subject': 'Guardiano e protetto',
     'onboarding_already_registered_title': 'Dispositivo già registrato',
     'onboarding_already_registered_message':
         'Questo dispositivo è già registrato in modalità "@roleLabel".\nDesidera continuare come "@roleLabel"?\n\nOppure passare alla modalità "@newRoleLabel"?\nIl cambio eliminerà tutti i dati esistenti.',
+    'onboarding_already_registered_message_gs':
+        'Questo dispositivo è già registrato in modalità "@roleLabel".\nPassare a "@newRoleLabel" eliminerà tutti i dati di guardiano e protetto.',
     'onboarding_registration_failed_title': 'Registrazione non riuscita',
     'onboarding_registration_failed_message':
         'Impossibile connettersi al server. Riprovi più tardi.',
@@ -211,6 +214,21 @@ abstract class ItIt {
     'settings_terms': 'Termini di servizio',
     'settings_app_version': 'Versione: v@version',
 
+    // ── G+S (Guardiano e protetto) ──
+    'gs_enable_button': 'Ricevi anche la protezione',
+    'gs_enable_dialog_title': 'Attiva protezione',
+    'gs_enable_dialog_body':
+        'Puoi ricevere protezione mantenendo le funzioni di guardiano.\nVerrà emesso un codice di sicurezza — condividilo con altri guardiani.',
+    'gs_enable_confirm': 'Attiva',
+    'gs_enabled_message': 'La protezione è stata attivata',
+    'gs_enable_failed': 'Attivazione della protezione fallita',
+    'gs_disable_dialog_title': 'Disattiva protezione',
+    'gs_disable_dialog_body':
+        'Disattivando verrà eliminato il codice di sicurezza e verranno interrotte le verifiche ai guardiani collegati.',
+    'gs_disable_confirm': 'Disattiva',
+    'gs_disabled_message': 'La protezione è stata disattivata',
+    'gs_disable_failed': 'Disattivazione della protezione fallita',
+
     // ── Notifiche guardiano ──
     'notifications_title': 'Notifiche',
     'notifications_today': 'Notifiche di oggi',
@@ -275,7 +293,7 @@ abstract class ItIt {
     'connection_unlink_warning':
         "Lo scollegamento eliminerà i dati dell'assistito.",
     'connection_unlink_warning_detail':
-        "I dati precedenti non potranno essere recuperati dopo un nuovo collegamento.\nDovrà reinserire il codice dell'assistito.",
+        "I dati precedenti non potranno essere recuperati dopo un nuovo collegamento. Dovrà reinserire il codice dell'assistito.",
     'connection_heartbeat_schedule': 'Ogni giorno alle @time',
     'connection_heartbeat_report_time':
         "L'orario di segnalazione del benessere è ",

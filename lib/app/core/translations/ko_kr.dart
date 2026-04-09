@@ -77,9 +77,12 @@ abstract class KoKr {
         "오직 '잘 지내고 있다'는\n안부 신호 하나만 전달합니다.\n당신의 정보는 안전합니다.",
     'onboarding_role_subject': '보호 대상자',
     'onboarding_role_guardian': '보호자',
+    'onboarding_role_guardian_subject': '보호자 겸 대상자',
     'onboarding_already_registered_title': '이미 등록된 기기',
     'onboarding_already_registered_message':
         '이 기기는 이미 "@roleLabel" 모드로 등록되어 있습니다.\n"@roleLabel" 모드로 계속하시겠습니까?\n\n아니면 "@newRoleLabel" 모드로 변경하시겠습니까?\n변경하시면 기존 저장 내용은 모두 삭제됩니다.',
+    'onboarding_already_registered_message_gs':
+        '이 기기는 이미 "@roleLabel" 모드로 등록되어 있습니다.\n"@newRoleLabel" 모드로 변경하면 보호자 및 대상자 데이터가 모두 삭제됩니다.',
     'onboarding_registration_failed_title': '등록 실패',
     'onboarding_registration_failed_message': '서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.',
 
@@ -182,6 +185,19 @@ abstract class KoKr {
     'settings_terms': '이용약관',
     'settings_app_version': '앱버전 : v@version',
 
+    // ── G+S (보호자 겸 대상자) ──
+    'gs_enable_button': '나도 안부 보호 받기',
+    'gs_enable_dialog_title': '안부 보호 활성화',
+    'gs_enable_dialog_body': '보호자 기능을 유지하면서 나의 안부도 보호받을 수 있습니다.\n활성화하면 안전 코드가 발급되고, 다른 보호자에게 내 "안전 코드"를 알려주세요.',
+    'gs_enable_confirm': '활성화',
+    'gs_enabled_message': '안부 보호가 활성화되었습니다',
+    'gs_enable_failed': '안부 보호 활성화에 실패했습니다',
+    'gs_disable_dialog_title': '안부 보호 해제',
+    'gs_disable_dialog_body': '안부 보호를 해제하면 안전 코드가 삭제되고, 연결된 보호자에게 더 이상 안부 확인이 전송되지 않습니다.',
+    'gs_disable_confirm': '해제',
+    'gs_disabled_message': '안부 보호가 해제되었습니다',
+    'gs_disable_failed': '안부 보호 해제에 실패했습니다',
+
     // ── 보호자 알림 ──
     'notifications_title': '알림',
     'notifications_today': '오늘 받은 알림',
@@ -235,7 +251,7 @@ abstract class KoKr {
     'connection_unlink_warning':
         '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.',
     'connection_unlink_warning_detail':
-        '재연결 시 이전의 기록을 복구할 수 없으며,\n보호 대상자 코드를 다시 입력해야 합니다.',
+        '재연결 시 이전의 기록을 복구할 수 없으며, 보호 대상자 코드를 다시 입력해야 합니다.',
     'connection_heartbeat_schedule': '매일 @time',
     'connection_heartbeat_report_time': '안부 보고시간은 ',
     'connection_subject_label': '보호 대상자',

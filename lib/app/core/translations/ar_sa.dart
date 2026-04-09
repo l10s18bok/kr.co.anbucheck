@@ -86,9 +86,12 @@ abstract class ArSa {
         'نُرسل إشارة واحدة فقط:\n«أنا بخير.»\nمعلوماتك في أمان.',
     'onboarding_role_subject': 'متابَع',
     'onboarding_role_guardian': 'حارس',
+    'onboarding_role_guardian_subject': 'وصي ومحمي',
     'onboarding_already_registered_title': 'الجهاز مسجل بالفعل',
     'onboarding_already_registered_message':
         'هذا الجهاز مسجل بالفعل في وضع "@roleLabel".\nهل تريد المتابعة كـ "@roleLabel"؟\n\nأم التبديل إلى وضع "@newRoleLabel"؟\nسيؤدي التبديل إلى حذف جميع البيانات.',
+    'onboarding_already_registered_message_gs':
+        'هذا الجهاز مسجل بالفعل في وضع "@roleLabel".\nالتبديل إلى وضع "@newRoleLabel" سيحذف جميع بيانات الوصي والمحمي.',
     'onboarding_registration_failed_title': 'فشل التسجيل',
     'onboarding_registration_failed_message':
         'تعذر الاتصال بالخادم. يرجى المحاولة لاحقاً.',
@@ -198,6 +201,21 @@ abstract class ArSa {
     'settings_terms': 'شروط الاستخدام',
     'settings_app_version': 'الإصدار: v@version',
 
+    // ── G+S (وصي + محمي) ──
+    'gs_enable_button': 'احصل على الحماية أيضاً',
+    'gs_enable_dialog_title': 'تفعيل الحماية',
+    'gs_enable_dialog_body':
+        'يمكنك الحصول على الحماية مع الاحتفاظ بصلاحيات الوصي.\nسيتم إصدار رمز أمان — يرجى مشاركته مع الأوصياء الآخرين.',
+    'gs_enable_confirm': 'تفعيل',
+    'gs_enabled_message': 'تم تفعيل الحماية',
+    'gs_enable_failed': 'فشل تفعيل الحماية',
+    'gs_disable_dialog_title': 'إلغاء الحماية',
+    'gs_disable_dialog_body':
+        'سيؤدي إلغاء الحماية إلى حذف رمز الأمان الخاص بك وإيقاف إرسال فحوصات السلامة إلى الأوصياء المتصلين.',
+    'gs_disable_confirm': 'إلغاء',
+    'gs_disabled_message': 'تم إلغاء الحماية',
+    'gs_disable_failed': 'فشل إلغاء الحماية',
+
     // ── إشعارات الحارس ──
     'notifications_title': 'الإشعارات',
     'notifications_today': 'إشعارات اليوم',
@@ -260,7 +278,7 @@ abstract class ArSa {
     'connection_unlink_warning':
         'سيؤدي إلغاء الربط إلى حذف بيانات المتابَع.',
     'connection_unlink_warning_detail':
-        'لا يمكن استعادة السجلات السابقة بعد إعادة الربط.\nسيتعين عليك إدخال رمز المتابَع مرة أخرى.',
+        'لا يمكن استعادة السجلات السابقة بعد إعادة الربط. سيتعين عليك إدخال رمز المتابَع مرة أخرى.',
     'connection_heartbeat_schedule': 'يومياً في @time',
     'connection_heartbeat_report_time': 'وقت تقرير الاطمئنان هو ',
     'connection_subject_label': 'متابَع',
