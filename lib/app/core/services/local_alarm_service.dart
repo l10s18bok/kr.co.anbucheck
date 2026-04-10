@@ -29,7 +29,11 @@ class LocalAlarmService {
     await plugin.initialize(
       const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-        iOS: DarwinInitializationSettings(),
+        iOS: DarwinInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+        ),
       ),
     );
     _plugin = plugin;
@@ -59,7 +63,7 @@ class LocalAlarmService {
       scheduled = scheduled.add(const Duration(days: 1));
     }
 
-    debugPrint('[LocalAlarm] 예약 시도: ${scheduled.toString()} (heartbeat $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')} + 5분)');
+    debugPrint('[LocalAlarm] 예약 시도: ${scheduled.toString()} (heartbeat $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')} + 30분)');
 
     // 백그라운드 isolate에서는 GetX .tr 사용 불가 → SharedPreferences 캐시 사용
     final title = await NotificationTextCache.get(
