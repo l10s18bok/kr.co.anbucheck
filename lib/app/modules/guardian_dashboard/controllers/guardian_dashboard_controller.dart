@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 대시보드 컨트롤러
@@ -29,6 +32,28 @@ class GuardianDashboardController extends BaseController {
     // subjects 데이터 변경 시 자동 반영 (FCM 수신 후 서비스 갱신 포함)
     ever(_svc.subjects, (_) => _mapSubjects());
     _loadSubjectsAndSubscription();
+    _scheduleHeartbeatIfGS();
+  }
+
+  /// G+S(보호자 겸 대상자)인 경우 서버 스케줄 동기화 후 WorkManager + 로컬 안전망 예약
+  Future<void> _scheduleHeartbeatIfGS() async {
+    final isAlsoSubject = await _tokenDs.getIsAlsoSubject();
+    if (!isAlsoSubject) return;
+    final deviceToken = await _tokenDs.getDeviceToken();
+    if (deviceToken == null) return;
+    try {
+      final data = await DeviceRemoteDatasource().getMyDevice(deviceToken);
+      final hour = data['heartbeat_hour'] as int? ?? 9;
+      final minute = data['heartbeat_minute'] as int? ?? 30;
+      await _tokenDs.saveHeartbeatSchedule(hour, minute);
+      await HeartbeatWorkerService.schedule(hour, minute);
+      await LocalAlarmService.schedule(hour, minute);
+    } catch (_) {
+      // 서버 실패 시 로컬 값으로 예약
+      final (h, m) = await _tokenDs.getHeartbeatSchedule();
+      await HeartbeatWorkerService.schedule(h, m);
+      await LocalAlarmService.schedule(h, m);
+    }
   }
 
   /// 앱이 포그라운드로 복귀 — 강제 갱신

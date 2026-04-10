@@ -16,6 +16,7 @@ class TokenLocalDatasource {
   static const _keyLastHeartbeatTime = 'last_heartbeat_time';
   static const _keySubscriptionActive = 'subscription_active';
   static const _keyIsAlsoSubject = 'is_also_subject';
+  static const _keyLastScheduledKey = 'last_scheduled_key';
 
   // ── device_id ─────────────────────────────────────────────
   Future<String> getOrCreateDeviceId() async {
@@ -142,10 +143,22 @@ class TokenLocalDatasource {
     await prefs.setString(_keyLastHeartbeatTime, time);
   }
 
+  // ── 마지막 전송 예약키 (yyyy-MM-dd_HH:mm) ─────────────────
+  // 동일 예약시각에 대한 중복 전송 방지 (날짜+예약시각 조합)
+  Future<String?> getLastScheduledKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyLastScheduledKey);
+  }
+
+  Future<void> saveLastScheduledKey(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyLastScheduledKey, key);
+  }
+
   // ── 구독 활성화 여부 ──────────────────────────────────────
   Future<bool> getSubscriptionActive() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_keySubscriptionActive) ?? false; // 미설정 시 무료 체험으로 간주
+    return prefs.getBool(_keySubscriptionActive) ?? true; // 미설정 시 활성으로 간주 (서버 응답 전 만료 배너 깜빡임 방지)
   }
 
   Future<void> saveSubscriptionActive(bool active) async {

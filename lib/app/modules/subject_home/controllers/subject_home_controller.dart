@@ -46,13 +46,15 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   /// 마지막 heartbeat 실제 전송 시각 (HH:mm), 없으면 빈 문자열
   final _lastHeartbeatTime = ''.obs;
 
-  /// 금일 heartbeat 보고 완료 여부
+  /// 현재 예약시각에 대해 heartbeat 전송 완료 여부
+  final _lastScheduledKey = ''.obs;
   bool get isReportedToday {
-    if (_lastHeartbeatDate.value.isEmpty) return false;
+    if (_lastScheduledKey.value.isEmpty) return false;
     final now = DateTime.now();
     final today =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    return _lastHeartbeatDate.value == today;
+    final key = '${today}_${heartbeatHour.value.toString().padLeft(2, '0')}:${heartbeatMinute.value.toString().padLeft(2, '0')}';
+    return _lastScheduledKey.value == key;
   }
 
   /// 예정 시각이 현재 시각보다 미래인지 여부
@@ -155,6 +157,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     await prefs.reload();
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
+    _lastScheduledKey.value = await _tokenDs.getLastScheduledKey() ?? '';
   }
 
   /// 예약시각 경과 + 오늘 미전송이면 heartbeat 자동 전송 + UI 갱신
@@ -181,6 +184,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     _userId.value = await _tokenDs.getUserId() ?? 0;
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
+    _lastScheduledKey.value = await _tokenDs.getLastScheduledKey() ?? '';
 
     _guardianConnected.value = await _tokenDs.getSubscriptionActive();
     // 로컬 저장값으로 먼저 표시 후 서버에서 최신 스케줄 동기화

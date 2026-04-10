@@ -45,14 +45,8 @@ void heartbeatWorkerCallback() {
         return true;
       }
 
-      // 오늘 이미 전송했으면 스킵 (하루 1회 제한)
-      final lastDate = await tokenDs.getLastHeartbeatDate();
-      final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-      print('[HeartbeatWorker] lastDate=$lastDate, today=$today');
-      if (lastDate == today) {
-        print('[HeartbeatWorker] 오늘 이미 전송 완료 — 스킵');
-        return true;
-      }
+      // 하루 1회 제한은 HeartbeatService.execute() 내부에서 처리
+      // 워커에서는 중복 체크하지 않음 (이중 체크 제거)
 
       final deviceId = await tokenDs.getDeviceId();
       final deviceToken = await tokenDs.getDeviceToken();
@@ -68,7 +62,11 @@ void heartbeatWorkerCallback() {
       await HeartbeatService().execute();
       print('[HeartbeatWorker] heartbeat 전송 완료');
 
-      // 다음 날 동일 시각 재예약
+      // 전송 성공 시 periodic 안전망 취소 (불필요한 깨어남 방지)
+      await Workmanager().cancelByUniqueName(HeartbeatWorkerService._periodicUniqueName);
+      print('[HeartbeatWorker] periodic 안전망 취소');
+
+      // 다음 날 동일 시각 재예약 (one-off + periodic 모두)
       await HeartbeatWorkerService.scheduleNextDay();
     } catch (e) {
       print('[HeartbeatWorker] 실행 실패: $e');
@@ -124,6 +122,7 @@ class HeartbeatWorkerService {
   }
 
   /// 다음 날 동일 시각 재예약 (콜백 내에서 호출)
+  /// one-off + periodic 모두 등록
   static Future<void> scheduleNextDay() async {
     try {
       final (hour, minute) = await TokenLocalDatasource().getHeartbeatSchedule();
@@ -132,11 +131,22 @@ class HeartbeatWorkerService {
           .add(const Duration(days: 1));
       final delay = tomorrow.difference(now);
 
+      // 1차: one-off (정확한 시각)
       await Workmanager().registerOneOffTask(
         _uniqueName,
         _taskName,
         initialDelay: delay,
         existingWorkPolicy: ExistingWorkPolicy.keep,
+        constraints: Constraints(networkType: NetworkType.connected),
+      );
+
+      // 2차 보조: periodic (안전망)
+      await Workmanager().registerPeriodicTask(
+        _periodicUniqueName,
+        _taskName,
+        frequency: const Duration(hours: 1),
+        initialDelay: delay,
+        existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
         constraints: Constraints(networkType: NetworkType.connected),
       );
     } catch (_) {}

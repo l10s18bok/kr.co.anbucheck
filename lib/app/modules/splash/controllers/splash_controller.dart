@@ -8,12 +8,11 @@ import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
-import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.dart';
-import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/firebase_options.dart';
 
@@ -88,14 +87,14 @@ class SplashController extends BaseController {
     // FCM 백그라운드 핸들러 등록
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-    // WorkManager 초기화
-    await HeartbeatWorkerService.init();
+    // WorkManager 초기화 — main()으로 이동 (앱 종료 후에도 콜백 등록 보장)
 
     // FCM 서비스 초기화
     await Get.putAsync(() => FcmService().init());
 
-    // 로컬 알림 번역 문자열 캐시 (백그라운드 isolate용)
+    // iOS 로컬 알림 텍스트 캐시 (백그라운드 isolate에서 .tr 사용 불가 → 캐시)
     await NotificationTextCache.cacheAll();
+
   }
 
   /// 버전 체크 — 강제 업데이트 필요 시 true 반환

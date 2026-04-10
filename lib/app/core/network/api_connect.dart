@@ -152,8 +152,6 @@ Future<void> _handleUnauthorized() async {
 
           // 홈 화면으로 이동
           if (role == 'subject') {
-            final (hour, minute) = await tokenDs.getHeartbeatSchedule();
-            await LocalAlarmService.schedule(hour, minute);
             Get.offAllNamed(AppRoutes.subjectHome);
           } else {
             Get.offAllNamed(AppRoutes.guardianDashboard);

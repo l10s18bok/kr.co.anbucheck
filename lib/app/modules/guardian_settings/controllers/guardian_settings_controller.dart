@@ -223,7 +223,7 @@ class GuardianSettingsController extends BaseController
         await Permission.activityRecognition.request();
       }
 
-      // WorkManager + 로컬 알림 등록
+      // WorkManager + 로컬 안전망 등록
       await HeartbeatWorkerService.schedule(hour, minute);
       await LocalAlarmService.schedule(hour, minute);
 
@@ -259,7 +259,7 @@ class GuardianSettingsController extends BaseController
       await _userDs.disableSubject(deviceToken);
       debugPrint('[G+S] disable-subject API 호출 성공');
 
-      // WorkManager/알림 취소
+      // WorkManager + 로컬 안전망 취소
       await HeartbeatWorkerService.cancel();
       await LocalAlarmService.cancel();
 

@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/core/services/ad_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await HeartbeatWorkerService.init();
   Get.put(ThemeService());
   await Get.putAsync(() => AdService().init());
   runApp(const App());

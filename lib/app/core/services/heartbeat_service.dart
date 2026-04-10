@@ -1,15 +1,13 @@
 import 'dart:math';
 import 'package:battery_plus/battery_plus.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/heartbeat_remote_datasource.dart';
-import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/data/models/heartbeat_request.dart';
 
 /// 센서 변화 임계값 (가속도/자이로 — 걸음수 0일 때만 사용)
@@ -52,15 +50,18 @@ class HeartbeatService {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceId == null || deviceToken == null) return;
 
-    // 하루 1회 중복 전송 방어 (manual=true는 무조건 전송 — suspicious 알림 응답 등)
+    // 동일 예약시각에 대한 중복 전송 방어 (날짜+예약시각 조합)
+    // manual=true는 무조건 전송 (suspicious 알림 응답, 수동 보고)
     final prefs = await SharedPreferences.getInstance();
     await prefs.reload();
     final now = DateTime.now();
     if (!manual) {
+      final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
       final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-      final lastDate = await _tokenDs.getLastHeartbeatDate();
-      if (lastDate == today) {
-        print('[HeartbeatService] 오늘 이미 전송 완료 — 스킵');
+      final scheduledKey = '${today}_${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+      final lastKey = await _tokenDs.getLastScheduledKey();
+      if (lastKey == scheduledKey) {
+        print('[HeartbeatService] 이미 전송 완료 — 스킵 ($scheduledKey)');
         return;
       }
     }
@@ -92,11 +93,6 @@ class HeartbeatService {
       }
       // 현재 걸음수 저장 (다음 주기 비교용)
       await _saveCurrentSteps();
-    }
-
-    // suspicious=true → 대상자에게 로컬 알림 즉시 발송 (서버 왕복 불필요)
-    if (suspicious) {
-      await _showWellbeingCheckNotification();
     }
 
     final request = HeartbeatRequest(
@@ -189,10 +185,13 @@ class HeartbeatService {
     await _tokenDs.saveLastHeartbeatDate(today);
     await _tokenDs.saveLastHeartbeatTime(timeStr);
 
-    // 전송 성공 → 데드맨 스위치 알림 취소 후 내일로 재예약
-    await LocalAlarmService.cancel();
-    final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
-    await LocalAlarmService.schedule(hour, minute, forceNextDay: true);
+    // 날짜+예약시각 키 저장 (중복 전송 방지)
+    final (h, m) = await _tokenDs.getHeartbeatSchedule();
+    final scheduledKey = '${today}_${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}';
+    await _tokenDs.saveLastScheduledKey(scheduledKey);
+
+    // iOS 로컬 안전망 알림: 오늘 전송 성공 → 내일로 재예약
+    await LocalAlarmService.schedule(h, m, forceNextDay: true);
   }
 
   Future<int?> _getBatteryLevel() async {
@@ -274,41 +273,6 @@ class HeartbeatService {
     );
 
     return accelDelta < _accelThreshold && gyroDelta < _gyroThreshold;
-  }
-
-  /// suspicious=true 판정 시 대상자에게 로��� 알림 즉�� 발송
-  /// 서버 왕복 없�� 즉각 표시 — 네트워크 없어도 동작
-  Future<void> _showWellbeingCheckNotification() async {
-    try {
-      // 백그라운드 isolate에서는 GetX .tr 사용 불가 �� SharedPreferences 캐시 사용
-      final title = await NotificationTextCache.get(
-          'wellbeing_check_title', fallback: '💛 Wellness Check');
-      final body = await NotificationTextCache.get(
-          'wellbeing_check_body', fallback: 'Are you doing well? Please tap this notification.');
-      final channelName = await NotificationTextCache.get(
-          'noti_channel_name', fallback: 'Anbu Alerts');
-
-      final plugin = FlutterLocalNotificationsPlugin();
-      await plugin.show(
-        0x57656C6C, // 고��� ID ('Well' hex) — 중복 발송 시 덮어씀
-        title,
-        body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            'anbu_alerts',
-            channelName,
-            importance: Importance.high,
-            priority: Priority.high,
-            icon: '@mipmap/ic_launcher',
-          ),
-          iOS: const DarwinNotificationDetails(
-            presentAlert: true,
-            presentSound: true,
-          ),
-        ),
-        payload: 'wellbeing_check',
-      );
-    } catch (_) {}
   }
 
   HeartbeatRequest _fromJson(Map<String, dynamic> json) =>

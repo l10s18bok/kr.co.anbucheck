@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
-import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
-import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
@@ -84,11 +82,8 @@ class OnboardingController extends BaseController {
     if (response['invite_code'] != null) {
       await _tokenDs.saveInviteCode(response['invite_code'] as String);
       if (role == 'guardian') {
-        // G+S 복원: 대상자 기능 활성화 + WorkManager/로컬알림 재등록
+        // G+S 복원: 대상자 기능 활성화 (WorkManager/LocalAlarm은 대시보드 진입 시 처리)
         await _tokenDs.saveIsAlsoSubject(true);
-        final (h, m) = await _tokenDs.getHeartbeatSchedule();
-        await HeartbeatWorkerService.schedule(h, m);
-        await LocalAlarmService.schedule(h, m);
       }
     }
 
@@ -104,9 +99,6 @@ class OnboardingController extends BaseController {
     } catch (_) {}
 
     if (role == 'subject') {
-      // 로컬 안전망 알림 예약 (기본 10:00, 매일 반복)
-      final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
-      await LocalAlarmService.schedule(hour, minute);
       Get.offNamed(AppRoutes.subjectHome);
     } else {
       Get.offNamed(AppRoutes.guardianDashboard);
