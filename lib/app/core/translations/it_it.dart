@@ -219,6 +219,8 @@ abstract class ItIt {
 
     // ── G+S (Guardiano e protetto) ──
     'gs_enable_button': 'Ricevi anche la protezione',
+    'gs_safety_code_button': 'Verifica il mio codice di sicurezza',
+    'gs_safety_code_title': 'Il mio codice di sicurezza',
     'gs_enable_dialog_title': 'Attiva protezione',
     'gs_enable_dialog_body':
         'Puoi ricevere protezione mantenendo le funzioni di guardiano.\nVerrà emesso un codice di sicurezza — condividilo con altri guardiani.',

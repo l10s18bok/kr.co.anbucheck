@@ -216,6 +216,8 @@ abstract class FrFr {
 
     // ── G+S (Gardien et protégé) ──
     'gs_enable_button': 'Recevoir aussi la protection',
+    'gs_safety_code_button': 'Vérifier mon code de sécurité',
+    'gs_safety_code_title': 'Mon code de sécurité',
     'gs_enable_dialog_title': 'Activer la protection',
     'gs_enable_dialog_body':
         'Vous pouvez recevoir une protection tout en gardant vos fonctions de gardien.\nUn code de sécurité sera émis — veuillez le partager avec d\'autres gardiens.',

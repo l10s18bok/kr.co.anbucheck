@@ -211,6 +211,8 @@ abstract class SvSe {
 
     // ── G+S (Vårdare + Skyddad) ──
     'gs_enable_button': 'Få hälsoskydd också',
+    'gs_safety_code_button': 'Visa min säkerhetskod',
+    'gs_safety_code_title': 'Min säkerhetskod',
     'gs_enable_dialog_title': 'Aktivera hälsoskydd',
     'gs_enable_dialog_body':
         'Du kan få hälsoskydd samtidigt som du behåller dina vårdarfunktioner.\nEn säkerhetskod utfärdas — dela den med andra vårdare.',

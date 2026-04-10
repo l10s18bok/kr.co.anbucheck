@@ -210,6 +210,8 @@ abstract class DeDe {
 
     // ── G+S (Betreuer + Schützling) ──
     'gs_enable_button': 'Auch Wellness-Schutz erhalten',
+    'gs_safety_code_button': 'Meinen Sicherheitscode prüfen',
+    'gs_safety_code_title': 'Mein Sicherheitscode',
     'gs_enable_dialog_title': 'Wellness-Schutz aktivieren',
     'gs_enable_dialog_body': 'Sie können Wellness-Schutz erhalten und gleichzeitig Ihre Betreuer-Funktionen behalten.\nBei Aktivierung wird ein Sicherheitscode ausgestellt — bitte teilen Sie ihn mit anderen Betreuern.',
     'gs_enable_confirm': 'Aktivieren',

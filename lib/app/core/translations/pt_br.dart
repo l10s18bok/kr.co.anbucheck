@@ -223,6 +223,8 @@ abstract class PtBr {
 
     // ── G+S (Guardião e protegido) ──
     'gs_enable_button': 'Receber proteção também',
+    'gs_safety_code_button': 'Ver meu código de segurança',
+    'gs_safety_code_title': 'Meu código de segurança',
     'gs_enable_dialog_title': 'Ativar proteção',
     'gs_enable_dialog_body':
         'Você pode receber proteção mantendo suas funções de guardião.\nUm código de segurança será emitido — compartilhe-o com outros guardiões.',

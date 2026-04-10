@@ -190,6 +190,8 @@ abstract class ZhTw {
 
     // ── G+S (守護者 + 被守護者) ──
     'gs_enable_button': '我也要接受安否保護',
+    'gs_safety_code_button': '查看我的安全碼',
+    'gs_safety_code_title': '我的安全碼',
     'gs_enable_dialog_title': '啟用安否保護',
     'gs_enable_dialog_body': '您可以在保持守護者功能的同時接受安否保護。\n啟用後將發放安全碼，請將您的「安全碼」告知其他守護者。',
     'gs_enable_confirm': '啟用',

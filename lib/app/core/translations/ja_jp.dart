@@ -190,6 +190,8 @@ abstract class JaJp {
 
     // ── G+S (保護者 + 対象者) ──
     'gs_enable_button': '私も安否保護を受ける',
+    'gs_safety_code_button': '安全コードを確認',
+    'gs_safety_code_title': '安全コード',
     'gs_enable_dialog_title': '安否保護を有効化',
     'gs_enable_dialog_body': '保護者機能を維持したまま、自分の安否も保護してもらえます。\n有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
     'gs_enable_confirm': '有効化',

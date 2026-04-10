@@ -206,6 +206,8 @@ abstract class ArSa {
 
     // ── G+S (وصي + محمي) ──
     'gs_enable_button': 'احصل على الحماية أيضاً',
+    'gs_safety_code_button': 'عرض رمز الأمان الخاص بي',
+    'gs_safety_code_title': 'رمز الأمان الخاص بي',
     'gs_enable_dialog_title': 'تفعيل الحماية',
     'gs_enable_dialog_body':
         'يمكنك الحصول على الحماية مع الاحتفاظ بصلاحيات الوصي.\nسيتم إصدار رمز أمان — يرجى مشاركته مع الأوصياء الآخرين.',

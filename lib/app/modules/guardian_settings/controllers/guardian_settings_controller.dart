@@ -404,4 +404,28 @@ class GuardianSettingsController extends BaseController
   void goToNotificationSettings() {
     Get.toNamed(AppRoutes.guardianNotificationSettings, arguments: 3);
   }
+
+  /// G+S 활성 상태에서 안전 코드 확인 페이지(SubjectHomePage)로 이동
+  void goToSafetyCode() {
+    Get.toNamed(AppRoutes.subjectHome, arguments: {'fromGuardian': true});
+  }
+
+  /// 계정 탈퇴
+  Future<void> deleteAccount() async {
+    final deviceToken = await _tokenDs.getDeviceToken();
+    if (deviceToken != null) {
+      try {
+        await _userDs.deleteMe(deviceToken);
+      } catch (_) {}
+    }
+
+    // G+S 상태라면 WorkManager / 로컬 알림도 취소
+    if (isAlsoSubject.value) {
+      await HeartbeatWorkerService.cancel();
+      await LocalAlarmService.cancel();
+    }
+
+    await _tokenDs.clear();
+    Get.offAllNamed(AppRoutes.modeSelect);
+  }
 }

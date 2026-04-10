@@ -211,6 +211,8 @@ abstract class IdId {
 
     // ── G+S (Penjaga + Yang Dilindungi) ──
     'gs_enable_button': 'Terima perlindungan juga',
+    'gs_safety_code_button': 'Lihat kode keamanan saya',
+    'gs_safety_code_title': 'Kode keamanan saya',
     'gs_enable_dialog_title': 'Aktifkan perlindungan',
     'gs_enable_dialog_body':
         'Anda dapat menerima perlindungan sambil mempertahankan fungsi penjaga.\nKode keamanan akan diterbitkan — bagikan kepada penjaga lain.',

@@ -189,6 +189,8 @@ abstract class EnUs {
 
     // ── G+S (Guardian + Subject) ──
     'gs_enable_button': 'Get Wellness Protection Too',
+    'gs_safety_code_button': 'Check My Safety Code',
+    'gs_safety_code_title': 'My Safety Code',
     'gs_enable_dialog_title': 'Enable Wellness Protection',
     'gs_enable_dialog_body': 'You can receive wellness protection while keeping your guardian features.\nA safety code will be issued — please share it with other guardians.',
     'gs_enable_confirm': 'Enable',

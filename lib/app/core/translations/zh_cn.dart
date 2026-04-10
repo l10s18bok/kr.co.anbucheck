@@ -190,6 +190,8 @@ abstract class ZhCn {
 
     // ── G+S (守护者 + 被守护者) ──
     'gs_enable_button': '我也要接受安否保护',
+    'gs_safety_code_button': '查看我的安全码',
+    'gs_safety_code_title': '我的安全码',
     'gs_enable_dialog_title': '启用安否保护',
     'gs_enable_dialog_body': '您可以在保持监护人功能的同时接受安否保护。\n启用后将发放安全码，请将您的"安全码"告知其他监护人。',
     'gs_enable_confirm': '启用',

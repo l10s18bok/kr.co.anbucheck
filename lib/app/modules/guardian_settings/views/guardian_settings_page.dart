@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
-import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
@@ -59,18 +58,10 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
         child: Obx(() => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: controller.isAlsoSubject.value ? AppSpacing.sm : AppSpacing.lg),
-
-                // ── G+S: 활성화 버튼 또는 통합 카드 ──
-                if (!controller.isAlsoSubject.value)
-                  _buildEnableButton()
-                else
-                  _buildSubjectCard(),
                 SizedBox(height: AppSpacing.lg),
 
-                // 연결 관리 카드 (G+S 활성 시 히든)
-                if (!controller.isAlsoSubject.value) ...[
-                  Container(
+                // 연결 관리 카드
+                Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(AppSpacing.lg),
                     decoration: BoxDecoration(
@@ -109,7 +100,6 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                     ),
                   ),
                   SizedBox(height: AppSpacing.sp6),
-                ],
 
                 // 구독 및 서비스 섹션
                 Text('settings_subscription_service'.tr,
@@ -119,6 +109,10 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
 
                 // 구독 카드
                 _buildSubscriptionCard(),
+                SizedBox(height: AppSpacing.lg),
+
+                // G+S 버튼: 비활성 → 활성화 / 활성 → 안전 코드 확인 페이지 이동
+                _buildGsButton(),
                 SizedBox(height: AppSpacing.lg),
 
                 // 알림 설정
@@ -202,30 +196,43 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                 ),
                 SizedBox(height: AppSpacing.sp8),
 
-                // 하단: 앱 버전 + 브랜드
-                Center(
-                  child: Column(
-                    children: [
-                      Obx(() => Text(
-                        'settings_app_version'.trParams({'version': controller.appVersion.value}),
-                        style: AppTextTheme.labelSmall(
-                            color: AppColors.textTertiary))),
-                      SizedBox(height: 2.h),
-                      Text('app_guardian_title'.tr,
+                // 하단: 앱 버전 + 브랜드 (왼쪽 정렬) + 탈퇴 (우측)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Obx(() => Text(
+                            'settings_app_version'.trParams({'version': controller.appVersion.value}),
+                            style: AppTextTheme.labelSmall(
+                                color: AppColors.textTertiary))),
+                          SizedBox(height: AppSpacing.md),
+                          Text('ANBU GUARD NETWORK',
+                              style: AppTextTheme.labelSmall(
+                                  color: AppColors.textTertiary,
+                                  fw: FontWeight.w600)),
+                          SizedBox(height: 4.h),
+                          Text('© 2024 TNS Inc.',
+                              style: AppTextTheme.labelSmall(
+                                  color: AppColors.textTertiary)),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => _showDeleteConfirm(),
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 2.h),
+                        child: Text(
+                          'drawer_withdraw'.tr,
                           style: AppTextTheme.labelSmall(
-                              color: AppColors.textTertiary,
-                              fw: FontWeight.w500)),
-                      SizedBox(height: AppSpacing.md),
-                      Text('ANBU GUARD NETWORK',
-                          style: AppTextTheme.labelSmall(
-                              color: AppColors.textTertiary,
-                              fw: FontWeight.w600)),
-                      SizedBox(height: 4.h),
-                      Text('© 2024 TNS Inc.',
-                          style: AppTextTheme.labelSmall(
-                              color: AppColors.textTertiary)),
-                    ],
-                  ),
+                            color: AppColors.error,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: AppSpacing.sp6),
               ],
@@ -237,23 +244,26 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
     );
   }
 
-  // ── [나도 안부 보호 받기] 활성화 버튼 ──
+  // ── G+S 버튼 (알림 설정과 동일한 스타일) ──
 
-  Widget _buildEnableButton() {
+  Widget _buildGsButton() {
     return Obx(() {
+      final isGS = controller.isAlsoSubject.value;
       final enabling = controller.isEnabling.value;
       return GestureDetector(
-        onTap: enabling ? null : () => _showEnableConfirm(),
+        onTap: enabling
+            ? null
+            : isGS
+                ? controller.goToSafetyCode
+                : () => _showEnableConfirm(),
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: AppSpacing.lg),
+          padding: EdgeInsets.all(AppSpacing.lg),
           decoration: BoxDecoration(
             color: AppColors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: const Color(0xFF4355B9).withValues(alpha: 0.3)),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (enabling)
                 SizedBox(
@@ -261,18 +271,16 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                   child: const CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF4355B9)),
                 )
               else
-                Icon(Icons.shield_rounded, size: 22.w, color: const Color(0xFF4355B9)),
-              SizedBox(width: 8.w),
-              Flexible(
+                Icon(Icons.shield_rounded, size: 22.w, color: AppColors.onSurfaceVariant),
+              SizedBox(width: AppSpacing.md),
+              Expanded(
                 child: Text(
-                  'gs_enable_button'.tr,
-                  style: AppTextTheme.bodyLarge(
-                    color: const Color(0xFF4355B9),
-                    fw: FontWeight.w700,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+                  isGS ? 'gs_safety_code_button'.tr : 'gs_enable_button'.tr,
+                  style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
                 ),
               ),
+              Icon(Icons.chevron_right_rounded,
+                  size: 22.w, color: AppColors.onSurfaceVariant),
             ],
           ),
         ),
@@ -307,287 +315,14 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
     );
   }
 
-  // ── G+S 통합 카드 (활성화 상태) ──
+  // ── 탈퇴 확인 다이얼로그 ──
 
-  Widget _buildSubjectCard() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      child: Column(
-        children: [
-          // 헤더: 해제 + SAFETY SHARE CODE + 복사/공유
-          Row(
-            children: [
-              GestureDetector(
-                onTap: _showDisableConfirm,
-                child: Container(
-                  padding: EdgeInsets.all(AppSpacing.sm),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLow,
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Icon(Icons.exit_to_app_rounded, size: 20.w, color: AppColors.error),
-                ),
-              ),
-              SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  'SAFETY SHARE CODE',
-                  style: AppTextTheme.labelMedium(
-                    color: AppColors.textTertiary,
-                    fw: FontWeight.w600,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: controller.copyInviteCode,
-                child: Container(
-                  padding: EdgeInsets.all(AppSpacing.sm),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLow,
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Icon(Icons.copy_rounded, size: 20.w, color: AppColors.onSurfaceVariant),
-                ),
-              ),
-              SizedBox(width: AppSpacing.sm),
-              GestureDetector(
-                onTap: controller.shareInviteCode,
-                child: Container(
-                  padding: EdgeInsets.all(AppSpacing.sm),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLow,
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Icon(Icons.share_rounded, size: 20.w, color: AppColors.onSurfaceVariant),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: AppSpacing.md),
-
-          // 초대 코드
-          Obx(() => Text(
-            controller.inviteCode.isNotEmpty ? controller.inviteCode.value : '---  ----',
-            style: TextStyle(
-              fontSize: 36.sp,
-              fontWeight: FontWeight.w800,
-              color: controller.inviteCode.isNotEmpty
-                  ? (Get.find<ThemeService>().isDarkMode.value
-                      ? Colors.white
-                      : const Color(0xFF4355B9))
-                  : AppColors.textTertiary,
-              letterSpacing: 2,
-            ),
-          )),
-          SizedBox(height: AppSpacing.lg),
-
-          // 상태 카드
-          _buildStatusRow(),
-          SizedBox(height: AppSpacing.lg),
-
-          // 수동 보고 버튼
-          _buildReportButton(),
-          SizedBox(height: AppSpacing.md),
-
-          // 시각 변경
-          Obx(() => HeartbeatScheduleTile(
-            heartbeatTime: controller.heartbeatTime.value,
-            onTap: controller.showTimePickerDialog,
-            color: const Color(0xFF4355B9),
-            timeColor: Get.find<ThemeService>().isDarkMode.value ? Colors.white : null,
-            backgroundColor: Get.find<ThemeService>().isDarkMode.value
-                ? const Color(0xFF1A237E).withValues(alpha: 0.3)
-                : const Color(0xFFE8EAF6),
-          )),
-          SizedBox(height: AppSpacing.md),
-
-          // 긴급 도움 요청
-          _buildEmergencyButton(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusRow() {
-    return Obx(() {
-      final state = controller.checkCardState;
-      final iconData = state == 'reported'
-          ? Icons.check_rounded
-          : state == 'waiting'
-              ? Icons.hourglass_top_rounded
-              : Icons.schedule_rounded;
-      final dark = Get.find<ThemeService>().isDarkMode.value;
-      final iconBg = state == 'reported'
-          ? (dark ? const Color(0xFF303F9F) : const Color(0xFF4355B9))
-          : state == 'waiting'
-              ? (dark ? const Color(0xFFFF6D00) : const Color(0xFFE65100))
-              : (dark ? const Color(0xFF6A1B9A) : AppColors.surfaceContainerHigh);
-      final iconColor = state == 'reported' || state == 'waiting'
-          ? Colors.white
-          : (dark ? Colors.white : AppColors.onSurfaceVariant);
-      final textColor = dark
-          ? const Color(0xFFFFD54F)
-          : (state == 'waiting' ? const Color(0xFFE65100) : const Color(0xFF4355B9));
-
-      return Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: dark
-              ? const Color(0xFF1A237E).withValues(alpha: 0.2)
-              : const Color(0xFFE8EAF6).withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40.w, height: 40.w,
-              decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
-              child: Icon(iconData, size: 24.w, color: iconColor),
-            ),
-            SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(controller.checkCardTitle,
-                      style: AppTextTheme.bodySmall(color: AppColors.textSecondary)),
-                  SizedBox(height: 2.h),
-                  Text(controller.checkCardBody,
-                      style: AppTextTheme.bodyLarge(color: textColor, fw: FontWeight.w700)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _buildReportButton() {
-    return Obx(() {
-      final sending = controller.isReporting.value;
-      return GestureDetector(
-        onTap: sending ? null : controller.reportNow,
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 14.h),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: sending
-                  ? [const Color(0xFF5C6BC0), const Color(0xFF5C6BC0)]
-                  : [const Color(0xFF4355B9), const Color(0xFF5C6BC0)],
-            ),
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (sending)
-                SizedBox(
-                  width: 20.w, height: 20.w,
-                  child: const CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                )
-              else
-                Icon(Icons.verified_user_rounded, size: 20.w, color: Colors.white),
-              SizedBox(width: 8.w),
-              Flexible(
-                child: Text(
-                  sending ? 'subject_home_report_loading'.tr : 'subject_home_report_button'.tr,
-                  style: AppTextTheme.bodyLarge(color: Colors.white, fw: FontWeight.w700),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
-  }
-
-  Widget _buildEmergencyButton() {
-    return Obx(() {
-      final sending = controller.isSendingEmergency.value;
-      return GestureDetector(
-        onTap: sending ? null : () => _showEmergencyConfirm(),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 14.h),
-          decoration: BoxDecoration(
-            color: sending ? const Color(0xFFFFCDD2) : const Color(0xFFFFEBEE),
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(
-              color: sending ? const Color(0xFFE57373) : const Color(0xFFB71C1C),
-              width: 1.5,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (sending)
-                SizedBox(
-                  width: 20.w, height: 20.w,
-                  child: const CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFB71C1C)),
-                )
-              else
-                Icon(Icons.volunteer_activism_rounded, size: 20.w, color: const Color(0xFFB71C1C)),
-              SizedBox(width: 8.w),
-              Flexible(
-                child: Text(
-                  sending ? 'subject_home_emergency_loading'.tr : 'subject_home_emergency_button'.tr,
-                  style: AppTextTheme.bodyLarge(
-                    color: const Color(0xFFB71C1C),
-                    fw: FontWeight.w700,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
-  }
-
-  void _showEmergencyConfirm() {
+  void _showDeleteConfirm() {
     Get.dialog(
       AlertDialog(
-        title: Text('subject_home_emergency_confirm_title'.tr,
-            style: AppTextTheme.headlineSmall(
-                fw: FontWeight.w700, color: const Color(0xFFB71C1C))),
-        content: Text('subject_home_emergency_confirm_body'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text('common_cancel'.tr,
-                style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              controller.sendEmergency();
-            },
-            child: Text('subject_home_emergency_confirm_send'.tr,
-                style: AppTextTheme.bodyMedium(
-                    color: const Color(0xFFB71C1C), fw: FontWeight.w700)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDisableConfirm() {
-    Get.dialog(
-      AlertDialog(
-        title: Text('gs_disable_dialog_title'.tr,
+        title: Text('drawer_withdraw'.tr,
             style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
-        content: Text('gs_disable_dialog_body'.tr,
+        content: Text('drawer_withdraw_message'.tr,
             style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
         actions: [
           TextButton(
@@ -598,10 +333,10 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
           TextButton(
             onPressed: () {
               Get.back();
-              controller.disableSubjectFeature();
+              controller.deleteAccount();
             },
-            child: Text('gs_disable_confirm'.tr,
-                style: AppTextTheme.bodyMedium(color: AppColors.error, fw: FontWeight.w700)),
+            child: Text('drawer_withdraw'.tr,
+                style: AppTextTheme.bodyMedium(color: AppColors.error)),
           ),
         ],
       ),

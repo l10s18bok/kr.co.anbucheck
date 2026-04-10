@@ -212,6 +212,8 @@ abstract class PlPl {
 
     // ── G+S (Opiekun + Podopieczny) ──
     'gs_enable_button': 'Otrzymuj też ochronę',
+    'gs_safety_code_button': 'Sprawdź mój kod bezpieczeństwa',
+    'gs_safety_code_title': 'Mój kod bezpieczeństwa',
     'gs_enable_dialog_title': 'Włącz ochronę',
     'gs_enable_dialog_body':
         'Możesz otrzymywać ochronę, zachowując funkcje opiekuna.\nZostanie wydany kod bezpieczeństwa — udostępnij go innym opiekunom.',

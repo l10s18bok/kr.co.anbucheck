@@ -220,6 +220,8 @@ abstract class NlNl {
 
     // ── G+S (Bewaker en beschermde) ──
     'gs_enable_button': 'Ook welzijnsbescherming ontvangen',
+    'gs_safety_code_button': 'Mijn veiligheidscode bekijken',
+    'gs_safety_code_title': 'Mijn veiligheidscode',
     'gs_enable_dialog_title': 'Welzijnsbescherming activeren',
     'gs_enable_dialog_body':
         'U kunt welzijnsbescherming ontvangen terwijl u uw bewakerfuncties behoudt.\nEr wordt een veiligheidscode uitgegeven — deel deze met andere bewakers.',

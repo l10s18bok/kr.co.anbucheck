@@ -190,6 +190,8 @@ abstract class KoKr {
 
     // ── G+S (보호자 겸 대상자) ──
     'gs_enable_button': '나도 안부 보호 받기',
+    'gs_safety_code_button': '내 안전 코드 확인',
+    'gs_safety_code_title': '내 안전 코드',
     'gs_enable_dialog_title': '안부 보호 활성화',
     'gs_enable_dialog_body': '보호자 기능을 유지하면서 나의 안부도 보호받을 수 있습니다.\n활성화하면 안전 코드가 발급되고, 다른 보호자에게 내 "안전 코드"를 알려주세요.',
     'gs_enable_confirm': '활성화',

@@ -216,6 +216,8 @@ abstract class EsEs {
 
     // ── G+S (Guardián y protegido) ──
     'gs_enable_button': 'Recibir protección también',
+    'gs_safety_code_button': 'Ver mi código de seguridad',
+    'gs_safety_code_title': 'Mi código de seguridad',
     'gs_enable_dialog_title': 'Activar protección',
     'gs_enable_dialog_body':
         'Puedes recibir protección mientras mantienes tus funciones de guardián.\nSe emitirá un código de seguridad — compártelo con otros guardianes.',

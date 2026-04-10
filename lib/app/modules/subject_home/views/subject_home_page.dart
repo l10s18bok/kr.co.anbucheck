@@ -17,28 +17,50 @@ import 'package:anbucheck/app/modules/subject_home/controllers/subject_home_cont
 class SubjectHomePage extends GetWidget<SubjectHomeController> {
   const SubjectHomePage({super.key});
 
+  /// G+S 모드(보호자 설정에서 진입)인지 확인
+  bool get _isFromGuardian {
+    final args = Get.arguments;
+    if (args is Map) return args['fromGuardian'] == true;
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     controller.loadAppVersion();
     final scaffoldKey = GlobalKey<ScaffoldState>();
+    final fromGuardian = _isFromGuardian;
 
     return PopScope(
-      canPop: false,
+      canPop: fromGuardian,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) BackPressHandler.onBackPressed();
+        if (!didPop) {
+          if (fromGuardian) {
+            Get.back();
+          } else {
+            BackPressHandler.onBackPressed();
+          }
+        }
       },
       child: Scaffold(
       key: scaffoldKey,
       backgroundColor: AppColors.surface,
-      drawer: _buildDrawer(scaffoldKey),
+      drawer: fromGuardian ? null : _buildDrawer(scaffoldKey),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
-          onPressed: () => scaffoldKey.currentState?.openDrawer(),
-        ),
-        title: Text('app_name'.tr, style: AppTextTheme.headlineSmall()),
+        automaticallyImplyLeading: false,
+        leading: fromGuardian
+            ? IconButton(
+                icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.onSurface, size: 20.w),
+                onPressed: () => Get.back(),
+              )
+            : IconButton(
+                icon: Icon(Icons.menu, color: AppColors.onSurface, size: 24.w),
+                onPressed: () => scaffoldKey.currentState?.openDrawer(),
+              ),
+        title: fromGuardian
+            ? Text('gs_safety_code_title'.tr, style: AppTextTheme.headlineSmall())
+            : Text('app_name'.tr, style: AppTextTheme.headlineSmall()),
         actions: [
           Obx(() {
             if (!controller.isGuardianConnected) return const SizedBox.shrink();

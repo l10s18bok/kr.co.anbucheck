@@ -208,6 +208,8 @@ abstract class TrTr {
 
     // ── G+S (Koruyucu + Korunan) ──
     'gs_enable_button': 'Ben de koruma al',
+    'gs_safety_code_button': 'Güvenlik kodumu kontrol et',
+    'gs_safety_code_title': 'Güvenlik kodum',
     'gs_enable_dialog_title': 'Korumayı etkinleştir',
     'gs_enable_dialog_body':
         'Koruyucu özelliklerinizi korurken koruma alabilirsiniz.\nBir güvenlik kodu verilecektir — lütfen diğer koruyucularla paylaşın.',

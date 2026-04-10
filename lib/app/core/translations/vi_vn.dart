@@ -211,6 +211,8 @@ abstract class ViVn {
 
     // ── G+S (Người giám hộ + Được bảo vệ) ──
     'gs_enable_button': 'Nhận bảo vệ sức khỏe',
+    'gs_safety_code_button': 'Xem mã an toàn của tôi',
+    'gs_safety_code_title': 'Mã an toàn của tôi',
     'gs_enable_dialog_title': 'Kích hoạt bảo vệ',
     'gs_enable_dialog_body':
         'Bạn có thể nhận bảo vệ trong khi giữ nguyên chức năng giám hộ.\nMã an toàn sẽ được cấp — hãy chia sẻ với người giám hộ khác.',
