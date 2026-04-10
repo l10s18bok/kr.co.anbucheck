@@ -75,6 +75,9 @@ abstract class PtBr {
     'permission_notification_required_message':
         'A permissão de notificações é necessária para o serviço de verificação de bem-estar.\nAtive-a nas Configurações.',
     'permission_go_to_settings': 'Ir para Configurações',
+    'permission_activity_denied_title': 'Permissão de atividade física necessária',
+    'permission_activity_denied_message':
+        'Usada para detectar passos e melhorar a precisão da verificação de bem-estar.\nAtive a permissão de atividade física nas Configurações.',
 
     // ── Onboarding ──
     'onboarding_title_1':

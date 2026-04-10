@@ -64,6 +64,9 @@ abstract class EnUs {
     'permission_notification_required_message':
         'Notification permission is required for the wellness check service.\nPlease enable it in Settings.',
     'permission_go_to_settings': 'Go to Settings',
+    'permission_activity_denied_title': 'Physical Activity Permission Required',
+    'permission_activity_denied_message':
+        'This is used to detect steps and improve wellness check accuracy.\nPlease enable physical activity permission in Settings.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Worried about someone\nliving alone?',

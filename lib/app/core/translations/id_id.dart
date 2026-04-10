@@ -70,6 +70,9 @@ abstract class IdId {
     'permission_notification_required_message':
         'Izin notifikasi diperlukan untuk layanan pemeriksaan kesejahteraan.\nSilakan aktifkan di Pengaturan.',
     'permission_go_to_settings': 'Buka Pengaturan',
+    'permission_activity_denied_title': 'Izin Aktivitas Fisik Diperlukan',
+    'permission_activity_denied_message':
+        'Izin aktivitas fisik diperlukan untuk mendeteksi langkah dan memverifikasi keselamatan Anda.\n\nTanpa izin ini, informasi langkah tidak akan dikirim ke wali.\n\nSilakan aktifkan izin "Aktivitas Fisik" di pengaturan aplikasi.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Khawatir tentang seseorang\nyang tinggal sendiri?',

@@ -71,6 +71,9 @@ abstract class PlPl {
     'permission_notification_required_message':
         'Uprawnienie do powiadomien jest wymagane dla uslugi sprawdzania samopoczucia.\nProsze wlaczyc je w Ustawieniach.',
     'permission_go_to_settings': 'Przejdz do Ustawien',
+    'permission_activity_denied_title': 'Wymagane uprawnienie aktywności fizycznej',
+    'permission_activity_denied_message':
+        'Uprawnienie aktywności fizycznej jest wymagane do wykrywania kroków i weryfikacji Twojego bezpieczeństwa.\n\nBez tego uprawnienia informacje o krokach nie będą wysyłane do opiekunów.\n\nWłącz uprawnienie "Aktywność fizyczna" w ustawieniach aplikacji.',
 
     // ── Onboarding ──
     'onboarding_title_1':

@@ -64,6 +64,9 @@ abstract class ZhCn {
     'permission_notification_required_message':
         '问安服务需要通知权限。\n请在设置中开启通知权限。',
     'permission_go_to_settings': '前往设置',
+    'permission_activity_denied_title': '需要身体活动权限',
+    'permission_activity_denied_message':
+        '用于检测步数并提高问安准确性。\n请在设置中开启身体活动权限。',
 
     // ── 引导页 ──
     'onboarding_title_1': '担心独居的亲人\n过得好不好？',

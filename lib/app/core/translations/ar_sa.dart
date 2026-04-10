@@ -70,6 +70,9 @@ abstract class ArSa {
     'permission_notification_required_message':
         'يتطلب عمل خدمة الاطمئنان إذن الإشعارات.\nيرجى تفعيله من الإعدادات.',
     'permission_go_to_settings': 'الذهاب إلى الإعدادات',
+    'permission_activity_denied_title': 'إذن النشاط البدني مطلوب',
+    'permission_activity_denied_message':
+        'يلزم إذن النشاط البدني لاكتشاف الخطوات والتحقق من سلامتك.\n\nبدون هذا الإذن، لن يتم إرسال معلومات الخطوات إلى الأوصياء.\n\nيرجى تفعيل إذن "النشاط البدني" في إعدادات التطبيق.',
 
     // ── التهيئة الأولية ──
     'onboarding_title_1': 'هل تقلق على شخص\nعزيز يعيش بمفرده؟',

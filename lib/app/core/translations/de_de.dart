@@ -71,6 +71,9 @@ abstract class DeDe {
     'permission_notification_required_message':
         'Für den Wohlbefindens-Check ist die Benachrichtigungsberechtigung erforderlich.\nBitte aktivieren Sie diese in den Einstellungen.',
     'permission_go_to_settings': 'Zu den Einstellungen',
+    'permission_activity_denied_title': 'Berechtigung für körperliche Aktivität erforderlich',
+    'permission_activity_denied_message':
+        'Wird verwendet, um Schritte zu erkennen und die Genauigkeit der Wohlbefindensprüfung zu verbessern.\nBitte aktivieren Sie die Berechtigung in den Einstellungen.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Machen Sie sich Sorgen\num jemanden, der allein lebt?',

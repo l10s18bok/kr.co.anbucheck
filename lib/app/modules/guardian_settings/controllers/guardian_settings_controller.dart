@@ -218,9 +218,9 @@ class GuardianSettingsController extends BaseController
       inviteCode.value = code;
       applySchedule(hour, minute);
 
-      // Android: 신체 활동 권한 요청
+      // Android: 신체 활동 권한 (사전 안내 → 요청 → 거부 시 설정 안내)
       if (Platform.isAndroid) {
-        await Permission.activityRecognition.request();
+        await _requestActivityRecognition();
       }
 
       // WorkManager + 로컬 안전망 등록
@@ -245,6 +245,47 @@ class GuardianSettingsController extends BaseController
           snackPosition: SnackPosition.TOP);
     } finally {
       isEnabling.value = false;
+    }
+  }
+
+  /// 신체 활동 권한: 사전 안내 → 요청 → 거부 시 설정 이동 안내
+  Future<void> _requestActivityRecognition() async {
+    // 사전 안내 다이얼로그
+    await Get.dialog<void>(
+      AlertDialog(
+        title: Text('permission_activity_dialog_title'.tr),
+        content: Text('permission_activity_dialog_message'.tr),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('common_confirm'.tr),
+          ),
+        ],
+      ),
+    );
+
+    // OS 권한 팝업
+    final status = await Permission.activityRecognition.request();
+    if (!status.isGranted) {
+      final goSettings = await Get.dialog<bool>(
+        AlertDialog(
+          title: Text('permission_activity_denied_title'.tr),
+          content: Text('permission_activity_denied_message'.tr),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(result: false),
+              child: Text('common_later'.tr),
+            ),
+            TextButton(
+              onPressed: () => Get.back(result: true),
+              child: Text('permission_go_to_settings'.tr),
+            ),
+          ],
+        ),
+      );
+      if (goSettings == true) {
+        openAppSettings();
+      }
     }
   }
 

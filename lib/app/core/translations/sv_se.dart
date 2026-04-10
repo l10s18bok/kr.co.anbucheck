@@ -72,6 +72,9 @@ abstract class SvSe {
     'permission_notification_required_message':
         'Aviseringsbehorighet kravs for valmaendetjansten.\nAktivera den i Installningar.',
     'permission_go_to_settings': 'Ga till Installningar',
+    'permission_activity_denied_title': 'Behörighet för fysisk aktivitet krävs',
+    'permission_activity_denied_message':
+        'Behörighet för fysisk aktivitet krävs för att upptäcka steg och verifiera din säkerhet.\n\nUtan denna behörighet skickas ingen steginformation till vårdnadshavare.\n\nAktivera behörigheten "Fysisk aktivitet" i appinställningarna.',
 
     // ── Introduktion ──
     'onboarding_title_1': 'Orolig for nagon\nsom bor ensam?',

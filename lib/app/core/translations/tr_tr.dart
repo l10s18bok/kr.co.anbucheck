@@ -70,6 +70,9 @@ abstract class TrTr {
     'permission_notification_required_message':
         'Hal hatır hizmeti için bildirim izni gereklidir.\nLütfen Ayarlar\'dan etkinleştirin.',
     'permission_go_to_settings': 'Ayarlara Git',
+    'permission_activity_denied_title': 'Fiziksel Aktivite İzni Gerekli',
+    'permission_activity_denied_message':
+        'Adım sayınızı algılamak ve güvenliğinizi doğrulamak için fiziksel aktivite izni gereklidir.\n\nBu izin olmadan adım bilgileri koruyuculara gönderilmeyecektir.\n\nLütfen uygulama ayarlarından "Fiziksel Aktivite" iznini etkinleştirin.',
 
     // ── Tanıtım ──
     'onboarding_title_1': 'Yalnız yaşayan birisi için\nendişeleniyor musunuz?',

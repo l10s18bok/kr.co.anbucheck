@@ -75,6 +75,9 @@ abstract class NlNl {
     'permission_notification_required_message':
         'De welzijnscontrole vereist meldingstoestemming.\nSchakel deze in via Instellingen.',
     'permission_go_to_settings': 'Ga naar Instellingen',
+    'permission_activity_denied_title': 'Toestemming voor fysieke activiteit vereist',
+    'permission_activity_denied_message':
+        'Wordt gebruikt om stappen te detecteren en de nauwkeurigheid van de welzijnscontrole te verbeteren.\nSchakel de toestemming in via Instellingen.',
 
     // ── Onboarding ──
     'onboarding_title_1':

@@ -74,6 +74,9 @@ abstract class ItIt {
     'permission_notification_required_message':
         'Il permesso notifiche è necessario per il servizio di verifica del benessere.\nLo abiliti nelle Impostazioni.',
     'permission_go_to_settings': 'Vai alle Impostazioni',
+    'permission_activity_denied_title': 'Autorizzazione attività fisica richiesta',
+    'permission_activity_denied_message':
+        'Viene utilizzata per rilevare i passi e migliorare la precisione del controllo del benessere.\nAbilita l\'autorizzazione attività fisica nelle Impostazioni.',
 
     // ── Onboarding ──
     'onboarding_title_1':

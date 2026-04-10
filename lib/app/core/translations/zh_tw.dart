@@ -64,6 +64,9 @@ abstract class ZhTw {
     'permission_notification_required_message':
         '問安服務需要通知權限。\n請在設定中開啟通知權限。',
     'permission_go_to_settings': '前往設定',
+    'permission_activity_denied_title': '需要身體活動權限',
+    'permission_activity_denied_message':
+        '用於偵測步數並提高問安準確性。\n請在設定中開啟身體活動權限。',
 
     // ── 引導頁 ──
     'onboarding_title_1': '擔心獨居的親人\n過得好不好？',

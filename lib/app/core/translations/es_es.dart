@@ -72,6 +72,9 @@ abstract class EsEs {
     'permission_notification_required_message':
         'Se necesita el permiso de notificaciones para el servicio de bienestar.\nActívelo en Ajustes.',
     'permission_go_to_settings': 'Ir a Ajustes',
+    'permission_activity_denied_title': 'Se requiere permiso de actividad física',
+    'permission_activity_denied_message':
+        'Se utiliza para detectar pasos y mejorar la precisión de la verificación de bienestar.\nActive el permiso de actividad física en Ajustes.',
 
     // ── Presentación ──
     'onboarding_title_1':

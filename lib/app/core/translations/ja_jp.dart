@@ -64,6 +64,9 @@ abstract class JaJp {
     'permission_notification_required_message':
         '安否確認サービスをご利用いただくには通知の権限が必要です。\n設定から通知の権限を許可してください。',
     'permission_go_to_settings': '設定を開く',
+    'permission_activity_denied_title': '身体活動の権限が必要です',
+    'permission_activity_denied_message':
+        '歩数を検知して安否確認の精度を向上させるために使用します。\n設定から身体活動の権限を許可してください。',
 
     // ── オンボーディング ──
     'onboarding_title_1': 'ひとり暮らしの大切な人、\n心配ではありませんか？',

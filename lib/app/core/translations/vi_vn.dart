@@ -71,6 +71,9 @@ abstract class ViVn {
     'permission_notification_required_message':
         'Quyen thong bao la bat buoc cho dich vu kiem tra suc khoe.\nVui long bat trong Cai dat.',
     'permission_go_to_settings': 'Di den Cai dat',
+    'permission_activity_denied_title': 'Can quyen hoat dong the chat',
+    'permission_activity_denied_message':
+        'Quyen hoat dong the chat can thiet de phat hien buoc chan va xac minh su an toan cua ban.\n\nNeu khong co quyen nay, thong tin buoc chan se khong duoc gui den nguoi bao ho.\n\nVui long bat quyen "Hoat dong the chat" trong cai dat ung dung.',
 
     // ── Gioi thieu ──
     'onboarding_title_1': 'Ban lo lang cho nguoi\nsong mot minh?',

@@ -72,6 +72,9 @@ abstract class FrFr {
     'permission_notification_required_message':
         'L\'autorisation de notification est nécessaire pour le service de bien-être.\nVeuillez l\'activer dans les Réglages.',
     'permission_go_to_settings': 'Ouvrir les Réglages',
+    'permission_activity_denied_title': 'Autorisation d\'activité physique requise',
+    'permission_activity_denied_message':
+        'Utilisée pour détecter les pas et améliorer la précision de la vérification du bien-être.\nVeuillez activer l\'autorisation d\'activité physique dans les Réglages.',
 
     // ── Présentation ──
     'onboarding_title_1':

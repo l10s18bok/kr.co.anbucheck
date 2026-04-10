@@ -64,6 +64,9 @@ abstract class KoKr {
     'permission_notification_required_message':
         '안부 확인 서비스를 이용하려면 알림 권한이 필요합니다.\n설정에서 알림 권한을 허용해 주세요.',
     'permission_go_to_settings': '설정으로 이동',
+    'permission_activity_denied_title': '신체 활동 권한이 필요합니다',
+    'permission_activity_denied_message':
+        '걸음수를 감지하여 안부 확인 정확도를 높이는 데 사용됩니다.\n설정에서 신체 활동 권한을 허용해 주세요.',
 
     // ── 온보딩 ──
     'onboarding_title_1': '혼자 사는 소중한 사람,\n걱정되시나요?',
