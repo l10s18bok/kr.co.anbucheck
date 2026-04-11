@@ -163,7 +163,7 @@ Splash → 버전 체크 → 플랫폼 분기
 |                       | Android                                                                                                           | iOS                                                                                               |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | 주 방식 (1차)         | **WorkManager** (클라이언트가 예약 시각에 백그라운드 실행)                                                        | **BGTaskScheduler + Background Fetch** (클라이언트가 예약 시각에 백그라운드 실행)                  |
-| 트리거                | `registerOneOffTask()` — 정확한 시각 지정 + `registerPeriodicTask()` — 1시간 주기 보조                             | `registerOneOffTask()` → BGProcessingTask + `registerPeriodicTask()` → BGAppRefreshTask (Background Fetch) |
+| 트리거                | `registerOneOffTask()` — 정확한 시각 지정 + `registerPeriodicTask()` — 1시간 주기 보조                             | `registerProcessingTask()` → BGProcessingTask (earliestBeginDate 존중). ⚠️ `registerOneOffTask()`는 iOS에서 `beginBackgroundTask`를 사용하여 즉시 실행되므로 사용 금지 (flutter_workmanager PR #511) |
 | 백그라운드 실행       | `workmanager` 패키지 콜백 (top-level function)                                                                    | `workmanager` 패키지 콜백 (top-level function)                                                    |
 | UI 표시               | 없음 (사용자 인지 불가)                                                                                           | 없음 (사용자 인지 불가)                                                                           |
 | 보조 방식 (2차)       | **앱 열기/복귀 자동 전송** — 예약 시각 경과 + 당일 미전송 시 heartbeat 즉시 전송                                   | **앱 열기/복귀 자동 전송** — 예약 시각 경과 + 당일 미전송 시 heartbeat 즉시 전송                    |
@@ -230,21 +230,23 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 | 3차 | 로컬 알림 데드맨 스위치 | heartbeat 시각 + 30분 (매일 반복) | 1차·2차 모두 실패 시 사용자에게 앱 실행 유도 |
 
 ```
-[1차: WorkManager/BGTaskScheduler + Background Fetch — 백그라운드 실행]
+[1차: WorkManager/BGTaskScheduler — 백그라운드 실행]
     │
-    ├─ one-off 태스크: registerOneOffTask() — initialDelay로 정확한 시각 지정
-    │   ├─ Android: WorkManager가 예약 시각에 실행
-    │   └─ iOS: BGProcessingTask가 예약 시점 근처에서 실행
+    ├─ Android:
+    │   ├─ registerOneOffTask() — initialDelay로 정확한 시각 지정 (WorkManager)
+    │   └─ registerPeriodicTask() — 1시간 주기 보조 안전망
     │
-    ├─ periodic 태스크: registerPeriodicTask() — 1시간 주기 보조
-    │   ├─ Android: WorkManager 주기적 실행 (최소 15분 간격)
-    │   └─ iOS: BGAppRefreshTask (Background Fetch) — OS 재량으로 실행
-    │   ※ one-off가 미실행되었을 때 보조 역할
+    ��─ iOS:
+    │   ├─ registerProcessingTask() — BGProcessingTask (earliestBeginDate 존중)
+    │   │   ⚠️ registerOneOffTask()는 iOS에서 beginBackgroundTask를 사용하여
+    │   │      initialDelay를 무시하고 즉시 실행되므로 사용 금지
+    │   │      (flutter_workmanager PR #511 참고)
+    │   └─ AppDelegate에서 registerBGProcessingTask(withIdentifier:) 등록 필수
     │
-    ├─ 콜백 (one-off / periodic 공통):
+    ├─ 콜백 (Android/iOS 공통):
     │   ├─ 당일 이미 전송 여부 확인 (lastHeartbeatDate) → 중복 전송 방지
     │   ├─ 미전송 시 → heartbeat 전송 (센서 + API)
-    │   └─ 다음 날 동일 시각으로 one-off 재예약
+    │   └─ 다음 날 동일 시각으로 재예약 (iOS: registerProcessingTask, Android: registerOneOffTask)
     └─ 실행 후 자동 종료
 
 [2차: 앱 열기/복귀 자동 전송]
@@ -292,7 +294,7 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 ```
 
 **한계 및 대응:**
-- **iOS BGProcessingTask 미실행**: iOS가 실행 시점을 OS 재량으로 결정 → periodic(BGAppRefreshTask) + 2차(앱 열기) + 3차(데드맨 알림)로 보완
+- **iOS BGProcessingTask 미실행**: iOS가 실행 시점을 OS 재량으로 결정 → 2차(앱 열기) + 3차(데드맨 알림)로 보완. iOS에서는 periodic 태스크(BGAppRefreshTask) 미사용
 - 사용자가 알림을 무시하면 앱이 열리지 않음 → 서버가 미수신 감지 → 보호자에게 경고 발송
 - 사용자가 알림 권한을 거부하면 3차 안전망 동작 안 함 → 모드 선택 후 권한 요청 안내 화면(9.0)에서 중요성 안내
 - 알림 권한은 이 앱의 핵심 기능(보호자 경고 Push 수신)에도 필수이므로, 별도 권한 추가 부담 없음
@@ -1210,7 +1212,9 @@ android/app/src/main/
 ### iOS
 ```
 ios/Runner/
-├── AppDelegate.swift
+├── AppDelegate.swift              # WorkmanagerPlugin.registerBGProcessingTask(withIdentifier:) 등록 필수
+│                                  # registerProcessingTask()가 BGProcessingTaskRequest를 제출하려면
+│                                  # didFinishLaunchingWithOptions에서 먼저 등록해야 함
 └── Info.plist                     # Background Modes: fetch, processing, remote-notification
                                    # BGTaskSchedulerPermittedIdentifiers: workmanager.background.task
 ```
