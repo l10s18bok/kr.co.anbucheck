@@ -2,6 +2,7 @@
 
 독거노인·1인 가구의 안녕을 자동으로 확인하는 Android/iOS 앱.
 하나의 앱에서 **대상자 모드** (heartbeat 전송, Teal 테마)와 **보호자 모드** (Push 수신, Indigo 테마)를 선택.
+보호자가 **G+S(Guardian+Subject) 모드**로 대상자 역할을 겸할 수 있음.
 
 ## 플랫폼별 모드 제한
 
@@ -29,33 +30,35 @@ lib/
 └── app/
     ├── core/
     │   ├── base/           # BaseController
-    │   ├── config/         # ApiConfig
-    │   ├── database/       # AppDatabase (sqflite)
+    │   ├── config/         # ApiConfig, AdConfig
     │   ├── mixins/         # HeartbeatScheduleMixin
     │   ├── models/         # ApiResponseModel (Freezed)
-    │   ├── network/        # ApiClient, ApiClientFactory, ApiEndpoints, ApiError
-    │   ├── services/       # FcmService, HeartbeatService, GuardianSubjectService
+    │   ├── network/        # ApiClient, ApiClientFactory, ApiConnect, DioConnect,
+    │   │                   # ApiEndpoints, ApiError, ApiResponse
+    │   ├── services/       # FcmService, HeartbeatService, HeartbeatWorkerService,
+    │   │                   # LocalAlarmService, GuardianSubjectService,
+    │   │                   # AdService, ThemeService
     │   ├── theme/          # AppColors, AppSpacing, AppTextTheme, AppTheme
-    │   ├── translations/   # ko_kr, en_us
+    │   ├── translations/   # 20개 언어 (ko_kr ~ id_id) + AppTranslations
     │   ├── usecases/       # UseCase 기반 클래스
-    │   ├── utils/          # constants, extensions, time_utils, phone_utils
-    │   └── widgets/        # 공통 위젯
+    │   ├── utils/          # constants, extensions, time_utils, phone_utils,
+    │   │                   # notification_text_cache, back_press_handler
+    │   └── widgets/        # BannerAdWidget, GuardianBottomNav,
+    │                       # HeartbeatScheduleTile, AddSubjectButton
     ├── data/
     │   ├── datasources/
     │   │   ├── local/      # TokenLocalDatasource, SensorLocalDatasource,
-    │   │   │               # HeartbeatLocalDatasource, NicknameLocalDatasource,
-    │   │   │               # NotificationLocalDatasource
+    │   │   │               # HeartbeatLocalDatasource, NicknameLocalDatasource
     │   │   └── remote/     # UserRemoteDatasource, DeviceRemoteDatasource,
     │   │                   # HeartbeatRemoteDatasource, SubjectRemoteDatasource,
-    │   │                   # EmergencyRemoteDatasource,
+    │   │                   # EmergencyRemoteDatasource, NotificationRemoteDatasource,
     │   │                   # NotificationSettingsRemoteDatasource, VersionRemoteDatasource
-    │   ├── models/         # HeartbeatRequest, NotificationModel
+    │   ├── models/         # HeartbeatRequest
     │   └── repositories/   # NotificationRepositoryImpl
     ├── domain/
     │   ├── entities/       # NotificationEntity
     │   ├── repositories/   # NotificationRepository (추상)
-    │   └── usecases/       # GetNotifications, MarkNotificationRead,
-    │                       # ResetAllNotificationsRead, CleanupNotifications
+    │   └── usecases/       # GetNotifications, DeleteAllNotifications
     ├── modules/
     │   ├── splash/
     │   ├── mode_select/
@@ -66,13 +69,29 @@ lib/
     │   ├── guardian_add_subject/       # 대상자 추가
     │   ├── guardian_connection_management/
     │   ├── guardian_notifications/     # 경고 알림 목록
-    │   ├── guardian_past_notifications/
     │   ├── guardian_notification_settings/
     │   └── guardian_settings/
     └── routes/             # AppRoutes, AppPages
 ```
 
 각 모듈은 `bindings/`, `controllers/`, `views/` 3개 파일로 구성.
+
+## G+S (Guardian+Subject) 모드
+
+보호자가 동시에 대상자 역할을 겸하는 모드. 두 가지 진입 경로:
+
+1. **설정에서 활성화**: 보호자 설정 화면 → G+S 토글 → `enableSubjectFeature()` → invite_code 발급 + heartbeat 예약
+2. **재설치 시 자동 감지**: 모드 선택 → `checkDevice(deviceId)` → `has_invite_code: true` → 권한 화면에 `isAlsoSubject: true` 전달
+
+**핵심 플래그:**
+- `TokenLocalDatasource.isAlsoSubject` — G+S 활성화 여부 (로컬)
+- `PermissionController.needsActivityPermission` — `Platform.isAndroid && (isSubjectMode || isAlsoSubject)`
+- `GuardianDashboardController._scheduleHeartbeatIfGS()` — G+S일 때만 WorkManager/LocalAlarm 예약
+
+**G+S 관련 컨트롤러:**
+- `GuardianSettingsController` — G+S 활성화/비활성화 라이프사이클 관리, 안전코드 페이지 진입
+- `GuardianDashboardController` — G+S일 때 heartbeat 예약 + 활동 인식 권한 확인
+- `ModeSelectController` — 재설치 시 `has_invite_code`로 G+S 감지 → `isAlsoSubject` 전달
 
 ## 핵심 파일 (Heartbeat 3계층 구조)
 
@@ -85,6 +104,7 @@ lib/
 | 1차 | `lib/app/core/services/heartbeat_worker_service.dart` | WorkManager/BGTaskScheduler 백그라운드 예약 실행. 사용자가 앱을 안 열어도 매일 heartbeat 실행. one-off(다음날 재예약 체인) + periodic(OS 자동 반복) 병행 |
 | 2차 | `lib/app/modules/subject_home/controllers/subject_home_controller.dart` | 앱 열기/복귀 시 안전망. onInit/onResumed에서 예약시각 경과 + 미전송 시 자동 전송. 서버 스케줄 동기화로 WorkManager 체인 복구도 담당 |
 | 3차 | `lib/app/core/services/fcm_service.dart` | 로컬 알림 탭 라우팅. 데드맨 알림 탭 → 앱 포그라운드 전환만 (홈 화면에서 자동 전송). suspicious 알림 탭 → manual=true heartbeat 즉시 재전송 |
+| 공유 캐시 | `lib/app/core/services/guardian_subject_service.dart` | 보호자 대상자 목록 공유 캐시 (2분 TTL). 대시보드·설정·연결관리에서 동일 데이터 사용. 구독 상태 동기화 |
 
 ## 참조 문서
 

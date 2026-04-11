@@ -89,13 +89,16 @@ Splash → 버전 체크 → 플랫폼 분기
     │   ├─ "나의 안전을 확인받고 싶어요" → [보호 대상자 모드]
     │   │   권한 요청 안내 화면 (모드 선택 후 진입)
     │   │   ├─ 알림 권한 (필수)
-    │   │   ├─ 신체 활동 권한 (걸음수 감지용)
-    │   │   └─ [확인] 탭 → OS 권한 팝업 순차 표시
+    │   │   ├─ 신체 활동 권한 (걸음수 감지용, Android만)
+    │   │   └─ [확인] 탭 → OS 권한 팝업 순차 표시 (사전 안내 다이얼로그 없이 바로)
     │   │   Onboarding (서비스 소개/동작 안내) → 서버 등록 (자동) → Home (고유 코드 표시)
     │   │
     │   └─ "소중한 사람을 지켜보고 싶어요" → [보호자 모드]
+    │       모드 선택 시 checkDevice API로 기존 등록 여부 확인
+    │       ├─ G+S 재설치 감지 (has_invite_code=true) → isAlsoSubject=true 전달
     │       권한 요청 안내 화면 (모드 선택 후 진입)
     │       ├─ 알림 권한 (필수)
+    │       ├─ 신체 활동 권한 (G+S 재설치 시에만 표시, Android만)
     │       └─ [확인] 탭 → OS 권한 팝업 순차 표시
     │       Onboarding → 서버 등록 (자동) → 대시보드 (보호 대상자 추가 대기)
     │
@@ -114,6 +117,7 @@ Splash → 버전 체크 → 플랫폼 분기
 
 > ⚠️ **이 섹션 전체는 대상자 모드 전용입니다.**
 > 보호자 모드는 heartbeat를 전송하지 않으며, 이 아키텍처와 무관합니다.
+> **예외: G+S 모드** — 보호자가 대상자 역할을 겸할 때 이 아키텍처가 동작함 (GuardianSettingsController에서 활성화).
 > 보호자 모드 아키텍처는 섹션 3(Push 알림 수신)을 참조하세요.
 
 > 📊 **전체 플로우차트**: [heartbeat_flowchart.md](heartbeat_flowchart.md) 참조
@@ -1065,175 +1069,126 @@ Authorization: Bearer <device_token> → 항상 유효
 
 ## 5. 프로젝트 구조
 
-Riverpod + Dio + GoRouter 기반 클린 아키텍처 (riverpod-skill 기반)
+GetX + GetConnect/Dio + Clean Architecture 기반
 
 ```
 lib/
-├── main.dart                          # 앱 진입점 (ProviderScope 래핑)
-├── app.dart                           # MaterialApp.router (ConsumerWidget)
+├── main.dart                          # 앱 진입점 (WorkManager 콜백 등록)
+├── app.dart                           # GetMaterialApp (GetX 라우팅)
+├── firebase_options.dart
 └── app/
     ├── core/                          # ── 공통 인프라 ──
+    │   ├── base/
+    │   │   └── base_controller.dart   # GetxController 공통 베이스
+    │   ├── config/
+    │   │   ├── api_config.dart        # API 서버 URL
+    │   │   └── ad_config.dart         # AdMob 설정
+    │   ├── mixins/
+    │   │   └── heartbeat_schedule_mixin.dart  # heartbeat 시각 관리 공통 mixin
+    │   ├── models/
+    │   │   └── api_response_model.dart  # Freezed 공통 응답 모델
     │   ├── network/
-    │   │   ├── dio_client.dart         # Dio 기반 HTTP 클라이언트
-    │   │   ├── dio_interceptors.dart   # 로깅/인증 인터셉터
-    │   │   ├── api_response.dart       # 공통 응답 모델 ApiResult<T>
+    │   │   ├── api_client.dart         # GetConnect 기반 HTTP 클라이언트
+    │   │   ├── api_client_factory.dart  # Dio 기반 HTTP 클라이언트 팩토리
+    │   │   ├── api_connect.dart        # GetConnect 래퍼
+    │   │   ├── dio_connect.dart        # Dio 래퍼
+    │   │   ├── api_response.dart       # 공통 응답 처리
     │   │   ├── api_error.dart          # API 에러 클래스
-    │   │   └── api_endpoints.dart      # 서버 URL, API 경로 상수
-    │   ├── providers/
-    │   │   └── core_providers.dart     # DioClient 싱글턴 Provider (@riverpod)
+    │   │   └── api_endpoints.dart      # API 경로 상수
     │   ├── services/
-    │   │   ├── push_service.dart       # FCM/APNs 수신 처리 (보호자 경고 Push만)
-    │   │   ├── heartbeat_worker_service.dart # WorkManager/BGTask 예약 실행 (heartbeat 백그라운드 전송)
-    │   │   ├── sensor_service.dart      # 가속도+자이로 센서 조회 (보조 활동 지표)
-    │   │   └── ad_service.dart         # 하단 고정 배너 광고 관리
+    │   │   ├── fcm_service.dart        # FCM Push 수신 + 로컬 알림 탭 라우팅
+    │   │   ├── heartbeat_service.dart  # heartbeat 1회 실행 (센서→판정→전송)
+    │   │   ├── heartbeat_worker_service.dart  # WorkManager 백그라운드 예약
+    │   │   ├── local_alarm_service.dart  # 데드맨 스위치 로컬 알림
+    │   │   ├── guardian_subject_service.dart  # G+S 모드 서비스
+    │   │   ├── ad_service.dart         # AdMob 배너 관리
+    │   │   └── theme_service.dart      # 다크모드 전환
     │   ├── theme/
     │   │   ├── app_colors.dart
+    │   │   ├── app_spacing.dart
     │   │   ├── app_text_theme.dart
     │   │   └── app_theme.dart
-    │   ├── l10n/
-    │   │   ├── app_ko.arb
-    │   │   └── app_en.arb
-    │   ├── router/
-    │   │   └── app_router.dart         # GoRouter Provider (@riverpod)
+    │   ├── translations/              # 20개 언어 번역 파일
+    │   │   ├── app_translations.dart  # GetX Translations 등록
+    │   │   ├── ko_kr.dart ~ id_id.dart  # 20개 언어
     │   ├── usecases/
     │   │   └── use_case.dart
     │   ├── utils/
     │   │   ├── constants.dart
     │   │   ├── extensions.dart
-    │   │   └── device_info.dart        # 기기 고유 ID (device_info_plus), OS 구분(android/ios) 관리
+    │   │   ├── time_utils.dart
+    │   │   ├── phone_utils.dart
+    │   │   ├── notification_text_cache.dart  # 백그라운드 isolate용 번역 캐시
+    │   │   └── back_press_handler.dart
     │   └── widgets/
-    │       ├── banner_ad_widget.dart   # 하단 고정 배너 광고 위젯
-    │       └── paywall_widget.dart     # 유료 전환 안내 위젯
+    │       ├── banner_ad_widget.dart
+    │       ├── guardian_bottom_nav.dart
+    │       ├── heartbeat_schedule_tile.dart
+    │       └── add_subject_button.dart
+    │
+    ├── data/                           # ── DataSource + Repository 구현체 ──
+    │   ├── datasources/
+    │   │   ├── local/
+    │   │   │   ├── token_local_datasource.dart    # device_token, 스케줄, 역할 등 로컬 저장
+    │   │   │   ├── sensor_local_datasource.dart    # 이전 센서 값 + 걸음수 저장
+    │   │   │   ├── heartbeat_local_datasource.dart # 전송 실패 보류 heartbeat 1건
+    │   │   │   └── nickname_local_datasource.dart  # 대상자 별칭 로컬 저장
+    │   │   └── remote/
+    │   │       ├── user_remote_datasource.dart
+    │   │       ├── device_remote_datasource.dart
+    │   │       ├── heartbeat_remote_datasource.dart
+    │   │       ├── subject_remote_datasource.dart
+    │   │       ├── emergency_remote_datasource.dart
+    │   │       ├── notification_remote_datasource.dart
+    │   │       ├── notification_settings_remote_datasource.dart
+    │   │       └── version_remote_datasource.dart
+    │   ├── models/
+    │   │   └── heartbeat_request.dart
+    │   └── repositories/
+    │       └── notification_repository_impl.dart
     │
     ├── domain/                         # ── 순수 비즈니스 (프레임워크 의존 없음) ──
     │   ├── entities/
-    │   │   ├── heartbeat_entity.dart
-    │   │   ├── user_entity.dart        # role(subject/guardian), invite_code 포함
-    │   │   ├── subject_link_entity.dart # 보호자-대상자 연결 정보
-    │   │   ├── alert_entity.dart       # 경고 정보 (상태, 횟수, 클리어 이력)
-    │   │   └── subscription_entity.dart
+    │   │   └── notification_entity.dart
     │   ├── repositories/
-    │   │   ├── heartbeat_repository.dart
-    │   │   ├── auth_repository.dart
-    │   │   ├── subject_link_repository.dart
-    │   │   ├── alert_repository.dart
-    │   │   └── subscription_repository.dart
+    │   │   └── notification_repository.dart  # 추상 인터페이스
     │   └── usecases/
-    │       ├── send_heartbeat_usecase.dart
-    │       ├── register_device_usecase.dart
-    │       ├── link_subject_usecase.dart   # 고유 코드로 대상자 연결
-    │       ├── clear_alert_usecase.dart
-    │       └── check_subscription_usecase.dart
+    │       ├── get_notifications_usecase.dart
+    │       └── delete_all_notifications_usecase.dart
     │
-    ├── data/                           # ── DTO + DataSource + Repository 구현체 ──
-    │   ├── models/
-    │   │   ├── heartbeat_model.dart    # Freezed DTO (센서 데이터 포함)
-    │   │   ├── user_model.dart         # Freezed DTO (OS 타입, role, invite_code 포함)
-    │   │   ├── subject_link_model.dart # Freezed DTO (연결 상태)
-    │   │   ├── alert_model.dart        # Freezed DTO (경고 상태, 클리어 정보)
-    │   │   └── subscription_model.dart
-    │   ├── datasources/
-    │   │   ├── remote/
-    │   │   │   ├── heartbeat_remote_datasource.dart
-    │   │   │   ├── auth_remote_datasource.dart
-    │   │   │   ├── subject_link_remote_datasource.dart
-    │   │   │   ├── alert_remote_datasource.dart
-    │   │   │   └── subscription_remote_datasource.dart
-    │   │   └── local/
-    │   │       ├── heartbeat_local_datasource.dart      # 전송 실패 보류 heartbeat 1건 (shared_preferences)
-    │   │       ├── token_local_datasource.dart          # device_token 로컬 저장
-    │   │       ├── sensor_local_datasource.dart          # 이전 센서 값 저장 (가속도+자이로)
-    │   │       └── nickname_local_datasource.dart        # 대상자 별칭 로컬 저장
-    │   └── repositories/
-    │       ├── heartbeat_repository_impl.dart
-    │       ├── auth_repository_impl.dart
-    │       ├── subject_link_repository_impl.dart
-    │       ├── alert_repository_impl.dart
-    │       └── subscription_repository_impl.dart
-    │
-    └── modules/                        # ── Presentation (UI + Provider) ──
-        ├── splash/
-        │   ├── providers/
-        │   │   └── splash_provider.dart     # 버전 체크 + 로컬 토큰 확인
-        │   └── views/
-        │       └── splash_page.dart
-        ├── permission/                 # 권한 요청 안내 (모드 선택 전)
-        │   ├── providers/
-        │   │   └── permission_provider.dart
-        │   └── views/
-        │       └── permission_page.dart
-        ├── mode_select/                # 대상자/보호자 모드 선택
-        │   └── views/
-        │       └── mode_select_page.dart
-        │
-        ├── subject/                    # ── 대상자 모드 ──
-        │   ├── onboarding/
-        │   │   ├── providers/
-        │   │   │   └── onboarding_provider.dart
-        │   │   ├── views/
-        │   │   │   └── onboarding_page.dart
-        │   │   └── widgets/
-        │   │       ├── onboarding_step_widget.dart
-        │   │       └── pricing_info_widget.dart
-        │   ├── home/
-        │   │   ├── providers/
-        │   │   │   └── home_provider.dart
-        │   │   ├── views/
-        │   │   │   └── home_page.dart
-        │   │   └── widgets/
-        │   │       └── .gitkeep
-        │   └── settings/
-        │       ├── providers/
-        │       │   └── settings_provider.dart
-        │       ├── views/
-        │       │   └── settings_page.dart
-        │       └── widgets/
-        │           └── .gitkeep
-        │
-        ├── guardian/                   # ── 보호자 모드 ──
-        │   ├── dashboard/
-        │   │   ├── providers/
-        │   │   │   └── guardian_dashboard_provider.dart
-        │   │   └── views/
-        │   │       └── guardian_dashboard_page.dart
-        │   ├── link_subject/           # 대상자 연결 (고유 코드 입력)
-        │   │   ├── providers/
-        │   │   │   └── link_subject_provider.dart
-        │   │   └── views/
-        │   │       └── link_subject_page.dart
-        │   └── settings/
-        │       ├── providers/
-        │       │   └── guardian_settings_provider.dart
-        │       └── views/
-        │           └── guardian_settings_page.dart
-        │
-        └── subscription/              # ── 공통: 구독/결제 ──
-            ├── providers/
-            │   └── subscription_provider.dart
-            ├── views/
-            │   └── subscription_page.dart
-            └── widgets/
-                └── .gitkeep
+    └── modules/                        # ── Presentation (GetX Binding + Controller + View) ──
+        ├── splash/                     # 앱 시작 + 버전 체크 + 기존 토큰 확인
+        ├── mode_select/                # 대상자/보호자 모드 선택 (Android만)
+        ├── permission/                 # 권한 안내 + OS 권한 요청
+        ├── onboarding/                 # 서비스 소개 → 서버 등록
+        ├── subject_home/               # 대상자 홈 (고유 코드, heartbeat 상태)
+        ├── guardian_dashboard/         # 보호자 대시보드 (대상자 상태 카드)
+        ├── guardian_add_subject/       # 대상자 추가 (고유 코드 입력)
+        ├── guardian_connection_management/  # 연결 관리
+        ├── guardian_notifications/     # 경고 알림 목록
+        ├── guardian_notification_settings/  # 알림 설정 (등급별 ON/OFF, DND)
+        └── guardian_settings/          # 보호자 설정 (구독, 약관, 탈퇴)
 ```
+
+각 모듈은 `bindings/`, `controllers/`, `views/` 3개 파일로 구성.
 
 
 ### 의존성 흐름
 ```
 ┌──────────────────── Presentation ────────────────────┐
-│  Notifier (@riverpod) → UseCase만 의존                │
-│  Page (ConsumerWidget) → ref.watch(provider)          │
+│  GetxController → DataSource 직접 참조               │
+│  Page (GetWidget) → controller.field / Obx()          │
 ├──────────────────── Domain ──────────────────────────┤
 │  Entity (순수 Dart)                                   │
 │  Repository (추상 인터페이스)                           │
-│  UseCase (비즈니스 로직)                               │
+│  UseCase (비즈니스 로직) — 알림 조회 등 일부만 구현      │
 ├──────────────────── Data ────────────────────────────┤
-│  Model (Freezed DTO)                                  │
-│  DataSource (API 호출 / 로컬 저장)                     │
+│  DataSource (API 호출 / SharedPreferences 저장)        │
 │  RepositoryImpl (Domain 인터페이스 구현)               │
 ├──────────────────── Core ────────────────────────────┤
-│  PushService / BackgroundService / SensorService      │
-│  DioClient (ref.watch(dioClientProvider)로 주입)      │
-│  GoRouter / Theme / AdService                         │
+│  FcmService / HeartbeatService / HeartbeatWorkerService │
+│  ApiClientFactory (Dio) / ApiClient (GetConnect)       │
+│  GetX 라우팅 / Theme / AdService                       │
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -1417,7 +1372,7 @@ ios/Runner/
 │  └───────────────────────┘  │
 │                             │
 │  ┌───────────────────────┐  │
-│  │ 🚶 신체 활동 권한      │  │  ← 대상자 모드 + Android만 표시
+│  │ 🚶 신체 활동 권한      │  │  ← 대상자 모드 또는 G+S 재설치 + Android만 표시
 │  │  걸음수를 감지하여      │  │
 │  │  활동 여부를 확인하는   │  │
 │  │  데 사용됩니다          │  │
@@ -1426,14 +1381,17 @@ ios/Runner/
 │         [확인]              │
 └─────────────────────────────┘
 ```
-- 모드 선택 화면에서 모드 선택 후 이 화면으로 진입 (`arguments['mode']`로 모드 구분)
+- 모드 선택 화면에서 모드 선택 후 이 화면으로 진입 (`arguments['mode']`, `arguments['isAlsoSubject']`로 모드 및 G+S 구분)
+- G+S 재설치 감지: `mode_select_controller.dart`에서 `checkDevice` API의 `has_invite_code` 응답으로 판별 → `isAlsoSubject=true` 전달
+- 신체 활동 권한 카드 표시 조건: `needsActivityPermission` = Android AND (대상자 모드 OR isAlsoSubject)
 - [확인] 탭 시 OS 권한 팝업 순차 표시:
   - iOS: Firebase Messaging `requestPermission()`으로 APNs 권한 + FCM 토큰 발급
   - Android: `permission_handler`로 알림 권한 요청
-  - 대상자 모드 + Android: 신체 활동 권한 사전 안내 다이얼로그 → `activityRecognition` 권한 요청
+  - 신체 활동 권한 필요 시: OS 팝업 바로 표시 (사전 안내 다이얼로그 없음, 거부 시 설정 이동 안내 없음)
 - 알림 권한 거부 시 재요청 다이얼로그 표시 ("설정으로 이동" / "나중에" 선택)
 - 권한 처리 후 온보딩 화면으로 이동 (`Get.offNamed(AppRoutes.onboarding)`)
 - 배터리 최적화 제외 권한은 제거됨 (전면 삭제)
+- 온보딩에서는 권한 요청 없음 — 서버 등록 + 화면 이동만 담당
 
 
 ### 9.1 모드 선택 화면 (최초 실행 시)
@@ -1461,6 +1419,13 @@ ios/Runner/
 │                             │
 └─────────────────────────────┘
 ```
+
+**ModeSelectController 동작 (`_selectMode`):**
+1. `TokenLocalDatasource.getOrCreateDeviceId()`로 device_id 획득
+2. `UserRemoteDatasource.checkDevice(deviceId)` → 기존 등록 여부 확인
+3. 기존 등록 + 다른 역할 → 경고 다이얼로그 (모드 변경 시 기존 데이터 삭제 안내)
+4. 보호자 모드 + `has_invite_code: true` → G+S 재설치 감지 → `isAlsoSubject: true` 전달
+5. 권한 화면으로 이동: `Get.toNamed(AppRoutes.permission, arguments: {'mode': mode, 'isAlsoSubject': needsSubjectPermission})`
 
 
 ### 9.2 온보딩 (4스텝, 대상자/보호자 공통)
@@ -1499,12 +1464,12 @@ ios/Runner/
 
 - PageView 기반 스와이프 + [다음] 버튼으로 이동
 - 마지막 스텝에서 [시작하기] 탭 시 서버에 자동 등록 (`POST /api/v1/users`)
-- **기존 기기 감지**: 서버가 device_id로 기존 계정 발견 시 다이얼로그 표시
-  - "○○ 모드로 계속" / "△△ 모드로 변경" / "취소" 선택
-  - 변경 시 서버 계정 삭제 후 새 모드로 재등록
+- **기존 기기 감지는 모드 선택 화면(ModeSelectController)에서 처리** — 온보딩 진입 전에 이미 완료
+- `OnboardingController.completeOnboarding()`: 서버 등록 → `_saveAndNavigate()` → 홈 이동
 - 등록 완료 시:
-  - 대상자: invite_code + device_token 저장 → 로컬 안전망 알림 예약 → Home 이동
-  - 보호자: device_token 저장 → Dashboard 이동
+  - 대상자: invite_code + device_token 저장 → SubjectHome 이동
+  - 보호자: device_token 저장 → GuardianDashboard 이동
+  - G+S 복원 (invite_code 포함 응답): `isAlsoSubject=true` 로컬 저장
 - SVG 일러스트: `assets/illustrations/onboarding_empathy.svg`, `onboarding_solution.svg`, `onboarding_connection.svg`, `onboarding_trust.svg`
 - Lottie 파일 확보 시 교체 가능하도록 구조화
 
@@ -1556,7 +1521,12 @@ ios/Runner/
 
 - Lottie 애니메이션 없음 — 아이콘 기반 UI
 - Drawer 메뉴에서 다크모드 전환, 약관, 탈퇴 기능 제공
-- "지금 안부 보고하기" 버튼으로 수동 heartbeat 즉시 전송 가능 (manual = true)
+- "지금 안부 보고하기" 버튼으로 수동 heartbeat 즉시 전송 가능 (manual = true) + 연락처 선택 → 전화 걸기
+- **SubjectHomeController 핵심 동작:**
+  - `onInit()`: 로컬 데이터 로드 + 알림 권한 확인 + 배터리/네트워크 상태 감시 + 서버 스케줄 동기화
+  - `onResumed()`: heartbeat 상태 갱신 + 예약시각 경과 시 자동 전송 (`_checkAndSendHeartbeat`)
+  - `_syncScheduleFromServer()`: G+S 모드 진입 시 전달받은 `deviceData`가 있으면 서버 호출 스킵 (중복 API 호출 방지)
+  - 활동 인식 권한 요청은 하지 않음 — 권한 화면(PermissionController) 또는 대시보드(GuardianDashboardController)에서 처리
 - "도움이 필요해요" 긴급 버튼으로 보호자 전원에게 즉시 긴급 알림 발송 (POST /api/v1/emergency)
   - 확인 다이얼로그 표시 후 전송 (오탐 방지)
   - 기존 heartbeat 경고 에스컬레이션(suspicious_count, days_inactive)과 독립 동작
@@ -1730,6 +1700,31 @@ ios/Runner/
 - [구독하기] → 인앱 결제 SDK 연동 후 구현 예정 (현재 placeholder)
 - [알림 설정] → 알림 설정 페이지로 이동 (등급별 ON/OFF, DND 설정)
 - 다크모드 토글: ThemeService를 통한 즉시 전환
+
+**G+S (Guardian+Subject) 모드 — 보호자가 대상자 역할 겸임:**
+
+설정 화면의 `GuardianSettingsController`가 G+S 라이프사이클을 관리한다.
+
+- **활성화** (`enableSubjectFeature()`):
+  1. 서버 `POST /api/v1/users/enable-subject` → invite_code 발급
+  2. 로컬 `isAlsoSubject=true`, invite_code 저장
+  3. Android: 활동 인식 권한 요청 (OS 팝업 바로 표시)
+  4. WorkManager + LocalAlarmService 예약
+  5. 첫 heartbeat 즉시 전송
+
+- **비활성화** (`disableSubjectFeature()`):
+  1. 서버 `POST /api/v1/users/disable-subject`
+  2. WorkManager/LocalAlarmService 취소
+  3. 로컬 데이터 전체 삭제 (isAlsoSubject, inviteCode, 센서 스냅샷 등)
+
+- **안전코드 페이지** (`goToSafetyCode()`):
+  - G+S 활성화 시 설정 화면에서 안전코드 페이지(SubjectHome)로 이동 가능
+  - 서버에서 미리 조회한 `deviceData`를 전달하여 중복 API 호출 방지
+  - `SubjectHomeController._deviceData`에서 arguments로 받아 사용
+
+- 설정 화면에서 G+S 관련 UI:
+  - G+S 비활성: "나도 안부를 확인받고 싶어요" 카드 표시 → 탭 시 `enableSubjectFeature()`
+  - G+S 활성: 안전코드 카드 (invite_code + 상태 표시) + heartbeat 상태 카드 + [안전코드 보기] 버튼
 
 **대상자 heartbeat 시각 변경:**
 - 대상자 본인이 메인 화면에서 [⏰ 시각 변경] 탭 → 시간 선택 다이얼로그
