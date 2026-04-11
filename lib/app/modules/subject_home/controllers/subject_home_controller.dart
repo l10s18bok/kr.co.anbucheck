@@ -234,7 +234,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
         await Permission.notification.status.isGranted;
   }
 
-  /// Android: 신체 활동 권한 미허용 시 안내 다이얼로그 → 설정 이동
+  /// Android: 신체 활동 권한 미허용 시 OS 팝업 → 영구 거부면 설정 이동
   /// 재설치 후 권한이 초기화되거나 거부된 경우 대비
   Future<void> _ensureActivityRecognitionPermission() async {
     if (!Platform.isAndroid) return;
@@ -247,24 +247,31 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     if (prefs.getBool(key) == true) return;
     await prefs.setBool(key, true);
 
-    final goSettings = await Get.dialog<bool>(
-      AlertDialog(
-        title: Text('permission_activity_denied_title'.tr),
-        content: Text('permission_activity_denied_message'.tr),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(result: false),
-            child: Text('common_later'.tr),
-          ),
-          TextButton(
-            onPressed: () => Get.back(result: true),
-            child: Text('permission_go_to_settings'.tr),
-          ),
-        ],
-      ),
-    );
-    if (goSettings == true) {
-      openAppSettings();
+    // 먼저 OS 권한 팝업으로 직접 요청
+    final result = await Permission.activityRecognition.request();
+    if (result.isGranted) return;
+
+    // 영구 거부(Don't ask again)된 경우에만 설정 이동 안내
+    if (result.isPermanentlyDenied) {
+      final goSettings = await Get.dialog<bool>(
+        AlertDialog(
+          title: Text('permission_activity_denied_title'.tr),
+          content: Text('permission_activity_denied_message'.tr),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(result: false),
+              child: Text('common_later'.tr),
+            ),
+            TextButton(
+              onPressed: () => Get.back(result: true),
+              child: Text('permission_go_to_settings'.tr),
+            ),
+          ],
+        ),
+      );
+      if (goSettings == true) {
+        openAppSettings();
+      }
     }
   }
 
