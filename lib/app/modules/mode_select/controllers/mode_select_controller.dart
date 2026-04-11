@@ -96,7 +96,14 @@ class ModeSelectController extends BaseController {
       }
 
       // 신규 또는 동일 역할 또는 변경 완료 → 권한 안내 페이지 이동
-      Get.toNamed(AppRoutes.permission, arguments: {'mode': mode});
+      // G+S 재설치: 보호자 선택이지만 invite_code 존재 → 대상자 권한도 필요
+      final needsSubjectPermission = mode == 'guardian'
+          && exists
+          && (check['has_invite_code'] as bool? ?? false);
+      Get.toNamed(AppRoutes.permission, arguments: {
+        'mode': mode,
+        'isAlsoSubject': needsSubjectPermission,
+      });
     } catch (e) {
       // 서버 오류 시에도 진행 가능하도록
       Get.toNamed(AppRoutes.permission, arguments: {'mode': mode});

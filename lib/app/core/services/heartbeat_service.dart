@@ -91,8 +91,7 @@ class HeartbeatService {
           );
         }
       }
-      // 현재 걸음수 저장 (다음 주기 비교용)
-      await _saveCurrentSteps();
+      // 걸음수 저장은 _getStepsDelta() 내에서 처리 완료
     }
 
     final request = HeartbeatRequest(
@@ -202,32 +201,27 @@ class HeartbeatService {
     }
   }
 
-  /// 이전 heartbeat 이후 걸음수 증가량 조회
+  /// 이전 heartbeat 이후 걸음수 증가량 조회 + 현재 걸음수 저장
   /// 권한 거부 또는 조회 실패 시 null 반환
   Future<int?> _getStepsDelta() async {
     try {
       final current = await Pedometer.stepCountStream.first
           .timeout(const Duration(seconds: 2));
+      final currentSteps = current.steps.toInt();
       final prevSteps = await _sensorDs.getLastSteps();
+
+      // 현재 걸음수 저장 (다음 주기 비교용) — 스트림 중복 구독 방지
+      await _sensorDs.saveLastSteps(currentSteps);
+
       if (prevSteps == null) {
-        // 첫 heartbeat — 기준점 저장 후 0 반환
-        await _sensorDs.saveLastSteps(current.steps.toInt());
+        // 첫 heartbeat — 기준점 저장 완료, 0 반환
         return 0;
       }
-      final delta = current.steps.toInt() - prevSteps;
+      final delta = currentSteps - prevSteps;
       return delta > 0 ? delta : 0;
     } catch (_) {
       return null;
     }
-  }
-
-  /// 현재 누적 걸음수 저장 (다음 주기 비교용)
-  Future<void> _saveCurrentSteps() async {
-    try {
-      final current = await Pedometer.stepCountStream.first
-          .timeout(const Duration(seconds: 2));
-      await _sensorDs.saveLastSteps(current.steps.toInt());
-    } catch (_) {}
   }
 
   /// 센서 스냅샷 1회 수집 (500ms 타임아웃, 실패 시 null)

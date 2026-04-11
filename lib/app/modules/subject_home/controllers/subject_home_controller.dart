@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:flutter/material.dart' show AlertDialog, Text, TextButton;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
@@ -143,7 +141,6 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     super.onInit();
     _loadStatus();
     _checkNotificationPermission();
-    _ensureActivityRecognitionPermission();
     _initBattery();
     _initConnectivity();
   }
@@ -232,47 +229,6 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   Future<void> _checkNotificationPermission() async {
     _notificationGranted.value =
         await Permission.notification.status.isGranted;
-  }
-
-  /// Android: 신체 활동 권한 미허용 시 OS 팝업 → 영구 거부면 설정 이동
-  /// 재설치 후 권한이 초기화되거나 거부된 경우 대비
-  Future<void> _ensureActivityRecognitionPermission() async {
-    if (!Platform.isAndroid) return;
-    final status = await Permission.activityRecognition.status;
-    if (status.isGranted) return;
-
-    // 1회만 안내 (앱 실행마다 반복 방지)
-    final prefs = await SharedPreferences.getInstance();
-    const key = '_activity_permission_prompted';
-    if (prefs.getBool(key) == true) return;
-    await prefs.setBool(key, true);
-
-    // 먼저 OS 권한 팝업으로 직접 요청
-    final result = await Permission.activityRecognition.request();
-    if (result.isGranted) return;
-
-    // 영구 거부(Don't ask again)된 경우에만 설정 이동 안내
-    if (result.isPermanentlyDenied) {
-      final goSettings = await Get.dialog<bool>(
-        AlertDialog(
-          title: Text('permission_activity_denied_title'.tr),
-          content: Text('permission_activity_denied_message'.tr),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(result: false),
-              child: Text('common_later'.tr),
-            ),
-            TextButton(
-              onPressed: () => Get.back(result: true),
-              child: Text('permission_go_to_settings'.tr),
-            ),
-          ],
-        ),
-      );
-      if (goSettings == true) {
-        openAppSettings();
-      }
-    }
   }
 
   /// 배터리 상태 초기화 및 실시간 감시
