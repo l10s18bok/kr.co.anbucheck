@@ -48,15 +48,12 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   /// 마지막 heartbeat 실제 전송 시각 (HH:mm), 없으면 빈 문자열
   final _lastHeartbeatTime = ''.obs;
 
-  /// 현재 예약시각에 대해 heartbeat 전송 완료 여부
-  final _lastScheduledKey = ''.obs;
+  /// 오늘 heartbeat 보고 완료 여부
   bool get isReportedToday {
-    if (_lastScheduledKey.value.isEmpty) return false;
     final now = DateTime.now();
     final today =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    final key = '${today}_${heartbeatHour.value.toString().padLeft(2, '0')}:${heartbeatMinute.value.toString().padLeft(2, '0')}';
-    return _lastScheduledKey.value == key;
+    return _lastHeartbeatDate.value == today;
   }
 
   /// 예정 시각이 현재 시각보다 미래인지 여부
@@ -149,54 +146,38 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     _ensureActivityRecognitionPermission();
     _initBattery();
     _initConnectivity();
-    // 앱 진입 시 예약시각 경과 + 미전송이면 heartbeat 자동 전송
-    _checkAndSendHeartbeat();
   }
 
-  /// 앱 포그라운드 복귀 시 로컬 상태 + 서버 스케줄 재동기화 + heartbeat 자동 전송
+  /// 앱 포그라운드 복귀 시 heartbeat 상태 갱신 + 자동 전송
   @override
   void onResumed() {
     super.onResumed();
-    _reloadLocalState().then((_) {
-      _syncScheduleFromServer();
-      _checkAndSendHeartbeat();
-    });
+    _reloadHeartbeatState().then((_) => _checkAndSendHeartbeat());
   }
 
-  Future<void> _reloadLocalState() async {
-    // 백그라운드 isolate에서 변경된 값을 메인 isolate에 반영
+  Future<void> _reloadHeartbeatState() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.reload();
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
-    _lastScheduledKey.value = await _tokenDs.getLastScheduledKey() ?? '';
   }
 
-  /// 예약시각 경과 + 오늘 미전송이면 heartbeat 자동 전송 + UI 갱신
+  /// 예약시각 경과 + 오늘 미전송이면 heartbeat 자동 전송
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
     if (isScheduleInFuture) return;
-
-    // 최초 설치 직후 (한 번도 전송한 적 없음) → 센서 기준값만 저장, 서버 전송 스킵
-    final lastDate = await _tokenDs.getLastHeartbeatDate();
-    if (lastDate == null || lastDate.isEmpty) {
-      await HeartbeatService().saveSensorBaseline();
-      return;
-    }
-
     await HeartbeatService().execute(manual: false);
-    await _reloadLocalState();
+    await _reloadHeartbeatState();
   }
 
   /// FCM heartbeat_trigger 수신 후 UI 갱신용 (FcmService에서 호출)
-  Future<void> reloadHeartbeatState() => _reloadLocalState();
+  Future<void> reloadHeartbeatState() => _reloadHeartbeatState();
 
   Future<void> _loadStatus() async {
     _inviteCode.value = await _tokenDs.getInviteCode() ?? '';
     _userId.value = await _tokenDs.getUserId() ?? 0;
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
-    _lastScheduledKey.value = await _tokenDs.getLastScheduledKey() ?? '';
 
     _guardianConnected.value = await _tokenDs.getSubscriptionActive();
     // 로컬 저장값으로 먼저 표시 후 서버에서 최신 스케줄 동기화
@@ -319,7 +300,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
     await HeartbeatService().sendPending(deviceToken);
-    await _reloadLocalState();
+    await _reloadHeartbeatState();
   }
 
   /// 고유 코드 클립보드 복사
@@ -352,7 +333,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     try {
       await HeartbeatService().execute(manual: true);
       // 전송 결과(성공/큐 저장) 반영하여 카드 상태 갱신
-      await _reloadLocalState();
+      await _reloadHeartbeatState();
     } finally {
       _isReporting.value = false;
     }
