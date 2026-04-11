@@ -149,7 +149,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   @override
   void onResumed() {
     super.onResumed();
-    _reloadHeartbeatState().then((_) => _checkAndSendHeartbeat());
+    // SharedPreferences reload → 스케줄 로드 → heartbeat 상태 갱신 순서 보장
+    loadScheduleFromLocal()
+        .then((_) => _reloadHeartbeatState())
+        .then((_) => _checkAndSendHeartbeat());
   }
 
   Future<void> _reloadHeartbeatState() async {

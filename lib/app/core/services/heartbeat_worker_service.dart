@@ -86,8 +86,10 @@ void heartbeatWorkerCallback() {
 }
 
 /// WorkManager 기반 heartbeat 예약 서비스
-/// Android: one-off + periodic (WorkManager)
-/// iOS: one-off만 (BGProcessingTask) — periodic 미사용 (즉시 반복 실행 버그 방어)
+/// Android: registerOneOffTask + registerPeriodicTask (WorkManager)
+/// iOS: registerProcessingTask (BGProcessingTask) — registerOneOffTask는
+///      beginBackgroundTask를 사용하여 즉시 실행되므로 사용하지 않음
+///      (flutter_workmanager PR #511 참고)
 class HeartbeatWorkerService {
   static const _taskName = 'heartbeat_task';
   static const _uniqueName = 'heartbeat_scheduled';
@@ -95,30 +97,15 @@ class HeartbeatWorkerService {
   // Android 전용: periodic 안전망
   static const _androidPeriodicName = 'heartbeat_periodic_android';
 
-  // iOS 전용: 동일 시각 재등록 방지용 키
-  static const _iosScheduledHourKey = '_ios_wm_scheduled_hour';
-  static const _iosScheduledMinuteKey = '_ios_wm_scheduled_minute';
-
   /// Workmanager 초기화 (main()에서 1회 호출)
   static Future<void> init() async {
     await Workmanager().initialize(heartbeatWorkerCallback);
   }
 
   /// 예약 시각에 맞춰 태스크 예약
-  /// Android: one-off + periodic (WorkManager 안전망)
-  /// iOS: one-off만 — 동일 시각이면 재등록 스킵 (BGTask 즉시 실행 방지)
+  /// Android: registerOneOffTask + registerPeriodicTask (WorkManager 안전망)
+  /// iOS: registerProcessingTask (BGProcessingTask, earliestBeginDate 존중)
   static Future<void> schedule(int hour, int minute) async {
-    // iOS: 동일 시각이면 재등록 스킵 (BGTask가 등록 시 즉시 실행되는 문제 방어)
-    if (Platform.isIOS) {
-      final prefs = await SharedPreferences.getInstance();
-      final lastH = prefs.getInt(_iosScheduledHourKey);
-      final lastM = prefs.getInt(_iosScheduledMinuteKey);
-      if (lastH == hour && lastM == minute) {
-        debugPrint('[HeartbeatWorker] iOS: 동일 스케줄($hour:$minute) — 재등록 스킵');
-        return;
-      }
-    }
-
     final now = DateTime.now();
     var scheduled = DateTime(now.year, now.month, now.day, hour, minute);
     if (scheduled.isBefore(now)) {
@@ -126,16 +113,26 @@ class HeartbeatWorkerService {
     }
     final delay = scheduled.difference(now);
 
-    // one-off (Android/iOS 공통)
-    await Workmanager().registerOneOffTask(
-      _uniqueName,
-      _taskName,
-      initialDelay: delay,
-      existingWorkPolicy: ExistingWorkPolicy.replace,
-      constraints: Constraints(networkType: NetworkType.connected),
-    );
-
-    if (Platform.isAndroid) {
+    if (Platform.isIOS) {
+      // iOS: registerProcessingTask → BGProcessingTaskRequest
+      // earliestBeginDate를 존중하여 지정 시각 근처에 실행
+      // 기존 태스크를 명시적으로 취소 후 재등록 (replace 정책 미지원)
+      await Workmanager().cancelByUniqueName(_uniqueName);
+      await Workmanager().registerProcessingTask(
+        _uniqueName,
+        _taskName,
+        initialDelay: delay,
+        constraints: Constraints(networkType: NetworkType.connected),
+      );
+    } else {
+      // Android: registerOneOffTask → WorkManager OneTimeWorkRequest
+      await Workmanager().registerOneOffTask(
+        _uniqueName,
+        _taskName,
+        initialDelay: delay,
+        existingWorkPolicy: ExistingWorkPolicy.replace,
+        constraints: Constraints(networkType: NetworkType.connected),
+      );
       // Android 전용: periodic 안전망 (1시간 주기)
       await Workmanager().registerPeriodicTask(
         _androidPeriodicName,
@@ -147,14 +144,7 @@ class HeartbeatWorkerService {
       );
     }
 
-    if (Platform.isIOS) {
-      // iOS: 등록된 시각 저장 (재등록 방지)
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(_iosScheduledHourKey, hour);
-      await prefs.setInt(_iosScheduledMinuteKey, minute);
-    }
-
-    debugPrint('[HeartbeatWorker] 예약: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} (${delay.inHours}시간 ${delay.inMinutes % 60}분 후)');
+    debugPrint('[HeartbeatWorker] 예약: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} (${delay.inHours}시간 ${delay.inMinutes % 60}분 후) [${Platform.isIOS ? "BGProcessingTask" : "WorkManager"}]');
   }
 
   /// 다음 날 동일 시각 재예약 (콜백 내에서 호출)
@@ -166,15 +156,22 @@ class HeartbeatWorkerService {
           .add(const Duration(days: 1));
       final delay = tomorrow.difference(now);
 
-      await Workmanager().registerOneOffTask(
-        _uniqueName,
-        _taskName,
-        initialDelay: delay,
-        existingWorkPolicy: ExistingWorkPolicy.keep,
-        constraints: Constraints(networkType: NetworkType.connected),
-      );
-
-      if (Platform.isAndroid) {
+      if (Platform.isIOS) {
+        await Workmanager().cancelByUniqueName(_uniqueName);
+        await Workmanager().registerProcessingTask(
+          _uniqueName,
+          _taskName,
+          initialDelay: delay,
+          constraints: Constraints(networkType: NetworkType.connected),
+        );
+      } else {
+        await Workmanager().registerOneOffTask(
+          _uniqueName,
+          _taskName,
+          initialDelay: delay,
+          existingWorkPolicy: ExistingWorkPolicy.keep,
+          constraints: Constraints(networkType: NetworkType.connected),
+        );
         // Android 전용: periodic 안전망 재등록
         await Workmanager().registerPeriodicTask(
           _androidPeriodicName,
@@ -193,12 +190,6 @@ class HeartbeatWorkerService {
     await Workmanager().cancelByUniqueName(_uniqueName);
     if (Platform.isAndroid) {
       await Workmanager().cancelByUniqueName(_androidPeriodicName);
-    }
-    if (Platform.isIOS) {
-      // iOS: 저장된 스케줄 초기화 (다음 schedule()이 실행되도록)
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_iosScheduledHourKey);
-      await prefs.remove(_iosScheduledMinuteKey);
     }
   }
 }

@@ -15,6 +15,10 @@ import UIKit
       GeneratedPluginRegistrant.register(with: registry)
     }
 
+    // BGProcessingTask 등록 (registerProcessingTask에서 사용)
+    // Info.plist의 BGTaskSchedulerPermittedIdentifiers와 일치해야 함
+    WorkmanagerPlugin.registerBGProcessingTask(withIdentifier: "workmanager.background.task")
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 

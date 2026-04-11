@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -14,8 +15,12 @@ mixin HeartbeatScheduleMixin on GetxController {
   final heartbeatHour = 9.obs;
   final heartbeatMinute = 30.obs;
 
-  /// 로컬 저장된 스케줄 로드 (onInit에서 호출)
+  /// 로컬 저장된 스케줄 로드 (onInit / onResumed에서 호출)
+  /// iOS 백그라운드 복귀 시 SharedPreferences 캐시가 디스크와 불일치할 수 있으므로
+  /// reload() 후 읽기
   Future<void> loadScheduleFromLocal() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     final (h, m) = await TokenLocalDatasource().getHeartbeatSchedule();
     applySchedule(h, m);
   }
@@ -64,28 +69,25 @@ mixin HeartbeatScheduleMixin on GetxController {
     await showCupertinoModalPopup(
       context: Get.context!,
       builder: (context) => Container(
-        height: 280,
+        height: 300,
         color: CupertinoColors.systemBackground.resolveFrom(context),
         child: Column(
           children: [
-            SizedBox(
-              height: 44,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CupertinoButton(
-                    child: Text('common_cancel'.tr),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  CupertinoButton(
-                    child: Text('common_confirm'.tr),
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      await _updateTime(selectedTime.hour, selectedTime.minute);
-                    },
-                  ),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CupertinoButton(
+                  child: Text('common_cancel'.tr),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                CupertinoButton(
+                  child: Text('common_confirm'.tr),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await _updateTime(selectedTime.hour, selectedTime.minute);
+                  },
+                ),
+              ],
             ),
             Expanded(
               child: CupertinoDatePicker(
