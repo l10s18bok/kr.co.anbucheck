@@ -406,8 +406,17 @@ class GuardianSettingsController extends BaseController
   }
 
   /// G+S 활성 상태에서 안전 코드 확인 페이지(SubjectHomePage)로 이동
+  /// 설정 페이지에서 이미 받은 서버 데이터를 넘겨 중복 API 호출 방지
   void goToSafetyCode() {
-    Get.toNamed(AppRoutes.subjectHome, arguments: {'fromGuardian': true});
+    Get.toNamed(AppRoutes.subjectHome, arguments: {
+      'fromGuardian': true,
+      'deviceData': {
+        'heartbeat_hour': heartbeatHour.value,
+        'heartbeat_minute': heartbeatMinute.value,
+        'subscription_active': isSubscriptionActive.value,
+        'guardian_count': guardianCount.value,
+      },
+    });
   }
 
   /// 계정 탈퇴
