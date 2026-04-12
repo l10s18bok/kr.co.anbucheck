@@ -78,6 +78,13 @@ abstract class PtBr {
     'permission_activity_denied_title': 'Permissão de atividade física necessária',
     'permission_activity_denied_message':
         'Usada para detectar passos e melhorar a precisão da verificação de bem-estar.\nAtive a permissão de atividade física nas Configurações.',
+    'permission_battery': 'Exclusão da otimização de bateria',
+    'permission_battery_desc':
+        'Exclui o aplicativo da otimização de bateria para que as verificações diárias de bem-estar não sejam perdidas',
+    'permission_battery_required_title': 'Defina a bateria como "Sem restrições"',
+    'permission_battery_required_message':
+        'Se estiver definida como "Otimização de bateria" ou "Economia de bateria",\nas verificações diárias de bem-estar podem ser atrasadas ou perdidas.\n\nApós tocar em [Ir para Configurações]:\n1. Selecione "Bateria"\n2. Altere para "Sem restrições"',
+    'permission_battery_go_to_settings': 'Ir para Configurações',
 
     // ── Onboarding ──
     'onboarding_title_1':

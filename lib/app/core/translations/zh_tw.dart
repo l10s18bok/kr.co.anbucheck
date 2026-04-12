@@ -67,6 +67,12 @@ abstract class ZhTw {
     'permission_activity_denied_title': '需要身體活動權限',
     'permission_activity_denied_message':
         '用於偵測步數並提高問安準確性。\n請在設定中開啟身體活動權限。',
+    'permission_battery': '電池最佳化例外',
+    'permission_battery_desc': '將應用程式從電池最佳化中排除，以免每天定時的問安檢查被遺漏',
+    'permission_battery_required_title': '請將電池設定為「不受限制」',
+    'permission_battery_required_message':
+        '如果設定為「電池最佳化」或「省電模式」，\n每日問安檢查可能會延遲或遺漏。\n\n點擊[前往設定]後：\n1. 選擇「電池」\n2. 變更為「不受限制」',
+    'permission_battery_go_to_settings': '前往設定',
 
     // ── 引導頁 ──
     'onboarding_title_1': '擔心獨居的親人\n過得好不好？',

@@ -75,6 +75,13 @@ abstract class FrFr {
     'permission_activity_denied_title': 'Autorisation d\'activité physique requise',
     'permission_activity_denied_message':
         'Utilisée pour détecter les pas et améliorer la précision de la vérification du bien-être.\nVeuillez activer l\'autorisation d\'activité physique dans les Réglages.',
+    'permission_battery': 'Exclusion de l\'optimisation de la batterie',
+    'permission_battery_desc':
+        'Exclut l\'application de l\'optimisation de la batterie afin que les vérifications quotidiennes de bien-être ne soient pas manquées',
+    'permission_battery_required_title': 'Veuillez définir la batterie sur "Sans restriction"',
+    'permission_battery_required_message':
+        'Si elle est définie sur "Optimisation de la batterie" ou "Économiseur de batterie",\nles vérifications quotidiennes de bien-être peuvent être retardées ou manquées.\n\nAprès avoir appuyé sur [Ouvrir les Réglages] :\n1. Sélectionnez "Batterie"\n2. Changez sur "Sans restriction"',
+    'permission_battery_go_to_settings': 'Ouvrir les Réglages',
 
     // ── Présentation ──
     'onboarding_title_1':

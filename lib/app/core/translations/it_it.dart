@@ -77,6 +77,13 @@ abstract class ItIt {
     'permission_activity_denied_title': 'Autorizzazione attività fisica richiesta',
     'permission_activity_denied_message':
         'Viene utilizzata per rilevare i passi e migliorare la precisione del controllo del benessere.\nAbilita l\'autorizzazione attività fisica nelle Impostazioni.',
+    'permission_battery': 'Esclusione ottimizzazione batteria',
+    'permission_battery_desc':
+        'Esclude l\'app dall\'ottimizzazione della batteria affinché il controllo giornaliero del benessere non venga perso',
+    'permission_battery_required_title': 'Imposta la batteria su "Senza restrizioni"',
+    'permission_battery_required_message':
+        'Se è impostata su "Ottimizzazione batteria" o "Risparmio energetico",\nil controllo giornaliero del benessere potrebbe essere ritardato o perso.\n\nDopo aver toccato [Vai alle Impostazioni]:\n1. Seleziona "Batteria"\n2. Cambia in "Senza restrizioni"',
+    'permission_battery_go_to_settings': 'Vai alle Impostazioni',
 
     // ── Onboarding ──
     'onboarding_title_1':

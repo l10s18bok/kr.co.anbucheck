@@ -74,6 +74,13 @@ abstract class ViVn {
     'permission_activity_denied_title': 'Can quyen hoat dong the chat',
     'permission_activity_denied_message':
         'Quyen hoat dong the chat can thiet de phat hien buoc chan va xac minh su an toan cua ban.\n\nNeu khong co quyen nay, thong tin buoc chan se khong duoc gui den nguoi bao ho.\n\nVui long bat quyen "Hoat dong the chat" trong cai dat ung dung.',
+    'permission_battery': 'Loai tru toi uu hoa pin',
+    'permission_battery_desc':
+        'Loai tru ung dung khoi toi uu hoa pin de kiem tra suc khoe hang ngay khong bi bo lo vao gio da dinh',
+    'permission_battery_required_title': 'Vui long dat Pin thanh "Khong gioi han"',
+    'permission_battery_required_message':
+        'Neu duoc dat la "Toi uu hoa pin" hoac "Tiet kiem pin",\nviec kiem tra suc khoe hang ngay co the bi tre hoac bo lo.\n\nSau khi nhan [Di den Cai dat]:\n1. Chon "Pin"\n2. Thay doi thanh "Khong gioi han"',
+    'permission_battery_go_to_settings': 'Di den Cai dat',
 
     // ── Gioi thieu ──
     'onboarding_title_1': 'Ban lo lang cho nguoi\nsong mot minh?',

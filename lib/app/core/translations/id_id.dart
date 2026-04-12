@@ -73,6 +73,13 @@ abstract class IdId {
     'permission_activity_denied_title': 'Izin Aktivitas Fisik Diperlukan',
     'permission_activity_denied_message':
         'Izin aktivitas fisik diperlukan untuk mendeteksi langkah dan memverifikasi keselamatan Anda.\n\nTanpa izin ini, informasi langkah tidak akan dikirim ke wali.\n\nSilakan aktifkan izin "Aktivitas Fisik" di pengaturan aplikasi.',
+    'permission_battery': 'Pengecualian Pengoptimalan Baterai',
+    'permission_battery_desc':
+        'Mengecualikan aplikasi dari pengoptimalan baterai agar pemeriksaan kesejahteraan harian tidak terlewat pada waktu yang dijadwalkan',
+    'permission_battery_required_title': 'Harap atur Baterai ke "Tidak Dibatasi"',
+    'permission_battery_required_message':
+        'Jika diatur ke "Pengoptimalan Baterai" atau "Penghemat Baterai",\npemeriksaan kesejahteraan harian dapat tertunda atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan]:\n1. Pilih "Baterai"\n2. Ubah menjadi "Tidak Dibatasi"',
+    'permission_battery_go_to_settings': 'Buka Pengaturan',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Khawatir tentang seseorang\nyang tinggal sendiri?',

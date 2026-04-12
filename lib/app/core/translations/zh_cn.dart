@@ -67,6 +67,12 @@ abstract class ZhCn {
     'permission_activity_denied_title': '需要身体活动权限',
     'permission_activity_denied_message':
         '用于检测步数并提高问安准确性。\n请在设置中开启身体活动权限。',
+    'permission_battery': '电池优化例外',
+    'permission_battery_desc': '将应用从电池优化中排除，以免每天定时的问安检查被遗漏',
+    'permission_battery_required_title': '请将电池设置为"无限制"',
+    'permission_battery_required_message':
+        '如果设置为"电池优化"或"省电模式"，\n每日问安检查可能会延迟或遗漏。\n\n点击[前往设置]后：\n1. 选择"电池"\n2. 更改为"无限制"',
+    'permission_battery_go_to_settings': '前往设置',
 
     // ── 引导页 ──
     'onboarding_title_1': '担心独居的亲人\n过得好不好？',

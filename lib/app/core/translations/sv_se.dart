@@ -75,6 +75,13 @@ abstract class SvSe {
     'permission_activity_denied_title': 'Behörighet för fysisk aktivitet krävs',
     'permission_activity_denied_message':
         'Behörighet för fysisk aktivitet krävs för att upptäcka steg och verifiera din säkerhet.\n\nUtan denna behörighet skickas ingen steginformation till vårdnadshavare.\n\nAktivera behörigheten "Fysisk aktivitet" i appinställningarna.',
+    'permission_battery': 'Undantag från batterioptimering',
+    'permission_battery_desc':
+        'Utesluter appen från batterioptimering så att dagliga välmåendekontroller inte missas vid den schemalagda tiden',
+    'permission_battery_required_title': 'Ställ in batteriet på "Obegränsat"',
+    'permission_battery_required_message':
+        'Om det är inställt på "Batterioptimering" eller "Batterisparläge"\nkan dagliga välmåendekontroller fördröjas eller missas.\n\nEfter att du tryckt på [Ga till Installningar]:\n1. Välj "Batteri"\n2. Ändra till "Obegränsat"',
+    'permission_battery_go_to_settings': 'Ga till Installningar',
 
     // ── Introduktion ──
     'onboarding_title_1': 'Orolig for nagon\nsom bor ensam?',

@@ -67,6 +67,13 @@ abstract class EnUs {
     'permission_activity_denied_title': 'Physical Activity Permission Required',
     'permission_activity_denied_message':
         'This is used to detect steps and improve wellness check accuracy.\nPlease enable physical activity permission in Settings.',
+    'permission_battery': 'Battery Optimization Exclusion',
+    'permission_battery_desc':
+        'Excludes the app from battery optimization so that daily wellness checks are not missed at the scheduled time',
+    'permission_battery_required_title': 'Please set Battery to "Unrestricted"',
+    'permission_battery_required_message':
+        'If set to "Battery Optimized" or "Battery Saver",\ndaily wellness checks may be delayed or missed.\n\nAfter tapping [Go to Settings]:\n1. Select "Battery"\n2. Change it to "Unrestricted"',
+    'permission_battery_go_to_settings': 'Go to Settings',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Worried about someone\nliving alone?',

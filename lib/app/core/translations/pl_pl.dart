@@ -74,6 +74,13 @@ abstract class PlPl {
     'permission_activity_denied_title': 'Wymagane uprawnienie aktywności fizycznej',
     'permission_activity_denied_message':
         'Uprawnienie aktywności fizycznej jest wymagane do wykrywania kroków i weryfikacji Twojego bezpieczeństwa.\n\nBez tego uprawnienia informacje o krokach nie będą wysyłane do opiekunów.\n\nWłącz uprawnienie "Aktywność fizyczna" w ustawieniach aplikacji.',
+    'permission_battery': 'Wyłączenie z optymalizacji baterii',
+    'permission_battery_desc':
+        'Wyłącza aplikację z optymalizacji baterii, aby codzienne sprawdzanie samopoczucia nie było pomijane o zaplanowanej godzinie',
+    'permission_battery_required_title': 'Ustaw baterię na "Bez ograniczeń"',
+    'permission_battery_required_message':
+        'Jeśli ustawione jest "Optymalizacja baterii" lub "Oszczędzanie baterii",\ncodzienne sprawdzanie samopoczucia może być opóźnione lub pominięte.\n\nPo naciśnięciu [Przejdź do Ustawień]:\n1. Wybierz "Bateria"\n2. Zmień na "Bez ograniczeń"',
+    'permission_battery_go_to_settings': 'Przejdź do Ustawień',
 
     // ── Onboarding ──
     'onboarding_title_1':

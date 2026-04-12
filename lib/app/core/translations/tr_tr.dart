@@ -73,6 +73,13 @@ abstract class TrTr {
     'permission_activity_denied_title': 'Fiziksel Aktivite İzni Gerekli',
     'permission_activity_denied_message':
         'Adım sayınızı algılamak ve güvenliğinizi doğrulamak için fiziksel aktivite izni gereklidir.\n\nBu izin olmadan adım bilgileri koruyuculara gönderilmeyecektir.\n\nLütfen uygulama ayarlarından "Fiziksel Aktivite" iznini etkinleştirin.',
+    'permission_battery': 'Pil Optimizasyonu Hariç Tutma',
+    'permission_battery_desc':
+        'Günlük hal hatır kontrollerinin belirlenen saatte kaçırılmaması için uygulamayı pil optimizasyonundan hariç tutar',
+    'permission_battery_required_title': 'Lütfen Pili "Kısıtlanmamış" olarak ayarlayın',
+    'permission_battery_required_message':
+        '"Pil optimizasyonu" veya "Pil tasarrufu" olarak ayarlanmışsa\ngünlük hal hatır kontrolleri gecikebilir veya kaçırılabilir.\n\n[Ayarlara Git] düğmesine dokunduktan sonra:\n1. "Pil" öğesini seçin\n2. "Kısıtlanmamış" olarak değiştirin',
+    'permission_battery_go_to_settings': 'Ayarlara Git',
 
     // ── Tanıtım ──
     'onboarding_title_1': 'Yalnız yaşayan birisi için\nendişeleniyor musunuz?',
