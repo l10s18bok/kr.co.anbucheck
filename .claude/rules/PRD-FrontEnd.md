@@ -428,6 +428,68 @@ Future<void> sendHeartbeat() async {
 ```
 
 
+### 2.5.1 알림 탭 라우팅 (보호자 모드)
+
+알림을 탭했을 때 앱 상태(포그라운드/백그라운드/종료)에 따라 처리 경로가 다르다.
+
+**앱 상태별 처리 경로:**
+
+| 앱 상태 | iOS 처리 경로 | Android 처리 경로 |
+|---------|--------------|-------------------|
+| 포그라운드 (앱 활성) | AppDelegate `didReceive` → MethodChannel `onNotificationTap` → Dart `_handleNotificationTap` | `flutter_local_notifications` `onDidReceiveNotificationResponse` → `_handleNotificationTap` |
+| 백그라운드 (앱 일시정지) | AppDelegate `didReceive` → `super` 호출 → `FirebaseMessaging.onMessageOpenedApp` → Dart `_handleMessageOpenedApp` | `FirebaseMessaging.onMessageOpenedApp` → `_handleMessageOpenedApp` |
+| 종료 (스와이프 종료) | AppDelegate `didReceive` → `super` 호출 → `FirebaseMessaging.getInitialMessage()` → Dart `_handleMessageOpenedApp` | `FirebaseMessaging.getInitialMessage()` → `_handleMessageOpenedApp` |
+
+**iOS 포그라운드 알림 수신 시 추가 동작:**
+- AppDelegate `willPresent` → MethodChannel `onForegroundMessage` → `GuardianSubjectService.refresh()` (대시보드 카드 갱신)
+- Android는 `FirebaseMessaging.onMessage` → `_handleForegroundMessage` → `_refreshSubjectsIfNeeded()` 로 동일 동작
+
+**페이로드 `type`별 라우팅 대상:**
+
+| 서버 Push `type` | 라우팅 대상 | 설명 |
+|------------------|------------|------|
+| `alert_caution` | 알림 목록 (`guardianNotifications`) | 주의 등급 |
+| `alert_warning` | 알림 목록 | 경고 등급 |
+| `alert_urgent` | 알림 목록 | 긴급 등급 |
+| `alert_emergency` | 알림 목록 | 긴급 도움 요청 |
+| `alert_info` | 알림 목록 | 정보 등급 (배터리 부족 등) |
+| `alert_resolved` | 알림 목록 | 경고 해소 |
+| `alert_cleared` | 알림 목록 | 보호자 경고 클리어 |
+| `auto_report` | 알림 목록 | 자동 안부 확인 완료 |
+| `manual_report` | 알림 목록 | 수동 안부 확인 |
+| `heartbeat` | 무시 (라우팅 없음) | 대상자 전용 |
+| `subscription_expired` | 대시보드 (기본 홈) | 별도 라우팅 불필요 |
+| 기타 / 없음 | 대시보드 (기본 홈) | 앱 포그라운드 전환만 |
+
+**로컬 알림 페이로드:**
+
+| 로컬 알림 | payload | 라우팅 | 비고 |
+|-----------|---------|--------|------|
+| FCM 포그라운드 알림 (Android/iOS) | `message.data['type']` | 위 테이블과 동일 | `flutter_local_notifications`로 표시 후 탭 시 라우팅 |
+| 데드맨 스위치 (iOS 대상자 전용) | `heartbeat` | 무시 → 홈 화면 자동 전송 | 알림 탭 → 앱 포그라운드 전환만, `onInit`/`onResumed`에서 heartbeat 자동 전송 |
+
+```
+[알림 탭 라우팅 흐름]
+
+    알림 탭
+        │
+        ├─ iOS 포그라운드
+        │   AppDelegate.didReceive (applicationState == .active)
+        │   → MethodChannel "onNotificationTap" (type 전달)
+        │   → fcm_service._handleNotificationTap(type)
+        │
+        ├─ iOS 백그라운드 / 종료
+        │   AppDelegate.didReceive → super 호출
+        │   → firebase_messaging 플러그인이 페이로드 캐시
+        │   → onMessageOpenedApp (백그라운드) / getInitialMessage (종료)
+        │   → fcm_service._handleMessageOpenedApp(message)
+        │
+        └─ Android (모든 상태)
+            ├─ FCM Push 탭: onMessageOpenedApp / getInitialMessage
+            └─ 로컬 알림 탭: onDidReceiveNotificationResponse → payload로 라우팅
+```
+
+
 ### 2.6 경고 발생 흐름
 
 ```
