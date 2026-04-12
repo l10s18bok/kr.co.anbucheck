@@ -263,6 +263,9 @@ class FcmService extends GetxService {
     final notification = message.notification;
     if (notification == null) return;
 
+    // 대상자별 그룹화 키 — subject_user_id 우선, 없으면 invite_code, 둘 다 없으면 'default'
+    final groupKey = 'anbu_subject_${message.data['subject_user_id'] ?? message.data['invite_code'] ?? 'default'}';
+
     // 시스템 알림 표시
     _localNotifications.show(
       message.hashCode,
@@ -276,11 +279,13 @@ class FcmService extends GetxService {
           importance: Importance.high,
           priority: Priority.high,
           icon: '@mipmap/ic_launcher',
+          groupKey: groupKey,
         ),
-        iOS: const DarwinNotificationDetails(
+        iOS: DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
+          threadIdentifier: groupKey,
         ),
       ),
       payload: message.data['type'] ?? '',
