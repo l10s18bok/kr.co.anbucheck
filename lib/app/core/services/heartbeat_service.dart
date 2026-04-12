@@ -148,6 +148,11 @@ class HeartbeatService {
       final now = DateTime.now();
       await _tokenDs.saveLastHeartbeatDate(formatYmd(now));
       await _tokenDs.saveLastHeartbeatTime(formatHm(now.hour, now.minute));
+
+      // 오늘의 scheduledKey도 갱신해 _executeInternal 중복 전송 가드가 작동하도록 함
+      final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
+      final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
+      await _tokenDs.saveLastScheduledKey(scheduledKey);
     } catch (_) {}
   }
 
