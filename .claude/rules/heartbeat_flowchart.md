@@ -104,11 +104,10 @@ flowchart TD
 
     AlertActive -->|NO| CheckSuspicious{suspicious?}
     Resolve --> StatusNormal([✅ 정상<br/>센서 움직임 감지 — 사용 확인])
-    Downgrade --> WellbeingCheck
+    Downgrade --> Wait1
 
     CheckSuspicious -->|false| StatusNormal
-    CheckSuspicious -->|true| WellbeingCheck[앱 로컬 알림 즉시 표시<br/>💛 안부 확인<br/>잘 지내고 계시죠? 이 메시지 알림을<br/>한 번 터치해 주세요.<br/>서버 왕복 없음 — 오프라인에서도 동작]
-    WellbeingCheck --> Wait1([⏱ 다음 heartbeat 대기<br/>보호자 경고는 미수신 시에만 발생])
+    CheckSuspicious -->|true| Wait1([⏱ 다음 heartbeat 대기<br/>suspicious_count 기반 보호자 경고 에스컬레이션])
 
     StatusNormal --> SaveNoti[보호자 알림 DB 저장<br/>guardian_notifications<br/>alert_level: info<br/>is_push_sent: true/false]
     SaveNoti --> StepsNoti{steps_delta > 0?}
@@ -276,14 +275,14 @@ flowchart TD
 
 > **1차**: WorkManager(Android) / BGTaskScheduler(iOS)가 예약 시각에 heartbeat를 백그라운드 실행한다. one-off 태스크(정확한 시각)와 periodic 태스크(iOS: BGAppRefreshTask, Android: WorkManager 주기)를 병행 등록하여 실행 확률을 높인다. 콜백 내 `lastHeartbeatDate` 검사로 당일 중복 전송을 방지한다.
 > **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다.
-> **3차**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. suspicious 알림 탭 시에는 예외로 manual=true heartbeat를 즉시 재전송한다.
+> **3차 (iOS 전용)**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. Android는 WorkManager periodic(1시간 주기)이 안전망 역할을 하므로 데드맨 알림이 불필요하다.
 
 ```mermaid
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
         Install --> FirstWM[WorkManager one-off + periodic 태스크 예약<br/>heartbeat 시각 기본 09:30]
-        FirstWM --> FirstAlarm[로컬 안전망 알림 예약<br/>heartbeat 시각 + 30분<br/>기본 매일 10:00]
+        FirstWM --> FirstAlarm[iOS: 로컬 안전망 알림 예약<br/>heartbeat 시각 + 30분<br/>기본 매일 10:00]
     end
 
     FirstAlarm --> Wait
@@ -291,17 +290,17 @@ flowchart TD
     subgraph 정상주기[정상 동작 주기]
         Wait([다음 heartbeat 대기])
         Wait -->|WorkManager/BGTaskScheduler 실행| Collect[heartbeat 수집 및 서버 전송]
-        Collect --> Reschedule[다음날 같은 시각으로<br/>WorkManager 재예약 +<br/>로컬 안전망 알림 재예약<br/>heartbeat 시각 + 30분]
+        Collect --> Reschedule[다음날 같은 시각으로<br/>WorkManager 재예약 +<br/>iOS: 로컬 안전망 알림 재예약<br/>heartbeat 시각 + 30분]
         Reschedule --> Wait
         Wait -->|앱 실행 또는 포그라운드 복귀| AutoSend{예약 시각 지남<br/>AND 오늘 미전송?}
         AutoSend -->|YES| Collect
-        AutoSend -->|NO| ServerSync[서버에서 최신 heartbeat 시각 조회<br/>WorkManager + 로컬 알림 재예약]
+        AutoSend -->|NO| ServerSync[서버에서 최신 heartbeat 시각 조회<br/>WorkManager 재예약 + iOS: 로컬 알림 재예약]
         ServerSync --> Wait
     end
 
-    Wait -->|WorkManager 미실행<br/>heartbeat 시각 + 30분 경과| Alarm
+    Wait -->|iOS: BGTask 미실행<br/>heartbeat 시각 + 30분 경과| Alarm
 
-    subgraph 안전망[안전망 동작 — 로컬 알림]
+    subgraph 안전망[안전망 동작 — iOS 전용 로컬 알림]
         Alarm[OS가 로컬 알림 표시<br/>📱 안부 확인이 필요합니다<br/>이 메시지 알림을 한 번 터치해 주세요]
 
         Alarm --> UserAction{사용자 반응?}
@@ -320,14 +319,14 @@ flowchart TD
 
 | 상황 | WorkManager/BGTask | 앱 열기 자동 전송 | 로컬 안전망 알림 | 결과 |
 |------|-------------------|-----------------|----------------|------|
-| 정상 동작 (09:30) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | 재예약되어 10:00 표시 안 됨 | 정상 |
-| 앱 스와이프 종료 (Android MIUI) | **지연 또는 미실행 가능** | 앱 열면 자동 전송 | **10:00 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
-| 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **10:00 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
-| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **10:00 표시** | 네트워크 복구 + 앱 실행 시 복구 |
-| 알림 권한 거부 | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **표시 불가** | WorkManager/앱 열기로 대응 |
+| 정상 동작 (09:30) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | iOS: 재예약되어 표시 안 됨 | 정상 |
+| 앱 스와이프 종료 (Android MIUI) | **지연 또는 미실행 가능** | 앱 열면 자동 전송 | Android: 해당 없음 (periodic 안전망) | 사용자가 앱을 열면 복구 |
+| 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **iOS: 10:00 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
+| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **iOS: 10:00 표시** | 네트워크 복구 + 앱 실행 시 복구 |
+| 알림 권한 거부 (iOS) | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **iOS: 표시 불가** | BGTask/앱 열기로 대응 |
 
 ※ 위 시각은 기본값(09:30) 기준.
-※ 예약 시각 변경은 대상자 앱에서만 가능. 변경 시 WorkManager 재예약 + 로컬 안전망 알림 재예약이 동시에 수행됨.
+※ 예약 시각 변경은 대상자 앱에서만 가능. 변경 시 WorkManager 재예약 + iOS 로컬 안전망 알림 재예약이 동시에 수행됨.
 
 
 ## Mermaid 렌더링 방법

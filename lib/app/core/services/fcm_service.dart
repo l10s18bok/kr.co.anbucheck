@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -25,8 +26,8 @@ void onDidReceiveNotificationResponse(NotificationResponse response) {
 }
 
 /// 알림 탭 시 라우팅
-/// 데드맨 알림: 앱 포그라운드 전환만 → 홈 화면에서 미전송 체크 + 자동 전송
-/// suspicious 알림: 사용자 생존 응답 — manual=true heartbeat 즉시 재전송
+/// 데드맨 알림 (iOS 전용): 앱 포그라운드 전환만 → 홈 화면에서 미전송 체크 + 자동 전송
+/// 보호자 Push 알림: type에 따라 알림 목록 또는 대시보드로 이동
 void _handleNotificationTap(String type) {
   switch (type) {
     case 'alert':
@@ -34,14 +35,12 @@ void _handleNotificationTap(String type) {
     case 'alert_warning':
     case 'alert_caution':
     case 'alert_emergency':
-      Get.toNamed(AppRoutes.guardianNotifications);
-      break;
     case 'alert_resolved':
     case 'alert_cleared':
     case 'auto_report':
     case 'manual_report':
     case 'alert_info':
-      Get.toNamed(AppRoutes.guardianDashboard);
+      Get.toNamed(AppRoutes.guardianNotifications);
       break;
     case 'heartbeat':
       break;
@@ -76,12 +75,32 @@ class FcmService extends GetxService {
   Future<void> requestIosPermission() async {
     if (!Platform.isIOS) return;
     try {
-      await _messaging.requestPermission(
+      final settings = await _messaging.requestPermission(
         alert: true,
         badge: true,
         sound: true,
       );
-      await _getToken();
+      debugPrint('[FCM] iOS 알림 권한 상태: ${settings.authorizationStatus}');
+
+      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
+          settings.authorizationStatus == AuthorizationStatus.provisional) {
+        // APNs 토큰이 준비될 때까지 대기 (최대 5초)
+        String? apnsToken;
+        for (int i = 0; i < 10; i++) {
+          apnsToken = await _messaging.getAPNSToken();
+          if (apnsToken != null) break;
+          await Future.delayed(const Duration(milliseconds: 500));
+        }
+        debugPrint('[FCM] APNs 토큰: ${apnsToken != null ? '${apnsToken.substring(0, 20)}...' : 'null'}');
+
+        if (apnsToken != null) {
+          await _getToken();
+        } else {
+          debugPrint('[FCM] APNs 토큰 미발급 — FCM 토큰 발급 불가');
+        }
+      } else {
+        debugPrint('[FCM] iOS 알림 권한 거부됨');
+      }
     } catch (e) {
       debugPrint('[FCM] iOS 권한 요청 실패: $e');
     }
@@ -116,6 +135,23 @@ class FcmService extends GetxService {
 
     // 포그라운드 메시지 수신
     FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
+
+    // iOS: AppDelegate에서 MethodChannel로 전달받아 대시보드 갱신 + 알림 탭 라우팅
+    if (Platform.isIOS) {
+      const channel = MethodChannel('kr.co.anbucheck/fcm');
+      channel.setMethodCallHandler((call) async {
+        if (call.method == 'onForegroundMessage') {
+          debugPrint('[FCM] iOS 포그라운드 알림 수신 → 대시보드 갱신');
+          try {
+            Get.find<GuardianSubjectService>().refresh();
+          } catch (_) {}
+        } else if (call.method == 'onNotificationTap') {
+          final type = call.arguments?.toString() ?? '';
+          debugPrint('[FCM] iOS 알림 탭: $type');
+          _handleNotificationTap(type);
+        }
+      });
+    }
 
     // 백그라운드에서 알림 탭하여 앱 열기
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
@@ -156,10 +192,11 @@ class FcmService extends GetxService {
   Future<void> _initLocalNotifications() async {
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
+    // iOS 권한은 firebase_messaging에서 관리 — 여기서 요청하면 delegate 충돌
     const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
 
     await _localNotifications.initialize(
@@ -185,6 +222,16 @@ class FcmService extends GetxService {
   /// FCM 토큰 가져오기
   Future<void> _getToken() async {
     try {
+      // iOS: APNs 토큰이 있어야 FCM 토큰 발급 가능
+      if (Platform.isIOS) {
+        final apnsToken = await _messaging.getAPNSToken();
+        debugPrint('[FCM] APNs 토큰 확인: ${apnsToken != null ? '있음' : 'null'}');
+        if (apnsToken == null) {
+          debugPrint('[FCM] APNs 토큰 없음 — FCM 토큰 발급 건너뜀');
+          return;
+        }
+      }
+
       final fcmToken = await _messaging.getToken();
       _token.value = fcmToken;
       debugPrint('[FCM] 토큰: $fcmToken');
