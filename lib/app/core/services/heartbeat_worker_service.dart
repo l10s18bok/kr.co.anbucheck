@@ -32,16 +32,16 @@ void heartbeatWorkerCallback() {
       final tokenDs = TokenLocalDatasource();
       final role = await tokenDs.getUserRole();
       final isAlsoSubject = await tokenDs.getIsAlsoSubject();
-      print('[HeartbeatWorker] role=$role, isAlsoSubject=$isAlsoSubject');
+      debugPrint('[HeartbeatWorker] role=$role, isAlsoSubject=$isAlsoSubject');
       if (role != 'subject' && !isAlsoSubject) return true;
 
       // 예약시각 2분 전 이상이면 스킵 (Android/iOS 공통)
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
       final now = DateTime.now();
       final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
-      print('[HeartbeatWorker] 현재: ${now.hour}:${now.minute}:${now.second}, 예약: $hour:$minute');
+      debugPrint('[HeartbeatWorker] 현재: ${now.hour}:${now.minute}:${now.second}, 예약: $hour:$minute');
       if (now.isBefore(scheduled.subtract(const Duration(minutes: 2)))) {
-        print('[HeartbeatWorker] 예약시각 이전 — 스킵');
+        debugPrint('[HeartbeatWorker] 예약시각 이전 — 스킵');
         return true;
       }
 
@@ -50,7 +50,7 @@ void heartbeatWorkerCallback() {
         final lastExecMs = prefs.getInt('_ios_worker_last_exec_ms') ?? 0;
         final elapsed = now.millisecondsSinceEpoch - lastExecMs;
         if (elapsed < 30000) {
-          print('[HeartbeatWorker] iOS: 최근 실행됨 — 스킵 (${elapsed}ms 전)');
+          debugPrint('[HeartbeatWorker] iOS: 최근 실행됨 — 스킵 (${elapsed}ms 전)');
           return true;
         }
         await prefs.setInt('_ios_worker_last_exec_ms', now.millisecondsSinceEpoch);
@@ -58,28 +58,28 @@ void heartbeatWorkerCallback() {
 
       final deviceId = await tokenDs.getDeviceId();
       final deviceToken = await tokenDs.getDeviceToken();
-      print('[HeartbeatWorker] deviceId=$deviceId, deviceToken=${deviceToken != null ? '${deviceToken.substring(0, 10)}...' : 'null'}');
+      debugPrint('[HeartbeatWorker] deviceId=$deviceId, deviceToken=${deviceToken != null ? '${deviceToken.substring(0, 10)}...' : 'null'}');
       if (deviceId == null || deviceToken == null) {
-        print('[HeartbeatWorker] deviceId 또는 deviceToken이 null — 전송 불가');
+        debugPrint('[HeartbeatWorker] deviceId 또는 deviceToken이 null — 전송 불가');
         return true;
       }
 
-      // DNS 안정화 대기 (셀룰러 네트워크 백그라운드 실행 시 DNS 지연 방어)
-      await Future.delayed(const Duration(seconds: 10));
-      print('[HeartbeatWorker] heartbeat 전송 시작');
+      // // DNS 안정화 대기 (셀룰러 네트워크 백그라운드 실행 시 DNS 지연 방어)
+      // await Future.delayed(const Duration(seconds: 10));
+      debugPrint('[HeartbeatWorker] heartbeat 전송 시작');
       await HeartbeatService().execute();
-      print('[HeartbeatWorker] heartbeat 전송 완료');
+      debugPrint('[HeartbeatWorker] heartbeat 전송 완료');
 
       if (Platform.isAndroid) {
         // Android: periodic 안전망 취소 후 다음 날 재예약
         await Workmanager().cancelByUniqueName(HeartbeatWorkerService._androidPeriodicName);
-        print('[HeartbeatWorker] Android periodic 안전망 취소');
+        debugPrint('[HeartbeatWorker] Android periodic 안전망 취소');
       }
 
       // 다음 날 동일 시각 재예약
       await HeartbeatWorkerService.scheduleNextDay();
     } catch (e) {
-      print('[HeartbeatWorker] 실행 실패: $e');
+      debugPrint('[HeartbeatWorker] 실행 실패: $e');
     }
     return true;
   });

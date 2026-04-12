@@ -8,14 +8,14 @@ import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 권한 안내 및 요청 컨트롤러
 /// 모드 선택 후 진입, arguments['mode']로 모드 구분
+///
+/// Android: 보호자/대상자/G+S 구분 없이 항상 3개 권한 순차 요청
+///   1. 알림 → 2. 배터리 최적화 제외 → 3. 신체 활동
+/// iOS: 알림 권한만 요청 (보호자 전용)
 class PermissionController extends BaseController {
   late final String mode;
   late final bool isAlsoSubject;
   bool get isSubjectMode => mode == 'subject';
-
-  /// 신체 활동 권한 요청 필요 여부 (대상자 모드 또는 G+S 재설치)
-  bool get needsActivityPermission =>
-      Platform.isAndroid && (isSubjectMode || isAlsoSubject);
 
   @override
   void onInit() {
@@ -32,41 +32,34 @@ class PermissionController extends BaseController {
     if (_isRequesting) return;
     _isRequesting = true;
 
-    // 1. 알림 권한 요청
-    // iOS: Firebase Messaging의 requestPermission()으로 APNs 권한 + FCM 토큰 발급
-    // Android: permission_handler로 OS 알림 권한 요청
-    if (Platform.isIOS) {
-      await Get.find<FcmService>().requestIosPermission();
-    } else {
-      final notificationStatus = await Permission.notification.request();
-      if (!notificationStatus.isGranted) {
-        final retry = await _showPermissionDeniedDialog();
-        if (retry) {
-          _isRequesting = false;
-          openAppSettings();
-          return;
+    try {
+      // 1. 알림 권한
+      if (Platform.isIOS) {
+        await Get.find<FcmService>().requestIosPermission();
+      } else {
+        final notificationStatus = await Permission.notification.request();
+        if (!notificationStatus.isGranted) {
+          final retry = await _showNotificationDeniedDialog();
+          if (retry) {
+            openAppSettings();
+            return;
+          }
         }
       }
+
+      // Android: 신체 활동 권한 (걸음수)
+      if (Platform.isAndroid) {
+        await Permission.activityRecognition.request();
+      }
+
+      Get.offNamed(AppRoutes.onboarding, arguments: {'mode': mode});
+    } finally {
+      _isRequesting = false;
     }
-
-    // 2. 대상자 모드 또는 G+S 재설치 + Android: 활동 인식 권한 요청
-    //    OS 다이얼로그 전 사전 안내 다이얼로그 표시
-    if (needsActivityPermission) {
-      await _requestActivityRecognition();
-    }
-
-    // 온보딩으로 이동 (공통)
-    _isRequesting = false;
-    Get.offNamed(AppRoutes.onboarding, arguments: {'mode': mode});
-  }
-
-  /// 신체 활동 권한 요청 (OS 팝업만 — 안내는 권한 화면 카드에서 완료)
-  Future<void> _requestActivityRecognition() async {
-    await Permission.activityRecognition.request();
   }
 
   /// 알림 권한 거부 시 다이얼로그
-  Future<bool> _showPermissionDeniedDialog() async {
+  Future<bool> _showNotificationDeniedDialog() async {
     final result = await Get.dialog<bool>(
       AlertDialog(
         title: Text('permission_notification_required_title'.tr),

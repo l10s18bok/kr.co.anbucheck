@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,7 @@ class PermissionPage extends GetWidget<PermissionController> {
               ),
               SizedBox(height: AppSpacing.sp8),
 
-              // 알림 권한 카드 (공통)
+              // 1. 알림 권한 카드 (공통)
               _PermissionCard(
                 icon: Icons.notifications_rounded,
                 title: 'permission_notification'.tr,
@@ -42,8 +43,8 @@ class PermissionPage extends GetWidget<PermissionController> {
                     : 'permission_notification_guardian_desc'.tr,
               ),
 
-              // 걸음수 / 신체 활동 카드 (대상자 모드 + Android만)
-              if (controller.needsActivityPermission) ...[
+              // 2. 신체 활동 카드 (Android만)
+              if (Platform.isAndroid) ...[
                 SizedBox(height: AppSpacing.lg),
                 _PermissionCard(
                   icon: Icons.directions_walk_rounded,

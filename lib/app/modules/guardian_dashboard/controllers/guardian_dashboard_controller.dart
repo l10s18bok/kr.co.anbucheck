@@ -1,8 +1,4 @@
-import 'dart:io';
-import 'package:flutter/material.dart' show AlertDialog, Text, TextButton;
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
@@ -37,7 +33,6 @@ class GuardianDashboardController extends BaseController {
     ever(_svc.subjects, (_) => _mapSubjects());
     _loadSubjectsAndSubscription();
     _scheduleHeartbeatIfGS();
-    _ensureActivityRecognitionIfGS();
   }
 
   /// G+S(보호자 겸 대상자)인 경우 서버 스케줄 동기화 후 WorkManager + 로컬 안전망 예약
@@ -58,42 +53,6 @@ class GuardianDashboardController extends BaseController {
       final (h, m) = await _tokenDs.getHeartbeatSchedule();
       await HeartbeatWorkerService.schedule(h, m);
       await LocalAlarmService.schedule(h, m);
-    }
-  }
-
-  /// G+S 보호자: Android 신체 활동 권한 미허용 시 안내
-  Future<void> _ensureActivityRecognitionIfGS() async {
-    if (!Platform.isAndroid) return;
-    final isAlsoSubject = await _tokenDs.getIsAlsoSubject();
-    if (!isAlsoSubject) return;
-
-    final status = await Permission.activityRecognition.status;
-    if (status.isGranted) return;
-
-    // 1회만 안내 (앱 실행마다 반복 방지)
-    final prefs = await SharedPreferences.getInstance();
-    const key = '_activity_permission_prompted';
-    if (prefs.getBool(key) == true) return;
-    await prefs.setBool(key, true);
-
-    final goSettings = await Get.dialog<bool>(
-      AlertDialog(
-        title: Text('permission_activity_denied_title'.tr),
-        content: Text('permission_activity_denied_message'.tr),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(result: false),
-            child: Text('common_later'.tr),
-          ),
-          TextButton(
-            onPressed: () => Get.back(result: true),
-            child: Text('permission_go_to_settings'.tr),
-          ),
-        ],
-      ),
-    );
-    if (goSettings == true) {
-      openAppSettings();
     }
   }
 
