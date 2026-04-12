@@ -1410,7 +1410,7 @@ ios/Runner/
 │  └───────────────────────┘  │
 │                             │
 │  ┌───────────────────────┐  │
-│  │ 🚶 신체 활동 권한      │  │  ← 대상자 모드 또는 G+S 재설치 + Android만 표시
+│  │ 🚶 신체 활동 권한      │  │  ← Android만 표시 (모드 무관)
 │  │  걸음수를 감지하여      │  │
 │  │  활동 여부를 확인하는   │  │
 │  │  데 사용됩니다          │  │
@@ -1421,15 +1421,34 @@ ios/Runner/
 ```
 - 모드 선택 화면에서 모드 선택 후 이 화면으로 진입 (`arguments['mode']`, `arguments['isAlsoSubject']`로 모드 및 G+S 구분)
 - G+S 재설치 감지: `mode_select_controller.dart`에서 `checkDevice` API의 `has_invite_code` 응답으로 판별 → `isAlsoSubject=true` 전달
-- 신체 활동 권한 카드 표시 조건: `needsActivityPermission` = Android AND (대상자 모드 OR isAlsoSubject)
+- 신체 활동 권한 카드는 **Android에서 모드와 무관하게 항상 표시** (보호자/대상자/G+S 동일)
 - [확인] 탭 시 OS 권한 팝업 순차 표시:
   - iOS: Firebase Messaging `requestPermission()`으로 APNs 권한 + FCM 토큰 발급
-  - Android: `permission_handler`로 알림 권한 요청
-  - 신체 활동 권한 필요 시: OS 팝업 바로 표시 (사전 안내 다이얼로그 없음, 거부 시 설정 이동 안내 없음)
+  - Android: `permission_handler`로 알림 권한 → 신체 활동 권한 순차 요청 (사전 안내 다이얼로그 없이 OS 팝업 직접 표시)
 - 알림 권한 거부 시 재요청 다이얼로그 표시 ("설정으로 이동" / "나중에" 선택)
 - 권한 처리 후 온보딩 화면으로 이동 (`Get.offNamed(AppRoutes.onboarding)`)
-- 배터리 최적화 제외 권한은 제거됨 (전면 삭제)
+- 배터리 최적화 제외 권한(`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`)은 매니페스트에서 제거됨 — Splash 단계에서 다이얼로그로 안내 (9.0.1 참조)
 - 온보딩에서는 권한 요청 없음 — 서버 등록 + 화면 이동만 담당
+
+
+#### 9.0.1 배터리 최적화 안내 다이얼로그 (Splash, 대상자/G+S 전용)
+
+매일 정해진 시각의 heartbeat 전송이 OEM 배터리 절약 정책으로 누락되는 것을 막기 위해, Splash 단계에서 사용자에게 직접 안내한다. Google Play 정책상 `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` 권한은 사용하지 않고, 사용자가 앱 설정 화면에서 배터리를 "제한없음"으로 직접 변경하도록 유도한다.
+
+**표시 조건 (`splash_controller.dart::_checkBatteryOptimization`):**
+- Android 전용 (iOS는 즉시 return)
+- `userRole == 'subject'` 또는 `isAlsoSubject == true` (순수 보호자는 heartbeat 전송 안 함 → 표시 안 함)
+- 기존 등록된 사용자에게만 표시 (Splash → 홈 이동 직후)
+
+**1회 표시 플래그 (`SharedPreferences: battery_dialog_shown`):**
+- [설정으로 이동] 클릭 시에만 플래그 저장 → 다음부터 표시 안 함
+- [나중에] 클릭 시 플래그 미저장 → **다음 앱 실행 시 다시 표시** (사용자가 적극 설정하도록 유도)
+
+**다이얼로그 내용 (`permission_battery_required_*` 번역키):**
+- 제목: "배터리 \"제한없음\"으로 설정해주세요"
+- 본문: "배터리 최적화" 또는 "배터리 절약" 설정 시 안부 확인 누락 가능 안내 + [설정으로 이동] → "배터리" → "제한없음" 선택 단계 안내
+- `barrierDismissible: false` (외부 탭으로 닫기 불가)
+- [설정으로 이동] → `permission_handler.openAppSettings()` 호출 (앱 정보 화면 → 사용자가 배터리 항목으로 직접 진입)
 
 
 ### 9.1 모드 선택 화면 (최초 실행 시)
@@ -1564,7 +1583,7 @@ ios/Runner/
   - `onInit()`: 로컬 데이터 로드 + 알림 권한 확인 + 배터리/네트워크 상태 감시 + 서버 스케줄 동기화
   - `onResumed()`: heartbeat 상태 갱신 + 예약시각 경과 시 자동 전송 (`_checkAndSendHeartbeat`)
   - `_syncScheduleFromServer()`: G+S 모드 진입 시 전달받은 `deviceData`가 있으면 서버 호출 스킵 (중복 API 호출 방지)
-  - 활동 인식 권한 요청은 하지 않음 — 권한 화면(PermissionController) 또는 대시보드(GuardianDashboardController)에서 처리
+  - 활동 인식 권한 요청은 하지 않음 — 권한 화면(PermissionController)에서 일괄 처리
 - "도움이 필요해요" 긴급 버튼으로 보호자 전원에게 즉시 긴급 알림 발송 (POST /api/v1/emergency)
   - 확인 다이얼로그 표시 후 전송 (오탐 방지)
   - 기존 heartbeat 경고 에스컬레이션(suspicious_count, days_inactive)과 독립 동작
@@ -1746,9 +1765,9 @@ ios/Runner/
 - **활성화** (`enableSubjectFeature()`):
   1. 서버 `POST /api/v1/users/enable-subject` → invite_code 발급
   2. 로컬 `isAlsoSubject=true`, invite_code 저장
-  3. Android: 활동 인식 권한 요청 (OS 팝업 바로 표시)
-  4. WorkManager + LocalAlarmService 예약
-  5. 첫 heartbeat 즉시 전송
+  3. WorkManager + LocalAlarmService 예약
+  4. 첫 heartbeat 즉시 전송
+  ※ 활동 인식 권한은 최초 권한 화면(9.0)에서 이미 요청되었으므로 별도 요청 없음
 
 - **비활성화** (`disableSubjectFeature()`):
   1. 서버 `POST /api/v1/users/disable-subject`
