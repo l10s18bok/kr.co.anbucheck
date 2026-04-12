@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 
@@ -19,8 +19,7 @@ mixin HeartbeatScheduleMixin on GetxController {
   /// iOS 백그라운드 복귀 시 SharedPreferences 캐시가 디스크와 불일치할 수 있으므로
   /// reload() 후 읽기
   Future<void> loadScheduleFromLocal() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
+    await getReloadedPrefs();
     final (h, m) = await TokenLocalDatasource().getHeartbeatSchedule();
     applySchedule(h, m);
   }
@@ -134,10 +133,7 @@ mixin HeartbeatScheduleMixin on GetxController {
       // WorkManager + 로컬 안전망 재예약
       await HeartbeatWorkerService.schedule(hour, minute);
       await LocalAlarmService.schedule(hour, minute);
-      final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
-      final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-      final timeStr = '$period ${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-      final message = 'heartbeat_scheduled_today'.trParams({'time': timeStr});
+      final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
       Get.snackbar('', message,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 2),

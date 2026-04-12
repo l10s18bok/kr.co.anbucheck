@@ -4,9 +4,9 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tzlib;
 import 'package:workmanager/workmanager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 
 /// WorkManager 백그라운드 콜백 (top-level 함수 필수)
@@ -26,8 +26,7 @@ void heartbeatWorkerCallback() {
 
       ApiClientFactory.init(type: HttpClientType.dio);
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.reload();
+      final prefs = await getReloadedPrefs();
 
       final tokenDs = TokenLocalDatasource();
       final role = await tokenDs.getUserRole();
@@ -56,16 +55,7 @@ void heartbeatWorkerCallback() {
         await prefs.setInt('_ios_worker_last_exec_ms', now.millisecondsSinceEpoch);
       }
 
-      final deviceId = await tokenDs.getDeviceId();
-      final deviceToken = await tokenDs.getDeviceToken();
-      debugPrint('[HeartbeatWorker] deviceId=$deviceId, deviceToken=${deviceToken != null ? '${deviceToken.substring(0, 10)}...' : 'null'}');
-      if (deviceId == null || deviceToken == null) {
-        debugPrint('[HeartbeatWorker] deviceId 또는 deviceToken이 null — 전송 불가');
-        return true;
-      }
-
-      // // DNS 안정화 대기 (셀룰러 네트워크 백그라운드 실행 시 DNS 지연 방어)
-      // await Future.delayed(const Duration(seconds: 10));
+      // deviceId/deviceToken 검증은 HeartbeatService.execute() 내부에서 처리
       debugPrint('[HeartbeatWorker] heartbeat 전송 시작');
       await HeartbeatService().execute();
       debugPrint('[HeartbeatWorker] heartbeat 전송 완료');

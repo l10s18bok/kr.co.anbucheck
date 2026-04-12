@@ -1,9 +1,10 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -30,38 +31,38 @@ class HeartbeatService {
     if (_busy) return;
     _busy = true;
     try {
-      // 보류 큐가 있으면 먼저 전송
+      final deviceId    = await _tokenDs.getDeviceId();
       final deviceToken = await _tokenDs.getDeviceToken();
-      if (deviceToken != null) {
-        final pending = await _heartbeatDs.getPending();
-        if (pending != null) {
-          await _sendPendingInternal(deviceToken);
-        }
+      if (deviceId == null || deviceToken == null) return;
+
+      // 보류 큐가 있으면 먼저 전송
+      final pending = await _heartbeatDs.getPending();
+      if (pending != null) {
+        await _sendPendingInternal(deviceToken);
       }
 
-      await _executeInternal(manual: manual);
+      await _executeInternal(deviceId: deviceId, deviceToken: deviceToken, manual: manual);
     } finally {
       _busy = false;
     }
   }
 
-  Future<void> _executeInternal({bool manual = false}) async {
-    final deviceId    = await _tokenDs.getDeviceId();
-    final deviceToken = await _tokenDs.getDeviceToken();
-    if (deviceId == null || deviceToken == null) return;
+  Future<void> _executeInternal({
+    required String deviceId,
+    required String deviceToken,
+    bool manual = false,
+  }) async {
 
     // 동일 예약시각에 대한 중복 전송 방어 (날짜+예약시각 조합)
     // manual=true는 무조건 전송 (suspicious 알림 응답, 수동 보고)
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
+    await getReloadedPrefs();
     final now = DateTime.now();
+    final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
     if (!manual) {
-      final (hour, minute) = await _tokenDs.getHeartbeatSchedule();
-      final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-      final scheduledKey = '${today}_${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+      final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
       final lastKey = await _tokenDs.getLastScheduledKey();
       if (lastKey == scheduledKey) {
-        print('[HeartbeatService] 이미 전송 완료 — 스킵 ($scheduledKey)');
+        debugPrint('[HeartbeatService] 이미 전송 완료 — 스킵 ($scheduledKey)');
         return;
       }
     }
@@ -74,16 +75,16 @@ class HeartbeatService {
     bool suspicious = false;
     if (!manual) {
       stepsDelta = await _getStepsDelta();
-      print('[HeartbeatService] stepsDelta=$stepsDelta');
+      debugPrint('[HeartbeatService] stepsDelta=$stepsDelta');
       if (stepsDelta != null && stepsDelta > 0) {
         // 걸음수 변화 있음 → 즉시 정상 판정
         suspicious = false;
       } else {
         // 걸음수 변화 없거나 권한 거부 → 가속도/자이로로 보완 판정
         final sensor = await _collectSensor();
-        print('[HeartbeatService] sensor=${sensor != null ? 'accel(${sensor.accelX.toStringAsFixed(2)},${sensor.accelY.toStringAsFixed(2)},${sensor.accelZ.toStringAsFixed(2)}) gyro(${sensor.gyroX.toStringAsFixed(2)},${sensor.gyroY.toStringAsFixed(2)},${sensor.gyroZ.toStringAsFixed(2)})' : 'null'}');
+        debugPrint('[HeartbeatService] sensor=${sensor != null ? 'accel(${sensor.accelX.toStringAsFixed(2)},${sensor.accelY.toStringAsFixed(2)},${sensor.accelZ.toStringAsFixed(2)}) gyro(${sensor.gyroX.toStringAsFixed(2)},${sensor.gyroY.toStringAsFixed(2)},${sensor.gyroZ.toStringAsFixed(2)})' : 'null'}');
         suspicious = await _calcSuspicious(sensor);
-        print('[HeartbeatService] suspicious=$suspicious');
+        debugPrint('[HeartbeatService] suspicious=$suspicious');
         if (sensor != null) {
           await _sensorDs.saveSnapshot(
             accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
@@ -103,7 +104,7 @@ class HeartbeatService {
       batteryLevel: batteryLevel,
     );
 
-    await _sendOrSavePending(request, deviceToken);
+    await _sendOrSavePending(request, deviceToken, schedHour, schedMinute);
   }
 
   /// 센서 기준값만 로컬에 저장 (서버 전송 없음)
@@ -145,26 +146,27 @@ class HeartbeatService {
       await _heartbeatDs.clearPending();
 
       final now = DateTime.now();
-      final today =
-          '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-      final timeStr =
-          '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-      await _tokenDs.saveLastHeartbeatDate(today);
-      await _tokenDs.saveLastHeartbeatTime(timeStr);
+      await _tokenDs.saveLastHeartbeatDate(formatYmd(now));
+      await _tokenDs.saveLastHeartbeatTime(formatHm(now.hour, now.minute));
     } catch (_) {}
   }
 
   // ── private ──────────────────────────────────────────────
 
-  Future<void> _sendOrSavePending(HeartbeatRequest request, String deviceToken) async {
+  Future<void> _sendOrSavePending(
+    HeartbeatRequest request,
+    String deviceToken,
+    int schedHour,
+    int schedMinute,
+  ) async {
     final remote = HeartbeatRemoteDatasource(deviceToken);
     for (var attempt = 1; attempt <= 3; attempt++) {
       try {
         await remote.send(request);
-        print('[HeartbeatService] API 전송 성공 (시도 $attempt)');
+        debugPrint('[HeartbeatService] API 전송 성공 (시도 $attempt)');
         break;
       } catch (e) {
-        print('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
+        debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
         if (attempt == 3) {
           await _heartbeatDs.savePending(request.toJson());
           return;
@@ -177,20 +179,16 @@ class HeartbeatService {
     await _heartbeatDs.clearPending();
 
     final now = DateTime.now();
-    final today =
-        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    final timeStr =
-        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+    final today = formatYmd(now);
     await _tokenDs.saveLastHeartbeatDate(today);
-    await _tokenDs.saveLastHeartbeatTime(timeStr);
+    await _tokenDs.saveLastHeartbeatTime(formatHm(now.hour, now.minute));
 
     // 날짜+예약시각 키 저장 (중복 전송 방지)
-    final (h, m) = await _tokenDs.getHeartbeatSchedule();
-    final scheduledKey = '${today}_${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}';
+    final scheduledKey = '${today}_${formatHm(schedHour, schedMinute)}';
     await _tokenDs.saveLastScheduledKey(scheduledKey);
 
     // iOS 로컬 안전망 알림: 오늘 전송 성공 → 내일로 재예약
-    await LocalAlarmService.schedule(h, m, forceNextDay: true);
+    await LocalAlarmService.schedule(schedHour, schedMinute, forceNextDay: true);
   }
 
   Future<int?> _getBatteryLevel() async {
