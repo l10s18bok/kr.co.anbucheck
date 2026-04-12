@@ -210,6 +210,7 @@ abstract class PlPl {
     'settings_current_membership': 'Obecne czlonkostwo',
     'settings_premium': 'Aktywna subskrypcja Premium',
     'settings_free_trial': 'Okres probny',
+    'settings_days_remaining': 'Pozostalo @days dni',
     'settings_manage_subscription': 'Zarzadzaj subskrypcja',
     'settings_notification': 'Ustawienia powiadomien',
     'settings_terms_section': 'Prawne',

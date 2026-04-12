@@ -221,6 +221,7 @@ abstract class PtBr {
     'settings_current_membership': 'Plano atual',
     'settings_premium': 'Premium ativo',
     'settings_free_trial': 'Período de teste',
+    'settings_days_remaining': '@days dias restantes',
     'settings_manage_subscription': 'Gerenciar assinatura',
     'settings_notification': 'Configurações de notificação',
     'settings_terms_section': 'Jurídico',

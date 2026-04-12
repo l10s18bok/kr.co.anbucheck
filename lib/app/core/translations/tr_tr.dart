@@ -206,6 +206,7 @@ abstract class TrTr {
     'settings_current_membership': 'Mevcut Üyelik',
     'settings_premium': 'Premium Aktif',
     'settings_free_trial': 'Ücretsiz Deneme',
+    'settings_days_remaining': '@days gün kaldı',
     'settings_manage_subscription': 'Aboneliği Yönet',
     'settings_notification': 'Bildirim Ayarları',
     'settings_terms_section': 'Yasal',

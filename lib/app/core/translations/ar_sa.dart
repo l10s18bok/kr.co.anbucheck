@@ -204,6 +204,7 @@ abstract class ArSa {
     'settings_current_membership': 'العضوية الحالية',
     'settings_premium': 'اشتراك مميز نشط',
     'settings_free_trial': 'فترة تجريبية مجانية',
+    'settings_days_remaining': 'متبقي @days يوم',
     'settings_manage_subscription': 'إدارة الاشتراك',
     'settings_notification': 'إعدادات الإشعارات',
     'settings_terms_section': 'قانوني',

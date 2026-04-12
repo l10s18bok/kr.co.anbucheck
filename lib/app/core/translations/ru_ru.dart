@@ -207,6 +207,7 @@ abstract class RuRu {
     'settings_current_membership': 'Текущая подписка',
     'settings_premium': 'Премиум активна',
     'settings_free_trial': 'Бесплатный период',
+    'settings_days_remaining': 'Осталось @days дн.',
     'settings_manage_subscription': 'Управление подпиской',
     'settings_notification': 'Настройки уведомлений',
     'settings_terms_section': 'Правовая информация',

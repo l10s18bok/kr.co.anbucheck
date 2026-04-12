@@ -187,6 +187,7 @@ abstract class ZhTw {
     'settings_current_membership': '目前會員',
     'settings_premium': '進階訂閱中',
     'settings_free_trial': '免費試用中',
+    'settings_days_remaining': '剩餘@days天',
     'settings_manage_subscription': '管理訂閱',
     'settings_notification': '通知設定',
     'settings_terms_section': '條款',

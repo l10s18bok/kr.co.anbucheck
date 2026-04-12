@@ -187,6 +187,7 @@ abstract class EnUs {
     'settings_current_membership': 'Current Membership',
     'settings_premium': 'Premium Active',
     'settings_free_trial': 'Free Trial',
+    'settings_days_remaining': '@days days left',
     'settings_manage_subscription': 'Manage Subscription',
     'settings_notification': 'Notification Settings',
     'settings_terms_section': 'Legal',

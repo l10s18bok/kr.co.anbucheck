@@ -214,6 +214,7 @@ abstract class FrFr {
     'settings_current_membership': 'Abonnement actuel',
     'settings_premium': 'Premium actif',
     'settings_free_trial': 'Essai gratuit',
+    'settings_days_remaining': '@days jours restants',
     'settings_manage_subscription': 'Gérer l\'abonnement',
     'settings_notification': 'Paramètres de notification',
     'settings_terms_section': 'Mentions légales',

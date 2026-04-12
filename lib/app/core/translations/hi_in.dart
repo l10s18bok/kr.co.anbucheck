@@ -207,6 +207,7 @@ abstract class HiIn {
     'settings_current_membership': 'वर्तमान सदस्यता',
     'settings_premium': 'प्रीमियम सक्रिय',
     'settings_free_trial': 'मुफ्त परीक्षण',
+    'settings_days_remaining': '@days दिन शेष',
     'settings_manage_subscription': 'सदस्यता प्रबंधित करें',
     'settings_notification': 'सूचना सेटिंग्स',
     'settings_terms_section': 'कानूनी',

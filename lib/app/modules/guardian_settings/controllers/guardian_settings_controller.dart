@@ -38,6 +38,7 @@ class GuardianSettingsController extends BaseController
   final osVersion = ''.obs;
   final isSubscriptionActive = true.obs;
   final subscriptionPlan = ''.obs; // free_trial, yearly, expired
+  final subscriptionDaysRemaining = (-1).obs; // -1: 미조회, 0+: 남은 일수
 
   // ── G+S (보호자 겸 대상자) 상태 ──
   final isAlsoSubject = false.obs;
@@ -154,6 +155,15 @@ class GuardianSettingsController extends BaseController
       isSubscriptionActive.value = active;
       subscriptionPlan.value = plan;
       await _tokenDs.saveSubscriptionActive(active);
+
+      // 보호자 구독 남은 일수 조회 (보호자만 엔드포인트 접근 가능)
+      try {
+        final sub = await deviceDs.getSubscription(deviceToken);
+        final days = sub['days_remaining'] as int?;
+        if (days != null) subscriptionDaysRemaining.value = days;
+      } catch (_) {
+        // 대상자이거나 구독 정보 없음 — 무시
+      }
 
       // G+S 상태 서버 동기화 (양방향)
       final serverAlsoSubject = data['is_also_subject'] as bool? ?? false;

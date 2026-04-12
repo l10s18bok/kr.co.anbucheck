@@ -217,6 +217,7 @@ abstract class ItIt {
     'settings_current_membership': 'Abbonamento attuale',
     'settings_premium': 'Premium attivo',
     'settings_free_trial': 'Prova gratuita',
+    'settings_days_remaining': '@days giorni rimasti',
     'settings_manage_subscription': "Gestisci l'abbonamento",
     'settings_notification': 'Impostazioni notifiche',
     'settings_terms_section': 'Legale',

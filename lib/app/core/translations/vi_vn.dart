@@ -209,6 +209,7 @@ abstract class ViVn {
     'settings_current_membership': 'Thanh vien hien tai',
     'settings_premium': 'Premium dang hoat dong',
     'settings_free_trial': 'Dung thu mien phi',
+    'settings_days_remaining': 'Con @days ngay',
     'settings_manage_subscription': 'Quan ly dang ky',
     'settings_notification': 'Cai dat thong bao',
     'settings_terms_section': 'Phap ly',

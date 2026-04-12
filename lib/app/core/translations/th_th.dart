@@ -208,6 +208,7 @@ abstract class ThTh {
     'settings_current_membership': 'สมาชิกปัจจุบัน',
     'settings_premium': 'พรีเมียมใช้งานอยู่',
     'settings_free_trial': 'ทดลองใช้ฟรี',
+    'settings_days_remaining': 'เหลือ @days วัน',
     'settings_manage_subscription': 'จัดการการสมัครสมาชิก',
     'settings_notification': 'การตั้งค่าการแจ้งเตือน',
     'settings_terms_section': 'กฎหมาย',

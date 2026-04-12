@@ -209,6 +209,7 @@ abstract class SvSe {
     'settings_current_membership': 'Nuvarande medlemskap',
     'settings_premium': 'Premium aktivt',
     'settings_free_trial': 'Gratis provperiod',
+    'settings_days_remaining': '@days dagar kvar',
     'settings_manage_subscription': 'Hantera prenumeration',
     'settings_notification': 'Aviseringsinstellningar',
     'settings_terms_section': 'Juridiskt',

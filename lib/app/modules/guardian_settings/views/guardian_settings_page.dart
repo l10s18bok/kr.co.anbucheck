@@ -379,10 +379,40 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
               ],
             ),
             SizedBox(height: AppSpacing.md),
-            Text(
-                isPremium ? 'settings_premium'.tr : 'settings_free_trial'.tr,
-                style: AppTextTheme.headlineMedium(
-                    color: Colors.white, fw: FontWeight.w700)),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Text(
+                    isPremium
+                        ? 'settings_premium'.tr
+                        : 'settings_free_trial'.tr,
+                    style: AppTextTheme.headlineMedium(
+                        color: Colors.white, fw: FontWeight.w700),
+                  ),
+                ),
+                if (controller.subscriptionDaysRemaining.value >= 0)
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 4.h, left: 8.w),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 4.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Text(
+                        'settings_days_remaining'.trParams({
+                          'days':
+                              '${controller.subscriptionDaysRemaining.value}',
+                        }),
+                        style: AppTextTheme.labelSmall(
+                            color: Colors.white, fw: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
             SizedBox(height: AppSpacing.lg),
             if (isPremium)
               _PremiumButton(

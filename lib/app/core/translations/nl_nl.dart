@@ -218,6 +218,7 @@ abstract class NlNl {
     'settings_current_membership': 'Huidig lidmaatschap',
     'settings_premium': 'Premium actief',
     'settings_free_trial': 'Gratis proefperiode',
+    'settings_days_remaining': 'Nog @days dagen',
     'settings_manage_subscription': 'Abonnement beheren',
     'settings_notification': 'Meldingsinstellingen',
     'settings_terms_section': 'Juridisch',

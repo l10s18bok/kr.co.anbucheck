@@ -209,6 +209,7 @@ abstract class IdId {
     'settings_current_membership': 'Keanggotaan Saat Ini',
     'settings_premium': 'Premium Aktif',
     'settings_free_trial': 'Uji Coba Gratis',
+    'settings_days_remaining': 'Sisa @days hari',
     'settings_manage_subscription': 'Kelola Langganan',
     'settings_notification': 'Pengaturan Notifikasi',
     'settings_terms_section': 'Hukum',

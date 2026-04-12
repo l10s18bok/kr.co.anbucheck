@@ -214,6 +214,7 @@ abstract class EsEs {
     'settings_current_membership': 'Membresía actual',
     'settings_premium': 'Premium activo',
     'settings_free_trial': 'Prueba gratuita',
+    'settings_days_remaining': '@days días restantes',
     'settings_manage_subscription': 'Gestionar suscripción',
     'settings_notification': 'Ajustes de notificación',
     'settings_terms_section': 'Legal',

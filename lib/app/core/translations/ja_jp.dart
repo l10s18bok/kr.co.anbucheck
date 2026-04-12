@@ -187,6 +187,7 @@ abstract class JaJp {
     'settings_current_membership': '現在のプラン',
     'settings_premium': 'プレミアム利用中',
     'settings_free_trial': '無料体験中',
+    'settings_days_remaining': '残り@days日',
     'settings_manage_subscription': 'サブスクリプション管理',
     'settings_notification': '通知設定',
     'settings_terms_section': '規約',

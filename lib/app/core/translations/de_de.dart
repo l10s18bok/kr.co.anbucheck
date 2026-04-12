@@ -208,6 +208,7 @@ abstract class DeDe {
     'settings_current_membership': 'Aktuelle Mitgliedschaft',
     'settings_premium': 'Premium aktiv',
     'settings_free_trial': 'Kostenlose Testphase',
+    'settings_days_remaining': 'Noch @days Tage',
     'settings_manage_subscription': 'Abo verwalten',
     'settings_notification': 'Benachrichtigungseinstellungen',
     'settings_terms_section': 'Rechtliches',

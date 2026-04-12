@@ -39,6 +39,18 @@ class DeviceRemoteDatasource {
     return Map<String, dynamic>.from(result.body as Map);
   }
 
+  /// GET /api/v1/subscription — 보호자 구독 상태 조회 (plan, expires_at, days_remaining)
+  Future<Map<String, dynamic>> getSubscription(String deviceToken) async {
+    final result = await ApiClientFactory.instance.get<dynamic>(
+      ApiEndpoints.subscription,
+      headers: _auth(deviceToken),
+    );
+    if (!result.isOk) {
+      throw Exception('구독 정보 조회 실패 (${result.statusCode})');
+    }
+    return Map<String, dynamic>.from(result.body as Map);
+  }
+
   /// PUT /api/v1/devices/{device_id}/heartbeat-schedule — heartbeat 시각 변경
   /// 서버 PRD는 PATCH이나 PUT으로도 동작하도록 서버에서 처리
   Future<void> updateHeartbeatSchedule(

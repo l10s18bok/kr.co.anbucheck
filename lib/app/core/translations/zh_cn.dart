@@ -187,6 +187,7 @@ abstract class ZhCn {
     'settings_current_membership': '当前会员',
     'settings_premium': '高级订阅中',
     'settings_free_trial': '免费试用中',
+    'settings_days_remaining': '剩余@days天',
     'settings_manage_subscription': '管理订阅',
     'settings_notification': '通知设置',
     'settings_terms_section': '条款',
