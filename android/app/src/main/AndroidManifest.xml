@@ -52,6 +52,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- 구형 Android 폰 호환성: Impeller 비활성화
+             화면 off/on 시 surface 재생성에서 구형 GPU가 Impeller 복구 실패 → 앱 UI 공백 이슈 회피 -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableImpeller"
+            android:value="false" />
 
         <!-- flutter_local_notifications: 예약 알림 발동 리시버 -->
         <receiver

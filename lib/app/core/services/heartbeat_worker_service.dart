@@ -60,12 +60,6 @@ void heartbeatWorkerCallback() {
       await HeartbeatService().execute();
       debugPrint('[HeartbeatWorker] heartbeat 전송 완료');
 
-      if (Platform.isAndroid) {
-        // Android: periodic 안전망 취소 후 다음 날 재예약
-        await Workmanager().cancelByUniqueName(HeartbeatWorkerService._androidPeriodicName);
-        debugPrint('[HeartbeatWorker] Android periodic 안전망 취소');
-      }
-
       // 다음 날 동일 시각 재예약
       await HeartbeatWorkerService.scheduleNextDay();
     } catch (e) {
@@ -76,7 +70,7 @@ void heartbeatWorkerCallback() {
 }
 
 /// WorkManager 기반 heartbeat 예약 서비스
-/// Android: registerOneOffTask + registerPeriodicTask (WorkManager)
+/// Android: registerOneOffTask (WorkManager OneTimeWorkRequest)
 /// iOS: registerProcessingTask (BGProcessingTask) — registerOneOffTask는
 ///      beginBackgroundTask를 사용하여 즉시 실행되므로 사용하지 않음
 ///      (flutter_workmanager PR #511 참고)
@@ -84,12 +78,19 @@ class HeartbeatWorkerService {
   static const _taskName = 'heartbeat_task';
   static const _uniqueName = 'heartbeat_scheduled';
 
-  // Android 전용: periodic 안전망
-  static const _androidPeriodicName = 'heartbeat_periodic_android';
+  // 구버전 업그레이드 정리용 (periodic 안전망 드롭)
+  static const _legacyAndroidPeriodicName = 'heartbeat_periodic_android';
 
   /// Workmanager 초기화 (main()에서 1회 호출)
   static Future<void> init() async {
     await Workmanager().initialize(heartbeatWorkerCallback);
+    // 구버전에서 등록된 Android periodic 안전망 제거
+    // (병렬 isolate 실행으로 인한 heartbeat 중복 전송 race 회피)
+    if (Platform.isAndroid) {
+      try {
+        await Workmanager().cancelByUniqueName(_legacyAndroidPeriodicName);
+      } catch (_) {}
+    }
   }
 
   /// 예약 시각에 맞춰 태스크 예약
@@ -123,15 +124,6 @@ class HeartbeatWorkerService {
         existingWorkPolicy: ExistingWorkPolicy.replace,
         constraints: Constraints(networkType: NetworkType.connected),
       );
-      // Android 전용: periodic 안전망 (1시간 주기)
-      await Workmanager().registerPeriodicTask(
-        _androidPeriodicName,
-        _taskName,
-        frequency: const Duration(hours: 1),
-        initialDelay: delay,
-        existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
-        constraints: Constraints(networkType: NetworkType.connected),
-      );
     }
 
     debugPrint('[HeartbeatWorker] 예약: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} (${delay.inHours}시간 ${delay.inMinutes % 60}분 후) [${Platform.isIOS ? "BGProcessingTask" : "WorkManager"}]');
@@ -162,15 +154,6 @@ class HeartbeatWorkerService {
           existingWorkPolicy: ExistingWorkPolicy.keep,
           constraints: Constraints(networkType: NetworkType.connected),
         );
-        // Android 전용: periodic 안전망 재등록
-        await Workmanager().registerPeriodicTask(
-          _androidPeriodicName,
-          _taskName,
-          frequency: const Duration(hours: 1),
-          initialDelay: delay,
-          existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
-          constraints: Constraints(networkType: NetworkType.connected),
-        );
       }
     } catch (_) {}
   }
@@ -179,7 +162,9 @@ class HeartbeatWorkerService {
   static Future<void> cancel() async {
     await Workmanager().cancelByUniqueName(_uniqueName);
     if (Platform.isAndroid) {
-      await Workmanager().cancelByUniqueName(_androidPeriodicName);
+      try {
+        await Workmanager().cancelByUniqueName(_legacyAndroidPeriodicName);
+      } catch (_) {}
     }
   }
 }
