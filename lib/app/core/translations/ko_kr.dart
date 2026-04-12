@@ -187,6 +187,7 @@ abstract class KoKr {
     'settings_current_membership': '현재 멤버십',
     'settings_premium': '프리미엄 구독 중',
     'settings_free_trial': '무료 체험 중',
+    'settings_days_remaining': '@days일 남음',
     'settings_manage_subscription': '구독 관리',
     'settings_notification': '알림 설정',
     'settings_terms_section': '약관',
