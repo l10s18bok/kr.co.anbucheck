@@ -28,7 +28,7 @@ flowchart TD
     Start --> Trigger
 
     Trigger{트리거 종류?}
-    Trigger -->|고정 시각 Android| WM[WorkManager one-off 태스크<br/>예약 시각에 백그라운드 실행<br/>단일 계층 — periodic 안전망은<br/>중복 전송 race 때문에 드롭<br/>실행 후 다음 날 자동 재예약]
+    Trigger -->|고정 시각 Android| WM[WorkManager 2계층<br/>one-off 정확 발화 + periodic 1h 폴링<br/>one-off fire 후 내일로 재등록<br/>periodic은 재등록 없이 유지<br/>2중 dedup으로 중복 전송 차단]
     Trigger -->|고정 시각 iOS| BG[BGProcessingTask one-off<br/>OS 재량에 따라 지연 가능<br/>실행 후 다음 날 자동 재예약]
     Trigger -->|공통| FG[앱 열기 / 포그라운드 복귀<br/>예약 시각 경과 + 오늘 미전송 시<br/>자동 heartbeat 전송]
 
@@ -273,15 +273,15 @@ flowchart TD
 
 ## 8. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)
 
-> **1차**: WorkManager(Android) / BGTaskScheduler(iOS)가 예약 시각에 heartbeat를 백그라운드 실행한다. one-off 태스크 단일 계층으로 등록한다 — periodic 안전망은 one-off와 거의 동시에 실행되어 중복 전송 race를 유발하므로 드롭했다. 콜백 내 `lastHeartbeatDate` 검사로 당일 중복 전송을 방지한다.
-> **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다. Android에서는 1차 실패 시 이것이 유일한 안전망이다.
+> **1차 (Android)**: WorkManager 2계층으로 등록한다 — (a) **one-off**: 예약시각에 정확히 1회 fire. 전송 성공 후 `rescheduleOneOffForNextDay()`로 내일 예약시각에 재등록. (b) **periodic 1시간**: 안전망 폴링. one-off가 OEM 배터리 절약/Doze 등으로 누락되어도 최대 1시간 내 백업 발화. fire 후 재등록하지 않고 그대로 둔다 — workmanager의 `UPDATE`는 initialDelay를 무시하고 `REPLACE`는 자기자신을 취소하는 이슈가 있어 건드리면 오히려 폴링이 깨진다. one-off와 periodic이 거의 동시에 fire되는 race는 2중 dedup으로 차단한다: 콜백 진입 시 `lastHeartbeatDate == 오늘` 검사 + `HeartbeatService._executeInternal`의 `lastScheduledKey` 검사. iOS는 BGTaskScheduler 불안정성 때문에 사용하지 않는다.
+> **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다. Android에서는 one-off/periodic 모두 실패한 경우의 최종 안전망.
 > **3차 (iOS 전용)**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. Android는 데드맨 알림이 없으며 2차(앱 열기 자동 전송)가 유일한 안전망이다.
 
 ```mermaid
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
-        Install --> FirstWM[WorkManager one-off 태스크 예약<br/>heartbeat 시각 기본 09:30<br/>단일 계층 — periodic 안전망 없음]
+        Install --> FirstWM[WorkManager 예약<br/>one-off 예약시각 정각<br/>+ periodic 1시간 폴링<br/>heartbeat 시각 기본 09:30]
         FirstWM --> FirstAlarm[iOS: 로컬 안전망 알림 예약<br/>heartbeat 시각 + 30분<br/>기본 매일 10:00]
     end
 
@@ -290,7 +290,7 @@ flowchart TD
     subgraph 정상주기[정상 동작 주기]
         Wait([다음 heartbeat 대기])
         Wait -->|WorkManager/BGTaskScheduler 실행| Collect[heartbeat 수집 및 서버 전송]
-        Collect --> Reschedule[다음날 같은 시각으로<br/>WorkManager 재예약 +<br/>iOS: 로컬 안전망 알림 재예약<br/>heartbeat 시각 + 30분]
+        Collect --> Reschedule[Android: one-off만 내일로 재등록<br/>periodic은 그대로 유지<br/>iOS: 로컬 안전망 알림 재예약<br/>heartbeat 시각 + 30분]
         Reschedule --> Wait
         Wait -->|앱 실행 또는 포그라운드 복귀| AutoSend{예약 시각 지남<br/>AND 오늘 미전송?}
         AutoSend -->|YES| Collect
@@ -320,7 +320,7 @@ flowchart TD
 | 상황 | WorkManager/BGTask | 앱 열기 자동 전송 | 로컬 안전망 알림 | 결과 |
 |------|-------------------|-----------------|----------------|------|
 | 정상 동작 (09:30) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | iOS: 재예약되어 표시 안 됨 | 정상 |
-| 앱 스와이프 종료 (Android OneUI/MIUI) + 화면 꺼짐 Doze | **지연 또는 미실행 가능** | 앱 열면 자동 전송 | Android: 해당 없음 (데드맨 알림 미사용) | 사용자가 앱을 열 때까지 복구 불가 — 배터리 "제한없음" 설정이 유일한 예방책 |
+| 앱 스와이프 종료 (Android OneUI/MIUI) + 화면 꺼짐 Doze | one-off **지연/미실행 가능** → periodic 1시간 폴링이 최대 1시간 내 백업 발화 | 앱 열면 자동 전송 | Android: 해당 없음 (데드맨 알림 미사용) | periodic 폴링으로 대부분 복구. 둘 다 실패 시 앱 열기까지 미전송 — 배터리 "제한없음" 설정이 최종 예방책 |
 | 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **iOS: 10:00 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
 | 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **iOS: 10:00 표시** | 네트워크 복구 + 앱 실행 시 복구 |
 | 알림 권한 거부 (iOS) | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **iOS: 표시 불가** | BGTask/앱 열기로 대응 |
