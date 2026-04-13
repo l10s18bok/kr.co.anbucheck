@@ -14,7 +14,6 @@ void heartbeatWorkerCallback() {
   Workmanager().executeTask((taskName, inputData) async {
     WidgetsFlutterBinding.ensureInitialized();
     try {
-      // 백그라운드 isolate timezone 초기화
       tz.initializeTimeZones();
       try {
         final localTzName = await FlutterTimezone.getLocalTimezone();
@@ -24,37 +23,36 @@ void heartbeatWorkerCallback() {
       }
 
       ApiClientFactory.init(type: HttpClientType.dio);
-
-      // 백그라운드 isolate의 SharedPreferences 캐시를 디스크와 동기화
-      // 메인 isolate에서 막 저장한 스케줄/역할 값을 stale 없이 읽기 위함
       await getReloadedPrefs();
 
       final tokenDs = TokenLocalDatasource();
       final role = await tokenDs.getUserRole();
       final isAlsoSubject = await tokenDs.getIsAlsoSubject();
-      debugPrint('[HeartbeatWorker] role=$role, isAlsoSubject=$isAlsoSubject');
+      debugPrint('[HeartbeatWorker] task=$taskName role=$role, isAlsoSubject=$isAlsoSubject');
       if (role != 'subject' && !isAlsoSubject) return true;
 
-      // 예약시각 2분 전 이상이면 스킵
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
       final now = DateTime.now();
       final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
       debugPrint('[HeartbeatWorker] 현재: ${now.hour}:${now.minute}:${now.second}, 예약: $hour:$minute');
-      if (now.isBefore(scheduled.subtract(const Duration(minutes: 2)))) {
+      if (now.isBefore(scheduled)) {
         debugPrint('[HeartbeatWorker] 예약시각 이전 — 스킵');
         return true;
       }
 
-      debugPrint('[HeartbeatWorker] heartbeat 전송 시작');
+      final today = formatYmd(now);
+      final lastDate = await tokenDs.getLastHeartbeatDate();
+      if (lastDate == today) {
+        debugPrint('[HeartbeatWorker] 오늘 이미 전송 완료 — 스킵');
+        return true;
+      }
+
+      debugPrint('[HeartbeatWorker] heartbeat 전송 시도');
       await HeartbeatService().execute();
       debugPrint('[HeartbeatWorker] heartbeat 전송 완료');
 
-      // 오늘 periodic 안전망 취소 — 다음 날은 scheduleNextDay에서 재등록
-      await Workmanager().cancelByUniqueName(HeartbeatWorkerService._androidPeriodicName);
-      debugPrint('[HeartbeatWorker] Android periodic 안전망 취소');
-
-      // 다음 날 동일 시각 재예약
-      await HeartbeatWorkerService.scheduleNextDay();
+      // 전송 성공 시 one-off만 내일로 재등록 (periodic은 그대로 폴링 유지)
+      await HeartbeatWorkerService.rescheduleOneOffForNextDay(hour, minute);
     } catch (e) {
       debugPrint('[HeartbeatWorker] 실행 실패: $e');
     }
@@ -64,85 +62,99 @@ void heartbeatWorkerCallback() {
 
 /// WorkManager 기반 heartbeat 예약 서비스 (Android 전용)
 ///
-/// 2계층 예약:
-///   · one-off: 예약 시각에 한 번 정확히 실행 (primary)
-///   · periodic: 15분 주기 안전망 (WorkManager 최소 간격) — Doze/OEM 절전으로
-///     one-off가 지연/미실행되는 경우 maintenance window에 따라잡기 실행
+/// 2계층 구조:
+///   - one-off: 정확히 예약시각에 1회 fire. 전송 성공 후 내일로 재등록.
+///   - periodic 1시간: 안전망 폴링. one-off가 OEM 배터리 절약 등으로 누락될 때 1시간 내
+///     백업 발화. UPDATE/REPLACE 모두 self-cancel/initialDelay 무시 이슈가 있어 재등록하지 않고
+///     그대로 둔다. 당일 재전송은 HeartbeatService 내부 lastScheduledKey dedup이 차단.
 ///
-/// 전송 성공 시 콜백에서 periodic을 즉시 취소해 오늘 남은 시간의 재발화를 막고,
-/// `scheduleNextDay`에서 다음 날용 one-off + periodic을 함께 재등록한다.
-/// 중복 전송 race는 HeartbeatService의 선(先)점유 dedup으로 구조적으로 차단된다.
+/// race 주의:
+///   one-off와 periodic이 거의 동시에 fire될 수 있다. flutter_workmanager는 매 worker마다
+///   새 FlutterEngine/isolate를 생성하므로 Dart `static _busy` 플래그로 막을 수 없다.
+///   방어선:
+///     1) 콜백 진입 시 lastHeartbeatDate == 오늘 검사
+///     2) HeartbeatService._executeInternal에서 lastScheduledKey 검사
+///   둘 다 SharedPreferences 기반이라 TOCTOU 윈도우는 남지만, 실측상 두 워커의 격차가
+///   ms~수십ms 수준이라 충분히 좁아 실패 케이스는 매우 드물다.
 ///
 /// iOS는 이 서비스를 호출하지 않는다 — iOS G+S는 LocalAlarmService 데드맨 알림 +
 /// 앱 열기 자동 전송만으로 동작하며, BGTaskScheduler를 사용하지 않는다.
 class HeartbeatWorkerService {
   static const _taskName = 'heartbeat_task';
-  static const _uniqueName = 'heartbeat_scheduled';
-  static const _androidPeriodicName = 'heartbeat_periodic_android';
+  static const _periodicName = 'heartbeat_periodic';
+  static const _oneOffName = 'heartbeat_scheduled';
+
+  static const _pollFrequency = Duration(hours: 1);
 
   /// Workmanager 초기화 (main()에서 1회 호출, Android에서만)
   static Future<void> init() async {
     await Workmanager().initialize(heartbeatWorkerCallback);
   }
 
-  /// 예약 시각에 맞춰 태스크 예약 (one-off + periodic 안전망)
+  /// 예약 등록 (one-off + periodic 1시간 동시 등록)
   static Future<void> schedule(int hour, int minute) async {
-    final now = DateTime.now();
-    var scheduled = DateTime(now.year, now.month, now.day, hour, minute);
-    if (scheduled.isBefore(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
-    }
-    final delay = scheduled.difference(now);
+    final delay = _computeNextDelay(hour, minute);
 
+    // one-off: 정확히 예약시각에 1회 fire
+    await Workmanager().cancelByUniqueName(_oneOffName);
     await Workmanager().registerOneOffTask(
-      _uniqueName,
+      _oneOffName,
       _taskName,
       initialDelay: delay,
       existingWorkPolicy: ExistingWorkPolicy.replace,
       constraints: Constraints(networkType: NetworkType.connected),
     );
+
+    // periodic 1시간: 안전망 폴링
     await Workmanager().registerPeriodicTask(
-      _androidPeriodicName,
+      _periodicName,
       _taskName,
-      frequency: const Duration(minutes: 15),
+      frequency: _pollFrequency,
       initialDelay: delay,
-      existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
-    debugPrint('[HeartbeatWorker] 예약: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} (${delay.inHours}시간 ${delay.inMinutes % 60}분 후)');
+    debugPrint('[HeartbeatWorker] 예약 등록: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} '
+        '(${delay.inHours}시간 ${delay.inMinutes % 60}분 후 첫 fire) — one-off + periodic 1h');
   }
 
-  /// 다음 날 동일 시각 재예약 (콜백 내에서 호출)
-  static Future<void> scheduleNextDay() async {
+  /// 콜백 내부에서 전송 성공 후 호출 — one-off만 내일 예약시각으로 재등록.
+  /// periodic은 손대지 않는다 (UPDATE는 무시되고 REPLACE는 자기자신 취소 위험).
+  static Future<void> rescheduleOneOffForNextDay(int hour, int minute) async {
     try {
-      final (hour, minute) = await TokenLocalDatasource().getHeartbeatSchedule();
       final now = DateTime.now();
       final tomorrow = DateTime(now.year, now.month, now.day, hour, minute)
           .add(const Duration(days: 1));
       final delay = tomorrow.difference(now);
 
+      await Workmanager().cancelByUniqueName(_oneOffName);
       await Workmanager().registerOneOffTask(
-        _uniqueName,
+        _oneOffName,
         _taskName,
         initialDelay: delay,
-        existingWorkPolicy: ExistingWorkPolicy.keep,
+        existingWorkPolicy: ExistingWorkPolicy.replace,
         constraints: Constraints(networkType: NetworkType.connected),
       );
-      await Workmanager().registerPeriodicTask(
-        _androidPeriodicName,
-        _taskName,
-        frequency: const Duration(minutes: 15),
-        initialDelay: delay,
-        existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
-        constraints: Constraints(networkType: NetworkType.connected),
-      );
-    } catch (_) {}
+      debugPrint('[HeartbeatWorker] one-off 내일로 재등록: ${delay.inHours}시간 ${delay.inMinutes % 60}분 후 fire');
+    } catch (e) {
+      debugPrint('[HeartbeatWorker] one-off 재등록 실패: $e');
+    }
   }
 
-  /// 예약 취소
+  /// 다음 예약시각까지의 delay 계산 (이미 지났으면 내일)
+  static Duration _computeNextDelay(int hour, int minute) {
+    final now = DateTime.now();
+    var next = DateTime(now.year, now.month, now.day, hour, minute);
+    if (!next.isAfter(now)) {
+      next = next.add(const Duration(days: 1));
+    }
+    return next.difference(now);
+  }
+
+  /// 예약 취소 (one-off + periodic 모두)
   static Future<void> cancel() async {
-    await Workmanager().cancelByUniqueName(_uniqueName);
-    await Workmanager().cancelByUniqueName(_androidPeriodicName);
+    await Workmanager().cancelByUniqueName(_oneOffName);
+    await Workmanager().cancelByUniqueName(_periodicName);
   }
 }

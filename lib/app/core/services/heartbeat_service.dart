@@ -58,18 +58,14 @@ class HeartbeatService {
     await getReloadedPrefs();
     final now = DateTime.now();
     final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
-    final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
     if (!manual) {
+      final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
       final lastKey = await _tokenDs.getLastScheduledKey();
       if (lastKey == scheduledKey) {
         debugPrint('[HeartbeatService] 이미 전송 완료 — 스킵 ($scheduledKey)');
         return;
       }
     }
-    // 선(先)점유: periodic과 one-off가 거의 동시에 깨어나도 두 번째 워커가
-    // 여기서 즉시 skip 되도록, 서버 전송 전에 scheduledKey를 먼저 커밋한다.
-    // 전송 실패 시 pending 큐가 자연 복구하므로 롤백 불필요.
-    await _tokenDs.saveLastScheduledKey(scheduledKey);
 
     final timestamp    = now.toUtc().toIso8601String();
     final batteryLevel = await _getBatteryLevel();
@@ -178,8 +174,6 @@ class HeartbeatService {
         debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
         if (attempt == 3) {
           await _heartbeatDs.savePending(request.toJson());
-          // 전송 실패 — 내일 데드맨 알림은 반드시 예약되어 있어야 안전망 유지
-          await LocalAlarmService.schedule(schedHour, schedMinute, forceNextDay: true);
           return;
         }
         await Future.delayed(Duration(seconds: attempt * 5));
@@ -193,7 +187,10 @@ class HeartbeatService {
     final today = formatYmd(now);
     await _tokenDs.saveLastHeartbeatDate(today);
     await _tokenDs.saveLastHeartbeatTime(formatHm(now.hour, now.minute));
-    // scheduledKey는 _executeInternal에서 전송 전 이미 선점유함
+
+    // 날짜+예약시각 키 저장 (중복 전송 방지)
+    final scheduledKey = '${today}_${formatHm(schedHour, schedMinute)}';
+    await _tokenDs.saveLastScheduledKey(scheduledKey);
 
     // iOS 로컬 안전망 알림: 오늘 전송 성공 → 내일로 재예약
     await LocalAlarmService.schedule(schedHour, schedMinute, forceNextDay: true);

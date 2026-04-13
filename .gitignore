@@ -46,6 +46,7 @@ app.*.map.json
 
 # Claude Code 로컬 설정 (환경별 권한 설정, 커밋 불필요)
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
 
 # Firebase 설정 파일 (민감 정보 포함, 직접 관리)
 android/app/google-services.json
