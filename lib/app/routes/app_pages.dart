@@ -21,6 +21,8 @@ import 'package:anbucheck/app/modules/guardian_settings/bindings/guardian_settin
 import 'package:anbucheck/app/modules/guardian_settings/views/guardian_settings_page.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/bindings/guardian_connection_management_binding.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/views/guardian_connection_management_page.dart';
+import 'package:anbucheck/app/modules/guardian_safety_code/bindings/guardian_safety_code_binding.dart';
+import 'package:anbucheck/app/modules/guardian_safety_code/views/guardian_safety_code_page.dart';
 
 part 'app_routes.dart';
 
@@ -84,6 +86,11 @@ class AppPages {
       name: AppRoutes.guardianConnectionManagement,
       page: () => const GuardianConnectionManagementPage(),
       binding: GuardianConnectionManagementBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.guardianSafetyCode,
+      page: () => const GuardianSafetyCodePage(),
+      binding: GuardianSafetyCodeBinding(),
     ),
   ];
 }

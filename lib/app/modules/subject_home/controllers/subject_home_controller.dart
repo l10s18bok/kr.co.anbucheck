@@ -129,15 +129,6 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
   final _tokenDs = TokenLocalDatasource();
 
-  /// G+S 모드 진입 시 전달받은 서버 데이터 (중복 API 호출 방지)
-  Map<String, dynamic>? get _deviceData {
-    final args = Get.arguments;
-    if (args is Map && args['deviceData'] is Map) {
-      return Map<String, dynamic>.from(args['deviceData'] as Map);
-    }
-    return null;
-  }
-
   @override
   void onInit() {
     super.onInit();
@@ -189,20 +180,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   }
 
   /// 서버에서 heartbeat 스케줄 조회 후 로컬과 다를 때만 재예약
-  /// G+S 모드 진입 시 전달받은 데이터가 있으면 서버 호출 스킵
   Future<void> _syncScheduleFromServer() async {
-    // G+S 모드: 설정 페이지에서 이미 받은 데이터 사용 (중복 API 호출 방지)
-    final cached = _deviceData;
-    if (cached != null) {
-      final hour = cached['heartbeat_hour'] as int? ?? 9;
-      final minute = cached['heartbeat_minute'] as int? ?? 30;
-      final subscriptionActive = cached['subscription_active'] as bool? ?? true;
-      _guardianConnected.value = subscriptionActive;
-      _guardianCount.value = cached['guardian_count'] as int? ?? 0;
-      applySchedule(hour, minute);
-      return;
-    }
-
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
     try {

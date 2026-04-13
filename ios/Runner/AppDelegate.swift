@@ -33,12 +33,16 @@ import UserNotifications
   }
 
   // 포그라운드에서 알림 수신 시 배너 표시 + Dart에 대시보드 갱신 전달
+  // FCM 푸시만 대시보드 갱신 트리거 — 로컬 데드맨 알림(gs_deadman)은 제외
+  // FCM 메시지는 gcm.message_id 필드를 항상 포함하므로 이를 구분자로 사용
   override func userNotificationCenter(
     _ center: UNUserNotificationCenter,
     willPresent notification: UNNotification,
     withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
   ) {
-    if let vc = getFlutterVC() {
+    let userInfo = notification.request.content.userInfo
+    let isFcmPush = userInfo["gcm.message_id"] != nil
+    if isFcmPush, let vc = getFlutterVC() {
       let channel = FlutterMethodChannel(name: "kr.co.anbucheck/fcm", binaryMessenger: vc.engine.binaryMessenger)
       channel.invokeMethod("onForegroundMessage", arguments: NSNull())
     }

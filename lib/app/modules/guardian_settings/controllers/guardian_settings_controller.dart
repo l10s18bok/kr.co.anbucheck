@@ -381,11 +381,10 @@ class GuardianSettingsController extends BaseController
     Get.toNamed(AppRoutes.guardianNotificationSettings, arguments: 3);
   }
 
-  /// G+S 활성 상태에서 안전 코드 확인 페이지(SubjectHomePage)로 이동
+  /// G+S 활성 상태에서 안전 코드 확인 페이지로 이동
   /// 설정 페이지에서 이미 받은 서버 데이터를 넘겨 중복 API 호출 방지
   void goToSafetyCode() {
-    Get.toNamed(AppRoutes.subjectHome, arguments: {
-      'fromGuardian': true,
+    Get.toNamed(AppRoutes.guardianSafetyCode, arguments: {
       'deviceData': {
         'heartbeat_hour': heartbeatHour.value,
         'heartbeat_minute': heartbeatMinute.value,

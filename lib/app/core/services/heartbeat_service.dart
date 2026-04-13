@@ -174,6 +174,8 @@ class HeartbeatService {
         debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
         if (attempt == 3) {
           await _heartbeatDs.savePending(request.toJson());
+          // 전송 실패 — 내일 데드맨 알림은 반드시 예약되어 있어야 안전망 유지
+          await LocalAlarmService.schedule(schedHour, schedMinute, forceNextDay: true);
           return;
         }
         await Future.delayed(Duration(seconds: attempt * 5));

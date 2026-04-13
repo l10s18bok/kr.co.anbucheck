@@ -9,6 +9,7 @@ import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
+import 'package:anbucheck/app/modules/guardian_safety_code/controllers/guardian_safety_code_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// FCM 백그라운드 메시지 핸들러 (top-level 함수 필수)
@@ -55,12 +56,19 @@ void _handleNotificationTap(String type) {
     case 'heartbeat':
       break;
     case 'gs_deadman':
-      // iOS G+S 데드맨 알림 탭 → 보호자 대시보드 거쳐 대상자 홈으로 이동
-      // (홈 화면 onInit/onResumed에서 미전송 체크 + 자동 전송)
-      // 이미 SubjectHome에 있으면 스택 유지 (뒤로가기/arguments 보존)
-      if (Get.currentRoute != AppRoutes.subjectHome) {
-        Get.offAllNamed(AppRoutes.guardianDashboard);
-        Get.toNamed(AppRoutes.subjectHome);
+      // iOS G+S 데드맨 알림 탭 → 보호자 대시보드 위에 안전코드 페이지 push
+      // 이미 안전코드 페이지면 스택 유지 + 컨트롤러가 즉시 미전송 heartbeat 재확인
+      // offNamedUntil로 dashboard까지만 pop + safetyCode push — offAllNamed+toNamed
+      // 조합은 dashboard 컨트롤러를 재생성하는 race로 Obx가 컨트롤러를 못 찾는 문제 발생
+      if (Get.currentRoute == AppRoutes.guardianSafetyCode) {
+        try {
+          Get.find<GuardianSafetyCodeController>().refreshAndSend();
+        } catch (_) {}
+      } else {
+        Get.offNamedUntil(
+          AppRoutes.guardianSafetyCode,
+          (route) => route.settings.name == AppRoutes.guardianDashboard,
+        );
       }
       break;
     default:
@@ -74,6 +82,11 @@ void _handleNotificationTap(String type) {
 /// - 백그라운드/종료: 시스템 알림 자동 표시
 /// - 알림 탭 시 라우팅
 class FcmService extends GetxService {
+  /// kill 상태에서 로컬 알림 탭으로 런치된 경우의 payload 캐시
+  /// SplashController가 라우팅 완료 후 소비 — addPostFrameCallback 경로는
+  /// Splash의 offNamed와 race를 일으켜 최종 스택에서 safetyCode가 날아감
+  static String? pendingLaunchNotificationType;
+
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
   /// Android 알림 채널
@@ -189,6 +202,8 @@ class FcmService extends GetxService {
     } catch (_) {}
 
     // 앱 종료 상태에서 로컬 알림 탭하여 앱 열기
+    // addPostFrameCallback 경로는 Splash의 라우팅과 race를 일으켜 최종 스택에서
+    // safetyCode가 날아가는 문제가 있어, payload만 캐시하고 SplashController가 소비
     try {
       final launchDetails =
           await _localNotifications.getNotificationAppLaunchDetails();
@@ -196,10 +211,8 @@ class FcmService extends GetxService {
           launchDetails.didNotificationLaunchApp &&
           launchDetails.notificationResponse != null) {
         final payload = launchDetails.notificationResponse!.payload;
-        if (payload != null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _handleNotificationTap(payload);
-          });
+        if (payload != null && payload.isNotEmpty) {
+          pendingLaunchNotificationType = payload;
         }
       }
     } catch (_) {}
