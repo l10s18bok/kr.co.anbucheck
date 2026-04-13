@@ -16,7 +16,7 @@ class App extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'app',
+          onGenerateTitle: (_) => 'app_name'.tr,
           translations: AppTranslations(),
           locale: Get.deviceLocale,
           fallbackLocale: const Locale('en', 'US'),
