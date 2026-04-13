@@ -1020,8 +1020,8 @@ Authorization: Bearer <device_token> → 항상 유효
 - 보호자가 최초 대상자를 연결할 때 3개월 무료 체험 시작
 - 동일 device_id + 앱 재설치 → 기존 무료 체험 기간 유지 (device_id로 식별)
 - 다른 device_id → 새 무료 체험 허용 (기기 변경)
-- Android: `Settings.Secure.ANDROID_ID` 사용 (앱 삭제해도 유지)
-- iOS: `identifierForVendor` 사용 + Apple 구독 시스템이 자체적으로 무료 체험 중복 관리
+- Android: `Settings.Secure.ANDROID_ID` (SSAID) 사용 — 앱 삭제 후에도 유지, 공장 초기화 시에만 변경
+- iOS: `identifierForVendor` + **Keychain 백업** 사용 — IDFV는 vendor 앱을 전부 삭제 후 재설치하면 변경되므로, 최초 발급값을 `flutter_secure_storage`로 Keychain에 저장해 재설치 후에도 동일 device_id를 복원. Apple 구독 시스템도 자체적으로 무료 체험 중복 관리
 
 
 ### 3.5 앱 재설치 시 동작
@@ -1039,6 +1039,15 @@ Authorization: Bearer <device_token> → 항상 유효
   · 재등록 시 서버가 device_id로 기존 계정 조회 → 기존 계정 자동 복원
   · 기존 구독·대상자 연결 유지, device_token만 재발급
   · 대상자 재연결 불필요 (로컬 별칭만 재설정 필요)
+
+[iOS device_id 복원 메커니즘]
+  · iOS `identifierForVendor`는 vendor 앱 전부 삭제 후 재설치 시 값이 변경됨
+    → Keychain 백업 없이는 서버가 새 device_id를 새 계정으로 인식 → 구독·대상자 연결 끊어짐
+  · TokenLocalDatasource.getOrCreateDeviceId()가 최초 발급 시 SharedPreferences + Keychain(accessibility=unlocked_this_device) 양쪽 저장
+  · 재설치 후 _getHardwareDeviceId()는 Keychain 우선 조회 → 없을 때만 IDFV fallback
+  · Keychain 저장은 계정 복원 전용 (광고/트래킹 아님) — Apple 정책상 fingerprinting에 해당하지 않음
+  · iCloud 동기화 차단(unlocked_this_device)으로 다른 기기로 전파되지 않음
+  · Android는 SSAID가 자연스럽게 유지되므로 Keychain 불필요
 
 [모드 변경 (동일 기기에서 다른 모드 선택)]
   · 서버: DELETE /api/v1/users/me → 전체 데이터 삭제

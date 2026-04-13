@@ -1360,6 +1360,12 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 - 기존 구독·대상자 연결 유지, device_token만 재발급
 - 대상자 재연결 불필요 (로컬 별칭만 재설정 필요)
 
+**device_id 영속성 보장 (클라이언트):**
+- Android: SSAID(`Settings.Secure.ANDROID_ID`)는 공장 초기화 전까지 유지되므로 자연스럽게 동일 값 전달
+- iOS: `identifierForVendor`는 vendor 앱 전부 삭제 후 재설치 시 값이 변경되므로, 클라이언트가 최초 발급 시 Keychain(`accessibility=unlocked_this_device`)에 백업 → 재설치 시 Keychain 우선 조회로 동일 device_id 복원
+- 서버는 플랫폼과 무관하게 동일 device_id를 수신하므로 위 복원 로직(기존 계정 자동 복원)이 그대로 유효
+- iOS Keychain 백업은 계정 복원 전용이며 iCloud 동기화 차단 → fingerprinting 정책과 무관
+
 
 ---
 

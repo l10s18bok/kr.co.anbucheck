@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 인증/사용자 관련 로컬 저장소
@@ -18,6 +19,16 @@ class TokenLocalDatasource {
   static const _keyIsAlsoSubject = 'is_also_subject';
   static const _keyLastScheduledKey = 'last_scheduled_key';
 
+  // iOS Keychain: 재설치 후에도 device_id 복원용 (identifierForVendor는 vendor 앱
+  // 전부 삭제 후 재설치 시 변경되므로, Keychain 백업이 없으면 계정 복원이 불가능)
+  // accessibility=unlocked_this_device: iCloud 동기화 차단 → 기기 단위로만 유지
+  static const _iosKeychainDeviceIdKey = 'anbucheck_device_id';
+  static const _secureStorage = FlutterSecureStorage(
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.unlocked_this_device,
+    ),
+  );
+
   // ── device_id ─────────────────────────────────────────────
   Future<String> getOrCreateDeviceId() async {
     final prefs = await SharedPreferences.getInstance();
@@ -25,18 +36,30 @@ class TokenLocalDatasource {
     if (existing != null) return existing;
     final newId = await _getHardwareDeviceId();
     await prefs.setString(_keyDeviceId, newId);
+    // iOS: Keychain에도 저장 (재설치 복원용)
+    if (Platform.isIOS) {
+      try {
+        await _secureStorage.write(key: _iosKeychainDeviceIdKey, value: newId);
+      } catch (_) {}
+    }
     return newId;
   }
 
   /// 기기 고유 ID 조회
   /// Android: SSAID (앱 재설치 후에도 유지, 공장 초기화 시 변경)
-  /// iOS: identifierForVendor (앱 재설치 후에도 유지)
+  /// iOS: Keychain 우선 → identifierForVendor fallback
+  ///       IDFV는 같은 vendor 앱을 모두 삭제 후 재설치하면 바뀌므로, 계정 복원을
+  ///       위해 최초 발급값을 Keychain에 백업해두고 재설치 시 그대로 돌려준다.
   static Future<String> _getHardwareDeviceId() async {
     final info = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       final android = await info.androidInfo;
       return android.id;
     } else if (Platform.isIOS) {
+      try {
+        final keychainId = await _secureStorage.read(key: _iosKeychainDeviceIdKey);
+        if (keychainId != null && keychainId.isNotEmpty) return keychainId;
+      } catch (_) {}
       final ios = await info.iosInfo;
       return ios.identifierForVendor ?? _generateFallbackId();
     }
