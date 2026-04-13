@@ -28,8 +28,8 @@ flowchart TD
     Start --> Trigger
 
     Trigger{트리거 종류?}
-    Trigger -->|고정 시각 Android| WM[WorkManager one-off 태스크<br/>예약 시각에 백그라운드 실행<br/>+ periodic 태스크 1시간 주기 보조<br/>실행 후 다음 날 자동 재예약]
-    Trigger -->|고정 시각 iOS| BG[BGProcessingTask one-off<br/>+ BGAppRefreshTask periodic 보조<br/>OS 재량에 따라 지연 가능<br/>두 경로 모두 동일 콜백 실행]
+    Trigger -->|고정 시각 Android| WM[WorkManager one-off 태스크<br/>예약 시각에 백그라운드 실행<br/>단일 계층 — periodic 안전망은<br/>중복 전송 race 때문에 드롭<br/>실행 후 다음 날 자동 재예약]
+    Trigger -->|고정 시각 iOS| BG[BGProcessingTask one-off<br/>OS 재량에 따라 지연 가능<br/>실행 후 다음 날 자동 재예약]
     Trigger -->|공통| FG[앱 열기 / 포그라운드 복귀<br/>예약 시각 경과 + 오늘 미전송 시<br/>자동 heartbeat 전송]
 
     WM --> Collect
@@ -273,15 +273,15 @@ flowchart TD
 
 ## 8. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)
 
-> **1차**: WorkManager(Android) / BGTaskScheduler(iOS)가 예약 시각에 heartbeat를 백그라운드 실행한다. one-off 태스크(정확한 시각)와 periodic 태스크(iOS: BGAppRefreshTask, Android: WorkManager 주기)를 병행 등록하여 실행 확률을 높인다. 콜백 내 `lastHeartbeatDate` 검사로 당일 중복 전송을 방지한다.
-> **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다.
-> **3차 (iOS 전용)**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. Android는 WorkManager periodic(1시간 주기)이 안전망 역할을 하므로 데드맨 알림이 불필요하다.
+> **1차**: WorkManager(Android) / BGTaskScheduler(iOS)가 예약 시각에 heartbeat를 백그라운드 실행한다. one-off 태스크 단일 계층으로 등록한다 — periodic 안전망은 one-off와 거의 동시에 실행되어 중복 전송 race를 유발하므로 드롭했다. 콜백 내 `lastHeartbeatDate` 검사로 당일 중복 전송을 방지한다.
+> **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다. Android에서는 1차 실패 시 이것이 유일한 안전망이다.
+> **3차 (iOS 전용)**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. Android는 데드맨 알림이 없으며 2차(앱 열기 자동 전송)가 유일한 안전망이다.
 
 ```mermaid
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
-        Install --> FirstWM[WorkManager one-off + periodic 태스크 예약<br/>heartbeat 시각 기본 09:30]
+        Install --> FirstWM[WorkManager one-off 태스크 예약<br/>heartbeat 시각 기본 09:30<br/>단일 계층 — periodic 안전망 없음]
         FirstWM --> FirstAlarm[iOS: 로컬 안전망 알림 예약<br/>heartbeat 시각 + 30분<br/>기본 매일 10:00]
     end
 
@@ -320,7 +320,7 @@ flowchart TD
 | 상황 | WorkManager/BGTask | 앱 열기 자동 전송 | 로컬 안전망 알림 | 결과 |
 |------|-------------------|-----------------|----------------|------|
 | 정상 동작 (09:30) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | iOS: 재예약되어 표시 안 됨 | 정상 |
-| 앱 스와이프 종료 (Android MIUI) | **지연 또는 미실행 가능** | 앱 열면 자동 전송 | Android: 해당 없음 (periodic 안전망) | 사용자가 앱을 열면 복구 |
+| 앱 스와이프 종료 (Android OneUI/MIUI) + 화면 꺼짐 Doze | **지연 또는 미실행 가능** | 앱 열면 자동 전송 | Android: 해당 없음 (데드맨 알림 미사용) | 사용자가 앱을 열 때까지 복구 불가 — 배터리 "제한없음" 설정이 유일한 예방책 |
 | 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **iOS: 10:00 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
 | 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **iOS: 10:00 표시** | 네트워크 복구 + 앱 실행 시 복구 |
 | 알림 권한 거부 (iOS) | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **iOS: 표시 불가** | BGTask/앱 열기로 대응 |

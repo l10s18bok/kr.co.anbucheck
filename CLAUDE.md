@@ -101,9 +101,9 @@ lib/
 | 계층 | 파일 | 역할 |
 |------|------|------|
 | 공통 | `lib/app/core/services/heartbeat_service.dart` | heartbeat 1회 실행의 전체 로직: 센서 수집 → suspicious 판정 → 서버 전송 → 실패 시 큐 저장 → 데드맨 알림 재예약. 오탐/미탐, 중복 전송, 데이터 누락 모두 이 파일에서 발생 |
-| 1차 | `lib/app/core/services/heartbeat_worker_service.dart` | WorkManager/BGTaskScheduler 백그라운드 예약 실행. 사용자가 앱을 안 열어도 매일 heartbeat 실행. one-off(다음날 재예약 체인) + periodic(OS 자동 반복) 병행 |
+| 1차 | `lib/app/core/services/heartbeat_worker_service.dart` | WorkManager 백그라운드 예약 실행 (Android 전용). 사용자가 앱을 안 열어도 매일 heartbeat 실행. one-off 단일 계층(다음날 재예약 체인) — periodic 안전망은 one-off와 동시 실행되는 중복 전송 race 때문에 드롭됨. iOS는 BGTaskScheduler 불안정성으로 사용하지 않음 |
 | 2차 | `lib/app/modules/subject_home/controllers/subject_home_controller.dart` | 앱 열기/복귀 시 안전망. onInit/onResumed에서 예약시각 경과 + 미전송 시 자동 전송. 서버 스케줄 동기화로 WorkManager 체인 복구도 담당 |
-| 3차 (iOS) | `lib/app/core/services/local_alarm_service.dart` | iOS 전용 데드맨 스위치 로컬 알림. heartbeat 시각 + 30분에 매일 반복 알림 → 앱 포그라운드 전환만 (홈 화면에서 자동 전송). Android는 WorkManager periodic이 안전망 역할 |
+| 3차 (iOS) | `lib/app/core/services/local_alarm_service.dart` | iOS 전용 데드맨 스위치 로컬 알림. heartbeat 시각 + 30분(일반) 또는 예약 시각 정각(G+S)에 매일 반복 → 앱 포그라운드 전환 시 홈 화면 onInit/onResumed에서 자동 전송. Android는 데드맨 알림 없이 앱 열기 자동 전송(2차)만으로 안전망 구성 |
 | 공유 캐시 | `lib/app/core/services/guardian_subject_service.dart` | 보호자 대상자 목록 공유 캐시 (2분 TTL). 대시보드·설정·연결관리에서 동일 데이터 사용. 구독 상태 동기화 |
 
 ## 참조 문서
