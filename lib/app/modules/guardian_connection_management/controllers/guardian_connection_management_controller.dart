@@ -42,6 +42,7 @@ class GuardianConnectionManagementController extends BaseController {
       } else {
         await _svc.load();
       }
+      if (isClosed) return;
       _subjects.value = _svc.subjects.map((s) => ConnectedSubject(
             guardianId: s.guardianId,
             alias: s.alias,
@@ -51,10 +52,11 @@ class GuardianConnectionManagementController extends BaseController {
             heartbeatMinute: s.heartbeatMinute,
           )).toList();
     } catch (_) {
+      if (isClosed) return;
       Get.snackbar('common_error'.tr, 'connection_load_failed'.tr,
           snackPosition: SnackPosition.BOTTOM);
     } finally {
-      isLoading = false;
+      if (!isClosed) isLoading = false;
     }
   }
 

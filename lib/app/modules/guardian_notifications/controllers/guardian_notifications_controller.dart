@@ -28,12 +28,14 @@ class GuardianNotificationsController extends BaseController {
     isLoading = true;
     try {
       final list = await _getNotifications();
+      if (isClosed) return;
       notifications.value = list
         ..sort((a, b) => b.receivedAt.compareTo(a.receivedAt));
     } catch (e) {
+      if (isClosed) return;
       notifications.value = [];
     } finally {
-      isLoading = false;
+      if (!isClosed) isLoading = false;
     }
   }
 
@@ -42,12 +44,14 @@ class GuardianNotificationsController extends BaseController {
     isLoading = true;
     try {
       await _deleteAllNotifications();
+      if (isClosed) return;
       notifications.clear();
     } catch (_) {
+      if (isClosed) return;
       Get.snackbar('common_error'.tr, 'notifications_delete_failed'.tr,
           snackPosition: SnackPosition.BOTTOM);
     } finally {
-      isLoading = false;
+      if (!isClosed) isLoading = false;
     }
   }
 }
