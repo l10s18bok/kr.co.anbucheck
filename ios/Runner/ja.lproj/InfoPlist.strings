@@ -1,2 +1,3 @@
 "CFBundleDisplayName" = "Anbu";
 "CFBundleName" = "Anbu";
+"NSMotionUsageDescription" = "歩数を検出して活動状況を確認するために使用されます。";

@@ -72,7 +72,7 @@ abstract class EnUs {
         'Excludes the app from battery optimization so that daily wellness checks are not missed at the scheduled time',
     'permission_battery_required_title': 'Please set Battery to "Unrestricted"',
     'permission_battery_required_message':
-        'If set to "Battery Optimized" or "Battery Saver",\ndaily wellness checks may be delayed or missed.\n\nAfter tapping [Go to Settings]:\n1. Select "Battery"\n2. Change it to "Unrestricted"',
+        'If set to "Battery Optimized" or "Battery Saver", daily wellness checks may be delayed or missed.\n\nAfter tapping [Go to Settings]:\n1. Select "Battery"\n2. Change it to "Unrestricted"',
     'permission_battery_go_to_settings': 'Go to Settings',
 
     // ── Onboarding ──
@@ -201,6 +201,9 @@ abstract class EnUs {
     'gs_safety_code_title': 'My Safety Code',
     'gs_enable_dialog_title': 'Enable Wellness Protection',
     'gs_enable_dialog_body': 'You can receive wellness protection while keeping your guardian features.\nA safety code will be issued — please share it with other guardians.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS works differently from Android',
+    'gs_enable_dialog_ios_warning_body': 'On iOS, a "wellness push notification" appears every day at the scheduled time. You must tap the notification or open the app yourself around that time for your wellness signal to be sent. If you do not open the app, your guardians may receive a missed-check alert.',
+    'gs_enable_dialog_ios_confirm': 'I understand, enable',
     'gs_enable_confirm': 'Enable',
     'gs_enabled_message': 'Wellness protection has been enabled',
     'gs_enable_failed': 'Failed to enable wellness protection',
@@ -284,6 +287,9 @@ abstract class EnUs {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Change Check Time',
+    'heartbeat_schedule_title_ios': 'Wellness Push Time',
+    'heartbeat_schedule_change_title_ios': 'Change Wellness Push Time',
+    'heartbeat_schedule_hint_ios': 'A wellness push notification arrives at this time every day. Tap the notification or open the app around then to send your wellness signal.',
     'heartbeat_daily_time': 'Daily at @time',
     'heartbeat_scheduled_today': 'Wellness check scheduled at @time today.',
     'heartbeat_change_failed_title': 'Time Change Failed',

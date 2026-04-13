@@ -79,7 +79,7 @@ abstract class PlPl {
         'Wyłącza aplikację z optymalizacji baterii, aby codzienne sprawdzanie samopoczucia nie było pomijane o zaplanowanej godzinie',
     'permission_battery_required_title': 'Ustaw baterię na "Bez ograniczeń"',
     'permission_battery_required_message':
-        'Jeśli ustawione jest "Optymalizacja baterii" lub "Oszczędzanie baterii",\ncodzienne sprawdzanie samopoczucia może być opóźnione lub pominięte.\n\nPo naciśnięciu [Przejdź do Ustawień]:\n1. Wybierz "Bateria"\n2. Zmień na "Bez ograniczeń"',
+        'Jeśli ustawione jest "Optymalizacja baterii" lub "Oszczędzanie baterii", codzienne sprawdzanie samopoczucia może być opóźnione lub pominięte.\n\nPo naciśnięciu [Przejdź do Ustawień]:\n1. Wybierz "Bateria"\n2. Zmień na "Bez ograniczeń"',
     'permission_battery_go_to_settings': 'Przejdź do Ustawień',
 
     // ── Onboarding ──
@@ -225,6 +225,10 @@ abstract class PlPl {
     'gs_enable_dialog_title': 'Włącz ochronę',
     'gs_enable_dialog_body':
         'Możesz otrzymywać ochronę, zachowując funkcje opiekuna.\nZostanie wydany kod bezpieczeństwa — udostępnij go innym opiekunom.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS działa inaczej niż Android',
+    'gs_enable_dialog_ios_warning_body':
+        'W systemie iOS codziennie o ustalonej godzinie pojawia się "powiadomienie push o pomyślności". Aby Twój sygnał pomyślności został wysłany, musisz dotknąć powiadomienia lub samodzielnie otworzyć aplikację o tej porze. Jeśli nie otworzysz aplikacji, Twoi opiekunowie mogą otrzymać alert o nieudanej kontroli.',
+    'gs_enable_dialog_ios_confirm': 'Rozumiem, włącz',
     'gs_enable_confirm': 'Włącz',
     'gs_enabled_message': 'Ochrona została włączona',
     'gs_enable_failed': 'Nie udało się włączyć ochrony',
@@ -320,6 +324,9 @@ abstract class PlPl {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Zmien czas sprawdzenia',
+    'heartbeat_schedule_title_ios': 'Czas powiadomienia push o pomyślności',
+    'heartbeat_schedule_change_title_ios': 'Zmień czas powiadomienia push o pomyślności',
+    'heartbeat_schedule_hint_ios': 'Powiadomienie push o pomyślności przychodzi codziennie o tej godzinie. Dotknij powiadomienia lub otwórz aplikację o tej porze, aby wysłać sygnał pomyślności.',
     'heartbeat_daily_time': 'Codziennie o @time',
     'heartbeat_scheduled_today':
         'Sprawdzenie samopoczucia zaplanowane na @time dzisiaj.',

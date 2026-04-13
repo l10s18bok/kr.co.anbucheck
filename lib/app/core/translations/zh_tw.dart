@@ -71,7 +71,7 @@ abstract class ZhTw {
     'permission_battery_desc': '將應用程式從電池最佳化中排除，以免每天定時的問安檢查被遺漏',
     'permission_battery_required_title': '請將電池設定為「不受限制」',
     'permission_battery_required_message':
-        '如果設定為「電池最佳化」或「省電模式」，\n每日問安檢查可能會延遲或遺漏。\n\n點擊[前往設定]後：\n1. 選擇「電池」\n2. 變更為「不受限制」',
+        '如果設定為「電池最佳化」或「省電模式」， 每日問安檢查可能會延遲或遺漏。\n\n點擊[前往設定]後：\n1. 選擇「電池」\n2. 變更為「不受限制」',
     'permission_battery_go_to_settings': '前往設定',
 
     // ── 引導頁 ──
@@ -201,6 +201,9 @@ abstract class ZhTw {
     'gs_safety_code_title': '我的安全碼',
     'gs_enable_dialog_title': '啟用安否保護',
     'gs_enable_dialog_body': '您可以在保持守護者功能的同時接受安否保護。\n啟用後將發放安全碼，請將您的「安全碼」告知其他守護者。',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS 與 Android 運作方式不同',
+    'gs_enable_dialog_ios_warning_body': '在 iOS 上，每天會在固定時間顯示「安否推播通知」。您必須點按通知或在該時間前後親自開啟應用程式，安否信號才會傳送。若不開啟應用程式，守護者可能會收到未接收警告。',
+    'gs_enable_dialog_ios_confirm': '我已了解，啟用',
     'gs_enable_confirm': '啟用',
     'gs_enabled_message': '安否保護已啟用',
     'gs_enable_failed': '安否保護啟用失敗',
@@ -284,6 +287,9 @@ abstract class ZhTw {
 
     // ── Heartbeat 相關 ──
     'heartbeat_schedule_change': '更改問安時間',
+    'heartbeat_schedule_title_ios': '安否推播通知時間',
+    'heartbeat_schedule_change_title_ios': '更改安否推播通知時間',
+    'heartbeat_schedule_hint_ios': '每天在此時間會收到安否推播通知。點按通知或在前後開啟應用程式即可傳送安否信號。',
     'heartbeat_daily_time': '每天 @time',
     'heartbeat_scheduled_today': '今天 @time 已預約問安。',
     'heartbeat_change_failed_title': '更改時間失敗',

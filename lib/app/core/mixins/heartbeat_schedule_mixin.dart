@@ -130,8 +130,11 @@ mixin HeartbeatScheduleMixin on GetxController {
       // 예약시각 변경 시 하루 1회 제한 리셋 (재테스트 가능)
       await tokenDs.saveLastHeartbeatDate('');
       await tokenDs.saveLastHeartbeatTime('');
-      // WorkManager + 로컬 안전망 재예약
-      await HeartbeatWorkerService.schedule(hour, minute);
+      // Android: WorkManager + 로컬 안전망 재예약
+      // iOS G+S: 데드맨 로컬 알림만 재예약 (BGTaskScheduler 사용 안 함)
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.schedule(hour, minute);
+      }
       await LocalAlarmService.schedule(hour, minute);
       final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
       Get.snackbar('', message,

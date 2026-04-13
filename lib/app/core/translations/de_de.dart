@@ -79,7 +79,7 @@ abstract class DeDe {
         'Schließt die App von der Akku-Optimierung aus, damit der tägliche Wohlbefindens-Check zur geplanten Zeit nicht verpasst wird',
     'permission_battery_required_title': 'Bitte setzen Sie den Akku auf "Nicht eingeschränkt"',
     'permission_battery_required_message':
-        'Wenn "Akku-Optimierung" oder "Energiesparmodus" aktiviert ist,\nkann der tägliche Wohlbefindens-Check verzögert oder verpasst werden.\n\nNach dem Tippen auf [Zu den Einstellungen]:\n1. Wählen Sie "Akku"\n2. Auf "Nicht eingeschränkt" ändern',
+        'Wenn "Akku-Optimierung" oder "Energiesparmodus" aktiviert ist, kann der tägliche Wohlbefindens-Check verzögert oder verpasst werden.\n\nNach dem Tippen auf [Zu den Einstellungen]:\n1. Wählen Sie "Akku"\n2. Auf "Nicht eingeschränkt" ändern',
     'permission_battery_go_to_settings': 'Zu den Einstellungen',
 
     // ── Onboarding ──
@@ -222,6 +222,9 @@ abstract class DeDe {
     'gs_safety_code_title': 'Mein Sicherheitscode',
     'gs_enable_dialog_title': 'Wellness-Schutz aktivieren',
     'gs_enable_dialog_body': 'Sie können Wellness-Schutz erhalten und gleichzeitig Ihre Betreuer-Funktionen behalten.\nBei Aktivierung wird ein Sicherheitscode ausgestellt — bitte teilen Sie ihn mit anderen Betreuern.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS funktioniert anders als Android',
+    'gs_enable_dialog_ios_warning_body': 'Auf iOS erscheint täglich zur festgelegten Zeit eine "Wellness-Push-Benachrichtigung". Sie müssen die Benachrichtigung antippen oder die App selbst um diese Zeit öffnen, damit Ihr Wellness-Signal gesendet wird. Wenn Sie die App nicht öffnen, erhalten Ihre Betreuer möglicherweise eine Warnung wegen ausbleibender Prüfung.',
+    'gs_enable_dialog_ios_confirm': 'Verstanden, aktivieren',
     'gs_enable_confirm': 'Aktivieren',
     'gs_enabled_message': 'Wellness-Schutz wurde aktiviert',
     'gs_enable_failed': 'Wellness-Schutz konnte nicht aktiviert werden',
@@ -316,6 +319,9 @@ abstract class DeDe {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Prüfzeit ändern',
+    'heartbeat_schedule_title_ios': 'Wellness-Push-Zeit',
+    'heartbeat_schedule_change_title_ios': 'Wellness-Push-Zeit ändern',
+    'heartbeat_schedule_hint_ios': 'Eine Wellness-Push-Benachrichtigung trifft täglich zu dieser Zeit ein. Tippen Sie auf die Benachrichtigung oder öffnen Sie die App um diese Zeit, um Ihr Wellness-Signal zu senden.',
     'heartbeat_daily_time': 'Täglich um @time',
     'heartbeat_scheduled_today':
         'Wohlbefindens-Check heute um @time geplant.',

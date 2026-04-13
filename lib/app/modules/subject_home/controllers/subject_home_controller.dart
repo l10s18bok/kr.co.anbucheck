@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
@@ -163,9 +165,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   }
 
   /// 예약시각 경과 + 오늘 미전송이면 heartbeat 자동 전송
+  /// iOS G+S는 시각 조건 없이 "당일 미전송"만 확인 (PRD iOS G+S 2.2)
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
-    if (isScheduleInFuture) return;
+    if (Platform.isAndroid && isScheduleInFuture) return;
     await HeartbeatService().execute(manual: false);
     await _reloadHeartbeatState();
   }
@@ -211,17 +214,14 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       _guardianConnected.value = subscriptionActive;
       _guardianCount.value = data['guardian_count'] as int? ?? 0;
 
-      // 로컬 저장값과 동일하면 재예약 스킵
-      final (localH, localM) = await _tokenDs.getHeartbeatSchedule();
-      if (localH == hour && localM == minute) {
-        applySchedule(hour, minute);
-        return;
-      }
-
       await _tokenDs.saveHeartbeatSchedule(hour, minute);
       applySchedule(hour, minute);
-      // 서버 기준 시각으로 WorkManager 및 로컬 안전망 알림 재예약
-      await HeartbeatWorkerService.schedule(hour, minute);
+      // 서버 기준 시각으로 항상 재예약 (existingWorkPolicy.replace로 중복 부담 없음)
+      // 신규 설치/재설치/재진입 시점에서 WorkManager 누락을 방지하는 안전망 역할
+      // Android: WorkManager + 로컬 안전망 / iOS G+S: 데드맨 로컬 알림만
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.schedule(hour, minute);
+      }
       await LocalAlarmService.schedule(hour, minute);
     } catch (_) {
       // 실패 시 로컬 저장값 유지
@@ -236,12 +236,18 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
   /// 배터리 상태 초기화 및 실시간 감시
   Future<void> _initBattery() async {
-    _batteryLevel.value = await _battery.batteryLevel;
-    _batteryState.value = await _battery.batteryState;
+    try {
+      _batteryLevel.value = await _battery.batteryLevel;
+      _batteryState.value = await _battery.batteryState;
+    } catch (_) {
+      // 시뮬레이터/에뮬레이터 등 배터리 정보 미제공 환경 대응
+    }
 
     _battery.onBatteryStateChanged.listen((state) async {
       _batteryState.value = state;
-      _batteryLevel.value = await _battery.batteryLevel;
+      try {
+        _batteryLevel.value = await _battery.batteryLevel;
+      } catch (_) {}
     });
   }
 
@@ -357,7 +363,9 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
         );
       } catch (_) {}
     }
-    await HeartbeatWorkerService.cancel();
+    if (Platform.isAndroid) {
+      await HeartbeatWorkerService.cancel();
+    }
     await LocalAlarmService.cancel();
     await _tokenDs.clear();
     Get.offAllNamed(AppRoutes.modeSelect);

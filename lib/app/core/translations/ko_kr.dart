@@ -71,7 +71,7 @@ abstract class KoKr {
     'permission_battery_desc': '매일 정해진 시각에 안부 확인이 누락되지 않도록 배터리 최적화에서 제외합니다',
     'permission_battery_required_title': '배터리 "제한없음"으로 설정해주세요',
     'permission_battery_required_message':
-        '"배터리 최적화" 또는 "배터리 절약"으로 설정되어 있으면\n매일 안부 확인이 지연되거나 누락될 수 있습니다.\n\n[설정으로 이동]을 누른 후:\n1. "배터리" 항목 선택\n2. "제한없음"으로 변경해 주세요',
+        '"배터리 최적화" 또는 "배터리 절약"으로 설정되어 있으면 매일 안부 확인이 지연되거나 누락될 수 있습니다.\n\n[설정으로 이동]을 누른 후:\n1. "배터리" 항목 선택\n2. "제한없음"으로 변경해 주세요',
     'permission_battery_go_to_settings': '설정으로 이동',
 
     // ── 온보딩 ──
@@ -201,6 +201,9 @@ abstract class KoKr {
     'gs_safety_code_title': '내 안전 코드',
     'gs_enable_dialog_title': '안부 보호 활성화',
     'gs_enable_dialog_body': '보호자 기능을 유지하면서 나의 안부도 보호받을 수 있습니다.\n활성화하면 안전 코드가 발급되고, 다른 보호자에게 내 "안전 코드"를 알려주세요.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS는 Android와 달리 동작합니다',
+    'gs_enable_dialog_ios_warning_body': 'iOS에서는 매일 정해진 시각에 "안부 푸시 알림"이 표시됩니다. 알림을 탭하거나 알림 전후로 직접 앱을 열어야 안부가 전송됩니다. 앱을 열지 않으면 보호자에게 미수신 경고가 발생할 수 있습니다.',
+    'gs_enable_dialog_ios_confirm': '이해했습니다, 활성화',
     'gs_enable_confirm': '활성화',
     'gs_enabled_message': '안부 보호가 활성화되었습니다',
     'gs_enable_failed': '안부 보호 활성화에 실패했습니다',
@@ -284,6 +287,9 @@ abstract class KoKr {
 
     // ── Heartbeat 관련 ──
     'heartbeat_schedule_change': '안부 확인 시각 변경',
+    'heartbeat_schedule_title_ios': '안부 푸시 알림 시각',
+    'heartbeat_schedule_change_title_ios': '안부 푸시 알림 시각 변경',
+    'heartbeat_schedule_hint_ios': '매일 이 시각에 안부 푸시 알림이 도착합니다. 알림을 탭하거나 그 전후로 앱을 열면 안부가 전송됩니다.',
     'heartbeat_daily_time': '매일 @time',
     'heartbeat_scheduled_today': '오늘 @time에 안부 확인이 예약되었습니다.',
     'heartbeat_change_failed_title': '시각 변경 실패',

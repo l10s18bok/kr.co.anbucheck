@@ -131,9 +131,10 @@ class GuardianSettingsController extends BaseController
   }
 
   /// 예약시각 경과 + 오늘 미전송이면 heartbeat 자동 전송
+  /// iOS G+S는 시각 조건 없이 "당일 미전송"만 확인
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
-    if (isScheduleInFuture) return;
+    if (Platform.isAndroid && isScheduleInFuture) return;
     await HeartbeatService().execute(manual: false);
     await _reloadHeartbeatState();
   }
@@ -230,8 +231,11 @@ class GuardianSettingsController extends BaseController
       inviteCode.value = code;
       applySchedule(hour, minute);
 
-      // WorkManager + 로컬 안전망 등록
-      await HeartbeatWorkerService.schedule(hour, minute);
+      // Android: WorkManager + 로컬 안전망 등록
+      // iOS G+S: 데드맨 로컬 알림만 등록 (BGTaskScheduler 사용 안 함)
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.schedule(hour, minute);
+      }
       await LocalAlarmService.schedule(hour, minute);
 
       // 첫 heartbeat 즉시 전송
@@ -247,6 +251,9 @@ class GuardianSettingsController extends BaseController
           duration: const Duration(seconds: 2),
           backgroundColor: Colors.white,
           colorText: const Color(0xFF1a1c1c));
+
+      // 활성화 성공 → 안전 코드 페이지로 바로 이동
+      goToSafetyCode();
     } catch (e) {
       Get.snackbar('common_error'.tr, 'gs_enable_failed'.tr,
           snackPosition: SnackPosition.TOP);
@@ -266,8 +273,11 @@ class GuardianSettingsController extends BaseController
       await _userDs.disableSubject(deviceToken);
       debugPrint('[G+S] disable-subject API 호출 성공');
 
-      // WorkManager + 로컬 안전망 취소
-      await HeartbeatWorkerService.cancel();
+      // Android: WorkManager + 로컬 안전망 취소
+      // iOS G+S: 데드맨 로컬 알림만 취소
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.cancel();
+      }
       await LocalAlarmService.cancel();
 
       // 로컬 데이터 정리
@@ -396,7 +406,9 @@ class GuardianSettingsController extends BaseController
 
     // G+S 상태라면 WorkManager / 로컬 알림도 취소
     if (isAlsoSubject.value) {
-      await HeartbeatWorkerService.cancel();
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.cancel();
+      }
       await LocalAlarmService.cancel();
     }
 

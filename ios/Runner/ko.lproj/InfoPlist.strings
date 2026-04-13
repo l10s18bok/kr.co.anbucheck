@@ -1,2 +1,3 @@
 "CFBundleDisplayName" = "안부";
 "CFBundleName" = "안부";
+"NSMotionUsageDescription" = "걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.";

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -15,7 +17,11 @@ class HeartbeatScheduleTile extends StatelessWidget {
   final String? subLabel;
   final Color? timeColor;
 
-  String get label => _label ?? 'heartbeat_schedule_change'.tr;
+  String get label =>
+      _label ??
+      (Platform.isIOS
+          ? 'heartbeat_schedule_change_title_ios'.tr
+          : 'heartbeat_schedule_change'.tr);
 
   const HeartbeatScheduleTile({
     super.key,

@@ -80,7 +80,7 @@ abstract class SvSe {
         'Utesluter appen från batterioptimering så att dagliga välmåendekontroller inte missas vid den schemalagda tiden',
     'permission_battery_required_title': 'Ställ in batteriet på "Obegränsat"',
     'permission_battery_required_message':
-        'Om det är inställt på "Batterioptimering" eller "Batterisparläge"\nkan dagliga välmåendekontroller fördröjas eller missas.\n\nEfter att du tryckt på [Ga till Installningar]:\n1. Välj "Batteri"\n2. Ändra till "Obegränsat"',
+        'Om det är inställt på "Batterioptimering" eller "Batterisparläge" kan dagliga välmåendekontroller fördröjas eller missas.\n\nEfter att du tryckt på [Ga till Installningar]:\n1. Välj "Batteri"\n2. Ändra till "Obegränsat"',
     'permission_battery_go_to_settings': 'Ga till Installningar',
 
     // ── Introduktion ──
@@ -224,6 +224,10 @@ abstract class SvSe {
     'gs_enable_dialog_title': 'Aktivera hälsoskydd',
     'gs_enable_dialog_body':
         'Du kan få hälsoskydd samtidigt som du behåller dina vårdarfunktioner.\nEn säkerhetskod utfärdas — dela den med andra vårdare.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS fungerar annorlunda än Android',
+    'gs_enable_dialog_ios_warning_body':
+        'På iOS visas en "hälso-pushavisering" varje dag vid den schemalagda tiden. Du måste trycka på aviseringen eller själv öppna appen vid den tidpunkten för att din hälsosignal ska skickas. Om du inte öppnar appen kan dina vårdare få en varning om missad kontroll.',
+    'gs_enable_dialog_ios_confirm': 'Jag förstår, aktivera',
     'gs_enable_confirm': 'Aktivera',
     'gs_enabled_message': 'Hälsoskydd har aktiverats',
     'gs_enable_failed': 'Kunde inte aktivera hälsoskydd',
@@ -318,6 +322,9 @@ abstract class SvSe {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Andra kontrolltid',
+    'heartbeat_schedule_title_ios': 'Tid för hälso-pushavisering',
+    'heartbeat_schedule_change_title_ios': 'Ändra tid för hälso-pushavisering',
+    'heartbeat_schedule_hint_ios': 'En hälso-pushavisering kommer varje dag vid denna tid. Tryck på aviseringen eller öppna appen vid den tidpunkten för att skicka din hälsosignal.',
     'heartbeat_daily_time': 'Dagligen kl. @time',
     'heartbeat_scheduled_today':
         'Valmaendekontroll schemalagd kl. @time idag.',

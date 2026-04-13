@@ -80,7 +80,7 @@ abstract class FrFr {
         'Exclut l\'application de l\'optimisation de la batterie afin que les vérifications quotidiennes de bien-être ne soient pas manquées',
     'permission_battery_required_title': 'Veuillez définir la batterie sur "Sans restriction"',
     'permission_battery_required_message':
-        'Si elle est définie sur "Optimisation de la batterie" ou "Économiseur de batterie",\nles vérifications quotidiennes de bien-être peuvent être retardées ou manquées.\n\nAprès avoir appuyé sur [Ouvrir les Réglages] :\n1. Sélectionnez "Batterie"\n2. Changez sur "Sans restriction"',
+        'Si elle est définie sur "Optimisation de la batterie" ou "Économiseur de batterie", les vérifications quotidiennes de bien-être peuvent être retardées ou manquées.\n\nAprès avoir appuyé sur [Ouvrir les Réglages] :\n1. Sélectionnez "Batterie"\n2. Changez sur "Sans restriction"',
     'permission_battery_go_to_settings': 'Ouvrir les Réglages',
 
     // ── Présentation ──
@@ -229,6 +229,10 @@ abstract class FrFr {
     'gs_enable_dialog_title': 'Activer la protection',
     'gs_enable_dialog_body':
         'Vous pouvez recevoir une protection tout en gardant vos fonctions de gardien.\nUn code de sécurité sera émis — veuillez le partager avec d\'autres gardiens.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS fonctionne différemment d\'Android',
+    'gs_enable_dialog_ios_warning_body':
+        'Sur iOS, une « notification push de bien-être » apparaît chaque jour à l\'heure programmée. Vous devez appuyer sur la notification ou ouvrir l\'application vous-même à ce moment-là pour que votre signal de bien-être soit envoyé. Si vous n\'ouvrez pas l\'application, vos gardiens peuvent recevoir une alerte de vérification manquée.',
+    'gs_enable_dialog_ios_confirm': 'Compris, activer',
     'gs_enable_confirm': 'Activer',
     'gs_enabled_message': 'La protection a été activée',
     'gs_enable_failed': 'Échec de l\'activation de la protection',
@@ -325,6 +329,9 @@ abstract class FrFr {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Modifier l\'heure de vérification',
+    'heartbeat_schedule_title_ios': 'Heure de notification push de bien-être',
+    'heartbeat_schedule_change_title_ios': 'Modifier l\'heure de notification push de bien-être',
+    'heartbeat_schedule_hint_ios': 'Une notification push de bien-être arrive chaque jour à cette heure. Appuyez sur la notification ou ouvrez l\'application à ce moment-là pour envoyer votre signal de bien-être.',
     'heartbeat_daily_time': 'Tous les jours à @time',
     'heartbeat_scheduled_today':
         'Vérification du bien-être prévue aujourd\'hui à @time.',

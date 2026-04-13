@@ -79,7 +79,7 @@ abstract class ViVn {
         'Loai tru ung dung khoi toi uu hoa pin de kiem tra suc khoe hang ngay khong bi bo lo vao gio da dinh',
     'permission_battery_required_title': 'Vui long dat Pin thanh "Khong gioi han"',
     'permission_battery_required_message':
-        'Neu duoc dat la "Toi uu hoa pin" hoac "Tiet kiem pin",\nviec kiem tra suc khoe hang ngay co the bi tre hoac bo lo.\n\nSau khi nhan [Di den Cai dat]:\n1. Chon "Pin"\n2. Thay doi thanh "Khong gioi han"',
+        'Neu duoc dat la "Toi uu hoa pin" hoac "Tiet kiem pin", viec kiem tra suc khoe hang ngay co the bi tre hoac bo lo.\n\nSau khi nhan [Di den Cai dat]:\n1. Chon "Pin"\n2. Thay doi thanh "Khong gioi han"',
     'permission_battery_go_to_settings': 'Di den Cai dat',
 
     // ── Gioi thieu ──
@@ -224,6 +224,10 @@ abstract class ViVn {
     'gs_enable_dialog_title': 'Kích hoạt bảo vệ',
     'gs_enable_dialog_body':
         'Bạn có thể nhận bảo vệ trong khi giữ nguyên chức năng giám hộ.\nMã an toàn sẽ được cấp — hãy chia sẻ với người giám hộ khác.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS hoạt động khác Android',
+    'gs_enable_dialog_ios_warning_body':
+        'Trên iOS, "thông báo đẩy an toàn" sẽ hiển thị mỗi ngày vào thời điểm đã định. Bạn phải chạm vào thông báo hoặc tự mở ứng dụng quanh thời điểm đó để tín hiệu an toàn được gửi đi. Nếu bạn không mở ứng dụng, người giám hộ của bạn có thể nhận được cảnh báo bỏ lỡ kiểm tra.',
+    'gs_enable_dialog_ios_confirm': 'Đã hiểu, kích hoạt',
     'gs_enable_confirm': 'Kích hoạt',
     'gs_enabled_message': 'Bảo vệ đã được kích hoạt',
     'gs_enable_failed': 'Không thể kích hoạt bảo vệ',
@@ -318,6 +322,9 @@ abstract class ViVn {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Doi thoi gian kiem tra',
+    'heartbeat_schedule_title_ios': 'Thời gian thông báo đẩy an toàn',
+    'heartbeat_schedule_change_title_ios': 'Đổi thời gian thông báo đẩy an toàn',
+    'heartbeat_schedule_hint_ios': 'Thông báo đẩy an toàn sẽ đến vào thời điểm này mỗi ngày. Chạm vào thông báo hoặc mở ứng dụng quanh thời điểm đó để gửi tín hiệu an toàn.',
     'heartbeat_daily_time': 'Hang ngay luc @time',
     'heartbeat_scheduled_today':
         'Kiem tra suc khoe da len lich luc @time hom nay.',

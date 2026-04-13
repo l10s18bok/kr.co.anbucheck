@@ -71,7 +71,7 @@ abstract class JaJp {
     'permission_battery_desc': '毎日決まった時刻の安否確認が漏れないように、バッテリー最適化から除外します',
     'permission_battery_required_title': 'バッテリーを「制限なし」に設定してください',
     'permission_battery_required_message':
-        '「バッテリー最適化」または「バッテリーセーバー」に設定されていると\n毎日の安否確認が遅延または漏れる可能性があります。\n\n[設定を開く]をタップした後：\n1.「バッテリー」を選択\n2.「制限なし」に変更してください',
+        '「バッテリー最適化」または「バッテリーセーバー」に設定されていると 毎日の安否確認が遅延または漏れる可能性があります。\n\n[設定を開く]をタップした後：\n1.「バッテリー」を選択\n2.「制限なし」に変更してください',
     'permission_battery_go_to_settings': '設定を開く',
 
     // ── オンボーディング ──
@@ -201,6 +201,9 @@ abstract class JaJp {
     'gs_safety_code_title': '安全コード',
     'gs_enable_dialog_title': '安否保護を有効化',
     'gs_enable_dialog_body': '保護者機能を維持したまま、自分の安否も保護してもらえます。\n有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOSはAndroidとは動作が異なります',
+    'gs_enable_dialog_ios_warning_body': 'iOSでは毎日決まった時刻に「安否プッシュ通知」が表示されます。通知をタップするか、その前後にご自身でアプリを開いた場合のみ安否信号が送信されます。アプリを開かないと、保護者に未受信の警告が届く可能性があります。',
+    'gs_enable_dialog_ios_confirm': '理解しました、有効化',
     'gs_enable_confirm': '有効化',
     'gs_enabled_message': '安否保護が有効化されました',
     'gs_enable_failed': '安否保護の有効化に失敗しました',
@@ -284,6 +287,9 @@ abstract class JaJp {
 
     // ── Heartbeat関連 ──
     'heartbeat_schedule_change': '安否確認時刻の変更',
+    'heartbeat_schedule_title_ios': '安否プッシュ通知の時刻',
+    'heartbeat_schedule_change_title_ios': '安否プッシュ通知の時刻変更',
+    'heartbeat_schedule_hint_ios': '毎日この時刻に安否プッシュ通知が届きます。通知をタップするか、その前後にアプリを開くと安否が送信されます。',
     'heartbeat_daily_time': '毎日 @time',
     'heartbeat_scheduled_today': '本日@timeに安否確認が予約されています。',
     'heartbeat_change_failed_title': '時刻の変更に失敗しました',

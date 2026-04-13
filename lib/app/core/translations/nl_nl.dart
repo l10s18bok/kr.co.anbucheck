@@ -83,7 +83,7 @@ abstract class NlNl {
         'Sluit de app uit van batterijoptimalisatie zodat dagelijkse welzijnscontroles niet worden gemist',
     'permission_battery_required_title': 'Stel de batterij in op "Onbeperkt"',
     'permission_battery_required_message':
-        'Als "Batterijoptimalisatie" of "Batterijbesparing" is ingeschakeld,\nkunnen dagelijkse welzijnscontroles worden vertraagd of gemist.\n\nNa het tikken op [Ga naar Instellingen]:\n1. Selecteer "Batterij"\n2. Wijzig naar "Onbeperkt"',
+        'Als "Batterijoptimalisatie" of "Batterijbesparing" is ingeschakeld, kunnen dagelijkse welzijnscontroles worden vertraagd of gemist.\n\nNa het tikken op [Ga naar Instellingen]:\n1. Selecteer "Batterij"\n2. Wijzig naar "Onbeperkt"',
     'permission_battery_go_to_settings': 'Ga naar Instellingen',
 
     // ── Onboarding ──
@@ -233,6 +233,10 @@ abstract class NlNl {
     'gs_enable_dialog_title': 'Welzijnsbescherming activeren',
     'gs_enable_dialog_body':
         'U kunt welzijnsbescherming ontvangen terwijl u uw bewakerfuncties behoudt.\nEr wordt een veiligheidscode uitgegeven — deel deze met andere bewakers.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS werkt anders dan Android',
+    'gs_enable_dialog_ios_warning_body':
+        'Op iOS verschijnt elke dag op het ingestelde tijdstip een "welzijns-pushmelding". U moet de melding aantikken of de app rond dat tijdstip zelf openen om uw welzijnssignaal te verzenden. Als u de app niet opent, kunnen uw bewakers een waarschuwing voor een gemiste controle ontvangen.',
+    'gs_enable_dialog_ios_confirm': 'Begrepen, activeren',
     'gs_enable_confirm': 'Activeren',
     'gs_enabled_message': 'Welzijnsbescherming is geactiveerd',
     'gs_enable_failed': 'Welzijnsbescherming activeren mislukt',
@@ -330,6 +334,9 @@ abstract class NlNl {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Controletijd wijzigen',
+    'heartbeat_schedule_title_ios': 'Tijd welzijns-pushmelding',
+    'heartbeat_schedule_change_title_ios': 'Tijd welzijns-pushmelding wijzigen',
+    'heartbeat_schedule_hint_ios': 'Een welzijns-pushmelding komt elke dag op deze tijd binnen. Tik op de melding of open de app rond dat tijdstip om uw welzijnssignaal te verzenden.',
     'heartbeat_daily_time': 'Dagelijks om @time',
     'heartbeat_scheduled_today':
         'Welzijnscontrole gepland om @time vandaag.',

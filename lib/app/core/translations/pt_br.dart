@@ -83,7 +83,7 @@ abstract class PtBr {
         'Exclui o aplicativo da otimização de bateria para que as verificações diárias de bem-estar não sejam perdidas',
     'permission_battery_required_title': 'Defina a bateria como "Sem restrições"',
     'permission_battery_required_message':
-        'Se estiver definida como "Otimização de bateria" ou "Economia de bateria",\nas verificações diárias de bem-estar podem ser atrasadas ou perdidas.\n\nApós tocar em [Ir para Configurações]:\n1. Selecione "Bateria"\n2. Altere para "Sem restrições"',
+        'Se estiver definida como "Otimização de bateria" ou "Economia de bateria", as verificações diárias de bem-estar podem ser atrasadas ou perdidas.\n\nApós tocar em [Ir para Configurações]:\n1. Selecione "Bateria"\n2. Altere para "Sem restrições"',
     'permission_battery_go_to_settings': 'Ir para Configurações',
 
     // ── Onboarding ──
@@ -236,6 +236,10 @@ abstract class PtBr {
     'gs_enable_dialog_title': 'Ativar proteção',
     'gs_enable_dialog_body':
         'Você pode receber proteção mantendo suas funções de guardião.\nUm código de segurança será emitido — compartilhe-o com outros guardiões.',
+    'gs_enable_dialog_ios_warning_title': '⚠ O iOS funciona de forma diferente do Android',
+    'gs_enable_dialog_ios_warning_body':
+        'No iOS, uma "notificação push de bem-estar" aparece todos os dias no horário programado. Você deve tocar na notificação ou abrir o aplicativo por conta própria nesse horário para que seu sinal de bem-estar seja enviado. Se não abrir o aplicativo, seus guardiões podem receber um alerta de verificação perdida.',
+    'gs_enable_dialog_ios_confirm': 'Entendi, ativar',
     'gs_enable_confirm': 'Ativar',
     'gs_enabled_message': 'A proteção foi ativada',
     'gs_enable_failed': 'Falha ao ativar a proteção',
@@ -333,6 +337,9 @@ abstract class PtBr {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Alterar horário de verificação',
+    'heartbeat_schedule_title_ios': 'Horário da notificação push de bem-estar',
+    'heartbeat_schedule_change_title_ios': 'Alterar horário da notificação push de bem-estar',
+    'heartbeat_schedule_hint_ios': 'Uma notificação push de bem-estar chega todos os dias neste horário. Toque na notificação ou abra o aplicativo nesse momento para enviar seu sinal de bem-estar.',
     'heartbeat_daily_time': 'Diariamente às @time',
     'heartbeat_scheduled_today':
         'Verificação de bem-estar agendada para @time hoje.',

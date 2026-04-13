@@ -50,15 +50,9 @@
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 		<key>NSMotionUsageDescription</key>
-		<string>걸음수를 측정하여 안부 확인에 활용합니다</string>
-		<key>BGTaskSchedulerPermittedIdentifiers</key>
-		<array>
-			<string>workmanager.background.task</string>
-		</array>
+		<string>걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다</string>
 		<key>UIBackgroundModes</key>
 		<array>
-			<string>fetch</string>
-			<string>processing</string>
 			<string>remote-notification</string>
 		</array>
 		<key>UILaunchStoryboardName</key>

@@ -78,7 +78,7 @@ abstract class IdId {
         'Mengecualikan aplikasi dari pengoptimalan baterai agar pemeriksaan kesejahteraan harian tidak terlewat pada waktu yang dijadwalkan',
     'permission_battery_required_title': 'Harap atur Baterai ke "Tidak Dibatasi"',
     'permission_battery_required_message':
-        'Jika diatur ke "Pengoptimalan Baterai" atau "Penghemat Baterai",\npemeriksaan kesejahteraan harian dapat tertunda atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan]:\n1. Pilih "Baterai"\n2. Ubah menjadi "Tidak Dibatasi"',
+        'Jika diatur ke "Pengoptimalan Baterai" atau "Penghemat Baterai", pemeriksaan kesejahteraan harian dapat tertunda atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan]:\n1. Pilih "Baterai"\n2. Ubah menjadi "Tidak Dibatasi"',
     'permission_battery_go_to_settings': 'Buka Pengaturan',
 
     // ── Onboarding ──
@@ -224,6 +224,10 @@ abstract class IdId {
     'gs_enable_dialog_title': 'Aktifkan perlindungan',
     'gs_enable_dialog_body':
         'Anda dapat menerima perlindungan sambil mempertahankan fungsi penjaga.\nKode keamanan akan diterbitkan — bagikan kepada penjaga lain.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS bekerja berbeda dari Android',
+    'gs_enable_dialog_ios_warning_body':
+        'Di iOS, "notifikasi push kesehatan" muncul setiap hari pada waktu yang dijadwalkan. Anda harus mengetuk notifikasi atau membuka aplikasi sendiri di sekitar waktu itu agar sinyal kesehatan Anda dapat dikirim. Jika Anda tidak membuka aplikasi, penjaga Anda mungkin menerima peringatan pemeriksaan terlewat.',
+    'gs_enable_dialog_ios_confirm': 'Saya mengerti, aktifkan',
     'gs_enable_confirm': 'Aktifkan',
     'gs_enabled_message': 'Perlindungan telah diaktifkan',
     'gs_enable_failed': 'Gagal mengaktifkan perlindungan',
@@ -318,6 +322,9 @@ abstract class IdId {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Ubah Waktu Pemeriksaan',
+    'heartbeat_schedule_title_ios': 'Waktu Notifikasi Push Kesehatan',
+    'heartbeat_schedule_change_title_ios': 'Ubah Waktu Notifikasi Push Kesehatan',
+    'heartbeat_schedule_hint_ios': 'Notifikasi push kesehatan datang setiap hari pada waktu ini. Ketuk notifikasi atau buka aplikasi di sekitar waktu itu untuk mengirim sinyal kesehatan Anda.',
     'heartbeat_daily_time': 'Setiap hari pukul @time',
     'heartbeat_scheduled_today':
         'Pemeriksaan kesejahteraan dijadwalkan pukul @time hari ini.',

@@ -44,6 +44,15 @@ void _handleNotificationTap(String type) {
       break;
     case 'heartbeat':
       break;
+    case 'gs_deadman':
+      // iOS G+S 데드맨 알림 탭 → 보호자 대시보드 거쳐 대상자 홈으로 이동
+      // (홈 화면 onInit/onResumed에서 미전송 체크 + 자동 전송)
+      // 이미 SubjectHome에 있으면 스택 유지 (뒤로가기/arguments 보존)
+      if (Get.currentRoute != AppRoutes.subjectHome) {
+        Get.offAllNamed(AppRoutes.guardianDashboard);
+        Get.toNamed(AppRoutes.subjectHome);
+      }
+      break;
     default:
       break;
   }

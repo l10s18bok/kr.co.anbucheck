@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -289,6 +291,10 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
   }
 
   void _showEnableConfirm() {
+    if (Platform.isIOS) {
+      _showEnableConfirmIOS();
+      return;
+    }
     Get.dialog(
       AlertDialog(
         title: Text('gs_enable_dialog_title'.tr,
@@ -309,6 +315,70 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
             child: Text('gs_enable_confirm'.tr,
                 style: AppTextTheme.bodyMedium(
                     color: const Color(0xFF4355B9), fw: FontWeight.w700)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// iOS G+S 전용 활성화 확인 다이얼로그
+  /// 강조 경고 카드로 "하루 한 번만 기억" 원칙을 명시 (PRD 4.2)
+  void _showEnableConfirmIOS() {
+    Get.dialog(
+      barrierDismissible: false,
+      AlertDialog(
+        title: Text('gs_enable_dialog_title'.tr,
+            style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('gs_enable_dialog_body'.tr,
+                  style:
+                      AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+              SizedBox(height: AppSpacing.lg),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF3E0),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: const Border(
+                    left: BorderSide(color: Color(0xFFE65100), width: 4),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('gs_enable_dialog_ios_warning_title'.tr,
+                        style: AppTextTheme.bodyLarge(
+                            fw: FontWeight.w700,
+                            color: const Color(0xFFE65100))),
+                    SizedBox(height: AppSpacing.sm),
+                    Text('gs_enable_dialog_ios_warning_body'.tr,
+                        style: AppTextTheme.bodyMedium(
+                            color: const Color(0xFF3F4948))),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('common_cancel'.tr,
+                style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              controller.enableSubjectFeature();
+            },
+            child: Text('gs_enable_dialog_ios_confirm'.tr,
+                style: AppTextTheme.bodyMedium(
+                    color: const Color(0xFFE65100), fw: FontWeight.w700)),
           ),
         ],
       ),

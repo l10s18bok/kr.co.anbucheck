@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pedometer/pedometer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
@@ -9,9 +10,9 @@ import 'package:anbucheck/app/routes/app_pages.dart';
 /// 권한 안내 및 요청 컨트롤러
 /// 모드 선택 후 진입, arguments['mode']로 모드 구분
 ///
-/// Android: 보호자/대상자/G+S 구분 없이 항상 3개 권한 순차 요청
-///   1. 알림 → 2. 배터리 최적화 제외 → 3. 신체 활동
-/// iOS: 알림 권한만 요청 (보호자 전용)
+/// Android: 알림 → 신체 활동(ACTIVITY_RECOGNITION) 순차 요청
+/// iOS: 알림(APNs) → 모션(NSMotionUsageDescription) 순차 요청
+/// — permission_handler의 activityRecognition이 플랫폼별로 자동 매핑됨
 class PermissionController extends BaseController {
   late final String mode;
   late final bool isAlsoSubject;
@@ -47,9 +48,18 @@ class PermissionController extends BaseController {
         }
       }
 
-      // Android: 신체 활동 권한 (걸음수)
+      // 신체 활동 / 모션 권한 (Android: ACTIVITY_RECOGNITION, iOS: NSMotionUsageDescription)
       if (Platform.isAndroid) {
         await Permission.activityRecognition.request();
+      } else {
+        // iOS: Permission.activityRecognition.request()는 시스템 팝업을 띄우지 않음.
+        // CMPedometer 데이터를 실제로 조회해야 최초 1회 모션 권한 팝업이 표시됨.
+        try {
+          await Pedometer.stepCountStream.first
+              .timeout(const Duration(seconds: 3));
+        } catch (_) {
+          // 거부/미지원/타임아웃 모두 무시 — 팝업만 띄우는 목적
+        }
       }
 
       Get.offNamed(AppRoutes.onboarding, arguments: {'mode': mode});

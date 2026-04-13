@@ -8,13 +8,8 @@ import UserNotifications
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    // WorkManager 백그라운드 FlutterEngine에 플러그인 등록
-    WorkmanagerPlugin.setPluginRegistrantCallback { registry in
-      GeneratedPluginRegistrant.register(with: registry)
-    }
-
-    // BGProcessingTask 등록 (registerProcessingTask에서 사용)
-    WorkmanagerPlugin.registerBGProcessingTask(withIdentifier: "workmanager.background.task")
+    // iOS G+S는 BGTaskScheduler / WorkManager 백그라운드 태스크를 사용하지 않음
+    // 로컬 알림(UserNotifications) + 앱 열기 자동 전송만으로 동작
 
     // Flutter 엔진 + Firebase + 플러그인 초기화
     let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -47,29 +42,28 @@ import UserNotifications
       let channel = FlutterMethodChannel(name: "kr.co.anbucheck/fcm", binaryMessenger: vc.engine.binaryMessenger)
       channel.invokeMethod("onForegroundMessage", arguments: NSNull())
     }
-    completionHandler([.banner, .sound, .badge])
+    completionHandler([.banner, .list, .sound, .badge])
   }
 
   // 알림 탭 시 처리
-  // 포그라운드: MethodChannel로 Dart에 전달 (firebase_messaging이 처리하지 않음)
-  // 백그라운드/종료: super 호출 → firebase_messaging이 페이로드에서 처리
-  //   → onMessageOpenedApp / getInitialMessage()로 Dart에서 수신
+  // firebase_messaging iOS 플러그인은 FlutterSceneDelegate(scene-based 앱)를 지원하지 않아
+  // onMessageOpenedApp / getInitialMessage()가 백그라운드/종료 상태에서 동작하지 않음
+  // (FlutterFire #13212, #12398, #10356 — 공식 수정 미정)
+  // → 포그라운드/백그라운드/종료 상태 모두 MethodChannel로 직접 Dart에 전달
   override func userNotificationCenter(
     _ center: UNUserNotificationCenter,
     didReceive response: UNNotificationResponse,
     withCompletionHandler completionHandler: @escaping () -> Void
   ) {
-    // 포그라운드 상태에서 알림 탭 → MethodChannel로 Dart에 직접 전달
-    if UIApplication.shared.applicationState == .active {
-      let userInfo = response.notification.request.content.userInfo
-      let type = userInfo["type"] as? String ?? ""
-      if let vc = getFlutterVC() {
-        let channel = FlutterMethodChannel(name: "kr.co.anbucheck/fcm", binaryMessenger: vc.engine.binaryMessenger)
-        channel.invokeMethod("onNotificationTap", arguments: type)
-      }
+    let userInfo = response.notification.request.content.userInfo
+    let type = userInfo["type"] as? String ?? ""
+
+    if let vc = getFlutterVC() {
+      let channel = FlutterMethodChannel(name: "kr.co.anbucheck/fcm", binaryMessenger: vc.engine.binaryMessenger)
+      channel.invokeMethod("onNotificationTap", arguments: type)
     }
 
-    // firebase_messaging에 위임 → onMessageOpenedApp / getInitialMessage() 동작
+    // firebase_messaging에도 위임 (종료 상태에서 getInitialMessage 경로 보존 + 플러그인 체인)
     super.userNotificationCenter(center, didReceive: response, withCompletionHandler: completionHandler)
   }
 

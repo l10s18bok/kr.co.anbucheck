@@ -78,7 +78,7 @@ abstract class TrTr {
         'Günlük hal hatır kontrollerinin belirlenen saatte kaçırılmaması için uygulamayı pil optimizasyonundan hariç tutar',
     'permission_battery_required_title': 'Lütfen Pili "Kısıtlanmamış" olarak ayarlayın',
     'permission_battery_required_message':
-        '"Pil optimizasyonu" veya "Pil tasarrufu" olarak ayarlanmışsa\ngünlük hal hatır kontrolleri gecikebilir veya kaçırılabilir.\n\n[Ayarlara Git] düğmesine dokunduktan sonra:\n1. "Pil" öğesini seçin\n2. "Kısıtlanmamış" olarak değiştirin',
+        '"Pil optimizasyonu" veya "Pil tasarrufu" olarak ayarlanmışsa günlük hal hatır kontrolleri gecikebilir veya kaçırılabilir.\n\n[Ayarlara Git] düğmesine dokunduktan sonra:\n1. "Pil" öğesini seçin\n2. "Kısıtlanmamış" olarak değiştirin',
     'permission_battery_go_to_settings': 'Ayarlara Git',
 
     // ── Tanıtım ──
@@ -221,6 +221,10 @@ abstract class TrTr {
     'gs_enable_dialog_title': 'Korumayı etkinleştir',
     'gs_enable_dialog_body':
         'Koruyucu özelliklerinizi korurken koruma alabilirsiniz.\nBir güvenlik kodu verilecektir — lütfen diğer koruyucularla paylaşın.',
+    'gs_enable_dialog_ios_warning_title': '⚠ iOS, Android\'den farklı çalışır',
+    'gs_enable_dialog_ios_warning_body':
+        'iOS\'ta her gün belirlenen saatte bir "iyilik push bildirimi" görünür. İyilik sinyalinizin gönderilmesi için bildirime dokunmanız veya o sırada uygulamayı kendiniz açmanız gerekir. Uygulamayı açmazsanız koruyucularınız kaçırılan kontrol uyarısı alabilir.',
+    'gs_enable_dialog_ios_confirm': 'Anladım, etkinleştir',
     'gs_enable_confirm': 'Etkinleştir',
     'gs_enabled_message': 'Koruma etkinleştirildi',
     'gs_enable_failed': 'Koruma etkinleştirilemedi',
@@ -315,6 +319,9 @@ abstract class TrTr {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Kontrol Saatini Değiştir',
+    'heartbeat_schedule_title_ios': 'İyilik Push Bildirim Saati',
+    'heartbeat_schedule_change_title_ios': 'İyilik Push Bildirim Saatini Değiştir',
+    'heartbeat_schedule_hint_ios': 'Her gün bu saatte iyilik push bildirimi gelir. Bildirime dokunun veya o sırada uygulamayı açın, böylece iyilik sinyaliniz gönderilir.',
     'heartbeat_daily_time': 'Her gün @time',
     'heartbeat_scheduled_today':
         'Bugün @time için hal hatır kontrolü planlandı.',

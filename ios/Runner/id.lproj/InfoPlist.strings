@@ -1,2 +1,3 @@
 "CFBundleDisplayName" = "Anbu";
 "CFBundleName" = "Anbu";
+"NSMotionUsageDescription" = "Digunakan untuk mendeteksi langkah dan memastikan aktivitas Anda.";
