@@ -8,6 +8,7 @@ import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
+import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// FCM 백그라운드 메시지 핸들러 (top-level 함수 필수)
@@ -40,7 +41,16 @@ void _handleNotificationTap(String type) {
     case 'auto_report':
     case 'manual_report':
     case 'alert_info':
-      Get.toNamed(AppRoutes.guardianNotifications);
+      // 하단 탭과 동일하게 스택 리셋 — toNamed로 push하면 dashboard 컨트롤러가
+      // 배경에 살아있어 이후 탭 전환 시 중복 컨트롤러 충돌로 앱이 멈춘다
+      if (Get.currentRoute == AppRoutes.guardianNotifications) {
+        // 이미 알림 화면이면 스택 유지하되 목록 갱신
+        try {
+          Get.find<GuardianNotificationsController>().load();
+        } catch (_) {}
+      } else {
+        Get.offAllNamed(AppRoutes.guardianNotifications);
+      }
       break;
     case 'heartbeat':
       break;
