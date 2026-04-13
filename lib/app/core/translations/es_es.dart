@@ -378,7 +378,7 @@ abstract class EsEs {
     'noti_cleared_by_guardian_body': 'Uno de los protectores ha confirmado personalmente la seguridad.',
 
     // ── Notificaciones locales ──
-    'local_alarm_title': '📱 Verificación de bienestar necesaria',
+    'local_alarm_title': '💗 Verificación de bienestar necesaria',
     'local_alarm_body': 'Por favor, toque esta notificación.',
     'wellbeing_check_title': '💛 Verificación de bienestar',
     'wellbeing_check_body':

@@ -64,7 +64,7 @@ class LocalAlarmService {
 
     // 백그라운드 isolate에서는 GetX .tr 사용 불가 → SharedPreferences 캐시 사용
     final title = await NotificationTextCache.get(
-        'local_alarm_title', fallback: '📱 Wellness check needed');
+        'local_alarm_title', fallback: '💗 Wellness check needed');
     final body = await NotificationTextCache.get(
         'local_alarm_body', fallback: 'Please tap this notification.');
     final channelName = await NotificationTextCache.get(

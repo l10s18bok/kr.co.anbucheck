@@ -369,7 +369,7 @@ abstract class RuRu {
     'noti_cleared_by_guardian_body': 'Один из опекунов лично подтвердил безопасность подопечного.',
 
     // ── Локальные уведомления ──
-    'local_alarm_title': '📱 Требуется проверка самочувствия',
+    'local_alarm_title': '💗 Требуется проверка самочувствия',
     'local_alarm_body': 'Пожалуйста, нажмите на это уведомление.',
     'wellbeing_check_title': '💛 Проверка самочувствия',
     'wellbeing_check_body':

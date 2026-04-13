@@ -369,7 +369,7 @@ abstract class HiIn {
     'noti_cleared_by_guardian_body': 'एक अभिभावक ने व्यक्तिगत रूप से सुरक्षा की पुष्टि की है।',
 
     // ── स्थानीय सूचनाएँ ──
-    'local_alarm_title': '📱 कुशलता जांच आवश्यक है',
+    'local_alarm_title': '💗 कुशलता जांच आवश्यक है',
     'local_alarm_body': 'कृपया इस सूचना पर टैप करें।',
     'wellbeing_check_title': '💛 कुशलता जांच',
     'wellbeing_check_body':

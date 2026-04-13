@@ -373,7 +373,7 @@ abstract class PlPl {
     'noti_cleared_by_guardian_body': 'Jeden z opiekunów osobiście potwierdził bezpieczeństwo.',
 
     // ── Powiadomienia lokalne ──
-    'local_alarm_title': '📱 Wymagane sprawdzenie samopoczucia',
+    'local_alarm_title': '💗 Wymagane sprawdzenie samopoczucia',
     'local_alarm_body': 'Proszę dotknąć tego powiadomienia.',
     'wellbeing_check_title': '💛 Sprawdzenie samopoczucia',
     'wellbeing_check_body':

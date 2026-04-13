@@ -332,7 +332,7 @@ abstract class EnUs {
     'noti_cleared_by_guardian_body': 'One of the guardians has personally confirmed the subject\'s safety.',
 
     // ── Local Notifications ──
-    'local_alarm_title': '📱 Wellness check needed',
+    'local_alarm_title': '💗 Wellness check needed',
     'local_alarm_body': 'Please tap this notification.',
     'wellbeing_check_title': '💛 Wellness Check',
     'wellbeing_check_body': 'Are you doing well? Please tap this notification.',

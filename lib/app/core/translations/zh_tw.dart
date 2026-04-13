@@ -327,7 +327,7 @@ abstract class ZhTw {
     'noti_cleared_by_guardian_body': '一位守護者已親自確認了被守護者的安全。',
 
     // ── 本地通知 ──
-    'local_alarm_title': '📱 需要確認安否',
+    'local_alarm_title': '💗 需要確認安否',
     'local_alarm_body': '請點擊此通知。',
     'wellbeing_check_title': '💛 安否確認',
     'wellbeing_check_body': '您還好嗎？請點擊此通知。',

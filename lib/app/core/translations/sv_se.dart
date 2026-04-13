@@ -371,7 +371,7 @@ abstract class SvSe {
     'noti_cleared_by_guardian_body': 'En av vårdnadshavarna har personligen bekräftat säkerheten.',
 
     // ── Lokala aviseringar ──
-    'local_alarm_title': '📱 Välmåendekontroll behövs',
+    'local_alarm_title': '💗 Välmåendekontroll behövs',
     'local_alarm_body': 'Vänligen tryck på denna avisering.',
     'wellbeing_check_title': '💛 Välmåendekontroll',
     'wellbeing_check_body':

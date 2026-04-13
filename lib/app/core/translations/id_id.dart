@@ -371,7 +371,7 @@ abstract class IdId {
     'noti_cleared_by_guardian_body': 'Salah satu pelindung telah memastikan keamanan secara langsung.',
 
     // ── Notifikasi lokal ──
-    'local_alarm_title': '📱 Pemeriksaan kesejahteraan diperlukan',
+    'local_alarm_title': '💗 Pemeriksaan kesejahteraan diperlukan',
     'local_alarm_body': 'Silakan ketuk notifikasi ini.',
     'wellbeing_check_title': '💛 Pemeriksaan Kesejahteraan',
     'wellbeing_check_body':

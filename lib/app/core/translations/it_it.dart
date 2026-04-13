@@ -381,7 +381,7 @@ abstract class ItIt {
     'noti_cleared_by_guardian_body': 'Uno dei tutori ha confermato personalmente la sicurezza.',
 
     // ── Notifiche locali ──
-    'local_alarm_title': '📱 Verifica di benessere necessaria',
+    'local_alarm_title': '💗 Verifica di benessere necessaria',
     'local_alarm_body': 'Per favore, tocca questa notifica.',
     'wellbeing_check_title': '💛 Verifica di benessere',
     'wellbeing_check_body':

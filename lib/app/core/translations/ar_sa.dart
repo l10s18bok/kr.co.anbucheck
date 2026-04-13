@@ -362,7 +362,7 @@ abstract class ArSa {
     'noti_cleared_by_guardian_body': 'أحد الأوصياء تحقق شخصياً من سلامة الشخص المحمي.',
 
     // ── الإشعارات المحلية ──
-    'local_alarm_title': '📱 يلزم التحقق من السلامة',
+    'local_alarm_title': '💗 يلزم التحقق من السلامة',
     'local_alarm_body': 'يرجى الضغط على هذا الإشعار.',
     'wellbeing_check_title': '💛 التحقق من السلامة',
     'wellbeing_check_body':

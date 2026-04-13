@@ -378,7 +378,7 @@ abstract class FrFr {
     'noti_cleared_by_guardian_body': "Un des protecteurs a personnellement confirmé la sécurité.",
 
     // ── Notifications locales ──
-    'local_alarm_title': '📱 Vérification de bien-être nécessaire',
+    'local_alarm_title': '💗 Vérification de bien-être nécessaire',
     'local_alarm_body': 'Veuillez appuyer sur cette notification.',
     'wellbeing_check_title': '💛 Vérification de bien-être',
     'wellbeing_check_body':

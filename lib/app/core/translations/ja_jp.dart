@@ -332,7 +332,7 @@ abstract class JaJp {
     'noti_cleared_by_guardian_body': '保護者の一人が対象者の安全を直接確認しました。',
 
     // ── ローカル通知 ──
-    'local_alarm_title': '📱 安否確認が必要です',
+    'local_alarm_title': '💗 安否確認が必要です',
     'local_alarm_body': 'この通知をタップしてください。',
     'wellbeing_check_title': '💛 安否確認',
     'wellbeing_check_body': 'お元気ですか？この通知をタップしてください。',

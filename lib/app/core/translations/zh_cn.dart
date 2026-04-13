@@ -327,7 +327,7 @@ abstract class ZhCn {
     'noti_cleared_by_guardian_body': '一位守护者已亲自确认了被守护人的安全。',
 
     // ── 本地通知 ──
-    'local_alarm_title': '📱 需要确认安否',
+    'local_alarm_title': '💗 需要确认安否',
     'local_alarm_body': '请点击此通知。',
     'wellbeing_check_title': '💛 安否确认',
     'wellbeing_check_body': '您还好吗？请点击此通知。',

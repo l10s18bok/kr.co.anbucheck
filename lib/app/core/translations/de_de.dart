@@ -367,7 +367,7 @@ abstract class DeDe {
     'noti_cleared_by_guardian_body': 'Einer der Betreuer hat die Sicherheit persönlich bestätigt.',
 
     // ── Lokale Benachrichtigungen ──
-    'local_alarm_title': '📱 Wohlbefindens-Prüfung erforderlich',
+    'local_alarm_title': '💗 Wohlbefindens-Prüfung erforderlich',
     'local_alarm_body': 'Bitte tippen Sie auf diese Benachrichtigung.',
     'wellbeing_check_title': '💛 Wohlbefindens-Prüfung',
     'wellbeing_check_body':

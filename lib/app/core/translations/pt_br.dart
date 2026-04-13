@@ -386,7 +386,7 @@ abstract class PtBr {
     'noti_cleared_by_guardian_body': 'Um dos protetores confirmou pessoalmente a segurança.',
 
     // ── Notificações locais ──
-    'local_alarm_title': '📱 Verificação de bem-estar necessária',
+    'local_alarm_title': '💗 Verificação de bem-estar necessária',
     'local_alarm_body': 'Por favor, toque nesta notificação.',
     'wellbeing_check_title': '💛 Verificação de bem-estar',
     'wellbeing_check_body':

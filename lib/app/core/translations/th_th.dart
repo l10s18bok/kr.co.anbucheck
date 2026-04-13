@@ -370,7 +370,7 @@ abstract class ThTh {
     'noti_cleared_by_guardian_body': 'ผู้ดูแลท่านหนึ่งได้ยืนยันความปลอดภัยด้วยตนเอง',
 
     // ── การแจ้งเตือนในเครื่อง ──
-    'local_alarm_title': '📱 ต้องตรวจสอบความเป็นอยู่',
+    'local_alarm_title': '💗 ต้องตรวจสอบความเป็นอยู่',
     'local_alarm_body': 'กรุณาแตะที่การแจ้งเตือนนี้',
     'wellbeing_check_title': '💛 ตรวจสอบความเป็นอยู่',
     'wellbeing_check_body':

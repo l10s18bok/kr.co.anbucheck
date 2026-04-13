@@ -328,7 +328,7 @@ abstract class KoKr {
     'noti_cleared_by_guardian_body': '보호자 중 한 명이 대상자의 안전을 직접 확인했습니다.',
 
     // ── 로컬 알림 ──
-    'local_alarm_title': '📱 안부 확인이 필요합니다',
+    'local_alarm_title': '💗 안부 확인이 필요합니다',
     'local_alarm_body': '이 메시지 알림을 한 번 터치해 주세요.',
     'wellbeing_check_title': '💛 안부 확인',
     'wellbeing_check_body': '잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요.',

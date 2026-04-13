@@ -371,7 +371,7 @@ abstract class ViVn {
     'noti_cleared_by_guardian_body': 'Một trong các người bảo vệ đã trực tiếp xác nhận sự an toàn.',
 
     // ── Thông báo cục bộ ──
-    'local_alarm_title': '📱 Cần kiểm tra sức khỏe',
+    'local_alarm_title': '💗 Cần kiểm tra sức khỏe',
     'local_alarm_body': 'Vui lòng chạm vào thông báo này.',
     'wellbeing_check_title': '💛 Kiểm tra sức khỏe',
     'wellbeing_check_body':

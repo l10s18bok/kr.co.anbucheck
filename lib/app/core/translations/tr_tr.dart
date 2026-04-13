@@ -367,7 +367,7 @@ abstract class TrTr {
     'noti_cleared_by_guardian_body': 'Koruyuculardan biri güvenliğini bizzat doğruladı.',
 
     // ── Yerel bildirimler ──
-    'local_alarm_title': '📱 Sağlık kontrolü gerekli',
+    'local_alarm_title': '💗 Sağlık kontrolü gerekli',
     'local_alarm_body': 'Lütfen bu bildirime dokunun.',
     'wellbeing_check_title': '💛 Sağlık Kontrolü',
     'wellbeing_check_body':

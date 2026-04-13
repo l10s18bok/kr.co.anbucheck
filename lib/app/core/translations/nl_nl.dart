@@ -383,7 +383,7 @@ abstract class NlNl {
     'noti_cleared_by_guardian_body': 'Een van de beschermers heeft de veiligheid persoonlijk bevestigd.',
 
     // ── Lokale meldingen ──
-    'local_alarm_title': '📱 Welzijnscontrole nodig',
+    'local_alarm_title': '💗 Welzijnscontrole nodig',
     'local_alarm_body': 'Tik op deze melding.',
     'wellbeing_check_title': '💛 Welzijnscontrole',
     'wellbeing_check_body':
