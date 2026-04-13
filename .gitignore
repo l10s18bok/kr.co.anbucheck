@@ -50,3 +50,6 @@ app.*.map.json
 # Firebase 설정 파일 (민감 정보 포함, 직접 관리)
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
+
+# 로컬 참고 문서 (버전 관리 제외)
+.ref/
