@@ -49,6 +49,10 @@ void heartbeatWorkerCallback() {
       await HeartbeatService().execute();
       debugPrint('[HeartbeatWorker] heartbeat 전송 완료');
 
+      // 오늘 periodic 안전망 취소 — 다음 날은 scheduleNextDay에서 재등록
+      await Workmanager().cancelByUniqueName(HeartbeatWorkerService._androidPeriodicName);
+      debugPrint('[HeartbeatWorker] Android periodic 안전망 취소');
+
       // 다음 날 동일 시각 재예약
       await HeartbeatWorkerService.scheduleNextDay();
     } catch (e) {
@@ -60,26 +64,28 @@ void heartbeatWorkerCallback() {
 
 /// WorkManager 기반 heartbeat 예약 서비스 (Android 전용)
 ///
-/// registerOneOffTask로 예약 시각에 한 번 실행한다.
-/// periodic 안전망은 사용하지 않는다 — OS가 Doze maintenance window에서
-/// one-off를 실행해주며, 앱 열기 자동 전송이 2차 안전망 역할을 한다.
-/// (periodic 병행 시 one-off와 거의 동시에 실행되어 중복 전송 race 발생)
+/// 2계층 예약:
+///   · one-off: 예약 시각에 한 번 정확히 실행 (primary)
+///   · periodic: 15분 주기 안전망 (WorkManager 최소 간격) — Doze/OEM 절전으로
+///     one-off가 지연/미실행되는 경우 maintenance window에 따라잡기 실행
+///
+/// 전송 성공 시 콜백에서 periodic을 즉시 취소해 오늘 남은 시간의 재발화를 막고,
+/// `scheduleNextDay`에서 다음 날용 one-off + periodic을 함께 재등록한다.
+/// 중복 전송 race는 HeartbeatService의 선(先)점유 dedup으로 구조적으로 차단된다.
 ///
 /// iOS는 이 서비스를 호출하지 않는다 — iOS G+S는 LocalAlarmService 데드맨 알림 +
 /// 앱 열기 자동 전송만으로 동작하며, BGTaskScheduler를 사용하지 않는다.
 class HeartbeatWorkerService {
   static const _taskName = 'heartbeat_task';
   static const _uniqueName = 'heartbeat_scheduled';
+  static const _androidPeriodicName = 'heartbeat_periodic_android';
 
   /// Workmanager 초기화 (main()에서 1회 호출, Android에서만)
   static Future<void> init() async {
     await Workmanager().initialize(heartbeatWorkerCallback);
-    // 업그레이드 대응: 이전 버전에서 등록한 periodic 안전망 제거
-    // (one-off와 동시 실행되어 중복 전송 race 유발 → 드롭)
-    await Workmanager().cancelByUniqueName('heartbeat_periodic_android');
   }
 
-  /// 예약 시각에 맞춰 태스크 예약 (one-off)
+  /// 예약 시각에 맞춰 태스크 예약 (one-off + periodic 안전망)
   static Future<void> schedule(int hour, int minute) async {
     final now = DateTime.now();
     var scheduled = DateTime(now.year, now.month, now.day, hour, minute);
@@ -93,6 +99,14 @@ class HeartbeatWorkerService {
       _taskName,
       initialDelay: delay,
       existingWorkPolicy: ExistingWorkPolicy.replace,
+      constraints: Constraints(networkType: NetworkType.connected),
+    );
+    await Workmanager().registerPeriodicTask(
+      _androidPeriodicName,
+      _taskName,
+      frequency: const Duration(minutes: 15),
+      initialDelay: delay,
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
@@ -112,7 +126,15 @@ class HeartbeatWorkerService {
         _uniqueName,
         _taskName,
         initialDelay: delay,
-        existingWorkPolicy: ExistingWorkPolicy.replace,
+        existingWorkPolicy: ExistingWorkPolicy.keep,
+        constraints: Constraints(networkType: NetworkType.connected),
+      );
+      await Workmanager().registerPeriodicTask(
+        _androidPeriodicName,
+        _taskName,
+        frequency: const Duration(minutes: 15),
+        initialDelay: delay,
+        existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
         constraints: Constraints(networkType: NetworkType.connected),
       );
     } catch (_) {}
@@ -121,5 +143,6 @@ class HeartbeatWorkerService {
   /// 예약 취소
   static Future<void> cancel() async {
     await Workmanager().cancelByUniqueName(_uniqueName);
+    await Workmanager().cancelByUniqueName(_androidPeriodicName);
   }
 }
