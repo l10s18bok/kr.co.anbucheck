@@ -138,13 +138,13 @@ mixin HeartbeatScheduleMixin on GetxController {
       await LocalAlarmService.schedule(hour, minute);
       final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
       Get.snackbar('', message,
-          snackPosition: SnackPosition.TOP,
+          snackPosition: SnackPosition.BOTTOM,
           duration: const Duration(seconds: 2),
           backgroundColor: Colors.white,
           colorText: const Color(0xFF1a1c1c));
     } catch (e) {
       Get.snackbar('heartbeat_change_failed_title'.tr, 'heartbeat_change_failed_message'.tr,
-          snackPosition: SnackPosition.TOP,
+          snackPosition: SnackPosition.BOTTOM,
           duration: const Duration(seconds: 2),
           backgroundColor: Colors.white,
           colorText: const Color(0xFF1a1c1c));

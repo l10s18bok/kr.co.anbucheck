@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
+import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/modules/guardian_settings/controllers/guardian_settings_controller.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
@@ -249,14 +250,15 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
   // ── G+S 버튼 (알림 설정과 동일한 스타일) ──
 
   Widget _buildGsButton() {
+    final dashboard = Get.find<GuardianDashboardController>();
     return Obx(() {
-      final isGS = controller.isAlsoSubject.value;
-      final enabling = controller.isEnabling.value;
+      final isGS = dashboard.isAlsoSubject.value;
+      final enabling = dashboard.isEnabling.value;
       return GestureDetector(
         onTap: enabling
             ? null
             : isGS
-                ? controller.goToSafetyCode
+                ? dashboard.goToSafetyCode
                 : () => _showEnableConfirm(),
         child: Container(
           width: double.infinity,
@@ -310,7 +312,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
           TextButton(
             onPressed: () {
               Get.back();
-              controller.enableSubjectFeature();
+              Get.find<GuardianDashboardController>().enableSubjectFeature();
             },
             child: Text('gs_enable_confirm'.tr,
                 style: AppTextTheme.bodyMedium(
@@ -374,7 +376,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
           TextButton(
             onPressed: () {
               Get.back();
-              controller.enableSubjectFeature();
+              Get.find<GuardianDashboardController>().enableSubjectFeature();
             },
             child: Text('gs_enable_dialog_ios_confirm'.tr,
                 style: AppTextTheme.bodyMedium(

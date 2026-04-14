@@ -8,8 +8,11 @@ class GuardianDashboardBinding implements Bindings {
     if (!Get.isRegistered<GuardianSubjectService>()) {
       Get.put(GuardianSubjectService(), permanent: true);
     }
-    Get.lazyPut<GuardianDashboardController>(
-      () => GuardianDashboardController(),
-    );
+    if (!Get.isRegistered<GuardianDashboardController>()) {
+      Get.put<GuardianDashboardController>(
+        GuardianDashboardController(),
+        permanent: true,
+      );
+    }
   }
 }

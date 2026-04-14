@@ -1,15 +1,26 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
+import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 대시보드 컨트롤러
 /// PRD 7.6: 대상자 목록, 상태 모니터링, 알림 레벨 표시
-class GuardianDashboardController extends BaseController {
+/// G+S(보호자 겸 대상자) 라이프사이클(활성화/해제/예약)만 이곳에서 담당하고,
+/// heartbeat 자동 재전송 체크는 [GuardianSafetyCodeController]가 단독 소유한다.
+class GuardianDashboardController extends BaseController
+    with HeartbeatScheduleMixin {
   final subjects = <SubjectStatus>[].obs;
 
   /// 현재 카드 슬라이드 인덱스
@@ -21,8 +32,15 @@ class GuardianDashboardController extends BaseController {
   /// 구독 활성 여부
   final isSubscriptionActive = true.obs;
 
+  // ── G+S (보호자 겸 대상자) 상태 ──
+  final isAlsoSubject = false.obs;
+  final inviteCode = ''.obs;
+  final guardianCount = 0.obs;
+  final isEnabling = false.obs;
+
   final _svc = Get.find<GuardianSubjectService>();
   final _tokenDs = TokenLocalDatasource();
+  final _userDs = UserRemoteDatasource();
 
   @override
   void onInit() {
@@ -32,13 +50,22 @@ class GuardianDashboardController extends BaseController {
     // subjects 데이터 변경 시 자동 반영 (FCM 수신 후 서비스 갱신 포함)
     ever(_svc.subjects, (_) => _mapSubjects());
     _loadSubjectsAndSubscription();
+    _loadSubjectState();
     _scheduleHeartbeatIfGS();
+  }
+
+  /// 앱이 포그라운드로 복귀 — 대상자 목록 강제 갱신
+  /// heartbeat 자동 재전송은 SafetyCode 컨트롤러가 전담 (race 방지)
+  @override
+  void onResumed() {
+    super.onResumed();
+    _loadSubjectsAndSubscription(force: true);
   }
 
   /// G+S(보호자 겸 대상자)인 경우 서버 스케줄 동기화 후 WorkManager + 로컬 안전망 예약
   Future<void> _scheduleHeartbeatIfGS() async {
-    final isAlsoSubject = await _tokenDs.getIsAlsoSubject();
-    if (!isAlsoSubject) return;
+    final isAls = await _tokenDs.getIsAlsoSubject();
+    if (!isAls) return;
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
     try {
@@ -46,21 +73,19 @@ class GuardianDashboardController extends BaseController {
       final hour = data['heartbeat_hour'] as int? ?? 9;
       final minute = data['heartbeat_minute'] as int? ?? 30;
       await _tokenDs.saveHeartbeatSchedule(hour, minute);
-      await HeartbeatWorkerService.schedule(hour, minute);
+      applySchedule(hour, minute);
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.schedule(hour, minute);
+      }
       await LocalAlarmService.schedule(hour, minute);
     } catch (_) {
-      // 서버 실패 시 로컬 값으로 예약
       final (h, m) = await _tokenDs.getHeartbeatSchedule();
-      await HeartbeatWorkerService.schedule(h, m);
+      applySchedule(h, m);
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.schedule(h, m);
+      }
       await LocalAlarmService.schedule(h, m);
     }
-  }
-
-  /// 앱이 포그라운드로 복귀 — 강제 갱신
-  @override
-  void onResumed() {
-    super.onResumed();
-    _loadSubjectsAndSubscription(force: true);
   }
 
   /// 대상자 로드 완료 후 구독 상태 읽기 (서비스가 로컬에 저장한 값)
@@ -71,6 +96,15 @@ class GuardianDashboardController extends BaseController {
 
   Future<void> _loadSubscriptionStatus() async {
     isSubscriptionActive.value = await _tokenDs.getSubscriptionActive();
+  }
+
+  /// 로컬에서 G+S 상태 로드 (앱 시작 시)
+  Future<void> _loadSubjectState() async {
+    final also = await _tokenDs.getIsAlsoSubject();
+    isAlsoSubject.value = also;
+    if (!also) return;
+    inviteCode.value = await _tokenDs.getInviteCode() ?? '';
+    await loadScheduleFromLocal();
   }
 
   /// 전화 버튼 탭 — 해당 대상자를 강조 대상으로 등록
@@ -163,6 +197,111 @@ class GuardianDashboardController extends BaseController {
       await _svc.refresh();
       await _loadSubjects();
     }
+  }
+
+  // ── G+S 활성화 ──
+
+  Future<void> enableSubjectFeature() async {
+    isEnabling.value = true;
+    try {
+      final deviceToken = await _tokenDs.getDeviceToken();
+      if (deviceToken == null) return;
+      final result = await _userDs.enableSubject(deviceToken);
+      final code = result['invite_code'] as String;
+      final hour = result['heartbeat_hour'] as int? ?? 9;
+      final minute = result['heartbeat_minute'] as int? ?? 30;
+
+      // 로컬 저장
+      await _tokenDs.saveIsAlsoSubject(true);
+      await _tokenDs.saveInviteCode(code);
+      await _tokenDs.saveHeartbeatSchedule(hour, minute);
+      isAlsoSubject.value = true;
+      inviteCode.value = code;
+      applySchedule(hour, minute);
+
+      // Android: WorkManager + 로컬 안전망 등록
+      // iOS G+S: 데드맨 로컬 알림만 등록 (BGTaskScheduler 사용 안 함)
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.schedule(hour, minute);
+      }
+      await LocalAlarmService.schedule(hour, minute);
+
+      // 첫 heartbeat 즉시 전송 — 이후 SafetyCode.onInit에서는
+      // HeartbeatService 내부 dedup + isReportedToday 체크로 중복 전송 방지
+      try {
+        await HeartbeatService().execute();
+      } catch (_) {}
+
+      Get.snackbar('', 'gs_enabled_message'.tr,
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.white,
+          colorText: const Color(0xFF1a1c1c));
+
+      goToSafetyCode();
+    } catch (e) {
+      Get.snackbar('common_error'.tr, 'gs_enable_failed'.tr,
+          snackPosition: SnackPosition.TOP);
+    } finally {
+      isEnabling.value = false;
+    }
+  }
+
+  // ── G+S 해제 ──
+
+  Future<void> disableSubjectFeature() async {
+    try {
+      final deviceToken = await _tokenDs.getDeviceToken();
+      if (deviceToken == null) return;
+      await _userDs.disableSubject(deviceToken);
+
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.cancel();
+      }
+      await LocalAlarmService.cancel();
+
+      await _tokenDs.saveIsAlsoSubject(false);
+      await SensorLocalDatasource().saveSnapshot(
+        accelX: 0, accelY: 0, accelZ: 0,
+        gyroX: 0, gyroY: 0, gyroZ: 0,
+      );
+      await _tokenDs.saveLastHeartbeatDate('');
+      await _tokenDs.saveLastHeartbeatTime('');
+
+      isAlsoSubject.value = false;
+      inviteCode.value = '';
+      guardianCount.value = 0;
+
+      Get.snackbar('', 'gs_disabled_message'.tr,
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.white,
+          colorText: const Color(0xFF1a1c1c));
+    } catch (e) {
+      Get.snackbar('common_error'.tr, 'gs_disable_failed'.tr,
+          snackPosition: SnackPosition.TOP);
+    }
+  }
+
+  /// 탈퇴 시 heartbeat 예약 정리 — 설정 컨트롤러가 호출
+  Future<void> cancelHeartbeatSchedules() async {
+    if (!isAlsoSubject.value) return;
+    if (Platform.isAndroid) {
+      await HeartbeatWorkerService.cancel();
+    }
+    await LocalAlarmService.cancel();
+  }
+
+  /// G+S 활성 상태에서 안전 코드 확인 페이지로 이동
+  void goToSafetyCode() {
+    Get.toNamed(AppRoutes.guardianSafetyCode, arguments: {
+      'deviceData': {
+        'heartbeat_hour': heartbeatHour.value,
+        'heartbeat_minute': heartbeatMinute.value,
+        'subscription_active': isSubscriptionActive.value,
+        'guardian_count': guardianCount.value,
+      },
+    });
   }
 }
 

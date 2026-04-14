@@ -58,17 +58,17 @@ void _handleNotificationTap(String type) {
     case 'gs_deadman':
       // iOS G+S 데드맨 알림 탭 → 보호자 대시보드 위에 안전코드 페이지 push
       // 이미 안전코드 페이지면 스택 유지 + 컨트롤러가 즉시 미전송 heartbeat 재확인
-      // offNamedUntil로 dashboard까지만 pop + safetyCode push — offAllNamed+toNamed
-      // 조합은 dashboard 컨트롤러를 재생성하는 race로 Obx가 컨트롤러를 못 찾는 문제 발생
+      // kill 상태 런치에서는 스택에 Dashboard가 없을 수 있어 offNamedUntil predicate가
+      // 매칭되지 않고 SafetyCode가 root가 되어 뒤로가기 불가 — offAllNamed(dashboard)로
+      // 스택을 재구성한 뒤 SafetyCode를 push해 [dashboard, safetyCode] 구조 보장.
+      // Dashboard 바인딩은 permanent이므로 재등록되지 않아 컨트롤러 race 없음.
       if (Get.currentRoute == AppRoutes.guardianSafetyCode) {
         try {
           Get.find<GuardianSafetyCodeController>().refreshAndSend();
         } catch (_) {}
       } else {
-        Get.offNamedUntil(
-          AppRoutes.guardianSafetyCode,
-          (route) => route.settings.name == AppRoutes.guardianDashboard,
-        );
+        Get.offAllNamed(AppRoutes.guardianDashboard);
+        Get.toNamed(AppRoutes.guardianSafetyCode);
       }
       break;
     default:
