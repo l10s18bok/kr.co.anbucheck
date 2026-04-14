@@ -1330,6 +1330,36 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
 ```
 
 
+### 6.7 보호자 Push 대상 조회 규칙 (중복 전송 방지)
+
+heartbeat 수신·경고 발송·긴급 도움 요청·대상자 탈퇴 Push 등 **대상자 이벤트 → 연결된 보호자 전원에게 Push**를 보내는 모든 경로는 아래 조회 규칙을 따른다.
+
+**규칙:** `guardians JOIN devices` 쿼리에 반드시 `DISTINCT ON (g.guardian_user_id)` + `ORDER BY g.guardian_user_id, d.updated_at DESC` 를 적용하여, 보호자 1명당 **가장 최근 갱신된 `devices` 1건의 `fcm_token`으로만** Push를 발송한다.
+
+```sql
+SELECT DISTINCT ON (g.guardian_user_id)
+       g.guardian_user_id, d.fcm_token, d.locale
+FROM guardians g
+JOIN subscriptions s ON s.user_id = g.guardian_user_id
+JOIN devices d ON d.user_id = g.guardian_user_id
+WHERE g.subject_user_id = $1
+  AND s.plan != 'expired'
+  AND s.expires_at > NOW()
+  AND d.fcm_token IS NOT NULL
+  AND d.fcm_token != ''
+ORDER BY g.guardian_user_id, d.updated_at DESC;
+```
+
+**배경:** `guardians` 테이블에는 `UNIQUE(subject_user_id, guardian_user_id)` 제약이 걸려 있어 보호자-대상자 매핑은 1행으로 유일하나, `devices` 테이블에는 동일 `user_id`에 대해 여러 행이 남아있을 수 있다 (OS/기기 교체, orphan 레코드 등). 단순 JOIN 시 보호자당 N행이 반환되어 **같은 보호자에게 Push가 N회 발송**되는 이슈가 발생하므로 `DISTINCT ON` + `updated_at DESC`로 최신 토큰 1건만 선택한다.
+
+**적용 대상 쿼리 (예시):**
+- `services/heartbeat_service.py::_get_active_guardians` — heartbeat 정상/suspicious 판정 시 보호자 Push (emergency_service도 이 함수를 재사용)
+- `services/alert_service.py::send_alert_to_guardians` — 정보/주의/경고/긴급/배터리 Push
+- `routers/user.py::delete_me` — 대상자 탈퇴 Push (2곳)
+
+신규로 보호자 전원에게 Push를 보내는 쿼리를 추가할 때도 동일 규칙을 적용한다.
+
+
 ---
 
 
