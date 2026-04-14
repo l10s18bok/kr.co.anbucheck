@@ -178,6 +178,11 @@ class TokenLocalDatasource {
     await prefs.setString(_keyLastScheduledKey, key);
   }
 
+  Future<void> clearLastScheduledKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keyLastScheduledKey);
+  }
+
   // ── 구독 활성화 여부 ──────────────────────────────────────
   Future<bool> getSubscriptionActive() async {
     final prefs = await SharedPreferences.getInstance();

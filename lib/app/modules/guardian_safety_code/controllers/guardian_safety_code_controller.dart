@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -131,8 +132,26 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
     if (Platform.isAndroid && isScheduleInFuture) return;
+    await _clearStaleScheduledKey();
     await HeartbeatService().execute(manual: false);
     await _reloadHeartbeatState();
+  }
+
+  /// WorkManager Worker가 lastScheduledKey를 선점 save한 뒤 Samsung OneUI
+  /// Doze/OEM 절전으로 중도 종료되면, lastHeartbeatDate는 비어있고
+  /// lastScheduledKey만 남아 2차 안전망(앱 복귀 자동 전송)이 dedup 가드에
+  /// 막혀 영구히 차단된다. 포그라운드 진입 시 "오늘 미전송인데 오늘자 키가
+  /// 박혀 있는" stale 상태를 감지해 정리한다.
+  Future<void> _clearStaleScheduledKey() async {
+    final lastKey = await _tokenDs.getLastScheduledKey();
+    if (lastKey == null || lastKey.isEmpty) return;
+    final now = DateTime.now();
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    if (lastKey.startsWith(today)) {
+      debugPrint('[GuardianSafetyCode] stale lastScheduledKey 정리 ($lastKey)');
+      await _tokenDs.clearLastScheduledKey();
+    }
   }
 
   Future<void> _loadStatus() async {
