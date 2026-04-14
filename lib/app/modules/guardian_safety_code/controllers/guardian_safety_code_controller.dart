@@ -135,6 +135,11 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   }
 
   Future<void> _loadStatus() async {
+    // Worker isolate가 방금 저장한 lastHeartbeatDate/ScheduledKey가 메인 isolate
+    // 캐시에 반영되지 않은 상태로 _checkAndSendHeartbeat가 돌면 isReportedToday
+    // 판정이 stale해져 간헐적 중복 전송이 발생한다. 읽기 전에 prefs를 디스크와
+    // 동기화해 race를 차단한다.
+    await getReloadedPrefs();
     _inviteCode.value = await _tokenDs.getInviteCode() ?? '';
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';

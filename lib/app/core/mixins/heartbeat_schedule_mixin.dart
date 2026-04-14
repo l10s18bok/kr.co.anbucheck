@@ -127,9 +127,11 @@ mixin HeartbeatScheduleMixin on GetxController {
       heartbeatHour.value = hour;
       heartbeatMinute.value = minute;
       _applyToHeartbeatTime(hour, minute);
-      // 예약시각 변경 시 하루 1회 제한 리셋 (재테스트 가능)
+      // 예약시각 변경 = 새 예약 발화로 간주 → 선점 키까지 같이 비워야
+      // 같은 시각으로 되돌렸을 때도 재테스트가 막히지 않음
       await tokenDs.saveLastHeartbeatDate('');
       await tokenDs.saveLastHeartbeatTime('');
+      await tokenDs.saveLastScheduledKey('');
       // Android: WorkManager + 로컬 안전망 재예약
       // iOS G+S: 오늘의 안부 확인 메시지 로컬 알림만 재예약 (BGTaskScheduler 사용 안 함)
       if (Platform.isAndroid) {

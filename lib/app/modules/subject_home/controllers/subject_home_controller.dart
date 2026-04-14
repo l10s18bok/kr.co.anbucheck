@@ -168,6 +168,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   Future<void> reloadHeartbeatState() => _reloadHeartbeatState();
 
   Future<void> _loadStatus() async {
+    // Worker isolate가 저장한 lastHeartbeatDate가 메인 isolate 캐시에 미반영된
+    // 채로 _checkAndSendHeartbeat가 돌면 isReportedToday가 stale해져 간헐적
+    // 중복 전송이 발생한다. 읽기 전에 prefs를 디스크와 동기화한다.
+    await getReloadedPrefs();
     _inviteCode.value = await _tokenDs.getInviteCode() ?? '';
     _userId.value = await _tokenDs.getUserId() ?? 0;
     _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';

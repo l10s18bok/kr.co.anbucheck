@@ -63,19 +63,44 @@ void heartbeatWorkerCallback() {
 /// WorkManager 기반 heartbeat 예약 서비스 (Android 전용)
 ///
 /// 2계층 구조:
-///   - one-off: 정확히 예약시각에 1회 fire. 전송 성공 후 내일로 재등록.
-///   - periodic 1시간: 안전망 폴링. one-off가 OEM 배터리 절약 등으로 누락될 때 1시간 내
-///     백업 발화. UPDATE/REPLACE 모두 self-cancel/initialDelay 무시 이슈가 있어 재등록하지 않고
-///     그대로 둔다. 당일 재전송은 HeartbeatService 내부 lastScheduledKey dedup이 차단.
+///   - one-off: 정확히 예약시각(예: 09:30)에 1회 fire. 메인 전송 담당.
+///     전송 성공 후 rescheduleOneOffForNextDay()로 내일 예약시각에 재등록.
+///   - periodic 1시간: 안전망 폴링. one-off가 OEM 배터리 절약/Doze 등으로 누락될 때
+///     최대 1시간 내 백업 발화. fire 후 재등록하지 않고 그대로 둔다
+///     (flutter_workmanager의 UPDATE는 initialDelay를 무시하고, REPLACE는 자기자신을
+///     취소하는 이슈가 있어 건드리면 오히려 폴링이 깨진다).
 ///
-/// race 주의:
-///   one-off와 periodic이 거의 동시에 fire될 수 있다. flutter_workmanager는 매 worker마다
-///   새 FlutterEngine/isolate를 생성하므로 Dart `static _busy` 플래그로 막을 수 없다.
-///   방어선:
-///     1) 콜백 진입 시 lastHeartbeatDate == 오늘 검사
-///     2) HeartbeatService._executeInternal에서 lastScheduledKey 검사
-///   둘 다 SharedPreferences 기반이라 TOCTOU 윈도우는 남지만, 실측상 두 워커의 격차가
-///   ms~수십ms 수준이라 충분히 좁아 실패 케이스는 매우 드물다.
+/// ─── 동시 발화(race) 방지 — 이중 방어 ───
+///
+/// flutter_workmanager는 워커마다 새 FlutterEngine/isolate를 생성하므로 Dart
+/// `static _busy` 플래그는 cross-isolate에서 무력하다. 따라서 one-off와 periodic이
+/// 거의 동시에 fire되면 SharedPreferences 기반 dedup이 유일한 방어선이 되는데,
+/// 과거에는 `lastScheduledKey` save가 API 전송 성공 후에 있어 check→전송→save
+/// 사이 최대 10~20초의 TOCTOU 윈도우가 열려 있었고, 그 틈에 두 워커가 모두
+/// check를 통과해 중복 전송하는 사례가 실측됐다.
+///
+/// 현재 구조는 두 축으로 race를 차단한다:
+///
+/// 1) 선점(preempt) save — HeartbeatService._executeInternal
+///    check 직후 센서 수집·API 전송을 시작하기 *전에* lastScheduledKey를 먼저
+///    박는다. TOCTOU 윈도우가 prefs write 수준(~수 마이크로초)으로 축소되어,
+///    같은 isolate가 아니어도 뒤따라 들어온 호출은 check 단계에서 즉시 스킵된다.
+///
+/// 2) periodic 23분 오프셋 — 이 파일
+///    periodic의 첫 fire를 one-off보다 23분 뒤로 미뤄, 정각에 두 워커가 동시에
+///    진입하는 케이스 자체를 구조적으로 제거한다. 23분은 비라운드 값으로,
+///    사용자가 예약시각을 00/30분 같은 라운드 값으로 설정하는 일반적 패턴과
+///    절대 겹치지 않아(09:30 → periodic 09:53) 로그 구분이 명확하다. Android
+///    WorkManager의 flex 윈도우(~15분)도 충분히 흡수한다.
+///      - one-off 정상 fire (예약시각 정각) → 전송 성공 → lastHeartbeatDate·
+///        lastScheduledKey 기록
+///      - 23분 뒤 periodic 첫 fire → lastHeartbeatDate == 오늘 검사에서 스킵
+///        (23분이면 센서·재시도 전 구간이 종료돼 있음)
+///      - one-off가 누락된 경우에만 periodic이 실제 전송 → 원래 안전망 의도 유지
+///        (백업 지연이 1시간에서 23분으로 단축)
+///
+/// 콜백 내 dedup 2중 방어선(lastHeartbeatDate + lastScheduledKey)은 그대로 남겨두어
+/// periodic이 이후 매 1시간 폴링할 때 당일 재전송을 막는 역할을 수행한다.
 ///
 /// iOS는 이 서비스를 호출하지 않는다 — iOS G+S는 LocalAlarmService의
 /// 오늘의 안부 확인 메시지 로컬 알림 + 앱 열기 자동 전송만으로 동작하며,
@@ -107,17 +132,24 @@ class HeartbeatWorkerService {
     );
 
     // periodic 1시간: 안전망 폴링
+    // 첫 fire를 one-off보다 23분 뒤로 오프셋 — 두 워커가 같은 초에 fire되어
+    // SharedPreferences 기반 dedup(TOCTOU)이 무력화되는 race를 구조적으로 차단.
+    // 23분은 비라운드 값으로, 사용자가 예약시각을 00/30분 같은 라운드 값으로
+    // 설정해도 periodic이 절대 겹치지 않아 로그 구분이 명확하다.
+    // one-off 정상 동작 시: 23분 뒤 periodic 진입 시점엔 lastHeartbeatDate가 이미 오늘로
+    // 저장돼 있어 콜백 1차 방어선에서 스킵. one-off 누락 시엔 23분 내 백업 발화.
+    final periodicDelay = delay + const Duration(minutes: 23);
     await Workmanager().registerPeriodicTask(
       _periodicName,
       _taskName,
       frequency: _pollFrequency,
-      initialDelay: delay,
+      initialDelay: periodicDelay,
       existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
     debugPrint('[HeartbeatWorker] 예약 등록: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} '
-        '(${delay.inHours}시간 ${delay.inMinutes % 60}분 후 첫 fire) — one-off + periodic 1h');
+        '(one-off ${delay.inHours}h ${delay.inMinutes % 60}m / periodic ${periodicDelay.inHours}h ${periodicDelay.inMinutes % 60}m 후 첫 fire)');
   }
 
   /// 콜백 내부에서 전송 성공 후 호출 — one-off만 내일 예약시각으로 재등록.

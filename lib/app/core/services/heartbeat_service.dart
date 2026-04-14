@@ -55,6 +55,12 @@ class HeartbeatService {
 
     // 동일 예약시각에 대한 중복 전송 방어 (날짜+예약시각 조합)
     // manual=true는 무조건 전송 (suspicious 알림 응답, 수동 보고)
+    //
+    // 선점(preempt) 방식: check 직후 즉시 save하여 TOCTOU 윈도우를 prefs write 수준
+    // (~수 마이크로초)으로 축소. 과거 구조는 save가 API 전송 성공 후에 있어 수 초~
+    // 수십 초의 윈도우가 열렸고, 같은 예약시각에 다른 isolate가 들어오면 두 쪽 모두
+    // check 통과 → 중복 전송. 선점 후에는 첫 진입자가 즉시 키를 박아버리므로 뒤따르는
+    // 호출은 line 64 가드에서 바로 스킵된다.
     await getReloadedPrefs();
     final now = DateTime.now();
     final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
@@ -65,6 +71,9 @@ class HeartbeatService {
         debugPrint('[HeartbeatService] 이미 전송 완료 — 스킵 ($scheduledKey)');
         return;
       }
+      // 선점: 센서 수집/API 전송 시작 전에 키를 먼저 박아 race 차단
+      await _tokenDs.saveLastScheduledKey(scheduledKey);
+      debugPrint('[HeartbeatService] 선점 완료 ($scheduledKey) — 전송 진행');
     }
 
     final timestamp    = now.toUtc().toIso8601String();
