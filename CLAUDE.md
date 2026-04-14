@@ -89,8 +89,9 @@ lib/
 - `GuardianDashboardController._scheduleHeartbeatIfGS()` — G+S일 때만 WorkManager/LocalAlarm 예약
 
 **G+S 관련 컨트롤러:**
-- `GuardianSettingsController` — G+S 활성화/비활성화 라이프사이클 관리, 안전코드 페이지 진입
-- `GuardianDashboardController` — G+S일 때 heartbeat 예약 + 활동 인식 권한 확인
+- `GuardianDashboardController` — G+S 라이프사이클 단독 소유: 활성화/비활성화, WorkManager/LocalAlarm 예약, 안전코드 페이지 진입. Dashboard/Settings 바인딩에서 `permanent: true`로 공유 등록
+- `GuardianSafetyCodeController` — G+S heartbeat 자동 재전송 단독 소유 (`_checkAndSendHeartbeat`). FcmService가 `gs_deadman` 데드맨 알림 탭 시 `refreshAndSend()` 호출
+- `GuardianSettingsController` — UI 전용. G+S 활성화/해제/탈퇴 시 Dashboard 컨트롤러에 위임
 - `ModeSelectController` — 재설치 시 `has_invite_code`로 G+S 감지 → `isAlsoSubject` 전달
 
 ## 핵심 파일 (Heartbeat 3계층 구조)
