@@ -73,6 +73,11 @@ abstract class ZhCn {
     'permission_battery_required_message':
         '如果设置为"电池优化"或"省电模式"， 每日问安检查可能会延迟或遗漏。\n\n点击[前往设置]后：\n1. 选择"电池"\n2. 更改为"无限制"',
     'permission_battery_go_to_settings': '前往设置',
+    'permission_hibernation_title': '请关闭"暂停未使用的应用"',
+    'permission_hibernation_highlight': '暂停未使用的应用',
+    'permission_hibernation_message':
+        '如果您几个月未打开应用,Android可能会自动停止该应用,导致安康检查中断。\n\n点击[打开应用设置],然后找到并关闭"暂停未使用的应用"。',
+    'permission_hibernation_go_to_settings': '打开应用设置',
 
     // ── 引导页 ──
     'onboarding_title_1': '担心独居的亲人\n过得好不好？',

@@ -5,8 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app/core/base/base_controller.dart';
@@ -66,7 +64,6 @@ class SplashController extends BaseController {
         }
       }
 
-      await _checkBatteryOptimization();
     } else {
       // iOS는 보호자 전용 — 모드 선택 스킵, 바로 권한 화면으로 이동
       if (Platform.isIOS) {
@@ -75,43 +72,6 @@ class SplashController extends BaseController {
         Get.offNamed(AppRoutes.modeSelect);
       }
     }
-  }
-
-  /// 배터리 최적화 제외 안내 (Android만, 1회만 표시)
-  /// Play 정책상 REQUEST_IGNORE_BATTERY_OPTIMIZATIONS 권한을 매니페스트에 두지 않음 →
-  /// 사용자에게 다이얼로그로 안내 후 앱 설정 화면으로 이동시켜 직접 변경하도록 유도
-  static const String _kBatteryDialogShownKey = 'battery_dialog_shown';
-
-  Future<void> _checkBatteryOptimization() async {
-    if (!Platform.isAndroid) return;
-    // 대상자 또는 G+S 보호자만 표시 (순수 보호자는 heartbeat 전송 안 함)
-    final userRole = await _tokenDs.getUserRole();
-    final isAlsoSubject = await _tokenDs.getIsAlsoSubject();
-    if (userRole != 'subject' && !isAlsoSubject) return;
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(_kBatteryDialogShownKey) ?? false) return;
-
-    await Get.dialog<void>(
-      AlertDialog(
-        title: Text('permission_battery_required_title'.tr),
-        content: Text('permission_battery_required_message'.tr),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text('common_later'.tr),
-          ),
-          TextButton(
-            onPressed: () async {
-              await prefs.setBool(_kBatteryDialogShownKey, true);
-              Get.back();
-              await openAppSettings();
-            },
-            child: Text('permission_battery_go_to_settings'.tr),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
   }
 
   /// 기존 main()에서 수행하던 무거운 초기화를 Splash 화면에서 처리

@@ -81,6 +81,11 @@ abstract class ViVn {
     'permission_battery_required_message':
         'Neu duoc dat la "Toi uu hoa pin" hoac "Tiet kiem pin", viec kiem tra suc khoe hang ngay co the bi tre hoac bo lo.\n\nSau khi nhan [Di den Cai dat]:\n1. Chon "Pin"\n2. Thay doi thanh "Khong gioi han"',
     'permission_battery_go_to_settings': 'Di den Cai dat',
+    'permission_hibernation_title': 'Vui long tat "Tam dung ung dung khi khong dung"',
+    'permission_hibernation_highlight': 'Tam dung ung dung khi khong dung',
+    'permission_hibernation_message':
+        'Neu ban khong mo ung dung trong vai thang, Android co the tu dong dung ung dung, lam gian doan viec kiem tra suc khoe.\n\nNhan [Mo cai dat ung dung] va tat "Tam dung ung dung khi khong dung".',
+    'permission_hibernation_go_to_settings': 'Mo cai dat ung dung',
 
     // ── Gioi thieu ──
     'onboarding_title_1': 'Ban lo lang cho nguoi\nsong mot minh?',

@@ -80,6 +80,11 @@ abstract class HiIn {
     'permission_battery_required_message':
         'यदि "बैटरी अनुकूलन" या "बैटरी सेवर" पर सेट है, तो दैनिक कुशलता जांच में देरी हो सकती है या छूट सकती है।\n\n[सेटिंग्स पर जाएं] टैप करने के बाद:\n1. "बैटरी" चुनें\n2. "अप्रतिबंधित" में बदलें',
     'permission_battery_go_to_settings': 'सेटिंग्स पर जाएं',
+    'permission_hibernation_title': '"अप्रयुक्त ऐप्स को रोकें" बंद करें',
+    'permission_hibernation_highlight': 'अप्रयुक्त ऐप्स को रोकें',
+    'permission_hibernation_message':
+        'यदि आप कई महीनों तक ऐप नहीं खोलते हैं, तो Android ऐप को स्वचालित रूप से रोक सकता है, जिससे कल्याण जांच बाधित हो सकती है।\n\n[ऐप सेटिंग्स खोलें] पर टैप करें और "अप्रयुक्त ऐप्स को रोकें" बंद करें।',
+    'permission_hibernation_go_to_settings': 'ऐप सेटिंग्स खोलें',
 
     // ── ऑनबोर्डिंग ──
     'onboarding_title_1': 'अकेले रहने वाले\nप्रियजन की चिंता है?',

@@ -82,6 +82,11 @@ abstract class FrFr {
     'permission_battery_required_message':
         'Si elle est définie sur "Optimisation de la batterie" ou "Économiseur de batterie", les vérifications quotidiennes de bien-être peuvent être retardées ou manquées.\n\nAprès avoir appuyé sur [Ouvrir les Réglages] :\n1. Sélectionnez "Batterie"\n2. Changez sur "Sans restriction"',
     'permission_battery_go_to_settings': 'Ouvrir les Réglages',
+    'permission_hibernation_title': 'Veuillez désactiver "Suspendre l\'activité si inutilisée"',
+    'permission_hibernation_highlight': 'Suspendre l\'activité si inutilisée',
+    'permission_hibernation_message':
+        'Si vous n\'ouvrez pas l\'application pendant plusieurs mois, Android peut l\'arrêter automatiquement et interrompre les vérifications de bien-être.\n\nAppuyez sur [Ouvrir les paramètres de l\'application], puis désactivez "Suspendre l\'activité si inutilisée".',
+    'permission_hibernation_go_to_settings': 'Ouvrir les paramètres de l\'application',
 
     // ── Présentation ──
     'onboarding_title_1':

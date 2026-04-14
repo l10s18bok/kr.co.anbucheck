@@ -73,6 +73,11 @@ abstract class KoKr {
     'permission_battery_required_message':
         '"배터리 최적화" 또는 "배터리 절약"으로 설정되어 있으면 매일 안부 확인이 지연되거나 누락될 수 있습니다.\n\n[설정으로 이동]을 누른 후:\n1. "배터리" 항목 선택\n2. "제한없음"으로 변경해 주세요',
     'permission_battery_go_to_settings': '설정으로 이동',
+    'permission_hibernation_title': '\'사용하지 않는 앱 일시 정지\'를 꺼주세요',
+    'permission_hibernation_highlight': '사용하지 않는 앱 일시 정지',
+    'permission_hibernation_message':
+        '앱을 여러 달 열지 않으면 Android가 앱을 자동으로 정지시켜 안부 확인이 중단될 수 있습니다.\n\n[앱 설정으로 이동]을 누른 뒤, "사용하지 않는 앱 일시 정지" 항목을 찾아 꺼주세요.',
+    'permission_hibernation_go_to_settings': '앱 설정으로 이동',
 
     // ── 온보딩 ──
     'onboarding_title_1': '혼자 사는 소중한 사람,\n걱정되시나요?',

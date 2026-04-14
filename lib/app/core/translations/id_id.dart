@@ -80,6 +80,11 @@ abstract class IdId {
     'permission_battery_required_message':
         'Jika diatur ke "Pengoptimalan Baterai" atau "Penghemat Baterai", pemeriksaan kesejahteraan harian dapat tertunda atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan]:\n1. Pilih "Baterai"\n2. Ubah menjadi "Tidak Dibatasi"',
     'permission_battery_go_to_settings': 'Buka Pengaturan',
+    'permission_hibernation_title': 'Matikan "Jeda aplikasi jika tidak digunakan"',
+    'permission_hibernation_highlight': 'Jeda aplikasi jika tidak digunakan',
+    'permission_hibernation_message':
+        'Jika Anda tidak membuka aplikasi selama beberapa bulan, Android dapat menghentikannya secara otomatis, mengganggu pemeriksaan kesejahteraan.\n\nKetuk [Buka Pengaturan Aplikasi] dan matikan "Jeda aplikasi jika tidak digunakan".',
+    'permission_hibernation_go_to_settings': 'Buka Pengaturan Aplikasi',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Khawatir tentang seseorang\nyang tinggal sendiri?',

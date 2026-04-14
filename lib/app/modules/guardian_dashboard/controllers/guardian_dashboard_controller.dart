@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
@@ -66,6 +68,8 @@ class GuardianDashboardController extends BaseController
   Future<void> _scheduleHeartbeatIfGS() async {
     final isAls = await _tokenDs.getIsAlsoSubject();
     if (!isAls) return;
+    // 배터리 최적화 없이도 정상 동작 확인됨 — 필요 시 주석 해제
+    // _checkBatteryOptimization();
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
     try {
@@ -86,6 +90,38 @@ class GuardianDashboardController extends BaseController
       }
       await LocalAlarmService.schedule(h, m);
     }
+  }
+
+  /// 배터리 최적화 제외 안내 (Android G+S만, [설정으로 이동] 클릭 시 1회만 표시)
+  static const String _kBatteryDialogShownKey = 'battery_dialog_shown';
+
+  // ignore: unused_element
+  Future<void> _checkBatteryOptimization() async {
+    if (!Platform.isAndroid) return;
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(_kBatteryDialogShownKey) ?? false) return;
+
+    await Get.dialog<void>(
+      AlertDialog(
+        title: Text('permission_battery_required_title'.tr),
+        content: Text('permission_battery_required_message'.tr),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('common_later'.tr),
+          ),
+          TextButton(
+            onPressed: () async {
+              await prefs.setBool(_kBatteryDialogShownKey, true);
+              Get.back();
+              await openAppSettings();
+            },
+            child: Text('permission_battery_go_to_settings'.tr),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
   }
 
   /// 대상자 로드 완료 후 구독 상태 읽기 (서비스가 로컬에 저장한 값)

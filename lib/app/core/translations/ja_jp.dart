@@ -73,6 +73,11 @@ abstract class JaJp {
     'permission_battery_required_message':
         '「バッテリー最適化」または「バッテリーセーバー」に設定されていると 毎日の安否確認が遅延または漏れる可能性があります。\n\n[設定を開く]をタップした後：\n1.「バッテリー」を選択\n2.「制限なし」に変更してください',
     'permission_battery_go_to_settings': '設定を開く',
+    'permission_hibernation_title': '「使用していないアプリを一時停止」をオフにしてください',
+    'permission_hibernation_highlight': '使用していないアプリを一時停止',
+    'permission_hibernation_message':
+        '数か月間アプリを開かないと、Androidがアプリを自動的に停止し、安否確認が中断される可能性があります。\n\n[アプリ設定を開く]をタップし、「使用していないアプリを一時停止」をオフにしてください。',
+    'permission_hibernation_go_to_settings': 'アプリ設定を開く',
 
     // ── オンボーディング ──
     'onboarding_title_1': 'ひとり暮らしの大切な人、\n心配ではありませんか？',

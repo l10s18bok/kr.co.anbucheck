@@ -85,6 +85,11 @@ abstract class PtBr {
     'permission_battery_required_message':
         'Se estiver definida como "Otimização de bateria" ou "Economia de bateria", as verificações diárias de bem-estar podem ser atrasadas ou perdidas.\n\nApós tocar em [Ir para Configurações]:\n1. Selecione "Bateria"\n2. Altere para "Sem restrições"',
     'permission_battery_go_to_settings': 'Ir para Configurações',
+    'permission_hibernation_title': 'Desative "Pausar atividade se não usado"',
+    'permission_hibernation_highlight': 'Pausar atividade se não usado',
+    'permission_hibernation_message':
+        'Se você não abrir o app por vários meses, o Android pode pará-lo automaticamente, interrompendo as verificações de bem-estar.\n\nToque em [Abrir configurações do app] e desative "Pausar atividade se não usado".',
+    'permission_hibernation_go_to_settings': 'Abrir configurações do app',
 
     // ── Onboarding ──
     'onboarding_title_1':

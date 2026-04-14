@@ -34,7 +34,9 @@ void heartbeatWorkerCallback() {
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
       final now = DateTime.now();
       final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
-      debugPrint('[HeartbeatWorker] 현재: ${now.hour}:${now.minute}:${now.second}, 예약: $hour:$minute');
+      debugPrint(
+        '[HeartbeatWorker] 현재: ${now.hour}:${now.minute}:${now.second}, 예약: $hour:$minute',
+      );
       if (now.isBefore(scheduled)) {
         debugPrint('[HeartbeatWorker] 예약시각 이전 — 스킵');
         return true;
@@ -149,8 +151,10 @@ class HeartbeatWorkerService {
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
-    debugPrint('[HeartbeatWorker] 예약 등록: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} '
-        '(one-off ${delay.inHours}h ${delay.inMinutes % 60}m / periodic ${periodicDelay.inHours}h ${periodicDelay.inMinutes % 60}m 후 첫 fire)');
+    debugPrint(
+      '[HeartbeatWorker] 예약 등록: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} '
+      '(one-off ${delay.inHours}h ${delay.inMinutes % 60}m / periodic ${periodicDelay.inHours}h ${periodicDelay.inMinutes % 60}m 후 첫 fire)',
+    );
   }
 
   /// 콜백 내부에서 전송 성공 후 호출 — one-off만 내일 예약시각으로 재등록.
@@ -158,8 +162,13 @@ class HeartbeatWorkerService {
   static Future<void> rescheduleOneOffForNextDay(int hour, int minute) async {
     try {
       final now = DateTime.now();
-      final tomorrow = DateTime(now.year, now.month, now.day, hour, minute)
-          .add(const Duration(days: 1));
+      final tomorrow = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        hour,
+        minute,
+      ).add(const Duration(days: 1));
       final delay = tomorrow.difference(now);
 
       await Workmanager().cancelByUniqueName(_oneOffName);
@@ -170,7 +179,9 @@ class HeartbeatWorkerService {
         existingWorkPolicy: ExistingWorkPolicy.replace,
         constraints: Constraints(networkType: NetworkType.connected),
       );
-      debugPrint('[HeartbeatWorker] one-off 내일로 재등록: ${delay.inHours}시간 ${delay.inMinutes % 60}분 후 fire');
+      debugPrint(
+        '[HeartbeatWorker] one-off 내일로 재등록: ${delay.inHours}시간 ${delay.inMinutes % 60}분 후 fire',
+      );
     } catch (e) {
       debugPrint('[HeartbeatWorker] one-off 재등록 실패: $e');
     }

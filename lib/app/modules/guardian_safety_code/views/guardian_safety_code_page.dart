@@ -79,6 +79,8 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
             SizedBox(height: AppSpacing.lg),
             _buildLastCheckCard(),
             SizedBox(height: AppSpacing.lg),
+            _buildReportButton(),
+            SizedBox(height: AppSpacing.lg),
             Obx(
               () => HeartbeatScheduleTile(
                 heartbeatTime: controller.heartbeatTime.value,
@@ -245,6 +247,64 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
               ],
             ),
           ],
+        ),
+      );
+    });
+  }
+
+  Widget _buildReportButton() {
+    return Obx(() {
+      final sending = controller.isReporting;
+      final disabled = controller.guardianCount == 0;
+      return GestureDetector(
+        onTap: (sending || disabled) ? null : controller.reportNow,
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 20.h),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: (sending || disabled)
+                  ? [const Color(0xFF4A7C78), const Color(0xFF4A7C78)]
+                  : [const Color(0xFF00685E), const Color(0xFF008377)],
+            ),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (sending)
+                    SizedBox(
+                      width: 24.w,
+                      height: 24.w,
+                      child: const CircularProgressIndicator(
+                          strokeWidth: 2.5, color: Colors.white),
+                    )
+                  else
+                    Icon(Icons.verified_user_rounded,
+                        size: 24.w, color: Colors.white),
+                  SizedBox(width: 8.w),
+                  Flexible(
+                    child: Text(
+                      sending
+                          ? 'subject_home_report_loading'.tr
+                          : 'subject_home_report_button'.tr,
+                      style: AppTextTheme.headlineSmall(
+                          color: Colors.white, fw: FontWeight.w700),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 4.h),
+              Text(
+                'subject_home_report_desc'.tr,
+                style: AppTextTheme.bodySmall(
+                    color: Colors.white.withValues(alpha: 0.8)),
+              ),
+            ],
+          ),
         ),
       );
     });

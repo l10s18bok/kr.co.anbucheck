@@ -82,6 +82,11 @@ abstract class EsEs {
     'permission_battery_required_message':
         'Si está configurada como "Optimización de batería" o "Ahorro de batería", las verificaciones diarias de bienestar pueden retrasarse o perderse.\n\nDespués de tocar [Ir a Ajustes]:\n1. Seleccione "Batería"\n2. Cambie a "Sin restricciones"',
     'permission_battery_go_to_settings': 'Ir a Ajustes',
+    'permission_hibernation_title': 'Desactive "Pausar actividad si no se usa"',
+    'permission_hibernation_highlight': 'Pausar actividad si no se usa',
+    'permission_hibernation_message':
+        'Si no abre la aplicación durante varios meses, Android puede detenerla automáticamente e interrumpir las verificaciones de bienestar.\n\nToque [Abrir ajustes de la app] y desactive "Pausar actividad si no se usa".',
+    'permission_hibernation_go_to_settings': 'Abrir ajustes de la app',
 
     // ── Presentación ──
     'onboarding_title_1':

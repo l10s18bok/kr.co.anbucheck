@@ -81,6 +81,11 @@ abstract class DeDe {
     'permission_battery_required_message':
         'Wenn "Akku-Optimierung" oder "Energiesparmodus" aktiviert ist, kann der tägliche Wohlbefindens-Check verzögert oder verpasst werden.\n\nNach dem Tippen auf [Zu den Einstellungen]:\n1. Wählen Sie "Akku"\n2. Auf "Nicht eingeschränkt" ändern',
     'permission_battery_go_to_settings': 'Zu den Einstellungen',
+    'permission_hibernation_title': 'Bitte "App bei Nichtnutzung pausieren" deaktivieren',
+    'permission_hibernation_highlight': 'App bei Nichtnutzung pausieren',
+    'permission_hibernation_message':
+        'Wenn Sie die App mehrere Monate nicht öffnen, kann Android sie automatisch stoppen und die Wohlbefindens-Checks unterbrechen.\n\nTippen Sie auf [App-Einstellungen öffnen] und deaktivieren Sie dann "App bei Nichtnutzung pausieren".',
+    'permission_hibernation_go_to_settings': 'App-Einstellungen öffnen',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Machen Sie sich Sorgen\num jemanden, der allein lebt?',

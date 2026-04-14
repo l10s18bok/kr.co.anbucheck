@@ -8,6 +8,7 @@ import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
+import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
@@ -199,6 +200,22 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
         subject: 'subject_home_share_subject'.tr,
       ),
     );
+  }
+
+  final _isReporting = false.obs;
+  bool get isReporting => _isReporting.value;
+
+  /// 안전 보고 버튼: heartbeat 즉시 전송 후 전화 다이얼러 열기
+  Future<void> reportNow() async {
+    if (_isReporting.value) return;
+    _isReporting.value = true;
+    try {
+      await HeartbeatService().execute(manual: true);
+      await _reloadHeartbeatState();
+    } finally {
+      _isReporting.value = false;
+    }
+    await PhoneUtils.pickContactAndCall();
   }
 
   final _isSendingEmergency = false.obs;

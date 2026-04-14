@@ -81,6 +81,11 @@ abstract class PlPl {
     'permission_battery_required_message':
         'Jeśli ustawione jest "Optymalizacja baterii" lub "Oszczędzanie baterii", codzienne sprawdzanie samopoczucia może być opóźnione lub pominięte.\n\nPo naciśnięciu [Przejdź do Ustawień]:\n1. Wybierz "Bateria"\n2. Zmień na "Bez ograniczeń"',
     'permission_battery_go_to_settings': 'Przejdź do Ustawień',
+    'permission_hibernation_title': 'Wyłącz "Wstrzymaj nieużywane aplikacje"',
+    'permission_hibernation_highlight': 'Wstrzymaj nieużywane aplikacje',
+    'permission_hibernation_message':
+        'Jeśli nie otworzysz aplikacji przez kilka miesięcy, Android może ją automatycznie zatrzymać, przerywając sprawdzanie dobrostanu.\n\nDotknij [Otwórz ustawienia aplikacji] i wyłącz "Wstrzymaj nieużywane aplikacje".',
+    'permission_hibernation_go_to_settings': 'Otwórz ustawienia aplikacji',
 
     // ── Onboarding ──
     'onboarding_title_1':

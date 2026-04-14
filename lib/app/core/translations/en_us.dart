@@ -74,6 +74,11 @@ abstract class EnUs {
     'permission_battery_required_message':
         'If set to "Battery Optimized" or "Battery Saver", daily wellness checks may be delayed or missed.\n\nAfter tapping [Go to Settings]:\n1. Select "Battery"\n2. Change it to "Unrestricted"',
     'permission_battery_go_to_settings': 'Go to Settings',
+    'permission_hibernation_title': 'Please turn off "Pause app activity if unused"',
+    'permission_hibernation_highlight': 'Pause app activity if unused',
+    'permission_hibernation_message':
+        'If you don\'t open the app for several months, Android may automatically stop it and interrupt wellness checks.\n\nTap [Open App Settings], then find and turn off "Pause app activity if unused".',
+    'permission_hibernation_go_to_settings': 'Open App Settings',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Worried about someone\nliving alone?',

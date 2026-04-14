@@ -73,6 +73,11 @@ abstract class ZhTw {
     'permission_battery_required_message':
         '如果設定為「電池最佳化」或「省電模式」， 每日問安檢查可能會延遲或遺漏。\n\n點擊[前往設定]後：\n1. 選擇「電池」\n2. 變更為「不受限制」',
     'permission_battery_go_to_settings': '前往設定',
+    'permission_hibernation_title': '請關閉「暫停未使用的應用程式」',
+    'permission_hibernation_highlight': '暫停未使用的應用程式',
+    'permission_hibernation_message':
+        '如果您數月未開啟應用程式,Android可能會自動停止,導致安康檢查中斷。\n\n點擊[開啟應用程式設定],然後找到並關閉「暫停未使用的應用程式」。',
+    'permission_hibernation_go_to_settings': '開啟應用程式設定',
 
     // ── 引導頁 ──
     'onboarding_title_1': '擔心獨居的親人\n過得好不好？',

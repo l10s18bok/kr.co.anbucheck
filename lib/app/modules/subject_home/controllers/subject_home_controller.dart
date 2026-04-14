@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
@@ -136,6 +137,103 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     _checkNotificationPermission();
     _initBattery();
     _initConnectivity();
+    // 배터리 최적화 없이도 정상 동작 확인됨 — 필요 시 주석 해제
+    // _checkBatteryOptimization();
+    _checkHibernationSetting();
+  }
+
+  static const _hibernationChannel = MethodChannel('anbucheck/hibernation');
+
+  /// Android "사용하지 않는 앱 일시 정지" 안내
+  /// 앱이 auto-revoke whitelist에 등록되어 있으면(=사용자가 토글 OFF) 안내 생략.
+  /// 등록되지 않은 경우에만 앱 실행 때마다 계속 안내한다.
+  Future<void> _checkHibernationSetting() async {
+    if (!Platform.isAndroid) return;
+
+    try {
+      final whitelisted = await _hibernationChannel
+          .invokeMethod<bool>('isAutoRevokeWhitelisted');
+      if (whitelisted == true) return;
+    } catch (_) {
+      return;
+    }
+
+    await Get.dialog<void>(
+      AlertDialog(
+        title: _buildHibernationTitle(),
+        content: Text('permission_hibernation_message'.tr),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('common_later'.tr),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              await openAppSettings();
+            },
+            child: Text('permission_hibernation_go_to_settings'.tr),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  /// 제목에서 "사용하지 않는 앱 일시 정지"(로케일별 highlight 문구) 부분만 강조 색상 적용
+  Widget _buildHibernationTitle() {
+    final title = 'permission_hibernation_title'.tr;
+    final highlight = 'permission_hibernation_highlight'.tr;
+    final idx = title.indexOf(highlight);
+    if (idx < 0) return Text(title);
+    const highlightStyle = TextStyle(
+      color: Color(0xFFB71C1C),
+      fontWeight: FontWeight.w700,
+    );
+    return Text.rich(
+      TextSpan(
+        children: [
+          if (idx > 0) TextSpan(text: title.substring(0, idx)),
+          TextSpan(text: highlight, style: highlightStyle),
+          if (idx + highlight.length < title.length)
+            TextSpan(text: title.substring(idx + highlight.length)),
+        ],
+      ),
+    );
+  }
+
+  /// 배터리 최적화 제외 안내 (Android만, [설정으로 이동] 클릭 시 1회만 표시)
+  /// Play 정책상 REQUEST_IGNORE_BATTERY_OPTIMIZATIONS 권한을 매니페스트에 두지 않음 →
+  /// 사용자에게 다이얼로그로 안내 후 앱 설정 화면으로 이동시켜 직접 변경하도록 유도
+  static const String _kBatteryDialogShownKey = 'battery_dialog_shown';
+
+  // ignore: unused_element
+  Future<void> _checkBatteryOptimization() async {
+    if (!Platform.isAndroid) return;
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(_kBatteryDialogShownKey) ?? false) return;
+
+    await Get.dialog<void>(
+      AlertDialog(
+        title: Text('permission_battery_required_title'.tr),
+        content: Text('permission_battery_required_message'.tr),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('common_later'.tr),
+          ),
+          TextButton(
+            onPressed: () async {
+              await prefs.setBool(_kBatteryDialogShownKey, true);
+              Get.back();
+              await openAppSettings();
+            },
+            child: Text('permission_battery_go_to_settings'.tr),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
   }
 
   /// 앱 포그라운드 복귀 시 heartbeat 상태 갱신 + 자동 전송

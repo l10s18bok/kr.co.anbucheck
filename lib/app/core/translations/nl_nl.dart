@@ -85,6 +85,11 @@ abstract class NlNl {
     'permission_battery_required_message':
         'Als "Batterijoptimalisatie" of "Batterijbesparing" is ingeschakeld, kunnen dagelijkse welzijnscontroles worden vertraagd of gemist.\n\nNa het tikken op [Ga naar Instellingen]:\n1. Selecteer "Batterij"\n2. Wijzig naar "Onbeperkt"',
     'permission_battery_go_to_settings': 'Ga naar Instellingen',
+    'permission_hibernation_title': 'Schakel "App pauzeren bij niet-gebruik" uit',
+    'permission_hibernation_highlight': 'App pauzeren bij niet-gebruik',
+    'permission_hibernation_message':
+        'Als u de app enkele maanden niet opent, kan Android deze automatisch stoppen, waardoor welzijnscontroles worden onderbroken.\n\nTik op [App-instellingen openen] en schakel "App pauzeren bij niet-gebruik" uit.',
+    'permission_hibernation_go_to_settings': 'App-instellingen openen',
 
     // ── Onboarding ──
     'onboarding_title_1':

@@ -80,6 +80,11 @@ abstract class TrTr {
     'permission_battery_required_message':
         '"Pil optimizasyonu" veya "Pil tasarrufu" olarak ayarlanmışsa günlük hal hatır kontrolleri gecikebilir veya kaçırılabilir.\n\n[Ayarlara Git] düğmesine dokunduktan sonra:\n1. "Pil" öğesini seçin\n2. "Kısıtlanmamış" olarak değiştirin',
     'permission_battery_go_to_settings': 'Ayarlara Git',
+    'permission_hibernation_title': '"Kullanılmazsa uygulamayı duraklat"ı kapatın',
+    'permission_hibernation_highlight': 'Kullanılmazsa uygulamayı duraklat',
+    'permission_hibernation_message':
+        'Uygulamayı birkaç ay açmazsanız, Android uygulamayı otomatik olarak durdurabilir ve sağlık kontrollerini kesintiye uğratabilir.\n\n[Uygulama Ayarlarını Aç]\'a dokunun ve "Kullanılmazsa uygulamayı duraklat"ı kapatın.',
+    'permission_hibernation_go_to_settings': 'Uygulama Ayarlarını Aç',
 
     // ── Tanıtım ──
     'onboarding_title_1': 'Yalnız yaşayan birisi için\nendişeleniyor musunuz?',
