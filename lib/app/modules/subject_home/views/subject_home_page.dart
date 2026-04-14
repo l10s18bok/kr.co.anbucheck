@@ -42,7 +42,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
         title: Text('app_name'.tr, style: AppTextTheme.headlineSmall()),
         actions: [
           Obx(() {
-            if (!controller.isGuardianConnected) return const SizedBox.shrink();
+            if (controller.guardianCount == 0) return const SizedBox.shrink();
             return GestureDetector(
               onTap: () => Get.rawSnackbar(
                 message: 'subject_home_guardian_count'.trParams({'count': '${controller.guardianCount}'}),
@@ -80,7 +80,11 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           }),
         ],
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: controller.pullToRefresh,
+        color: const Color(0xFF00685E),
+        child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,9 +118,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             Obx(
               () => HeartbeatScheduleTile(
                 heartbeatTime: controller.heartbeatTime.value,
-                onTap: controller.isGuardianConnected
-                    ? controller.showTimePickerDialog
-                    : () {},
+                onTap: controller.showTimePickerDialog,
                 color: Get.find<ThemeService>().isDarkMode.value
                     ? const Color(0xFF80CBC4)
                     : const Color(0xFF00685E),
@@ -139,6 +141,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             SizedBox(height: AppSpacing.sp6),
           ],
         ),
+      ),
       ),
     ),
     );
@@ -167,42 +170,41 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     fw: FontWeight.w600,
                   ),
                 ),
-                if (controller.notificationGranted)
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: controller.copyInviteCode,
-                        child: Container(
-                          padding: EdgeInsets.all(AppSpacing.sm),
-                          decoration: BoxDecoration(
-                            color: AppColors.surfaceContainerLow,
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Icon(
-                            Icons.copy_rounded,
-                            size: 20.w,
-                            color: AppColors.onSurfaceVariant,
-                          ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: controller.copyInviteCode,
+                      child: Container(
+                        padding: EdgeInsets.all(AppSpacing.sm),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Icon(
+                          Icons.copy_rounded,
+                          size: 20.w,
+                          color: AppColors.onSurfaceVariant,
                         ),
                       ),
-                      SizedBox(width: AppSpacing.md),
-                      GestureDetector(
-                        onTap: controller.shareInviteCode,
-                        child: Container(
-                          padding: EdgeInsets.all(AppSpacing.sm),
-                          decoration: BoxDecoration(
-                            color: AppColors.surfaceContainerLow,
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Icon(
-                            Icons.share_rounded,
-                            size: 20.w,
-                            color: AppColors.onSurfaceVariant,
-                          ),
+                    ),
+                    SizedBox(width: AppSpacing.md),
+                    GestureDetector(
+                      onTap: controller.shareInviteCode,
+                      child: Container(
+                        padding: EdgeInsets.all(AppSpacing.sm),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Icon(
+                          Icons.share_rounded,
+                          size: 20.w,
+                          color: AppColors.onSurfaceVariant,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
               ],
             ),
             SizedBox(height: AppSpacing.md),
@@ -290,7 +292,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
   Widget _buildEmergencyButton() {
     return Obx(() {
       final sending = controller.isSendingEmergency;
-      final disabled = !controller.isGuardianConnected;
+      final disabled = controller.guardianCount == 0;
       return GestureDetector(
         onTap: (sending || disabled) ? null : () => _showEmergencyConfirm(),
         child: Container(
@@ -398,7 +400,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
   Widget _buildReportButton() {
     return Obx(() {
       final sending = controller.isReporting;
-      final disabled = !controller.isGuardianConnected;
+      final disabled = controller.guardianCount == 0;
       return GestureDetector(
         onTap: (sending || disabled) ? null : controller.reportNow,
         child: Container(

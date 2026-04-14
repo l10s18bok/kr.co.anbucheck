@@ -132,7 +132,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   @override
   void onInit() {
     super.onInit();
-    _loadStatus();
+    _loadStatus().then((_) => _checkAndSendHeartbeat());
     _checkNotificationPermission();
     _initBattery();
     _initConnectivity();
@@ -156,7 +156,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   }
 
   /// 예약시각 경과 + 오늘 미전송이면 heartbeat 자동 전송
-  /// iOS G+S는 시각 조건 없이 "당일 미전송"만 확인 (PRD iOS G+S 2.2)
+  /// iOS G+S는 시각 조건 없이 "당일 미전송"만 확인
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
     if (Platform.isAndroid && isScheduleInFuture) return;
@@ -164,13 +164,24 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     await _reloadHeartbeatState();
   }
 
-  /// FCM heartbeat_trigger 수신 후 UI 갱신용 (FcmService에서 호출)
-  Future<void> reloadHeartbeatState() => _reloadHeartbeatState();
+  /// 오늘의 안부 확인 메시지 로컬 알림 탭으로 이미 스택에 있는 경우 FcmService에서 호출
+  Future<void> refreshAndSend() async {
+    await loadScheduleFromLocal();
+    await _reloadHeartbeatState();
+    await _checkAndSendHeartbeat();
+  }
+
+  /// Pull-to-refresh: 서버 스케줄/구독/보호자 수 재동기화 + heartbeat 상태 갱신
+  Future<void> pullToRefresh() async {
+    await _loadStatus();
+    await _checkAndSendHeartbeat();
+  }
 
   Future<void> _loadStatus() async {
-    // Worker isolate가 저장한 lastHeartbeatDate가 메인 isolate 캐시에 미반영된
-    // 채로 _checkAndSendHeartbeat가 돌면 isReportedToday가 stale해져 간헐적
-    // 중복 전송이 발생한다. 읽기 전에 prefs를 디스크와 동기화한다.
+    // Worker isolate가 방금 저장한 lastHeartbeatDate/ScheduledKey가 메인 isolate
+    // 캐시에 반영되지 않은 상태로 _checkAndSendHeartbeat가 돌면 isReportedToday
+    // 판정이 stale해져 간헐적 중복 전송이 발생한다. 읽기 전에 prefs를 디스크와
+    // 동기화해 race를 차단한다.
     await getReloadedPrefs();
     _inviteCode.value = await _tokenDs.getInviteCode() ?? '';
     _userId.value = await _tokenDs.getUserId() ?? 0;
@@ -198,13 +209,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
       await _tokenDs.saveHeartbeatSchedule(hour, minute);
       applySchedule(hour, minute);
-      // 서버 기준 시각으로 항상 재예약 (existingWorkPolicy.replace로 중복 부담 없음)
-      // 신규 설치/재설치/재진입 시점에서 WorkManager 누락을 방지하는 안전망 역할
-      // Android: WorkManager + 로컬 안전망 / iOS G+S: 오늘의 안부 확인 메시지 로컬 알림만
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }
-      await LocalAlarmService.schedule(hour, minute);
+      // LocalAlarm 재예약은 HeartbeatService가 전송 성공/실패 시 전담 — 여기서는 중복 호출 금지
     } catch (_) {
       // 실패 시 로컬 저장값 유지
     }

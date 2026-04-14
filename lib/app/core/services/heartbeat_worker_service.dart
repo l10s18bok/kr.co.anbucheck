@@ -86,18 +86,19 @@ void heartbeatWorkerCallback() {
 ///    박는다. TOCTOU 윈도우가 prefs write 수준(~수 마이크로초)으로 축소되어,
 ///    같은 isolate가 아니어도 뒤따라 들어온 호출은 check 단계에서 즉시 스킵된다.
 ///
-/// 2) periodic 23분 오프셋 — 이 파일
-///    periodic의 첫 fire를 one-off보다 23분 뒤로 미뤄, 정각에 두 워커가 동시에
-///    진입하는 케이스 자체를 구조적으로 제거한다. 23분은 비라운드 값으로,
+/// 2) periodic 3분 오프셋 — 이 파일
+///    periodic의 첫 fire를 one-off보다 3분 뒤로 미뤄, 정각에 두 워커가 동시에
+///    진입하는 케이스 자체를 구조적으로 제거한다. 3분은 비라운드 값으로,
 ///    사용자가 예약시각을 00/30분 같은 라운드 값으로 설정하는 일반적 패턴과
-///    절대 겹치지 않아(09:30 → periodic 09:53) 로그 구분이 명확하다. Android
-///    WorkManager의 flex 윈도우(~15분)도 충분히 흡수한다.
+///    절대 겹치지 않아(09:30 → periodic 09:33) 로그 구분이 명확하다.
 ///      - one-off 정상 fire (예약시각 정각) → 전송 성공 → lastHeartbeatDate·
-///        lastScheduledKey 기록
-///      - 23분 뒤 periodic 첫 fire → lastHeartbeatDate == 오늘 검사에서 스킵
-///        (23분이면 센서·재시도 전 구간이 종료돼 있음)
+///        lastScheduledKey 기록 (수 초 내 완료)
+///      - 3분 뒤 periodic 첫 fire → lastHeartbeatDate == 오늘 검사에서 스킵
 ///      - one-off가 누락된 경우에만 periodic이 실제 전송 → 원래 안전망 의도 유지
-///        (백업 지연이 1시간에서 23분으로 단축)
+///        (백업 지연이 1시간에서 3분으로 단축)
+///      - OEM 절전으로 one-off이 3분+ 지연되면 periodic이 먼저 전송하고 상태를
+///        쓰며, 뒤늦은 one-off은 dedup으로 스킵된다 — 순서만 바뀔 뿐 중복 전송은
+///        여전히 차단됨
 ///
 /// 콜백 내 dedup 2중 방어선(lastHeartbeatDate + lastScheduledKey)은 그대로 남겨두어
 /// periodic이 이후 매 1시간 폴링할 때 당일 재전송을 막는 역할을 수행한다.
@@ -132,13 +133,13 @@ class HeartbeatWorkerService {
     );
 
     // periodic 1시간: 안전망 폴링
-    // 첫 fire를 one-off보다 23분 뒤로 오프셋 — 두 워커가 같은 초에 fire되어
+    // 첫 fire를 one-off보다 3분 뒤로 오프셋 — 두 워커가 같은 초에 fire되어
     // SharedPreferences 기반 dedup(TOCTOU)이 무력화되는 race를 구조적으로 차단.
-    // 23분은 비라운드 값으로, 사용자가 예약시각을 00/30분 같은 라운드 값으로
+    // 3분은 비라운드 값으로, 사용자가 예약시각을 00/30분 같은 라운드 값으로
     // 설정해도 periodic이 절대 겹치지 않아 로그 구분이 명확하다.
-    // one-off 정상 동작 시: 23분 뒤 periodic 진입 시점엔 lastHeartbeatDate가 이미 오늘로
-    // 저장돼 있어 콜백 1차 방어선에서 스킵. one-off 누락 시엔 23분 내 백업 발화.
-    final periodicDelay = delay + const Duration(minutes: 23);
+    // one-off 정상 동작 시: 3분 뒤 periodic 진입 시점엔 lastHeartbeatDate가 이미 오늘로
+    // 저장돼 있어 콜백 1차 방어선에서 스킵. one-off 누락 시엔 3분 내 백업 발화.
+    final periodicDelay = delay + const Duration(minutes: 3);
     await Workmanager().registerPeriodicTask(
       _periodicName,
       _taskName,
