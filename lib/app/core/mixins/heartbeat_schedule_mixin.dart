@@ -131,7 +131,7 @@ mixin HeartbeatScheduleMixin on GetxController {
       await tokenDs.saveLastHeartbeatDate('');
       await tokenDs.saveLastHeartbeatTime('');
       // Android: WorkManager + 로컬 안전망 재예약
-      // iOS G+S: 데드맨 로컬 알림만 재예약 (BGTaskScheduler 사용 안 함)
+      // iOS G+S: 오늘의 안부 확인 메시지 로컬 알림만 재예약 (BGTaskScheduler 사용 안 함)
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }

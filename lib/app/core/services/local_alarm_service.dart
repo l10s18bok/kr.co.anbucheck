@@ -4,10 +4,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 
-/// iOS 전용 로컬 반복 알림 안전망 (iOS G+S 데드맨 스위치)
+/// iOS 전용 오늘의 안부 확인 메시지 로컬 알림 (iOS G+S 전용)
 ///
 /// iOS는 BGTaskScheduler를 사용하지 않으므로, heartbeat 예약 시각에 정확히
-/// 데드맨 스위치 알림을 표시하여 사용자에게 앱 실행을 유도한다.
+/// 오늘의 안부 확인 메시지 로컬 알림을 표시하여 사용자에게 앱 실행을 유도한다.
 /// 알림 탭 → 앱 포그라운드 전환 → 홈 화면 자동 전송 로직이 heartbeat를 전송.
 /// Android는 WorkManager periodic이 안전망 역할을 하므로 로컬 알림 불필요.
 class LocalAlarmService {
@@ -41,7 +41,7 @@ class LocalAlarmService {
     debugPrint('[LocalAlarm] 플러그인 자체 초기화 완료 (백그라운드 isolate)');
   }
 
-  /// heartbeat 예약 시각에 정확히 로컬 데드맨 알림 예약 (iOS 전용)
+  /// heartbeat 예약 시각에 정확히 오늘의 안부 확인 메시지 로컬 알림 예약 (iOS 전용)
   /// iOS G+S: BGTaskScheduler 없이 이 알림이 유일한 예약 트리거
   /// [forceNextDay] heartbeat 전송 성공 후 호출 시 true — 오늘 알림 방지, 내일로 강제
   static Future<void> schedule(int heartbeatHour, int heartbeatMinute, {bool forceNextDay = false}) async {

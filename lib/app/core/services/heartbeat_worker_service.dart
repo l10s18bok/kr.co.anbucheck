@@ -77,8 +77,9 @@ void heartbeatWorkerCallback() {
 ///   둘 다 SharedPreferences 기반이라 TOCTOU 윈도우는 남지만, 실측상 두 워커의 격차가
 ///   ms~수십ms 수준이라 충분히 좁아 실패 케이스는 매우 드물다.
 ///
-/// iOS는 이 서비스를 호출하지 않는다 — iOS G+S는 LocalAlarmService 데드맨 알림 +
-/// 앱 열기 자동 전송만으로 동작하며, BGTaskScheduler를 사용하지 않는다.
+/// iOS는 이 서비스를 호출하지 않는다 — iOS G+S는 LocalAlarmService의
+/// 오늘의 안부 확인 메시지 로컬 알림 + 앱 열기 자동 전송만으로 동작하며,
+/// BGTaskScheduler를 사용하지 않는다.
 class HeartbeatWorkerService {
   static const _taskName = 'heartbeat_task';
   static const _periodicName = 'heartbeat_periodic';

@@ -220,7 +220,7 @@ class GuardianDashboardController extends BaseController
       applySchedule(hour, minute);
 
       // Android: WorkManager + 로컬 안전망 등록
-      // iOS G+S: 데드맨 로컬 알림만 등록 (BGTaskScheduler 사용 안 함)
+      // iOS G+S: 오늘의 안부 확인 메시지 로컬 알림만 등록 (BGTaskScheduler 사용 안 함)
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }

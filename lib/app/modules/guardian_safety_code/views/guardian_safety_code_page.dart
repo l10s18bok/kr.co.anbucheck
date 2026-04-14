@@ -11,7 +11,7 @@ import 'package:anbucheck/app/modules/guardian_safety_code/controllers/guardian_
 
 /// 보호자 G+S 모드 안전코드 페이지
 ///
-/// 보호자 설정 또는 iOS 데드맨 알림 탭으로 진입. SubjectHomePage와 비슷한 카드
+/// 보호자 설정 또는 iOS 오늘의 안부 확인 메시지 로컬 알림 탭으로 진입. SubjectHomePage와 비슷한 카드
 /// 구성을 가지지만 Drawer·탈퇴·모드 선택 복귀 등 대상자 전용 메뉴는 제거했다.
 /// 뒤로가기 시 이전 라우트(보통 보호자 설정 또는 대시보드)로 복귀한다.
 class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {

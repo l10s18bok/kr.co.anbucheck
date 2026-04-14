@@ -90,7 +90,7 @@ lib/
 
 **G+S 관련 컨트롤러:**
 - `GuardianDashboardController` — G+S 라이프사이클 단독 소유: 활성화/비활성화, WorkManager/LocalAlarm 예약, 안전코드 페이지 진입. Dashboard/Settings 바인딩에서 `permanent: true`로 공유 등록
-- `GuardianSafetyCodeController` — G+S heartbeat 자동 재전송 단독 소유 (`_checkAndSendHeartbeat`). FcmService가 `gs_deadman` 데드맨 알림 탭 시 `refreshAndSend()` 호출
+- `GuardianSafetyCodeController` — G+S heartbeat 자동 재전송 단독 소유 (`_checkAndSendHeartbeat`). FcmService가 `gs_deadman` 오늘의 안부 확인 메시지 로컬 알림 탭 시 `refreshAndSend()` 호출
 - `GuardianSettingsController` — UI 전용. G+S 활성화/해제/탈퇴 시 Dashboard 컨트롤러에 위임
 - `ModeSelectController` — 재설치 시 `has_invite_code`로 G+S 감지 → `isAlsoSubject` 전달
 
@@ -101,10 +101,10 @@ lib/
 
 | 계층 | 파일 | 역할 |
 |------|------|------|
-| 공통 | `lib/app/core/services/heartbeat_service.dart` | heartbeat 1회 실행의 전체 로직: 센서 수집 → suspicious 판정 → 서버 전송 → 실패 시 큐 저장 → 데드맨 알림 재예약. 오탐/미탐, 중복 전송, 데이터 누락 모두 이 파일에서 발생 |
+| 공통 | `lib/app/core/services/heartbeat_service.dart` | heartbeat 1회 실행의 전체 로직: 센서 수집 → suspicious 판정 → 서버 전송 → 실패 시 큐 저장 → 오늘의 안부 확인 메시지 로컬 알림 재예약. 오탐/미탐, 중복 전송, 데이터 누락 모두 이 파일에서 발생 |
 | 1차 | `lib/app/core/services/heartbeat_worker_service.dart` | WorkManager 백그라운드 예약 실행 (Android 전용). 2계층 구조 — (a) one-off: 예약시각에 정확히 1회 fire 후 내일로 재등록, (b) periodic 1시간: 안전망 폴링 (one-off 누락 시 1시간 내 백업 발화, fire 후 재등록하지 않고 그대로 유지 — UPDATE/REPLACE 모두 self-cancel/initialDelay 무시 이슈 때문). race는 2중 dedup으로 방어: worker 콜백 `lastHeartbeatDate` + `HeartbeatService._executeInternal`의 `lastScheduledKey`. iOS는 BGTaskScheduler 불안정성으로 사용하지 않음 |
 | 2차 | `lib/app/modules/subject_home/controllers/subject_home_controller.dart` | 앱 열기/복귀 시 안전망. onInit/onResumed에서 예약시각 경과 + 미전송 시 자동 전송. 서버 스케줄 동기화로 WorkManager 체인 복구도 담당 |
-| 3차 (iOS) | `lib/app/core/services/local_alarm_service.dart` | iOS 전용 데드맨 스위치 로컬 알림. heartbeat 예약 시각 정각에 매일 반복 → 앱 포그라운드 전환 시 홈 화면 onInit/onResumed에서 자동 전송 |
+| 3차 (iOS) | `lib/app/core/services/local_alarm_service.dart` | iOS 전용 오늘의 안부 확인 메시지 로컬 알림. heartbeat 예약 시각 정각에 매일 반복 → 앱 포그라운드 전환 시 홈 화면 onInit/onResumed에서 자동 전송 |
 | 공유 캐시 | `lib/app/core/services/guardian_subject_service.dart` | 보호자 대상자 목록 공유 캐시 (2분 TTL). 대시보드·설정·연결관리에서 동일 데이터 사용. 구독 상태 동기화 |
 
 ## 참조 문서

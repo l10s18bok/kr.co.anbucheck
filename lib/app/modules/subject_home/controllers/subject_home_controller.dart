@@ -196,7 +196,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       applySchedule(hour, minute);
       // 서버 기준 시각으로 항상 재예약 (existingWorkPolicy.replace로 중복 부담 없음)
       // 신규 설치/재설치/재진입 시점에서 WorkManager 누락을 방지하는 안전망 역할
-      // Android: WorkManager + 로컬 안전망 / iOS G+S: 데드맨 로컬 알림만
+      // Android: WorkManager + 로컬 안전망 / iOS G+S: 오늘의 안부 확인 메시지 로컬 알림만
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }

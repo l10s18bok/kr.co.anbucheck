@@ -17,7 +17,7 @@ import 'package:anbucheck/app/data/datasources/remote/emergency_remote_datasourc
 ///
 /// 보호자가 대상자 역할을 겸할 때(G+S) 전용 화면. SubjectHome과 UI 요소는 비슷하지만
 /// Drawer·탈퇴·모드 선택 복귀 등 대상자 전용 기능은 제외된다.
-/// iOS 데드맨 알림 탭 진입 시 onInit/onResumed에서 당일 미전송 heartbeat를 즉시 전송하고
+/// iOS 오늘의 안부 확인 메시지 로컬 알림 탭 진입 시 onInit/onResumed에서 당일 미전송 heartbeat를 즉시 전송하고
 /// 보고 카드(_lastHeartbeatDate/_lastHeartbeatTime)를 Obx로 갱신한다.
 class GuardianSafetyCodeController extends BaseController with HeartbeatScheduleMixin {
   final _inviteCode = ''.obs;
@@ -111,7 +111,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
         .then((_) => _checkAndSendHeartbeat());
   }
 
-  /// 데드맨 알림 탭으로 이미 스택에 있는 경우 FcmService에서 호출
+  /// 오늘의 안부 확인 메시지 로컬 알림 탭으로 이미 스택에 있는 경우 FcmService에서 호출
   Future<void> refreshAndSend() async {
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
@@ -144,7 +144,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   }
 
   /// G+S 모드: 설정 페이지에서 이미 받은 데이터 사용 (중복 API 호출 방지)
-  /// 데드맨 알림 탭 진입 등 캐시 없는 경우만 서버 호출
+  /// 오늘의 안부 확인 메시지 로컬 알림 탭 진입 등 캐시 없는 경우만 서버 호출
   Future<void> _syncScheduleFromServer() async {
     final cached = _deviceData;
     if (cached != null) {

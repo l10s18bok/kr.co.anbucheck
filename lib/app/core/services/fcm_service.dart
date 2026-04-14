@@ -28,7 +28,7 @@ void onDidReceiveNotificationResponse(NotificationResponse response) {
 }
 
 /// 알림 탭 시 라우팅
-/// 데드맨 알림 (iOS 전용): 앱 포그라운드 전환만 → 홈 화면에서 미전송 체크 + 자동 전송
+/// 오늘의 안부 확인 메시지 로컬 알림 (iOS 전용): 앱 포그라운드 전환만 → 홈 화면에서 미전송 체크 + 자동 전송
 /// 보호자 Push 알림: type에 따라 알림 목록 또는 대시보드로 이동
 void _handleNotificationTap(String type) {
   switch (type) {
@@ -56,7 +56,7 @@ void _handleNotificationTap(String type) {
     case 'heartbeat':
       break;
     case 'gs_deadman':
-      // iOS G+S 데드맨 알림 탭 → 보호자 대시보드 위에 안전코드 페이지 push
+      // iOS G+S 오늘의 안부 확인 메시지 로컬 알림 탭 → 보호자 대시보드 위에 안전코드 페이지 push
       // 이미 안전코드 페이지면 스택 유지 + 컨트롤러가 즉시 미전송 heartbeat 재확인
       // kill 상태 런치에서는 스택에 Dashboard가 없을 수 있어 offNamedUntil predicate가
       // 매칭되지 않고 SafetyCode가 root가 되어 뒤로가기 불가 — offAllNamed(dashboard)로

@@ -57,7 +57,7 @@ class SplashController extends BaseController {
         Get.offNamed(AppRoutes.subjectHome);
       } else {
         Get.offNamed(AppRoutes.guardianDashboard);
-        // iOS G+S 데드맨 알림 탭으로 kill 상태에서 런치된 경우:
+        // iOS G+S 오늘의 안부 확인 메시지 로컬 알림 탭으로 kill 상태에서 런치된 경우:
         // dashboard를 base로 두고 safetyCode를 그 위에 push (뒤로가기 시 dashboard 복귀)
         final pendingTap = FcmService.pendingLaunchNotificationType;
         if (pendingTap == LocalAlarmService.alarmPayload) {
