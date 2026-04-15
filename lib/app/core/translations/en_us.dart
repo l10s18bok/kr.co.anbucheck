@@ -229,15 +229,13 @@ abstract class EnUs {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Subject\'s wellness confirmed normally',
     'notifications_level_caution': 'Caution',
-    'notifications_level_caution_desc':
-        'One of the following:\n1. Today\'s scheduled check is missing\n2. Check received but no phone usage detected',
+    'notifications_level_caution_desc': 'No wellness signal today yet',
     'notifications_level_warning': 'Warning',
-    'notifications_level_warning_desc':
-        'One of the following:\n1. No check for 2 consecutive days\n2. No phone usage for 2 consecutive days',
+    'notifications_level_warning_desc': 'No wellness confirmation for multiple days',
     'notifications_level_urgent': 'Urgent',
-    'notifications_level_urgent_desc': 'No check for extended period,\nor no phone usage for 3+ days',
+    'notifications_level_urgent_desc': 'Immediate check needed now',
     'notifications_level_info': 'Info',
-    'notifications_level_info_desc': 'Reference notifications such as\nstep count or low battery',
+    'notifications_level_info_desc': 'Steps, low battery, and other reference alerts',
     'notifications_activity_note':
         '※ Activity info may not be shown if step data could not be collected.',
 

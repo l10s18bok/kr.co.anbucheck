@@ -256,17 +256,13 @@ abstract class IdId {
     'notifications_level_health_desc':
         'Kesejahteraan orang yang dilindungi dikonfirmasi normal',
     'notifications_level_caution': 'Perhatian',
-    'notifications_level_caution_desc':
-        'Salah satu dari berikut:\n1. Pemeriksaan terjadwal hari ini belum ada\n2. Pemeriksaan diterima tapi tidak ada penggunaan telepon',
+    'notifications_level_caution_desc': 'Belum ada sinyal kesejahteraan hari ini',
     'notifications_level_warning': 'Peringatan',
-    'notifications_level_warning_desc':
-        'Salah satu dari berikut:\n1. Tidak ada pemeriksaan selama 2 hari berturut-turut\n2. Tidak ada penggunaan telepon selama 2 hari berturut-turut',
+    'notifications_level_warning_desc': 'Tidak ada konfirmasi selama beberapa hari',
     'notifications_level_urgent': 'Mendesak',
-    'notifications_level_urgent_desc':
-        'Tidak ada pemeriksaan dalam waktu lama,\natau tidak ada penggunaan telepon selama 3+ hari',
+    'notifications_level_urgent_desc': 'Perlu pemeriksaan segera sekarang',
     'notifications_level_info': 'Info',
-    'notifications_level_info_desc':
-        'Notifikasi referensi seperti\njumlah langkah atau baterai lemah',
+    'notifications_level_info_desc': 'Langkah, baterai lemah, dan pemberitahuan lainnya',
     'notifications_activity_note':
         '※ Info aktivitas mungkin tidak ditampilkan jika data langkah tidak dapat dikumpulkan.',
 

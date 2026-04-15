@@ -262,17 +262,13 @@ abstract class EsEs {
     'notifications_level_health_desc':
         'El bienestar de la persona protegida ha sido confirmado',
     'notifications_level_caution': 'Precaución',
-    'notifications_level_caution_desc':
-        'Uno de los siguientes casos:\n1. Falta la verificación programada de hoy\n2. Señal recibida pero sin uso del teléfono detectado',
+    'notifications_level_caution_desc': 'Aún no hay señal de bienestar hoy',
     'notifications_level_warning': 'Alerta',
-    'notifications_level_warning_desc':
-        'Uno de los siguientes casos:\n1. Sin verificación durante 2 días consecutivos\n2. Sin uso del teléfono durante 2 días consecutivos',
+    'notifications_level_warning_desc': 'Sin confirmación durante varios días',
     'notifications_level_urgent': 'Urgente',
-    'notifications_level_urgent_desc':
-        'Sin verificación durante un período prolongado\no sin uso del teléfono durante 3 días o más',
+    'notifications_level_urgent_desc': 'Se requiere verificación inmediata',
     'notifications_level_info': 'Información',
-    'notifications_level_info_desc':
-        'Notificaciones de referencia como\nnúmero de pasos o batería baja',
+    'notifications_level_info_desc': 'Pasos, batería baja y otros avisos',
     'notifications_activity_note':
         '※ Los datos de actividad pueden no mostrarse si no se pudieron obtener los pasos.',
 

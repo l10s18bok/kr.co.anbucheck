@@ -229,15 +229,13 @@ abstract class JaJp {
     'notifications_level_health': '正常',
     'notifications_level_health_desc': '対象者の安否が正常に確認されました',
     'notifications_level_caution': '注意',
-    'notifications_level_caution_desc':
-        '以下のいずれかに該当します。\n1. 本日予定の安否確認がまだありません\n2. 安否は受信しましたがスマホの使用形跡がありません',
+    'notifications_level_caution_desc': '今日の安否信号がまだありません',
     'notifications_level_warning': '警告',
-    'notifications_level_warning_desc':
-        '以下のいずれかに該当します。\n1. 2日連続で安否確認ができていません\n2. 2日連続でスマホの使用形跡がありません',
+    'notifications_level_warning_desc': '連続して安否が確認されていません',
     'notifications_level_urgent': '緊急',
-    'notifications_level_urgent_desc': '長期間安否確認がないか、\n3日以上スマホの使用がありません',
+    'notifications_level_urgent_desc': '今すぐ確認が必要です',
     'notifications_level_info': '情報',
-    'notifications_level_info_desc': '歩数やバッテリー不足など\n参考情報の通知です',
+    'notifications_level_info_desc': '歩数、バッテリー不足など参考用通知',
     'notifications_activity_note':
         '※ 歩数データを取得できなかった場合、活動情報が表示されないことがあります。',
 

@@ -262,17 +262,13 @@ abstract class FrFr {
     'notifications_level_health_desc':
         'Le bien-être de la personne protégée a été confirmé',
     'notifications_level_caution': 'Attention',
-    'notifications_level_caution_desc':
-        'L\'un des cas suivants :\n1. La vérification prévue aujourd\'hui est manquante\n2. Signal reçu mais aucune utilisation du téléphone détectée',
+    'notifications_level_caution_desc': "Aucun signal de bien-être aujourd'hui",
     'notifications_level_warning': 'Alerte',
-    'notifications_level_warning_desc':
-        'L\'un des cas suivants :\n1. Aucune vérification depuis 2 jours consécutifs\n2. Aucune utilisation du téléphone depuis 2 jours consécutifs',
+    'notifications_level_warning_desc': 'Aucune confirmation depuis plusieurs jours',
     'notifications_level_urgent': 'Urgent',
-    'notifications_level_urgent_desc':
-        'Aucune vérification depuis longtemps\nou aucune utilisation du téléphone depuis 3 jours ou plus',
+    'notifications_level_urgent_desc': 'Vérification immédiate requise',
     'notifications_level_info': 'Info',
-    'notifications_level_info_desc':
-        'Informations de référence telles que\nle nombre de pas ou la batterie faible',
+    'notifications_level_info_desc': 'Pas, batterie faible et autres informations',
     'notifications_activity_note':
         '※ Les données d\'activité peuvent ne pas s\'afficher si le nombre de pas n\'a pas pu être relevé.',
 

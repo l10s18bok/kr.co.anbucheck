@@ -255,17 +255,13 @@ abstract class ThTh {
     'notifications_level_health_desc':
         'ยืนยันความเป็นอยู่ของผู้อยู่ในการดูแลเป็นปกติ',
     'notifications_level_caution': 'ระวัง',
-    'notifications_level_caution_desc':
-        'หนึ่งในกรณีต่อไปนี้:\n1. ยังไม่มีการตรวจสอบตามกำหนดวันนี้\n2. ได้รับการตรวจสอบแต่ไม่พบการใช้โทรศัพท์',
+    'notifications_level_caution_desc': 'วันนี้ยังไม่มีสัญญาณความปลอดภัย',
     'notifications_level_warning': 'เตือน',
-    'notifications_level_warning_desc':
-        'หนึ่งในกรณีต่อไปนี้:\n1. ไม่มีการตรวจสอบ 2 วันติดต่อกัน\n2. ไม่มีการใช้โทรศัพท์ 2 วันติดต่อกัน',
+    'notifications_level_warning_desc': 'ไม่มีการยืนยันความปลอดภัยต่อเนื่องหลายวัน',
     'notifications_level_urgent': 'เร่งด่วน',
-    'notifications_level_urgent_desc':
-        'ไม่มีการตรวจสอบเป็นเวลานาน\nหรือไม่มีการใช้โทรศัพท์ 3 วันขึ้นไป',
+    'notifications_level_urgent_desc': 'ต้องตรวจสอบโดยด่วนทันที',
     'notifications_level_info': 'ข้อมูล',
-    'notifications_level_info_desc':
-        'การแจ้งเตือนอ้างอิง เช่น\nจำนวนก้าวหรือแบตเตอรี่ต่ำ',
+    'notifications_level_info_desc': 'การแจ้งเตือนจำนวนก้าว แบตเตอรี่ต่ำและอื่น ๆ',
     'notifications_activity_note':
         '※ ข้อมูลกิจกรรมอาจไม่แสดงหากไม่สามารถเก็บข้อมูลก้าวเดินได้',
 

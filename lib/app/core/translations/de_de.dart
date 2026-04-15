@@ -253,17 +253,13 @@ abstract class DeDe {
     'notifications_level_health_desc':
         'Wohlbefinden der Schutzperson wurde bestätigt',
     'notifications_level_caution': 'Achtung',
-    'notifications_level_caution_desc':
-        'Einer der folgenden Fälle:\n1. Die heutige geplante Prüfung fehlt\n2. Signal empfangen, aber keine Telefonnutzung erkannt',
+    'notifications_level_caution_desc': 'Heute noch kein Wohlbefindenssignal',
     'notifications_level_warning': 'Warnung',
-    'notifications_level_warning_desc':
-        'Einer der folgenden Fälle:\n1. Zwei Tage in Folge keine Prüfung\n2. Zwei Tage in Folge keine Telefonnutzung',
+    'notifications_level_warning_desc': 'Seit mehreren Tagen keine Bestätigung',
     'notifications_level_urgent': 'Dringend',
-    'notifications_level_urgent_desc':
-        'Längere Zeit keine Prüfung\noder keine Telefonnutzung seit 3+ Tagen',
+    'notifications_level_urgent_desc': 'Sofortige Überprüfung erforderlich',
     'notifications_level_info': 'Info',
-    'notifications_level_info_desc':
-        'Hinweise wie Schrittzahl\noder niedriger Akkustand',
+    'notifications_level_info_desc': 'Schritte, niedriger Akku und weitere Hinweise',
     'notifications_activity_note':
         '※ Aktivitätsdaten werden möglicherweise nicht angezeigt, wenn Schrittzahlen nicht erfasst werden konnten.',
 

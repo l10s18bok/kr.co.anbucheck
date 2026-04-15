@@ -256,17 +256,13 @@ abstract class ViVn {
     'notifications_level_health_desc':
         'Suc khoe cua nguoi duoc bao ve da duoc xac nhan binh thuong',
     'notifications_level_caution': 'Chu y',
-    'notifications_level_caution_desc':
-        'Mot trong cac truong hop sau:\n1. Chua co kiem tra da len lich hom nay\n2. Da nhan kiem tra nhung khong phat hien su dung dien thoai',
+    'notifications_level_caution_desc': 'Hôm nay chưa có tín hiệu an toàn',
     'notifications_level_warning': 'Canh bao',
-    'notifications_level_warning_desc':
-        'Mot trong cac truong hop sau:\n1. Khong kiem tra trong 2 ngay lien tiep\n2. Khong su dung dien thoai trong 2 ngay lien tiep',
+    'notifications_level_warning_desc': 'Không có xác nhận trong nhiều ngày liên tiếp',
     'notifications_level_urgent': 'Khan cap',
-    'notifications_level_urgent_desc':
-        'Khong kiem tra trong thoi gian dai,\nhoac khong su dung dien thoai tu 3 ngay tro len',
+    'notifications_level_urgent_desc': 'Cần kiểm tra ngay bây giờ',
     'notifications_level_info': 'Thong tin',
-    'notifications_level_info_desc':
-        'Thong bao tham khao nhu\nso buoc chan hoac pin yeu',
+    'notifications_level_info_desc': 'Số bước, pin yếu và thông báo tham khảo khác',
     'notifications_activity_note':
         '※ Thong tin hoat dong co the khong hien thi neu khong thu thap duoc du lieu buoc chan.',
 

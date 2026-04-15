@@ -229,15 +229,13 @@ abstract class KoKr {
     'notifications_level_health': '정상',
     'notifications_level_health_desc': '대상자의 안부가 정상적으로 확인됨',
     'notifications_level_caution': '주의',
-    'notifications_level_caution_desc':
-        '다음 중 하나에 해당합니다.\n1. 오늘 예정된 안부 확인이 아직 없음\n2. 안부는 수신되었으나 폰 사용 흔적이 없음',
+    'notifications_level_caution_desc': '오늘 아직 안부 신호가 없어요',
     'notifications_level_warning': '경고',
-    'notifications_level_warning_desc':
-        '다음 중 하나에 해당합니다.\n1. 2일 연속으로 안부 확인이 되지 않음\n2. 2일 연속 폰 사용 흔적이 없음',
+    'notifications_level_warning_desc': '연속으로 안부가 확인되지 않아요',
     'notifications_level_urgent': '긴급',
-    'notifications_level_urgent_desc': '장기간 안부 확인이 없거나,\n3일 이상 폰 사용이 없음',
+    'notifications_level_urgent_desc': '지금 바로 확인이 필요해요',
     'notifications_level_info': '정보',
-    'notifications_level_info_desc': '걸음수, 배터리 부족 등 참고용 알림\n일반적인 상태 정보 전달',
+    'notifications_level_info_desc': '걸음수, 배터리 부족 등 참고용 알림',
     'notifications_activity_note':
         '※ 걸음수 데이터를 수집하지 못한 경우 활동 정보가 표시되지 않을 수 있습니다.',
 

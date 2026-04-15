@@ -256,17 +256,13 @@ abstract class SvSe {
     'notifications_level_health_desc':
         'Skyddspersonens valmaende ar normalt bekraftat',
     'notifications_level_caution': 'Forsiktighet',
-    'notifications_level_caution_desc':
-        'Nagot av foljande:\n1. Dagens schemalagda kontroll saknas\n2. Kontroll mottagen men ingen telefonanvandning upptackt',
+    'notifications_level_caution_desc': 'Ingen välmåendesignal idag ännu',
     'notifications_level_warning': 'Varning',
-    'notifications_level_warning_desc':
-        'Nagot av foljande:\n1. Ingen kontroll pa 2 dagar i rad\n2. Ingen telefonanvandning pa 2 dagar i rad',
+    'notifications_level_warning_desc': 'Ingen bekräftelse på flera dagar',
     'notifications_level_urgent': 'Bradskande',
-    'notifications_level_urgent_desc':
-        'Ingen kontroll under langre tid,\neller ingen telefonanvandning pa 3+ dagar',
+    'notifications_level_urgent_desc': 'Omedelbar kontroll krävs',
     'notifications_level_info': 'Info',
-    'notifications_level_info_desc':
-        'Referensaviseringar som\nstegantal eller lagt batteri',
+    'notifications_level_info_desc': 'Steg, låg batterinivå och andra aviseringar',
     'notifications_activity_note':
         '※ Aktivitetsinformation kanske inte visas om stegdata inte kunde samlas in.',
 

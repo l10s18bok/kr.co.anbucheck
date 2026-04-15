@@ -254,17 +254,13 @@ abstract class RuRu {
     'notifications_level_health_desc':
         'Самочувствие подопечного подтверждено',
     'notifications_level_caution': 'Внимание',
-    'notifications_level_caution_desc':
-        'Возможна одна из причин:\n1. Сегодняшняя проверка не поступила\n2. Проверка получена, но использование телефона не обнаружено',
+    'notifications_level_caution_desc': 'Сегодня ещё нет сигнала благополучия',
     'notifications_level_warning': 'Предупреждение',
-    'notifications_level_warning_desc':
-        'Возможна одна из причин:\n1. Нет проверки 2 дня подряд\n2. Телефон не используется 2 дня подряд',
+    'notifications_level_warning_desc': 'Нет подтверждения несколько дней подряд',
     'notifications_level_urgent': 'Срочно',
-    'notifications_level_urgent_desc':
-        'Длительное отсутствие проверки\nили телефон не используется 3 и более дней',
+    'notifications_level_urgent_desc': 'Требуется немедленная проверка',
     'notifications_level_info': 'Информация',
-    'notifications_level_info_desc':
-        'Справочные уведомления: количество шагов,\nнизкий заряд батареи и т.д.',
+    'notifications_level_info_desc': 'Шаги, низкий заряд и другие уведомления',
     'notifications_activity_note':
         '※ Информация об активности может не отображаться, если данные о шагах недоступны.',
 

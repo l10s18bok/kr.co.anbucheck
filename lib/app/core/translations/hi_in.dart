@@ -254,17 +254,13 @@ abstract class HiIn {
     'notifications_level_health_desc':
         'संरक्षित व्यक्ति की कुशलता सामान्य रूप से पुष्ट',
     'notifications_level_caution': 'सावधानी',
-    'notifications_level_caution_desc':
-        'निम्नलिखित में से एक:\n1. आज की निर्धारित जांच गायब है\n2. जांच प्राप्त हुई लेकिन फोन उपयोग नहीं पाया गया',
+    'notifications_level_caution_desc': 'आज अभी तक कोई कुशल संकेत नहीं',
     'notifications_level_warning': 'चेतावनी',
-    'notifications_level_warning_desc':
-        'निम्नलिखित में से एक:\n1. लगातार 2 दिन कोई जांच नहीं\n2. लगातार 2 दिन फोन उपयोग नहीं',
+    'notifications_level_warning_desc': 'कई दिनों से कोई पुष्टि नहीं',
     'notifications_level_urgent': 'अत्यावश्यक',
-    'notifications_level_urgent_desc':
-        'लंबे समय से कोई जांच नहीं,\nया 3+ दिन से फोन उपयोग नहीं',
+    'notifications_level_urgent_desc': 'अभी तुरंत जाँच आवश्यक',
     'notifications_level_info': 'जानकारी',
-    'notifications_level_info_desc':
-        'संदर्भ सूचनाएं जैसे\nकदम संख्या या कम बैटरी',
+    'notifications_level_info_desc': 'कदम, बैटरी कम और अन्य सूचनाएँ',
     'notifications_activity_note':
         '※ यदि कदम डेटा एकत्र नहीं हो सका तो गतिविधि जानकारी नहीं दिख सकती।',
 

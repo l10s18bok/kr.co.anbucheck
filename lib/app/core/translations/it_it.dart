@@ -265,17 +265,13 @@ abstract class ItIt {
     'notifications_level_health_desc':
         "Il benessere dell'assistito è stato confermato normalmente",
     'notifications_level_caution': 'Attenzione',
-    'notifications_level_caution_desc':
-        "Uno dei seguenti:\n1. Il controllo programmato di oggi non è stato ricevuto\n2. Controllo ricevuto ma nessun utilizzo del telefono rilevato",
+    'notifications_level_caution_desc': 'Nessun segnale di benessere oggi',
     'notifications_level_warning': 'Avviso',
-    'notifications_level_warning_desc':
-        'Uno dei seguenti:\n1. Nessun controllo per 2 giorni consecutivi\n2. Nessun utilizzo del telefono per 2 giorni consecutivi',
+    'notifications_level_warning_desc': 'Nessuna conferma per più giorni',
     'notifications_level_urgent': 'Urgente',
-    'notifications_level_urgent_desc':
-        'Nessun controllo per un periodo prolungato,\no nessun utilizzo del telefono per più di 3 giorni',
+    'notifications_level_urgent_desc': 'Verifica immediata necessaria',
     'notifications_level_info': 'Info',
-    'notifications_level_info_desc':
-        'Notifiche informative come\nnumero di passi o batteria scarica',
+    'notifications_level_info_desc': 'Passi, batteria scarica e altri avvisi',
     'notifications_activity_note':
         "※ Le informazioni sull'attività potrebbero non essere visualizzate se i dati dei passi non sono stati raccolti.",
 

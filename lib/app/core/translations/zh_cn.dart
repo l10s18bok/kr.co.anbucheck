@@ -229,15 +229,13 @@ abstract class ZhCn {
     'notifications_level_health': '正常',
     'notifications_level_health_desc': '被守护者的平安已正常确认',
     'notifications_level_caution': '注意',
-    'notifications_level_caution_desc':
-        '以下情况之一：\n1. 今天预定的问安尚未收到\n2. 已收到问安但未检测到手机使用痕迹',
+    'notifications_level_caution_desc': '今天还没有平安信号',
     'notifications_level_warning': '警告',
-    'notifications_level_warning_desc':
-        '以下情况之一：\n1. 连续2天未收到问安\n2. 连续2天未检测到手机使用',
+    'notifications_level_warning_desc': '连续多日未确认平安',
     'notifications_level_urgent': '紧急',
-    'notifications_level_urgent_desc': '长时间未收到问安，\n或连续3天以上未使用手机',
+    'notifications_level_urgent_desc': '需要立即确认',
     'notifications_level_info': '信息',
-    'notifications_level_info_desc': '步数、电量不足等参考性通知\n一般状态信息',
+    'notifications_level_info_desc': '步数、电量不足等参考提醒',
     'notifications_activity_note':
         '※ 如果无法采集步数数据，活动信息可能不会显示。',
 

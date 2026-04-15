@@ -253,17 +253,13 @@ abstract class TrTr {
     'notifications_level_health_desc':
         'Takip edilenin hal hatırı normal şekilde onaylandı',
     'notifications_level_caution': 'Dikkat',
-    'notifications_level_caution_desc':
-        'Aşağıdakilerden biri:\n1. Bugünkü planlanan kontrol yapılmadı\n2. Kontrol alındı ancak telefon kullanımı tespit edilmedi',
+    'notifications_level_caution_desc': 'Bugün henüz iyilik sinyali yok',
     'notifications_level_warning': 'Uyarı',
-    'notifications_level_warning_desc':
-        'Aşağıdakilerden biri:\n1. Ardışık 2 gündür kontrol yok\n2. Ardışık 2 gündür telefon kullanımı yok',
+    'notifications_level_warning_desc': 'Birkaç gündür onay yok',
     'notifications_level_urgent': 'Acil',
-    'notifications_level_urgent_desc':
-        'Uzun süredir kontrol yok\nveya 3 günden fazla telefon kullanımı yok',
+    'notifications_level_urgent_desc': 'Hemen kontrol gerekli',
     'notifications_level_info': 'Bilgi',
-    'notifications_level_info_desc':
-        'Adım sayısı veya düşük pil gibi\nreferans bildirimler',
+    'notifications_level_info_desc': 'Adım, düşük pil ve diğer bilgi uyarıları',
     'notifications_activity_note':
         '※ Adım verileri toplanamadıysa aktivite bilgisi gösterilmeyebilir.',
 

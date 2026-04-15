@@ -269,17 +269,13 @@ abstract class PtBr {
     'notifications_level_health_desc':
         'O bem-estar do protegido foi confirmado normalmente',
     'notifications_level_caution': 'Atenção',
-    'notifications_level_caution_desc':
-        'Um dos seguintes:\n1. A verificação programada de hoje não foi recebida\n2. Verificação recebida, mas nenhum uso do telefone detectado',
+    'notifications_level_caution_desc': 'Ainda sem sinal de bem-estar hoje',
     'notifications_level_warning': 'Alerta',
-    'notifications_level_warning_desc':
-        'Um dos seguintes:\n1. Sem verificação por 2 dias consecutivos\n2. Sem uso do telefone por 2 dias consecutivos',
+    'notifications_level_warning_desc': 'Sem confirmação por vários dias',
     'notifications_level_urgent': 'Urgente',
-    'notifications_level_urgent_desc':
-        'Sem verificação por período prolongado,\nou sem uso do telefone por mais de 3 dias',
+    'notifications_level_urgent_desc': 'Verificação imediata necessária',
     'notifications_level_info': 'Info',
-    'notifications_level_info_desc':
-        'Notificações informativas como\nnúmero de passos ou bateria fraca',
+    'notifications_level_info_desc': 'Passos, bateria fraca e outros avisos',
     'notifications_activity_note':
         '※ As informações de atividade podem não ser exibidas se os dados de passos não puderam ser coletados.',
 

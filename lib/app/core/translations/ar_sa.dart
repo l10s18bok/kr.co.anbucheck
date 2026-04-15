@@ -250,17 +250,13 @@ abstract class ArSa {
     'notifications_level_health_desc':
         'تم التأكد من سلامة المتابَع بشكل طبيعي',
     'notifications_level_caution': 'تنبيه',
-    'notifications_level_caution_desc':
-        'أحد الأسباب التالية:\n1. لم يتم تلقي اطمئنان اليوم المقرر\n2. تم تلقي الاطمئنان لكن لم يُكتشف استخدام للهاتف',
+    'notifications_level_caution_desc': 'لا توجد إشارة اطمئنان اليوم بعد',
     'notifications_level_warning': 'تحذير',
-    'notifications_level_warning_desc':
-        'أحد الأسباب التالية:\n1. لا اطمئنان لمدة يومين متتاليين\n2. لا استخدام للهاتف لمدة يومين متتاليين',
+    'notifications_level_warning_desc': 'لا يوجد تأكيد لعدة أيام متتالية',
     'notifications_level_urgent': 'عاجل',
-    'notifications_level_urgent_desc':
-        'غياب الاطمئنان لفترة طويلة\nأو عدم استخدام الهاتف لأكثر من 3 أيام',
+    'notifications_level_urgent_desc': 'يلزم التحقق فورًا الآن',
     'notifications_level_info': 'معلومات',
-    'notifications_level_info_desc':
-        'إشعارات مرجعية مثل عدد الخطوات\nأو انخفاض البطارية',
+    'notifications_level_info_desc': 'الخطوات وانخفاض البطارية وتنبيهات أخرى',
     'notifications_activity_note':
         '※ قد لا تظهر معلومات النشاط إذا تعذر جمع بيانات الخطوات.',
 

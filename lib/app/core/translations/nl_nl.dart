@@ -266,17 +266,13 @@ abstract class NlNl {
     'notifications_level_health_desc':
         'Het welzijn van de beschermeling is normaal bevestigd',
     'notifications_level_caution': 'Let op',
-    'notifications_level_caution_desc':
-        'Een van de volgende:\n1. De geplande controle van vandaag ontbreekt\n2. Controle ontvangen maar geen telefoongebruik gedetecteerd',
+    'notifications_level_caution_desc': 'Vandaag nog geen welzijnssignaal',
     'notifications_level_warning': 'Waarschuwing',
-    'notifications_level_warning_desc':
-        'Een van de volgende:\n1. Geen controle gedurende 2 opeenvolgende dagen\n2. Geen telefoongebruik gedurende 2 opeenvolgende dagen',
+    'notifications_level_warning_desc': 'Meerdere dagen geen bevestiging',
     'notifications_level_urgent': 'Dringend',
-    'notifications_level_urgent_desc':
-        'Langdurig geen controle,\nof geen telefoongebruik gedurende meer dan 3 dagen',
+    'notifications_level_urgent_desc': 'Onmiddellijke controle nodig',
     'notifications_level_info': 'Info',
-    'notifications_level_info_desc':
-        'Informatieve meldingen zoals\naantal stappen of lage batterij',
+    'notifications_level_info_desc': 'Stappen, lage batterij en andere meldingen',
     'notifications_activity_note':
         '※ Activiteitsinformatie wordt mogelijk niet getoond als stapgegevens niet konden worden verzameld.',
 

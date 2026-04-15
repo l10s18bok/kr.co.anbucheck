@@ -257,17 +257,13 @@ abstract class PlPl {
     'notifications_level_health_desc':
         'Samopoczucie podopiecznego potwierdzone prawidlowo',
     'notifications_level_caution': 'Uwaga',
-    'notifications_level_caution_desc':
-        'Jedna z ponizszych sytuacji:\n1. Brak dzisiejszego zaplanowanego sprawdzenia\n2. Sprawdzenie odebrane, ale brak uzycia telefonu',
+    'notifications_level_caution_desc': 'Dziś jeszcze brak sygnału o samopoczuciu',
     'notifications_level_warning': 'Ostrzezenie',
-    'notifications_level_warning_desc':
-        'Jedna z ponizszych sytuacji:\n1. Brak sprawdzenia przez 2 kolejne dni\n2. Brak uzycia telefonu przez 2 kolejne dni',
+    'notifications_level_warning_desc': 'Brak potwierdzenia przez kilka dni',
     'notifications_level_urgent': 'Pilne',
-    'notifications_level_urgent_desc':
-        'Brak sprawdzenia przez dlugi czas\nlub brak uzycia telefonu przez 3+ dni',
+    'notifications_level_urgent_desc': 'Natychmiastowa kontrola wymagana',
     'notifications_level_info': 'Informacja',
-    'notifications_level_info_desc':
-        'Powiadomienia informacyjne, takie jak\nliczba krokow lub niski poziom baterii',
+    'notifications_level_info_desc': 'Kroki, niski poziom baterii i inne powiadomienia',
     'notifications_activity_note':
         '※ Informacje o aktywnosci moga nie byc wyswietlane, jesli nie udalo sie zebrac danych o krokach.',
 

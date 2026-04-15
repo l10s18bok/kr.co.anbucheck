@@ -229,15 +229,13 @@ abstract class ZhTw {
     'notifications_level_health': '正常',
     'notifications_level_health_desc': '被守護者的平安已正常確認',
     'notifications_level_caution': '注意',
-    'notifications_level_caution_desc':
-        '以下情況之一：\n1. 今天預定的問安尚未收到\n2. 已收到問安但未偵測到手機使用痕跡',
+    'notifications_level_caution_desc': '今天還沒有平安訊號',
     'notifications_level_warning': '警告',
-    'notifications_level_warning_desc':
-        '以下情況之一：\n1. 連續2天未收到問安\n2. 連續2天未偵測到手機使用',
+    'notifications_level_warning_desc': '連續多日未確認平安',
     'notifications_level_urgent': '緊急',
-    'notifications_level_urgent_desc': '長時間未收到問安，\n或連續3天以上未使用手機',
+    'notifications_level_urgent_desc': '需要立即確認',
     'notifications_level_info': '資訊',
-    'notifications_level_info_desc': '步數、電量不足等參考性通知\n一般狀態資訊',
+    'notifications_level_info_desc': '步數、電量不足等參考提醒',
     'notifications_activity_note':
         '※ 如果無法採集步數資料，活動資訊可能不會顯示。',
 
