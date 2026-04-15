@@ -62,6 +62,20 @@ class SplashController extends BaseController {
           FcmService.pendingLaunchNotificationType = null;
           Get.toNamed(AppRoutes.guardianSafetyCode);
         }
+        // kill 상태에서 FCM 푸시 알림 탭으로 런치된 경우:
+        // dashboard를 base로 두고 알림 목록을 그 위에 push (뒤로가기 시 dashboard 복귀)
+        final pendingFcm = FcmService.pendingLaunchFcmType;
+        if (pendingFcm != null) {
+          FcmService.pendingLaunchFcmType = null;
+          const guardianAlertTypes = {
+            'alert', 'alert_urgent', 'alert_warning', 'alert_caution',
+            'alert_emergency', 'alert_resolved', 'alert_cleared',
+            'auto_report', 'manual_report', 'alert_info',
+          };
+          if (guardianAlertTypes.contains(pendingFcm)) {
+            Get.toNamed(AppRoutes.guardianNotifications);
+          }
+        }
       }
 
     } else {

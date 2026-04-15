@@ -87,6 +87,12 @@ class FcmService extends GetxService {
   /// Splash의 offNamed와 race를 일으켜 최종 스택에서 safetyCode가 날아감
   static String? pendingLaunchNotificationType;
 
+  /// kill 상태에서 FCM 푸시 알림 탭으로 런치된 경우의 type 캐시
+  /// SplashController가 dashboard 라우팅 완료 후 소비 — addPostFrameCallback 경로는
+  /// Splash의 2초 delay/버전체크보다 먼저 fire되어 알림 페이지로 갔다가
+  /// 뒤늦은 offNamed(dashboard)가 덮어쓰는 bounce 문제가 있음
+  static String? pendingLaunchFcmType;
+
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
   /// Android 알림 채널
@@ -188,16 +194,19 @@ class FcmService extends GetxService {
     // 백그라운드에서 알림 탭하여 앱 열기
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
 
-    // 앱 종료 상태에서 알림 탭하여 앱 열기
-    // addPostFrameCallback으로 GetX 라우터가 준비된 후 처리
+    // 앱 종료 상태에서 FCM 푸시 알림 탭하여 앱 열기
+    // addPostFrameCallback 경로는 Splash의 delay/버전체크보다 먼저 fire되어
+    // 알림 페이지로 갔다가 뒤늦은 offNamed(dashboard)가 덮어쓰는 bounce가 발생
+    // → type만 캐시하고 SplashController가 dashboard 이동 직후 소비
     try {
       final initialMessage = await _messaging
           .getInitialMessage()
           .timeout(const Duration(seconds: 3));
       if (initialMessage != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _handleMessageOpenedApp(initialMessage);
-        });
+        final type = initialMessage.data['type']?.toString() ?? '';
+        if (type.isNotEmpty) {
+          pendingLaunchFcmType = type;
+        }
       }
     } catch (_) {}
 
