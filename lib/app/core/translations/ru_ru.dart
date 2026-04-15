@@ -29,7 +29,7 @@ abstract class RuRu {
     'app_tagline': 'Проверяем, что у вас всё хорошо.',
     'app_service_desc': 'Автоматическая проверка самочувствия',
     'app_guardian_title': 'Anbu Опекун',
-    'app_copyright': '© 2024 Averic SB Inc.',
+    'app_copyright': '© 2026 Averic SB Inc.',
 
     // ── Заставка ──
     'splash_loading': 'Проверяем самочувствие...',

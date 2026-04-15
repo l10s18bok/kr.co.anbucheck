@@ -62,7 +62,7 @@ mixin HeartbeatScheduleMixin on GetxController {
 
   Future<void> _showCupertinoTimePicker() async {
     final (hour, minute) = _parseTime();
-    final initialDate = DateTime(2024, 1, 1, hour, minute);
+    final initialDate = DateTime(2026, 1, 1, hour, minute);
     var selectedTime = initialDate;
 
     await showCupertinoModalPopup(
@@ -121,8 +121,7 @@ mixin HeartbeatScheduleMixin on GetxController {
       final deviceToken = await tokenDs.getDeviceToken();
       final deviceId = await tokenDs.getDeviceId();
       if (deviceToken == null || deviceId == null) return;
-      await DeviceRemoteDatasource()
-          .updateHeartbeatSchedule(deviceToken, deviceId, hour, minute);
+      await DeviceRemoteDatasource().updateHeartbeatSchedule(deviceToken, deviceId, hour, minute);
       await tokenDs.saveHeartbeatSchedule(hour, minute);
       heartbeatHour.value = hour;
       heartbeatMinute.value = minute;
@@ -139,17 +138,23 @@ mixin HeartbeatScheduleMixin on GetxController {
       }
       await LocalAlarmService.schedule(hour, minute);
       final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
-      Get.snackbar('', message,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.white,
-          colorText: const Color(0xFF1a1c1c));
+      Get.snackbar(
+        '',
+        message,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.white,
+        colorText: const Color(0xFF1a1c1c),
+      );
     } catch (e) {
-      Get.snackbar('heartbeat_change_failed_title'.tr, 'heartbeat_change_failed_message'.tr,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.white,
-          colorText: const Color(0xFF1a1c1c));
+      Get.snackbar(
+        'heartbeat_change_failed_title'.tr,
+        'heartbeat_change_failed_message'.tr,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.white,
+        colorText: const Color(0xFF1a1c1c),
+      );
     }
   }
 }

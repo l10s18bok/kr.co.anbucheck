@@ -72,15 +72,15 @@ class GuardianNotificationSettingsController extends BaseController {
 
   /// 현재 설정값을 API 페이로드 형태로 반환
   Map<String, dynamic> _currentPayload() => {
-        'all_enabled': allNotifications.value,
-        'urgent_enabled': urgentEnabled.value,
-        'warning_enabled': warningEnabled.value,
-        'caution_enabled': cautionEnabled.value,
-        'info_enabled': infoEnabled.value,
-        'dnd_enabled': dndEnabled.value,
-        'dnd_start': dndEnabled.value ? _displayToHhmm24(dndStartTime.value) : null,
-        'dnd_end': dndEnabled.value ? _displayToHhmm24(dndEndTime.value) : null,
-      };
+    'all_enabled': allNotifications.value,
+    'urgent_enabled': urgentEnabled.value,
+    'warning_enabled': warningEnabled.value,
+    'caution_enabled': cautionEnabled.value,
+    'info_enabled': infoEnabled.value,
+    'dnd_enabled': dndEnabled.value,
+    'dnd_start': dndEnabled.value ? _displayToHhmm24(dndStartTime.value) : null,
+    'dnd_end': dndEnabled.value ? _displayToHhmm24(dndEndTime.value) : null,
+  };
 
   /// 초기 설정과 현재 설정을 비교하여 변경 시에만 저장
   Future<void> _saveIfChanged() async {
@@ -131,8 +131,7 @@ class GuardianNotificationSettingsController extends BaseController {
   /// 개별 스위치 상태에서 "전체 알림 받기" 자동 계산
   /// 긴급 알림은 항상 ON이므로 계산에서 제외
   void _syncAllSwitch() {
-    allNotifications.value =
-        warningEnabled.value && cautionEnabled.value && infoEnabled.value;
+    allNotifications.value = warningEnabled.value && cautionEnabled.value && infoEnabled.value;
   }
 
   void toggleAll(bool value) {
@@ -214,7 +213,7 @@ class GuardianNotificationSettingsController extends BaseController {
 
   Future<void> _showCupertinoPicker(RxString target) async {
     final (hour, minute) = _parseTimeString(target.value);
-    final initialDate = DateTime(2024, 1, 1, hour, minute);
+    final initialDate = DateTime(2026, 1, 1, hour, minute);
     var selectedTime = initialDate;
 
     await showCupertinoModalPopup(
@@ -230,17 +229,19 @@ class GuardianNotificationSettingsController extends BaseController {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CupertinoButton(
-                    child: Text('common_cancel'.tr,
-                        style: TextStyle(color: AppColors.textSecondary)),
+                    child: Text(
+                      'common_cancel'.tr,
+                      style: TextStyle(color: AppColors.textSecondary),
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                   CupertinoButton(
-                    child: Text('common_confirm'.tr,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary)),
+                    child: Text(
+                      'common_confirm'.tr,
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                    ),
                     onPressed: () {
-                      target.value =
-                          _formatTime(selectedTime.hour, selectedTime.minute);
+                      target.value = _formatTime(selectedTime.hour, selectedTime.minute);
                       Navigator.pop(context);
                     },
                   ),

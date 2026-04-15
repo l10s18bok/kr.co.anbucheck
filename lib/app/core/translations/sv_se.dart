@@ -29,7 +29,7 @@ abstract class SvSe {
     'app_tagline': 'Kontrollerar ditt valmaende.',
     'app_service_desc': 'Automatisk valmaendekontroll',
     'app_guardian_title': 'Anbu-vardare',
-    'app_copyright': '© 2024 Averic SB Inc.',
+    'app_copyright': '© 2026 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Kontrollerar valmaende...',

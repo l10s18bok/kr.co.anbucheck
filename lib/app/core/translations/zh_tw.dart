@@ -29,7 +29,7 @@ abstract class ZhTw {
     'app_tagline': '關心您的平安',
     'app_service_desc': '自動問安服務',
     'app_guardian_title': 'Anbu 守護者',
-    'app_copyright': '© 2024 Averic SB Inc.',
+    'app_copyright': '© 2026 Averic SB Inc.',
 
     // ── 啟動頁 ──
     'splash_loading': '正在確認平安...',

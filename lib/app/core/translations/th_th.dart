@@ -29,7 +29,7 @@ abstract class ThTh {
     'app_tagline': 'ตรวจสอบความเป็นอยู่ของคุณ',
     'app_service_desc': 'บริการตรวจสอบความเป็นอยู่อัตโนมัติ',
     'app_guardian_title': 'ผู้ปกป้อง Anbu',
-    'app_copyright': '© 2024 Averic SB Inc.',
+    'app_copyright': '© 2026 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'กำลังตรวจสอบความเป็นอยู่...',

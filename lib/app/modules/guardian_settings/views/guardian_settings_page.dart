@@ -269,7 +269,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                             ),
                             SizedBox(height: 4.h),
                             Text(
-                              '© 2024 Averic SB Inc.',
+                              '© 2026 Averic SB Inc.',
                               style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
                             ),
                           ],

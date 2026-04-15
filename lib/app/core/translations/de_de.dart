@@ -29,7 +29,7 @@ abstract class DeDe {
     'app_tagline': 'Wir schauen nach Ihrem Wohlbefinden.',
     'app_service_desc': 'Automatischer Wohlbefindens-Check',
     'app_guardian_title': 'Anbu Schutzperson',
-    'app_copyright': '© 2024 Averic SB Inc.',
+    'app_copyright': '© 2026 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Wohlbefinden wird geprüft...',

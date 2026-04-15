@@ -29,7 +29,7 @@ abstract class PtBr {
     'app_tagline': 'Verificando o seu bem-estar.',
     'app_service_desc': 'Serviço automático de verificação de bem-estar',
     'app_guardian_title': 'Anbu Guardião',
-    'app_copyright': '© 2024 Averic SB Inc.',
+    'app_copyright': '© 2026 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Verificando...',

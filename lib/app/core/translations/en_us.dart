@@ -29,7 +29,7 @@ abstract class EnUs {
     'app_tagline': 'Checking your wellbeing.',
     'app_service_desc': 'Automatic wellness check service',
     'app_guardian_title': 'Anbu Guardian',
-    'app_copyright': '© 2024 Averic SB Inc.',
+    'app_copyright': '© 2026 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Checking in...',

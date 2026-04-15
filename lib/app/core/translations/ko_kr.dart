@@ -29,7 +29,7 @@ abstract class KoKr {
     'app_tagline': '당신의 안부를 확인합니다.\n(Checking your wellbeing.)',
     'app_service_desc': '자동 안부 확인 서비스',
     'app_guardian_title': '안부 수호자',
-    'app_copyright': '© 2024 Averic SB Inc.',
+    'app_copyright': '© 2026 Averic SB Inc.',
 
     // ── 스플래시 ──
     'splash_loading': '안부를 확인하는 중...',
