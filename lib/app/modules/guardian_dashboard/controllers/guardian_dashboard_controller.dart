@@ -238,6 +238,9 @@ class GuardianDashboardController extends BaseController
   // ── G+S 활성화 ──
 
   Future<void> enableSubjectFeature() async {
+    // 재진입 가드: G+S 토글 더블탭 시 enable-subject가 두 번 발사되어
+    // 서버가 invite_code를 재발급하면서 첫 응답이 stale해지는 이슈 방지
+    if (isEnabling.value) return;
     isEnabling.value = true;
     try {
       final deviceToken = await _tokenDs.getDeviceToken();

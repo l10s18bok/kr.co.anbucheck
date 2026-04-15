@@ -46,6 +46,9 @@ class OnboardingController extends BaseController {
 
   /// 온보딩 완료 → 서버 사용자 등록 → 로컬 저장 → 홈 이동
   Future<void> completeOnboarding() async {
+    // 재진입 가드: [시작하기] 더블탭 시 POST /users가 두 번 발사되어
+    // 서버가 device_token을 회전시키면서 첫 토큰이 즉시 무효화되는 이슈 방지
+    if (isLoading) return;
     isLoading = true;
     try {
       final deviceId = await _tokenDs.getOrCreateDeviceId();

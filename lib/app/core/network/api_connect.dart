@@ -226,8 +226,13 @@ class _InternalGetConnect extends GetConnect {
       '*************************************'.printLog();
 
       // 401: 서버에서 계정 삭제됨 → 로컬 초기화 + 모드 선택 화면 이동
+      // heartbeat 401은 재등록을 트리거하지 않는다 — pending 큐에 저장하고 다음 주기 재시도
+      // users 엔드포인트 자체의 401도 스킵 (재귀 방지)
       if (response.statusCode == 401) {
-        _handleUnauthorized();
+        final path = response.request?.url.path ?? '';
+        if (!path.contains('/heartbeat') && !path.contains('/users')) {
+          _handleUnauthorized();
+        }
       }
 
       return response;

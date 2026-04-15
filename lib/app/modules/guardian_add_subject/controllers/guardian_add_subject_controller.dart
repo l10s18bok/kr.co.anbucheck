@@ -31,6 +31,9 @@ class GuardianAddSubjectController extends BaseController {
   /// 대상자 연결 — 서버 API + 별칭 로컬 저장
   Future<void> connectSubject() async {
     if (!isFormValid) return;
+    // 재진입 가드: [연결하기] 더블탭 시 link API가 두 번 발사되어
+    // 두 번째 호출이 409로 실패하면서 사용자에게 혼동 주는 이슈 방지
+    if (isLoading) return;
 
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) {

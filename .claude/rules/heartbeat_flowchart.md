@@ -28,7 +28,7 @@ flowchart TD
     Start --> Trigger
 
     Trigger{트리거 종류?}
-    Trigger -->|고정 시각 Android| WM[WorkManager 2계층<br/>one-off 정확 발화 + periodic 1h 폴링<br/>one-off fire 후 내일로 재등록<br/>periodic은 재등록 없이 유지<br/>2중 dedup으로 중복 전송 차단]
+    Trigger -->|고정 시각 Android| WM[WorkManager 2계층<br/>one-off 정확 발화 + periodic 1h 폴링<br/>one-off fire 후 내일로 재등록<br/>periodic은 재등록 없이 유지<br/>race 방어: lastScheduledKey 성공 마커<br/>+ heartbeat_in_flight 30s TTL mutex]
     Trigger -->|고정 시각 iOS| BG[BGProcessingTask one-off<br/>OS 재량에 따라 지연 가능<br/>실행 후 다음 날 자동 재예약]
     Trigger -->|공통| FG[앱 열기 / 포그라운드 복귀<br/>예약 시각 경과 + 오늘 미전송 시<br/>자동 heartbeat 전송]
 
@@ -273,8 +273,8 @@ flowchart TD
 
 ## 8. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)
 
-> **1차 (Android)**: WorkManager 2계층으로 등록한다 — (a) **one-off**: 예약시각에 정확히 1회 fire. 전송 성공 후 `rescheduleOneOffForNextDay()`로 내일 예약시각에 재등록. (b) **periodic 1시간**: 안전망 폴링. one-off가 OEM 배터리 절약/Doze 등으로 누락되어도 최대 1시간 내 백업 발화. fire 후 재등록하지 않고 그대로 둔다 — workmanager의 `UPDATE`는 initialDelay를 무시하고 `REPLACE`는 자기자신을 취소하는 이슈가 있어 건드리면 오히려 폴링이 깨진다. one-off와 periodic이 거의 동시에 fire되는 race는 2중 dedup으로 차단한다: 콜백 진입 시 `lastHeartbeatDate == 오늘` 검사 + `HeartbeatService._executeInternal`의 `lastScheduledKey` 검사. iOS는 BGTaskScheduler 불안정성 때문에 사용하지 않는다.
-> **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다. Android에서는 one-off/periodic 모두 실패한 경우의 최종 안전망.
+> **1차 (Android)**: WorkManager 2계층으로 등록한다 — (a) **one-off**: 예약시각에 정확히 1회 fire. 전송 성공 후 `rescheduleOneOffForNextDay()`로 내일 예약시각에 재등록. (b) **periodic 1시간**: 안전망 폴링. one-off가 OEM 배터리 절약/Doze 등으로 누락되어도 최대 1시간 내 백업 발화. fire 후 재등록하지 않고 그대로 둔다 — workmanager의 `UPDATE`는 initialDelay를 무시하고 `REPLACE`는 자기자신을 취소하는 이슈가 있어 건드리면 오히려 폴링이 깨진다. one-off와 periodic이 거의 동시에 fire되는 race는 **역할 분리된 2선 방어**로 차단한다: (1) 콜백 진입 시 `lastHeartbeatDate == 오늘` 검사(콜백 레벨 1차 거름), (2) `HeartbeatService._executeInternal`에서 `lastScheduledKey`(성공 마커 — API 전송 성공 후에만 save) + `heartbeat_in_flight`(**30초 TTL mutex lock** — 센서/전송 직전 save, finally에서 clear, TTL 초과 시 crashed isolate 이어받음) 검사. 과거에는 `lastScheduledKey`를 선점 save해 락과 성공 마커를 겸용했으나, Worker가 Doze/OEM 절전으로 중도 종료될 때 선점 마커만 남아 2차 안전망을 영구 차단하는 ghost state 버그가 있어 역할을 분리했다. iOS는 BGTaskScheduler 불안정성 때문에 사용하지 않는다.
+> **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다. Android에서는 one-off/periodic 모두 실패한 경우의 최종 안전망. 진입 시 `isReportedToday=false`인데 오늘 날짜의 `lastScheduledKey`가 남아 있으면 stale ghost로 판단하고 제거한다(`_clearStaleScheduledKey`, 커밋 4260e53) — Worker가 중도 종료되어 남긴 성공 마커가 2차 안전망을 차단하지 않도록 하는 전환기 방어선으로, SubjectHome과 GuardianSafetyCode 양쪽 진입 시 수행한다.
 > **3차 (iOS 전용)**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. Android는 오늘의 안부 확인 메시지 로컬 알림이 없으며 WorkManager periodic 1시간 폴링과 포그라운드 복귀 자동 전송(2차)이 안전망 역할을 한다.
 
 ```mermaid

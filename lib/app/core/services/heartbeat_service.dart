@@ -52,68 +52,89 @@ class HeartbeatService {
     required String deviceToken,
     bool manual = false,
   }) async {
-
     // 동일 예약시각에 대한 중복 전송 방어 (날짜+예약시각 조합)
     // manual=true는 무조건 전송 (suspicious 알림 응답, 수동 보고)
     //
-    // 선점(preempt) 방식: check 직후 즉시 save하여 TOCTOU 윈도우를 prefs write 수준
-    // (~수 마이크로초)으로 축소. 과거 구조는 save가 API 전송 성공 후에 있어 수 초~
-    // 수십 초의 윈도우가 열렸고, 같은 예약시각에 다른 isolate가 들어오면 두 쪽 모두
-    // check 통과 → 중복 전송. 선점 후에는 첫 진입자가 즉시 키를 박아버리므로 뒤따르는
-    // 호출은 line 64 가드에서 바로 스킵된다.
+    // 책임 분리 구조:
+    //   - lastScheduledKey: 성공 마커. API 전송 성공 + lastHeartbeatDate 저장 후에만 save.
+    //   - heartbeat_in_flight: mutual exclusion 락. 센서/전송 시작 직전 now ms를 save,
+    //     정상 종료 시 finally로 clear. TTL 30초 초과 시 이전 isolate가 크래시한 것으로
+    //     간주하고 새 진입자가 이어받는다.
+    //
+    // 과거에는 lastScheduledKey를 선점 save해 락과 성공 마커를 겸용했는데, Worker가
+    // Doze/OEM 절전으로 중도 종료되면 성공 마커만 남아 2차 안전망(앱 복귀 자동 전송)이
+    // HeartbeatService의 dedup 가드에 영구 차단되는 ghost state 버그가 있었다.
     await getReloadedPrefs();
     final now = DateTime.now();
     final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
+    final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
+
     if (!manual) {
-      final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
       final lastKey = await _tokenDs.getLastScheduledKey();
       if (lastKey == scheduledKey) {
         debugPrint('[HeartbeatService] 이미 전송 완료 — 스킵 ($scheduledKey)');
         return;
       }
-      // 선점: 센서 수집/API 전송 시작 전에 키를 먼저 박아 race 차단
-      await _tokenDs.saveLastScheduledKey(scheduledKey);
-      debugPrint('[HeartbeatService] 선점 완료 ($scheduledKey) — 전송 진행');
-    }
 
-    final timestamp    = now.toUtc().toIso8601String();
-    final batteryLevel = await _getBatteryLevel();
-
-    // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false
-    int? stepsDelta;
-    bool suspicious = false;
-    if (!manual) {
-      stepsDelta = await _getStepsDelta();
-      debugPrint('[HeartbeatService] stepsDelta=$stepsDelta');
-      if (stepsDelta != null && stepsDelta > 0) {
-        // 걸음수 변화 있음 → 즉시 정상 판정
-        suspicious = false;
-      } else {
-        // 걸음수 변화 없거나 권한 거부 → 가속도/자이로로 보완 판정
-        final sensor = await _collectSensor();
-        debugPrint('[HeartbeatService] sensor=${sensor != null ? 'accel(${sensor.accelX.toStringAsFixed(2)},${sensor.accelY.toStringAsFixed(2)},${sensor.accelZ.toStringAsFixed(2)}) gyro(${sensor.gyroX.toStringAsFixed(2)},${sensor.gyroY.toStringAsFixed(2)},${sensor.gyroZ.toStringAsFixed(2)})' : 'null'}');
-        suspicious = await _calcSuspicious(sensor);
-        debugPrint('[HeartbeatService] suspicious=$suspicious');
-        if (sensor != null) {
-          await _sensorDs.saveSnapshot(
-            accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
-            gyroX:  sensor.gyroX,  gyroY:  sensor.gyroY,  gyroZ:  sensor.gyroZ,
-          );
+      // in-flight TTL 락 검사: 다른 isolate가 현재 전송 중이면 스킵
+      final inFlight = await _tokenDs.getHeartbeatInFlight();
+      if (inFlight != null) {
+        final elapsedMs = now.millisecondsSinceEpoch - inFlight;
+        if (elapsedMs >= 0 && elapsedMs < 30000) {
+          debugPrint('[HeartbeatService] 다른 isolate 전송 중 — 스킵 (${elapsedMs}ms)');
+          return;
         }
+        debugPrint('[HeartbeatService] stale in_flight 감지 (${elapsedMs}ms) — 이어받음');
       }
-      // 걸음수 저장은 _getStepsDelta() 내에서 처리 완료
+
+      await _tokenDs.saveHeartbeatInFlight(now.millisecondsSinceEpoch);
+      debugPrint('[HeartbeatService] in_flight 락 획득 ($scheduledKey) — 전송 진행');
     }
 
-    final request = HeartbeatRequest(
-      deviceId:     deviceId,
-      timestamp:    timestamp,
-      manual:       manual,
-      stepsDelta:   stepsDelta,
-      suspicious:   suspicious,
-      batteryLevel: batteryLevel,
-    );
+    try {
+      final timestamp    = now.toUtc().toIso8601String();
+      final batteryLevel = await _getBatteryLevel();
 
-    await _sendOrSavePending(request, deviceToken, schedHour, schedMinute);
+      // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false
+      int? stepsDelta;
+      bool suspicious = false;
+      if (!manual) {
+        stepsDelta = await _getStepsDelta();
+        debugPrint('[HeartbeatService] stepsDelta=$stepsDelta');
+        if (stepsDelta != null && stepsDelta > 0) {
+          // 걸음수 변화 있음 → 즉시 정상 판정
+          suspicious = false;
+        } else {
+          // 걸음수 변화 없거나 권한 거부 → 가속도/자이로로 보완 판정
+          final sensor = await _collectSensor();
+          debugPrint('[HeartbeatService] sensor=${sensor != null ? 'accel(${sensor.accelX.toStringAsFixed(2)},${sensor.accelY.toStringAsFixed(2)},${sensor.accelZ.toStringAsFixed(2)}) gyro(${sensor.gyroX.toStringAsFixed(2)},${sensor.gyroY.toStringAsFixed(2)},${sensor.gyroZ.toStringAsFixed(2)})' : 'null'}');
+          suspicious = await _calcSuspicious(sensor);
+          debugPrint('[HeartbeatService] suspicious=$suspicious');
+          if (sensor != null) {
+            await _sensorDs.saveSnapshot(
+              accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
+              gyroX:  sensor.gyroX,  gyroY:  sensor.gyroY,  gyroZ:  sensor.gyroZ,
+            );
+          }
+        }
+        // 걸음수 저장은 _getStepsDelta() 내에서 처리 완료
+      }
+
+      final request = HeartbeatRequest(
+        deviceId:     deviceId,
+        timestamp:    timestamp,
+        manual:       manual,
+        stepsDelta:   stepsDelta,
+        suspicious:   suspicious,
+        batteryLevel: batteryLevel,
+      );
+
+      await _sendOrSavePending(request, deviceToken, schedHour, schedMinute);
+    } finally {
+      if (!manual) {
+        await _tokenDs.clearHeartbeatInFlight();
+      }
+    }
   }
 
   /// 센서 기준값만 로컬에 저장 (서버 전송 없음)
