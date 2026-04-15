@@ -29,7 +29,7 @@ abstract class FrFr {
     'app_tagline': 'Nous veillons sur votre bien-être.',
     'app_service_desc': 'Service automatique de suivi du bien-être',
     'app_guardian_title': 'Protecteur Anbu',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Vérification du bien-être...',
@@ -50,25 +50,20 @@ abstract class FrFr {
     'mode_subject_button': 'Être protégé(e) →',
     'mode_guardian_title': 'Je souhaite veiller\nsur un proche',
     'mode_guardian_button': 'Devenir protecteur →',
-    'mode_select_notice':
-        'L\'interface et les notifications seront adaptées selon votre choix',
+    'mode_select_notice': 'L\'interface et les notifications seront adaptées selon votre choix',
 
     // ── Autorisations ──
     'permission_title': 'Des autorisations sont\nnécessaires',
     'permission_notification': 'Notifications',
-    'permission_notification_subject_desc':
-        'Nécessaire pour recevoir les alertes de bien-être',
+    'permission_notification_subject_desc': 'Nécessaire pour recevoir les alertes de bien-être',
     'permission_notification_guardian_desc':
         'Nécessaire pour recevoir les alertes sur la sécurité de vos proches',
     'permission_activity': 'Reconnaissance d\'activité',
-    'permission_activity_desc':
-        'Utilisée pour détecter les pas et confirmer l\'activité',
-    'permission_activity_dialog_title':
-        'À propos de l\'autorisation d\'activité',
+    'permission_activity_desc': 'Utilisée pour détecter les pas et confirmer l\'activité',
+    'permission_activity_dialog_title': 'À propos de l\'autorisation d\'activité',
     'permission_activity_dialog_message':
         'Utilisée pour détecter les pas et confirmer l\'activité.\nVeuillez appuyer sur « Autoriser » à l\'écran suivant.',
-    'permission_notification_required_title':
-        'Autorisation de notification requise',
+    'permission_notification_required_title': 'Autorisation de notification requise',
     'permission_notification_required_message':
         'L\'autorisation de notification est nécessaire pour le service de bien-être.\nVeuillez l\'activer dans les Réglages.',
     'permission_go_to_settings': 'Ouvrir les Réglages',
@@ -89,20 +84,15 @@ abstract class FrFr {
     'permission_hibernation_go_to_settings': 'Ouvrir les paramètres de l\'application',
 
     // ── Présentation ──
-    'onboarding_title_1':
-        'Vous vous inquiétez pour\nquelqu\'un qui vit seul ?',
-    'onboarding_desc_1':
-        'Même à distance,\non se demande si tout va bien.\nAnbu est là pour vous.',
-    'onboarding_title_2':
-        'Le bien-être se transmet\nsans un mot',
+    'onboarding_title_1': 'Vous vous inquiétez pour\nquelqu\'un qui vit seul ?',
+    'onboarding_desc_1': 'Même à distance,\non se demande si tout va bien.\nAnbu est là pour vous.',
+    'onboarding_title_2': 'Le bien-être se transmet\nsans un mot',
     'onboarding_desc_2':
         'Rien qu\'en utilisant son smartphone,\nun signal quotidien de bien-être\nest envoyé automatiquement.',
-    'onboarding_title_3':
-        'Partagez le bien-être\navec vos proches',
+    'onboarding_title_3': 'Partagez le bien-être\navec vos proches',
     'onboarding_desc_3':
         'Les vérifications quotidiennes\ncréent une tranquillité d\'esprit durable.\nCommencez dès maintenant.',
-    'onboarding_title_4':
-        'Ni nom, ni numéro de téléphone\n— rien n\'est collecté',
+    'onboarding_title_4': 'Ni nom, ni numéro de téléphone\n— rien n\'est collecté',
     'onboarding_desc_4':
         'Un seul signal est transmis :\n« Je vais bien. »\nVos données restent en sécurité.',
     'onboarding_role_subject': 'Personne protégée',
@@ -133,15 +123,15 @@ abstract class FrFr {
     'subject_home_connectivity_status': 'État de la connexion',
     'subject_home_report_loading': 'Envoi en cours...',
     'subject_home_report_button': 'Signaler mon bien-être maintenant',
-    'subject_home_report_desc':
-        'Rassurez votre protecteur en lui montrant que vous allez bien',
+    'subject_home_report_desc': 'Rassurez votre protecteur en lui montrant que vous allez bien',
     'subject_home_emergency_button': "J'ai besoin d'aide",
     'subject_home_emergency_desc': "Envoie une alerte d'urgence à vos protecteurs",
     'subject_home_emergency_loading': "Envoi de l'alerte d'urgence...",
     'subject_home_emergency_sent': "L'alerte d'urgence a été envoyée",
     'subject_home_emergency_failed': "Échec de l'envoi de l'alerte d'urgence",
     'subject_home_emergency_confirm_title': "Demande d'aide d'urgence",
-    'subject_home_emergency_confirm_body': "Une alerte d'urgence sera envoyée à tous vos protecteurs.\nÊtes-vous sûr de vouloir demander de l'aide ?",
+    'subject_home_emergency_confirm_body':
+        "Une alerte d'urgence sera envoyée à tous vos protecteurs.\nÊtes-vous sûr de vouloir demander de l'aide ?",
     'subject_home_emergency_confirm_send': "Envoyer la demande d'urgence",
     'subject_home_share_text':
         'Veillez sur moi avec l\'application Anbu !\nCode d\'invitation : @code',
@@ -167,12 +157,10 @@ abstract class FrFr {
     'guardian_subscription_expired_message':
         'Les alertes ne sont plus envoyées.\nRenouvelez votre abonnement pour maintenir la protection.',
     'guardian_subscribe': 'S\'abonner',
-    'guardian_payment_preparing':
-        'La fonctionnalité de paiement sera bientôt disponible.',
+    'guardian_payment_preparing': 'La fonctionnalité de paiement sera bientôt disponible.',
     'guardian_today_summary': 'Résumé du jour',
     'guardian_no_subjects': 'Aucune personne protégée connectée.',
-    'guardian_checking_subjects':
-        'Suivi en cours pour\n@count personne(s).',
+    'guardian_checking_subjects': 'Suivi en cours pour\n@count personne(s).',
     'guardian_subject_list': 'Liste des personnes protégées',
     'guardian_call_now': 'Appeler maintenant',
     'guardian_confirm_safety': 'Confirmer la sécurité',
@@ -183,14 +171,12 @@ abstract class FrFr {
     'guardian_last_check_days': 'Dernière vérif. : il y a @days jour(s)',
     'guardian_activity_stable': 'Activité : stable',
     'guardian_safety_needed': 'Vérification de sécurité nécessaire',
-    'guardian_error_load_subjects':
-        'Impossible de charger la liste des personnes protégées.',
+    'guardian_error_load_subjects': 'Impossible de charger la liste des personnes protégées.',
     'guardian_error_clear_alerts': 'Impossible de lever les alertes.',
 
     // ── Ajouter une personne protégée ──
     'add_subject_title': 'Associer une personne protégée',
-    'add_subject_guide_title':
-        'Saisissez le code unique et un surnom.',
+    'add_subject_guide_title': 'Saisissez le code unique et un surnom.',
     'add_subject_guide_subtitle':
         'Associez l\'application d\'un proche pour suivre son état en temps réel.',
     'add_subject_code_label': 'Code unique (7 caractères)',
@@ -204,8 +190,7 @@ abstract class FrFr {
     'add_subject_success': 'Personne protégée associée avec succès.',
     'add_subject_error_invalid_code': 'Code non valide.',
     'add_subject_error_already_connected': 'Déjà associé(e).',
-    'add_subject_error_failed':
-        'Échec de l\'association. Veuillez réessayer.',
+    'add_subject_error_failed': 'Échec de l\'association. Veuillez réessayer.',
     'add_subject_button': 'Ajouter une personne protégée',
 
     // ── Paramètres (Protecteur) ──
@@ -253,14 +238,11 @@ abstract class FrFr {
     'notifications_today': 'Notifications du jour',
     'notifications_empty': 'Aucune notification aujourd\'hui',
     'notifications_delete_all_title': 'Supprimer toutes les notifications',
-    'notifications_delete_all_message':
-        'Supprimer toutes les notifications du jour ?',
-    'notifications_delete_failed':
-        'Impossible de supprimer les notifications.',
+    'notifications_delete_all_message': 'Supprimer toutes les notifications du jour ?',
+    'notifications_delete_failed': 'Impossible de supprimer les notifications.',
     'notifications_guide_title': 'Guide des niveaux de notification',
     'notifications_level_health': 'Normal',
-    'notifications_level_health_desc':
-        'Le bien-être de la personne protégée a été confirmé',
+    'notifications_level_health_desc': 'Le bien-être de la personne protégée a été confirmé',
     'notifications_level_caution': 'Attention',
     'notifications_level_caution_desc': "Aucun signal de bien-être aujourd'hui",
     'notifications_level_warning': 'Alerte',
@@ -280,14 +262,11 @@ abstract class FrFr {
         'Activer ou désactiver toutes les catégories de notification en une fois.',
     'notification_settings_level_section': 'Réglages par niveau',
     'notification_settings_urgent': 'Alertes urgentes',
-    'notification_settings_urgent_desc':
-        'Les alertes urgentes ne peuvent pas être désactivées',
+    'notification_settings_urgent_desc': 'Les alertes urgentes ne peuvent pas être désactivées',
     'notification_settings_warning': 'Alertes d\'alerte',
-    'notification_settings_warning_desc':
-        'Alerte après 2 jours consécutifs sans vérification',
+    'notification_settings_warning_desc': 'Alerte après 2 jours consécutifs sans vérification',
     'notification_settings_caution': 'Alertes d\'attention',
-    'notification_settings_caution_desc':
-        'Alerte en cas de vérification manquante aujourd\'hui',
+    'notification_settings_caution_desc': 'Alerte en cas de vérification manquante aujourd\'hui',
     'notification_settings_info': 'Alertes d\'information',
     'notification_settings_info_desc':
         'Alertes générales comme le nombre de pas et le niveau de batterie',
@@ -305,15 +284,13 @@ abstract class FrFr {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Personnes protégées connectées',
     'connection_empty': 'Aucune personne protégée connectée',
-    'connection_unlink_warning':
-        'La dissociation supprimera les données de cette personne.',
+    'connection_unlink_warning': 'La dissociation supprimera les données de cette personne.',
     'connection_unlink_warning_detail':
         'Les données précédentes ne pourront pas être récupérées après une nouvelle association. Vous devrez saisir à nouveau le code de la personne.',
     'connection_heartbeat_schedule': 'Tous les jours à @time',
     'connection_heartbeat_report_time': 'L\'heure du rapport est ',
     'connection_subject_label': 'Personne protégée',
-    'connection_change_only_in_app':
-        'modifiable uniquement dans l\'application',
+    'connection_change_only_in_app': 'modifiable uniquement dans l\'application',
     'connection_edit_title': 'Modifier la personne protégée',
     'connection_alias_label': 'Surnom',
     'connection_unlink_title': 'Dissocier',
@@ -332,22 +309,20 @@ abstract class FrFr {
     'heartbeat_schedule_change': 'Modifier l\'heure de vérification',
     'heartbeat_schedule_title_ios': 'Heure de notification push de bien-être',
     'heartbeat_schedule_change_title_ios': 'Modifier l\'heure de notification push de bien-être',
-    'heartbeat_schedule_hint_ios': 'Une notification push de bien-être arrive chaque jour à cette heure. Appuyez sur la notification ou ouvrez l\'application à ce moment-là pour envoyer votre signal de bien-être.',
+    'heartbeat_schedule_hint_ios':
+        'Une notification push de bien-être arrive chaque jour à cette heure. Appuyez sur la notification ou ouvrez l\'application à ce moment-là pour envoyer votre signal de bien-être.',
     'heartbeat_daily_time': 'Tous les jours à @time',
-    'heartbeat_scheduled_today':
-        'Vérification du bien-être prévue aujourd\'hui à @time.',
+    'heartbeat_scheduled_today': 'Vérification du bien-être prévue aujourd\'hui à @time.',
     'heartbeat_change_failed_title': 'Échec du changement d\'heure',
     'heartbeat_change_failed_message':
         'La modification n\'a pas pu être enregistrée sur le serveur.',
 
     // ── Notifications locales ──
     'local_notification_channel': 'Alertes de bien-être',
-    'local_notification_channel_desc':
-        'Notifications du service de bien-être',
+    'local_notification_channel_desc': 'Notifications du service de bien-être',
 
     // ── Divers ──
-    'back_press_exit':
-        'Appuyez à nouveau pour quitter l\'application.',
+    'back_press_exit': 'Appuyez à nouveau pour quitter l\'application.',
 
     // ── Erreurs API ──
     'error_unknown': 'Une erreur inconnue est survenue.',
@@ -356,8 +331,7 @@ abstract class FrFr {
     'error_unauthorized': 'Authentification requise.',
 
     // ── Corps des notifications ──
-    'noti_auto_report_body':
-        'La vérification de bien-être programmée a été reçue aujourd\'hui.',
+    'noti_auto_report_body': 'La vérification de bien-être programmée a été reçue aujourd\'hui.',
     'noti_manual_report_body':
         'La personne protégée a envoyé manuellement une vérification de bien-être.',
     'noti_battery_low_body':
@@ -373,7 +347,8 @@ abstract class FrFr {
     'noti_urgent_body':
         'Aucune vérification de bien-être depuis @days jour(s). Une vérification immédiate est requise.',
     'noti_steps_body': '@from_time ~ @to_time : @steps pas effectués.',
-    'noti_emergency_body': "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
+    'noti_emergency_body':
+        "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
     'noti_resolved_body': 'Le bilan de santé du protégé est revenu à la normale.',
     'noti_cleared_by_guardian_title': '✅ Vérification confirmée',
     'noti_cleared_by_guardian_body': "Un des protecteurs a personnellement confirmé la sécurité.",
@@ -382,8 +357,7 @@ abstract class FrFr {
     'local_alarm_title': '💗 Vérification de bien-être nécessaire',
     'local_alarm_body': 'Veuillez appuyer sur cette notification.',
     'wellbeing_check_title': '💛 Vérification de bien-être',
-    'wellbeing_check_body':
-        'Comment allez-vous ? Veuillez appuyer sur cette notification.',
+    'wellbeing_check_body': 'Comment allez-vous ? Veuillez appuyer sur cette notification.',
     'noti_channel_name': 'Alertes Anbu',
   };
 }

@@ -29,7 +29,7 @@ abstract class JaJp {
     'app_tagline': 'あなたの安否を確認します。',
     'app_service_desc': '自動安否確認サービス',
     'app_guardian_title': 'Anbu 見守り人',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── スプラッシュ ──
     'splash_loading': '安否を確認しています...',
@@ -58,15 +58,13 @@ abstract class JaJp {
     'permission_activity': '身体活動の権限',
     'permission_activity_desc': '歩数を検出して活動状況を確認するために使用されます',
     'permission_activity_dialog_title': '身体活動の権限について',
-    'permission_activity_dialog_message':
-        '歩数を検出して活動状況を確認するために使用されます。\n次の画面で「許可」を選択してください。',
+    'permission_activity_dialog_message': '歩数を検出して活動状況を確認するために使用されます。\n次の画面で「許可」を選択してください。',
     'permission_notification_required_title': '通知の権限が必要です',
     'permission_notification_required_message':
         '安否確認サービスをご利用いただくには通知の権限が必要です。\n設定から通知の権限を許可してください。',
     'permission_go_to_settings': '設定を開く',
     'permission_activity_denied_title': '身体活動の権限が必要です',
-    'permission_activity_denied_message':
-        '歩数を検知して安否確認の精度を向上させるために使用します。\n設定から身体活動の権限を許可してください。',
+    'permission_activity_denied_message': '歩数を検知して安否確認の精度を向上させるために使用します。\n設定から身体活動の権限を許可してください。',
     'permission_battery': 'バッテリー最適化の除外',
     'permission_battery_desc': '毎日決まった時刻の安否確認が漏れないように、バッテリー最適化から除外します',
     'permission_battery_required_title': 'バッテリーを「制限なし」に設定してください',
@@ -87,8 +85,7 @@ abstract class JaJp {
     'onboarding_title_3': '大切な人と\n安否を分かち合いましょう',
     'onboarding_desc_3': '毎日の安否確認が積み重なり\nお互いの安心につながります。\n今すぐはじめましょう。',
     'onboarding_title_4': '名前も電話番号も\n収集しません',
-    'onboarding_desc_4':
-        "お伝えするのは\n「元気です」という\n安否の信号だけです。\nあなたの情報は安全です。",
+    'onboarding_desc_4': "お伝えするのは\n「元気です」という\n安否の信号だけです。\nあなたの情報は安全です。",
     'onboarding_role_subject': '見守り対象者',
     'onboarding_role_guardian': '見守り人',
     'onboarding_role_guardian_subject': '保護者兼対象者',
@@ -144,8 +141,7 @@ abstract class JaJp {
     'guardian_status_urgent': '緊急',
     'guardian_status_confirmed': '安全確認済み',
     'guardian_subscription_expired': 'サブスクリプションの期限が切れました',
-    'guardian_subscription_expired_message':
-        '警告の通知が送信されていません。\nサブスクリプションを更新して見守りサービスを続けましょう。',
+    'guardian_subscription_expired_message': '警告の通知が送信されていません。\nサブスクリプションを更新して見守りサービスを続けましょう。',
     'guardian_subscribe': 'サブスクリプション登録',
     'guardian_payment_preparing': '決済機能は準備中です。',
     'guardian_today_summary': '今日の安否まとめ',
@@ -205,9 +201,11 @@ abstract class JaJp {
     'gs_safety_code_button': '安全コードを確認',
     'gs_safety_code_title': '安全コード',
     'gs_enable_dialog_title': '安否保護を有効化',
-    'gs_enable_dialog_body': '保護者機能を維持したまま、自分の安否も保護してもらえます。\n有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
+    'gs_enable_dialog_body':
+        '保護者機能を維持したまま、自分の安否も保護してもらえます。\n有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
     'gs_enable_dialog_ios_warning_title': '⚠ iOSはAndroidとは動作が異なります',
-    'gs_enable_dialog_ios_warning_body': 'iOSでは毎日決まった時刻に「安否プッシュ通知」が表示されます。通知をタップするか、その前後にご自身でアプリを開いた場合のみ安否信号が送信されます。アプリを開かないと、保護者に未受信の警告が届く可能性があります。',
+    'gs_enable_dialog_ios_warning_body':
+        'iOSでは毎日決まった時刻に「安否プッシュ通知」が表示されます。通知をタップするか、その前後にご自身でアプリを開いた場合のみ安否信号が送信されます。アプリを開かないと、保護者に未受信の警告が届く可能性があります。',
     'gs_enable_dialog_ios_confirm': '理解しました、有効化',
     'gs_enable_confirm': '有効化',
     'gs_enabled_message': '安否保護が有効化されました',
@@ -236,8 +234,7 @@ abstract class JaJp {
     'notifications_level_urgent_desc': '今すぐ確認が必要です',
     'notifications_level_info': '情報',
     'notifications_level_info_desc': '歩数、バッテリー不足など参考用通知',
-    'notifications_activity_note':
-        '※ 歩数データを取得できなかった場合、活動情報が表示されないことがあります。',
+    'notifications_activity_note': '※ 歩数データを取得できなかった場合、活動情報が表示されないことがあります。',
 
     // ── 見守り通知設定 ──
     'notification_settings_title': '通知設定',
@@ -266,10 +263,8 @@ abstract class JaJp {
     'connection_managed_count_value': '@current / @max人',
     'connection_connected_subjects': '接続中の対象者',
     'connection_empty': '接続された見守り対象者がいません',
-    'connection_unlink_warning':
-        '接続を解除すると、この対象者のデータは削除されます。',
-    'connection_unlink_warning_detail':
-        '再接続しても以前の記録は復元できません。 対象者のコードを再度入力する必要があります。',
+    'connection_unlink_warning': '接続を解除すると、この対象者のデータは削除されます。',
+    'connection_unlink_warning_detail': '再接続しても以前の記録は復元できません。 対象者のコードを再度入力する必要があります。',
     'connection_heartbeat_schedule': '毎日 @time',
     'connection_heartbeat_report_time': '安否報告時刻は ',
     'connection_subject_label': '見守り対象者',
@@ -312,22 +307,14 @@ abstract class JaJp {
     'error_unauthorized': '認証が必要です。',
 
     // ── 通知本文 ──
-    'noti_auto_report_body':
-        '本日の予定時刻に安否確認が正常に受信されました。',
-    'noti_manual_report_body':
-        '対象者が手動で安否確認を送信しました。',
-    'noti_battery_low_body':
-        'スマホのバッテリーが20%未満です。充電が必要かもしれません。',
-    'noti_battery_dead_body':
-        'スマホがバッテリー切れで電源が落ちたようです。最後のバッテリー残量: @battery_level%。充電後に自動復旧します。',
-    'noti_caution_suspicious_body':
-        '安否信号は受信されましたが、スマホの使用形跡がありません。直接ご確認ください。',
-    'noti_caution_missing_body':
-        '本日予定の安否確認がまだ届いていません。直接ご確認ください。',
-    'noti_warning_body':
-        '安否確認が連続して届いていません。直接のご確認が必要です。',
-    'noti_urgent_body':
-        '@days日間安否確認がありません。直ちに確認が必要です。',
+    'noti_auto_report_body': '本日の予定時刻に安否確認が正常に受信されました。',
+    'noti_manual_report_body': '対象者が手動で安否確認を送信しました。',
+    'noti_battery_low_body': 'スマホのバッテリーが20%未満です。充電が必要かもしれません。',
+    'noti_battery_dead_body': 'スマホがバッテリー切れで電源が落ちたようです。最後のバッテリー残量: @battery_level%。充電後に自動復旧します。',
+    'noti_caution_suspicious_body': '安否信号は受信されましたが、スマホの使用形跡がありません。直接ご確認ください。',
+    'noti_caution_missing_body': '本日予定の安否確認がまだ届いていません。直接ご確認ください。',
+    'noti_warning_body': '安否確認が連続して届いていません。直接のご確認が必要です。',
+    'noti_urgent_body': '@days日間安否確認がありません。直ちに確認が必要です。',
     'noti_steps_body': '@from_time ～ @to_time の間に@steps歩歩きました。',
     'noti_emergency_body': '対象者が直接助けを求めました。すぐに確認してください。',
     'noti_resolved_body': '正常に復帰しました。見守り対象者の安否が正常に確認されました。',

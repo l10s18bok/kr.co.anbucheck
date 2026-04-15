@@ -29,7 +29,7 @@ abstract class ZhCn {
     'app_tagline': '关心您的平安',
     'app_service_desc': '自动问安服务',
     'app_guardian_title': 'Anbu 守护者',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── 启动页 ──
     'splash_loading': '正在确认平安...',
@@ -58,15 +58,12 @@ abstract class ZhCn {
     'permission_activity': '身体活动权限',
     'permission_activity_desc': '用于检测步数以确认活动状态',
     'permission_activity_dialog_title': '身体活动权限说明',
-    'permission_activity_dialog_message':
-        '用于检测步数以确认活动状态。\n请在下一个界面中选择"允许"。',
+    'permission_activity_dialog_message': '用于检测步数以确认活动状态。\n请在下一个界面中选择"允许"。',
     'permission_notification_required_title': '需要通知权限',
-    'permission_notification_required_message':
-        '问安服务需要通知权限。\n请在设置中开启通知权限。',
+    'permission_notification_required_message': '问安服务需要通知权限。\n请在设置中开启通知权限。',
     'permission_go_to_settings': '前往设置',
     'permission_activity_denied_title': '需要身体活动权限',
-    'permission_activity_denied_message':
-        '用于检测步数并提高问安准确性。\n请在设置中开启身体活动权限。',
+    'permission_activity_denied_message': '用于检测步数并提高问安准确性。\n请在设置中开启身体活动权限。',
     'permission_battery': '电池优化例外',
     'permission_battery_desc': '将应用从电池优化中排除，以免每天定时的问安检查被遗漏',
     'permission_battery_required_title': '请将电池设置为"无限制"',
@@ -87,8 +84,7 @@ abstract class ZhCn {
     'onboarding_title_3': '与亲人\n互报平安',
     'onboarding_desc_3': '每天的问安汇聚成\n彼此的安心。\n现在就开始吧。',
     'onboarding_title_4': '不收集姓名，\n也不收集电话号码',
-    'onboarding_desc_4':
-        '只传递一个信号：\n「我一切安好。」\n您的信息绝对安全。',
+    'onboarding_desc_4': '只传递一个信号：\n「我一切安好。」\n您的信息绝对安全。',
     'onboarding_role_subject': '被守护者',
     'onboarding_role_guardian': '守护者',
     'onboarding_role_guardian_subject': '监护人兼被监护人',
@@ -144,8 +140,7 @@ abstract class ZhCn {
     'guardian_status_urgent': '紧急',
     'guardian_status_confirmed': '安全已确认',
     'guardian_subscription_expired': '订阅已过期',
-    'guardian_subscription_expired_message':
-        '警报通知已停止发送。\n请续订以继续守护服务。',
+    'guardian_subscription_expired_message': '警报通知已停止发送。\n请续订以继续守护服务。',
     'guardian_subscribe': '订阅',
     'guardian_payment_preparing': '支付功能正在准备中。',
     'guardian_today_summary': '今日问安总结',
@@ -207,7 +202,8 @@ abstract class ZhCn {
     'gs_enable_dialog_title': '启用安否保护',
     'gs_enable_dialog_body': '您可以在保持监护人功能的同时接受安否保护。\n启用后将发放安全码，请将您的"安全码"告知其他监护人。',
     'gs_enable_dialog_ios_warning_title': '⚠ iOS 与 Android 工作方式不同',
-    'gs_enable_dialog_ios_warning_body': '在 iOS 上，每天会在固定时间显示"安否推送通知"。您必须点按通知或在该时间前后亲自打开应用，安否信号才会发送。如果不打开应用，监护人可能会收到未接收警告。',
+    'gs_enable_dialog_ios_warning_body':
+        '在 iOS 上，每天会在固定时间显示"安否推送通知"。您必须点按通知或在该时间前后亲自打开应用，安否信号才会发送。如果不打开应用，监护人可能会收到未接收警告。',
     'gs_enable_dialog_ios_confirm': '我已了解，启用',
     'gs_enable_confirm': '启用',
     'gs_enabled_message': '安否保护已启用',
@@ -236,8 +232,7 @@ abstract class ZhCn {
     'notifications_level_urgent_desc': '需要立即确认',
     'notifications_level_info': '信息',
     'notifications_level_info_desc': '步数、电量不足等参考提醒',
-    'notifications_activity_note':
-        '※ 如果无法采集步数数据，活动信息可能不会显示。',
+    'notifications_activity_note': '※ 如果无法采集步数数据，活动信息可能不会显示。',
 
     // ── 守护者通知设置 ──
     'notification_settings_title': '通知设置',
@@ -266,10 +261,8 @@ abstract class ZhCn {
     'connection_managed_count_value': '@current / @max 人',
     'connection_connected_subjects': '已连接的被守护者',
     'connection_empty': '没有连接的保护对象',
-    'connection_unlink_warning':
-        '解除连接后，该被守护者的数据将被删除。',
-    'connection_unlink_warning_detail':
-        '重新连接后无法恢复之前的记录， 需要重新输入被守护者的邀请码。',
+    'connection_unlink_warning': '解除连接后，该被守护者的数据将被删除。',
+    'connection_unlink_warning_detail': '重新连接后无法恢复之前的记录， 需要重新输入被守护者的邀请码。',
     'connection_heartbeat_schedule': '每天 @time',
     'connection_heartbeat_report_time': '问安报告时间为 ',
     'connection_subject_label': '被守护者',
@@ -315,12 +308,9 @@ abstract class ZhCn {
     'noti_auto_report_body': '今天的定时问安已正常收到。',
     'noti_manual_report_body': '对象者手动发送了问安。',
     'noti_battery_low_body': '手机电量低于20%，可能需要充电。',
-    'noti_battery_dead_body':
-        '手机似乎因电量耗尽而关机。最后电量：@battery_level%。充电后将自动恢复。',
-    'noti_caution_suspicious_body':
-        '已收到问安信号，但未检测到手机使用痕迹。请亲自确认。',
-    'noti_caution_missing_body':
-        '今天预定的问安尚未收到。请亲自确认。',
+    'noti_battery_dead_body': '手机似乎因电量耗尽而关机。最后电量：@battery_level%。充电后将自动恢复。',
+    'noti_caution_suspicious_body': '已收到问安信号，但未检测到手机使用痕迹。请亲自确认。',
+    'noti_caution_missing_body': '今天预定的问安尚未收到。请亲自确认。',
     'noti_warning_body': '问安已连续未收到。请亲自核实。',
     'noti_urgent_body': '已@days天未收到问安。需要立即确认。',
     'noti_steps_body': '@from_time ~ @to_time：走了@steps步。',

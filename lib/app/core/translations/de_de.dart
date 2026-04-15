@@ -29,7 +29,7 @@ abstract class DeDe {
     'app_tagline': 'Wir schauen nach Ihrem Wohlbefinden.',
     'app_service_desc': 'Automatischer Wohlbefindens-Check',
     'app_guardian_title': 'Anbu Schutzperson',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Wohlbefinden wird geprüft...',
@@ -56,8 +56,7 @@ abstract class DeDe {
     // ── Berechtigungen ──
     'permission_title': 'Berechtigungen werden\nbenötigt',
     'permission_notification': 'Benachrichtigungen',
-    'permission_notification_subject_desc':
-        'Erforderlich, um Wohlbefindens-Meldungen zu erhalten',
+    'permission_notification_subject_desc': 'Erforderlich, um Wohlbefindens-Meldungen zu erhalten',
     'permission_notification_guardian_desc':
         'Erforderlich, um Sicherheitsmeldungen über Ihre Schutzpersonen zu erhalten',
     'permission_activity': 'Aktivitätserkennung',
@@ -66,8 +65,7 @@ abstract class DeDe {
     'permission_activity_dialog_title': 'Hinweis zur Aktivitätsberechtigung',
     'permission_activity_dialog_message':
         'Wird verwendet, um Schritte zu erkennen und Aktivität zu bestätigen.\nBitte tippen Sie im nächsten Bildschirm auf „Erlauben".',
-    'permission_notification_required_title':
-        'Benachrichtigungsberechtigung erforderlich',
+    'permission_notification_required_title': 'Benachrichtigungsberechtigung erforderlich',
     'permission_notification_required_message':
         'Für den Wohlbefindens-Check ist die Benachrichtigungsberechtigung erforderlich.\nBitte aktivieren Sie diese in den Einstellungen.',
     'permission_go_to_settings': 'Zu den Einstellungen',
@@ -135,10 +133,10 @@ abstract class DeDe {
     'subject_home_emergency_sent': 'Notruf wurde gesendet',
     'subject_home_emergency_failed': 'Notruf konnte nicht gesendet werden',
     'subject_home_emergency_confirm_title': 'Nothilfe anfordern',
-    'subject_home_emergency_confirm_body': 'Ein Notruf wird an alle Ihre Betreuer gesendet.\nMöchten Sie wirklich Hilfe anfordern?',
+    'subject_home_emergency_confirm_body':
+        'Ein Notruf wird an alle Ihre Betreuer gesendet.\nMöchten Sie wirklich Hilfe anfordern?',
     'subject_home_emergency_confirm_send': 'Notruf senden',
-    'subject_home_share_text':
-        'Schauen Sie mit der Anbu-App nach mir!\nEinladungscode: @code',
+    'subject_home_share_text': 'Schauen Sie mit der Anbu-App nach mir!\nEinladungscode: @code',
     'subject_home_share_subject': 'Anbu Einladungscode',
     'subject_home_code_copied': 'Code kopiert',
 
@@ -148,8 +146,7 @@ abstract class DeDe {
     'drawer_privacy_policy': 'Datenschutzrichtlinie',
     'drawer_terms': 'Nutzungsbedingungen',
     'drawer_withdraw': 'Konto löschen',
-    'drawer_withdraw_message':
-        'Ihr Konto und alle Daten werden gelöscht.\nSind Sie sicher?',
+    'drawer_withdraw_message': 'Ihr Konto und alle Daten werden gelöscht.\nSind Sie sicher?',
 
     // ── Betreuer-Dashboard ──
     'guardian_status_normal': 'Normal',
@@ -164,8 +161,7 @@ abstract class DeDe {
     'guardian_payment_preparing': 'Zahlungsfunktion wird vorbereitet.',
     'guardian_today_summary': 'Heutige Zusammenfassung',
     'guardian_no_subjects': 'Keine Schutzpersonen verbunden.',
-    'guardian_checking_subjects':
-        'Derzeit wird das Wohlbefinden\nvon @count Person(en) geprüft.',
+    'guardian_checking_subjects': 'Derzeit wird das Wohlbefinden\nvon @count Person(en) geprüft.',
     'guardian_subject_list': 'Liste der Schutzpersonen',
     'guardian_call_now': 'Jetzt anrufen',
     'guardian_confirm_safety': 'Sicherheit bestätigen',
@@ -176,21 +172,17 @@ abstract class DeDe {
     'guardian_last_check_days': 'Letzte Prüfung: vor @days Tag(en)',
     'guardian_activity_stable': 'Aktivität: stabil',
     'guardian_safety_needed': 'Sicherheitsprüfung erforderlich',
-    'guardian_error_load_subjects':
-        'Schutzpersonen konnten nicht geladen werden.',
-    'guardian_error_clear_alerts':
-        'Warnungen konnten nicht aufgehoben werden.',
+    'guardian_error_load_subjects': 'Schutzpersonen konnten nicht geladen werden.',
+    'guardian_error_clear_alerts': 'Warnungen konnten nicht aufgehoben werden.',
 
     // ── Schutzperson hinzufügen ──
     'add_subject_title': 'Schutzperson verbinden',
-    'add_subject_guide_title':
-        'Geben Sie den Einladungscode und einen Spitznamen ein.',
+    'add_subject_guide_title': 'Geben Sie den Einladungscode und einen Spitznamen ein.',
     'add_subject_guide_subtitle':
         'Verbinden Sie die App einer Schutzperson, um deren Zustand in Echtzeit zu verfolgen.',
     'add_subject_code_label': 'Einladungscode (7 Zeichen)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'Den Einladungscode finden Sie in der App der Schutzperson.',
+    'add_subject_code_info': 'Den Einladungscode finden Sie in der App der Schutzperson.',
     'add_subject_alias_label': 'Spitzname',
     'add_subject_alias_hint': 'z. B. Mama, Papa',
     'add_subject_connect': 'Verbinden',
@@ -198,8 +190,7 @@ abstract class DeDe {
     'add_subject_success': 'Schutzperson erfolgreich verbunden.',
     'add_subject_error_invalid_code': 'Ungültiger Code.',
     'add_subject_error_already_connected': 'Bereits verbunden.',
-    'add_subject_error_failed':
-        'Verbindung fehlgeschlagen. Bitte versuchen Sie es erneut.',
+    'add_subject_error_failed': 'Verbindung fehlgeschlagen. Bitte versuchen Sie es erneut.',
     'add_subject_button': 'Neue Schutzperson hinzufügen',
 
     // ── Betreuer-Einstellungen ──
@@ -226,15 +217,18 @@ abstract class DeDe {
     'gs_safety_code_button': 'Meinen Sicherheitscode prüfen',
     'gs_safety_code_title': 'Mein Sicherheitscode',
     'gs_enable_dialog_title': 'Wellness-Schutz aktivieren',
-    'gs_enable_dialog_body': 'Sie können Wellness-Schutz erhalten und gleichzeitig Ihre Betreuer-Funktionen behalten.\nBei Aktivierung wird ein Sicherheitscode ausgestellt — bitte teilen Sie ihn mit anderen Betreuern.',
+    'gs_enable_dialog_body':
+        'Sie können Wellness-Schutz erhalten und gleichzeitig Ihre Betreuer-Funktionen behalten.\nBei Aktivierung wird ein Sicherheitscode ausgestellt — bitte teilen Sie ihn mit anderen Betreuern.',
     'gs_enable_dialog_ios_warning_title': '⚠ iOS funktioniert anders als Android',
-    'gs_enable_dialog_ios_warning_body': 'Auf iOS erscheint täglich zur festgelegten Zeit eine "Wellness-Push-Benachrichtigung". Sie müssen die Benachrichtigung antippen oder die App selbst um diese Zeit öffnen, damit Ihr Wellness-Signal gesendet wird. Wenn Sie die App nicht öffnen, erhalten Ihre Betreuer möglicherweise eine Warnung wegen ausbleibender Prüfung.',
+    'gs_enable_dialog_ios_warning_body':
+        'Auf iOS erscheint täglich zur festgelegten Zeit eine "Wellness-Push-Benachrichtigung". Sie müssen die Benachrichtigung antippen oder die App selbst um diese Zeit öffnen, damit Ihr Wellness-Signal gesendet wird. Wenn Sie die App nicht öffnen, erhalten Ihre Betreuer möglicherweise eine Warnung wegen ausbleibender Prüfung.',
     'gs_enable_dialog_ios_confirm': 'Verstanden, aktivieren',
     'gs_enable_confirm': 'Aktivieren',
     'gs_enabled_message': 'Wellness-Schutz wurde aktiviert',
     'gs_enable_failed': 'Wellness-Schutz konnte nicht aktiviert werden',
     'gs_disable_dialog_title': 'Wellness-Schutz deaktivieren',
-    'gs_disable_dialog_body': 'Bei Deaktivierung wird Ihr Sicherheitscode gelöscht und die Wellness-Prüfungen an verbundene Betreuer werden gestoppt.',
+    'gs_disable_dialog_body':
+        'Bei Deaktivierung wird Ihr Sicherheitscode gelöscht und die Wellness-Prüfungen an verbundene Betreuer werden gestoppt.',
     'gs_disable_confirm': 'Deaktivieren',
     'gs_disabled_message': 'Wellness-Schutz wurde deaktiviert',
     'gs_disable_failed': 'Wellness-Schutz konnte nicht deaktiviert werden',
@@ -244,14 +238,11 @@ abstract class DeDe {
     'notifications_today': 'Heutige Benachrichtigungen',
     'notifications_empty': 'Heute keine Benachrichtigungen',
     'notifications_delete_all_title': 'Alle Benachrichtigungen löschen',
-    'notifications_delete_all_message':
-        'Alle heutigen Benachrichtigungen löschen?',
-    'notifications_delete_failed':
-        'Benachrichtigungen konnten nicht gelöscht werden.',
+    'notifications_delete_all_message': 'Alle heutigen Benachrichtigungen löschen?',
+    'notifications_delete_failed': 'Benachrichtigungen konnten nicht gelöscht werden.',
     'notifications_guide_title': 'Erklärung der Benachrichtigungsstufen',
     'notifications_level_health': 'Normal',
-    'notifications_level_health_desc':
-        'Wohlbefinden der Schutzperson wurde bestätigt',
+    'notifications_level_health_desc': 'Wohlbefinden der Schutzperson wurde bestätigt',
     'notifications_level_caution': 'Achtung',
     'notifications_level_caution_desc': 'Heute noch kein Wohlbefindenssignal',
     'notifications_level_warning': 'Warnung',
@@ -271,17 +262,13 @@ abstract class DeDe {
         'Alle Benachrichtigungskategorien auf einmal aktivieren oder deaktivieren.',
     'notification_settings_level_section': 'Stufeneinstellungen',
     'notification_settings_urgent': 'Dringende Meldungen',
-    'notification_settings_urgent_desc':
-        'Dringende Meldungen können nicht deaktiviert werden',
+    'notification_settings_urgent_desc': 'Dringende Meldungen können nicht deaktiviert werden',
     'notification_settings_warning': 'Warnmeldungen',
-    'notification_settings_warning_desc':
-        'Warnung bei 2 Tagen ohne Prüfung in Folge',
+    'notification_settings_warning_desc': 'Warnung bei 2 Tagen ohne Prüfung in Folge',
     'notification_settings_caution': 'Achtung-Meldungen',
-    'notification_settings_caution_desc':
-        'Meldung bei fehlender heutiger Prüfung',
+    'notification_settings_caution_desc': 'Meldung bei fehlender heutiger Prüfung',
     'notification_settings_info': 'Info-Meldungen',
-    'notification_settings_info_desc':
-        'Allgemeine Meldungen wie Schrittzahl und Akkustand',
+    'notification_settings_info_desc': 'Allgemeine Meldungen wie Schrittzahl und Akkustand',
     'notification_settings_dnd': 'Bitte nicht stören',
     'notification_settings_dnd_start': 'Startzeit',
     'notification_settings_dnd_end': 'Endzeit',
@@ -296,8 +283,7 @@ abstract class DeDe {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Verbundene Schutzpersonen',
     'connection_empty': 'Keine verbundenen Schutzpersonen',
-    'connection_unlink_warning':
-        'Beim Trennen werden die Daten der Schutzperson gelöscht.',
+    'connection_unlink_warning': 'Beim Trennen werden die Daten der Schutzperson gelöscht.',
     'connection_unlink_warning_detail':
         'Frühere Aufzeichnungen können nach erneuter Verbindung nicht wiederhergestellt werden. Sie müssen den Code der Schutzperson erneut eingeben.',
     'connection_heartbeat_schedule': 'Täglich um @time',
@@ -322,18 +308,16 @@ abstract class DeDe {
     'heartbeat_schedule_change': 'Prüfzeit ändern',
     'heartbeat_schedule_title_ios': 'Wellness-Push-Zeit',
     'heartbeat_schedule_change_title_ios': 'Wellness-Push-Zeit ändern',
-    'heartbeat_schedule_hint_ios': 'Eine Wellness-Push-Benachrichtigung trifft täglich zu dieser Zeit ein. Tippen Sie auf die Benachrichtigung oder öffnen Sie die App um diese Zeit, um Ihr Wellness-Signal zu senden.',
+    'heartbeat_schedule_hint_ios':
+        'Eine Wellness-Push-Benachrichtigung trifft täglich zu dieser Zeit ein. Tippen Sie auf die Benachrichtigung oder öffnen Sie die App um diese Zeit, um Ihr Wellness-Signal zu senden.',
     'heartbeat_daily_time': 'Täglich um @time',
-    'heartbeat_scheduled_today':
-        'Wohlbefindens-Check heute um @time geplant.',
+    'heartbeat_scheduled_today': 'Wohlbefindens-Check heute um @time geplant.',
     'heartbeat_change_failed_title': 'Zeitänderung fehlgeschlagen',
-    'heartbeat_change_failed_message':
-        'Konnte nicht auf dem Server aktualisiert werden.',
+    'heartbeat_change_failed_message': 'Konnte nicht auf dem Server aktualisiert werden.',
 
     // ── Lokale Benachrichtigungen ──
     'local_notification_channel': 'Wohlbefindens-Meldungen',
-    'local_notification_channel_desc':
-        'Benachrichtigungen des Wohlbefindens-Dienstes',
+    'local_notification_channel_desc': 'Benachrichtigungen des Wohlbefindens-Dienstes',
 
     // ── Sonstiges ──
     'back_press_exit': 'Noch einmal drücken, um die App zu beenden.',
@@ -345,10 +329,8 @@ abstract class DeDe {
     'error_unauthorized': 'Authentifizierung erforderlich.',
 
     // ── Benachrichtigungstexte ──
-    'noti_auto_report_body':
-        'Die geplante Wohlbefindens-Prüfung wurde heute empfangen.',
-    'noti_manual_report_body':
-        'Die Schutzperson hat manuell eine Wohlbefindens-Prüfung gesendet.',
+    'noti_auto_report_body': 'Die geplante Wohlbefindens-Prüfung wurde heute empfangen.',
+    'noti_manual_report_body': 'Die Schutzperson hat manuell eine Wohlbefindens-Prüfung gesendet.',
     'noti_battery_low_body':
         'Der Akkustand des Telefons liegt unter 20 %. Aufladen könnte nötig sein.',
     'noti_battery_dead_body':
@@ -362,7 +344,8 @@ abstract class DeDe {
     'noti_urgent_body':
         'Seit @days Tag(en) keine Wohlbefindens-Prüfung. Sofortige Überprüfung erforderlich.',
     'noti_steps_body': '@from_time ~ @to_time: @steps Schritte gegangen.',
-    'noti_emergency_body': 'Die betreute Person hat direkt um Hilfe gebeten. Bitte sofort überprüfen.',
+    'noti_emergency_body':
+        'Die betreute Person hat direkt um Hilfe gebeten. Bitte sofort überprüfen.',
     'noti_resolved_body': 'Der Wellness-Check der betreuten Person ist wieder normal.',
     'noti_cleared_by_guardian_title': '✅ Sicherheit bestätigt',
     'noti_cleared_by_guardian_body': 'Einer der Betreuer hat die Sicherheit persönlich bestätigt.',
@@ -371,8 +354,7 @@ abstract class DeDe {
     'local_alarm_title': '💗 Wohlbefindens-Prüfung erforderlich',
     'local_alarm_body': 'Bitte tippen Sie auf diese Benachrichtigung.',
     'wellbeing_check_title': '💛 Wohlbefindens-Prüfung',
-    'wellbeing_check_body':
-        'Geht es Ihnen gut? Bitte tippen Sie auf diese Benachrichtigung.',
+    'wellbeing_check_body': 'Geht es Ihnen gut? Bitte tippen Sie auf diese Benachrichtigung.',
     'noti_channel_name': 'Anbu-Benachrichtigungen',
   };
 }

@@ -29,49 +29,40 @@ abstract class PtBr {
     'app_tagline': 'Verificando o seu bem-estar.',
     'app_service_desc': 'Serviço automático de verificação de bem-estar',
     'app_guardian_title': 'Anbu Guardião',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Verificando...',
 
     // ── Atualização ──
     'update_required_title': 'Atualização necessária',
-    'update_required_message':
-        'Atualize para a versão @version para continuar usando o app.',
+    'update_required_message': 'Atualize para a versão @version para continuar usando o app.',
     'update_button': 'Atualizar',
     'update_available_title': 'Atualização disponível',
     'update_available_message': 'A versão @version está disponível.',
 
     // ── Seleção de modo ──
     'mode_select_title': 'Escolha sua função',
-    'mode_select_subtitle':
-        'Isso nos ajuda a configurar as funcionalidades certas para você',
-    'mode_subject_title':
-        'Quero que minha segurança\nseja monitorada',
+    'mode_select_subtitle': 'Isso nos ajuda a configurar as funcionalidades certas para você',
+    'mode_subject_title': 'Quero que minha segurança\nseja monitorada',
     'mode_subject_button': 'Quero ser protegido →',
-    'mode_guardian_title':
-        'Quero cuidar de alguém\nque eu amo',
+    'mode_guardian_title': 'Quero cuidar de alguém\nque eu amo',
     'mode_guardian_button': 'Começar como guardião →',
-    'mode_select_notice':
-        'O layout e as notificações serão diferentes de acordo com sua escolha',
+    'mode_select_notice': 'O layout e as notificações serão diferentes de acordo com sua escolha',
 
     // ── Permissões ──
-    'permission_title':
-        'Permissões necessárias\npara usar o app',
+    'permission_title': 'Permissões necessárias\npara usar o app',
     'permission_notification': 'Permissão de notificações',
     'permission_notification_subject_desc':
         'Necessária para receber alertas de verificação de bem-estar',
     'permission_notification_guardian_desc':
         'Necessária para receber alertas sobre o estado de segurança dos seus protegidos',
     'permission_activity': 'Reconhecimento de atividade',
-    'permission_activity_desc':
-        'Usado para detectar passos e confirmar atividade',
-    'permission_activity_dialog_title':
-        'Informações sobre a permissão de atividade',
+    'permission_activity_desc': 'Usado para detectar passos e confirmar atividade',
+    'permission_activity_dialog_title': 'Informações sobre a permissão de atividade',
     'permission_activity_dialog_message':
         'Usado para detectar passos e confirmar atividade.\nToque em "Permitir" na próxima tela.',
-    'permission_notification_required_title':
-        'Permissão de notificações necessária',
+    'permission_notification_required_title': 'Permissão de notificações necessária',
     'permission_notification_required_message':
         'A permissão de notificações é necessária para o serviço de verificação de bem-estar.\nAtive-a nas Configurações.',
     'permission_go_to_settings': 'Ir para Configurações',
@@ -92,20 +83,16 @@ abstract class PtBr {
     'permission_hibernation_go_to_settings': 'Abrir configurações do app',
 
     // ── Onboarding ──
-    'onboarding_title_1':
-        'Você se preocupa com alguém\nque mora sozinho?',
+    'onboarding_title_1': 'Você se preocupa com alguém\nque mora sozinho?',
     'onboarding_desc_1':
         'Mesmo de longe,\nvocê se pergunta se está tudo bem.\nO Anbu está aqui para você.',
-    'onboarding_title_2':
-        'A verificação de bem-estar\nacontece sem uma palavra',
+    'onboarding_title_2': 'A verificação de bem-estar\nacontece sem uma palavra',
     'onboarding_desc_2':
         'Apenas usando o smartphone,\num sinal diário de bem-estar\né enviado automaticamente.',
-    'onboarding_title_3':
-        'Compartilhe o bem-estar\ncom quem você ama',
+    'onboarding_title_3': 'Compartilhe o bem-estar\ncom quem você ama',
     'onboarding_desc_3':
         'Verificações diárias se acumulam\nem tranquilidade duradoura.\nVamos começar.',
-    'onboarding_title_4':
-        'Sem nomes, sem números\nde telefone coletados',
+    'onboarding_title_4': 'Sem nomes, sem números\nde telefone coletados',
     'onboarding_desc_4':
         'Apenas um sinal é transmitido:\n"Estou bem."\nSuas informações estão seguras.',
     'onboarding_role_subject': 'Protegido',
@@ -136,18 +123,17 @@ abstract class PtBr {
     'subject_home_connectivity_status': 'Conectividade',
     'subject_home_report_loading': 'Reportando...',
     'subject_home_report_button': 'Reportar segurança agora',
-    'subject_home_report_desc':
-        'Avise seu guardião de que você está bem',
+    'subject_home_report_desc': 'Avise seu guardião de que você está bem',
     'subject_home_emergency_button': 'Preciso de ajuda',
     'subject_home_emergency_desc': 'Envia um alerta de emergência aos seus guardiões',
     'subject_home_emergency_loading': 'Enviando alerta de emergência...',
     'subject_home_emergency_sent': 'Alerta de emergência enviado',
     'subject_home_emergency_failed': 'Falha ao enviar alerta de emergência',
     'subject_home_emergency_confirm_title': 'Pedido de ajuda de emergência',
-    'subject_home_emergency_confirm_body': 'Um alerta de emergência será enviado a todos os seus guardiões.\nTem certeza de que deseja pedir ajuda?',
+    'subject_home_emergency_confirm_body':
+        'Um alerta de emergência será enviado a todos os seus guardiões.\nTem certeza de que deseja pedir ajuda?',
     'subject_home_emergency_confirm_send': 'Enviar pedido de emergência',
-    'subject_home_share_text':
-        'Verifique como estou pelo app Anbu!\nCódigo de convite: @code',
+    'subject_home_share_text': 'Verifique como estou pelo app Anbu!\nCódigo de convite: @code',
     'subject_home_share_subject': 'Código de convite Anbu',
     'subject_home_code_copied': 'Código copiado',
 
@@ -157,8 +143,7 @@ abstract class PtBr {
     'drawer_privacy_policy': 'Política de privacidade',
     'drawer_terms': 'Termos de uso',
     'drawer_withdraw': 'Excluir conta',
-    'drawer_withdraw_message':
-        'Sua conta e todos os dados serão excluídos.\nTem certeza?',
+    'drawer_withdraw_message': 'Sua conta e todos os dados serão excluídos.\nTem certeza?',
 
     // ── Painel do guardião ──
     'guardian_status_normal': 'Normal',
@@ -170,40 +155,31 @@ abstract class PtBr {
     'guardian_subscription_expired_message':
         'As notificações de alerta não estão sendo enviadas.\nRenove sua assinatura para continuar a proteção.',
     'guardian_subscribe': 'Assinar',
-    'guardian_payment_preparing':
-        'A função de pagamento estará disponível em breve.',
+    'guardian_payment_preparing': 'A função de pagamento estará disponível em breve.',
     'guardian_today_summary': 'Resumo de bem-estar de hoje',
     'guardian_no_subjects': 'Nenhum protegido conectado.',
-    'guardian_checking_subjects':
-        'Monitorando atualmente\n@count protegido(s).',
+    'guardian_checking_subjects': 'Monitorando atualmente\n@count protegido(s).',
     'guardian_subject_list': 'Lista de protegidos',
     'guardian_call_now': 'Ligar agora',
     'guardian_confirm_safety': 'Confirmar segurança',
     'guardian_no_check_history': 'Sem histórico de verificação',
     'guardian_last_check_now': 'Última verificação: agora',
-    'guardian_last_check_minutes':
-        'Última verificação: @minutes min atrás',
-    'guardian_last_check_hours':
-        'Última verificação: @hours h atrás',
-    'guardian_last_check_days':
-        'Última verificação: @days dia(s) atrás',
+    'guardian_last_check_minutes': 'Última verificação: @minutes min atrás',
+    'guardian_last_check_hours': 'Última verificação: @hours h atrás',
+    'guardian_last_check_days': 'Última verificação: @days dia(s) atrás',
     'guardian_activity_stable': 'Atividade: estável',
     'guardian_safety_needed': 'Verificação de segurança necessária',
-    'guardian_error_load_subjects':
-        'Não foi possível carregar a lista de protegidos.',
-    'guardian_error_clear_alerts':
-        'Não foi possível limpar os alertas.',
+    'guardian_error_load_subjects': 'Não foi possível carregar a lista de protegidos.',
+    'guardian_error_clear_alerts': 'Não foi possível limpar os alertas.',
 
     // ── Adicionar protegido ──
     'add_subject_title': 'Vincular protegido',
-    'add_subject_guide_title':
-        'Insira o código único do protegido e um apelido.',
+    'add_subject_guide_title': 'Insira o código único do protegido e um apelido.',
     'add_subject_guide_subtitle':
         'Vincule o app do protegido para monitorar saúde e atividade em tempo real.',
     'add_subject_code_label': 'Código único (7 dígitos)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'O código único pode ser encontrado no app do protegido.',
+    'add_subject_code_info': 'O código único pode ser encontrado no app do protegido.',
     'add_subject_alias_label': 'Apelido do protegido',
     'add_subject_alias_hint': 'Ex: Mãe, Pai',
     'add_subject_connect': 'Conectar',
@@ -211,8 +187,7 @@ abstract class PtBr {
     'add_subject_success': 'Protegido conectado com sucesso.',
     'add_subject_error_invalid_code': 'Código inválido.',
     'add_subject_error_already_connected': 'Já conectado.',
-    'add_subject_error_failed':
-        'Conexão falhou. Tente novamente mais tarde.',
+    'add_subject_error_failed': 'Conexão falhou. Tente novamente mais tarde.',
     'add_subject_button': 'Adicionar novo protegido',
 
     // ── Configurações do guardião ──
@@ -260,14 +235,11 @@ abstract class PtBr {
     'notifications_today': 'Notificações de hoje',
     'notifications_empty': 'Nenhuma notificação hoje',
     'notifications_delete_all_title': 'Excluir todas as notificações',
-    'notifications_delete_all_message':
-        'Excluir todas as notificações de hoje?',
-    'notifications_delete_failed':
-        'Não foi possível excluir as notificações.',
+    'notifications_delete_all_message': 'Excluir todas as notificações de hoje?',
+    'notifications_delete_failed': 'Não foi possível excluir as notificações.',
     'notifications_guide_title': 'Guia de níveis de notificação',
     'notifications_level_health': 'Normal',
-    'notifications_level_health_desc':
-        'O bem-estar do protegido foi confirmado normalmente',
+    'notifications_level_health_desc': 'O bem-estar do protegido foi confirmado normalmente',
     'notifications_level_caution': 'Atenção',
     'notifications_level_caution_desc': 'Ainda sem sinal de bem-estar hoje',
     'notifications_level_warning': 'Alerta',
@@ -287,17 +259,14 @@ abstract class PtBr {
         'Ativa ou desativa todas as categorias de notificação de uma vez.',
     'notification_settings_level_section': 'Configurações por nível',
     'notification_settings_urgent': 'Alertas urgentes',
-    'notification_settings_urgent_desc':
-        'Alertas urgentes não podem ser desativados',
+    'notification_settings_urgent_desc': 'Alertas urgentes não podem ser desativados',
     'notification_settings_warning': 'Alertas de aviso',
     'notification_settings_warning_desc':
         'Alerta quando não há verificação por 2 dias consecutivos',
     'notification_settings_caution': 'Alertas de atenção',
-    'notification_settings_caution_desc':
-        'Alerta quando a verificação de hoje está ausente',
+    'notification_settings_caution_desc': 'Alerta quando a verificação de hoje está ausente',
     'notification_settings_info': 'Alertas informativos',
-    'notification_settings_info_desc':
-        'Alertas gerais como número de passos e status da bateria',
+    'notification_settings_info_desc': 'Alertas gerais como número de passos e status da bateria',
     'notification_settings_dnd': 'Não perturbe',
     'notification_settings_dnd_start': 'Hora de início',
     'notification_settings_dnd_end': 'Hora de término',
@@ -312,16 +281,13 @@ abstract class PtBr {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Protegidos conectados',
     'connection_empty': 'Nenhuma pessoa protegida conectada',
-    'connection_unlink_warning':
-        'A desvinculação excluirá os dados do protegido.',
+    'connection_unlink_warning': 'A desvinculação excluirá os dados do protegido.',
     'connection_unlink_warning_detail':
         'Os dados anteriores não poderão ser recuperados após uma nova vinculação. Você precisará inserir o código do protegido novamente.',
     'connection_heartbeat_schedule': 'Diariamente às @time',
-    'connection_heartbeat_report_time':
-        'O horário do relatório de bem-estar é ',
+    'connection_heartbeat_report_time': 'O horário do relatório de bem-estar é ',
     'connection_subject_label': 'Protegido',
-    'connection_change_only_in_app':
-        'só pode ser alterado no app',
+    'connection_change_only_in_app': 'só pode ser alterado no app',
     'connection_edit_title': 'Editar protegido',
     'connection_alias_label': 'Apelido',
     'connection_unlink_title': 'Desvincular',
@@ -340,18 +306,16 @@ abstract class PtBr {
     'heartbeat_schedule_change': 'Alterar horário de verificação',
     'heartbeat_schedule_title_ios': 'Horário da notificação push de bem-estar',
     'heartbeat_schedule_change_title_ios': 'Alterar horário da notificação push de bem-estar',
-    'heartbeat_schedule_hint_ios': 'Uma notificação push de bem-estar chega todos os dias neste horário. Toque na notificação ou abra o aplicativo nesse momento para enviar seu sinal de bem-estar.',
+    'heartbeat_schedule_hint_ios':
+        'Uma notificação push de bem-estar chega todos os dias neste horário. Toque na notificação ou abra o aplicativo nesse momento para enviar seu sinal de bem-estar.',
     'heartbeat_daily_time': 'Diariamente às @time',
-    'heartbeat_scheduled_today':
-        'Verificação de bem-estar agendada para @time hoje.',
+    'heartbeat_scheduled_today': 'Verificação de bem-estar agendada para @time hoje.',
     'heartbeat_change_failed_title': 'Falha ao alterar horário',
-    'heartbeat_change_failed_message':
-        'Não foi possível atualizar no servidor.',
+    'heartbeat_change_failed_message': 'Não foi possível atualizar no servidor.',
 
     // ── Notificações locais ──
     'local_notification_channel': 'Alertas de bem-estar',
-    'local_notification_channel_desc':
-        'Notificações do serviço de verificação de bem-estar',
+    'local_notification_channel_desc': 'Notificações do serviço de verificação de bem-estar',
 
     // ── Diversos ──
     'back_press_exit': 'Pressione voltar novamente para sair.',
@@ -363,8 +327,7 @@ abstract class PtBr {
     'error_unauthorized': 'Autenticação necessária.',
 
     // ── Corpo das notificações ──
-    'noti_auto_report_body':
-        'A verificação de bem-estar agendada foi recebida hoje.',
+    'noti_auto_report_body': 'A verificação de bem-estar agendada foi recebida hoje.',
     'noti_manual_report_body':
         'A pessoa protegida enviou manualmente uma verificação de bem-estar.',
     'noti_battery_low_body':
@@ -379,8 +342,7 @@ abstract class PtBr {
         'Verificações de bem-estar foram perdidas consecutivamente. Por favor, verifique pessoalmente.',
     'noti_urgent_body':
         'Sem verificação de bem-estar há @days dia(s). Verificação imediata necessária.',
-    'noti_steps_body':
-        '@from_time ~ @to_time: @steps passos dados.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps passos dados.',
     'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
     'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',
     'noti_cleared_by_guardian_title': '✅ Verificação confirmada',
@@ -390,8 +352,7 @@ abstract class PtBr {
     'local_alarm_title': '💗 Verificação de bem-estar necessária',
     'local_alarm_body': 'Por favor, toque nesta notificação.',
     'wellbeing_check_title': '💛 Verificação de bem-estar',
-    'wellbeing_check_body':
-        'Está tudo bem? Por favor, toque nesta notificação.',
+    'wellbeing_check_body': 'Está tudo bem? Por favor, toque nesta notificação.',
     'noti_channel_name': 'Alertas Anbu',
   };
 }

@@ -29,7 +29,7 @@ abstract class KoKr {
     'app_tagline': '당신의 안부를 확인합니다.\n(Checking your wellbeing.)',
     'app_service_desc': '자동 안부 확인 서비스',
     'app_guardian_title': '안부 수호자',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── 스플래시 ──
     'splash_loading': '안부를 확인하는 중...',
@@ -58,8 +58,7 @@ abstract class KoKr {
     'permission_activity': '신체 활동 권한',
     'permission_activity_desc': '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다',
     'permission_activity_dialog_title': '신체 활동 권한 안내',
-    'permission_activity_dialog_message':
-        '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.\n다음 화면에서 "허용"을 선택해 주세요.',
+    'permission_activity_dialog_message': '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.\n다음 화면에서 "허용"을 선택해 주세요.',
     'permission_notification_required_title': '알림 권한이 필요합니다',
     'permission_notification_required_message':
         '안부 확인 서비스를 이용하려면 알림 권한이 필요합니다.\n설정에서 알림 권한을 허용해 주세요.',
@@ -87,8 +86,7 @@ abstract class KoKr {
     'onboarding_title_3': '소중한 사람과\n안부를 나누세요',
     'onboarding_desc_3': '매일의 안부가 쌓여\n서로의 안심이 됩니다.\n지금 시작해 보세요.',
     'onboarding_title_4': '이름도, 전화번호도\n수집하지 않습니다',
-    'onboarding_desc_4':
-        "오직 '잘 지내고 있다'는\n안부 신호 하나만 전달합니다.\n당신의 정보는 안전합니다.",
+    'onboarding_desc_4': "오직 '잘 지내고 있다'는\n안부 신호 하나만 전달합니다.\n당신의 정보는 안전합니다.",
     'onboarding_role_subject': '보호 대상자',
     'onboarding_role_guardian': '보호자',
     'onboarding_role_guardian_subject': '보호자 겸 대상자',
@@ -144,8 +142,7 @@ abstract class KoKr {
     'guardian_status_urgent': '긴급',
     'guardian_status_confirmed': '안전확인됨',
     'guardian_subscription_expired': '구독이 만료되었습니다',
-    'guardian_subscription_expired_message':
-        '경고 알림이 발송되지 않고 있습니다.\n구독을 갱신하여 보호 서비스를 계속하세요.',
+    'guardian_subscription_expired_message': '경고 알림이 발송되지 않고 있습니다.\n구독을 갱신하여 보호 서비스를 계속하세요.',
     'guardian_subscribe': '구독하기',
     'guardian_payment_preparing': '결제 기능 준비 중입니다.',
     'guardian_today_summary': '오늘의 안부 요약',
@@ -205,9 +202,11 @@ abstract class KoKr {
     'gs_safety_code_button': '내 안전 코드 확인',
     'gs_safety_code_title': '내 안전 코드',
     'gs_enable_dialog_title': '안부 보호 활성화',
-    'gs_enable_dialog_body': '보호자 기능을 유지하면서 나의 안부도 보호받을 수 있습니다.\n활성화하면 안전 코드가 발급되고, 다른 보호자에게 내 "안전 코드"를 알려주세요.',
+    'gs_enable_dialog_body':
+        '보호자 기능을 유지하면서 나의 안부도 보호받을 수 있습니다.\n활성화하면 안전 코드가 발급되고, 다른 보호자에게 내 "안전 코드"를 알려주세요.',
     'gs_enable_dialog_ios_warning_title': '⚠ iOS는 Android와 달리 동작합니다',
-    'gs_enable_dialog_ios_warning_body': 'iOS에서는 매일 정해진 시각에 "안부 푸시 알림"이 표시됩니다. 알림을 탭하거나 알림 전후로 직접 앱을 열어야 안부가 전송됩니다. 앱을 열지 않으면 보호자에게 미수신 경고가 발생할 수 있습니다.',
+    'gs_enable_dialog_ios_warning_body':
+        'iOS에서는 매일 정해진 시각에 "안부 푸시 알림"이 표시됩니다. 알림을 탭하거나 알림 전후로 직접 앱을 열어야 안부가 전송됩니다. 앱을 열지 않으면 보호자에게 미수신 경고가 발생할 수 있습니다.',
     'gs_enable_dialog_ios_confirm': '이해했습니다, 활성화',
     'gs_enable_confirm': '활성화',
     'gs_enabled_message': '안부 보호가 활성화되었습니다',
@@ -236,8 +235,7 @@ abstract class KoKr {
     'notifications_level_urgent_desc': '지금 바로 확인이 필요해요',
     'notifications_level_info': '정보',
     'notifications_level_info_desc': '걸음수, 배터리 부족 등 참고용 알림',
-    'notifications_activity_note':
-        '※ 걸음수 데이터를 수집하지 못한 경우 활동 정보가 표시되지 않을 수 있습니다.',
+    'notifications_activity_note': '※ 걸음수 데이터를 수집하지 못한 경우 활동 정보가 표시되지 않을 수 있습니다.',
 
     // ── 보호자 알림 설정 ──
     'notification_settings_title': '알림 설정',
@@ -266,10 +264,8 @@ abstract class KoKr {
     'connection_managed_count_value': '@current / @max명',
     'connection_connected_subjects': '연결된 보호 대상자',
     'connection_empty': '연결된 보호 대상자가 없습니다',
-    'connection_unlink_warning':
-        '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.',
-    'connection_unlink_warning_detail':
-        '재연결 시 이전의 기록을 복구할 수 없으며, 보호 대상자 코드를 다시 입력해야 합니다.',
+    'connection_unlink_warning': '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.',
+    'connection_unlink_warning_detail': '재연결 시 이전의 기록을 복구할 수 없으며, 보호 대상자 코드를 다시 입력해야 합니다.',
     'connection_heartbeat_schedule': '매일 @time',
     'connection_heartbeat_report_time': '안부 보고시간은 ',
     'connection_subject_label': '보호 대상자',
@@ -317,12 +313,9 @@ abstract class KoKr {
     'noti_battery_low_body': '폰 배터리가 20% 미만입니다. 충전이 필요할 수 있습니다.',
     'noti_battery_dead_body':
         '폰이 배터리 방전으로 꺼진 것 같습니다. 마지막 배터리 잔량: @battery_level%. 충전 후 자동으로 정상 복귀됩니다.',
-    'noti_caution_suspicious_body':
-        '안부는 수신되었으나 폰 사용 흔적이 없습니다. 직접 확인해 주세요.',
-    'noti_caution_missing_body':
-        '오늘 예정된 안부 확인이 아직 없습니다. 직접 확인해 주세요.',
-    'noti_warning_body':
-        '연속으로 안부 확인이 되지 않고 있습니다. 직접 확인이 필요합니다.',
+    'noti_caution_suspicious_body': '안부는 수신되었으나 폰 사용 흔적이 없습니다. 직접 확인해 주세요.',
+    'noti_caution_missing_body': '오늘 예정된 안부 확인이 아직 없습니다. 직접 확인해 주세요.',
+    'noti_warning_body': '연속으로 안부 확인이 되지 않고 있습니다. 직접 확인이 필요합니다.',
     'noti_urgent_body': '@days일간 안부 확인이 없습니다. 즉시 확인이 필요합니다.',
     'noti_steps_body': '@from_time ~ @to_time 사이 @steps보를 걸으셨습니다.',
     'noti_emergency_body': '보호 대상자가 직접 도움을 요청했습니다. 즉시 확인해 주세요.',

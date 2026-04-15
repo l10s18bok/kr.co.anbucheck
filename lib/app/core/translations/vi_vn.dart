@@ -29,7 +29,7 @@ abstract class ViVn {
     'app_tagline': 'Kiem tra suc khoe cua ban.',
     'app_service_desc': 'Dich vu kiem tra suc khoe tu dong',
     'app_guardian_title': 'Nguoi bao ve Anbu',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Dang kiem tra suc khoe...',
@@ -44,26 +44,21 @@ abstract class ViVn {
 
     // ── Chon che do ──
     'mode_select_title': 'Chon vai tro cua ban',
-    'mode_select_subtitle':
-        'Dieu nay giup chung toi thiet lap cac tinh nang phu hop cho ban',
+    'mode_select_subtitle': 'Dieu nay giup chung toi thiet lap cac tinh nang phu hop cho ban',
     'mode_subject_title': 'Toi muon su an toan cua toi\nduoc theo doi',
     'mode_subject_button': 'Duoc bao ve →',
-    'mode_guardian_title':
-        'Toi muon theo doi\nnguoi than yeu cua toi',
+    'mode_guardian_title': 'Toi muon theo doi\nnguoi than yeu cua toi',
     'mode_guardian_button': 'Bat dau voi tu cach nguoi bao ve →',
-    'mode_select_notice':
-        'Giao dien va thong bao se khac nhau tuy theo lua chon cua ban',
+    'mode_select_notice': 'Giao dien va thong bao se khac nhau tuy theo lua chon cua ban',
 
     // ── Quyen ──
     'permission_title': 'Can cap quyen\nde su dung ung dung',
     'permission_notification': 'Quyen thong bao',
-    'permission_notification_subject_desc':
-        'Can thiet de nhan thong bao kiem tra suc khoe',
+    'permission_notification_subject_desc': 'Can thiet de nhan thong bao kiem tra suc khoe',
     'permission_notification_guardian_desc':
         'Can thiet de nhan thong bao ve tinh trang an toan cua nguoi duoc bao ve',
     'permission_activity': 'Nhan dien hoat dong',
-    'permission_activity_desc':
-        'Dung de phat hien buoc chan va xac nhan hoat dong',
+    'permission_activity_desc': 'Dung de phat hien buoc chan va xac nhan hoat dong',
     'permission_activity_dialog_title': 'Thong tin quyen hoat dong',
     'permission_activity_dialog_message':
         'Dung de phat hien buoc chan va xac nhan hoat dong.\nVui long nhan "Cho phep" tren man hinh tiep theo.',
@@ -89,16 +84,14 @@ abstract class ViVn {
 
     // ── Gioi thieu ──
     'onboarding_title_1': 'Ban lo lang cho nguoi\nsong mot minh?',
-    'onboarding_desc_1':
-        'Du o xa,\nban van tu hoi ho co khoe khong.\nAnbu o day cung ban.',
+    'onboarding_desc_1': 'Du o xa,\nban van tu hoi ho co khoe khong.\nAnbu o day cung ban.',
     'onboarding_title_2': 'Kiem tra suc khoe\nkhong can noi mot loi',
     'onboarding_desc_2':
         'Chi can su dung dien thoai,\nmoi ngay mot tin hieu suc khoe\nduoc gui tu dong.',
     'onboarding_title_3': 'Chia se su quan tam\nvoi nguoi than yeu',
     'onboarding_desc_3':
         'Nhung lan kiem tra hang ngay tich luy\nthanh su an tam lau dai.\nHay bat dau nao.',
-    'onboarding_title_4':
-        'Khong ten, khong so dien thoai\n— khong thu thap gi ca',
+    'onboarding_title_4': 'Khong ten, khong so dien thoai\n— khong thu thap gi ca',
     'onboarding_desc_4':
         'Chi mot tin hieu duoc gui:\n"Toi van khoe."\nThong tin cua ban luon an toan.',
     'onboarding_role_subject': 'Nguoi duoc bao ve',
@@ -129,18 +122,17 @@ abstract class ViVn {
     'subject_home_connectivity_status': 'Ket noi',
     'subject_home_report_loading': 'Dang bao cao...',
     'subject_home_report_button': 'Bao cao an toan ngay',
-    'subject_home_report_desc':
-        'Cho nguoi bao ve biet ban van khoe',
+    'subject_home_report_desc': 'Cho nguoi bao ve biet ban van khoe',
     'subject_home_emergency_button': 'Tôi cần giúp đỡ',
     'subject_home_emergency_desc': 'Gửi cảnh báo khẩn cấp đến người giám hộ',
     'subject_home_emergency_loading': 'Đang gửi cảnh báo khẩn cấp...',
     'subject_home_emergency_sent': 'Cảnh báo khẩn cấp đã được gửi',
     'subject_home_emergency_failed': 'Gửi cảnh báo khẩn cấp thất bại',
     'subject_home_emergency_confirm_title': 'Yêu cầu trợ giúp khẩn cấp',
-    'subject_home_emergency_confirm_body': 'Cảnh báo khẩn cấp sẽ được gửi đến tất cả người giám hộ.\nBạn có chắc chắn muốn yêu cầu trợ giúp không?',
+    'subject_home_emergency_confirm_body':
+        'Cảnh báo khẩn cấp sẽ được gửi đến tất cả người giám hộ.\nBạn có chắc chắn muốn yêu cầu trợ giúp không?',
     'subject_home_emergency_confirm_send': 'Gửi yêu cầu khẩn cấp',
-    'subject_home_share_text':
-        'Kiem tra suc khoe cua toi qua ung dung Anbu!\nMa moi: @code',
+    'subject_home_share_text': 'Kiem tra suc khoe cua toi qua ung dung Anbu!\nMa moi: @code',
     'subject_home_share_subject': 'Ma moi Anbu',
     'subject_home_code_copied': 'Da sao chep ma',
 
@@ -150,8 +142,7 @@ abstract class ViVn {
     'drawer_privacy_policy': 'Chinh sach bao mat',
     'drawer_terms': 'Dieu khoan su dung',
     'drawer_withdraw': 'Xoa tai khoan',
-    'drawer_withdraw_message':
-        'Tai khoan va tat ca du lieu se bi xoa.\nBan co chac khong?',
+    'drawer_withdraw_message': 'Tai khoan va tat ca du lieu se bi xoa.\nBan co chac khong?',
 
     // ── Bang dieu khien nguoi bao ve ──
     'guardian_status_normal': 'Binh thuong',
@@ -166,8 +157,7 @@ abstract class ViVn {
     'guardian_payment_preparing': 'Tinh nang thanh toan sap co.',
     'guardian_today_summary': 'Tom tat suc khoe hom nay',
     'guardian_no_subjects': 'Chua co nguoi duoc bao ve nao.',
-    'guardian_checking_subjects':
-        'Dang kiem tra\n@count nguoi duoc bao ve.',
+    'guardian_checking_subjects': 'Dang kiem tra\n@count nguoi duoc bao ve.',
     'guardian_subject_list': 'Danh sach nguoi duoc bao ve',
     'guardian_call_now': 'Goi ngay',
     'guardian_confirm_safety': 'Xac nhan an toan',
@@ -178,20 +168,17 @@ abstract class ViVn {
     'guardian_last_check_days': 'Lan kiem tra cuoi: @days ngay truoc',
     'guardian_activity_stable': 'Hoat dong: On dinh',
     'guardian_safety_needed': 'Can kiem tra an toan',
-    'guardian_error_load_subjects':
-        'Khong the tai danh sach nguoi duoc bao ve.',
+    'guardian_error_load_subjects': 'Khong the tai danh sach nguoi duoc bao ve.',
     'guardian_error_clear_alerts': 'Khong the xoa canh bao.',
 
     // ── Them nguoi duoc bao ve ──
     'add_subject_title': 'Ket noi nguoi duoc bao ve',
-    'add_subject_guide_title':
-        'Nhap ma duy nhat cua nguoi duoc bao ve va ten goi.',
+    'add_subject_guide_title': 'Nhap ma duy nhat cua nguoi duoc bao ve va ten goi.',
     'add_subject_guide_subtitle':
         'Ket noi ung dung cua nguoi duoc bao ve de theo doi suc khoe va hoat dong theo thoi gian thuc.',
     'add_subject_code_label': 'Ma duy nhat (7 ky tu)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'Ma duy nhat co the tim thay trong ung dung cua nguoi duoc bao ve.',
+    'add_subject_code_info': 'Ma duy nhat co the tim thay trong ung dung cua nguoi duoc bao ve.',
     'add_subject_alias_label': 'Ten goi nguoi duoc bao ve',
     'add_subject_alias_hint': 'VD: Me, Bo',
     'add_subject_connect': 'Ket noi',
@@ -199,8 +186,7 @@ abstract class ViVn {
     'add_subject_success': 'Ket noi nguoi duoc bao ve thanh cong.',
     'add_subject_error_invalid_code': 'Ma khong hop le.',
     'add_subject_error_already_connected': 'Da ket noi roi.',
-    'add_subject_error_failed':
-        'Ket noi that bai. Vui long thu lai.',
+    'add_subject_error_failed': 'Ket noi that bai. Vui long thu lai.',
     'add_subject_button': 'Them nguoi duoc bao ve moi',
 
     // ── Cai dat nguoi bao ve ──
@@ -248,8 +234,7 @@ abstract class ViVn {
     'notifications_today': 'Thong bao hom nay',
     'notifications_empty': 'Khong co thong bao hom nay',
     'notifications_delete_all_title': 'Xoa tat ca thong bao',
-    'notifications_delete_all_message':
-        'Xoa tat ca thong bao hom nay?',
+    'notifications_delete_all_message': 'Xoa tat ca thong bao hom nay?',
     'notifications_delete_failed': 'Khong the xoa thong bao.',
     'notifications_guide_title': 'Huong dan cap do thong bao',
     'notifications_level_health': 'Binh thuong',
@@ -270,21 +255,16 @@ abstract class ViVn {
     'notification_settings_title': 'Cai dat thong bao',
     'notification_settings_push': 'Thong bao day',
     'notification_settings_all': 'Tat ca thong bao',
-    'notification_settings_all_desc':
-        'Bat hoac tat tat ca cac loai thong bao cung mot luc.',
+    'notification_settings_all_desc': 'Bat hoac tat tat ca cac loai thong bao cung mot luc.',
     'notification_settings_level_section': 'Cai dat theo cap do',
     'notification_settings_urgent': 'Canh bao khan cap',
-    'notification_settings_urgent_desc':
-        'Khong the tat canh bao khan cap',
+    'notification_settings_urgent_desc': 'Khong the tat canh bao khan cap',
     'notification_settings_warning': 'Canh bao muc do cao',
-    'notification_settings_warning_desc':
-        'Canh bao khi khong kiem tra trong 2 ngay lien tiep',
+    'notification_settings_warning_desc': 'Canh bao khi khong kiem tra trong 2 ngay lien tiep',
     'notification_settings_caution': 'Canh bao chu y',
-    'notification_settings_caution_desc':
-        'Canh bao khi chua kiem tra hom nay',
+    'notification_settings_caution_desc': 'Canh bao khi chua kiem tra hom nay',
     'notification_settings_info': 'Thong bao thong tin',
-    'notification_settings_info_desc':
-        'Thong bao chung nhu so buoc chan va tinh trang pin',
+    'notification_settings_info_desc': 'Thong bao chung nhu so buoc chan va tinh trang pin',
     'notification_settings_dnd': 'Khong lam phien',
     'notification_settings_dnd_start': 'Thoi gian bat dau',
     'notification_settings_dnd_end': 'Thoi gian ket thuc',
@@ -299,8 +279,7 @@ abstract class ViVn {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Nguoi duoc bao ve da ket noi',
     'connection_empty': 'Không có đối tượng bảo vệ nào được kết nối',
-    'connection_unlink_warning':
-        'Ngat ket noi se xoa du lieu cua nguoi duoc bao ve.',
+    'connection_unlink_warning': 'Ngat ket noi se xoa du lieu cua nguoi duoc bao ve.',
     'connection_unlink_warning_detail':
         'Cac ban ghi truoc do khong the khoi phuc sau khi ket noi lai. Ban se can nhap lai ma cua nguoi duoc bao ve.',
     'connection_heartbeat_schedule': 'Hang ngay luc @time',
@@ -325,18 +304,16 @@ abstract class ViVn {
     'heartbeat_schedule_change': 'Doi thoi gian kiem tra',
     'heartbeat_schedule_title_ios': 'Thời gian thông báo đẩy an toàn',
     'heartbeat_schedule_change_title_ios': 'Đổi thời gian thông báo đẩy an toàn',
-    'heartbeat_schedule_hint_ios': 'Thông báo đẩy an toàn sẽ đến vào thời điểm này mỗi ngày. Chạm vào thông báo hoặc mở ứng dụng quanh thời điểm đó để gửi tín hiệu an toàn.',
+    'heartbeat_schedule_hint_ios':
+        'Thông báo đẩy an toàn sẽ đến vào thời điểm này mỗi ngày. Chạm vào thông báo hoặc mở ứng dụng quanh thời điểm đó để gửi tín hiệu an toàn.',
     'heartbeat_daily_time': 'Hang ngay luc @time',
-    'heartbeat_scheduled_today':
-        'Kiem tra suc khoe da len lich luc @time hom nay.',
+    'heartbeat_scheduled_today': 'Kiem tra suc khoe da len lich luc @time hom nay.',
     'heartbeat_change_failed_title': 'Doi thoi gian that bai',
-    'heartbeat_change_failed_message':
-        'Khong the cap nhat tren may chu.',
+    'heartbeat_change_failed_message': 'Khong the cap nhat tren may chu.',
 
     // ── Thong bao cuc bo ──
     'local_notification_channel': 'Canh bao suc khoe',
-    'local_notification_channel_desc':
-        'Thong bao dich vu kiem tra suc khoe',
+    'local_notification_channel_desc': 'Thong bao dich vu kiem tra suc khoe',
 
     // ── Khac ──
     'back_press_exit': 'Nhan lai de thoat.',
@@ -348,25 +325,20 @@ abstract class ViVn {
     'error_unauthorized': 'Can xac thuc.',
 
     // ── Noi dung thong bao ──
-    'noti_auto_report_body':
-        'Kiem tra suc khoe theo lich da duoc nhan hom nay.',
-    'noti_manual_report_body':
-        'Nguoi duoc bao ve da gui kiem tra suc khoe thu cong.',
-    'noti_battery_low_body':
-        'Pin dien thoai duoi 20%. Co the can sac.',
+    'noti_auto_report_body': 'Kiem tra suc khoe theo lich da duoc nhan hom nay.',
+    'noti_manual_report_body': 'Nguoi duoc bao ve da gui kiem tra suc khoe thu cong.',
+    'noti_battery_low_body': 'Pin dien thoai duoi 20%. Co the can sac.',
     'noti_battery_dead_body':
         'Dien thoai co ve da tat do het pin. Muc pin cuoi: @battery_level%. Se phuc hoi sau khi sac.',
     'noti_caution_suspicious_body':
         'Da nhan tin hieu suc khoe nhung khong co dau hieu su dung dien thoai. Vui long kiem tra truc tiep.',
     'noti_caution_missing_body':
         'Kiem tra suc khoe theo lich hom nay chua duoc nhan. Vui long kiem tra truc tiep.',
-    'noti_warning_body':
-        'Kiem tra suc khoe da bi bo lo lien tiep. Vui long xac minh truc tiep.',
-    'noti_urgent_body':
-        'Khong co kiem tra suc khoe trong @days ngay. Can xac minh ngay lap tuc.',
-    'noti_steps_body':
-        '@from_time ~ @to_time: @steps buoc di.',
-    'noti_emergency_body': 'Người được bảo vệ đã trực tiếp yêu cầu giúp đỡ. Vui lòng kiểm tra ngay.',
+    'noti_warning_body': 'Kiem tra suc khoe da bi bo lo lien tiep. Vui long xac minh truc tiep.',
+    'noti_urgent_body': 'Khong co kiem tra suc khoe trong @days ngay. Can xac minh ngay lap tuc.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps buoc di.',
+    'noti_emergency_body':
+        'Người được bảo vệ đã trực tiếp yêu cầu giúp đỡ. Vui lòng kiểm tra ngay.',
     'noti_resolved_body': 'Kiểm tra sức khỏe của người được bảo vệ đã trở lại bình thường.',
     'noti_cleared_by_guardian_title': '✅ Xác nhận an toàn',
     'noti_cleared_by_guardian_body': 'Một trong các người bảo vệ đã trực tiếp xác nhận sự an toàn.',
@@ -375,8 +347,7 @@ abstract class ViVn {
     'local_alarm_title': '💗 Cần kiểm tra sức khỏe',
     'local_alarm_body': 'Vui lòng chạm vào thông báo này.',
     'wellbeing_check_title': '💛 Kiểm tra sức khỏe',
-    'wellbeing_check_body':
-        'Bạn có khỏe không? Vui lòng chạm vào thông báo này.',
+    'wellbeing_check_body': 'Bạn có khỏe không? Vui lòng chạm vào thông báo này.',
     'noti_channel_name': 'Cảnh báo Anbu',
   };
 }

@@ -29,7 +29,7 @@ abstract class HiIn {
     'app_tagline': 'आपकी कुशलता की जांच।',
     'app_service_desc': 'स्वचालित कुशलता जांच सेवा',
     'app_guardian_title': 'Anbu अभिभावक',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── स्प्लैश ──
     'splash_loading': 'कुशलता जांच हो रही है...',
@@ -44,25 +44,21 @@ abstract class HiIn {
 
     // ── मोड चयन ──
     'mode_select_title': 'अपनी भूमिका चुनें',
-    'mode_select_subtitle':
-        'यह आपके लिए सही सुविधाएं सेट करने में मदद करता है',
+    'mode_select_subtitle': 'यह आपके लिए सही सुविधाएं सेट करने में मदद करता है',
     'mode_subject_title': 'मैं चाहता/चाहती हूं कि\nमेरी सुरक्षा पर नजर रखी जाए',
     'mode_subject_button': 'सुरक्षित रहें →',
     'mode_guardian_title': 'मैं अपने प्रिय व्यक्ति\nकी देखभाल करना चाहता/चाहती हूं',
     'mode_guardian_button': 'अभिभावक के रूप में शुरू करें →',
-    'mode_select_notice':
-        'आपके चयन के अनुसार स्क्रीन लेआउट और सूचनाएं भिन्न होंगी',
+    'mode_select_notice': 'आपके चयन के अनुसार स्क्रीन लेआउट और सूचनाएं भिन्न होंगी',
 
     // ── अनुमतियां ──
     'permission_title': 'ऐप का उपयोग करने के लिए\nअनुमतियां आवश्यक हैं',
     'permission_notification': 'सूचना अनुमति',
-    'permission_notification_subject_desc':
-        'कुशलता जांच सूचनाएं प्राप्त करने के लिए आवश्यक',
+    'permission_notification_subject_desc': 'कुशलता जांच सूचनाएं प्राप्त करने के लिए आवश्यक',
     'permission_notification_guardian_desc':
         'आपके संरक्षित व्यक्तियों की सुरक्षा सूचनाएं प्राप्त करने के लिए आवश्यक',
     'permission_activity': 'गतिविधि पहचान',
-    'permission_activity_desc':
-        'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है',
+    'permission_activity_desc': 'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है',
     'permission_activity_dialog_title': 'गतिविधि अनुमति जानकारी',
     'permission_activity_dialog_message':
         'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है।\nकृपया अगली स्क्रीन पर "अनुमति दें" दबाएं।',
@@ -88,17 +84,14 @@ abstract class HiIn {
 
     // ── ऑनबोर्डिंग ──
     'onboarding_title_1': 'अकेले रहने वाले\nप्रियजन की चिंता है?',
-    'onboarding_desc_1':
-        'दूर रहकर भी\nआप सोचते हैं कि वे ठीक हैं या नहीं।\nAnbu आपके साथ है।',
+    'onboarding_desc_1': 'दूर रहकर भी\nआप सोचते हैं कि वे ठीक हैं या नहीं।\nAnbu आपके साथ है।',
     'onboarding_title_2': 'बिना एक शब्द कहे\nकुशलता की जांच',
     'onboarding_desc_2':
         'बस स्मार्टफोन का उपयोग करके\nरोज एक कुशलता संकेत\nस्वचालित रूप से भेजा जाता है।',
     'onboarding_title_3': 'अपने प्रियजनों के साथ\nकुशलता साझा करें',
-    'onboarding_desc_3':
-        'रोज की जांच से\nस्थायी मानसिक शांति बनती है।\nचलिए शुरू करते हैं।',
+    'onboarding_desc_3': 'रोज की जांच से\nस्थायी मानसिक शांति बनती है।\nचलिए शुरू करते हैं।',
     'onboarding_title_4': 'कोई नाम नहीं, कोई फोन नंबर नहीं\n— कुछ भी एकत्र नहीं',
-    'onboarding_desc_4':
-        'केवल एक संकेत भेजा जाता है:\n"मैं ठीक हूं।"\nआपकी जानकारी सुरक्षित है।',
+    'onboarding_desc_4': 'केवल एक संकेत भेजा जाता है:\n"मैं ठीक हूं।"\nआपकी जानकारी सुरक्षित है।',
     'onboarding_role_subject': 'संरक्षित व्यक्ति',
     'onboarding_role_guardian': 'अभिभावक',
     'onboarding_role_guardian_subject': 'अभिभावक और संरक्षित',
@@ -127,18 +120,17 @@ abstract class HiIn {
     'subject_home_connectivity_status': 'कनेक्टिविटी',
     'subject_home_report_loading': 'रिपोर्ट हो रही है...',
     'subject_home_report_button': 'अभी सुरक्षा रिपोर्ट करें',
-    'subject_home_report_desc':
-        'अपने अभिभावक को बताएं कि आप ठीक हैं',
+    'subject_home_report_desc': 'अपने अभिभावक को बताएं कि आप ठीक हैं',
     'subject_home_emergency_button': 'मुझे मदद चाहिए',
     'subject_home_emergency_desc': 'अभिभावकों को आपातकालीन अलर्ट भेजता है',
     'subject_home_emergency_loading': 'आपातकालीन अलर्ट भेजा जा रहा है...',
     'subject_home_emergency_sent': 'आपातकालीन अलर्ट भेज दिया गया',
     'subject_home_emergency_failed': 'आपातकालीन अलर्ट भेजने में विफल',
     'subject_home_emergency_confirm_title': 'आपातकालीन सहायता अनुरोध',
-    'subject_home_emergency_confirm_body': 'सभी अभिभावकों को आपातकालीन अलर्ट भेजा जाएगा।\nक्या आप वाकई मदद का अनुरोध करना चाहते हैं?',
+    'subject_home_emergency_confirm_body':
+        'सभी अभिभावकों को आपातकालीन अलर्ट भेजा जाएगा।\nक्या आप वाकई मदद का अनुरोध करना चाहते हैं?',
     'subject_home_emergency_confirm_send': 'आपातकालीन अनुरोध भेजें',
-    'subject_home_share_text':
-        'Anbu ऐप से मेरी कुशलता जांचें!\nआमंत्रण कोड: @code',
+    'subject_home_share_text': 'Anbu ऐप से मेरी कुशलता जांचें!\nआमंत्रण कोड: @code',
     'subject_home_share_subject': 'Anbu आमंत्रण कोड',
     'subject_home_code_copied': 'कोड कॉपी किया गया',
 
@@ -148,8 +140,7 @@ abstract class HiIn {
     'drawer_privacy_policy': 'गोपनीयता नीति',
     'drawer_terms': 'सेवा की शर्तें',
     'drawer_withdraw': 'खाता हटाएं',
-    'drawer_withdraw_message':
-        'आपका खाता और सभी डेटा हटा दिया जाएगा।\nक्या आप सुनिश्चित हैं?',
+    'drawer_withdraw_message': 'आपका खाता और सभी डेटा हटा दिया जाएगा।\nक्या आप सुनिश्चित हैं?',
 
     // ── अभिभावक डैशबोर्ड ──
     'guardian_status_normal': 'सामान्य',
@@ -164,8 +155,7 @@ abstract class HiIn {
     'guardian_payment_preparing': 'भुगतान सुविधा जल्द आ रही है।',
     'guardian_today_summary': 'आज की कुशलता सारांश',
     'guardian_no_subjects': 'कोई संरक्षित व्यक्ति जुड़ा नहीं है।',
-    'guardian_checking_subjects':
-        'वर्तमान में @count संरक्षित व्यक्ति(यों)\nकी जांच हो रही है।',
+    'guardian_checking_subjects': 'वर्तमान में @count संरक्षित व्यक्ति(यों)\nकी जांच हो रही है।',
     'guardian_subject_list': 'संरक्षित व्यक्ति सूची',
     'guardian_call_now': 'अभी कॉल करें',
     'guardian_confirm_safety': 'सुरक्षा पुष्ट करें',
@@ -176,20 +166,17 @@ abstract class HiIn {
     'guardian_last_check_days': 'अंतिम जांच: @days दिन पहले',
     'guardian_activity_stable': 'गतिविधि: स्थिर',
     'guardian_safety_needed': 'सुरक्षा जांच आवश्यक',
-    'guardian_error_load_subjects':
-        'संरक्षित व्यक्तियों की सूची लोड करने में विफल।',
+    'guardian_error_load_subjects': 'संरक्षित व्यक्तियों की सूची लोड करने में विफल।',
     'guardian_error_clear_alerts': 'चेतावनियां हटाने में विफल।',
 
     // ── अभिभावक संरक्षित व्यक्ति जोड़ें ──
     'add_subject_title': 'संरक्षित व्यक्ति जोड़ें',
-    'add_subject_guide_title':
-        'संरक्षित व्यक्ति का अनोखा कोड और उपनाम दर्ज करें।',
+    'add_subject_guide_title': 'संरक्षित व्यक्ति का अनोखा कोड और उपनाम दर्ज करें।',
     'add_subject_guide_subtitle':
         'संरक्षित व्यक्ति के ऐप को जोड़कर उनके स्वास्थ्य और गतिविधि पर नजर रखें।',
     'add_subject_code_label': 'अनोखा कोड (7 अंक)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'अनोखा कोड संरक्षित व्यक्ति के ऐप में मिल सकता है।',
+    'add_subject_code_info': 'अनोखा कोड संरक्षित व्यक्ति के ऐप में मिल सकता है।',
     'add_subject_alias_label': 'संरक्षित व्यक्ति का उपनाम',
     'add_subject_alias_hint': 'जैसे: मां, पिताजी',
     'add_subject_connect': 'जोड़ें',
@@ -197,8 +184,7 @@ abstract class HiIn {
     'add_subject_success': 'संरक्षित व्यक्ति सफलतापूर्वक जुड़ गया।',
     'add_subject_error_invalid_code': 'अमान्य कोड।',
     'add_subject_error_already_connected': 'पहले से जुड़ा हुआ।',
-    'add_subject_error_failed':
-        'कनेक्शन विफल। कृपया पुनः प्रयास करें।',
+    'add_subject_error_failed': 'कनेक्शन विफल। कृपया पुनः प्रयास करें।',
     'add_subject_button': 'नया संरक्षित व्यक्ति जोड़ें',
 
     // ── अभिभावक सेटिंग्स ──
@@ -246,13 +232,11 @@ abstract class HiIn {
     'notifications_today': 'आज की सूचनाएं',
     'notifications_empty': 'आज कोई सूचना नहीं',
     'notifications_delete_all_title': 'सभी सूचनाएं हटाएं',
-    'notifications_delete_all_message':
-        'आज की सभी सूचनाएं हटाएं?',
+    'notifications_delete_all_message': 'आज की सभी सूचनाएं हटाएं?',
     'notifications_delete_failed': 'सूचनाएं हटाने में विफल।',
     'notifications_guide_title': 'सूचना स्तर मार्गदर्शिका',
     'notifications_level_health': 'सामान्य',
-    'notifications_level_health_desc':
-        'संरक्षित व्यक्ति की कुशलता सामान्य रूप से पुष्ट',
+    'notifications_level_health_desc': 'संरक्षित व्यक्ति की कुशलता सामान्य रूप से पुष्ट',
     'notifications_level_caution': 'सावधानी',
     'notifications_level_caution_desc': 'आज अभी तक कोई कुशल संकेत नहीं',
     'notifications_level_warning': 'चेतावनी',
@@ -268,26 +252,20 @@ abstract class HiIn {
     'notification_settings_title': 'सूचना सेटिंग्स',
     'notification_settings_push': 'पुश सूचनाएं',
     'notification_settings_all': 'सभी सूचनाएं',
-    'notification_settings_all_desc':
-        'सभी सूचना श्रेणियों को एक साथ सक्षम या अक्षम करें।',
+    'notification_settings_all_desc': 'सभी सूचना श्रेणियों को एक साथ सक्षम या अक्षम करें।',
     'notification_settings_level_section': 'स्तर सेटिंग्स',
     'notification_settings_urgent': 'अत्यावश्यक अलर्ट',
-    'notification_settings_urgent_desc':
-        'अत्यावश्यक अलर्ट अक्षम नहीं किए जा सकते',
+    'notification_settings_urgent_desc': 'अत्यावश्यक अलर्ट अक्षम नहीं किए जा सकते',
     'notification_settings_warning': 'चेतावनी अलर्ट',
-    'notification_settings_warning_desc':
-        'लगातार 2 दिन जांच न होने पर अलर्ट',
+    'notification_settings_warning_desc': 'लगातार 2 दिन जांच न होने पर अलर्ट',
     'notification_settings_caution': 'सावधानी अलर्ट',
-    'notification_settings_caution_desc':
-        'आज की जांच गायब होने पर अलर्ट',
+    'notification_settings_caution_desc': 'आज की जांच गायब होने पर अलर्ट',
     'notification_settings_info': 'जानकारी अलर्ट',
-    'notification_settings_info_desc':
-        'सामान्य अलर्ट जैसे कदम संख्या और बैटरी स्थिति',
+    'notification_settings_info_desc': 'सामान्य अलर्ट जैसे कदम संख्या और बैटरी स्थिति',
     'notification_settings_dnd': 'परेशान न करें',
     'notification_settings_dnd_start': 'शुरू का समय',
     'notification_settings_dnd_end': 'समाप्ति का समय',
-    'notification_settings_dnd_note':
-        '※ अत्यावश्यक अलर्ट परेशान न करें मोड में भी आते हैं',
+    'notification_settings_dnd_note': '※ अत्यावश्यक अलर्ट परेशान न करें मोड में भी आते हैं',
     'notification_settings_dnd_start_default': 'रात 10:00',
     'notification_settings_dnd_end_default': 'सुबह 7:00',
 
@@ -297,8 +275,7 @@ abstract class HiIn {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'जुड़े संरक्षित व्यक्ति',
     'connection_empty': 'कोई जुड़ा हुआ संरक्षित व्यक्ति नहीं',
-    'connection_unlink_warning':
-        'अनलिंक करने से संरक्षित व्यक्ति का डेटा हट जाएगा।',
+    'connection_unlink_warning': 'अनलिंक करने से संरक्षित व्यक्ति का डेटा हट जाएगा।',
     'connection_unlink_warning_detail':
         'पुनः जोड़ने के बाद पिछले रिकॉर्ड पुनर्प्राप्त नहीं किए जा सकते। आपको संरक्षित व्यक्ति का कोड फिर से दर्ज करना होगा।',
     'connection_heartbeat_schedule': 'रोज @time पर',
@@ -323,18 +300,16 @@ abstract class HiIn {
     'heartbeat_schedule_change': 'जांच समय बदलें',
     'heartbeat_schedule_title_ios': 'वेलनेस पुश सूचना समय',
     'heartbeat_schedule_change_title_ios': 'वेलनेस पुश सूचना समय बदलें',
-    'heartbeat_schedule_hint_ios': 'हर दिन इस समय एक वेलनेस पुश सूचना आती है। अपना वेलनेस संकेत भेजने के लिए सूचना पर टैप करें या उस समय के आसपास ऐप खोलें।',
+    'heartbeat_schedule_hint_ios':
+        'हर दिन इस समय एक वेलनेस पुश सूचना आती है। अपना वेलनेस संकेत भेजने के लिए सूचना पर टैप करें या उस समय के आसपास ऐप खोलें।',
     'heartbeat_daily_time': 'रोज @time पर',
-    'heartbeat_scheduled_today':
-        'आज @time पर कुशलता जांच निर्धारित है।',
+    'heartbeat_scheduled_today': 'आज @time पर कुशलता जांच निर्धारित है।',
     'heartbeat_change_failed_title': 'समय बदलना विफल',
-    'heartbeat_change_failed_message':
-        'सर्वर पर अपडेट नहीं हो सका।',
+    'heartbeat_change_failed_message': 'सर्वर पर अपडेट नहीं हो सका।',
 
     // ── स्थानीय सूचनाएं ──
     'local_notification_channel': 'कुशलता अलर्ट',
-    'local_notification_channel_desc':
-        'कुशलता जांच सेवा सूचनाएं',
+    'local_notification_channel_desc': 'कुशलता जांच सेवा सूचनाएं',
 
     // ── अन्य ──
     'back_press_exit': 'बाहर निकलने के लिए फिर से दबाएं।',
@@ -346,24 +321,18 @@ abstract class HiIn {
     'error_unauthorized': 'प्रमाणीकरण आवश्यक है।',
 
     // ── सूचना सामग्री ──
-    'noti_auto_report_body':
-        'आज की निर्धारित कुशलता जांच प्राप्त हुई।',
-    'noti_manual_report_body':
-        'संरक्षित व्यक्ति ने मैन्युअल रूप से कुशलता जांच भेजी।',
-    'noti_battery_low_body':
-        'फोन की बैटरी 20% से कम है। चार्जिंग की आवश्यकता हो सकती है।',
+    'noti_auto_report_body': 'आज की निर्धारित कुशलता जांच प्राप्त हुई।',
+    'noti_manual_report_body': 'संरक्षित व्यक्ति ने मैन्युअल रूप से कुशलता जांच भेजी।',
+    'noti_battery_low_body': 'फोन की बैटरी 20% से कम है। चार्जिंग की आवश्यकता हो सकती है।',
     'noti_battery_dead_body':
         'फोन बैटरी खत्म होने से बंद हो गया लगता है। अंतिम बैटरी स्तर: @battery_level%। चार्ज करने के बाद स्वतः ठीक हो जाएगा।',
     'noti_caution_suspicious_body':
         'कुशलता संकेत प्राप्त हुआ, लेकिन फोन उपयोग के कोई संकेत नहीं हैं। कृपया व्यक्तिगत रूप से जांचें।',
     'noti_caution_missing_body':
         'आज की निर्धारित कुशलता जांच अभी तक प्राप्त नहीं हुई है। कृपया व्यक्तिगत रूप से जांचें।',
-    'noti_warning_body':
-        'कुशलता जांच लगातार छूट रही है। कृपया व्यक्तिगत रूप से सत्यापित करें।',
-    'noti_urgent_body':
-        '@days दिनों से कुशलता जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
-    'noti_steps_body':
-        '@from_time ~ @to_time: @steps कदम चले।',
+    'noti_warning_body': 'कुशलता जांच लगातार छूट रही है। कृपया व्यक्तिगत रूप से सत्यापित करें।',
+    'noti_urgent_body': '@days दिनों से कुशलता जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
+    'noti_steps_body': '@from_time ~ @to_time: @steps कदम चले।',
     'noti_emergency_body': 'संरक्षित व्यक्ति ने सीधे मदद का अनुरोध किया है। कृपया तुरंत जांचें।',
     'noti_resolved_body': 'संरक्षित व्यक्ति की स्वास्थ्य जाँच सामान्य हो गई है।',
     'noti_cleared_by_guardian_title': '✅ सुरक्षा पुष्टि',
@@ -373,8 +342,7 @@ abstract class HiIn {
     'local_alarm_title': '💗 कुशलता जांच आवश्यक है',
     'local_alarm_body': 'कृपया इस सूचना पर टैप करें।',
     'wellbeing_check_title': '💛 कुशलता जांच',
-    'wellbeing_check_body':
-        'क्या आप ठीक हैं? कृपया इस सूचना पर टैप करें।',
+    'wellbeing_check_body': 'क्या आप ठीक हैं? कृपया इस सूचना पर टैप करें।',
     'noti_channel_name': 'Anbu सूचनाएँ',
   };
 }

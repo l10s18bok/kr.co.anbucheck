@@ -29,15 +29,14 @@ abstract class EsEs {
     'app_tagline': 'Velamos por su bienestar.',
     'app_service_desc': 'Servicio automático de verificación de bienestar',
     'app_guardian_title': 'Protector Anbu',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Verificando bienestar...',
 
     // ── Actualización ──
     'update_required_title': 'Actualización necesaria',
-    'update_required_message':
-        'Actualice a la versión @version para seguir usando la aplicación.',
+    'update_required_message': 'Actualice a la versión @version para seguir usando la aplicación.',
     'update_button': 'Actualizar',
     'update_available_title': 'Actualización disponible',
     'update_available_message': 'La versión @version está disponible.',
@@ -50,25 +49,20 @@ abstract class EsEs {
     'mode_subject_button': 'Recibir protección →',
     'mode_guardian_title': 'Quiero cuidar\nde un ser querido',
     'mode_guardian_button': 'Ser protector →',
-    'mode_select_notice':
-        'La interfaz y las notificaciones serán diferentes según su elección',
+    'mode_select_notice': 'La interfaz y las notificaciones serán diferentes según su elección',
 
     // ── Permisos ──
     'permission_title': 'Se necesitan permisos\npara usar la aplicación',
     'permission_notification': 'Notificaciones',
-    'permission_notification_subject_desc':
-        'Necesario para recibir alertas de bienestar',
+    'permission_notification_subject_desc': 'Necesario para recibir alertas de bienestar',
     'permission_notification_guardian_desc':
         'Necesario para recibir alertas sobre la seguridad de sus protegidos',
     'permission_activity': 'Reconocimiento de actividad',
-    'permission_activity_desc':
-        'Se utiliza para detectar pasos y confirmar la actividad',
-    'permission_activity_dialog_title':
-        'Información sobre el permiso de actividad',
+    'permission_activity_desc': 'Se utiliza para detectar pasos y confirmar la actividad',
+    'permission_activity_dialog_title': 'Información sobre el permiso de actividad',
     'permission_activity_dialog_message':
         'Se utiliza para detectar pasos y confirmar la actividad.\nPulse "Permitir" en la siguiente pantalla.',
-    'permission_notification_required_title':
-        'Permiso de notificaciones necesario',
+    'permission_notification_required_title': 'Permiso de notificaciones necesario',
     'permission_notification_required_message':
         'Se necesita el permiso de notificaciones para el servicio de bienestar.\nActívelo en Ajustes.',
     'permission_go_to_settings': 'Ir a Ajustes',
@@ -89,22 +83,17 @@ abstract class EsEs {
     'permission_hibernation_go_to_settings': 'Abrir ajustes de la app',
 
     // ── Presentación ──
-    'onboarding_title_1':
-        '¿Le preocupa alguien\nque vive solo?',
+    'onboarding_title_1': '¿Le preocupa alguien\nque vive solo?',
     'onboarding_desc_1':
         'Aunque esté lejos,\nuno se pregunta si todo va bien.\nAnbu está aquí para usted.',
-    'onboarding_title_2':
-        'El bienestar se comparte\nsin decir una palabra',
+    'onboarding_title_2': 'El bienestar se comparte\nsin decir una palabra',
     'onboarding_desc_2':
         'Con solo usar el teléfono,\nse envía automáticamente\nuna señal diaria de bienestar.',
-    'onboarding_title_3':
-        'Comparta el bienestar\ncon sus seres queridos',
+    'onboarding_title_3': 'Comparta el bienestar\ncon sus seres queridos',
     'onboarding_desc_3':
         'Las verificaciones diarias generan\ntranquilidad duradera.\nComience ahora.',
-    'onboarding_title_4':
-        'Sin nombres ni números\nde teléfono — no se recopila nada',
-    'onboarding_desc_4':
-        'Solo se transmite una señal:\n«Estoy bien».\nSu información está segura.',
+    'onboarding_title_4': 'Sin nombres ni números\nde teléfono — no se recopila nada',
+    'onboarding_desc_4': 'Solo se transmite una señal:\n«Estoy bien».\nSu información está segura.',
     'onboarding_role_subject': 'Persona protegida',
     'onboarding_role_guardian': 'Protector',
     'onboarding_role_guardian_subject': 'Guardián y protegido',
@@ -133,18 +122,17 @@ abstract class EsEs {
     'subject_home_connectivity_status': 'Estado de conexión',
     'subject_home_report_loading': 'Enviando reporte...',
     'subject_home_report_button': 'Reportar bienestar ahora',
-    'subject_home_report_desc':
-        'Haga saber a su protector que se encuentra bien',
+    'subject_home_report_desc': 'Haga saber a su protector que se encuentra bien',
     'subject_home_emergency_button': 'Necesito ayuda',
     'subject_home_emergency_desc': 'Envía una alerta de emergencia a sus guardianes',
     'subject_home_emergency_loading': 'Enviando alerta de emergencia...',
     'subject_home_emergency_sent': 'La alerta de emergencia ha sido enviada',
     'subject_home_emergency_failed': 'Error al enviar la alerta de emergencia',
     'subject_home_emergency_confirm_title': 'Solicitud de ayuda de emergencia',
-    'subject_home_emergency_confirm_body': 'Se enviará una alerta de emergencia a todos sus guardianes.\n¿Está seguro de que desea solicitar ayuda?',
+    'subject_home_emergency_confirm_body':
+        'Se enviará una alerta de emergencia a todos sus guardianes.\n¿Está seguro de que desea solicitar ayuda?',
     'subject_home_emergency_confirm_send': 'Enviar solicitud de emergencia',
-    'subject_home_share_text':
-        '¡Cuide de mí con la aplicación Anbu!\nCódigo de invitación: @code',
+    'subject_home_share_text': '¡Cuide de mí con la aplicación Anbu!\nCódigo de invitación: @code',
     'subject_home_share_subject': 'Código de invitación Anbu',
     'subject_home_code_copied': 'Código copiado',
 
@@ -154,8 +142,7 @@ abstract class EsEs {
     'drawer_privacy_policy': 'Política de privacidad',
     'drawer_terms': 'Términos de uso',
     'drawer_withdraw': 'Eliminar cuenta',
-    'drawer_withdraw_message':
-        'Su cuenta y todos sus datos serán eliminados.\n¿Está seguro/a?',
+    'drawer_withdraw_message': 'Su cuenta y todos sus datos serán eliminados.\n¿Está seguro/a?',
 
     // ── Panel del protector ──
     'guardian_status_normal': 'Normal',
@@ -167,12 +154,10 @@ abstract class EsEs {
     'guardian_subscription_expired_message':
         'Las alertas ya no se están enviando.\nRenueve su suscripción para mantener la protección.',
     'guardian_subscribe': 'Suscribirse',
-    'guardian_payment_preparing':
-        'La función de pago estará disponible próximamente.',
+    'guardian_payment_preparing': 'La función de pago estará disponible próximamente.',
     'guardian_today_summary': 'Resumen del día',
     'guardian_no_subjects': 'No hay personas protegidas conectadas.',
-    'guardian_checking_subjects':
-        'Actualmente se vigila el bienestar\nde @count persona(s).',
+    'guardian_checking_subjects': 'Actualmente se vigila el bienestar\nde @count persona(s).',
     'guardian_subject_list': 'Lista de personas protegidas',
     'guardian_call_now': 'Llamar ahora',
     'guardian_confirm_safety': 'Confirmar seguridad',
@@ -183,14 +168,12 @@ abstract class EsEs {
     'guardian_last_check_days': 'Última verif.: hace @days día(s)',
     'guardian_activity_stable': 'Actividad: estable',
     'guardian_safety_needed': 'Se necesita verificación de seguridad',
-    'guardian_error_load_subjects':
-        'No se pudo cargar la lista de personas protegidas.',
+    'guardian_error_load_subjects': 'No se pudo cargar la lista de personas protegidas.',
     'guardian_error_clear_alerts': 'No se pudieron eliminar las alertas.',
 
     // ── Agregar persona protegida ──
     'add_subject_title': 'Vincular persona protegida',
-    'add_subject_guide_title':
-        'Introduzca el código único y un apodo.',
+    'add_subject_guide_title': 'Introduzca el código único y un apodo.',
     'add_subject_guide_subtitle':
         'Vincule la aplicación de un ser querido para seguir su estado en tiempo real.',
     'add_subject_code_label': 'Código único (7 caracteres)',
@@ -204,8 +187,7 @@ abstract class EsEs {
     'add_subject_success': 'Persona protegida vinculada correctamente.',
     'add_subject_error_invalid_code': 'Código no válido.',
     'add_subject_error_already_connected': 'Ya está vinculado/a.',
-    'add_subject_error_failed':
-        'Error de vinculación. Inténtelo de nuevo.',
+    'add_subject_error_failed': 'Error de vinculación. Inténtelo de nuevo.',
     'add_subject_button': 'Agregar nueva persona protegida',
 
     // ── Ajustes (Protector) ──
@@ -253,14 +235,11 @@ abstract class EsEs {
     'notifications_today': 'Notificaciones de hoy',
     'notifications_empty': 'No hay notificaciones hoy',
     'notifications_delete_all_title': 'Eliminar todas las notificaciones',
-    'notifications_delete_all_message':
-        '¿Eliminar todas las notificaciones de hoy?',
-    'notifications_delete_failed':
-        'No se pudieron eliminar las notificaciones.',
+    'notifications_delete_all_message': '¿Eliminar todas las notificaciones de hoy?',
+    'notifications_delete_failed': 'No se pudieron eliminar las notificaciones.',
     'notifications_guide_title': 'Guía de niveles de notificación',
     'notifications_level_health': 'Normal',
-    'notifications_level_health_desc':
-        'El bienestar de la persona protegida ha sido confirmado',
+    'notifications_level_health_desc': 'El bienestar de la persona protegida ha sido confirmado',
     'notifications_level_caution': 'Precaución',
     'notifications_level_caution_desc': 'Aún no hay señal de bienestar hoy',
     'notifications_level_warning': 'Alerta',
@@ -280,17 +259,14 @@ abstract class EsEs {
         'Activar o desactivar todas las categorías de notificación a la vez.',
     'notification_settings_level_section': 'Ajustes por nivel',
     'notification_settings_urgent': 'Alertas urgentes',
-    'notification_settings_urgent_desc':
-        'Las alertas urgentes no se pueden desactivar',
+    'notification_settings_urgent_desc': 'Las alertas urgentes no se pueden desactivar',
     'notification_settings_warning': 'Alertas de alerta',
     'notification_settings_warning_desc':
         'Alerta cuando no hay verificación durante 2 días consecutivos',
     'notification_settings_caution': 'Alertas de precaución',
-    'notification_settings_caution_desc':
-        'Alerta cuando falta la verificación de hoy',
+    'notification_settings_caution_desc': 'Alerta cuando falta la verificación de hoy',
     'notification_settings_info': 'Alertas informativas',
-    'notification_settings_info_desc':
-        'Alertas generales como número de pasos y nivel de batería',
+    'notification_settings_info_desc': 'Alertas generales como número de pasos y nivel de batería',
     'notification_settings_dnd': 'No molestar',
     'notification_settings_dnd_start': 'Hora de inicio',
     'notification_settings_dnd_end': 'Hora de fin',
@@ -305,15 +281,13 @@ abstract class EsEs {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Personas protegidas conectadas',
     'connection_empty': 'No hay personas protegidas conectadas',
-    'connection_unlink_warning':
-        'Al desvincular se eliminarán los datos de esta persona.',
+    'connection_unlink_warning': 'Al desvincular se eliminarán los datos de esta persona.',
     'connection_unlink_warning_detail':
         'Los registros anteriores no se podrán recuperar tras una nueva vinculación. Deberá introducir de nuevo el código de la persona.',
     'connection_heartbeat_schedule': 'Cada día a las @time',
     'connection_heartbeat_report_time': 'La hora de reporte es ',
     'connection_subject_label': 'Persona protegida',
-    'connection_change_only_in_app':
-        'solo se puede cambiar en la aplicación',
+    'connection_change_only_in_app': 'solo se puede cambiar en la aplicación',
     'connection_edit_title': 'Editar persona protegida',
     'connection_alias_label': 'Apodo',
     'connection_unlink_title': 'Desvincular',
@@ -332,18 +306,16 @@ abstract class EsEs {
     'heartbeat_schedule_change': 'Cambiar hora de verificación',
     'heartbeat_schedule_title_ios': 'Hora de notificación push de bienestar',
     'heartbeat_schedule_change_title_ios': 'Cambiar hora de notificación push de bienestar',
-    'heartbeat_schedule_hint_ios': 'Una notificación push de bienestar llega cada día a esta hora. Toca la notificación o abre la aplicación en ese momento para enviar tu señal de bienestar.',
+    'heartbeat_schedule_hint_ios':
+        'Una notificación push de bienestar llega cada día a esta hora. Toca la notificación o abre la aplicación en ese momento para enviar tu señal de bienestar.',
     'heartbeat_daily_time': 'Cada día a las @time',
-    'heartbeat_scheduled_today':
-        'Verificación de bienestar programada hoy a las @time.',
+    'heartbeat_scheduled_today': 'Verificación de bienestar programada hoy a las @time.',
     'heartbeat_change_failed_title': 'Error al cambiar la hora',
-    'heartbeat_change_failed_message':
-        'No se pudo guardar en el servidor.',
+    'heartbeat_change_failed_message': 'No se pudo guardar en el servidor.',
 
     // ── Notificaciones locales ──
     'local_notification_channel': 'Alertas de bienestar',
-    'local_notification_channel_desc':
-        'Notificaciones del servicio de bienestar',
+    'local_notification_channel_desc': 'Notificaciones del servicio de bienestar',
 
     // ── Otros ──
     'back_press_exit': 'Pulse de nuevo para salir de la aplicación.',
@@ -355,8 +327,7 @@ abstract class EsEs {
     'error_unauthorized': 'Se requiere autenticación.',
 
     // ── Cuerpo de notificaciones ──
-    'noti_auto_report_body':
-        'La verificación de bienestar programada se recibió hoy.',
+    'noti_auto_report_body': 'La verificación de bienestar programada se recibió hoy.',
     'noti_manual_report_body':
         'La persona protegida envió manualmente una verificación de bienestar.',
     'noti_battery_low_body':
@@ -371,19 +342,19 @@ abstract class EsEs {
         'Las verificaciones de bienestar se han perdido consecutivamente. Por favor, verifique en persona.',
     'noti_urgent_body':
         'Sin verificación de bienestar durante @days día(s). Se requiere verificación inmediata.',
-    'noti_steps_body':
-        '@from_time ~ @to_time: @steps pasos caminados.',
-    'noti_emergency_body': 'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps pasos caminados.',
+    'noti_emergency_body':
+        'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',
     'noti_resolved_body': 'La verificación de bienestar del protegido ha vuelto a la normalidad.',
     'noti_cleared_by_guardian_title': '✅ Verificación confirmada',
-    'noti_cleared_by_guardian_body': 'Uno de los protectores ha confirmado personalmente la seguridad.',
+    'noti_cleared_by_guardian_body':
+        'Uno de los protectores ha confirmado personalmente la seguridad.',
 
     // ── Notificaciones locales ──
     'local_alarm_title': '💗 Verificación de bienestar necesaria',
     'local_alarm_body': 'Por favor, toque esta notificación.',
     'wellbeing_check_title': '💛 Verificación de bienestar',
-    'wellbeing_check_body':
-        '¿Se encuentra bien? Por favor, toque esta notificación.',
+    'wellbeing_check_body': '¿Se encuentra bien? Por favor, toque esta notificación.',
     'noti_channel_name': 'Alertas Anbu',
   };
 }

@@ -29,7 +29,7 @@ abstract class EnUs {
     'app_tagline': 'Checking your wellbeing.',
     'app_service_desc': 'Automatic wellness check service',
     'app_guardian_title': 'Anbu Guardian',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Checking in...',
@@ -54,7 +54,8 @@ abstract class EnUs {
     'permission_title': 'Permissions needed\nto use the app',
     'permission_notification': 'Notification Permission',
     'permission_notification_subject_desc': 'Required to receive wellness check alerts',
-    'permission_notification_guardian_desc': 'Required to receive safety status alerts for your subjects',
+    'permission_notification_guardian_desc':
+        'Required to receive safety status alerts for your subjects',
     'permission_activity': 'Activity Recognition',
     'permission_activity_desc': 'Used to detect steps and confirm activity',
     'permission_activity_dialog_title': 'Activity Permission Info',
@@ -82,13 +83,17 @@ abstract class EnUs {
 
     // ── Onboarding ──
     'onboarding_title_1': 'Worried about someone\nliving alone?',
-    'onboarding_desc_1': 'Even from far away,\nyou wonder if they\'re okay.\nAnbu is here with you.',
+    'onboarding_desc_1':
+        'Even from far away,\nyou wonder if they\'re okay.\nAnbu is here with you.',
     'onboarding_title_2': 'Wellness checks\nwithout a single word',
-    'onboarding_desc_2': 'Just by using their smartphone,\na daily wellness signal\nis sent automatically.',
+    'onboarding_desc_2':
+        'Just by using their smartphone,\na daily wellness signal\nis sent automatically.',
     'onboarding_title_3': 'Share wellness\nwith your loved ones',
-    'onboarding_desc_3': 'Daily check-ins build up\ninto lasting peace of mind.\nLet\'s get started.',
+    'onboarding_desc_3':
+        'Daily check-ins build up\ninto lasting peace of mind.\nLet\'s get started.',
     'onboarding_title_4': 'No names, no phone numbers\n— nothing collected',
-    'onboarding_desc_4': 'Only one signal is delivered:\n"I\'m doing fine."\nYour information stays safe.',
+    'onboarding_desc_4':
+        'Only one signal is delivered:\n"I\'m doing fine."\nYour information stays safe.',
     'onboarding_role_subject': 'Subject',
     'onboarding_role_guardian': 'Guardian',
     'onboarding_role_guardian_subject': 'Guardian & Subject',
@@ -123,7 +128,8 @@ abstract class EnUs {
     'subject_home_emergency_sent': 'Emergency alert has been sent',
     'subject_home_emergency_failed': 'Failed to send emergency alert',
     'subject_home_emergency_confirm_title': 'Emergency Help Request',
-    'subject_home_emergency_confirm_body': 'An emergency alert will be sent to all your guardians.\nAre you sure you want to request help?',
+    'subject_home_emergency_confirm_body':
+        'An emergency alert will be sent to all your guardians.\nAre you sure you want to request help?',
     'subject_home_emergency_confirm_send': 'Send Emergency Request',
     'subject_home_share_text': 'Check on me with the Anbu app!\nInvite code: @code',
     'subject_home_share_subject': 'Anbu Invite Code',
@@ -167,7 +173,8 @@ abstract class EnUs {
     // ── Guardian Add Subject ──
     'add_subject_title': 'Link Subject',
     'add_subject_guide_title': 'Enter the subject\'s unique code and an alias.',
-    'add_subject_guide_subtitle': 'Link a subject\'s app to monitor their health and activity in real-time.',
+    'add_subject_guide_subtitle':
+        'Link a subject\'s app to monitor their health and activity in real-time.',
     'add_subject_code_label': 'Unique Code (7 digits)',
     'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'The unique code can be found in the subject\'s app.',
@@ -205,15 +212,18 @@ abstract class EnUs {
     'gs_safety_code_button': 'Check My Safety Code',
     'gs_safety_code_title': 'My Safety Code',
     'gs_enable_dialog_title': 'Enable Wellness Protection',
-    'gs_enable_dialog_body': 'You can receive wellness protection while keeping your guardian features.\nA safety code will be issued — please share it with other guardians.',
+    'gs_enable_dialog_body':
+        'You can receive wellness protection while keeping your guardian features.\nA safety code will be issued — please share it with other guardians.',
     'gs_enable_dialog_ios_warning_title': '⚠ iOS works differently from Android',
-    'gs_enable_dialog_ios_warning_body': 'On iOS, a "wellness push notification" appears every day at the scheduled time. You must tap the notification or open the app yourself around that time for your wellness signal to be sent. If you do not open the app, your guardians may receive a missed-check alert.',
+    'gs_enable_dialog_ios_warning_body':
+        'On iOS, a "wellness push notification" appears every day at the scheduled time. You must tap the notification or open the app yourself around that time for your wellness signal to be sent. If you do not open the app, your guardians may receive a missed-check alert.',
     'gs_enable_dialog_ios_confirm': 'I understand, enable',
     'gs_enable_confirm': 'Enable',
     'gs_enabled_message': 'Wellness protection has been enabled',
     'gs_enable_failed': 'Failed to enable wellness protection',
     'gs_disable_dialog_title': 'Disable Wellness Protection',
-    'gs_disable_dialog_body': 'Disabling wellness protection will delete your safety code and stop sending wellness checks to connected guardians.',
+    'gs_disable_dialog_body':
+        'Disabling wellness protection will delete your safety code and stop sending wellness checks to connected guardians.',
     'gs_disable_confirm': 'Disable',
     'gs_disabled_message': 'Wellness protection has been disabled',
     'gs_disable_failed': 'Failed to disable wellness protection',
@@ -266,8 +276,7 @@ abstract class EnUs {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Connected Subjects',
     'connection_empty': 'No connected subjects',
-    'connection_unlink_warning':
-        'Unlinking will delete the subject\'s data.',
+    'connection_unlink_warning': 'Unlinking will delete the subject\'s data.',
     'connection_unlink_warning_detail':
         'Previous records cannot be recovered after relinking. You will need to re-enter the subject\'s code.',
     'connection_heartbeat_schedule': 'Daily at @time',
@@ -292,7 +301,8 @@ abstract class EnUs {
     'heartbeat_schedule_change': 'Change Check Time',
     'heartbeat_schedule_title_ios': 'Wellness Push Time',
     'heartbeat_schedule_change_title_ios': 'Change Wellness Push Time',
-    'heartbeat_schedule_hint_ios': 'A wellness push notification arrives at this time every day. Tap the notification or open the app around then to send your wellness signal.',
+    'heartbeat_schedule_hint_ios':
+        'A wellness push notification arrives at this time every day. Tap the notification or open the app around then to send your wellness signal.',
     'heartbeat_daily_time': 'Daily at @time',
     'heartbeat_scheduled_today': 'Wellness check scheduled at @time today.',
     'heartbeat_change_failed_title': 'Time Change Failed',
@@ -312,27 +322,23 @@ abstract class EnUs {
     'error_unauthorized': 'Authentication required.',
 
     // ── Notification Bodies ──
-    'noti_auto_report_body':
-        'Scheduled wellness check was received today.',
-    'noti_manual_report_body':
-        'The subject sent a manual wellness check.',
-    'noti_battery_low_body':
-        'Phone battery is below 20%. Charging may be needed.',
+    'noti_auto_report_body': 'Scheduled wellness check was received today.',
+    'noti_manual_report_body': 'The subject sent a manual wellness check.',
+    'noti_battery_low_body': 'Phone battery is below 20%. Charging may be needed.',
     'noti_battery_dead_body':
         'Phone appears to have shut down due to a dead battery. Last battery level: @battery_level%. It will recover after charging.',
     'noti_caution_suspicious_body':
         'A wellness signal was received, but there are no signs of phone usage. Please check in person.',
     'noti_caution_missing_body':
         "Today's scheduled wellness check has not been received yet. Please check in person.",
-    'noti_warning_body':
-        'Wellness checks have been missed consecutively. Please verify in person.',
-    'noti_urgent_body':
-        'No wellness check for @days day(s). Immediate verification is required.',
+    'noti_warning_body': 'Wellness checks have been missed consecutively. Please verify in person.',
+    'noti_urgent_body': 'No wellness check for @days day(s). Immediate verification is required.',
     'noti_steps_body': '@from_time ~ @to_time: @steps steps walked.',
     'noti_emergency_body': 'The subject has directly requested help. Please check immediately.',
     'noti_resolved_body': 'The subject\'s wellness check has returned to normal.',
     'noti_cleared_by_guardian_title': '✅ Wellness Check Confirmed',
-    'noti_cleared_by_guardian_body': 'One of the guardians has personally confirmed the subject\'s safety.',
+    'noti_cleared_by_guardian_body':
+        'One of the guardians has personally confirmed the subject\'s safety.',
 
     // ── Local Notifications ──
     'local_alarm_title': '💗 Wellness check needed',

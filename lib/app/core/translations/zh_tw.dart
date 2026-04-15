@@ -29,7 +29,7 @@ abstract class ZhTw {
     'app_tagline': '關心您的平安',
     'app_service_desc': '自動問安服務',
     'app_guardian_title': 'Anbu 守護者',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── 啟動頁 ──
     'splash_loading': '正在確認平安...',
@@ -58,15 +58,12 @@ abstract class ZhTw {
     'permission_activity': '身體活動權限',
     'permission_activity_desc': '用於偵測步數以確認活動狀態',
     'permission_activity_dialog_title': '身體活動權限說明',
-    'permission_activity_dialog_message':
-        '用於偵測步數以確認活動狀態。\n請在下一個畫面中選擇「允許」。',
+    'permission_activity_dialog_message': '用於偵測步數以確認活動狀態。\n請在下一個畫面中選擇「允許」。',
     'permission_notification_required_title': '需要通知權限',
-    'permission_notification_required_message':
-        '問安服務需要通知權限。\n請在設定中開啟通知權限。',
+    'permission_notification_required_message': '問安服務需要通知權限。\n請在設定中開啟通知權限。',
     'permission_go_to_settings': '前往設定',
     'permission_activity_denied_title': '需要身體活動權限',
-    'permission_activity_denied_message':
-        '用於偵測步數並提高問安準確性。\n請在設定中開啟身體活動權限。',
+    'permission_activity_denied_message': '用於偵測步數並提高問安準確性。\n請在設定中開啟身體活動權限。',
     'permission_battery': '電池最佳化例外',
     'permission_battery_desc': '將應用程式從電池最佳化中排除，以免每天定時的問安檢查被遺漏',
     'permission_battery_required_title': '請將電池設定為「不受限制」',
@@ -87,8 +84,7 @@ abstract class ZhTw {
     'onboarding_title_3': '與親人\n互報平安',
     'onboarding_desc_3': '每天的問安匯聚成\n彼此的安心。\n現在就開始吧。',
     'onboarding_title_4': '不收集姓名，\n也不收集電話號碼',
-    'onboarding_desc_4':
-        '只傳遞一個訊號：\n「我一切安好。」\n您的資訊絕對安全。',
+    'onboarding_desc_4': '只傳遞一個訊號：\n「我一切安好。」\n您的資訊絕對安全。',
     'onboarding_role_subject': '被守護者',
     'onboarding_role_guardian': '守護者',
     'onboarding_role_guardian_subject': '守護者兼被守護者',
@@ -144,8 +140,7 @@ abstract class ZhTw {
     'guardian_status_urgent': '緊急',
     'guardian_status_confirmed': '安全已確認',
     'guardian_subscription_expired': '訂閱已過期',
-    'guardian_subscription_expired_message':
-        '警報通知已停止發送。\n請續訂以繼續守護服務。',
+    'guardian_subscription_expired_message': '警報通知已停止發送。\n請續訂以繼續守護服務。',
     'guardian_subscribe': '訂閱',
     'guardian_payment_preparing': '付款功能正在準備中。',
     'guardian_today_summary': '今日問安總結',
@@ -207,7 +202,8 @@ abstract class ZhTw {
     'gs_enable_dialog_title': '啟用安否保護',
     'gs_enable_dialog_body': '您可以在保持守護者功能的同時接受安否保護。\n啟用後將發放安全碼，請將您的「安全碼」告知其他守護者。',
     'gs_enable_dialog_ios_warning_title': '⚠ iOS 與 Android 運作方式不同',
-    'gs_enable_dialog_ios_warning_body': '在 iOS 上，每天會在固定時間顯示「安否推播通知」。您必須點按通知或在該時間前後親自開啟應用程式，安否信號才會傳送。若不開啟應用程式，守護者可能會收到未接收警告。',
+    'gs_enable_dialog_ios_warning_body':
+        '在 iOS 上，每天會在固定時間顯示「安否推播通知」。您必須點按通知或在該時間前後親自開啟應用程式，安否信號才會傳送。若不開啟應用程式，守護者可能會收到未接收警告。',
     'gs_enable_dialog_ios_confirm': '我已了解，啟用',
     'gs_enable_confirm': '啟用',
     'gs_enabled_message': '安否保護已啟用',
@@ -236,8 +232,7 @@ abstract class ZhTw {
     'notifications_level_urgent_desc': '需要立即確認',
     'notifications_level_info': '資訊',
     'notifications_level_info_desc': '步數、電量不足等參考提醒',
-    'notifications_activity_note':
-        '※ 如果無法採集步數資料，活動資訊可能不會顯示。',
+    'notifications_activity_note': '※ 如果無法採集步數資料，活動資訊可能不會顯示。',
 
     // ── 守護者通知設定 ──
     'notification_settings_title': '通知設定',
@@ -266,10 +261,8 @@ abstract class ZhTw {
     'connection_managed_count_value': '@current / @max 人',
     'connection_connected_subjects': '已連線的被守護者',
     'connection_empty': '沒有連接的保護對象',
-    'connection_unlink_warning':
-        '解除連結後，該被守護者的資料將被刪除。',
-    'connection_unlink_warning_detail':
-        '重新連結後無法恢復之前的紀錄， 需要重新輸入被守護者的邀請碼。',
+    'connection_unlink_warning': '解除連結後，該被守護者的資料將被刪除。',
+    'connection_unlink_warning_detail': '重新連結後無法恢復之前的紀錄， 需要重新輸入被守護者的邀請碼。',
     'connection_heartbeat_schedule': '每天 @time',
     'connection_heartbeat_report_time': '問安報告時間為 ',
     'connection_subject_label': '被守護者',
@@ -315,12 +308,9 @@ abstract class ZhTw {
     'noti_auto_report_body': '今天的定時問安已正常收到。',
     'noti_manual_report_body': '對象者手動發送了問安。',
     'noti_battery_low_body': '手機電量低於20%，可能需要充電。',
-    'noti_battery_dead_body':
-        '手機似乎因電量耗盡而關機。最後電量：@battery_level%。充電後將自動恢復。',
-    'noti_caution_suspicious_body':
-        '已收到問安信號，但未偵測到手機使用痕跡。請親自確認。',
-    'noti_caution_missing_body':
-        '今天預定的問安尚未收到。請親自確認。',
+    'noti_battery_dead_body': '手機似乎因電量耗盡而關機。最後電量：@battery_level%。充電後將自動恢復。',
+    'noti_caution_suspicious_body': '已收到問安信號，但未偵測到手機使用痕跡。請親自確認。',
+    'noti_caution_missing_body': '今天預定的問安尚未收到。請親自確認。',
     'noti_warning_body': '問安已連續未收到。請親自核實。',
     'noti_urgent_body': '已@days天未收到問安。需要立即確認。',
     'noti_steps_body': '@from_time ~ @to_time：走了@steps步。',

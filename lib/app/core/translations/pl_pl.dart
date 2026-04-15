@@ -29,7 +29,7 @@ abstract class PlPl {
     'app_tagline': 'Sprawdzamy, czy wszystko u Ciebie w porzadku.',
     'app_service_desc': 'Automatyczna usluga sprawdzania samopoczucia',
     'app_guardian_title': 'Opiekun Anbu',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Sprawdzanie samopoczucia...',
@@ -44,30 +44,25 @@ abstract class PlPl {
 
     // ── Wybor trybu ──
     'mode_select_title': 'Wybierz swoja role',
-    'mode_select_subtitle':
-        'To pomoze nam skonfigurowac odpowiednie funkcje dla Ciebie',
+    'mode_select_subtitle': 'To pomoze nam skonfigurowac odpowiednie funkcje dla Ciebie',
     'mode_subject_title': 'Chce, aby ktos\nczuwal nad moim bezpieczenstwem',
     'mode_subject_button': 'Chce byc pod opieka →',
     'mode_guardian_title': 'Chce czuwac nad bezpieczenstwem\nbliskiej osoby',
     'mode_guardian_button': 'Zacznij jako opiekun →',
-    'mode_select_notice':
-        'Uklad ekranu i powiadomienia beda sie roznic w zaleznosci od wyboru',
+    'mode_select_notice': 'Uklad ekranu i powiadomienia beda sie roznic w zaleznosci od wyboru',
 
     // ── Uprawnienia ──
     'permission_title': 'Do korzystania z aplikacji\nwymagane sa uprawnienia',
     'permission_notification': 'Uprawnienie do powiadomien',
-    'permission_notification_subject_desc':
-        'Wymagane do otrzymywania powiadomien o samopoczuciu',
+    'permission_notification_subject_desc': 'Wymagane do otrzymywania powiadomien o samopoczuciu',
     'permission_notification_guardian_desc':
         'Wymagane do otrzymywania powiadomien o bezpieczenstwie podopiecznych',
     'permission_activity': 'Rozpoznawanie aktywnosci',
-    'permission_activity_desc':
-        'Sluzy do wykrywania krokow i potwierdzania aktywnosci',
+    'permission_activity_desc': 'Sluzy do wykrywania krokow i potwierdzania aktywnosci',
     'permission_activity_dialog_title': 'Informacja o uprawnieniu aktywnosci',
     'permission_activity_dialog_message':
         'Sluzy do wykrywania krokow i potwierdzania aktywnosci.\nProsze wybrac "Zezwol" na nastepnym ekranie.',
-    'permission_notification_required_title':
-        'Wymagane uprawnienie do powiadomien',
+    'permission_notification_required_title': 'Wymagane uprawnienie do powiadomien',
     'permission_notification_required_message':
         'Uprawnienie do powiadomien jest wymagane dla uslugi sprawdzania samopoczucia.\nProsze wlaczyc je w Ustawieniach.',
     'permission_go_to_settings': 'Przejdz do Ustawien',
@@ -88,19 +83,15 @@ abstract class PlPl {
     'permission_hibernation_go_to_settings': 'Otwórz ustawienia aplikacji',
 
     // ── Onboarding ──
-    'onboarding_title_1':
-        'Martwisz sie o kogos,\nkto mieszka sam?',
+    'onboarding_title_1': 'Martwisz sie o kogos,\nkto mieszka sam?',
     'onboarding_desc_1':
         'Nawet z daleka\nzastanawiasz sie, czy wszystko w porzadku.\nAnbu jest tu z Toba.',
-    'onboarding_title_2':
-        'Sprawdzanie samopoczucia\nbez jednego slowa',
+    'onboarding_title_2': 'Sprawdzanie samopoczucia\nbez jednego slowa',
     'onboarding_desc_2':
         'Wystarczy korzystac ze smartfona,\naby codziennie automatycznie\nwyslac sygnal o samopoczuciu.',
     'onboarding_title_3': 'Podziel sie troska\nz bliskimi osobami',
-    'onboarding_desc_3':
-        'Codzienne sprawdzanie buduje\ntrwaly spokoj ducha.\nZacznijmy.',
-    'onboarding_title_4':
-        'Zadnych imion, zadnych numerow\ntelefonow — nic nie zbieramy',
+    'onboarding_desc_3': 'Codzienne sprawdzanie buduje\ntrwaly spokoj ducha.\nZacznijmy.',
+    'onboarding_title_4': 'Zadnych imion, zadnych numerow\ntelefonow — nic nie zbieramy',
     'onboarding_desc_4':
         'Przekazujemy tylko jeden sygnal:\n"Wszystko u mnie dobrze."\nTwoje dane sa bezpieczne.',
     'onboarding_role_subject': 'Podopieczny',
@@ -138,7 +129,8 @@ abstract class PlPl {
     'subject_home_emergency_sent': 'Alarm awaryjny został wysłany',
     'subject_home_emergency_failed': 'Nie udało się wysłać alarmu awaryjnego',
     'subject_home_emergency_confirm_title': 'Prośba o pomoc awaryjną',
-    'subject_home_emergency_confirm_body': 'Alarm awaryjny zostanie wysłany do wszystkich opiekunów.\nCzy na pewno chcesz poprosić o pomoc?',
+    'subject_home_emergency_confirm_body':
+        'Alarm awaryjny zostanie wysłany do wszystkich opiekunów.\nCzy na pewno chcesz poprosić o pomoc?',
     'subject_home_emergency_confirm_send': 'Wyślij prośbę awaryjną',
     'subject_home_share_text':
         'Sprawdz moje samopoczucie w aplikacji Anbu!\nKod zaproszenia: @code',
@@ -151,8 +143,7 @@ abstract class PlPl {
     'drawer_privacy_policy': 'Polityka prywatnosci',
     'drawer_terms': 'Regulamin',
     'drawer_withdraw': 'Usun konto',
-    'drawer_withdraw_message':
-        'Twoje konto i wszystkie dane zostana usuniete.\nCzy na pewno?',
+    'drawer_withdraw_message': 'Twoje konto i wszystkie dane zostana usuniete.\nCzy na pewno?',
 
     // ── Panel opiekuna ──
     'guardian_status_normal': 'Normalny',
@@ -167,8 +158,7 @@ abstract class PlPl {
     'guardian_payment_preparing': 'Funkcja platnosci wkrotce dostepna.',
     'guardian_today_summary': 'Dzisiejsze podsumowanie',
     'guardian_no_subjects': 'Brak polaczonych podopiecznych.',
-    'guardian_checking_subjects':
-        'Aktualnie sprawdzamy\n@count podopiecznego(-ych).',
+    'guardian_checking_subjects': 'Aktualnie sprawdzamy\n@count podopiecznego(-ych).',
     'guardian_subject_list': 'Lista podopiecznych',
     'guardian_call_now': 'Zadzwon teraz',
     'guardian_confirm_safety': 'Potwierdz bezpieczenstwo',
@@ -179,20 +169,17 @@ abstract class PlPl {
     'guardian_last_check_days': 'Ostatnie sprawdzenie: @days dni temu',
     'guardian_activity_stable': 'Aktywnosc: Stabilna',
     'guardian_safety_needed': 'Wymagane sprawdzenie bezpieczenstwa',
-    'guardian_error_load_subjects':
-        'Nie udalo sie zaladowac listy podopiecznych.',
+    'guardian_error_load_subjects': 'Nie udalo sie zaladowac listy podopiecznych.',
     'guardian_error_clear_alerts': 'Nie udalo sie usunac alertow.',
 
     // ── Dodawanie podopiecznego ──
     'add_subject_title': 'Polacz podopiecznego',
-    'add_subject_guide_title':
-        'Wprowadz unikalny kod podopiecznego i alias.',
+    'add_subject_guide_title': 'Wprowadz unikalny kod podopiecznego i alias.',
     'add_subject_guide_subtitle':
         'Polacz aplikacje podopiecznego, aby monitorowac jego zdrowie i aktywnosc w czasie rzeczywistym.',
     'add_subject_code_label': 'Unikalny kod (7 znakow)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'Unikalny kod mozna znalezc w aplikacji podopiecznego.',
+    'add_subject_code_info': 'Unikalny kod mozna znalezc w aplikacji podopiecznego.',
     'add_subject_alias_label': 'Alias podopiecznego',
     'add_subject_alias_hint': 'np. Mama, Tata',
     'add_subject_connect': 'Polacz',
@@ -200,8 +187,7 @@ abstract class PlPl {
     'add_subject_success': 'Podopieczny zostal polaczony.',
     'add_subject_error_invalid_code': 'Nieprawidlowy kod.',
     'add_subject_error_already_connected': 'Juz polaczony.',
-    'add_subject_error_failed':
-        'Polaczenie nie powiodlo sie. Prosze sprobowac ponownie.',
+    'add_subject_error_failed': 'Polaczenie nie powiodlo sie. Prosze sprobowac ponownie.',
     'add_subject_button': 'Dodaj nowego podopiecznego',
 
     // ── Ustawienia opiekuna ──
@@ -249,13 +235,11 @@ abstract class PlPl {
     'notifications_today': 'Dzisiejsze powiadomienia',
     'notifications_empty': 'Brak powiadomien na dzisiaj',
     'notifications_delete_all_title': 'Usun wszystkie powiadomienia',
-    'notifications_delete_all_message':
-        'Usunac wszystkie dzisiejsze powiadomienia?',
+    'notifications_delete_all_message': 'Usunac wszystkie dzisiejsze powiadomienia?',
     'notifications_delete_failed': 'Nie udalo sie usunac powiadomien.',
     'notifications_guide_title': 'Przewodnik po poziomach powiadomien',
     'notifications_level_health': 'Normalny',
-    'notifications_level_health_desc':
-        'Samopoczucie podopiecznego potwierdzone prawidlowo',
+    'notifications_level_health_desc': 'Samopoczucie podopiecznego potwierdzone prawidlowo',
     'notifications_level_caution': 'Uwaga',
     'notifications_level_caution_desc': 'Dziś jeszcze brak sygnału o samopoczuciu',
     'notifications_level_warning': 'Ostrzezenie',
@@ -275,17 +259,13 @@ abstract class PlPl {
         'Wlacz lub wylacz wszystkie kategorie powiadomien jednoczesnie.',
     'notification_settings_level_section': 'Ustawienia poziomow',
     'notification_settings_urgent': 'Alerty pilne',
-    'notification_settings_urgent_desc':
-        'Alertow pilnych nie mozna wylaczyc',
+    'notification_settings_urgent_desc': 'Alertow pilnych nie mozna wylaczyc',
     'notification_settings_warning': 'Alerty ostrzegawcze',
-    'notification_settings_warning_desc':
-        'Alert przy braku sprawdzenia przez 2 kolejne dni',
+    'notification_settings_warning_desc': 'Alert przy braku sprawdzenia przez 2 kolejne dni',
     'notification_settings_caution': 'Alerty uwagi',
-    'notification_settings_caution_desc':
-        'Alert przy braku dzisiejszego sprawdzenia',
+    'notification_settings_caution_desc': 'Alert przy braku dzisiejszego sprawdzenia',
     'notification_settings_info': 'Alerty informacyjne',
-    'notification_settings_info_desc':
-        'Ogolne alerty, takie jak liczba krokow i stan baterii',
+    'notification_settings_info_desc': 'Ogolne alerty, takie jak liczba krokow i stan baterii',
     'notification_settings_dnd': 'Nie przeszkadzac',
     'notification_settings_dnd_start': 'Czas rozpoczecia',
     'notification_settings_dnd_end': 'Czas zakonczenia',
@@ -300,15 +280,13 @@ abstract class PlPl {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Polaczeni podopieczni',
     'connection_empty': 'Brak połączonych podopiecznych',
-    'connection_unlink_warning':
-        'Odlaczenie spowoduje usuniecie danych podopiecznego.',
+    'connection_unlink_warning': 'Odlaczenie spowoduje usuniecie danych podopiecznego.',
     'connection_unlink_warning_detail':
         'Poprzednich zapisow nie mozna odzyskac po ponownym polaczeniu. Bedzie trzeba ponownie wprowadzic kod podopiecznego.',
     'connection_heartbeat_schedule': 'Codziennie o @time',
     'connection_heartbeat_report_time': 'Czas raportu samopoczucia: ',
     'connection_subject_label': 'Podopieczny',
-    'connection_change_only_in_app':
-        'mozna zmienic tylko w aplikacji',
+    'connection_change_only_in_app': 'mozna zmienic tylko w aplikacji',
     'connection_edit_title': 'Edytuj podopiecznego',
     'connection_alias_label': 'Alias',
     'connection_unlink_title': 'Odlacz',
@@ -327,18 +305,16 @@ abstract class PlPl {
     'heartbeat_schedule_change': 'Zmien czas sprawdzenia',
     'heartbeat_schedule_title_ios': 'Czas powiadomienia push o pomyślności',
     'heartbeat_schedule_change_title_ios': 'Zmień czas powiadomienia push o pomyślności',
-    'heartbeat_schedule_hint_ios': 'Powiadomienie push o pomyślności przychodzi codziennie o tej godzinie. Dotknij powiadomienia lub otwórz aplikację o tej porze, aby wysłać sygnał pomyślności.',
+    'heartbeat_schedule_hint_ios':
+        'Powiadomienie push o pomyślności przychodzi codziennie o tej godzinie. Dotknij powiadomienia lub otwórz aplikację o tej porze, aby wysłać sygnał pomyślności.',
     'heartbeat_daily_time': 'Codziennie o @time',
-    'heartbeat_scheduled_today':
-        'Sprawdzenie samopoczucia zaplanowane na @time dzisiaj.',
+    'heartbeat_scheduled_today': 'Sprawdzenie samopoczucia zaplanowane na @time dzisiaj.',
     'heartbeat_change_failed_title': 'Zmiana czasu nie powiodla sie',
-    'heartbeat_change_failed_message':
-        'Nie udalo sie zaktualizowac na serwerze.',
+    'heartbeat_change_failed_message': 'Nie udalo sie zaktualizowac na serwerze.',
 
     // ── Powiadomienia lokalne ──
     'local_notification_channel': 'Alerty samopoczucia',
-    'local_notification_channel_desc':
-        'Powiadomienia uslugi sprawdzania samopoczucia',
+    'local_notification_channel_desc': 'Powiadomienia uslugi sprawdzania samopoczucia',
 
     // ── Inne ──
     'back_press_exit': 'Nacisnij ponownie, aby wyjsc.',
@@ -350,12 +326,9 @@ abstract class PlPl {
     'error_unauthorized': 'Wymagane uwierzytelnienie.',
 
     // ── Tresci powiadomien ──
-    'noti_auto_report_body':
-        'Zaplanowane sprawdzenie samopoczucia zostalo odebrane dzisiaj.',
-    'noti_manual_report_body':
-        'Osoba chroniona reczne wyslala sprawdzenie samopoczucia.',
-    'noti_battery_low_body':
-        'Bateria telefonu ponizej 20%. Moze byc potrzebne ladowanie.',
+    'noti_auto_report_body': 'Zaplanowane sprawdzenie samopoczucia zostalo odebrane dzisiaj.',
+    'noti_manual_report_body': 'Osoba chroniona reczne wyslala sprawdzenie samopoczucia.',
+    'noti_battery_low_body': 'Bateria telefonu ponizej 20%. Moze byc potrzebne ladowanie.',
     'noti_battery_dead_body':
         'Telefon wydaje sie byc wylaczony z powodu rozladowanej baterii. Ostatni poziom baterii: @battery_level%. Przywroci sie po naladowaniu.',
     'noti_caution_suspicious_body':
@@ -366,9 +339,9 @@ abstract class PlPl {
         'Sprawdzenia samopoczucia zostaly pominiete z rzedu. Prosze zweryfikowac osobiscie.',
     'noti_urgent_body':
         'Brak sprawdzenia samopoczucia od @days dni. Wymagana natychmiastowa weryfikacja.',
-    'noti_steps_body':
-        '@from_time ~ @to_time: @steps krokow.',
-    'noti_emergency_body': 'Osoba pod opieką bezpośrednio poprosiła o pomoc. Proszę natychmiast sprawdzić.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps krokow.',
+    'noti_emergency_body':
+        'Osoba pod opieką bezpośrednio poprosiła o pomoc. Proszę natychmiast sprawdzić.',
     'noti_resolved_body': 'Kontrola dobrostanu podopiecznego wróciła do normy.',
     'noti_cleared_by_guardian_title': '✅ Bezpieczeństwo potwierdzone',
     'noti_cleared_by_guardian_body': 'Jeden z opiekunów osobiście potwierdził bezpieczeństwo.',
@@ -377,8 +350,7 @@ abstract class PlPl {
     'local_alarm_title': '💗 Wymagane sprawdzenie samopoczucia',
     'local_alarm_body': 'Proszę dotknąć tego powiadomienia.',
     'wellbeing_check_title': '💛 Sprawdzenie samopoczucia',
-    'wellbeing_check_body':
-        'Czy wszystko w porządku? Proszę dotknąć tego powiadomienia.',
+    'wellbeing_check_body': 'Czy wszystko w porządku? Proszę dotknąć tego powiadomienia.',
     'noti_channel_name': 'Powiadomienia Anbu',
   };
 }

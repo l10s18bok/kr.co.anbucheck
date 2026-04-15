@@ -29,7 +29,7 @@ abstract class RuRu {
     'app_tagline': 'Проверяем, что у вас всё хорошо.',
     'app_service_desc': 'Автоматическая проверка самочувствия',
     'app_guardian_title': 'Anbu Опекун',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Заставка ──
     'splash_loading': 'Проверяем самочувствие...',
@@ -44,14 +44,12 @@ abstract class RuRu {
 
     // ── Выбор режима ──
     'mode_select_title': 'Выберите вашу роль',
-    'mode_select_subtitle':
-        'Это поможет настроить подходящие для вас функции',
+    'mode_select_subtitle': 'Это поможет настроить подходящие для вас функции',
     'mode_subject_title': 'Хочу, чтобы за моей\nбезопасностью следили',
     'mode_subject_button': 'Быть под защитой →',
     'mode_guardian_title': 'Хочу присматривать за\nблизким человеком',
     'mode_guardian_button': 'Стать опекуном →',
-    'mode_select_notice':
-        'Интерфейс и уведомления будут зависеть от вашего выбора',
+    'mode_select_notice': 'Интерфейс и уведомления будут зависеть от вашего выбора',
 
     // ── Разрешения ──
     'permission_title': 'Для работы приложения\nнеобходимы разрешения',
@@ -61,13 +59,11 @@ abstract class RuRu {
     'permission_notification_guardian_desc':
         'Необходимо для получения уведомлений о состоянии подопечных',
     'permission_activity': 'Распознавание активности',
-    'permission_activity_desc':
-        'Используется для подсчёта шагов и подтверждения активности',
+    'permission_activity_desc': 'Используется для подсчёта шагов и подтверждения активности',
     'permission_activity_dialog_title': 'Информация о разрешении',
     'permission_activity_dialog_message':
         'Используется для подсчёта шагов и подтверждения активности.\nПожалуйста, нажмите «Разрешить» на следующем экране.',
-    'permission_notification_required_title':
-        'Требуется разрешение на уведомления',
+    'permission_notification_required_title': 'Требуется разрешение на уведомления',
     'permission_notification_required_message':
         'Для работы сервиса проверки самочувствия необходимо разрешение на уведомления.\nПожалуйста, включите его в настройках.',
     'permission_go_to_settings': 'Перейти в настройки',
@@ -135,7 +131,8 @@ abstract class RuRu {
     'subject_home_emergency_sent': 'Экстренное оповещение отправлено',
     'subject_home_emergency_failed': 'Не удалось отправить экстренное оповещение',
     'subject_home_emergency_confirm_title': 'Запрос экстренной помощи',
-    'subject_home_emergency_confirm_body': 'Экстренное оповещение будет отправлено всем вашим опекунам.\nВы уверены, что хотите запросить помощь?',
+    'subject_home_emergency_confirm_body':
+        'Экстренное оповещение будет отправлено всем вашим опекунам.\nВы уверены, что хотите запросить помощь?',
     'subject_home_emergency_confirm_send': 'Отправить экстренный запрос',
     'subject_home_share_text':
         'Проверяйте моё самочувствие через приложение Anbu!\nКод приглашения: @code',
@@ -148,8 +145,7 @@ abstract class RuRu {
     'drawer_privacy_policy': 'Политика конфиденциальности',
     'drawer_terms': 'Условия использования',
     'drawer_withdraw': 'Удалить аккаунт',
-    'drawer_withdraw_message':
-        'Ваш аккаунт и все данные будут удалены.\nВы уверены?',
+    'drawer_withdraw_message': 'Ваш аккаунт и все данные будут удалены.\nВы уверены?',
 
     // ── Панель опекуна ──
     'guardian_status_normal': 'Норма',
@@ -164,8 +160,7 @@ abstract class RuRu {
     'guardian_payment_preparing': 'Функция оплаты скоро будет доступна.',
     'guardian_today_summary': 'Сводка за сегодня',
     'guardian_no_subjects': 'Нет подключённых подопечных.',
-    'guardian_checking_subjects':
-        'В настоящее время проверяется\n@count подопечный(ых).',
+    'guardian_checking_subjects': 'В настоящее время проверяется\n@count подопечный(ых).',
     'guardian_subject_list': 'Список подопечных',
     'guardian_call_now': 'Позвонить сейчас',
     'guardian_confirm_safety': 'Подтвердить безопасность',
@@ -176,20 +171,17 @@ abstract class RuRu {
     'guardian_last_check_days': 'Последняя проверка: @days дн назад',
     'guardian_activity_stable': 'Активность: стабильная',
     'guardian_safety_needed': 'Необходима проверка безопасности',
-    'guardian_error_load_subjects':
-        'Не удалось загрузить список подопечных.',
+    'guardian_error_load_subjects': 'Не удалось загрузить список подопечных.',
     'guardian_error_clear_alerts': 'Не удалось сбросить тревоги.',
 
     // ── Добавление подопечного ──
     'add_subject_title': 'Привязка подопечного',
-    'add_subject_guide_title':
-        'Введите уникальный код подопечного и задайте имя.',
+    'add_subject_guide_title': 'Введите уникальный код подопечного и задайте имя.',
     'add_subject_guide_subtitle':
         'Привяжите приложение подопечного для отслеживания состояния здоровья и активности.',
     'add_subject_code_label': 'Уникальный код (7 символов)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'Уникальный код можно найти в приложении подопечного.',
+    'add_subject_code_info': 'Уникальный код можно найти в приложении подопечного.',
     'add_subject_alias_label': 'Имя подопечного',
     'add_subject_alias_hint': 'Напр.: мама, папа',
     'add_subject_connect': 'Привязать',
@@ -197,8 +189,7 @@ abstract class RuRu {
     'add_subject_success': 'Подопечный успешно подключён.',
     'add_subject_error_invalid_code': 'Недействительный код.',
     'add_subject_error_already_connected': 'Уже подключён.',
-    'add_subject_error_failed':
-        'Не удалось подключить. Пожалуйста, попробуйте позже.',
+    'add_subject_error_failed': 'Не удалось подключить. Пожалуйста, попробуйте позже.',
     'add_subject_button': 'Добавить подопечного',
 
     // ── Настройки опекуна ──
@@ -246,13 +237,11 @@ abstract class RuRu {
     'notifications_today': 'Сегодняшние уведомления',
     'notifications_empty': 'Сегодня уведомлений нет',
     'notifications_delete_all_title': 'Удалить все уведомления',
-    'notifications_delete_all_message':
-        'Удалить все сегодняшние уведомления?',
+    'notifications_delete_all_message': 'Удалить все сегодняшние уведомления?',
     'notifications_delete_failed': 'Не удалось удалить уведомления.',
     'notifications_guide_title': 'Уровни уведомлений',
     'notifications_level_health': 'Норма',
-    'notifications_level_health_desc':
-        'Самочувствие подопечного подтверждено',
+    'notifications_level_health_desc': 'Самочувствие подопечного подтверждено',
     'notifications_level_caution': 'Внимание',
     'notifications_level_caution_desc': 'Сегодня ещё нет сигнала благополучия',
     'notifications_level_warning': 'Предупреждение',
@@ -272,17 +261,13 @@ abstract class RuRu {
         'Включить или отключить все категории уведомлений одновременно.',
     'notification_settings_level_section': 'Настройки по уровням',
     'notification_settings_urgent': 'Срочные тревоги',
-    'notification_settings_urgent_desc':
-        'Срочные тревоги невозможно отключить',
+    'notification_settings_urgent_desc': 'Срочные тревоги невозможно отключить',
     'notification_settings_warning': 'Предупреждения',
-    'notification_settings_warning_desc':
-        'Уведомление при отсутствии проверки 2 дня подряд',
+    'notification_settings_warning_desc': 'Уведомление при отсутствии проверки 2 дня подряд',
     'notification_settings_caution': 'Уведомления «Внимание»',
-    'notification_settings_caution_desc':
-        'Уведомление при отсутствии сегодняшней проверки',
+    'notification_settings_caution_desc': 'Уведомление при отсутствии сегодняшней проверки',
     'notification_settings_info': 'Информационные уведомления',
-    'notification_settings_info_desc':
-        'Общие уведомления: шаги, состояние батареи и т.д.',
+    'notification_settings_info_desc': 'Общие уведомления: шаги, состояние батареи и т.д.',
     'notification_settings_dnd': 'Режим «Не беспокоить»',
     'notification_settings_dnd_start': 'Начало',
     'notification_settings_dnd_end': 'Окончание',
@@ -297,8 +282,7 @@ abstract class RuRu {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Подключённые подопечные',
     'connection_empty': 'Нет подключённых подопечных',
-    'connection_unlink_warning':
-        'При отвязке данные подопечного будут удалены.',
+    'connection_unlink_warning': 'При отвязке данные подопечного будут удалены.',
     'connection_unlink_warning_detail':
         'Предыдущие записи не подлежат восстановлению. Вам потребуется заново ввести код подопечного.',
     'connection_heartbeat_schedule': 'Ежедневно в @time',
@@ -323,18 +307,16 @@ abstract class RuRu {
     'heartbeat_schedule_change': 'Изменить время проверки',
     'heartbeat_schedule_title_ios': 'Время push-уведомления о благополучии',
     'heartbeat_schedule_change_title_ios': 'Изменить время push-уведомления о благополучии',
-    'heartbeat_schedule_hint_ios': 'Push-уведомление о благополучии приходит каждый день в это время. Нажмите на уведомление или откройте приложение в это время, чтобы отправить сигнал благополучия.',
+    'heartbeat_schedule_hint_ios':
+        'Push-уведомление о благополучии приходит каждый день в это время. Нажмите на уведомление или откройте приложение в это время, чтобы отправить сигнал благополучия.',
     'heartbeat_daily_time': 'Ежедневно в @time',
-    'heartbeat_scheduled_today':
-        'Проверка самочувствия запланирована на @time сегодня.',
+    'heartbeat_scheduled_today': 'Проверка самочувствия запланирована на @time сегодня.',
     'heartbeat_change_failed_title': 'Ошибка изменения времени',
-    'heartbeat_change_failed_message':
-        'Не удалось сохранить изменения на сервере.',
+    'heartbeat_change_failed_message': 'Не удалось сохранить изменения на сервере.',
 
     // ── Локальные уведомления ──
     'local_notification_channel': 'Уведомления о самочувствии',
-    'local_notification_channel_desc':
-        'Уведомления сервиса проверки самочувствия',
+    'local_notification_channel_desc': 'Уведомления сервиса проверки самочувствия',
 
     // ── Разное ──
     'back_press_exit': 'Нажмите «Назад» ещё раз для выхода.',
@@ -346,24 +328,18 @@ abstract class RuRu {
     'error_unauthorized': 'Требуется авторизация.',
 
     // ── Текст уведомлений ──
-    'noti_auto_report_body':
-        'Запланированная проверка самочувствия получена сегодня.',
-    'noti_manual_report_body':
-        'Подопечный вручную отправил проверку самочувствия.',
-    'noti_battery_low_body':
-        'Заряд батареи телефона ниже 20 %. Может потребоваться зарядка.',
+    'noti_auto_report_body': 'Запланированная проверка самочувствия получена сегодня.',
+    'noti_manual_report_body': 'Подопечный вручную отправил проверку самочувствия.',
+    'noti_battery_low_body': 'Заряд батареи телефона ниже 20 %. Может потребоваться зарядка.',
     'noti_battery_dead_body':
         'Телефон, похоже, выключился из-за разряженной батареи. Последний уровень заряда: @battery_level %. Восстановится после зарядки.',
     'noti_caution_suspicious_body':
         'Сигнал самочувствия получен, но признаков использования телефона нет. Пожалуйста, проверьте лично.',
     'noti_caution_missing_body':
         'Запланированная на сегодня проверка самочувствия ещё не получена. Пожалуйста, проверьте лично.',
-    'noti_warning_body':
-        'Проверки самочувствия пропущены подряд. Необходима личная проверка.',
-    'noti_urgent_body':
-        'Нет проверки самочувствия @days дн. Требуется немедленная проверка.',
-    'noti_steps_body':
-        '@from_time ~ @to_time: пройдено @steps шагов.',
+    'noti_warning_body': 'Проверки самочувствия пропущены подряд. Необходима личная проверка.',
+    'noti_urgent_body': 'Нет проверки самочувствия @days дн. Требуется немедленная проверка.',
+    'noti_steps_body': '@from_time ~ @to_time: пройдено @steps шагов.',
     'noti_emergency_body': 'Подопечный лично запросил помощь. Пожалуйста, проверьте немедленно.',
     'noti_resolved_body': 'Проверка здоровья подопечного вернулась в норму.',
     'noti_cleared_by_guardian_title': '✅ Проверка подтверждена',
@@ -373,8 +349,7 @@ abstract class RuRu {
     'local_alarm_title': '💗 Требуется проверка самочувствия',
     'local_alarm_body': 'Пожалуйста, нажмите на это уведомление.',
     'wellbeing_check_title': '💛 Проверка самочувствия',
-    'wellbeing_check_body':
-        'У вас всё хорошо? Пожалуйста, нажмите на это уведомление.',
+    'wellbeing_check_body': 'У вас всё хорошо? Пожалуйста, нажмите на это уведомление.',
     'noti_channel_name': 'Уведомления Anbu',
   };
 }

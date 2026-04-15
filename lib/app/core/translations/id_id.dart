@@ -29,7 +29,7 @@ abstract class IdId {
     'app_tagline': 'Memantau kesejahteraan Anda.',
     'app_service_desc': 'Layanan pemeriksaan kesejahteraan otomatis',
     'app_guardian_title': 'Penjaga Anbu',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Memeriksa kesejahteraan...',
@@ -44,14 +44,12 @@ abstract class IdId {
 
     // ── Pilih Mode ──
     'mode_select_title': 'Pilih peran Anda',
-    'mode_select_subtitle':
-        'Ini membantu kami menyiapkan fitur yang tepat untuk Anda',
+    'mode_select_subtitle': 'Ini membantu kami menyiapkan fitur yang tepat untuk Anda',
     'mode_subject_title': 'Saya ingin keselamatan saya\ndipantau',
     'mode_subject_button': 'Dilindungi →',
     'mode_guardian_title': 'Saya ingin menjaga\norang yang saya sayangi',
     'mode_guardian_button': 'Mulai sebagai penjaga →',
-    'mode_select_notice':
-        'Tampilan layar dan notifikasi akan berbeda berdasarkan pilihan Anda',
+    'mode_select_notice': 'Tampilan layar dan notifikasi akan berbeda berdasarkan pilihan Anda',
 
     // ── Izin ──
     'permission_title': 'Izin diperlukan\nuntuk menggunakan aplikasi',
@@ -61,8 +59,7 @@ abstract class IdId {
     'permission_notification_guardian_desc':
         'Diperlukan untuk menerima notifikasi status keselamatan orang yang dilindungi',
     'permission_activity': 'Pengenalan Aktivitas',
-    'permission_activity_desc':
-        'Digunakan untuk mendeteksi langkah dan memastikan aktivitas',
+    'permission_activity_desc': 'Digunakan untuk mendeteksi langkah dan memastikan aktivitas',
     'permission_activity_dialog_title': 'Info Izin Aktivitas',
     'permission_activity_dialog_message':
         'Digunakan untuk mendeteksi langkah dan memastikan aktivitas.\nSilakan ketuk "Izinkan" di layar berikutnya.',
@@ -96,8 +93,7 @@ abstract class IdId {
     'onboarding_title_3': 'Bagikan kepedulian\ndengan orang tersayang',
     'onboarding_desc_3':
         'Pemeriksaan harian membangun\nketenangan pikiran yang berkelanjutan.\nMari mulai.',
-    'onboarding_title_4':
-        'Tanpa nama, tanpa nomor telepon\n— tidak ada yang dikumpulkan',
+    'onboarding_title_4': 'Tanpa nama, tanpa nomor telepon\n— tidak ada yang dikumpulkan',
     'onboarding_desc_4':
         'Hanya satu sinyal yang dikirim:\n"Saya baik-baik saja."\nInformasi Anda tetap aman.',
     'onboarding_role_subject': 'Orang yang Dilindungi',
@@ -128,15 +124,15 @@ abstract class IdId {
     'subject_home_connectivity_status': 'Konektivitas',
     'subject_home_report_loading': 'Melaporkan...',
     'subject_home_report_button': 'Laporkan Keselamatan Sekarang',
-    'subject_home_report_desc':
-        'Beritahu penjaga Anda bahwa Anda baik-baik saja',
+    'subject_home_report_desc': 'Beritahu penjaga Anda bahwa Anda baik-baik saja',
     'subject_home_emergency_button': 'Saya butuh bantuan',
     'subject_home_emergency_desc': 'Mengirim peringatan darurat ke wali Anda',
     'subject_home_emergency_loading': 'Mengirim peringatan darurat...',
     'subject_home_emergency_sent': 'Peringatan darurat telah dikirim',
     'subject_home_emergency_failed': 'Gagal mengirim peringatan darurat',
     'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
-    'subject_home_emergency_confirm_body': 'Peringatan darurat akan dikirim ke semua wali Anda.\nApakah Anda yakin ingin meminta bantuan?',
+    'subject_home_emergency_confirm_body':
+        'Peringatan darurat akan dikirim ke semua wali Anda.\nApakah Anda yakin ingin meminta bantuan?',
     'subject_home_emergency_confirm_send': 'Kirim permintaan darurat',
     'subject_home_share_text':
         'Pantau kesejahteraan saya melalui aplikasi Anbu!\nKode undangan: @code',
@@ -149,8 +145,7 @@ abstract class IdId {
     'drawer_privacy_policy': 'Kebijakan Privasi',
     'drawer_terms': 'Ketentuan Layanan',
     'drawer_withdraw': 'Hapus Akun',
-    'drawer_withdraw_message':
-        'Akun dan semua data Anda akan dihapus.\nApakah Anda yakin?',
+    'drawer_withdraw_message': 'Akun dan semua data Anda akan dihapus.\nApakah Anda yakin?',
 
     // ── Dashboard Penjaga ──
     'guardian_status_normal': 'Normal',
@@ -165,33 +160,28 @@ abstract class IdId {
     'guardian_payment_preparing': 'Fitur pembayaran segera hadir.',
     'guardian_today_summary': 'Ringkasan Kesejahteraan Hari Ini',
     'guardian_no_subjects': 'Belum ada orang yang dilindungi.',
-    'guardian_checking_subjects':
-        'Sedang memeriksa\n@count orang yang dilindungi.',
+    'guardian_checking_subjects': 'Sedang memeriksa\n@count orang yang dilindungi.',
     'guardian_subject_list': 'Daftar Orang yang Dilindungi',
     'guardian_call_now': 'Telepon Sekarang',
     'guardian_confirm_safety': 'Konfirmasi Keselamatan',
     'guardian_no_check_history': 'Tidak ada riwayat pemeriksaan',
     'guardian_last_check_now': 'Pemeriksaan terakhir: baru saja',
-    'guardian_last_check_minutes':
-        'Pemeriksaan terakhir: @minutes menit lalu',
+    'guardian_last_check_minutes': 'Pemeriksaan terakhir: @minutes menit lalu',
     'guardian_last_check_hours': 'Pemeriksaan terakhir: @hours jam lalu',
     'guardian_last_check_days': 'Pemeriksaan terakhir: @days hari lalu',
     'guardian_activity_stable': 'Aktivitas: Stabil',
     'guardian_safety_needed': 'Pemeriksaan keselamatan diperlukan',
-    'guardian_error_load_subjects':
-        'Gagal memuat daftar orang yang dilindungi.',
+    'guardian_error_load_subjects': 'Gagal memuat daftar orang yang dilindungi.',
     'guardian_error_clear_alerts': 'Gagal menghapus peringatan.',
 
     // ── Penjaga Tambah Orang yang Dilindungi ──
     'add_subject_title': 'Hubungkan Orang yang Dilindungi',
-    'add_subject_guide_title':
-        'Masukkan kode unik orang yang dilindungi dan alias.',
+    'add_subject_guide_title': 'Masukkan kode unik orang yang dilindungi dan alias.',
     'add_subject_guide_subtitle':
         'Hubungkan aplikasi orang yang dilindungi untuk memantau kesehatan dan aktivitas secara real-time.',
     'add_subject_code_label': 'Kode Unik (7 digit)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'Kode unik dapat ditemukan di aplikasi orang yang dilindungi.',
+    'add_subject_code_info': 'Kode unik dapat ditemukan di aplikasi orang yang dilindungi.',
     'add_subject_alias_label': 'Alias Orang yang Dilindungi',
     'add_subject_alias_hint': 'contoh: Ibu, Ayah',
     'add_subject_connect': 'Hubungkan',
@@ -199,8 +189,7 @@ abstract class IdId {
     'add_subject_success': 'Orang yang dilindungi berhasil terhubung.',
     'add_subject_error_invalid_code': 'Kode tidak valid.',
     'add_subject_error_already_connected': 'Sudah terhubung.',
-    'add_subject_error_failed':
-        'Koneksi gagal. Silakan coba lagi.',
+    'add_subject_error_failed': 'Koneksi gagal. Silakan coba lagi.',
     'add_subject_button': 'Tambah Orang yang Dilindungi Baru',
 
     // ── Pengaturan Penjaga ──
@@ -248,13 +237,11 @@ abstract class IdId {
     'notifications_today': 'Notifikasi Hari Ini',
     'notifications_empty': 'Tidak ada notifikasi hari ini',
     'notifications_delete_all_title': 'Hapus Semua Notifikasi',
-    'notifications_delete_all_message':
-        'Hapus semua notifikasi hari ini?',
+    'notifications_delete_all_message': 'Hapus semua notifikasi hari ini?',
     'notifications_delete_failed': 'Gagal menghapus notifikasi.',
     'notifications_guide_title': 'Panduan Tingkat Notifikasi',
     'notifications_level_health': 'Normal',
-    'notifications_level_health_desc':
-        'Kesejahteraan orang yang dilindungi dikonfirmasi normal',
+    'notifications_level_health_desc': 'Kesejahteraan orang yang dilindungi dikonfirmasi normal',
     'notifications_level_caution': 'Perhatian',
     'notifications_level_caution_desc': 'Belum ada sinyal kesejahteraan hari ini',
     'notifications_level_warning': 'Peringatan',
@@ -274,17 +261,14 @@ abstract class IdId {
         'Aktifkan atau nonaktifkan semua kategori notifikasi sekaligus.',
     'notification_settings_level_section': 'Pengaturan Tingkat',
     'notification_settings_urgent': 'Peringatan Mendesak',
-    'notification_settings_urgent_desc':
-        'Peringatan mendesak tidak dapat dinonaktifkan',
+    'notification_settings_urgent_desc': 'Peringatan mendesak tidak dapat dinonaktifkan',
     'notification_settings_warning': 'Peringatan Waspada',
     'notification_settings_warning_desc':
         'Peringatan saat tidak ada pemeriksaan 2 hari berturut-turut',
     'notification_settings_caution': 'Peringatan Perhatian',
-    'notification_settings_caution_desc':
-        'Peringatan saat pemeriksaan hari ini belum ada',
+    'notification_settings_caution_desc': 'Peringatan saat pemeriksaan hari ini belum ada',
     'notification_settings_info': 'Peringatan Info',
-    'notification_settings_info_desc':
-        'Peringatan umum seperti jumlah langkah dan status baterai',
+    'notification_settings_info_desc': 'Peringatan umum seperti jumlah langkah dan status baterai',
     'notification_settings_dnd': 'Jangan Ganggu',
     'notification_settings_dnd_start': 'Waktu Mulai',
     'notification_settings_dnd_end': 'Waktu Selesai',
@@ -299,8 +283,7 @@ abstract class IdId {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Orang yang Dilindungi Terhubung',
     'connection_empty': 'Tidak ada orang yang dilindungi terhubung',
-    'connection_unlink_warning':
-        'Memutuskan koneksi akan menghapus data orang yang dilindungi.',
+    'connection_unlink_warning': 'Memutuskan koneksi akan menghapus data orang yang dilindungi.',
     'connection_unlink_warning_detail':
         'Catatan sebelumnya tidak dapat dipulihkan setelah menghubungkan ulang. Anda perlu memasukkan kembali kode orang yang dilindungi.',
     'connection_heartbeat_schedule': 'Setiap hari pukul @time',
@@ -325,18 +308,16 @@ abstract class IdId {
     'heartbeat_schedule_change': 'Ubah Waktu Pemeriksaan',
     'heartbeat_schedule_title_ios': 'Waktu Notifikasi Push Kesehatan',
     'heartbeat_schedule_change_title_ios': 'Ubah Waktu Notifikasi Push Kesehatan',
-    'heartbeat_schedule_hint_ios': 'Notifikasi push kesehatan datang setiap hari pada waktu ini. Ketuk notifikasi atau buka aplikasi di sekitar waktu itu untuk mengirim sinyal kesehatan Anda.',
+    'heartbeat_schedule_hint_ios':
+        'Notifikasi push kesehatan datang setiap hari pada waktu ini. Ketuk notifikasi atau buka aplikasi di sekitar waktu itu untuk mengirim sinyal kesehatan Anda.',
     'heartbeat_daily_time': 'Setiap hari pukul @time',
-    'heartbeat_scheduled_today':
-        'Pemeriksaan kesejahteraan dijadwalkan pukul @time hari ini.',
+    'heartbeat_scheduled_today': 'Pemeriksaan kesejahteraan dijadwalkan pukul @time hari ini.',
     'heartbeat_change_failed_title': 'Perubahan Waktu Gagal',
-    'heartbeat_change_failed_message':
-        'Tidak dapat memperbarui di server.',
+    'heartbeat_change_failed_message': 'Tidak dapat memperbarui di server.',
 
     // ── Notifikasi Lokal ──
     'local_notification_channel': 'Peringatan Kesejahteraan',
-    'local_notification_channel_desc':
-        'Notifikasi layanan pemeriksaan kesejahteraan',
+    'local_notification_channel_desc': 'Notifikasi layanan pemeriksaan kesejahteraan',
 
     // ── Lain-lain ──
     'back_press_exit': 'Tekan kembali sekali lagi untuk keluar.',
@@ -348,12 +329,10 @@ abstract class IdId {
     'error_unauthorized': 'Autentikasi diperlukan.',
 
     // ── Isi Notifikasi ──
-    'noti_auto_report_body':
-        'Pemeriksaan kesejahteraan terjadwal telah diterima hari ini.',
+    'noti_auto_report_body': 'Pemeriksaan kesejahteraan terjadwal telah diterima hari ini.',
     'noti_manual_report_body':
         'Orang yang dilindungi mengirim pemeriksaan kesejahteraan secara manual.',
-    'noti_battery_low_body':
-        'Baterai ponsel di bawah 20%. Mungkin perlu diisi daya.',
+    'noti_battery_low_body': 'Baterai ponsel di bawah 20%. Mungkin perlu diisi daya.',
     'noti_battery_dead_body':
         'Ponsel tampaknya mati karena baterai habis. Level baterai terakhir: @battery_level%. Akan pulih setelah diisi daya.',
     'noti_caution_suspicious_body':
@@ -364,19 +343,18 @@ abstract class IdId {
         'Pemeriksaan kesejahteraan terlewat berturut-turut. Silakan verifikasi langsung.',
     'noti_urgent_body':
         'Tidak ada pemeriksaan kesejahteraan selama @days hari. Verifikasi segera diperlukan.',
-    'noti_steps_body':
-        '@from_time ~ @to_time: @steps langkah.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps langkah.',
     'noti_emergency_body': 'Orang yang dilindungi langsung meminta bantuan. Harap segera periksa.',
     'noti_resolved_body': 'Pemeriksaan kesejahteraan orang yang dilindungi telah kembali normal.',
     'noti_cleared_by_guardian_title': '✅ Keamanan dikonfirmasi',
-    'noti_cleared_by_guardian_body': 'Salah satu pelindung telah memastikan keamanan secara langsung.',
+    'noti_cleared_by_guardian_body':
+        'Salah satu pelindung telah memastikan keamanan secara langsung.',
 
     // ── Notifikasi lokal ──
     'local_alarm_title': '💗 Pemeriksaan kesejahteraan diperlukan',
     'local_alarm_body': 'Silakan ketuk notifikasi ini.',
     'wellbeing_check_title': '💛 Pemeriksaan Kesejahteraan',
-    'wellbeing_check_body':
-        'Apakah Anda baik-baik saja? Silakan ketuk notifikasi ini.',
+    'wellbeing_check_body': 'Apakah Anda baik-baik saja? Silakan ketuk notifikasi ini.',
     'noti_channel_name': 'Peringatan Anbu',
   };
 }

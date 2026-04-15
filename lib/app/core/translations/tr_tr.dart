@@ -29,7 +29,7 @@ abstract class TrTr {
     'app_tagline': 'Hal hatır soruyoruz.',
     'app_service_desc': 'Otomatik hal hatır sorgulama hizmeti',
     'app_guardian_title': 'Anbu Koruyucu',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Açılış Ekranı ──
     'splash_loading': 'Hal hatır soruluyor...',
@@ -44,25 +44,21 @@ abstract class TrTr {
 
     // ── Mod Seçimi ──
     'mode_select_title': 'Rolünüzü seçin',
-    'mode_select_subtitle':
-        'Bu seçim, size uygun özellikleri ayarlamamıza yardımcı olur',
+    'mode_select_subtitle': 'Bu seçim, size uygun özellikleri ayarlamamıza yardımcı olur',
     'mode_subject_title': 'Güvenliğimin\ntakip edilmesini istiyorum',
     'mode_subject_button': 'Korunmak istiyorum →',
     'mode_guardian_title': 'Sevdiğim birini\ngözetlemek istiyorum',
     'mode_guardian_button': 'Koruyucu ol →',
-    'mode_select_notice':
-        'Ekran düzeni ve bildirimler seçiminize göre değişecektir',
+    'mode_select_notice': 'Ekran düzeni ve bildirimler seçiminize göre değişecektir',
 
     // ── İzinler ──
     'permission_title': 'Uygulamanın çalışması için\nizinler gereklidir',
     'permission_notification': 'Bildirim İzni',
-    'permission_notification_subject_desc':
-        'Hal hatır bildirimlerini almak için gereklidir',
+    'permission_notification_subject_desc': 'Hal hatır bildirimlerini almak için gereklidir',
     'permission_notification_guardian_desc':
         'Takip edilenlerin güvenlik durumu bildirimlerini almak için gereklidir',
     'permission_activity': 'Aktivite Tanıma',
-    'permission_activity_desc':
-        'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır',
+    'permission_activity_desc': 'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır',
     'permission_activity_dialog_title': 'Aktivite İzni Bilgisi',
     'permission_activity_dialog_message':
         'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır.\nLütfen sonraki ekranda "İzin Ver"e dokunun.',
@@ -94,11 +90,9 @@ abstract class TrTr {
     'onboarding_desc_2':
         'Akıllı telefonu kullanmak yeterli,\nher gün otomatik olarak\nbir hal hatır sinyali gönderilir.',
     'onboarding_title_3': 'Sevdiklerinizle\nhal hatır paylaşın',
-    'onboarding_desc_3':
-        'Günlük kontroller biriktikçe\nkalıcı bir huzur oluşur.\nHemen başlayın.',
+    'onboarding_desc_3': 'Günlük kontroller biriktikçe\nkalıcı bir huzur oluşur.\nHemen başlayın.',
     'onboarding_title_4': 'İsim yok, telefon numarası yok\n— hiçbir şey toplanmaz',
-    'onboarding_desc_4':
-        'Yalnızca tek bir sinyal iletilir:\n"İyiyim."\nBilgileriniz güvende.',
+    'onboarding_desc_4': 'Yalnızca tek bir sinyal iletilir:\n"İyiyim."\nBilgileriniz güvende.',
     'onboarding_role_subject': 'Takip Edilen',
     'onboarding_role_guardian': 'Koruyucu',
     'onboarding_role_guardian_subject': 'Koruyucu ve korunan',
@@ -134,10 +128,10 @@ abstract class TrTr {
     'subject_home_emergency_sent': 'Acil durum uyarısı gönderildi',
     'subject_home_emergency_failed': 'Acil durum uyarısı gönderilemedi',
     'subject_home_emergency_confirm_title': 'Acil yardım talebi',
-    'subject_home_emergency_confirm_body': 'Tüm koruyucularınıza acil durum uyarısı gönderilecektir.\nYardım istemek istediğinizden emin misiniz?',
+    'subject_home_emergency_confirm_body':
+        'Tüm koruyucularınıza acil durum uyarısı gönderilecektir.\nYardım istemek istediğinizden emin misiniz?',
     'subject_home_emergency_confirm_send': 'Acil talep gönder',
-    'subject_home_share_text':
-        'Anbu uygulamasıyla hal hatırımı sorun!\nDavet kodu: @code',
+    'subject_home_share_text': 'Anbu uygulamasıyla hal hatırımı sorun!\nDavet kodu: @code',
     'subject_home_share_subject': 'Anbu Davet Kodu',
     'subject_home_code_copied': 'Kod kopyalandı',
 
@@ -147,8 +141,7 @@ abstract class TrTr {
     'drawer_privacy_policy': 'Gizlilik Politikası',
     'drawer_terms': 'Kullanım Koşulları',
     'drawer_withdraw': 'Hesabı Sil',
-    'drawer_withdraw_message':
-        'Hesabınız ve tüm verileriniz silinecektir.\nEmin misiniz?',
+    'drawer_withdraw_message': 'Hesabınız ve tüm verileriniz silinecektir.\nEmin misiniz?',
 
     // ── Koruyucu Paneli ──
     'guardian_status_normal': 'Normal',
@@ -163,8 +156,7 @@ abstract class TrTr {
     'guardian_payment_preparing': 'Ödeme özelliği yakında kullanıma sunulacak.',
     'guardian_today_summary': 'Bugünün Özeti',
     'guardian_no_subjects': 'Bağlı takip edilen yok.',
-    'guardian_checking_subjects':
-        'Şu anda @count kişi\ntakip ediliyor.',
+    'guardian_checking_subjects': 'Şu anda @count kişi\ntakip ediliyor.',
     'guardian_subject_list': 'Takip Edilenler Listesi',
     'guardian_call_now': 'Şimdi Ara',
     'guardian_confirm_safety': 'Güvenliği Onayla',
@@ -175,20 +167,17 @@ abstract class TrTr {
     'guardian_last_check_days': 'Son kontrol: @days gün önce',
     'guardian_activity_stable': 'Aktivite: Stabil',
     'guardian_safety_needed': 'Güvenlik kontrolü gerekli',
-    'guardian_error_load_subjects':
-        'Takip edilenler listesi yüklenemedi.',
+    'guardian_error_load_subjects': 'Takip edilenler listesi yüklenemedi.',
     'guardian_error_clear_alerts': 'Uyarılar temizlenemedi.',
 
     // ── Takip Edilen Ekleme ──
     'add_subject_title': 'Takip Edilen Bağla',
-    'add_subject_guide_title':
-        'Takip edilenin benzersiz kodunu ve bir takma ad girin.',
+    'add_subject_guide_title': 'Takip edilenin benzersiz kodunu ve bir takma ad girin.',
     'add_subject_guide_subtitle':
         'Sağlık durumunu ve aktivitesini gerçek zamanlı izlemek için bağlayın.',
     'add_subject_code_label': 'Benzersiz Kod (7 hane)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'Benzersiz kod, takip edilenin uygulamasında bulunabilir.',
+    'add_subject_code_info': 'Benzersiz kod, takip edilenin uygulamasında bulunabilir.',
     'add_subject_alias_label': 'Takip Edilen Adı',
     'add_subject_alias_hint': 'Örn: Annem, Babam',
     'add_subject_connect': 'Bağla',
@@ -196,8 +185,7 @@ abstract class TrTr {
     'add_subject_success': 'Takip edilen başarıyla bağlandı.',
     'add_subject_error_invalid_code': 'Geçersiz kod.',
     'add_subject_error_already_connected': 'Zaten bağlı.',
-    'add_subject_error_failed':
-        'Bağlantı başarısız. Lütfen tekrar deneyin.',
+    'add_subject_error_failed': 'Bağlantı başarısız. Lütfen tekrar deneyin.',
     'add_subject_button': 'Yeni Takip Edilen Ekle',
 
     // ── Koruyucu Ayarları ──
@@ -245,13 +233,11 @@ abstract class TrTr {
     'notifications_today': 'Bugünkü Bildirimler',
     'notifications_empty': 'Bugün bildirim yok',
     'notifications_delete_all_title': 'Tüm Bildirimleri Sil',
-    'notifications_delete_all_message':
-        'Bugünkü tüm bildirimler silinsin mi?',
+    'notifications_delete_all_message': 'Bugünkü tüm bildirimler silinsin mi?',
     'notifications_delete_failed': 'Bildirimler silinemedi.',
     'notifications_guide_title': 'Bildirim Seviyeleri Rehberi',
     'notifications_level_health': 'Normal',
-    'notifications_level_health_desc':
-        'Takip edilenin hal hatırı normal şekilde onaylandı',
+    'notifications_level_health_desc': 'Takip edilenin hal hatırı normal şekilde onaylandı',
     'notifications_level_caution': 'Dikkat',
     'notifications_level_caution_desc': 'Bugün henüz iyilik sinyali yok',
     'notifications_level_warning': 'Uyarı',
@@ -271,22 +257,17 @@ abstract class TrTr {
         'Tüm bildirim kategorilerini toplu olarak etkinleştirin veya devre dışı bırakın.',
     'notification_settings_level_section': 'Seviye Ayarları',
     'notification_settings_urgent': 'Acil Uyarılar',
-    'notification_settings_urgent_desc':
-        'Acil uyarılar devre dışı bırakılamaz',
+    'notification_settings_urgent_desc': 'Acil uyarılar devre dışı bırakılamaz',
     'notification_settings_warning': 'Uyarı Bildirimleri',
-    'notification_settings_warning_desc':
-        'Ardışık 2 gün kontrol yapılmadığında bildirim',
+    'notification_settings_warning_desc': 'Ardışık 2 gün kontrol yapılmadığında bildirim',
     'notification_settings_caution': 'Dikkat Bildirimleri',
-    'notification_settings_caution_desc':
-        'Bugünkü kontrol yapılmadığında bildirim',
+    'notification_settings_caution_desc': 'Bugünkü kontrol yapılmadığında bildirim',
     'notification_settings_info': 'Bilgi Bildirimleri',
-    'notification_settings_info_desc':
-        'Adım sayısı ve pil durumu gibi genel bildirimler',
+    'notification_settings_info_desc': 'Adım sayısı ve pil durumu gibi genel bildirimler',
     'notification_settings_dnd': 'Rahatsız Etmeyin',
     'notification_settings_dnd_start': 'Başlangıç Saati',
     'notification_settings_dnd_end': 'Bitiş Saati',
-    'notification_settings_dnd_note':
-        '※ Acil uyarılar, Rahatsız Etmeyin modunda bile iletilir',
+    'notification_settings_dnd_note': '※ Acil uyarılar, Rahatsız Etmeyin modunda bile iletilir',
     'notification_settings_dnd_start_default': '22:00',
     'notification_settings_dnd_end_default': '07:00',
 
@@ -296,8 +277,7 @@ abstract class TrTr {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Bağlı Takip Edilenler',
     'connection_empty': 'Bağlı korunan kişi yok',
-    'connection_unlink_warning':
-        'Bağlantıyı kesmek takip edilenin verilerini silecektir.',
+    'connection_unlink_warning': 'Bağlantıyı kesmek takip edilenin verilerini silecektir.',
     'connection_unlink_warning_detail':
         'Yeniden bağlandıktan sonra önceki kayıtlar kurtarılamaz. Takip edilenin kodunu tekrar girmeniz gerekecektir.',
     'connection_heartbeat_schedule': 'Her gün @time',
@@ -322,17 +302,16 @@ abstract class TrTr {
     'heartbeat_schedule_change': 'Kontrol Saatini Değiştir',
     'heartbeat_schedule_title_ios': 'İyilik Push Bildirim Saati',
     'heartbeat_schedule_change_title_ios': 'İyilik Push Bildirim Saatini Değiştir',
-    'heartbeat_schedule_hint_ios': 'Her gün bu saatte iyilik push bildirimi gelir. Bildirime dokunun veya o sırada uygulamayı açın, böylece iyilik sinyaliniz gönderilir.',
+    'heartbeat_schedule_hint_ios':
+        'Her gün bu saatte iyilik push bildirimi gelir. Bildirime dokunun veya o sırada uygulamayı açın, böylece iyilik sinyaliniz gönderilir.',
     'heartbeat_daily_time': 'Her gün @time',
-    'heartbeat_scheduled_today':
-        'Bugün @time için hal hatır kontrolü planlandı.',
+    'heartbeat_scheduled_today': 'Bugün @time için hal hatır kontrolü planlandı.',
     'heartbeat_change_failed_title': 'Saat Değişikliği Başarısız',
     'heartbeat_change_failed_message': 'Sunucuda güncellenemedi.',
 
     // ── Yerel Bildirimler ──
     'local_notification_channel': 'Hal Hatır Bildirimleri',
-    'local_notification_channel_desc':
-        'Hal hatır sorgulama hizmeti bildirimleri',
+    'local_notification_channel_desc': 'Hal hatır sorgulama hizmeti bildirimleri',
 
     // ── Diğer ──
     'back_press_exit': 'Çıkmak için geri tuşuna tekrar basın.',
@@ -344,24 +323,18 @@ abstract class TrTr {
     'error_unauthorized': 'Kimlik doğrulama gerekli.',
 
     // ── Bildirim Metinleri ──
-    'noti_auto_report_body':
-        'Planlanan hal hatır kontrolü bugün alındı.',
-    'noti_manual_report_body':
-        'Korunan kişi manuel olarak hal hatır kontrolü gönderdi.',
-    'noti_battery_low_body':
-        'Telefon pili %20\'nin altında. Şarj etmek gerekebilir.',
+    'noti_auto_report_body': 'Planlanan hal hatır kontrolü bugün alındı.',
+    'noti_manual_report_body': 'Korunan kişi manuel olarak hal hatır kontrolü gönderdi.',
+    'noti_battery_low_body': 'Telefon pili %20\'nin altında. Şarj etmek gerekebilir.',
     'noti_battery_dead_body':
         'Telefon pil bitmesi nedeniyle kapanmış görünüyor. Son pil seviyesi: %@battery_level. Şarj edildikten sonra otomatik olarak düzelecektir.',
     'noti_caution_suspicious_body':
         'Hal hatır sinyali alındı ancak telefon kullanım belirtisi yok. Lütfen bizzat kontrol edin.',
     'noti_caution_missing_body':
         'Bugün planlanan hal hatır kontrolü henüz alınmadı. Lütfen bizzat kontrol edin.',
-    'noti_warning_body':
-        'Hal hatır kontrolleri art arda kaçırıldı. Lütfen bizzat doğrulayın.',
-    'noti_urgent_body':
-        '@days gündür hal hatır kontrolü yok. Acil doğrulama gerekli.',
-    'noti_steps_body':
-        '@from_time ~ @to_time: @steps adım atıldı.',
+    'noti_warning_body': 'Hal hatır kontrolleri art arda kaçırıldı. Lütfen bizzat doğrulayın.',
+    'noti_urgent_body': '@days gündür hal hatır kontrolü yok. Acil doğrulama gerekli.',
+    'noti_steps_body': '@from_time ~ @to_time: @steps adım atıldı.',
     'noti_emergency_body': 'Korunan kişi doğrudan yardım istedi. Lütfen hemen kontrol edin.',
     'noti_resolved_body': 'Korunan kişinin sağlık kontrolü normale döndü.',
     'noti_cleared_by_guardian_title': '✅ Güvenlik onaylandı',
@@ -371,8 +344,7 @@ abstract class TrTr {
     'local_alarm_title': '💗 Sağlık kontrolü gerekli',
     'local_alarm_body': 'Lütfen bu bildirime dokunun.',
     'wellbeing_check_title': '💛 Sağlık Kontrolü',
-    'wellbeing_check_body':
-        'İyi misiniz? Lütfen bu bildirime dokunun.',
+    'wellbeing_check_body': 'İyi misiniz? Lütfen bu bildirime dokunun.',
     'noti_channel_name': 'Anbu Uyarıları',
   };
 }

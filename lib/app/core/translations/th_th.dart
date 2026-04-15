@@ -29,40 +29,35 @@ abstract class ThTh {
     'app_tagline': 'ตรวจสอบความเป็นอยู่ของคุณ',
     'app_service_desc': 'บริการตรวจสอบความเป็นอยู่อัตโนมัติ',
     'app_guardian_title': 'ผู้ปกป้อง Anbu',
-    'app_copyright': '© 2024 TNS Inc.',
+    'app_copyright': '© 2024 Averic SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'กำลังตรวจสอบความเป็นอยู่...',
 
     // ── อัปเดต ──
     'update_required_title': 'จำเป็นต้องอัปเดต',
-    'update_required_message':
-        'กรุณาอัปเดตเป็นเวอร์ชัน @version เพื่อใช้งานแอปต่อไป',
+    'update_required_message': 'กรุณาอัปเดตเป็นเวอร์ชัน @version เพื่อใช้งานแอปต่อไป',
     'update_button': 'อัปเดต',
     'update_available_title': 'มีอัปเดตใหม่',
     'update_available_message': 'เวอร์ชัน @version พร้อมใช้งาน',
 
     // ── เลือกโหมด ──
     'mode_select_title': 'เลือกบทบาทของคุณ',
-    'mode_select_subtitle':
-        'การเลือกนี้จะช่วยตั้งค่าฟีเจอร์ที่เหมาะสมสำหรับคุณ',
+    'mode_select_subtitle': 'การเลือกนี้จะช่วยตั้งค่าฟีเจอร์ที่เหมาะสมสำหรับคุณ',
     'mode_subject_title': 'ฉันต้องการให้ดูแล\nความปลอดภัยของฉัน',
     'mode_subject_button': 'รับการดูแล →',
     'mode_guardian_title': 'ฉันต้องการดูแล\nคนที่ห่วงใย',
     'mode_guardian_button': 'เริ่มเป็นผู้ดูแล →',
-    'mode_select_notice':
-        'หน้าจอและการแจ้งเตือนจะแตกต่างกันตามการเลือกของคุณ',
+    'mode_select_notice': 'หน้าจอและการแจ้งเตือนจะแตกต่างกันตามการเลือกของคุณ',
 
     // ── สิทธิ์ ──
     'permission_title': 'จำเป็นต้องอนุญาต\nเพื่อใช้งานแอป',
     'permission_notification': 'สิทธิ์การแจ้งเตือน',
-    'permission_notification_subject_desc':
-        'จำเป็นเพื่อรับการแจ้งเตือนตรวจสอบความเป็นอยู่',
+    'permission_notification_subject_desc': 'จำเป็นเพื่อรับการแจ้งเตือนตรวจสอบความเป็นอยู่',
     'permission_notification_guardian_desc':
         'จำเป็นเพื่อรับการแจ้งเตือนสถานะความปลอดภัยของผู้อยู่ในการดูแล',
     'permission_activity': 'การรับรู้กิจกรรม',
-    'permission_activity_desc':
-        'ใช้ในการตรวจจับก้าวเดินและยืนยันกิจกรรม',
+    'permission_activity_desc': 'ใช้ในการตรวจจับก้าวเดินและยืนยันกิจกรรม',
     'permission_activity_dialog_title': 'ข้อมูลสิทธิ์กิจกรรม',
     'permission_activity_dialog_message':
         'ใช้ในการตรวจจับก้าวเดินและยืนยันกิจกรรม\nกรุณาแตะ "อนุญาต" ในหน้าจอถัดไป',
@@ -88,18 +83,13 @@ abstract class ThTh {
 
     // ── การแนะนำ ──
     'onboarding_title_1': 'เป็นห่วงคนที่คุณรัก\nที่อยู่คนเดียวหรือเปล่า?',
-    'onboarding_desc_1':
-        'แม้อยู่ไกล\nก็ยังอยากรู้ว่าเขาสบายดีไหม\nAnbu อยู่เคียงข้างคุณ',
+    'onboarding_desc_1': 'แม้อยู่ไกล\nก็ยังอยากรู้ว่าเขาสบายดีไหม\nAnbu อยู่เคียงข้างคุณ',
     'onboarding_title_2': 'ตรวจสอบความเป็นอยู่\nโดยไม่ต้องพูดสักคำ',
-    'onboarding_desc_2':
-        'เพียงแค่ใช้สมาร์ทโฟน\nทุกวันสัญญาณความเป็นอยู่\nจะถูกส่งอัตโนมัติ',
+    'onboarding_desc_2': 'เพียงแค่ใช้สมาร์ทโฟน\nทุกวันสัญญาณความเป็นอยู่\nจะถูกส่งอัตโนมัติ',
     'onboarding_title_3': 'แบ่งปันความห่วงใย\nกับคนที่คุณรัก',
-    'onboarding_desc_3':
-        'การตรวจสอบทุกวันสะสม\nเป็นความอุ่นใจที่ยั่งยืน\nเริ่มต้นกันเลย',
-    'onboarding_title_4':
-        'ไม่เก็บชื่อ ไม่เก็บเบอร์โทร\n— ไม่เก็บข้อมูลใดเลย',
-    'onboarding_desc_4':
-        'ส่งสัญญาณเดียวเท่านั้น:\n"ฉันสบายดี"\nข้อมูลของคุณปลอดภัย',
+    'onboarding_desc_3': 'การตรวจสอบทุกวันสะสม\nเป็นความอุ่นใจที่ยั่งยืน\nเริ่มต้นกันเลย',
+    'onboarding_title_4': 'ไม่เก็บชื่อ ไม่เก็บเบอร์โทร\n— ไม่เก็บข้อมูลใดเลย',
+    'onboarding_desc_4': 'ส่งสัญญาณเดียวเท่านั้น:\n"ฉันสบายดี"\nข้อมูลของคุณปลอดภัย',
     'onboarding_role_subject': 'ผู้อยู่ในการดูแล',
     'onboarding_role_guardian': 'ผู้ดูแล',
     'onboarding_role_guardian_subject': 'ผู้ดูแลและผู้ได้รับการดูแล',
@@ -128,18 +118,17 @@ abstract class ThTh {
     'subject_home_connectivity_status': 'การเชื่อมต่อ',
     'subject_home_report_loading': 'กำลังรายงาน...',
     'subject_home_report_button': 'รายงานความปลอดภัยตอนนี้',
-    'subject_home_report_desc':
-        'แจ้งผู้ดูแลว่าคุณสบายดี',
+    'subject_home_report_desc': 'แจ้งผู้ดูแลว่าคุณสบายดี',
     'subject_home_emergency_button': 'ฉันต้องการความช่วยเหลือ',
     'subject_home_emergency_desc': 'ส่งการแจ้งเตือนฉุกเฉินไปยังผู้ดูแล',
     'subject_home_emergency_loading': 'กำลังส่งการแจ้งเตือนฉุกเฉิน...',
     'subject_home_emergency_sent': 'ส่งการแจ้งเตือนฉุกเฉินแล้ว',
     'subject_home_emergency_failed': 'ไม่สามารถส่งการแจ้งเตือนฉุกเฉินได้',
     'subject_home_emergency_confirm_title': 'ขอความช่วยเหลือฉุกเฉิน',
-    'subject_home_emergency_confirm_body': 'การแจ้งเตือนฉุกเฉินจะถูกส่งไปยังผู้ดูแลทั้งหมด\nคุณแน่ใจหรือไม่ที่จะขอความช่วยเหลือ?',
+    'subject_home_emergency_confirm_body':
+        'การแจ้งเตือนฉุกเฉินจะถูกส่งไปยังผู้ดูแลทั้งหมด\nคุณแน่ใจหรือไม่ที่จะขอความช่วยเหลือ?',
     'subject_home_emergency_confirm_send': 'ส่งคำขอฉุกเฉิน',
-    'subject_home_share_text':
-        'ตรวจสอบความเป็นอยู่ของฉันผ่านแอป Anbu!\nรหัสเชิญ: @code',
+    'subject_home_share_text': 'ตรวจสอบความเป็นอยู่ของฉันผ่านแอป Anbu!\nรหัสเชิญ: @code',
     'subject_home_share_subject': 'รหัสเชิญ Anbu',
     'subject_home_code_copied': 'คัดลอกรหัสแล้ว',
 
@@ -149,8 +138,7 @@ abstract class ThTh {
     'drawer_privacy_policy': 'นโยบายความเป็นส่วนตัว',
     'drawer_terms': 'ข้อกำหนดการใช้งาน',
     'drawer_withdraw': 'ลบบัญชี',
-    'drawer_withdraw_message':
-        'บัญชีและข้อมูลทั้งหมดจะถูกลบ\nคุณแน่ใจหรือไม่?',
+    'drawer_withdraw_message': 'บัญชีและข้อมูลทั้งหมดจะถูกลบ\nคุณแน่ใจหรือไม่?',
 
     // ── แดชบอร์ดผู้ดูแล ──
     'guardian_status_normal': 'ปกติ',
@@ -165,8 +153,7 @@ abstract class ThTh {
     'guardian_payment_preparing': 'ฟีเจอร์การชำระเงินเร็วๆ นี้',
     'guardian_today_summary': 'สรุปความเป็นอยู่วันนี้',
     'guardian_no_subjects': 'ยังไม่มีผู้อยู่ในการดูแล',
-    'guardian_checking_subjects':
-        'กำลังตรวจสอบ\nผู้อยู่ในการดูแล @count คน',
+    'guardian_checking_subjects': 'กำลังตรวจสอบ\nผู้อยู่ในการดูแล @count คน',
     'guardian_subject_list': 'รายชื่อผู้อยู่ในการดูแล',
     'guardian_call_now': 'โทรเลย',
     'guardian_confirm_safety': 'ยืนยันความปลอดภัย',
@@ -177,20 +164,17 @@ abstract class ThTh {
     'guardian_last_check_days': 'ตรวจสอบล่าสุด: @days วันที่แล้ว',
     'guardian_activity_stable': 'กิจกรรม: คงที่',
     'guardian_safety_needed': 'จำเป็นต้องตรวจสอบความปลอดภัย',
-    'guardian_error_load_subjects':
-        'ไม่สามารถโหลดรายชื่อผู้อยู่ในการดูแล',
+    'guardian_error_load_subjects': 'ไม่สามารถโหลดรายชื่อผู้อยู่ในการดูแล',
     'guardian_error_clear_alerts': 'ไม่สามารถล้างการแจ้งเตือน',
 
     // ── เพิ่มผู้อยู่ในการดูแล ──
     'add_subject_title': 'เชื่อมต่อผู้อยู่ในการดูแล',
-    'add_subject_guide_title':
-        'กรอกรหัสเฉพาะของผู้อยู่ในการดูแลและชื่อเล่น',
+    'add_subject_guide_title': 'กรอกรหัสเฉพาะของผู้อยู่ในการดูแลและชื่อเล่น',
     'add_subject_guide_subtitle':
         'เชื่อมต่อแอปของผู้อยู่ในการดูแลเพื่อติดตามสุขภาพและกิจกรรมแบบเรียลไทม์',
     'add_subject_code_label': 'รหัสเฉพาะ (7 หลัก)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info':
-        'รหัสเฉพาะสามารถพบได้ในแอปของผู้อยู่ในการดูแล',
+    'add_subject_code_info': 'รหัสเฉพาะสามารถพบได้ในแอปของผู้อยู่ในการดูแล',
     'add_subject_alias_label': 'ชื่อเล่นผู้อยู่ในการดูแล',
     'add_subject_alias_hint': 'เช่น แม่, พ่อ',
     'add_subject_connect': 'เชื่อมต่อ',
@@ -198,8 +182,7 @@ abstract class ThTh {
     'add_subject_success': 'เชื่อมต่อผู้อยู่ในการดูแลสำเร็จ',
     'add_subject_error_invalid_code': 'รหัสไม่ถูกต้อง',
     'add_subject_error_already_connected': 'เชื่อมต่อแล้ว',
-    'add_subject_error_failed':
-        'การเชื่อมต่อล้มเหลว กรุณาลองใหม่',
+    'add_subject_error_failed': 'การเชื่อมต่อล้มเหลว กรุณาลองใหม่',
     'add_subject_button': 'เพิ่มผู้อยู่ในการดูแลใหม่',
 
     // ── การตั้งค่าผู้ดูแล ──
@@ -247,13 +230,11 @@ abstract class ThTh {
     'notifications_today': 'การแจ้งเตือนวันนี้',
     'notifications_empty': 'ไม่มีการแจ้งเตือนวันนี้',
     'notifications_delete_all_title': 'ลบการแจ้งเตือนทั้งหมด',
-    'notifications_delete_all_message':
-        'ลบการแจ้งเตือนทั้งหมดวันนี้?',
+    'notifications_delete_all_message': 'ลบการแจ้งเตือนทั้งหมดวันนี้?',
     'notifications_delete_failed': 'ไม่สามารถลบการแจ้งเตือน',
     'notifications_guide_title': 'คู่มือระดับการแจ้งเตือน',
     'notifications_level_health': 'ปกติ',
-    'notifications_level_health_desc':
-        'ยืนยันความเป็นอยู่ของผู้อยู่ในการดูแลเป็นปกติ',
+    'notifications_level_health_desc': 'ยืนยันความเป็นอยู่ของผู้อยู่ในการดูแลเป็นปกติ',
     'notifications_level_caution': 'ระวัง',
     'notifications_level_caution_desc': 'วันนี้ยังไม่มีสัญญาณความปลอดภัย',
     'notifications_level_warning': 'เตือน',
@@ -262,33 +243,26 @@ abstract class ThTh {
     'notifications_level_urgent_desc': 'ต้องตรวจสอบโดยด่วนทันที',
     'notifications_level_info': 'ข้อมูล',
     'notifications_level_info_desc': 'การแจ้งเตือนจำนวนก้าว แบตเตอรี่ต่ำและอื่น ๆ',
-    'notifications_activity_note':
-        '※ ข้อมูลกิจกรรมอาจไม่แสดงหากไม่สามารถเก็บข้อมูลก้าวเดินได้',
+    'notifications_activity_note': '※ ข้อมูลกิจกรรมอาจไม่แสดงหากไม่สามารถเก็บข้อมูลก้าวเดินได้',
 
     // ── การตั้งค่าการแจ้งเตือนผู้ดูแล ──
     'notification_settings_title': 'การตั้งค่าการแจ้งเตือน',
     'notification_settings_push': 'การแจ้งเตือนแบบพุช',
     'notification_settings_all': 'การแจ้งเตือนทั้งหมด',
-    'notification_settings_all_desc':
-        'เปิดหรือปิดการแจ้งเตือนทุกประเภทพร้อมกัน',
+    'notification_settings_all_desc': 'เปิดหรือปิดการแจ้งเตือนทุกประเภทพร้อมกัน',
     'notification_settings_level_section': 'การตั้งค่าตามระดับ',
     'notification_settings_urgent': 'แจ้งเตือนเร่งด่วน',
-    'notification_settings_urgent_desc':
-        'ไม่สามารถปิดการแจ้งเตือนเร่งด่วนได้',
+    'notification_settings_urgent_desc': 'ไม่สามารถปิดการแจ้งเตือนเร่งด่วนได้',
     'notification_settings_warning': 'แจ้งเตือนเตือน',
-    'notification_settings_warning_desc':
-        'แจ้งเตือนเมื่อไม่มีการตรวจสอบ 2 วันติดต่อกัน',
+    'notification_settings_warning_desc': 'แจ้งเตือนเมื่อไม่มีการตรวจสอบ 2 วันติดต่อกัน',
     'notification_settings_caution': 'แจ้งเตือนระวัง',
-    'notification_settings_caution_desc':
-        'แจ้งเตือนเมื่อยังไม่มีการตรวจสอบวันนี้',
+    'notification_settings_caution_desc': 'แจ้งเตือนเมื่อยังไม่มีการตรวจสอบวันนี้',
     'notification_settings_info': 'แจ้งเตือนข้อมูล',
-    'notification_settings_info_desc':
-        'การแจ้งเตือนทั่วไป เช่น จำนวนก้าวและสถานะแบตเตอรี่',
+    'notification_settings_info_desc': 'การแจ้งเตือนทั่วไป เช่น จำนวนก้าวและสถานะแบตเตอรี่',
     'notification_settings_dnd': 'ห้ามรบกวน',
     'notification_settings_dnd_start': 'เวลาเริ่ม',
     'notification_settings_dnd_end': 'เวลาสิ้นสุด',
-    'notification_settings_dnd_note':
-        '※ การแจ้งเตือนเร่งด่วนจะส่งแม้ในโหมดห้ามรบกวน',
+    'notification_settings_dnd_note': '※ การแจ้งเตือนเร่งด่วนจะส่งแม้ในโหมดห้ามรบกวน',
     'notification_settings_dnd_start_default': '22:00',
     'notification_settings_dnd_end_default': '7:00',
 
@@ -298,8 +272,7 @@ abstract class ThTh {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'ผู้อยู่ในการดูแลที่เชื่อมต่อ',
     'connection_empty': 'ไม่มีผู้ได้รับการดูแลที่เชื่อมต่อ',
-    'connection_unlink_warning':
-        'การยกเลิกเชื่อมต่อจะลบข้อมูลของผู้อยู่ในการดูแล',
+    'connection_unlink_warning': 'การยกเลิกเชื่อมต่อจะลบข้อมูลของผู้อยู่ในการดูแล',
     'connection_unlink_warning_detail':
         'ไม่สามารถกู้คืนบันทึกก่อนหน้าหลังจากเชื่อมต่อใหม่ คุณจะต้องกรอกรหัสผู้อยู่ในการดูแลอีกครั้ง',
     'connection_heartbeat_schedule': 'ทุกวันเวลา @time',
@@ -324,18 +297,16 @@ abstract class ThTh {
     'heartbeat_schedule_change': 'เปลี่ยนเวลาตรวจสอบ',
     'heartbeat_schedule_title_ios': 'เวลาแจ้งเตือนพุชสุขภาพ',
     'heartbeat_schedule_change_title_ios': 'เปลี่ยนเวลาแจ้งเตือนพุชสุขภาพ',
-    'heartbeat_schedule_hint_ios': 'การแจ้งเตือนพุชสุขภาพจะมาถึงทุกวันในเวลานี้ แตะที่การแจ้งเตือนหรือเปิดแอปในช่วงเวลานั้นเพื่อส่งสัญญาณสุขภาพของคุณ',
+    'heartbeat_schedule_hint_ios':
+        'การแจ้งเตือนพุชสุขภาพจะมาถึงทุกวันในเวลานี้ แตะที่การแจ้งเตือนหรือเปิดแอปในช่วงเวลานั้นเพื่อส่งสัญญาณสุขภาพของคุณ',
     'heartbeat_daily_time': 'ทุกวันเวลา @time',
-    'heartbeat_scheduled_today':
-        'การตรวจสอบความเป็นอยู่กำหนดเวลา @time วันนี้',
+    'heartbeat_scheduled_today': 'การตรวจสอบความเป็นอยู่กำหนดเวลา @time วันนี้',
     'heartbeat_change_failed_title': 'เปลี่ยนเวลาไม่สำเร็จ',
-    'heartbeat_change_failed_message':
-        'ไม่สามารถอัปเดตบนเซิร์ฟเวอร์ได้',
+    'heartbeat_change_failed_message': 'ไม่สามารถอัปเดตบนเซิร์ฟเวอร์ได้',
 
     // ── การแจ้งเตือนในเครื่อง ──
     'local_notification_channel': 'การแจ้งเตือนความเป็นอยู่',
-    'local_notification_channel_desc':
-        'การแจ้งเตือนบริการตรวจสอบความเป็นอยู่',
+    'local_notification_channel_desc': 'การแจ้งเตือนบริการตรวจสอบความเป็นอยู่',
 
     // ── อื่นๆ ──
     'back_press_exit': 'กดย้อนกลับอีกครั้งเพื่อออก',
@@ -347,24 +318,18 @@ abstract class ThTh {
     'error_unauthorized': 'จำเป็นต้องยืนยันตัวตน',
 
     // ── เนื้อหาการแจ้งเตือน ──
-    'noti_auto_report_body':
-        'การตรวจสอบความเป็นอยู่ตามกำหนดได้รับแล้ววันนี้',
-    'noti_manual_report_body':
-        'ผู้ได้รับการดูแลส่งการตรวจสอบความเป็นอยู่ด้วยตนเอง',
-    'noti_battery_low_body':
-        'แบตเตอรี่โทรศัพท์ต่ำกว่า 20% อาจจำเป็นต้องชาร์จ',
+    'noti_auto_report_body': 'การตรวจสอบความเป็นอยู่ตามกำหนดได้รับแล้ววันนี้',
+    'noti_manual_report_body': 'ผู้ได้รับการดูแลส่งการตรวจสอบความเป็นอยู่ด้วยตนเอง',
+    'noti_battery_low_body': 'แบตเตอรี่โทรศัพท์ต่ำกว่า 20% อาจจำเป็นต้องชาร์จ',
     'noti_battery_dead_body':
         'โทรศัพท์ดูเหมือนปิดเนื่องจากแบตเตอรี่หมด ระดับแบตเตอรี่ล่าสุด: @battery_level% จะกลับมาเป็นปกติหลังชาร์จ',
     'noti_caution_suspicious_body':
         'ได้รับสัญญาณความเป็นอยู่ แต่ไม่มีสัญญาณการใช้โทรศัพท์ กรุณาตรวจสอบด้วยตนเอง',
     'noti_caution_missing_body':
         'การตรวจสอบความเป็นอยู่ที่กำหนดไว้วันนี้ยังไม่ได้รับ กรุณาตรวจสอบด้วยตนเอง',
-    'noti_warning_body':
-        'การตรวจสอบความเป็นอยู่ถูกพลาดติดต่อกัน กรุณายืนยันด้วยตนเอง',
-    'noti_urgent_body':
-        'ไม่มีการตรวจสอบความเป็นอยู่เป็นเวลา @days วัน จำเป็นต้องยืนยันทันที',
-    'noti_steps_body':
-        '@from_time ~ @to_time: เดิน @steps ก้าว',
+    'noti_warning_body': 'การตรวจสอบความเป็นอยู่ถูกพลาดติดต่อกัน กรุณายืนยันด้วยตนเอง',
+    'noti_urgent_body': 'ไม่มีการตรวจสอบความเป็นอยู่เป็นเวลา @days วัน จำเป็นต้องยืนยันทันที',
+    'noti_steps_body': '@from_time ~ @to_time: เดิน @steps ก้าว',
     'noti_emergency_body': 'ผู้ถูกดูแลขอความช่วยเหลือโดยตรง กรุณาตรวจสอบทันที',
     'noti_resolved_body': 'การตรวจสอบสุขภาพของผู้ได้รับการดูแลกลับสู่ปกติแล้ว',
     'noti_cleared_by_guardian_title': '✅ ยืนยันความปลอดภัย',
@@ -374,8 +339,7 @@ abstract class ThTh {
     'local_alarm_title': '💗 ต้องตรวจสอบความเป็นอยู่',
     'local_alarm_body': 'กรุณาแตะที่การแจ้งเตือนนี้',
     'wellbeing_check_title': '💛 ตรวจสอบความเป็นอยู่',
-    'wellbeing_check_body':
-        'คุณสบายดีไหม? กรุณาแตะที่การแจ้งเตือนนี้',
+    'wellbeing_check_body': 'คุณสบายดีไหม? กรุณาแตะที่การแจ้งเตือนนี้',
     'noti_channel_name': 'การแจ้งเตือน Anbu',
   };
 }
