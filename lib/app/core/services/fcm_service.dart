@@ -8,8 +8,8 @@ import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
+import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
-import 'package:anbucheck/app/modules/guardian_safety_code/controllers/guardian_safety_code_controller.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// FCM 백그라운드 메시지 핸들러 (top-level 함수 필수)
@@ -62,11 +62,12 @@ void _handleNotificationTap(String type) {
       // 매칭되지 않고 SafetyCode가 root가 되어 뒤로가기 불가 — offAllNamed(dashboard)로
       // 스택을 재구성한 뒤 SafetyCode를 push해 [dashboard, safetyCode] 구조 보장.
       // Dashboard 바인딩은 permanent이므로 재등록되지 않아 컨트롤러 race 없음.
-      if (Get.currentRoute == AppRoutes.guardianSafetyCode) {
-        try {
-          Get.find<GuardianSafetyCodeController>().refreshAndSend();
-        } catch (_) {}
-      } else {
+      // Dashboard가 heartbeat 미전송 체크를 단독 소유하므로 route와 무관하게
+      // Dashboard 컨트롤러(permanent)에 위임. 이미 안전코드 페이지면 스택 유지.
+      try {
+        Get.find<GuardianDashboardController>().refreshAndSend();
+      } catch (_) {}
+      if (Get.currentRoute != AppRoutes.guardianSafetyCode) {
         Get.offAllNamed(AppRoutes.guardianDashboard);
         Get.toNamed(AppRoutes.guardianSafetyCode);
       }

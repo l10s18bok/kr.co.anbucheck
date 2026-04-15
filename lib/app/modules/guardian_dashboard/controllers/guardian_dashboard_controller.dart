@@ -40,6 +40,26 @@ class GuardianDashboardController extends BaseController
   final guardianCount = 0.obs;
   final isEnabling = false.obs;
 
+  // ── G+S heartbeat 보고 상태 (SafetyCode 카드가 Obx로 구독) ──
+  final _lastHeartbeatDate = ''.obs;
+  final _lastHeartbeatTime = ''.obs;
+  String get lastHeartbeatDate => _lastHeartbeatDate.value;
+  String get lastHeartbeatTime => _lastHeartbeatTime.value;
+
+  bool get isReportedToday {
+    final now = DateTime.now();
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    return _lastHeartbeatDate.value == today;
+  }
+
+  bool get isScheduleInFuture {
+    final now = DateTime.now();
+    final scheduled = DateTime(
+        now.year, now.month, now.day, heartbeatHour.value, heartbeatMinute.value);
+    return scheduled.isAfter(now);
+  }
+
   final _svc = Get.find<GuardianSubjectService>();
   final _tokenDs = TokenLocalDatasource();
   final _userDs = UserRemoteDatasource();
@@ -53,15 +73,77 @@ class GuardianDashboardController extends BaseController
     ever(_svc.subjects, (_) => _mapSubjects());
     _loadSubjectsAndSubscription();
     _loadSubjectState();
-    _scheduleHeartbeatIfGS();
+    _initGuardianSubjectMode();
   }
 
-  /// 앱이 포그라운드로 복귀 — 대상자 목록 강제 갱신
-  /// heartbeat 자동 재전송은 SafetyCode 컨트롤러가 전담 (race 방지)
+  /// 앱이 포그라운드로 복귀 — 대상자 목록 갱신 + G+S heartbeat 재확인
   @override
   void onResumed() {
     super.onResumed();
     _loadSubjectsAndSubscription(force: true);
+    _resumeGuardianSubjectMode();
+  }
+
+  /// onInit 진입 시: G+S 스케줄 동기화 후 heartbeat 미전송 체크
+  /// 순서가 중요 — isScheduleInFuture가 heartbeatHour/Minute를 참조하므로
+  /// 스케줄 로드가 반드시 선행되어야 한다.
+  Future<void> _initGuardianSubjectMode() async {
+    await _scheduleHeartbeatIfGS();
+    if (!isAlsoSubject.value) return;
+    await _reloadHeartbeatState();
+    await _checkAndSendHeartbeat();
+  }
+
+  /// onResumed 진입 시: G+S인 경우 로컬 스케줄 재로드 후 heartbeat 미전송 체크
+  Future<void> _resumeGuardianSubjectMode() async {
+    if (!isAlsoSubject.value) return;
+    await loadScheduleFromLocal();
+    await _reloadHeartbeatState();
+    await _checkAndSendHeartbeat();
+  }
+
+  /// FCM이 gs_deadman 로컬 알림 탭 시 호출 (이미 스택에 있을 때)
+  Future<void> refreshAndSend() async {
+    if (!isAlsoSubject.value) return;
+    await loadScheduleFromLocal();
+    await _reloadHeartbeatState();
+    await _checkAndSendHeartbeat();
+  }
+
+  /// SafetyCode 등 외부에서 heartbeat 상태 재로드가 필요할 때 호출
+  Future<void> reloadHeartbeatState() => _reloadHeartbeatState();
+
+  Future<void> _reloadHeartbeatState() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    _lastHeartbeatDate.value = await _tokenDs.getLastHeartbeatDate() ?? '';
+    _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
+  }
+
+  /// 예약시각 경과(Android) + 오늘 미전송이면 heartbeat 자동 전송
+  /// iOS G+S는 시각 조건 없이 "당일 미전송"만 확인
+  Future<void> _checkAndSendHeartbeat() async {
+    if (isReportedToday) return;
+    if (Platform.isAndroid && isScheduleInFuture) return;
+    await _clearStaleScheduledKey();
+    await HeartbeatService().execute(manual: false);
+    await _reloadHeartbeatState();
+  }
+
+  /// Worker가 Doze/OEM 절전으로 중도 종료되면 lastHeartbeatDate는 비어있고
+  /// lastScheduledKey만 남아 2차 안전망(앱 복귀 자동 전송)이 dedup 가드에 막혀
+  /// 영구히 차단된다. 포그라운드 진입 시 "오늘 미전송인데 오늘자 키가 박혀 있는"
+  /// stale 상태를 감지해 정리한다.
+  Future<void> _clearStaleScheduledKey() async {
+    final lastKey = await _tokenDs.getLastScheduledKey();
+    if (lastKey == null || lastKey.isEmpty) return;
+    final now = DateTime.now();
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    if (lastKey.startsWith(today)) {
+      debugPrint('[GuardianDashboard] stale lastScheduledKey 정리 ($lastKey)');
+      await _tokenDs.clearLastScheduledKey();
+    }
   }
 
   /// G+S(보호자 겸 대상자)인 경우 서버 스케줄 동기화 후 WorkManager + 로컬 안전망 예약
@@ -265,11 +347,12 @@ class GuardianDashboardController extends BaseController
       }
       await LocalAlarmService.schedule(hour, minute);
 
-      // 첫 heartbeat 즉시 전송 — 이후 SafetyCode.onInit에서는
-      // HeartbeatService 내부 dedup + isReportedToday 체크로 중복 전송 방지
+      // 첫 heartbeat 즉시 전송 — HeartbeatService 내부 dedup으로 중복 전송 방지
       try {
         await HeartbeatService().execute();
       } catch (_) {}
+      // 전송 결과를 로컬 Rx에 반영 (SafetyCode 카드가 즉시 보고 상태로 전환)
+      await _reloadHeartbeatState();
 
       Get.snackbar('', 'gs_enabled_message'.tr,
           snackPosition: SnackPosition.TOP,
@@ -310,6 +393,8 @@ class GuardianDashboardController extends BaseController
       isAlsoSubject.value = false;
       inviteCode.value = '';
       guardianCount.value = 0;
+      _lastHeartbeatDate.value = '';
+      _lastHeartbeatTime.value = '';
 
       Get.snackbar('', 'gs_disabled_message'.tr,
           snackPosition: SnackPosition.TOP,
