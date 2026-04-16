@@ -37,30 +37,55 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
             if (!controller.isGuardianConnected) return const SizedBox.shrink();
             return Padding(
               padding: EdgeInsets.only(right: 16.w),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircleAvatar(
-                    radius: 18.r,
-                    backgroundColor: const Color(0xFFE0F2F1),
-                    child: Icon(Icons.person,
-                        size: 20.w, color: const Color(0xFF00685E)),
-                  ),
-                  SizedBox(width: 4.w),
-                  Text(
-                    'x${controller.guardianCount}',
-                    style: AppTextTheme.labelMedium(
-                      color: const Color(0xFF00685E),
-                      fw: FontWeight.w700,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20.r),
+                  onTap: () {
+                    Get.rawSnackbar(
+                      message: 'subject_home_guardian_count'.trParams(
+                          {'count': '${controller.guardianCount}'}),
+                      snackPosition: SnackPosition.TOP,
+                      backgroundColor: const Color(0xFF00685E),
+                      margin: EdgeInsets.all(12.w),
+                      borderRadius: 12.r,
+                      duration: const Duration(seconds: 2),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 8.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE0F2F1),
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.person,
+                            size: 20.w, color: const Color(0xFF00685E)),
+                        SizedBox(width: 4.w),
+                        Text(
+                          'x${controller.guardianCount}',
+                          style: AppTextTheme.labelMedium(
+                            color: const Color(0xFF00685E),
+                            fw: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             );
           }),
         ],
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: controller.pullToRefresh,
+        color: const Color(0xFF00685E),
+        child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,6 +129,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
             const BannerAdWidget(),
             SizedBox(height: AppSpacing.sp6),
           ],
+        ),
         ),
       ),
     );

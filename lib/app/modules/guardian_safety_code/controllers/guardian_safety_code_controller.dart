@@ -112,10 +112,19 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     await _syncScheduleFromServer();
   }
 
+  /// Pull-to-refresh: arguments 캐시 무시하고 서버에서 강제 동기화
+  Future<void> pullToRefresh() async {
+    await getReloadedPrefs();
+    _inviteCode.value = await _tokenDs.getInviteCode() ?? '';
+    _guardianConnected.value = await _tokenDs.getSubscriptionActive();
+    await loadScheduleFromLocal();
+    await _syncScheduleFromServer(forceRemote: true);
+  }
+
   /// G+S 모드: 설정 페이지에서 이미 받은 데이터 사용 (중복 API 호출 방지)
   /// 오늘의 안부 확인 메시지 로컬 알림 탭 진입 등 캐시 없는 경우만 서버 호출
-  Future<void> _syncScheduleFromServer() async {
-    final cached = _deviceData;
+  Future<void> _syncScheduleFromServer({bool forceRemote = false}) async {
+    final cached = forceRemote ? null : _deviceData;
     if (cached != null) {
       final hour = cached['heartbeat_hour'] as int? ?? 9;
       final minute = cached['heartbeat_minute'] as int? ?? 30;
