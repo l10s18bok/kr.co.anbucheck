@@ -95,12 +95,13 @@ class HeartbeatService {
       final timestamp    = now.toUtc().toIso8601String();
       final batteryLevel = await _getBatteryLevel();
 
+      // 걸음수는 수동/자동 모두 수집 — 서버 활동 정보 알림이 heartbeat 간 구간 기반이므로
+      // 수동 보고가 구간을 끊지 않도록 항상 전송한다.
+      final stepsDelta = await _getStepsDelta();
+
       // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false
-      int? stepsDelta;
       bool suspicious = false;
       if (!manual) {
-        stepsDelta = await _getStepsDelta();
-        debugPrint('[HeartbeatService] stepsDelta=$stepsDelta');
         if (stepsDelta != null && stepsDelta > 0) {
           // 걸음수 변화 있음 → 즉시 정상 판정
           suspicious = false;
@@ -117,7 +118,6 @@ class HeartbeatService {
             );
           }
         }
-        // 걸음수 저장은 _getStepsDelta() 내에서 처리 완료
       }
 
       final request = HeartbeatRequest(
