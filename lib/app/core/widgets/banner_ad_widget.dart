@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:anbucheck/app/core/config/ad_config.dart';
-import 'package:anbucheck/app/core/theme/app_colors.dart';
-import 'package:anbucheck/app/core/theme/app_text_theme.dart';
-import 'package:anbucheck/app/core/theme/app_spacing.dart';
 
 /// 공통 배너 광고 위젯
 /// 대상자 홈, 보호자 대시보드에서 사용
@@ -27,10 +23,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   void _loadAd() async {
     final width = MediaQuery.of(context).size.width.truncate();
-    final adSize = await AdSize.getAnchoredAdaptiveBannerAdSize(
-      Orientation.portrait,
-      width,
-    );
+    final adSize = await AdSize.getAnchoredAdaptiveBannerAdSize(Orientation.portrait, width);
     if (adSize == null) return;
 
     _bannerAd = BannerAd(
@@ -64,33 +57,10 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       return const SizedBox.shrink();
     }
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(14.r),
-      ),
-      clipBehavior: Clip.hardEdge,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: AppSpacing.sm),
-            child: Text(
-              'AD',
-              style: AppTextTheme.labelSmall(
-                color: AppColors.textTertiary,
-                fw: FontWeight.w600,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: _bannerAd!.size.width.toDouble(),
-            height: _bannerAd!.size.height.toDouble(),
-            child: AdWidget(ad: _bannerAd!),
-          ),
-        ],
-      ),
+      height: _bannerAd!.size.height.toDouble(),
+      child: Center(child: AdWidget(ad: _bannerAd!)),
     );
   }
 }
