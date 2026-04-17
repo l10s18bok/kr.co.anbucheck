@@ -91,6 +91,7 @@ class LocalAlarmService {
       androidScheduleMode: AndroidScheduleMode.alarmClock,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
       payload: alarmPayload,
     );
     debugPrint('[LocalAlarm] 예약 완료: ${scheduled.toString()}');
