@@ -243,9 +243,9 @@ abstract class RuRu {
     'notifications_level_health': 'Норма',
     'notifications_level_health_desc': 'Самочувствие подопечного подтверждено',
     'notifications_level_caution': 'Внимание',
-    'notifications_level_caution_desc': 'Сегодня ещё нет сигнала благополучия',
+    'notifications_level_caution_desc': 'Пока нет сигнала благополучия или активности телефона',
     'notifications_level_warning': 'Предупреждение',
-    'notifications_level_warning_desc': 'Нет подтверждения несколько дней подряд',
+    'notifications_level_warning_desc': 'Нет сигнала благополучия или активности телефона несколько дней подряд',
     'notifications_level_urgent': 'Срочно',
     'notifications_level_urgent_desc': 'Требуется немедленная проверка',
     'notifications_level_info': 'Информация',
@@ -338,7 +338,11 @@ abstract class RuRu {
     'noti_caution_missing_body':
         'Запланированная на сегодня проверка самочувствия ещё не получена. Пожалуйста, проверьте лично.',
     'noti_warning_body': 'Проверки самочувствия пропущены подряд. Необходима личная проверка.',
+    'noti_warning_suspicious_body':
+        'Признаков использования телефона нет несколько раз подряд. Требуется личная проверка.',
     'noti_urgent_body': 'Нет проверки самочувствия @days дн. Требуется немедленная проверка.',
+    'noti_urgent_suspicious_body':
+        'Нет признаков использования телефона уже @days дн. Требуется немедленная проверка.',
     'noti_steps_body': '@from_time ~ @to_time: пройдено @steps шагов.',
     'noti_emergency_body': 'Подопечный лично запросил помощь. Пожалуйста, проверьте немедленно.',
     'noti_resolved_body': 'Проверка здоровья подопечного вернулась в норму.',

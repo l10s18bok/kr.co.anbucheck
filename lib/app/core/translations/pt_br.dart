@@ -241,9 +241,9 @@ abstract class PtBr {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'O bem-estar do protegido foi confirmado normalmente',
     'notifications_level_caution': 'Atenção',
-    'notifications_level_caution_desc': 'Ainda sem sinal de bem-estar hoje',
+    'notifications_level_caution_desc': 'Ainda sem sinal de bem-estar ou atividade do telefone',
     'notifications_level_warning': 'Alerta',
-    'notifications_level_warning_desc': 'Sem confirmação por vários dias',
+    'notifications_level_warning_desc': 'Sem sinal de bem-estar ou atividade do telefone por vários dias',
     'notifications_level_urgent': 'Urgente',
     'notifications_level_urgent_desc': 'Verificação imediata necessária',
     'notifications_level_info': 'Info',
@@ -340,8 +340,12 @@ abstract class PtBr {
         'A verificação de bem-estar agendada para hoje ainda não foi recebida. Por favor, verifique pessoalmente.',
     'noti_warning_body':
         'Verificações de bem-estar foram perdidas consecutivamente. Por favor, verifique pessoalmente.',
+    'noti_warning_suspicious_body':
+        'Nenhum sinal de uso do celular detectado consecutivamente. Verificação pessoal necessária.',
     'noti_urgent_body':
         'Sem verificação de bem-estar há @days dia(s). Verificação imediata necessária.',
+    'noti_urgent_suspicious_body':
+        'Sem sinais de uso do celular por @days dia(s). Verificação imediata necessária.',
     'noti_steps_body': '@from_time ~ @to_time: @steps passos dados.',
     'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
     'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',

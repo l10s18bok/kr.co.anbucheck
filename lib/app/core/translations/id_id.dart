@@ -243,9 +243,9 @@ abstract class IdId {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Kesejahteraan orang yang dilindungi dikonfirmasi normal',
     'notifications_level_caution': 'Perhatian',
-    'notifications_level_caution_desc': 'Belum ada sinyal kesejahteraan hari ini',
+    'notifications_level_caution_desc': 'Belum ada sinyal kesejahteraan atau aktivitas ponsel',
     'notifications_level_warning': 'Peringatan',
-    'notifications_level_warning_desc': 'Tidak ada konfirmasi selama beberapa hari',
+    'notifications_level_warning_desc': 'Tidak ada sinyal kesejahteraan atau aktivitas ponsel selama beberapa hari berturut-turut',
     'notifications_level_urgent': 'Mendesak',
     'notifications_level_urgent_desc': 'Perlu pemeriksaan segera sekarang',
     'notifications_level_info': 'Info',
@@ -341,8 +341,12 @@ abstract class IdId {
         'Pemeriksaan kesejahteraan terjadwal hari ini belum diterima. Silakan periksa langsung.',
     'noti_warning_body':
         'Pemeriksaan kesejahteraan terlewat berturut-turut. Silakan verifikasi langsung.',
+    'noti_warning_suspicious_body':
+        'Tidak ada tanda penggunaan ponsel terdeteksi berturut-turut. Diperlukan verifikasi langsung.',
     'noti_urgent_body':
         'Tidak ada pemeriksaan kesejahteraan selama @days hari. Verifikasi segera diperlukan.',
+    'noti_urgent_suspicious_body':
+        'Tidak ada tanda penggunaan ponsel selama @days hari. Diperlukan verifikasi segera.',
     'noti_steps_body': '@from_time ~ @to_time: @steps langkah.',
     'noti_emergency_body': 'Orang yang dilindungi langsung meminta bantuan. Harap segera periksa.',
     'noti_resolved_body': 'Pemeriksaan kesejahteraan orang yang dilindungi telah kembali normal.',

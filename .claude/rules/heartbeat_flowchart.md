@@ -107,7 +107,7 @@ flowchart TD
     Downgrade --> Wait1
 
     CheckSuspicious -->|false| StatusNormal
-    CheckSuspicious -->|true| Wait1([⏱ 다음 heartbeat 대기<br/>suspicious_count 기반 보호자 경고 에스컬레이션])
+    CheckSuspicious -->|true| Wait1([⏱ suspicious_count 기반 보호자 경고 에스컬레이션<br/>1회 → caution + caution_suspicious<br/>2회 → warning + warning_suspicious<br/>3회+ → urgent + urgent_suspicious<br/>※ scheduler 미수신 경로와 별도 문구 사용])
 
     StatusNormal --> SaveNoti[보호자 알림 DB 저장<br/>guardian_notifications<br/>alert_level: info<br/>is_push_sent: true/false]
     SaveNoti --> StepsNoti{steps_delta > 0?}

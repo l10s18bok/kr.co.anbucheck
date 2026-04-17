@@ -241,9 +241,9 @@ abstract class ViVn {
     'notifications_level_health_desc':
         'Suc khoe cua nguoi duoc bao ve da duoc xac nhan binh thuong',
     'notifications_level_caution': 'Chu y',
-    'notifications_level_caution_desc': 'Hôm nay chưa có tín hiệu an toàn',
+    'notifications_level_caution_desc': 'Chưa có tín hiệu an toàn hoặc dấu vết sử dụng điện thoại',
     'notifications_level_warning': 'Canh bao',
-    'notifications_level_warning_desc': 'Không có xác nhận trong nhiều ngày liên tiếp',
+    'notifications_level_warning_desc': 'Không có tín hiệu an toàn hoặc dấu vết sử dụng điện thoại trong nhiều ngày liên tiếp',
     'notifications_level_urgent': 'Khan cap',
     'notifications_level_urgent_desc': 'Cần kiểm tra ngay bây giờ',
     'notifications_level_info': 'Thong tin',
@@ -335,7 +335,11 @@ abstract class ViVn {
     'noti_caution_missing_body':
         'Kiem tra suc khoe theo lich hom nay chua duoc nhan. Vui long kiem tra truc tiep.',
     'noti_warning_body': 'Kiem tra suc khoe da bi bo lo lien tiep. Vui long xac minh truc tiep.',
+    'noti_warning_suspicious_body':
+        'Khong phat hien dau hieu su dung dien thoai lien tiep. Can kiem tra truc tiep.',
     'noti_urgent_body': 'Khong co kiem tra suc khoe trong @days ngay. Can xac minh ngay lap tuc.',
+    'noti_urgent_suspicious_body':
+        'Khong phat hien dau hieu su dung dien thoai trong @days ngay. Can xac minh ngay lap tuc.',
     'noti_steps_body': '@from_time ~ @to_time: @steps buoc di.',
     'noti_emergency_body':
         'Người được bảo vệ đã trực tiếp yêu cầu giúp đỡ. Vui lòng kiểm tra ngay.',

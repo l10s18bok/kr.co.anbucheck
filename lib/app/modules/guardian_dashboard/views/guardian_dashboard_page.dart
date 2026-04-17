@@ -323,9 +323,9 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
             AddSubjectButton(onTap: controller.goToAddSubject),
             SizedBox(height: AppSpacing.sp6),
 
-            // 광고 배너
-            const BannerAdWidget(),
-            SizedBox(height: AppSpacing.sp6),
+            // 광고 배너 (스크린샷용 임시 주석)
+            // const BannerAdWidget(),
+            // SizedBox(height: AppSpacing.sp6),
           ],
         ),
       ),
@@ -566,11 +566,13 @@ class _SubjectCardState extends State<_SubjectCard>
                   Icon(Icons.info_outline_rounded,
                       size: 18.w, color: widget.statusColor),
                   SizedBox(width: 6.w),
-                  Text(widget.activityLabel!,
-                      style: AppTextTheme.bodyLarge(
-                        color: widget.statusColor,
-                        fw: FontWeight.w700,
-                      )),
+                  Flexible(
+                    child: Text(widget.activityLabel!,
+                        style: AppTextTheme.bodyLarge(
+                          color: widget.statusColor,
+                          fw: FontWeight.w700,
+                        )),
+                  ),
                 ],
               ),
               const Spacer(),
@@ -692,7 +694,11 @@ class _LegendDot extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         SizedBox(width: 3.w),
-        Text(label, style: AppTextTheme.labelSmall(color: AppColors.textTertiary)),
+        Flexible(
+          child: Text(label,
+              style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
+              overflow: TextOverflow.ellipsis),
+        ),
       ],
     );
   }

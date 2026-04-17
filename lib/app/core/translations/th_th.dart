@@ -236,9 +236,9 @@ abstract class ThTh {
     'notifications_level_health': 'ปกติ',
     'notifications_level_health_desc': 'ยืนยันความเป็นอยู่ของผู้อยู่ในการดูแลเป็นปกติ',
     'notifications_level_caution': 'ระวัง',
-    'notifications_level_caution_desc': 'วันนี้ยังไม่มีสัญญาณความปลอดภัย',
+    'notifications_level_caution_desc': 'ยังไม่มีสัญญาณความปลอดภัยหรือการใช้งานโทรศัพท์',
     'notifications_level_warning': 'เตือน',
-    'notifications_level_warning_desc': 'ไม่มีการยืนยันความปลอดภัยต่อเนื่องหลายวัน',
+    'notifications_level_warning_desc': 'ไม่มีสัญญาณความปลอดภัยหรือการใช้งานโทรศัพท์ต่อเนื่องหลายวัน',
     'notifications_level_urgent': 'เร่งด่วน',
     'notifications_level_urgent_desc': 'ต้องตรวจสอบโดยด่วนทันที',
     'notifications_level_info': 'ข้อมูล',
@@ -328,7 +328,11 @@ abstract class ThTh {
     'noti_caution_missing_body':
         'การตรวจสอบความเป็นอยู่ที่กำหนดไว้วันนี้ยังไม่ได้รับ กรุณาตรวจสอบด้วยตนเอง',
     'noti_warning_body': 'การตรวจสอบความเป็นอยู่ถูกพลาดติดต่อกัน กรุณายืนยันด้วยตนเอง',
+    'noti_warning_suspicious_body':
+        'ไม่พบร่องรอยการใช้โทรศัพท์ติดต่อกัน จำเป็นต้องตรวจสอบด้วยตนเอง',
     'noti_urgent_body': 'ไม่มีการตรวจสอบความเป็นอยู่เป็นเวลา @days วัน จำเป็นต้องยืนยันทันที',
+    'noti_urgent_suspicious_body':
+        'ไม่พบร่องรอยการใช้โทรศัพท์เป็นเวลา @days วัน ต้องตรวจสอบทันที',
     'noti_steps_body': '@from_time ~ @to_time: เดิน @steps ก้าว',
     'noti_emergency_body': 'ผู้ถูกดูแลขอความช่วยเหลือโดยตรง กรุณาตรวจสอบทันที',
     'noti_resolved_body': 'การตรวจสอบสุขภาพของผู้ได้รับการดูแลกลับสู่ปกติแล้ว',

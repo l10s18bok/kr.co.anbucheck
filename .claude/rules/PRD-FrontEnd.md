@@ -2022,21 +2022,28 @@ String _localeString() {
 | `manual_report` | info | 수동 안부 확인 | - |
 | `battery_low` | info | 배터리 20% 미만 | - |
 | `battery_dead` | info | 배터리 방전 추정 | `battery_level` |
-| `caution_suspicious` | caution | 폰 사용 흔적 없음 | - |
-| `caution_missing` | caution | 안부 미수신 1회 | - |
-| `warning` | warning | 연속 미수신 | - |
-| `urgent` | urgent | 긴급 확인 필요 | `days` |
+| `caution_suspicious` | caution | 폰 사용 흔적 없음 (suspicious=true 1회) | - |
+| `caution_missing` | caution | 안부 미수신 1회 (scheduler) | - |
+| `warning` | warning | 연속 미수신 2회 (scheduler) | - |
+| `warning_suspicious` | warning | 폰 사용 흔적 연속 없음 (suspicious=true 2회) | - |
+| `urgent` | urgent | 긴급 미수신 3회+ (scheduler) | `days` |
+| `urgent_suspicious` | urgent | 폰 사용 흔적 연속 없음 (suspicious=true 3회+) | `days` |
 | `steps` | health | 걸음수 활동 정보 | `from_time`, `to_time`, `steps` |
 | `emergency` | urgent | 긴급 도움 요청 (대상자 직접) | - |
 | `cleared_by_guardian` | info | 보호자 수동 경고 클리어 (다른 보호자에게 발송) | - |
 
+> suspicious 경로(heartbeat는 수신되었으나 폰 사용 흔적 없음)와 미수신 경로(scheduler 기반)는 같은 등급이라도 별도 message_key/문구로 구분된다. suspicious 경로는 "폰 사용 흔적 없음"을, 미수신 경로는 "안부 확인 없음"을 강조.
+
 **클라이언트 번역 키 매핑:**
 ```dart
 // message_key → 클라이언트 .tr 키
-'auto_report'        → 'noti_auto_report_body'.tr
-'battery_dead'       → 'noti_battery_dead_body'.trParams({'battery_level': '...'})
-'urgent'             → 'noti_urgent_body'.trParams({'days': '...'})
-'steps'              → 'noti_steps_body'.trParams({...})
+'auto_report'         → 'noti_auto_report_body'.tr
+'battery_dead'        → 'noti_battery_dead_body'.trParams({'battery_level': '...'})
+'warning'             → 'noti_warning_body'.tr
+'warning_suspicious'  → 'noti_warning_suspicious_body'.tr
+'urgent'              → 'noti_urgent_body'.trParams({'days': '...'})
+'urgent_suspicious'   → 'noti_urgent_suspicious_body'.trParams({'days': '...'})
+'steps'               → 'noti_steps_body'.trParams({...})
 'cleared_by_guardian' → 'noti_cleared_by_guardian_body'.tr
 // message_key가 없으면 서버 제공 body(fallback) 사용
 ```

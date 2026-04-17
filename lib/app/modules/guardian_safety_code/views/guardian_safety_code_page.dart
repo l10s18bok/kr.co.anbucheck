@@ -5,7 +5,7 @@ import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
-import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
+// import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart'; // 스크린샷용 임시 주석
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/modules/guardian_safety_code/controllers/guardian_safety_code_controller.dart';
 
@@ -126,8 +126,8 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
             SizedBox(height: AppSpacing.lg),
             _buildEmergencyButton(),
             SizedBox(height: AppSpacing.sp6),
-            const BannerAdWidget(),
-            SizedBox(height: AppSpacing.sp6),
+            // const BannerAdWidget(), // 스크린샷용 임시 주석
+            // SizedBox(height: AppSpacing.sp6),
           ],
         ),
         ),
@@ -256,21 +256,23 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
               child: Icon(iconData, size: 28.w, color: iconColor),
             ),
             SizedBox(width: AppSpacing.lg),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  controller.checkCardTitle,
-                  style:
-                      AppTextTheme.bodyMedium(color: AppColors.textSecondary),
-                ),
-                SizedBox(height: 2.h),
-                Text(
-                  controller.checkCardBody,
-                  style: AppTextTheme.headlineSmall(
-                      color: textColor, fw: FontWeight.w700),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.checkCardTitle,
+                    style:
+                        AppTextTheme.bodyMedium(color: AppColors.textSecondary),
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    controller.checkCardBody,
+                    style: AppTextTheme.headlineSmall(
+                        color: textColor, fw: FontWeight.w700),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

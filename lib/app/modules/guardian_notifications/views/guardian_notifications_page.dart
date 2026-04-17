@@ -320,7 +320,9 @@ class _NotificationCard extends StatelessWidget {
       'caution_suspicious'  => 'noti_caution_suspicious_body'.tr,
       'caution_missing'     => 'noti_caution_missing_body'.tr,
       'warning'             => 'noti_warning_body'.tr,
+      'warning_suspicious'  => 'noti_warning_suspicious_body'.tr,
       'urgent'              => 'noti_urgent_body'.trParams({'days': '${p['days'] ?? ''}'}),
+      'urgent_suspicious'   => 'noti_urgent_suspicious_body'.trParams({'days': '${p['days'] ?? ''}'}),
       'steps'               => 'noti_steps_body'.trParams({
                                   'from_time': '${p['from_time'] ?? ''}',
                                   'to_time': '${p['to_time'] ?? ''}',

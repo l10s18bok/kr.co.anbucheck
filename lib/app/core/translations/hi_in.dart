@@ -238,9 +238,9 @@ abstract class HiIn {
     'notifications_level_health': 'सामान्य',
     'notifications_level_health_desc': 'संरक्षित व्यक्ति की कुशलता सामान्य रूप से पुष्ट',
     'notifications_level_caution': 'सावधानी',
-    'notifications_level_caution_desc': 'आज अभी तक कोई कुशल संकेत नहीं',
+    'notifications_level_caution_desc': 'अभी तक कोई कुशल संकेत या फोन उपयोग नहीं मिला',
     'notifications_level_warning': 'चेतावनी',
-    'notifications_level_warning_desc': 'कई दिनों से कोई पुष्टि नहीं',
+    'notifications_level_warning_desc': 'कई दिनों से कोई कुशल संकेत या फोन उपयोग नहीं मिला',
     'notifications_level_urgent': 'अत्यावश्यक',
     'notifications_level_urgent_desc': 'अभी तुरंत जाँच आवश्यक',
     'notifications_level_info': 'जानकारी',
@@ -331,7 +331,11 @@ abstract class HiIn {
     'noti_caution_missing_body':
         'आज की निर्धारित कुशलता जांच अभी तक प्राप्त नहीं हुई है। कृपया व्यक्तिगत रूप से जांचें।',
     'noti_warning_body': 'कुशलता जांच लगातार छूट रही है। कृपया व्यक्तिगत रूप से सत्यापित करें।',
+    'noti_warning_suspicious_body':
+        'लगातार फोन उपयोग के संकेत नहीं मिले। व्यक्तिगत सत्यापन आवश्यक है।',
     'noti_urgent_body': '@days दिनों से कुशलता जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
+    'noti_urgent_suspicious_body':
+        '@days दिनों से फोन उपयोग के कोई संकेत नहीं। तत्काल सत्यापन आवश्यक है।',
     'noti_steps_body': '@from_time ~ @to_time: @steps कदम चले।',
     'noti_emergency_body': 'संरक्षित व्यक्ति ने सीधे मदद का अनुरोध किया है। कृपया तुरंत जांचें।',
     'noti_resolved_body': 'संरक्षित व्यक्ति की स्वास्थ्य जाँच सामान्य हो गई है।',

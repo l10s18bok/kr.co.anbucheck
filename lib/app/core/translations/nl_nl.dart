@@ -242,9 +242,9 @@ abstract class NlNl {
     'notifications_level_health': 'Normaal',
     'notifications_level_health_desc': 'Het welzijn van de beschermeling is normaal bevestigd',
     'notifications_level_caution': 'Let op',
-    'notifications_level_caution_desc': 'Vandaag nog geen welzijnssignaal',
+    'notifications_level_caution_desc': 'Nog geen welzijnssignaal of telefoonactiviteit gedetecteerd',
     'notifications_level_warning': 'Waarschuwing',
-    'notifications_level_warning_desc': 'Meerdere dagen geen bevestiging',
+    'notifications_level_warning_desc': 'Meerdere dagen geen welzijnssignaal of telefoonactiviteit',
     'notifications_level_urgent': 'Dringend',
     'notifications_level_urgent_desc': 'Onmiddellijke controle nodig',
     'notifications_level_info': 'Info',
@@ -338,8 +338,12 @@ abstract class NlNl {
     'noti_caution_missing_body':
         'De geplande welzijnscontrole van vandaag is nog niet ontvangen. Controleer persoonlijk.',
     'noti_warning_body': 'Welzijnscontroles zijn achtereenvolgens gemist. Controleer persoonlijk.',
+    'noti_warning_suspicious_body':
+        'Er zijn achtereenvolgens geen tekenen van telefoongebruik gedetecteerd. Persoonlijke controle is nodig.',
     'noti_urgent_body':
         'Geen welzijnscontrole gedurende @days dag(en). Onmiddellijke controle vereist.',
+    'noti_urgent_suspicious_body':
+        'Geen tekenen van telefoongebruik gedurende @days dag(en). Onmiddellijke controle vereist.',
     'noti_steps_body': '@from_time ~ @to_time: @steps stappen gelopen.',
     'noti_emergency_body':
         'De beschermde persoon heeft rechtstreeks om hulp gevraagd. Controleer onmiddellijk.',

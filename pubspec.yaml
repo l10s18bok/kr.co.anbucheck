@@ -2,7 +2,7 @@ name: anbucheck
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.8+8
+version: 1.0.9+9
 
 environment:
   sdk: ^3.11.3
@@ -63,6 +63,7 @@ flutter_native_splash:
 flutter:
   uses-material-design: true
   assets:
+    - assets/
     - assets/icon/
     - assets/lottie/
     - assets/illustrations/

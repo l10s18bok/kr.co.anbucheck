@@ -268,19 +268,21 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
               child: Icon(iconData, size: 28.w, color: iconColor),
             ),
             SizedBox(width: AppSpacing.lg),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  controller.checkCardTitle,
-                  style: AppTextTheme.bodyMedium(color: AppColors.textSecondary),
-                ),
-                SizedBox(height: 2.h),
-                Text(
-                  controller.checkCardBody,
-                  style: AppTextTheme.headlineSmall(color: textColor, fw: FontWeight.w700),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.checkCardTitle,
+                    style: AppTextTheme.bodyMedium(color: AppColors.textSecondary),
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    controller.checkCardBody,
+                    style: AppTextTheme.headlineSmall(color: textColor, fw: FontWeight.w700),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

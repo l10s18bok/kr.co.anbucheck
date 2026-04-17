@@ -241,9 +241,9 @@ abstract class EsEs {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'El bienestar de la persona protegida ha sido confirmado',
     'notifications_level_caution': 'Precaución',
-    'notifications_level_caution_desc': 'Aún no hay señal de bienestar hoy',
+    'notifications_level_caution_desc': 'Aún no hay señal de bienestar ni actividad del teléfono',
     'notifications_level_warning': 'Alerta',
-    'notifications_level_warning_desc': 'Sin confirmación durante varios días',
+    'notifications_level_warning_desc': 'Sin señal de bienestar ni actividad del teléfono durante varios días',
     'notifications_level_urgent': 'Urgente',
     'notifications_level_urgent_desc': 'Se requiere verificación inmediata',
     'notifications_level_info': 'Información',
@@ -340,8 +340,12 @@ abstract class EsEs {
         'La verificación de bienestar programada para hoy aún no se ha recibido. Por favor, verifique en persona.',
     'noti_warning_body':
         'Las verificaciones de bienestar se han perdido consecutivamente. Por favor, verifique en persona.',
+    'noti_warning_suspicious_body':
+        'No se detecta uso del teléfono de forma consecutiva. Se requiere verificación en persona.',
     'noti_urgent_body':
         'Sin verificación de bienestar durante @days día(s). Se requiere verificación inmediata.',
+    'noti_urgent_suspicious_body':
+        'Sin señales de uso del teléfono durante @days día(s). Se requiere verificación inmediata.',
     'noti_steps_body': '@from_time ~ @to_time: @steps pasos caminados.',
     'noti_emergency_body':
         'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',

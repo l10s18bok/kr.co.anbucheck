@@ -241,9 +241,9 @@ abstract class PlPl {
     'notifications_level_health': 'Normalny',
     'notifications_level_health_desc': 'Samopoczucie podopiecznego potwierdzone prawidlowo',
     'notifications_level_caution': 'Uwaga',
-    'notifications_level_caution_desc': 'Dziś jeszcze brak sygnału o samopoczuciu',
+    'notifications_level_caution_desc': 'Brak sygnału o samopoczuciu lub aktywności telefonu',
     'notifications_level_warning': 'Ostrzezenie',
-    'notifications_level_warning_desc': 'Brak potwierdzenia przez kilka dni',
+    'notifications_level_warning_desc': 'Brak sygnału o samopoczuciu lub aktywności telefonu przez kilka dni z rzędu',
     'notifications_level_urgent': 'Pilne',
     'notifications_level_urgent_desc': 'Natychmiastowa kontrola wymagana',
     'notifications_level_info': 'Informacja',
@@ -337,8 +337,12 @@ abstract class PlPl {
         'Zaplanowane na dzisiaj sprawdzenie samopoczucia nie zostalo jeszcze odebrane. Prosze sprawdzic osobiscie.',
     'noti_warning_body':
         'Sprawdzenia samopoczucia zostaly pominiete z rzedu. Prosze zweryfikowac osobiscie.',
+    'noti_warning_suspicious_body':
+        'Nie wykryto kolejno oznak uzycia telefonu. Wymagana osobista weryfikacja.',
     'noti_urgent_body':
         'Brak sprawdzenia samopoczucia od @days dni. Wymagana natychmiastowa weryfikacja.',
+    'noti_urgent_suspicious_body':
+        'Brak oznak uzycia telefonu od @days dni. Wymagana natychmiastowa weryfikacja.',
     'noti_steps_body': '@from_time ~ @to_time: @steps krokow.',
     'noti_emergency_body':
         'Osoba pod opieką bezpośrednio poprosiła o pomoc. Proszę natychmiast sprawdzić.',

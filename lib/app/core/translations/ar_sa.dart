@@ -233,9 +233,9 @@ abstract class ArSa {
     'notifications_level_health': 'طبيعي',
     'notifications_level_health_desc': 'تم التأكد من سلامة المتابَع بشكل طبيعي',
     'notifications_level_caution': 'تنبيه',
-    'notifications_level_caution_desc': 'لا توجد إشارة اطمئنان اليوم بعد',
+    'notifications_level_caution_desc': 'لا توجد إشارة اطمئنان أو نشاط للهاتف بعد',
     'notifications_level_warning': 'تحذير',
-    'notifications_level_warning_desc': 'لا يوجد تأكيد لعدة أيام متتالية',
+    'notifications_level_warning_desc': 'لا توجد إشارة اطمئنان أو نشاط للهاتف لعدة أيام متتالية',
     'notifications_level_urgent': 'عاجل',
     'notifications_level_urgent_desc': 'يلزم التحقق فورًا الآن',
     'notifications_level_info': 'معلومات',
@@ -325,7 +325,11 @@ abstract class ArSa {
     'noti_caution_missing_body':
         'لم يتم استلام فحص الاطمئنان المجدول لليوم بعد. يرجى التحقق شخصياً.',
     'noti_warning_body': 'تم تفويت فحوصات الاطمئنان بشكل متتالٍ. يرجى التحقق شخصياً.',
+    'noti_warning_suspicious_body':
+        'لم يتم اكتشاف أي استخدام للهاتف بشكل متتالٍ. يلزم التحقق شخصياً.',
     'noti_urgent_body': 'لا يوجد فحص اطمئنان منذ @days يوم/أيام. التحقق الفوري مطلوب.',
+    'noti_urgent_suspicious_body':
+        'لم يتم اكتشاف استخدام للهاتف منذ @days يوم/أيام. مطلوب تحقق فوري.',
     'noti_steps_body': '@from_time ~ @to_time: @steps خطوة.',
     'noti_emergency_body': 'طلب الشخص المحمي المساعدة مباشرة. يرجى التحقق فوراً.',
     'noti_resolved_body': 'عاد فحص سلامة الشخص المحمي إلى الوضع الطبيعي.',

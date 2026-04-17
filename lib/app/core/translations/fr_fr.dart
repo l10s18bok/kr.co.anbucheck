@@ -244,9 +244,9 @@ abstract class FrFr {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Le bien-être de la personne protégée a été confirmé',
     'notifications_level_caution': 'Attention',
-    'notifications_level_caution_desc': "Aucun signal de bien-être aujourd'hui",
+    'notifications_level_caution_desc': 'Aucun signal de bien-être ni activité du téléphone détectés',
     'notifications_level_warning': 'Alerte',
-    'notifications_level_warning_desc': 'Aucune confirmation depuis plusieurs jours',
+    'notifications_level_warning_desc': 'Aucun signal de bien-être ni activité du téléphone depuis plusieurs jours',
     'notifications_level_urgent': 'Urgent',
     'notifications_level_urgent_desc': 'Vérification immédiate requise',
     'notifications_level_info': 'Info',
@@ -344,8 +344,12 @@ abstract class FrFr {
         'La vérification de bien-être prévue aujourd\'hui n\'a pas encore été reçue. Veuillez vérifier en personne.',
     'noti_warning_body':
         'Les vérifications de bien-être ont été manquées consécutivement. Veuillez vérifier en personne.',
+    'noti_warning_suspicious_body':
+        'Aucune utilisation du téléphone détectée de façon consécutive. Veuillez vérifier en personne.',
     'noti_urgent_body':
         'Aucune vérification de bien-être depuis @days jour(s). Une vérification immédiate est requise.',
+    'noti_urgent_suspicious_body':
+        'Aucune utilisation du téléphone détectée depuis @days jour(s). Une vérification immédiate est requise.',
     'noti_steps_body': '@from_time ~ @to_time : @steps pas effectués.',
     'noti_emergency_body':
         "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
