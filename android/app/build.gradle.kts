@@ -18,6 +18,10 @@ val keystoreProperties = Properties().apply {
     }
 }
 
+// pedometer_2가 Google Fit Local Recording API(Android 10+)를 사용해
+// 플러그인 최소 SDK가 29다. 프로젝트 minSdk를 이에 맞춰 상향한다.
+val pluginRequiredMinSdk = 29
+
 android {
     namespace = "kr.co.anbucheck.live"
     compileSdk = flutter.compileSdkVersion
@@ -38,7 +42,7 @@ android {
         applicationId = "kr.co.anbucheck.live"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = pluginRequiredMinSdk
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
