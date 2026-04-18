@@ -267,7 +267,7 @@ class _NotificationCard extends StatelessWidget {
                         style: AppTextTheme.labelSmall(
                             color: _iconColor, fw: FontWeight.w700),
                       ),
-                      if (item.level != AlertLevel.health)
+                      if (item.messageKey != 'steps')
                         Text(
                           _formatTime(item.receivedAt),
                           style: AppTextTheme.labelSmall(
@@ -324,8 +324,6 @@ class _NotificationCard extends StatelessWidget {
       'urgent'              => 'noti_urgent_body'.trParams({'days': '${p['days'] ?? ''}'}),
       'urgent_suspicious'   => 'noti_urgent_suspicious_body'.trParams({'days': '${p['days'] ?? ''}'}),
       'steps'               => 'noti_steps_body'.trParams({
-                                  'from_time': '${p['from_time'] ?? ''}',
-                                  'to_time': '${p['to_time'] ?? ''}',
                                   'steps': '${p['steps'] ?? ''}',
                                 }),
       'emergency'           => 'noti_emergency_body'.tr,
@@ -335,47 +333,77 @@ class _NotificationCard extends StatelessWidget {
     };
   }
 
-  Color get _backgroundColor {
-    final dark = AppColors.isDark;
+  /// 알림 카드 표시 등급 — 서버 alert_level은 모든 정보성 알림을 'info'로 묶지만,
+  /// UX상 "안부 정상 확인"과 "참고용 정보(걸음수/배터리)"를 분리해서 표시한다.
+  /// message_key 기준으로 normal / info를 구분하고, 나머지는 alert_level fallback.
+  _DisplayLevel get _displayLevel {
+    switch (item.messageKey) {
+      case 'auto_report':
+      case 'manual_report':
+      case 'resolved':
+      case 'cleared_by_guardian':
+        return _DisplayLevel.normal;
+      case 'battery_low':
+      case 'battery_dead':
+      case 'steps':
+        return _DisplayLevel.info;
+    }
     return switch (item.level) {
-      AlertLevel.urgent  => dark ? const Color(0xFF4E0000) : const Color(0xFFFFEBEE),
-      AlertLevel.warning => dark ? const Color(0xFF4E2000) : const Color(0xFFFFE0B2),
-      AlertLevel.caution => dark ? const Color(0xFF2E2E00) : const Color(0xFFFFF9C4),
-      AlertLevel.info    => item.isBatteryRelated
-          ? (dark ? const Color(0xFF2A1540) : const Color(0xFFEDE7F6))
-          : (dark ? const Color(0xFF1A2540) : const Color(0xFFE3F2FD)),
-      AlertLevel.health  => dark ? const Color(0xFF0A3A2A) : const Color(0xFFE8F5E9),
+      AlertLevel.urgent  => _DisplayLevel.urgent,
+      AlertLevel.warning => _DisplayLevel.warning,
+      AlertLevel.caution => _DisplayLevel.caution,
+      AlertLevel.info    => _DisplayLevel.info,
+      AlertLevel.health  => _DisplayLevel.info,
     };
   }
 
-  Color get _iconColor => switch (item.level) {
-        AlertLevel.urgent  => const Color(0xFFE53935),
-        AlertLevel.warning => const Color(0xFFFF9800),
-        AlertLevel.caution => const Color(0xFFFFC107),
-        AlertLevel.info    => item.isBatteryRelated
+  Color get _backgroundColor {
+    final dark = AppColors.isDark;
+    return switch (_displayLevel) {
+      _DisplayLevel.urgent  => dark ? const Color(0xFF4E0000) : const Color(0xFFFFEBEE),
+      _DisplayLevel.warning => dark ? const Color(0xFF4E2000) : const Color(0xFFFFE0B2),
+      _DisplayLevel.caution => dark ? const Color(0xFF2E2E00) : const Color(0xFFFFF9C4),
+      _DisplayLevel.info    => item.isBatteryRelated
+          ? (dark ? const Color(0xFF2A1540) : const Color(0xFFEDE7F6))
+          : (dark ? const Color(0xFF1A2540) : const Color(0xFFE3F2FD)),
+      _DisplayLevel.normal  => dark ? const Color(0xFF0A3A2A) : const Color(0xFFE8F5E9),
+    };
+  }
+
+  Color get _iconColor => switch (_displayLevel) {
+        _DisplayLevel.urgent  => const Color(0xFFE53935),
+        _DisplayLevel.warning => const Color(0xFFFF9800),
+        _DisplayLevel.caution => const Color(0xFFFFC107),
+        _DisplayLevel.info    => item.isBatteryRelated
             ? const Color(0xFF7B1FA2)
             : const Color(0xFF4355B9),
-        AlertLevel.health  => const Color(0xFF43A047),
+        _DisplayLevel.normal  => const Color(0xFF43A047),
       };
 
-  IconData get _icon => switch (item.level) {
-        AlertLevel.urgent  => Icons.error_rounded,
-        AlertLevel.warning => Icons.warning_amber_rounded,
-        AlertLevel.caution => Icons.info_rounded,
-        AlertLevel.info    => item.isBatteryRelated
-            ? Icons.battery_alert_rounded
-            : Icons.notifications_rounded,
-        AlertLevel.health  => Icons.directions_walk_rounded,
-      };
+  IconData get _icon {
+    if (item.messageKey == 'steps') return Icons.directions_walk_rounded;
+    return switch (_displayLevel) {
+      _DisplayLevel.urgent  => Icons.error_rounded,
+      _DisplayLevel.warning => Icons.warning_amber_rounded,
+      _DisplayLevel.caution => Icons.info_rounded,
+      _DisplayLevel.info    => item.isBatteryRelated
+          ? Icons.battery_alert_rounded
+          : Icons.notifications_rounded,
+      _DisplayLevel.normal  => Icons.check_circle_rounded,
+    };
+  }
 
-  String get _levelLabel => switch (item.level) {
-        AlertLevel.urgent  => 'notifications_level_urgent'.tr,
-        AlertLevel.warning => 'notifications_level_warning'.tr,
-        AlertLevel.caution => 'notifications_level_caution'.tr,
-        AlertLevel.info    => 'notifications_level_info'.tr,
-        AlertLevel.health  => 'notifications_level_health'.tr,
+  String get _levelLabel => switch (_displayLevel) {
+        _DisplayLevel.urgent  => 'notifications_level_urgent'.tr,
+        _DisplayLevel.warning => 'notifications_level_warning'.tr,
+        _DisplayLevel.caution => 'notifications_level_caution'.tr,
+        _DisplayLevel.info    => 'notifications_level_info'.tr,
+        // 다이얼로그 안내의 "정상" 라벨과 통일 (notifications_level_health = "정상")
+        _DisplayLevel.normal  => 'notifications_level_health'.tr,
       };
 }
+
+enum _DisplayLevel { normal, info, caution, warning, urgent }
 
 // ─── 빈 상태 ──────────────────────────────────────────────────────────────────
 
