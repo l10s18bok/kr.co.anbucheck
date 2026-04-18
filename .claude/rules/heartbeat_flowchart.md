@@ -39,7 +39,7 @@ flowchart TD
     FGCheck -->|NO| End0([종료 — 이미 전송 완료])
 
     Collect[데이터 수집]
-    Collect --> Steps[걸음수 조회<br/>pedometer<br/>steps_delta]
+    Collect --> Steps[걸음수 조회<br/>pedometer_2<br/>steps_delta]
     Collect --> Battery[배터리 상태 조회<br/>battery_level]
 
     Steps --> StepsCheck{steps_delta > 0?}
