@@ -3,6 +3,7 @@ import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
@@ -124,8 +125,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                       child: ElevatedButton(
                         onPressed: () {
                           // TODO: 인앱 결제 SDK 연동 후 구현
-                          Get.snackbar('common_notice'.tr, 'guardian_payment_preparing'.tr,
-                              snackPosition: SnackPosition.BOTTOM);
+                          AppSnackbar.show('common_notice'.tr, 'guardian_payment_preparing'.tr);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFE65100),

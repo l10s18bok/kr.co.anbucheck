@@ -12,6 +12,7 @@ import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/modules/guardian_settings/controllers/guardian_settings_controller.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 설정 페이지 — v2: G+S 통합 카드 포함
@@ -570,11 +571,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                 label: 'guardian_subscribe'.tr,
                 filled: true,
                 onTap: () {
-                  Get.snackbar(
-                    'common_notice'.tr,
-                    'guardian_payment_preparing'.tr,
-                    snackPosition: SnackPosition.BOTTOM,
-                  );
+                  AppSnackbar.show('common_notice'.tr, 'guardian_payment_preparing'.tr);
                 },
               ),
           ],

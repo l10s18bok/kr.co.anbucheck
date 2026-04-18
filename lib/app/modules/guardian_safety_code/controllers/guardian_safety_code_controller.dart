@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
@@ -277,10 +278,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
 
   void copyInviteCode() {
     Clipboard.setData(ClipboardData(text: _inviteCode.value));
-    Get.rawSnackbar(
-      message: 'subject_home_code_copied'.tr,
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    AppSnackbar.message('subject_home_code_copied'.tr);
   }
 
   void shareInviteCode() {
@@ -321,15 +319,9 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
       final deviceId = await _tokenDs.getDeviceId();
       if (deviceToken == null || deviceId == null) return;
       await EmergencyRemoteDatasource(deviceToken).send(deviceId);
-      Get.rawSnackbar(
-        message: 'subject_home_emergency_sent'.tr,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.message('subject_home_emergency_sent'.tr);
     } catch (_) {
-      Get.rawSnackbar(
-        message: 'subject_home_emergency_failed'.tr,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.message('subject_home_emergency_failed'.tr);
     } finally {
       _isSendingEmergency.value = false;
     }

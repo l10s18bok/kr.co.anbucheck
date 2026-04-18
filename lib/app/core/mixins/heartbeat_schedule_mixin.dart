@@ -6,6 +6,7 @@ import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 
 /// Heartbeat 시각 변경 기능 Mixin
@@ -138,22 +139,12 @@ mixin HeartbeatScheduleMixin on GetxController {
       }
       await LocalAlarmService.schedule(hour, minute);
       final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
-      Get.snackbar(
-        '',
-        message,
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 2),
-        backgroundColor: Colors.white,
-        colorText: const Color(0xFF1a1c1c),
-      );
+      AppSnackbar.show('', message, duration: const Duration(seconds: 2));
     } catch (e) {
-      Get.snackbar(
+      AppSnackbar.show(
         'heartbeat_change_failed_title'.tr,
         'heartbeat_change_failed_message'.tr,
-        snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 2),
-        backgroundColor: Colors.white,
-        colorText: const Color(0xFF1a1c1c),
       );
     }
   }

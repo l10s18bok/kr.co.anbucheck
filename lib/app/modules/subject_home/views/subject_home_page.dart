@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
@@ -44,16 +45,8 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           Obx(() {
             if (controller.guardianCount == 0) return const SizedBox.shrink();
             return GestureDetector(
-              onTap: () => Get.rawSnackbar(
-                message: 'subject_home_guardian_count'.trParams({'count': '${controller.guardianCount}'}),
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: Colors.white,
-                messageText: Text(
-                  'subject_home_guardian_count'.trParams({'count': '${controller.guardianCount}'}),
-                  style: AppTextTheme.bodyMedium(color: const Color(0xFF1A1C1C)),
-                ),
-                borderRadius: 12,
-                margin: EdgeInsets.symmetric(horizontal: 40.w, vertical: 32.h),
+              onTap: () => AppSnackbar.message(
+                'subject_home_guardian_count'.trParams({'count': '${controller.guardianCount}'}),
               ),
               child: Padding(
               padding: EdgeInsets.only(right: 16.w),

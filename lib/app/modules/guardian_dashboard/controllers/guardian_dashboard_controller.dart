@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
@@ -246,8 +247,7 @@ class GuardianDashboardController extends BaseController
       await _svc.load(force: force);
       _mapSubjects();
     } catch (e) {
-      Get.snackbar('common_error'.tr, 'guardian_error_load_subjects'.tr,
-          snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.show('common_error'.tr, 'guardian_error_load_subjects'.tr);
     } finally {
       isLoading = false;
     }
@@ -301,8 +301,7 @@ class GuardianDashboardController extends BaseController
     try {
       await _svc.clearAlerts(inviteCode);
     } catch (_) {
-      Get.snackbar('common_error'.tr, 'guardian_error_clear_alerts'.tr,
-          snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.show('common_error'.tr, 'guardian_error_clear_alerts'.tr);
     }
   }
 
@@ -375,16 +374,14 @@ class GuardianDashboardController extends BaseController
       // 전송 결과를 로컬 Rx에 반영 (SafetyCode 카드가 즉시 보고 상태로 전환)
       await _reloadHeartbeatState();
 
-      Get.snackbar('', 'gs_enabled_message'.tr,
-          snackPosition: SnackPosition.TOP,
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.white,
-          colorText: const Color(0xFF1a1c1c));
+      AppSnackbar.show('', 'gs_enabled_message'.tr,
+          position: SnackPosition.TOP,
+          duration: const Duration(seconds: 2));
 
       goToSafetyCode();
     } catch (e) {
-      Get.snackbar('common_error'.tr, 'gs_enable_failed'.tr,
-          snackPosition: SnackPosition.TOP);
+      AppSnackbar.show('common_error'.tr, 'gs_enable_failed'.tr,
+          position: SnackPosition.TOP);
     } finally {
       isEnabling.value = false;
     }
@@ -417,14 +414,12 @@ class GuardianDashboardController extends BaseController
       _lastHeartbeatDate.value = '';
       _lastHeartbeatTime.value = '';
 
-      Get.snackbar('', 'gs_disabled_message'.tr,
-          snackPosition: SnackPosition.TOP,
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.white,
-          colorText: const Color(0xFF1a1c1c));
+      AppSnackbar.show('', 'gs_disabled_message'.tr,
+          position: SnackPosition.TOP,
+          duration: const Duration(seconds: 2));
     } catch (e) {
-      Get.snackbar('common_error'.tr, 'gs_disable_failed'.tr,
-          snackPosition: SnackPosition.TOP);
+      AppSnackbar.show('common_error'.tr, 'gs_disable_failed'.tr,
+          position: SnackPosition.TOP);
     }
   }
 

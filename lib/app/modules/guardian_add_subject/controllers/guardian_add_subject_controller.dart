@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -37,7 +38,7 @@ class GuardianAddSubjectController extends BaseController {
 
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) {
-      Get.snackbar('common_error'.tr, 'add_subject_error_login'.tr, snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.show('common_error'.tr, 'add_subject_error_login'.tr);
       return;
     }
 
@@ -53,14 +54,14 @@ class GuardianAddSubjectController extends BaseController {
       }
 
       Get.back(result: true);
-      Get.snackbar('common_complete'.tr, 'add_subject_success'.tr, snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.show('common_complete'.tr, 'add_subject_success'.tr);
     } catch (e) {
       final msg = e.toString().contains('404')
           ? 'add_subject_error_invalid_code'.tr
           : e.toString().contains('409')
               ? 'add_subject_error_already_connected'.tr
               : 'add_subject_error_failed'.tr;
-      Get.snackbar('common_error'.tr, msg, snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.show('common_error'.tr, msg);
     } finally {
       isLoading = false;
     }

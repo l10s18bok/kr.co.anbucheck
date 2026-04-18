@@ -10,6 +10,7 @@ import 'package:battery_plus/battery_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
@@ -386,10 +387,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   /// 고유 코드 클립보드 복사
   void copyInviteCode() {
     Clipboard.setData(ClipboardData(text: _inviteCode.value));
-    Get.rawSnackbar(
-      message: 'subject_home_code_copied'.tr,
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    AppSnackbar.message('subject_home_code_copied'.tr);
   }
 
   /// 고유 코드 SNS 공유
@@ -438,15 +436,9 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       final deviceId = await _tokenDs.getDeviceId();
       if (deviceToken == null || deviceId == null) return;
       await EmergencyRemoteDatasource(deviceToken).send(deviceId);
-      Get.rawSnackbar(
-        message: 'subject_home_emergency_sent'.tr,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.message('subject_home_emergency_sent'.tr);
     } catch (_) {
-      Get.rawSnackbar(
-        message: 'subject_home_emergency_failed'.tr,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.message('subject_home_emergency_failed'.tr);
     } finally {
       _isSendingEmergency.value = false;
     }

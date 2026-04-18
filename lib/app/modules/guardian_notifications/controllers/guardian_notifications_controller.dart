@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/domain/entities/notification_entity.dart';
 import 'package:anbucheck/app/domain/usecases/delete_all_notifications_usecase.dart';
@@ -44,8 +45,7 @@ class GuardianNotificationsController extends BaseController {
       await _deleteAllNotifications();
       notifications.clear();
     } catch (_) {
-      Get.snackbar('common_error'.tr, 'notifications_delete_failed'.tr,
-          snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.show('common_error'.tr, 'notifications_delete_failed'.tr);
     } finally {
       isLoading = false;
     }

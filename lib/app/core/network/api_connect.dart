@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/network/api_client.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
 import 'package:anbucheck/app/core/network/api_response.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
@@ -169,9 +170,8 @@ Future<void> _handleUnauthorized() async {
     await LocalAlarmService.cancel();
     await tokenDs.clear();
     Get.offAllNamed(AppRoutes.modeSelect);
-    Get.snackbar('', '계정 정보가 만료되었습니다. 다시 등록해 주세요.',
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(seconds: 3));
+    AppSnackbar.show('', '계정 정보가 만료되었습니다. 다시 등록해 주세요.',
+        position: SnackPosition.TOP);
   } finally {
     _handlingUnauthorized = false;
   }

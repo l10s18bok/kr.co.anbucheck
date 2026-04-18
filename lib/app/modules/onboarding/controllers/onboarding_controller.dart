@@ -7,6 +7,7 @@ import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 온보딩 컨트롤러 (공통)
@@ -66,10 +67,9 @@ class OnboardingController extends BaseController {
 
       await _saveAndNavigate(response, mode);
     } catch (e) {
-      Get.snackbar(
+      AppSnackbar.show(
         'onboarding_registration_failed_title'.tr,
         'onboarding_registration_failed_message'.tr,
-        snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
       isLoading = false;

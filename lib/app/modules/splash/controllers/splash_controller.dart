@@ -14,6 +14,7 @@ import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/firebase_options.dart';
 
@@ -161,10 +162,9 @@ class SplashController extends BaseController {
   }
 
   void _showOptionalUpdateSnackbar(String version) {
-    Get.snackbar(
+    AppSnackbar.show(
       'update_available_title'.tr,
       'update_available_message'.trParams({'version': version}),
-      snackPosition: SnackPosition.BOTTOM,
       duration: const Duration(seconds: 4),
       mainButton: TextButton(
         onPressed: () => Get.back(),

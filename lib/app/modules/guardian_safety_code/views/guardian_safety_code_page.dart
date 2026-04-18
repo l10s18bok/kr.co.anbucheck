@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
@@ -42,13 +43,10 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20.r),
                   onTap: () {
-                    Get.rawSnackbar(
-                      message: 'subject_home_guardian_count'.trParams(
+                    AppSnackbar.message(
+                      'subject_home_guardian_count'.trParams(
                           {'count': '${controller.guardianCount}'}),
-                      snackPosition: SnackPosition.TOP,
-                      backgroundColor: const Color(0xFF00685E),
-                      margin: EdgeInsets.all(12.w),
-                      borderRadius: 12.r,
+                      position: SnackPosition.TOP,
                       duration: const Duration(seconds: 2),
                     );
                   },
