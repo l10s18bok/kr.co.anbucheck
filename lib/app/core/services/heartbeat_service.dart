@@ -140,11 +140,12 @@ class HeartbeatService {
   /// 센서 기준값만 로컬에 저장 (서버 전송 없음)
   /// 최초 설치 직후 보호자 미연결 상태에서 호출
   Future<void> saveSensorBaseline() async {
-    // 걸음수 기준점 저장
+    // 걸음수 기준점 저장 — 0이면 Samsung 초기화 케이스로 저장 건너뜀
     try {
       final current = await Pedometer.stepCountStream.first
           .timeout(const Duration(seconds: 2));
-      await _sensorDs.saveLastSteps(current.steps.toInt());
+      final steps = current.steps;
+      if (steps > 0) await _sensorDs.saveLastSteps(steps);
     } catch (_) {}
 
     // 가속도/자이로 기준점 저장
@@ -240,17 +241,25 @@ class HeartbeatService {
     try {
       final current = await Pedometer.stepCountStream.first
           .timeout(const Duration(seconds: 2));
-      final currentSteps = current.steps.toInt();
-      final prevSteps = await _sensorDs.getLastSteps();
+      final currentSteps = current.steps;
 
-      // 현재 걸음수 저장 (다음 주기 비교용) — 스트림 중복 구독 방지
+      // Samsung OneUI: 센서 등록 직후 0을 발화하거나 WorkManager 격리로 카운터가
+      // 초기화된 경우. 0을 prevSteps로 저장하면 다음 heartbeat에서도 delta = 0이
+      // 반복되므로 null을 반환해 가속도/자이로 센서 기반 판정으로 위임한다.
+      if (currentSteps == 0) return null;
+
+      final prevSteps = await _sensorDs.getLastSteps();
       await _sensorDs.saveLastSteps(currentSteps);
 
-      if (prevSteps == null) {
-        // 첫 heartbeat — 기준점 저장 완료, 0 반환
+      if (prevSteps == null || prevSteps == 0) {
+        // 첫 heartbeat이거나 이전에 0이 저장된 경우 — 기준점 확보, 0 반환
         return 0;
       }
+
       final delta = currentSteps - prevSteps;
+      // delta < 0: 기기 재부팅으로 카운터가 리셋된 경우
+      // 현재 누적값 자체를 이번 구간의 걸음수로 사용
+      if (delta < 0) return currentSteps;
       return delta > 0 ? delta : 0;
     } catch (_) {
       return null;
