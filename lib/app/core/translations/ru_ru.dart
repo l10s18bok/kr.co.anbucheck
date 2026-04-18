@@ -130,6 +130,7 @@ abstract class RuRu {
     'subject_home_emergency_loading': 'Отправка экстренного оповещения...',
     'subject_home_emergency_sent': 'Экстренное оповещение отправлено',
     'subject_home_emergency_failed': 'Не удалось отправить экстренное оповещение',
+    'subject_home_manual_report_limit_reached': 'Вы уже отправили сегодняшний отчёт о безопасности. Попробуйте завтра снова.',
     'subject_home_emergency_confirm_title': 'Запрос экстренной помощи',
     'subject_home_emergency_confirm_body':
         'Экстренное оповещение будет отправлено всем вашим опекунам.\nВы уверены, что хотите запросить помощь?',
@@ -347,7 +348,7 @@ abstract class RuRu {
     'noti_urgent_body': 'Нет проверки самочувствия @days дн. Требуется немедленная проверка.',
     'noti_urgent_suspicious_body':
         'Нет признаков использования телефона уже @days дн. Требуется немедленная проверка.',
-    'noti_steps_body': '@from_time ~ @to_time: пройдено @steps шагов.',
+    'noti_steps_body': 'Сегодня пройдено @steps шагов.',
     'noti_emergency_body': 'Подопечный лично запросил помощь. Пожалуйста, проверьте немедленно.',
     'noti_resolved_body': 'Проверка здоровья подопечного вернулась в норму.',
     'noti_cleared_by_guardian_title': '✅ Проверка подтверждена',

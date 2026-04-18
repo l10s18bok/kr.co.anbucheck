@@ -130,6 +130,7 @@ abstract class IdId {
     'subject_home_emergency_loading': 'Mengirim peringatan darurat...',
     'subject_home_emergency_sent': 'Peringatan darurat telah dikirim',
     'subject_home_emergency_failed': 'Gagal mengirim peringatan darurat',
+    'subject_home_manual_report_limit_reached': 'Anda sudah mengirim laporan keamanan hari ini. Silakan coba lagi besok.',
     'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
     'subject_home_emergency_confirm_body':
         'Peringatan darurat akan dikirim ke semua wali Anda.\nApakah Anda yakin ingin meminta bantuan?',
@@ -351,7 +352,7 @@ abstract class IdId {
         'Tidak ada pemeriksaan kesejahteraan selama @days hari. Verifikasi segera diperlukan.',
     'noti_urgent_suspicious_body':
         'Tidak ada tanda penggunaan ponsel selama @days hari. Diperlukan verifikasi segera.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps langkah.',
+    'noti_steps_body': 'Hari ini berjalan @steps langkah.',
     'noti_emergency_body': 'Orang yang dilindungi langsung meminta bantuan. Harap segera periksa.',
     'noti_resolved_body': 'Pemeriksaan kesejahteraan orang yang dilindungi telah kembali normal.',
     'noti_cleared_by_guardian_title': '✅ Keamanan dikonfirmasi',

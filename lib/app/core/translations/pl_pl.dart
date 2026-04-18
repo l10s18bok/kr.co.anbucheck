@@ -128,6 +128,7 @@ abstract class PlPl {
     'subject_home_emergency_loading': 'Wysyłanie alarmu awaryjnego...',
     'subject_home_emergency_sent': 'Alarm awaryjny został wysłany',
     'subject_home_emergency_failed': 'Nie udało się wysłać alarmu awaryjnego',
+    'subject_home_manual_report_limit_reached': 'Wysłałeś już dzisiejszy raport bezpieczeństwa. Spróbuj ponownie jutro.',
     'subject_home_emergency_confirm_title': 'Prośba o pomoc awaryjną',
     'subject_home_emergency_confirm_body':
         'Alarm awaryjny zostanie wysłany do wszystkich opiekunów.\nCzy na pewno chcesz poprosić o pomoc?',
@@ -347,7 +348,7 @@ abstract class PlPl {
         'Brak sprawdzenia samopoczucia od @days dni. Wymagana natychmiastowa weryfikacja.',
     'noti_urgent_suspicious_body':
         'Brak oznak uzycia telefonu od @days dni. Wymagana natychmiastowa weryfikacja.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps krokow.',
+    'noti_steps_body': 'Dzisiaj wykonano @steps krokow.',
     'noti_emergency_body':
         'Osoba pod opieką bezpośrednio poprosiła o pomoc. Proszę natychmiast sprawdzić.',
     'noti_resolved_body': 'Kontrola dobrostanu podopiecznego wróciła do normy.',

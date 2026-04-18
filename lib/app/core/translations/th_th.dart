@@ -124,6 +124,7 @@ abstract class ThTh {
     'subject_home_emergency_loading': 'กำลังส่งการแจ้งเตือนฉุกเฉิน...',
     'subject_home_emergency_sent': 'ส่งการแจ้งเตือนฉุกเฉินแล้ว',
     'subject_home_emergency_failed': 'ไม่สามารถส่งการแจ้งเตือนฉุกเฉินได้',
+    'subject_home_manual_report_limit_reached': 'คุณได้ส่งรายงานความปลอดภัยของวันนี้แล้ว โปรดลองอีกครั้งในวันพรุ่งนี้',
     'subject_home_emergency_confirm_title': 'ขอความช่วยเหลือฉุกเฉิน',
     'subject_home_emergency_confirm_body':
         'การแจ้งเตือนฉุกเฉินจะถูกส่งไปยังผู้ดูแลทั้งหมด\nคุณแน่ใจหรือไม่ที่จะขอความช่วยเหลือ?',
@@ -337,7 +338,7 @@ abstract class ThTh {
     'noti_urgent_body': 'ไม่มีการตรวจสอบความเป็นอยู่เป็นเวลา @days วัน จำเป็นต้องยืนยันทันที',
     'noti_urgent_suspicious_body':
         'ไม่พบร่องรอยการใช้โทรศัพท์เป็นเวลา @days วัน ต้องตรวจสอบทันที',
-    'noti_steps_body': '@from_time ~ @to_time: เดิน @steps ก้าว',
+    'noti_steps_body': 'วันนี้เดิน @steps ก้าว',
     'noti_emergency_body': 'ผู้ถูกดูแลขอความช่วยเหลือโดยตรง กรุณาตรวจสอบทันที',
     'noti_resolved_body': 'การตรวจสอบสุขภาพของผู้ได้รับการดูแลกลับสู่ปกติแล้ว',
     'noti_cleared_by_guardian_title': '✅ ยืนยันความปลอดภัย',

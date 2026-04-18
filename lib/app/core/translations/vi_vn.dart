@@ -128,6 +128,7 @@ abstract class ViVn {
     'subject_home_emergency_loading': 'Đang gửi cảnh báo khẩn cấp...',
     'subject_home_emergency_sent': 'Cảnh báo khẩn cấp đã được gửi',
     'subject_home_emergency_failed': 'Gửi cảnh báo khẩn cấp thất bại',
+    'subject_home_manual_report_limit_reached': 'Bạn đã gửi báo cáo an toàn hôm nay. Vui lòng thử lại vào ngày mai.',
     'subject_home_emergency_confirm_title': 'Yêu cầu trợ giúp khẩn cấp',
     'subject_home_emergency_confirm_body':
         'Cảnh báo khẩn cấp sẽ được gửi đến tất cả người giám hộ.\nBạn có chắc chắn muốn yêu cầu trợ giúp không?',
@@ -344,7 +345,7 @@ abstract class ViVn {
     'noti_urgent_body': 'Khong co kiem tra suc khoe trong @days ngay. Can xac minh ngay lap tuc.',
     'noti_urgent_suspicious_body':
         'Khong phat hien dau hieu su dung dien thoai trong @days ngay. Can xac minh ngay lap tuc.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps buoc di.',
+    'noti_steps_body': 'Hom nay da di @steps buoc.',
     'noti_emergency_body':
         'Người được bảo vệ đã trực tiếp yêu cầu giúp đỡ. Vui lòng kiểm tra ngay.',
     'noti_resolved_body': 'Kiểm tra sức khỏe của người được bảo vệ đã trở lại bình thường.',

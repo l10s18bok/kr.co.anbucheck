@@ -129,6 +129,7 @@ abstract class ItIt {
     'subject_home_emergency_loading': "Invio dell'allerta di emergenza...",
     'subject_home_emergency_sent': "L'allerta di emergenza è stata inviata",
     'subject_home_emergency_failed': "Invio dell'allerta di emergenza fallito",
+    'subject_home_manual_report_limit_reached': 'Hai già inviato il rapporto di sicurezza di oggi. Riprova domani.',
     'subject_home_emergency_confirm_title': 'Richiesta di aiuto di emergenza',
     'subject_home_emergency_confirm_body':
         "Un'allerta di emergenza verrà inviata a tutti i tuoi tutori.\nSei sicuro di voler richiedere aiuto?",
@@ -352,7 +353,7 @@ abstract class ItIt {
         'Nessuna verifica di benessere da @days giorno/i. È necessaria una verifica immediata.',
     'noti_urgent_suspicious_body':
         'Nessun segno di utilizzo del telefono da @days giorno/i. È necessaria una verifica immediata.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps passi percorsi.',
+    'noti_steps_body': '@steps passi percorsi oggi.',
     'noti_emergency_body':
         "La persona assistita ha richiesto direttamente aiuto. Verificare immediatamente.",
     'noti_resolved_body': 'Il controllo benessere dell\'assistito è tornato nella norma.',

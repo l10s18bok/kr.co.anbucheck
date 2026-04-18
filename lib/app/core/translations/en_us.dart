@@ -127,6 +127,7 @@ abstract class EnUs {
     'subject_home_emergency_loading': 'Sending emergency alert...',
     'subject_home_emergency_sent': 'Emergency alert has been sent',
     'subject_home_emergency_failed': 'Failed to send emergency alert',
+    'subject_home_manual_report_limit_reached': "You've already submitted today's safety report. Please try again tomorrow.",
     'subject_home_emergency_confirm_title': 'Emergency Help Request',
     'subject_home_emergency_confirm_body':
         'An emergency alert will be sent to all your guardians.\nAre you sure you want to request help?',
@@ -339,7 +340,7 @@ abstract class EnUs {
     'noti_warning_suspicious_body': 'No signs of phone usage have been detected consecutively. Please verify in person.',
     'noti_urgent_body': 'No wellness check for @days day(s). Immediate verification is required.',
     'noti_urgent_suspicious_body': 'No signs of phone usage for @days day(s). Immediate verification is required.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps steps walked.',
+    'noti_steps_body': '@steps steps taken today.',
     'noti_emergency_body': 'The subject has directly requested help. Please check immediately.',
     'noti_resolved_body': 'The subject\'s wellness check has returned to normal.',
     'noti_cleared_by_guardian_title': '✅ Wellness Check Confirmed',

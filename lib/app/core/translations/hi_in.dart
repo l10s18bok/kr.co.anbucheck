@@ -126,6 +126,7 @@ abstract class HiIn {
     'subject_home_emergency_loading': 'आपातकालीन अलर्ट भेजा जा रहा है...',
     'subject_home_emergency_sent': 'आपातकालीन अलर्ट भेज दिया गया',
     'subject_home_emergency_failed': 'आपातकालीन अलर्ट भेजने में विफल',
+    'subject_home_manual_report_limit_reached': 'आपने आज की सुरक्षा रिपोर्ट पहले ही भेज दी है। कृपया कल पुनः प्रयास करें।',
     'subject_home_emergency_confirm_title': 'आपातकालीन सहायता अनुरोध',
     'subject_home_emergency_confirm_body':
         'सभी अभिभावकों को आपातकालीन अलर्ट भेजा जाएगा।\nक्या आप वाकई मदद का अनुरोध करना चाहते हैं?',
@@ -340,7 +341,7 @@ abstract class HiIn {
     'noti_urgent_body': '@days दिनों से कुशलता जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
     'noti_urgent_suspicious_body':
         '@days दिनों से फोन उपयोग के कोई संकेत नहीं। तत्काल सत्यापन आवश्यक है।',
-    'noti_steps_body': '@from_time ~ @to_time: @steps कदम चले।',
+    'noti_steps_body': 'आज @steps कदम चले।',
     'noti_emergency_body': 'संरक्षित व्यक्ति ने सीधे मदद का अनुरोध किया है। कृपया तुरंत जांचें।',
     'noti_resolved_body': 'संरक्षित व्यक्ति की स्वास्थ्य जाँच सामान्य हो गई है।',
     'noti_cleared_by_guardian_title': '✅ सुरक्षा पुष्टि',

@@ -129,6 +129,7 @@ abstract class FrFr {
     'subject_home_emergency_loading': "Envoi de l'alerte d'urgence...",
     'subject_home_emergency_sent': "L'alerte d'urgence a été envoyée",
     'subject_home_emergency_failed': "Échec de l'envoi de l'alerte d'urgence",
+    'subject_home_manual_report_limit_reached': "Vous avez déjà envoyé le rapport de sécurité d'aujourd'hui. Veuillez réessayer demain.",
     'subject_home_emergency_confirm_title': "Demande d'aide d'urgence",
     'subject_home_emergency_confirm_body':
         "Une alerte d'urgence sera envoyée à tous vos protecteurs.\nÊtes-vous sûr de vouloir demander de l'aide ?",
@@ -354,7 +355,7 @@ abstract class FrFr {
         'Aucune vérification de bien-être depuis @days jour(s). Une vérification immédiate est requise.',
     'noti_urgent_suspicious_body':
         'Aucune utilisation du téléphone détectée depuis @days jour(s). Une vérification immédiate est requise.',
-    'noti_steps_body': '@from_time ~ @to_time : @steps pas effectués.',
+    'noti_steps_body': "@steps pas effectués aujourd'hui.",
     'noti_emergency_body':
         "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
     'noti_resolved_body': 'Le bilan de santé du protégé est revenu à la normale.',

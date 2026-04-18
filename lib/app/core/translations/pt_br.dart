@@ -129,6 +129,7 @@ abstract class PtBr {
     'subject_home_emergency_loading': 'Enviando alerta de emergência...',
     'subject_home_emergency_sent': 'Alerta de emergência enviado',
     'subject_home_emergency_failed': 'Falha ao enviar alerta de emergência',
+    'subject_home_manual_report_limit_reached': 'Você já enviou o relatório de segurança de hoje. Tente novamente amanhã.',
     'subject_home_emergency_confirm_title': 'Pedido de ajuda de emergência',
     'subject_home_emergency_confirm_body':
         'Um alerta de emergência será enviado a todos os seus guardiões.\nTem certeza de que deseja pedir ajuda?',
@@ -350,7 +351,7 @@ abstract class PtBr {
         'Sem verificação de bem-estar há @days dia(s). Verificação imediata necessária.',
     'noti_urgent_suspicious_body':
         'Sem sinais de uso do celular por @days dia(s). Verificação imediata necessária.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps passos dados.',
+    'noti_steps_body': '@steps passos dados hoje.',
     'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
     'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',
     'noti_cleared_by_guardian_title': '✅ Verificação confirmada',

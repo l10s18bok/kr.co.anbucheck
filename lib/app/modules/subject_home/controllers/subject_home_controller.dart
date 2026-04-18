@@ -405,12 +405,21 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   bool get isReporting => _isReporting.value;
 
   /// 안전 보고 버튼: heartbeat 즉시 전송 후 전화 다이얼러 열기
+  /// 하루 1회 제한 — 동일 날짜 재시도 시 안내 메시지 표시 후 차단
   Future<void> reportNow() async {
     if (_isReporting.value) return;
+
+    final today = formatYmd(DateTime.now());
+    final lastManualDate = await _tokenDs.getLastManualReportDate();
+    if (lastManualDate == today) {
+      AppSnackbar.message('subject_home_manual_report_limit_reached'.tr);
+      return;
+    }
+
     _isReporting.value = true;
     try {
       await HeartbeatService().execute(manual: true);
-      // 전송 결과(성공/큐 저장) 반영하여 카드 상태 갱신
+      await _tokenDs.saveLastManualReportDate(today);
       await _reloadHeartbeatState();
     } finally {
       _isReporting.value = false;

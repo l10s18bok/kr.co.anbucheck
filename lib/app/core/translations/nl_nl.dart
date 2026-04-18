@@ -129,6 +129,7 @@ abstract class NlNl {
     'subject_home_emergency_loading': 'Noodmelding wordt verzonden...',
     'subject_home_emergency_sent': 'Noodmelding is verzonden',
     'subject_home_emergency_failed': 'Noodmelding kon niet worden verzonden',
+    'subject_home_manual_report_limit_reached': 'U heeft het veiligheidsrapport van vandaag al verzonden. Probeer het morgen opnieuw.',
     'subject_home_emergency_confirm_title': 'Noodhulpverzoek',
     'subject_home_emergency_confirm_body':
         'Er wordt een noodmelding naar al uw beschermers gestuurd.\nWeet u zeker dat u hulp wilt vragen?',
@@ -348,7 +349,7 @@ abstract class NlNl {
         'Geen welzijnscontrole gedurende @days dag(en). Onmiddellijke controle vereist.',
     'noti_urgent_suspicious_body':
         'Geen tekenen van telefoongebruik gedurende @days dag(en). Onmiddellijke controle vereist.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps stappen gelopen.',
+    'noti_steps_body': '@steps stappen gelopen vandaag.',
     'noti_emergency_body':
         'De beschermde persoon heeft rechtstreeks om hulp gevraagd. Controleer onmiddellijk.',
     'noti_resolved_body': 'De welzijnscontrole van de beschermde persoon is weer normaal.',

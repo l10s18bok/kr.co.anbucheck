@@ -124,6 +124,7 @@ abstract class SvSe {
     'subject_home_emergency_loading': 'Skickar nödlarm...',
     'subject_home_emergency_sent': 'Nödlarmet har skickats',
     'subject_home_emergency_failed': 'Det gick inte att skicka nödlarmet',
+    'subject_home_manual_report_limit_reached': 'Du har redan skickat dagens säkerhetsrapport. Försök igen imorgon.',
     'subject_home_emergency_confirm_title': 'Nödhjälpbegäran',
     'subject_home_emergency_confirm_body':
         'Ett nödlarm skickas till alla dina vårdgivare.\nÄr du säker på att du vill begära hjälp?',
@@ -339,7 +340,7 @@ abstract class SvSe {
     'noti_urgent_body': 'Ingen valmaendekontroll pa @days dag(ar). Omedelbar verifiering kravs.',
     'noti_urgent_suspicious_body':
         'Inga tecken pa telefonanvandning pa @days dag(ar). Omedelbar verifiering kravs.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps steg.',
+    'noti_steps_body': '@steps steg gått idag.',
     'noti_emergency_body': 'Den skyddade personen har direkt begärt hjälp. Kontrollera omedelbart.',
     'noti_resolved_body':
         'Hälsokontrollen för den skyddade personen har återgått till det normala.',

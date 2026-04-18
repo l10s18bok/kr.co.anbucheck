@@ -15,6 +15,7 @@ class TokenLocalDatasource {
   static const _keyHeartbeatMinute = 'heartbeat_minute';
   static const _keyLastHeartbeatDate = 'last_heartbeat_date';
   static const _keyLastHeartbeatTime = 'last_heartbeat_time';
+  static const _keyLastManualReportDate = 'last_manual_report_date';
   static const _keySubscriptionActive = 'subscription_active';
   static const _keyIsAlsoSubject = 'is_also_subject';
   static const _keyLastScheduledKey = 'last_scheduled_key';
@@ -167,6 +168,19 @@ class TokenLocalDatasource {
     await prefs.setString(_keyLastHeartbeatTime, time);
   }
 
+  // ── 마지막 수동 보고 날짜 (yyyy-MM-dd) ─────────────────────
+  // 수동 보고는 하루 1회로 제한. 컨트롤러에서 reportNow 진입 시 검사하여
+  // 동일 날짜 재시도를 차단한다.
+  Future<String?> getLastManualReportDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyLastManualReportDate);
+  }
+
+  Future<void> saveLastManualReportDate(String date) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyLastManualReportDate, date);
+  }
+
   // ── 마지막 전송 예약키 (yyyy-MM-dd_HH:mm) ─────────────────
   // 동일 예약시각에 대한 중복 전송 방지 (날짜+예약시각 조합)
   Future<String?> getLastScheduledKey() async {
@@ -248,6 +262,7 @@ class TokenLocalDatasource {
     await prefs.remove(_keyHeartbeatMinute);
     await prefs.remove(_keyLastHeartbeatDate);
     await prefs.remove(_keyLastHeartbeatTime);
+    await prefs.remove(_keyLastManualReportDate);
     await prefs.remove(_keyIsAlsoSubject);
     await prefs.remove(_keyLastScheduledKey);
     await prefs.remove(_keyHeartbeatInFlight);

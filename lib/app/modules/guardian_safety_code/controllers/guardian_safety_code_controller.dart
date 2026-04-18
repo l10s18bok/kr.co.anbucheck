@@ -294,11 +294,21 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   bool get isReporting => _isReporting.value;
 
   /// 안전 보고 버튼: heartbeat 즉시 전송 후 전화 다이얼러 열기
+  /// 하루 1회 제한 — 동일 날짜 재시도 시 안내 메시지 표시 후 차단
   Future<void> reportNow() async {
     if (_isReporting.value) return;
+
+    final today = formatYmd(DateTime.now());
+    final lastManualDate = await _tokenDs.getLastManualReportDate();
+    if (lastManualDate == today) {
+      AppSnackbar.message('subject_home_manual_report_limit_reached'.tr);
+      return;
+    }
+
     _isReporting.value = true;
     try {
       await HeartbeatService().execute(manual: true);
+      await _tokenDs.saveLastManualReportDate(today);
       // Dashboard Rx를 갱신해 카드 표시를 즉시 reported 상태로 전환
       await _dashboard.reloadHeartbeatState();
     } finally {

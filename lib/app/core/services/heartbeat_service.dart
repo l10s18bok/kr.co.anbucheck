@@ -95,9 +95,9 @@ class HeartbeatService {
       final timestamp    = now.toUtc().toIso8601String();
       final batteryLevel = await _getBatteryLevel();
 
-      // 걸음수는 수동/자동 모두 수집 — 서버 활동 정보 알림이 heartbeat 간 구간 기반이므로
-      // 수동 보고가 구간을 끊지 않도록 항상 전송한다.
-      final stepsDelta = await _getStepsDelta();
+      // 자동: 오늘 자정 ~ 현재 구간 걸음수 전송
+      // 수동: 0으로 강제 전송 → 서버의 활동 정보 알림 생성 차단
+      final stepsDelta = await _getStepsDelta(manual: manual);
 
       // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false
       bool suspicious = false;
@@ -228,50 +228,29 @@ class HeartbeatService {
     }
   }
 
-  /// 이전 heartbeat 이후 걸음수 증가량 조회 (iOS/Android 공통).
+  /// 오늘 자정 ~ 현재 시각의 걸음수 조회 (iOS/Android 공통).
   ///
-  /// pedometer_2의 getStepCount(from, to)는:
-  ///   - iOS: CMPedometer.queryPedometerData 호출 → M-series coprocessor가 OS 레벨에서
-  ///     상시 수집·7일간 보관하는 데이터를 쿼리. 앱 스와이프 kill 구간도 포함.
-  ///   - Android: Sensors API + Recording API 조합 → Google Play Services가 자동으로
-  ///     백그라운드 수집. Samsung OneUI에서 기존 stepCountStream이 WorkManager 격리
-  ///     isolate로 인해 0을 발화하던 문제도 구조적으로 회피.
+  /// pedometer_2의 getStepCount(from, to):
+  ///   - iOS: CMPedometer.queryPedometerData (M-coprocessor 누적, 7일 보관)
+  ///   - Android: Google Fit Local Recording API
   ///
-  /// 절대 구간 쿼리이므로 baseline(prevSteps) 저장/대비 로직이 필요 없다.
-  /// 첫 heartbeat(lastHeartbeat* 미저장)이거나 조회 실패 시 null/0 반환.
-  ///
-  /// ※ cm_pedometer 1.2.0은 Dart(`from`/`to`) vs Swift(`startTime`/`endTime`) 키 불일치
-  ///    버그로 항상 FlutterError를 던진다 — pedometer_2를 사용한다.
-  Future<int?> _getStepsDelta() async {
+  /// [manual]=true일 때는 null을 반환하여 서버의 활동 정보 알림 생성을 차단한다.
+  /// 서버는 steps_delta가 null이 아니고 > 0일 때만 활동 알림을 생성하므로
+  /// (heartbeat_service.py:144), 수동 보고 시 null로 전송하면 "수동 안부 확인"
+  /// 알림 1건만 보호자에게 도달.
+  Future<int?> _getStepsDelta({bool manual = false}) async {
+    if (manual) return null;
     try {
-      final from = await _resolveLastHeartbeatDateTime();
-      if (from == null) {
-        // 첫 heartbeat — 기준 시각 없음, 0 반환
-        return 0;
-      }
-      final to = DateTime.now();
-      if (!to.isAfter(from)) return 0;
+      final now = DateTime.now();
+      final midnight = DateTime(now.year, now.month, now.day);
+      if (!now.isAfter(midnight)) return 0;
 
-      final steps = await p2.Pedometer().getStepCount(from: from, to: to)
+      final steps = await p2.Pedometer().getStepCount(from: midnight, to: now)
           .timeout(const Duration(seconds: 3));
-      debugPrint('[HeartbeatService] getStepCount $from~$to steps=$steps');
+      debugPrint('[HeartbeatService] getStepCount $midnight~$now steps=$steps');
       return steps;
     } catch (e) {
       debugPrint('[HeartbeatService] getStepCount 실패: $e');
-      return null;
-    }
-  }
-
-  /// 로컬 저장된 lastHeartbeatDate(yyyy-MM-dd) + lastHeartbeatTime(HH:mm) 조합을
-  /// 로컬 타임존 DateTime으로 복원. 어느 하나라도 없으면 null.
-  Future<DateTime?> _resolveLastHeartbeatDateTime() async {
-    final date = await _tokenDs.getLastHeartbeatDate();
-    final time = await _tokenDs.getLastHeartbeatTime();
-    if (date == null || time == null) return null;
-    try {
-      // 'yyyy-MM-dd HH:mm' → 로컬 타임존 DateTime
-      return DateTime.parse('$date $time:00');
-    } catch (_) {
       return null;
     }
   }

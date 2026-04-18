@@ -122,6 +122,7 @@ abstract class ArSa {
     'subject_home_emergency_loading': 'جاري إرسال تنبيه الطوارئ...',
     'subject_home_emergency_sent': 'تم إرسال تنبيه الطوارئ',
     'subject_home_emergency_failed': 'فشل إرسال تنبيه الطوارئ',
+    'subject_home_manual_report_limit_reached': 'لقد قمت بالفعل بإرسال تقرير السلامة لهذا اليوم. يرجى المحاولة غدًا.',
     'subject_home_emergency_confirm_title': 'طلب مساعدة طارئة',
     'subject_home_emergency_confirm_body':
         'سيتم إرسال تنبيه طوارئ إلى جميع الأوصياء.\nهل أنت متأكد من طلب المساعدة؟',
@@ -334,7 +335,7 @@ abstract class ArSa {
     'noti_urgent_body': 'لا يوجد فحص اطمئنان منذ @days يوم/أيام. التحقق الفوري مطلوب.',
     'noti_urgent_suspicious_body':
         'لم يتم اكتشاف استخدام للهاتف منذ @days يوم/أيام. مطلوب تحقق فوري.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps خطوة.',
+    'noti_steps_body': 'تم قطع @steps خطوة اليوم.',
     'noti_emergency_body': 'طلب الشخص المحمي المساعدة مباشرة. يرجى التحقق فوراً.',
     'noti_resolved_body': 'عاد فحص سلامة الشخص المحمي إلى الوضع الطبيعي.',
     'noti_cleared_by_guardian_title': '✅ تم تأكيد السلامة',

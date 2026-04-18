@@ -127,6 +127,7 @@ abstract class TrTr {
     'subject_home_emergency_loading': 'Acil durum uyarısı gönderiliyor...',
     'subject_home_emergency_sent': 'Acil durum uyarısı gönderildi',
     'subject_home_emergency_failed': 'Acil durum uyarısı gönderilemedi',
+    'subject_home_manual_report_limit_reached': 'Bugünün güvenlik raporunu zaten gönderdiniz. Lütfen yarın tekrar deneyin.',
     'subject_home_emergency_confirm_title': 'Acil yardım talebi',
     'subject_home_emergency_confirm_body':
         'Tüm koruyucularınıza acil durum uyarısı gönderilecektir.\nYardım istemek istediğinizden emin misiniz?',
@@ -342,7 +343,7 @@ abstract class TrTr {
     'noti_urgent_body': '@days gündür hal hatır kontrolü yok. Acil doğrulama gerekli.',
     'noti_urgent_suspicious_body':
         '@days gündür telefon kullanım belirtisi tespit edilmedi. Acil doğrulama gereklidir.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps adım atıldı.',
+    'noti_steps_body': 'Bugün @steps adım atıldı.',
     'noti_emergency_body': 'Korunan kişi doğrudan yardım istedi. Lütfen hemen kontrol edin.',
     'noti_resolved_body': 'Korunan kişinin sağlık kontrolü normale döndü.',
     'noti_cleared_by_guardian_title': '✅ Güvenlik onaylandı',

@@ -128,6 +128,7 @@ abstract class EsEs {
     'subject_home_emergency_loading': 'Enviando alerta de emergencia...',
     'subject_home_emergency_sent': 'La alerta de emergencia ha sido enviada',
     'subject_home_emergency_failed': 'Error al enviar la alerta de emergencia',
+    'subject_home_manual_report_limit_reached': 'Ya has enviado el informe de seguridad de hoy. Por favor, inténtalo de nuevo mañana.',
     'subject_home_emergency_confirm_title': 'Solicitud de ayuda de emergencia',
     'subject_home_emergency_confirm_body':
         'Se enviará una alerta de emergencia a todos sus guardianes.\n¿Está seguro de que desea solicitar ayuda?',
@@ -350,7 +351,7 @@ abstract class EsEs {
         'Sin verificación de bienestar durante @days día(s). Se requiere verificación inmediata.',
     'noti_urgent_suspicious_body':
         'Sin señales de uso del teléfono durante @days día(s). Se requiere verificación inmediata.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps pasos caminados.',
+    'noti_steps_body': '@steps pasos caminados hoy.',
     'noti_emergency_body':
         'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',
     'noti_resolved_body': 'La verificación de bienestar del protegido ha vuelto a la normalidad.',

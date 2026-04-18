@@ -132,6 +132,7 @@ abstract class DeDe {
     'subject_home_emergency_loading': 'Notruf wird gesendet...',
     'subject_home_emergency_sent': 'Notruf wurde gesendet',
     'subject_home_emergency_failed': 'Notruf konnte nicht gesendet werden',
+    'subject_home_manual_report_limit_reached': 'Sie haben den heutigen Sicherheitsbericht bereits gesendet. Bitte versuchen Sie es morgen erneut.',
     'subject_home_emergency_confirm_title': 'Nothilfe anfordern',
     'subject_home_emergency_confirm_body':
         'Ein Notruf wird an alle Ihre Betreuer gesendet.\nMöchten Sie wirklich Hilfe anfordern?',
@@ -351,7 +352,7 @@ abstract class DeDe {
         'Seit @days Tag(en) keine Wohlbefindens-Prüfung. Sofortige Überprüfung erforderlich.',
     'noti_urgent_suspicious_body':
         'Seit @days Tag(en) keine Anzeichen einer Telefonnutzung. Sofortige Überprüfung erforderlich.',
-    'noti_steps_body': '@from_time ~ @to_time: @steps Schritte gegangen.',
+    'noti_steps_body': 'Heute @steps Schritte gegangen.',
     'noti_emergency_body':
         'Die betreute Person hat direkt um Hilfe gebeten. Bitte sofort überprüfen.',
     'noti_resolved_body': 'Der Wellness-Check der betreuten Person ist wieder normal.',
