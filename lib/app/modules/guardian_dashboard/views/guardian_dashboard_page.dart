@@ -9,6 +9,7 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
+import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
@@ -322,9 +323,8 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
             AddSubjectButton(onTap: controller.goToAddSubject),
             SizedBox(height: AppSpacing.sp6),
 
-            // 광고 배너 (스크린샷용 임시 주석)
-            // const BannerAdWidget(),
-            // SizedBox(height: AppSpacing.sp6),
+            const BannerAdWidget(),
+            SizedBox(height: AppSpacing.sp6),
           ],
         ),
       ),

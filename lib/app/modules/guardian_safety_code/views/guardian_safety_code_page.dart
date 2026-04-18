@@ -6,7 +6,7 @@ import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
-// import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart'; // 스크린샷용 임시 주석
+import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/modules/guardian_safety_code/controllers/guardian_safety_code_controller.dart';
 
@@ -125,7 +125,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
             SizedBox(height: AppSpacing.lg),
             _buildEmergencyButton(),
             SizedBox(height: AppSpacing.sp6),
-            // const BannerAdWidget(), // 스크린샷용 임시 주석
+            const BannerAdWidget(),
             // SizedBox(height: AppSpacing.sp6),
           ],
         ),
