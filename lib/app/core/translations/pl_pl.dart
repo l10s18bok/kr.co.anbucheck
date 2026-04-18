@@ -229,6 +229,10 @@ abstract class PlPl {
     'gs_disable_confirm': 'Wyłącz',
     'gs_disabled_message': 'Ochrona została wyłączona',
     'gs_disable_failed': 'Nie udało się wyłączyć ochrony',
+    'gs_activity_permission_denied_warning': 'Uprawnienie krokomierza odrzucone. Dotknij tutaj, aby zezwolić.',
+    'gs_activity_permission_settings_title': 'Wymagane uprawnienie',
+    'gs_activity_permission_settings_body': 'Zezwól na uprawnienie Ruch i sprawność w ustawieniach aplikacji.',
+    'gs_activity_permission_settings_go': 'Przejdź do Ustawień',
 
     // ── Powiadomienia opiekuna ──
     'notifications_title': 'Powiadomienia',

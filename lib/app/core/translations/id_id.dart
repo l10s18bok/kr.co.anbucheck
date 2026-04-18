@@ -231,6 +231,10 @@ abstract class IdId {
     'gs_disable_confirm': 'Nonaktifkan',
     'gs_disabled_message': 'Perlindungan telah dinonaktifkan',
     'gs_disable_failed': 'Gagal menonaktifkan perlindungan',
+    'gs_activity_permission_denied_warning': 'Izin penghitung langkah ditolak. Ketuk di sini untuk mengizinkan.',
+    'gs_activity_permission_settings_title': 'Izin Diperlukan',
+    'gs_activity_permission_settings_body': 'Harap izinkan izin Gerakan & Kebugaran di pengaturan aplikasi.',
+    'gs_activity_permission_settings_go': 'Buka Pengaturan',
 
     // ── Notifikasi Penjaga ──
     'notifications_title': 'Notifikasi',

@@ -224,6 +224,10 @@ abstract class ThTh {
     'gs_disable_confirm': 'ปิดใช้งาน',
     'gs_disabled_message': 'ปิดใช้งานการดูแลแล้ว',
     'gs_disable_failed': 'ไม่สามารถปิดใช้งานการดูแลได้',
+    'gs_activity_permission_denied_warning': 'สิทธิ์นับก้าวถูกปฏิเสธ แตะที่นี่เพื่ออนุญาต',
+    'gs_activity_permission_settings_title': 'ต้องการสิทธิ์',
+    'gs_activity_permission_settings_body': 'โปรดอนุญาตสิทธิ์การเคลื่อนไหวและฟิตเนสในการตั้งค่าแอป',
+    'gs_activity_permission_settings_go': 'ไปที่การตั้งค่า',
 
     // ── การแจ้งเตือนผู้ดูแล ──
     'notifications_title': 'การแจ้งเตือน',

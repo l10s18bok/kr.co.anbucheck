@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -42,13 +43,19 @@ class PermissionPage extends GetWidget<PermissionController> {
                     : 'permission_notification_guardian_desc'.tr,
               ),
 
-              // 2. 신체 활동 / 모션 권한 카드 (Android: ACTIVITY_RECOGNITION, iOS: NSMotionUsageDescription)
-              SizedBox(height: AppSpacing.lg),
-              _PermissionCard(
-                icon: Icons.directions_walk_rounded,
-                title: 'permission_activity'.tr,
-                description: 'permission_activity_desc'.tr,
-              ),
+              // 2. 신체 활동 권한 카드 (Lazy Permission)
+              //   - Android 대상자 / G+S 복원: 카드 표시 + 권한 요청
+              //   - Android 순수 보호자 / iOS: heartbeat 전송이 이 시점에 필요 없으므로 숨김
+              //     (iOS는 G+S 활성화 시점에 CMPedometer 트리거로 시스템 팝업 표시)
+              if (Platform.isAndroid &&
+                  (controller.isSubjectMode || controller.isAlsoSubject)) ...[
+                SizedBox(height: AppSpacing.lg),
+                _PermissionCard(
+                  icon: Icons.directions_walk_rounded,
+                  title: 'permission_activity'.tr,
+                  description: 'permission_activity_desc'.tr,
+                ),
+              ],
 
               const Spacer(),
 

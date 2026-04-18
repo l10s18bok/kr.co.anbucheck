@@ -101,6 +101,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
             ),
             SizedBox(height: AppSpacing.lg),
             _buildSafetyCodeCard(),
+            _buildActivityPermissionWarning(),
             SizedBox(height: AppSpacing.lg),
             _buildLastCheckCard(),
             SizedBox(height: AppSpacing.lg),
@@ -275,6 +276,56 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
               ),
             ),
           ],
+        ),
+      );
+    });
+  }
+
+  /// 걸음수 권한 거부 경고 위젯 (Lazy Permission)
+  /// 권한 허용 상태면 SizedBox.shrink()로 공간도 차지하지 않음.
+  Widget _buildActivityPermissionWarning() {
+    return Obx(() {
+      if (!controller.activityPermissionDenied.value) {
+        return const SizedBox.shrink();
+      }
+      return Padding(
+        padding: EdgeInsets.only(top: AppSpacing.md),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12.r),
+            onTap: controller.requestActivityPermissionAgain,
+            child: Container(
+              width: double.infinity,
+              constraints: BoxConstraints(minHeight: 48.h),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFEBEE),
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(
+                  color: const Color(0xFFB71C1C).withValues(alpha: 0.3),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.warning_amber_rounded,
+                      size: 20.w, color: const Color(0xFFB71C1C)),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Text(
+                      'gs_activity_permission_denied_warning'.tr,
+                      style: AppTextTheme.bodySmall(
+                        color: const Color(0xFFB71C1C),
+                        fw: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       );
     });

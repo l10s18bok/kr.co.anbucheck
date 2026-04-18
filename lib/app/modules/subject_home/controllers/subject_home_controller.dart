@@ -18,6 +18,8 @@ import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
+import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/emergency_remote_datasource.dart';
@@ -459,6 +461,8 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   }
 
   // ── 탈퇴 ──────────────────────────────────────────
+  /// 로컬 DB 전반을 클리어해 재가입 시 이전 계정 잔존 데이터가 새 계정에
+  /// 오염을 일으키지 않도록 한다 (걸음수 delta 왜곡, pending heartbeat 오전송 등).
   Future<void> deleteAccount() async {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken != null) {
@@ -474,6 +478,12 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     }
     await LocalAlarmService.cancel();
     await _tokenDs.clear();
+    await SensorLocalDatasource().clear();
+    await HeartbeatLocalDatasource().clearPending();
+    // battery_dialog_shown 플래그 제거 — 재가입 시 안내 다이얼로그 다시 표시
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('battery_dialog_shown');
+
     Get.offAllNamed(AppRoutes.modeSelect);
   }
 }

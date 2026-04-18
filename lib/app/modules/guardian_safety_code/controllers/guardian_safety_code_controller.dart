@@ -1,10 +1,16 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pedometer/pedometer.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
+import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -81,6 +87,10 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     }
   }
 
+  // ── Lazy Permission: 걸음수(신체 활동/모션) 권한 상태 ──
+  /// 권한이 거부된 상태인지 여부 — 안전코드 화면 경고 위젯이 구독
+  final activityPermissionDenied = false.obs;
+
   final _tokenDs = TokenLocalDatasource();
 
   /// 설정 페이지에서 진입 시 전달받은 서버 데이터 (중복 API 호출 방지)
@@ -96,17 +106,101 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   void onInit() {
     super.onInit();
     _loadStatus();
+    refreshActivityPermissionStatus();
   }
 
   @override
   void onResumed() {
     super.onResumed();
     loadScheduleFromLocal();
+    // 앱 설정에서 권한을 허용하고 복귀한 경우 즉시 경고 위젯 숨기기
+    refreshActivityPermissionStatus();
+  }
+
+  /// 걸음수 권한 상태 확인 — 안전코드 화면 진입/복귀 시 호출
+  /// Android: `Permission.activityRecognition.status`
+  /// iOS: Pedometer 스트림을 짧게 조회해 실제 접근 가능 여부 판정
+  ///   (permission_handler의 activityRecognition/sensors가 iOS에서 신뢰도가 낮음)
+  Future<void> refreshActivityPermissionStatus() async {
+    try {
+      if (Platform.isAndroid) {
+        final status = await Permission.activityRecognition.status;
+        activityPermissionDenied.value = !status.isGranted;
+      } else if (Platform.isIOS) {
+        try {
+          await Pedometer.stepCountStream.first
+              .timeout(const Duration(milliseconds: 1500));
+          activityPermissionDenied.value = false;
+        } catch (_) {
+          activityPermissionDenied.value = true;
+        }
+      }
+    } catch (_) {
+      // 권한 체크 실패 시 경고를 띄우지 않는다 — 사용자 혼란 방지
+    }
+  }
+
+  /// 경고 텍스트 탭 시 권한 재요청
+  /// Android: 일반 거부면 재요청, 영구 거부면 설정 이동
+  /// iOS: 1회만 팝업 가능 — 재요청 시도 후 실패하면 설정 이동 안내
+  Future<void> requestActivityPermissionAgain() async {
+    try {
+      if (Platform.isAndroid) {
+        final status = await Permission.activityRecognition.status;
+        if (status.isPermanentlyDenied) {
+          await _showSettingsDialog();
+        } else {
+          await Permission.activityRecognition.request();
+        }
+      } else if (Platform.isIOS) {
+        try {
+          await Pedometer.stepCountStream.first
+              .timeout(const Duration(seconds: 3));
+        } catch (_) {
+          // iOS는 두 번째부터 팝업이 뜨지 않으므로 설정 이동 안내
+          await _showSettingsDialog();
+        }
+      }
+    } finally {
+      await refreshActivityPermissionStatus();
+    }
+  }
+
+  Future<void> _showSettingsDialog() async {
+    await Get.dialog<void>(
+      AlertDialog(
+        title: Text('gs_activity_permission_settings_title'.tr,
+            style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
+        content: Text('gs_activity_permission_settings_body'.tr,
+            style: AppTextTheme.bodyMedium()),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('common_cancel'.tr),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              await openAppSettings();
+            },
+            child: Text('gs_activity_permission_settings_go'.tr),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _loadStatus() async {
     await getReloadedPrefs();
-    _inviteCode.value = await _tokenDs.getInviteCode() ?? '';
+    // arguments로 전달받은 invite_code 우선 사용 — Dashboard가 방금 발급받은
+    // code를 즉시 반영할 수 있도록 하고, SharedPreferences reload 타이밍 이슈를 우회.
+    final cached = _deviceData;
+    final cachedCode = cached?['invite_code'] as String?;
+    if (cachedCode != null && cachedCode.isNotEmpty) {
+      _inviteCode.value = cachedCode;
+    } else {
+      _inviteCode.value = await _tokenDs.getInviteCode() ?? '';
+    }
     _guardianConnected.value = await _tokenDs.getSubscriptionActive();
     await loadScheduleFromLocal();
     await _syncScheduleFromServer();

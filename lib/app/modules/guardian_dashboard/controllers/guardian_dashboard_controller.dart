@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pedometer/pedometer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -330,6 +331,22 @@ class GuardianDashboardController extends BaseController
     if (isEnabling.value) return;
     isEnabling.value = true;
     try {
+      // Lazy Permission — 걸음수 권한은 G+S 활성화 시점에만 요청한다.
+      // 권한 거부 시에도 활성화는 계속 진행하며, 안전코드 화면의 경고 위젯이
+      // 재요청을 유도한다. 따라서 결과와 무관하게 삼키고 통과시킨다.
+      if (Platform.isAndroid) {
+        try {
+          await Permission.activityRecognition.request();
+        } catch (_) {}
+      } else if (Platform.isIOS) {
+        // iOS: Permission.activityRecognition.request()는 시스템 팝업을 띄우지 않음.
+        // CMPedometer 데이터를 실제로 조회해야 최초 1회 모션 권한 팝업이 표시됨.
+        try {
+          await Pedometer.stepCountStream.first
+              .timeout(const Duration(seconds: 3));
+        } catch (_) {}
+      }
+
       final deviceToken = await _tokenDs.getDeviceToken();
       if (deviceToken == null) return;
       final result = await _userDs.enableSubject(deviceToken);
@@ -421,16 +438,34 @@ class GuardianDashboardController extends BaseController
     await LocalAlarmService.cancel();
   }
 
-  /// G+S 활성 상태에서 안전 코드 확인 페이지로 이동
+  /// G+S 활성 상태에서 안전 코드 확인 페이지로 이동.
+  /// invite_code를 arguments로 함께 전달해 SafetyCode가 SharedPreferences의
+  /// reload 타이밍 이슈(iOS 특히)와 무관하게 즉시 화면에 표시할 수 있게 한다.
   void goToSafetyCode() {
     Get.toNamed(AppRoutes.guardianSafetyCode, arguments: {
       'deviceData': {
+        'invite_code': inviteCode.value,
         'heartbeat_hour': heartbeatHour.value,
         'heartbeat_minute': heartbeatMinute.value,
         'subscription_active': isSubscriptionActive.value,
         'guardian_count': guardianCount.value,
       },
     });
+  }
+
+  /// 탈퇴 시 Dashboard Rx 상태 초기화 — Dashboard는 permanent로 등록되어
+  /// Get.offAllNamed(modeSelect) 이후에도 인스턴스가 살아있으므로, 재가입 시
+  /// 이전 G+S 상태가 남아있지 않도록 명시적으로 리셋한다.
+  /// ([cancelHeartbeatSchedules]는 WorkManager/LocalAlarm 취소만 담당)
+  void resetSubjectState() {
+    isAlsoSubject.value = false;
+    inviteCode.value = '';
+    guardianCount.value = 0;
+    _lastHeartbeatDate.value = '';
+    _lastHeartbeatTime.value = '';
+    isSubscriptionActive.value = false;
+    subjects.clear();
+    highlightedInviteCode.value = null;
   }
 }
 

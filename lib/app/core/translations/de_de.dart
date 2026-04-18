@@ -232,6 +232,10 @@ abstract class DeDe {
     'gs_disable_confirm': 'Deaktivieren',
     'gs_disabled_message': 'Wellness-Schutz wurde deaktiviert',
     'gs_disable_failed': 'Wellness-Schutz konnte nicht deaktiviert werden',
+    'gs_activity_permission_denied_warning': 'Schrittzähler-Berechtigung verweigert. Hier tippen, um zu erlauben.',
+    'gs_activity_permission_settings_title': 'Berechtigung erforderlich',
+    'gs_activity_permission_settings_body': 'Bitte erlauben Sie die Bewegungs- und Fitness-Berechtigung in den App-Einstellungen.',
+    'gs_activity_permission_settings_go': 'Zu den Einstellungen',
 
     // ── Betreuer-Benachrichtigungen ──
     'notifications_title': 'Benachrichtigungen',

@@ -230,6 +230,10 @@ abstract class NlNl {
     'gs_disable_confirm': 'Deactiveren',
     'gs_disabled_message': 'Welzijnsbescherming is gedeactiveerd',
     'gs_disable_failed': 'Welzijnsbescherming deactiveren mislukt',
+    'gs_activity_permission_denied_warning': 'Stappenteller-toestemming geweigerd. Tik hier om toe te staan.',
+    'gs_activity_permission_settings_title': 'Toestemming vereist',
+    'gs_activity_permission_settings_body': 'Sta de machtiging Beweging en Fitness toe in de app-instellingen.',
+    'gs_activity_permission_settings_go': 'Ga naar Instellingen',
 
     // ── Meldingen beschermer ──
     'notifications_title': 'Meldingen',

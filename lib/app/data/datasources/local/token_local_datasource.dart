@@ -229,6 +229,14 @@ class TokenLocalDatasource {
   }
 
   // ── 전체 삭제 ─────────────────────────────────────────────
+  /// 탈퇴·모드 변경 등 "계정 초기화" 시 호출. device_id 관련 SharedPreferences
+  /// 키 전체를 제거한다. iOS Keychain의 device_id는 "같은 기기 식별" 용도로
+  /// 의도적으로 유지 — 서버에 이미 계정이 삭제된 상태이므로 재가입 시 자연스럽게
+  /// 새 계정으로 등록된다.
+  ///
+  /// subscription_active는 remove만 하면 getter 기본값이 true라 탈퇴 직후
+  /// 서버 응답 오기 전까지 "구독 활성"으로 잠깐 보이는 문제가 있어, 명시적으로
+  /// false를 저장한다.
   Future<void> clear() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyDeviceId);
@@ -240,8 +248,10 @@ class TokenLocalDatasource {
     await prefs.remove(_keyHeartbeatMinute);
     await prefs.remove(_keyLastHeartbeatDate);
     await prefs.remove(_keyLastHeartbeatTime);
-    await prefs.remove(_keySubscriptionActive);
     await prefs.remove(_keyIsAlsoSubject);
+    await prefs.remove(_keyLastScheduledKey);
+    await prefs.remove(_keyHeartbeatInFlight);
+    await prefs.setBool(_keySubscriptionActive, false);
   }
 
 }

@@ -104,6 +104,15 @@ class GuardianSubjectService extends GetxService {
     subjects.removeWhere((s) => s.guardianId == guardianId);
     _lastFetched = null; // 다음 로드 시 서버 반영
   }
+
+  /// 탈퇴 시 인메모리 캐시 전체 초기화 — permanent 등록이라 컨트롤러 해제
+  /// 이후에도 이전 계정 대상자 목록이 남아 새 계정에 보일 수 있는 문제 방지
+  void clearCache() {
+    subjects.clear();
+    maxSubjects.value = 5;
+    canAddMore.value = true;
+    _lastFetched = null;
+  }
 }
 
 class SubjectItem {

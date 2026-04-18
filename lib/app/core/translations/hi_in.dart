@@ -226,6 +226,10 @@ abstract class HiIn {
     'gs_disable_confirm': 'निष्क्रिय करें',
     'gs_disabled_message': 'सुरक्षा निष्क्रिय हो गई',
     'gs_disable_failed': 'सुरक्षा निष्क्रिय करने में विफल',
+    'gs_activity_permission_denied_warning': 'कदम गिनने की अनुमति अस्वीकार की गई। अनुमति देने के लिए यहां टैप करें।',
+    'gs_activity_permission_settings_title': 'अनुमति आवश्यक',
+    'gs_activity_permission_settings_body': 'कृपया ऐप सेटिंग्स में गति और फिटनेस अनुमति दें।',
+    'gs_activity_permission_settings_go': 'सेटिंग्स पर जाएं',
 
     // ── अभिभावक सूचनाएं ──
     'notifications_title': 'सूचनाएं',

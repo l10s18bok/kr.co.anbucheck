@@ -227,6 +227,10 @@ abstract class TrTr {
     'gs_disable_confirm': 'Devre dışı bırak',
     'gs_disabled_message': 'Koruma devre dışı bırakıldı',
     'gs_disable_failed': 'Koruma devre dışı bırakılamadı',
+    'gs_activity_permission_denied_warning': 'Adım sayar izni reddedildi. İzin vermek için buraya dokunun.',
+    'gs_activity_permission_settings_title': 'İzin Gerekli',
+    'gs_activity_permission_settings_body': 'Lütfen uygulama ayarlarından Hareket ve Fitness iznine izin verin.',
+    'gs_activity_permission_settings_go': 'Ayarlara Git',
 
     // ── Koruyucu Bildirimler ──
     'notifications_title': 'Bildirimler',

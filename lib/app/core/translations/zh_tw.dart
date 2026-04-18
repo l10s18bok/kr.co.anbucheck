@@ -213,6 +213,10 @@ abstract class ZhTw {
     'gs_disable_confirm': '停用',
     'gs_disabled_message': '安否保護已停用',
     'gs_disable_failed': '安否保護停用失敗',
+    'gs_activity_permission_denied_warning': '計步權限已被拒絕。點擊此處授予權限。',
+    'gs_activity_permission_settings_title': '需要權限設定',
+    'gs_activity_permission_settings_body': '請在應用程式設定中允許「動態與健身」權限。',
+    'gs_activity_permission_settings_go': '前往設定',
 
     // ── 守護者通知 ──
     'notifications_title': '通知',

@@ -57,4 +57,18 @@ class SensorLocalDatasource {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyLastSteps, steps);
   }
+
+  /// 탈퇴·모드 변경 시 호출 — 이전 계정 센서 스냅샷이 남으면 첫 heartbeat
+  /// suspicious 판정과 걸음수 delta 계산이 왜곡된다.
+  Future<void> clear() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keyAccelX);
+    await prefs.remove(_keyAccelY);
+    await prefs.remove(_keyAccelZ);
+    await prefs.remove(_keyGyroX);
+    await prefs.remove(_keyGyroY);
+    await prefs.remove(_keyGyroZ);
+    await prefs.remove(_keySavedAt);
+    await prefs.remove(_keyLastSteps);
+  }
 }
