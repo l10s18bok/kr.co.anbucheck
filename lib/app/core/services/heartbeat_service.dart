@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
+import 'package:cm_pedometer/cm_pedometer.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
@@ -140,13 +142,18 @@ class HeartbeatService {
   /// 센서 기준값만 로컬에 저장 (서버 전송 없음)
   /// 최초 설치 직후 보호자 미연결 상태에서 호출
   Future<void> saveSensorBaseline() async {
-    // 걸음수 기준점 저장 — 0이면 Samsung 초기화 케이스로 저장 건너뜀
-    try {
-      final current = await Pedometer.stepCountStream.first
-          .timeout(const Duration(seconds: 2));
-      final steps = current.steps;
-      if (steps > 0) await _sensorDs.saveLastSteps(steps);
-    } catch (_) {}
+    // 걸음수 기준점 저장 — Android 전용.
+    // iOS는 CMPedometer.queryPedometerData가 절대 구간(from~to)을 반환하므로
+    // baseline이 필요 없다. Android만 TYPE_STEP_COUNTER 누적값 대비용으로 저장.
+    // Android도 0이면 Samsung 초기화 케이스라 저장 건너뜀.
+    if (Platform.isAndroid) {
+      try {
+        final current = await Pedometer.stepCountStream.first
+            .timeout(const Duration(seconds: 2));
+        final steps = current.steps;
+        if (steps > 0) await _sensorDs.saveLastSteps(steps);
+      } catch (_) {}
+    }
 
     // 가속도/자이로 기준점 저장
     final sensor = await _collectSensor();
@@ -235,9 +242,40 @@ class HeartbeatService {
     }
   }
 
-  /// 이전 heartbeat 이후 걸음수 증가량 조회 + 현재 걸음수 저장
+  /// 이전 heartbeat 이후 걸음수 증가량 조회
   /// 권한 거부 또는 조회 실패 시 null 반환
   Future<int?> _getStepsDelta() async {
+    if (Platform.isIOS) return _getStepsDeltaIOS();
+    return _getStepsDeltaAndroid();
+  }
+
+  /// iOS: CMPedometer.queryPedometerData로 "마지막 heartbeat ~ 지금" 구간 조회.
+  /// iOS가 M-series coprocessor로 OS 레벨에서 상시 걸음수를 수집·7일간 보관하므로
+  /// 앱 스와이프 kill 구간도 포함된 정확한 delta를 얻는다.
+  /// 기존 stepCountStream(startPedometerUpdates)은 실시간 구독이라 kill 구간 유실 문제 있음.
+  Future<int?> _getStepsDeltaIOS() async {
+    try {
+      final from = await _resolveLastHeartbeatDateTime();
+      if (from == null) {
+        // 첫 heartbeat — 기준 시각 없음, 0 반환
+        return 0;
+      }
+      final to = DateTime.now();
+      if (!to.isAfter(from)) return 0;
+
+      final data = await CMPedometer.queryPedometerData(from: from, to: to)
+          .timeout(const Duration(seconds: 3));
+      final steps = data.numberOfSteps;
+      debugPrint('[HeartbeatService] iOS query $from~$to steps=$steps');
+      return steps;
+    } catch (e) {
+      debugPrint('[HeartbeatService] iOS queryPedometerData 실패: $e');
+      return null;
+    }
+  }
+
+  /// Android: TYPE_STEP_COUNTER 누적값 대비 방식. Samsung OneUI 0 발화 방어 포함.
+  Future<int?> _getStepsDeltaAndroid() async {
     try {
       final current = await Pedometer.stepCountStream.first
           .timeout(const Duration(seconds: 2));
@@ -261,6 +299,20 @@ class HeartbeatService {
       // 현재 누적값 자체를 이번 구간의 걸음수로 사용
       if (delta < 0) return currentSteps;
       return delta > 0 ? delta : 0;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// 로컬 저장된 lastHeartbeatDate(yyyy-MM-dd) + lastHeartbeatTime(HH:mm) 조합을
+  /// 로컬 타임존 DateTime으로 복원. 어느 하나라도 없으면 null.
+  Future<DateTime?> _resolveLastHeartbeatDateTime() async {
+    final date = await _tokenDs.getLastHeartbeatDate();
+    final time = await _tokenDs.getLastHeartbeatTime();
+    if (date == null || time == null) return null;
+    try {
+      // 'yyyy-MM-dd HH:mm' → 로컬 타임존 DateTime
+      return DateTime.parse('$date $time:00');
     } catch (_) {
       return null;
     }

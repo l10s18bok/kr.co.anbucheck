@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pedometer/pedometer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
@@ -107,6 +106,11 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     super.onInit();
     _loadStatus();
     refreshActivityPermissionStatus();
+    // iOS 재설치/최초 진입 케이스: 권한 상태가 notDetermined면 안전코드 화면
+    // 첫 진입 시 자동으로 시스템 팝업을 띄운다. 한 번 거부된 상태(isPermanentlyDenied)
+    // 에서는 permission_handler가 request() 호출해도 OS가 팝업을 띄우지 않으므로
+    // 실질적으로 notDetermined에서만 동작한다.
+    _autoRequestSensorPermissionIOSIfNeeded();
   }
 
   @override
@@ -136,7 +140,11 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
 
   /// 경고 텍스트 탭 시 권한 재요청
   /// Android: 일반 거부면 재요청, 영구 거부면 설정 이동
-  /// iOS: `Permission.sensors.status`로 현재 상태 확인 후 팝업(가능 시) 또는 설정 이동
+  /// iOS: permission_handler가 CMAuthorizationStatus를 다음과 같이 매핑함:
+  ///   notDetermined → isDenied, 실제 유저 거부 → isPermanentlyDenied.
+  ///   notDetermined일 때는 request()가 내부에서 CMMotionActivityManager.
+  ///   queryActivityStartingFromDate:를 호출해 시스템 팝업을 띄우고, 실제 거부
+  ///   상태에서는 OS가 팝업을 막으므로 설정 이동만 가능하다.
   Future<void> requestActivityPermissionAgain() async {
     try {
       if (Platform.isAndroid) {
@@ -148,19 +156,34 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
         }
       } else if (Platform.isIOS) {
         final status = await Permission.sensors.status;
-        if (status.isDenied || status.isPermanentlyDenied || status.isRestricted) {
-          // iOS는 한 번 거부되면 재요청 팝업이 뜨지 않으므로 설정 이동 안내
+        if (status.isPermanentlyDenied || status.isRestricted) {
+          // 실제 유저 거부 또는 제한 — 시스템 팝업 불가, 설정 이동만 가능
           await _showSettingsDialog();
-        } else if (!status.isGranted) {
-          // notDetermined 상태 — CMPedometer 호출로 시스템 팝업 유도
-          try {
-            await Pedometer.stepCountStream.first
-                .timeout(const Duration(seconds: 3));
-          } catch (_) {}
+        } else if (status.isDenied) {
+          // notDetermined — permission_handler가 queryActivity 호출해 시스템 팝업 표시
+          await Permission.sensors.request();
         }
       }
     } finally {
       await refreshActivityPermissionStatus();
+    }
+  }
+
+  /// iOS 자동 권한 요청 — 재설치/최초 진입 케이스에서 notDetermined 상태라면
+  /// 안전코드 화면 첫 진입 시 시스템 팝업을 자동으로 띄운다.
+  /// 한 번 거부된 상태(isPermanentlyDenied)에서는 OS가 팝업을 막으므로
+  /// 아무 동작도 하지 않는다. isGranted인 경우도 호출되지 않는다.
+  Future<void> _autoRequestSensorPermissionIOSIfNeeded() async {
+    if (!Platform.isIOS) return;
+    try {
+      final status = await Permission.sensors.status;
+      if (status.isDenied) {
+        // notDetermined 상태만 해당 — request()가 시스템 팝업 트리거
+        await Permission.sensors.request();
+        await refreshActivityPermissionStatus();
+      }
+    } catch (_) {
+      // 권한 조회 실패 시 조용히 무시 — 사용자가 경고 텍스트를 탭하면 수동 경로로 동작
     }
   }
 
