@@ -507,7 +507,7 @@ class _SubjectCardState extends State<_SubjectCard>
                     style:
                         AppTextTheme.bodySmall(color: AppColors.textSecondary)),
               ],
-              SizedBox(height: 8.h),
+              SizedBox(height: 20.h),
               Expanded(
                 child: AnimatedBuilder(
                   animation: _waveCtrl,
@@ -571,7 +571,7 @@ class _SubjectCardState extends State<_SubjectCard>
 
             // 정상: 마지막 확인 시간 (차트 아래)
             if (!widget.showActionButtons) ...[
-              const SizedBox(height: 3),
+              SizedBox(height: 12.h),
               Text(widget.lastCheck,
                   style:
                       AppTextTheme.bodySmall(color: AppColors.textTertiary)),
