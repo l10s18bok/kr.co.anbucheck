@@ -8,7 +8,6 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
-import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
@@ -222,7 +221,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               return Column(
                 children: [
                   SizedBox(
-                    height: 180.h,
+                    height: 220.h,
                     child: PageView.builder(
                       clipBehavior: Clip.none,
                       padEnds: false,
@@ -376,8 +375,6 @@ class _SubjectCard extends StatefulWidget {
 class _SubjectCardState extends State<_SubjectCard>
     with TickerProviderStateMixin {
   late final AnimationController _animCtrl;
-  late final Animation<double> _scale;
-  late final Animation<double> _glow;
 
   // 막대 차트 웨이브 애니메이션
   late final AnimationController _waveCtrl;
@@ -388,12 +385,6 @@ class _SubjectCardState extends State<_SubjectCard>
     _animCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1600),
-    );
-    _scale = Tween<double>(begin: 1.0, end: 1.035).animate(
-      CurvedAnimation(parent: _animCtrl, curve: Curves.easeInOut),
-    );
-    _glow = Tween<double>(begin: 0.0, end: 0.5).animate(
-      CurvedAnimation(parent: _animCtrl, curve: Curves.easeInOut),
     );
     if (widget.isHighlighted) _animCtrl.repeat(reverse: true);
 
@@ -588,76 +579,55 @@ class _SubjectCardState extends State<_SubjectCard>
 
             // 주의 상태 — 액션 버튼
             if (widget.showActionButtons) ...[
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // 전화 버튼
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.onCall?.call();
-                        PhoneUtils.pickContactAndCall();
-                      },
-                      child: Container(
-                        height: 40.h,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: widget.statusColor.withValues(alpha: 0.3)),
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.phone_rounded,
-                                size: 15.w, color: widget.statusColor),
-                            SizedBox(width: 4.w),
-                            Flexible(
-                              child: Text(
-                                'guardian_call_now'.tr,
-                                style: AppTextTheme.labelSmall(
-                                  color: widget.statusColor,
-                                  fw: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
+                  GestureDetector(
+                    onTap: () {
+                      widget.onCall?.call();
+                      PhoneUtils.pickContactAndCall();
+                    },
+                    child: Container(
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        color: widget.statusColor,
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  // 안전확인 완료 버튼 — 강조 애니메이션
-                  Expanded(
-                    child: AnimatedBuilder(
-                      animation: _animCtrl,
-                      builder: (_, child) => Transform.scale(
-                        scale: _scale.value,
-                        child: Container(
-                          height: 40.h,
-                          decoration: BoxDecoration(
-                            color: widget.statusColor,
-                            borderRadius: BorderRadius.circular(10.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color: widget.statusColor
-                                    .withValues(alpha: _glow.value),
-                                blurRadius: 12.r,
-                                spreadRadius: 2.r,
-                              ),
-                            ],
-                          ),
-                          child: child,
-                        ),
-                      ),
-                      child: GestureDetector(
-                        onTap: widget.onConfirmSafety,
-                        child: Center(
-                          child: Text(
-                            'guardian_confirm_safety'.tr,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.phone_rounded,
+                              size: 15.w, color: Colors.white),
+                          SizedBox(width: 4.w),
+                          Text(
+                            'guardian_call_now'.tr,
                             style: AppTextTheme.labelSmall(
                               color: Colors.white,
                               fw: FontWeight.w600,
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  // 안전확인 완료 버튼
+                  GestureDetector(
+                    onTap: widget.onConfirmSafety,
+                    child: Container(
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: widget.statusColor.withValues(alpha: 0.3)),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'guardian_confirm_safety'.tr,
+                          style: AppTextTheme.labelSmall(
+                            color: widget.statusColor,
+                            fw: FontWeight.w600,
                           ),
                         ),
                       ),

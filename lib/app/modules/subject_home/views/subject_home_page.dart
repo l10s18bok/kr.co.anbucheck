@@ -299,7 +299,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
         onTap: (sending || disabled) ? null : () => _showEmergencyConfirm(),
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 20.h),
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
           decoration: BoxDecoration(
             color: (sending || disabled)
                 ? const Color(0xFFFFCDD2)
@@ -407,7 +407,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
         onTap: (sending || disabled) ? null : controller.reportNow,
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 20.h),
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: (sending || disabled)
