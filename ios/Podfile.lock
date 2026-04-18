@@ -1,8 +1,6 @@
 PODS:
   - battery_plus (1.0.0):
     - Flutter
-  - cm_pedometer (0.0.1):
-    - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
   - device_info_plus (0.0.1):
@@ -91,7 +89,7 @@ PODS:
   - nanopb/encode (3.30910.0)
   - package_info_plus (0.4.5):
     - Flutter
-  - pedometer (4.2.0):
+  - pedometer_2 (0.0.1):
     - Flutter
   - permission_handler_apple (9.3.0):
     - Flutter
@@ -113,7 +111,6 @@ PODS:
 
 DEPENDENCIES:
   - battery_plus (from `.symlinks/plugins/battery_plus/ios`)
-  - cm_pedometer (from `.symlinks/plugins/cm_pedometer/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -126,7 +123,7 @@ DEPENDENCIES:
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - pedometer (from `.symlinks/plugins/pedometer/ios`)
+  - pedometer_2 (from `.symlinks/plugins/pedometer_2/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
@@ -152,8 +149,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   battery_plus:
     :path: ".symlinks/plugins/battery_plus/ios"
-  cm_pedometer:
-    :path: ".symlinks/plugins/cm_pedometer/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
@@ -178,8 +173,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
-  pedometer:
-    :path: ".symlinks/plugins/pedometer/ios"
+  pedometer_2:
+    :path: ".symlinks/plugins/pedometer_2/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   sensors_plus:
@@ -197,7 +192,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   battery_plus: b42253f6d2dde71712f8c36fef456d99121c5977
-  cm_pedometer: 6106ec8dfdb2b1762a8bbb45a0727fecccee0ec1
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Firebase: d99ac19b909cd2c548339c2241ecd0d1599ab02e
@@ -220,7 +214,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  pedometer: 6806036696085739f36b4e4e5374135e86220a59
+  pedometer_2: dbedf4f42eb698358d1f6231ef97e29ae6b0411f
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   sensors_plus: 6a11ed0c2e1d0bd0b20b4029d3bad27d96e0c65b

@@ -10,7 +10,6 @@ class SensorLocalDatasource {
   static const _keyGyroY = 'sensor_gyro_y';
   static const _keyGyroZ = 'sensor_gyro_z';
   static const _keySavedAt   = 'sensor_saved_at';
-  static const _keyLastSteps = 'sensor_last_steps';
 
   Future<Map<String, double?>> getSnapshot() async {
     final prefs = await SharedPreferences.getInstance();
@@ -48,18 +47,8 @@ class SensorLocalDatasource {
     return str != null ? DateTime.parse(str) : null;
   }
 
-  Future<int?> getLastSteps() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_keyLastSteps);
-  }
-
-  Future<void> saveLastSteps(int steps) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_keyLastSteps, steps);
-  }
-
-  /// 탈퇴·모드 변경 시 호출 — 이전 계정 센서 스냅샷이 남으면 첫 heartbeat
-  /// suspicious 판정과 걸음수 delta 계산이 왜곡된다.
+  /// 탈뢴·모드 변경 시 호출 — 이전 계정 센서 스냅샷이 남으면 첫 heartbeat
+  /// suspicious 판정이 왜곡된다.
   Future<void> clear() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyAccelX);
@@ -69,6 +58,5 @@ class SensorLocalDatasource {
     await prefs.remove(_keyGyroY);
     await prefs.remove(_keyGyroZ);
     await prefs.remove(_keySavedAt);
-    await prefs.remove(_keyLastSteps);
   }
 }

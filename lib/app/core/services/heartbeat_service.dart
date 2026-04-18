@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
-import 'package:cm_pedometer/cm_pedometer.dart';
-import 'package:pedometer/pedometer.dart';
+import 'package:pedometer_2/pedometer_2.dart' as p2;
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
@@ -141,21 +139,9 @@ class HeartbeatService {
 
   /// 센서 기준값만 로컬에 저장 (서버 전송 없음)
   /// 최초 설치 직후 보호자 미연결 상태에서 호출
+  /// pedometer_2의 getStepCount(from, to)는 iOS/Android 모두 절대 구간을 반환하므로
+  /// 걸음수 baseline 저장은 불필요. 가속도/자이로만 저장한다.
   Future<void> saveSensorBaseline() async {
-    // 걸음수 기준점 저장 — Android 전용.
-    // iOS는 CMPedometer.queryPedometerData가 절대 구간(from~to)을 반환하므로
-    // baseline이 필요 없다. Android만 TYPE_STEP_COUNTER 누적값 대비용으로 저장.
-    // Android도 0이면 Samsung 초기화 케이스라 저장 건너뜀.
-    if (Platform.isAndroid) {
-      try {
-        final current = await Pedometer.stepCountStream.first
-            .timeout(const Duration(seconds: 2));
-        final steps = current.steps;
-        if (steps > 0) await _sensorDs.saveLastSteps(steps);
-      } catch (_) {}
-    }
-
-    // 가속도/자이로 기준점 저장
     final sensor = await _collectSensor();
     if (sensor != null) {
       await _sensorDs.saveSnapshot(
@@ -242,18 +228,21 @@ class HeartbeatService {
     }
   }
 
-  /// 이전 heartbeat 이후 걸음수 증가량 조회
-  /// 권한 거부 또는 조회 실패 시 null 반환
+  /// 이전 heartbeat 이후 걸음수 증가량 조회 (iOS/Android 공통).
+  ///
+  /// pedometer_2의 getStepCount(from, to)는:
+  ///   - iOS: CMPedometer.queryPedometerData 호출 → M-series coprocessor가 OS 레벨에서
+  ///     상시 수집·7일간 보관하는 데이터를 쿼리. 앱 스와이프 kill 구간도 포함.
+  ///   - Android: Sensors API + Recording API 조합 → Google Play Services가 자동으로
+  ///     백그라운드 수집. Samsung OneUI에서 기존 stepCountStream이 WorkManager 격리
+  ///     isolate로 인해 0을 발화하던 문제도 구조적으로 회피.
+  ///
+  /// 절대 구간 쿼리이므로 baseline(prevSteps) 저장/대비 로직이 필요 없다.
+  /// 첫 heartbeat(lastHeartbeat* 미저장)이거나 조회 실패 시 null/0 반환.
+  ///
+  /// ※ cm_pedometer 1.2.0은 Dart(`from`/`to`) vs Swift(`startTime`/`endTime`) 키 불일치
+  ///    버그로 항상 FlutterError를 던진다 — pedometer_2를 사용한다.
   Future<int?> _getStepsDelta() async {
-    if (Platform.isIOS) return _getStepsDeltaIOS();
-    return _getStepsDeltaAndroid();
-  }
-
-  /// iOS: CMPedometer.queryPedometerData로 "마지막 heartbeat ~ 지금" 구간 조회.
-  /// iOS가 M-series coprocessor로 OS 레벨에서 상시 걸음수를 수집·7일간 보관하므로
-  /// 앱 스와이프 kill 구간도 포함된 정확한 delta를 얻는다.
-  /// 기존 stepCountStream(startPedometerUpdates)은 실시간 구독이라 kill 구간 유실 문제 있음.
-  Future<int?> _getStepsDeltaIOS() async {
     try {
       final from = await _resolveLastHeartbeatDateTime();
       if (from == null) {
@@ -263,43 +252,12 @@ class HeartbeatService {
       final to = DateTime.now();
       if (!to.isAfter(from)) return 0;
 
-      final data = await CMPedometer.queryPedometerData(from: from, to: to)
+      final steps = await p2.Pedometer().getStepCount(from: from, to: to)
           .timeout(const Duration(seconds: 3));
-      final steps = data.numberOfSteps;
-      debugPrint('[HeartbeatService] iOS query $from~$to steps=$steps');
+      debugPrint('[HeartbeatService] getStepCount $from~$to steps=$steps');
       return steps;
     } catch (e) {
-      debugPrint('[HeartbeatService] iOS queryPedometerData 실패: $e');
-      return null;
-    }
-  }
-
-  /// Android: TYPE_STEP_COUNTER 누적값 대비 방식. Samsung OneUI 0 발화 방어 포함.
-  Future<int?> _getStepsDeltaAndroid() async {
-    try {
-      final current = await Pedometer.stepCountStream.first
-          .timeout(const Duration(seconds: 2));
-      final currentSteps = current.steps;
-
-      // Samsung OneUI: 센서 등록 직후 0을 발화하거나 WorkManager 격리로 카운터가
-      // 초기화된 경우. 0을 prevSteps로 저장하면 다음 heartbeat에서도 delta = 0이
-      // 반복되므로 null을 반환해 가속도/자이로 센서 기반 판정으로 위임한다.
-      if (currentSteps == 0) return null;
-
-      final prevSteps = await _sensorDs.getLastSteps();
-      await _sensorDs.saveLastSteps(currentSteps);
-
-      if (prevSteps == null || prevSteps == 0) {
-        // 첫 heartbeat이거나 이전에 0이 저장된 경우 — 기준점 확보, 0 반환
-        return 0;
-      }
-
-      final delta = currentSteps - prevSteps;
-      // delta < 0: 기기 재부팅으로 카운터가 리셋된 경우
-      // 현재 누적값 자체를 이번 구간의 걸음수로 사용
-      if (delta < 0) return currentSteps;
-      return delta > 0 ? delta : 0;
-    } catch (_) {
+      debugPrint('[HeartbeatService] getStepCount 실패: $e');
       return null;
     }
   }

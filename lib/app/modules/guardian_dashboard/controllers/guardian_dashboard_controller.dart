@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pedometer/pedometer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -340,10 +339,10 @@ class GuardianDashboardController extends BaseController
         } catch (_) {}
       } else if (Platform.isIOS) {
         // iOS: Permission.activityRecognition.request()는 시스템 팝업을 띄우지 않음.
-        // CMPedometer 데이터를 실제로 조회해야 최초 1회 모션 권한 팝업이 표시됨.
+        // Permission.sensors.request()가 내부에서 CMMotionActivityManager를 호출해
+        // 최초 1회 모션 권한 시스템 팝업을 띄운다.
         try {
-          await Pedometer.stepCountStream.first
-              .timeout(const Duration(seconds: 3));
+          await Permission.sensors.request();
         } catch (_) {}
       }
 
