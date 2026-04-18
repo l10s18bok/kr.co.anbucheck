@@ -233,7 +233,7 @@ abstract class RuRu {
     'gs_disable_failed': 'Не удалось отключить защиту',
     'gs_activity_permission_denied_warning': 'Разрешение на шагомер отклонено. Нажмите здесь, чтобы разрешить.',
     'gs_activity_permission_settings_title': 'Требуется разрешение',
-    'gs_activity_permission_settings_body': 'Разрешите доступ к движению и фитнесу в настройках приложения.',
+    'gs_activity_permission_settings_body': 'Разрешите доступ к физической активности (Движение и фитнес) в настройках приложения.',
     'gs_activity_permission_settings_go': 'Перейти к настройкам',
 
     // ── Уведомления опекуна ──

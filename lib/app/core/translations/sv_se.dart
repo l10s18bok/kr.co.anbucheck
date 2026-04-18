@@ -226,7 +226,7 @@ abstract class SvSe {
     'gs_disable_failed': 'Kunde inte inaktivera hälsoskydd',
     'gs_activity_permission_denied_warning': 'Stegräknartillstånd nekat. Tryck här för att tillåta.',
     'gs_activity_permission_settings_title': 'Behörighet krävs',
-    'gs_activity_permission_settings_body': 'Tillåt behörighet för rörelse och kondition i appinställningarna.',
+    'gs_activity_permission_settings_body': 'Tillåt behörighet för Fysisk aktivitet (Rörelse och kondition) i appinställningarna.',
     'gs_activity_permission_settings_go': 'Gå till inställningar',
 
     // ── Vardarens aviseringar ──

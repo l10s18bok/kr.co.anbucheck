@@ -223,7 +223,7 @@ abstract class ArSa {
     'gs_disable_failed': 'فشل إلغاء الحماية',
     'gs_activity_permission_denied_warning': 'تم رفض إذن عداد الخطوات. انقر هنا للسماح.',
     'gs_activity_permission_settings_title': 'مطلوب إذن',
-    'gs_activity_permission_settings_body': 'يرجى السماح بإذن الحركة واللياقة في إعدادات التطبيق.',
+    'gs_activity_permission_settings_body': 'يرجى السماح بإذن النشاط البدني (الحركة واللياقة) في إعدادات التطبيق.',
     'gs_activity_permission_settings_go': 'الانتقال إلى الإعدادات',
 
     // ── إشعارات الحارس ──

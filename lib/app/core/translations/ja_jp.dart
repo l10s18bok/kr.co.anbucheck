@@ -217,7 +217,7 @@ abstract class JaJp {
     'gs_disable_failed': '安否保護の無効化に失敗しました',
     'gs_activity_permission_denied_warning': '歩数の権限が拒否されています。ここをタップして許可してください。',
     'gs_activity_permission_settings_title': '権限設定が必要',
-    'gs_activity_permission_settings_body': 'アプリ設定でモーションとフィットネスの権限を許可してください。',
+    'gs_activity_permission_settings_body': 'アプリ設定で身体活動（モーションとフィットネス）の権限を許可してください。',
     'gs_activity_permission_settings_go': '設定へ移動',
 
     // ── 見守り通知 ──

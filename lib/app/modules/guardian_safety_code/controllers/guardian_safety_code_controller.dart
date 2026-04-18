@@ -118,23 +118,17 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   }
 
   /// 걸음수 권한 상태 확인 — 안전코드 화면 진입/복귀 시 호출
-  /// Android: `Permission.activityRecognition.status`
-  /// iOS: Pedometer 스트림을 짧게 조회해 실제 접근 가능 여부 판정
-  ///   (permission_handler의 activityRecognition/sensors가 iOS에서 신뢰도가 낮음)
+  /// Android: `Permission.activityRecognition.status` (ACTIVITY_RECOGNITION)
+  /// iOS: `Permission.sensors.status` (CMMotionActivityManager, Podfile에
+  ///   PERMISSION_SENSORS=1 매크로 활성화 필요)
+  ///   ※ Pedometer 스트림은 움직임이 없으면 이벤트를 emit하지 않아 권한 판정에
+  ///      부적절 (타임아웃 → 오판정). 시스템 권한 상태를 직접 조회한다.
   Future<void> refreshActivityPermissionStatus() async {
     try {
-      if (Platform.isAndroid) {
-        final status = await Permission.activityRecognition.status;
-        activityPermissionDenied.value = !status.isGranted;
-      } else if (Platform.isIOS) {
-        try {
-          await Pedometer.stepCountStream.first
-              .timeout(const Duration(milliseconds: 1500));
-          activityPermissionDenied.value = false;
-        } catch (_) {
-          activityPermissionDenied.value = true;
-        }
-      }
+      final status = Platform.isAndroid
+          ? await Permission.activityRecognition.status
+          : await Permission.sensors.status;
+      activityPermissionDenied.value = !status.isGranted;
     } catch (_) {
       // 권한 체크 실패 시 경고를 띄우지 않는다 — 사용자 혼란 방지
     }
@@ -142,7 +136,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
 
   /// 경고 텍스트 탭 시 권한 재요청
   /// Android: 일반 거부면 재요청, 영구 거부면 설정 이동
-  /// iOS: 1회만 팝업 가능 — 재요청 시도 후 실패하면 설정 이동 안내
+  /// iOS: `Permission.sensors.status`로 현재 상태 확인 후 팝업(가능 시) 또는 설정 이동
   Future<void> requestActivityPermissionAgain() async {
     try {
       if (Platform.isAndroid) {
@@ -153,12 +147,16 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
           await Permission.activityRecognition.request();
         }
       } else if (Platform.isIOS) {
-        try {
-          await Pedometer.stepCountStream.first
-              .timeout(const Duration(seconds: 3));
-        } catch (_) {
-          // iOS는 두 번째부터 팝업이 뜨지 않으므로 설정 이동 안내
+        final status = await Permission.sensors.status;
+        if (status.isDenied || status.isPermanentlyDenied || status.isRestricted) {
+          // iOS는 한 번 거부되면 재요청 팝업이 뜨지 않으므로 설정 이동 안내
           await _showSettingsDialog();
+        } else if (!status.isGranted) {
+          // notDetermined 상태 — CMPedometer 호출로 시스템 팝업 유도
+          try {
+            await Pedometer.stepCountStream.first
+                .timeout(const Duration(seconds: 3));
+          } catch (_) {}
         }
       }
     } finally {
@@ -167,7 +165,10 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   }
 
   Future<void> _showSettingsDialog() async {
-    await Get.dialog<void>(
+    // 다이얼로그 결과를 먼저 받고 → 완전히 닫힌 후 openAppSettings 호출.
+    // 기존 `Get.back(); openAppSettings();` 순서는 openAppSettings 호출 시점에
+    // 앱이 백그라운드 전환되며 pop이 반영되지 못해 복귀 시 다이얼로그가 남았음.
+    final goToSettings = await Get.dialog<bool>(
       AlertDialog(
         title: Text('gs_activity_permission_settings_title'.tr,
             style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
@@ -175,19 +176,19 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
             style: AppTextTheme.bodyMedium()),
         actions: [
           TextButton(
-            onPressed: () => Get.back(),
+            onPressed: () => Get.back(result: false),
             child: Text('common_cancel'.tr),
           ),
           TextButton(
-            onPressed: () async {
-              Get.back();
-              await openAppSettings();
-            },
+            onPressed: () => Get.back(result: true),
             child: Text('gs_activity_permission_settings_go'.tr),
           ),
         ],
       ),
     );
+    if (goToSettings == true) {
+      await openAppSettings();
+    }
   }
 
   Future<void> _loadStatus() async {

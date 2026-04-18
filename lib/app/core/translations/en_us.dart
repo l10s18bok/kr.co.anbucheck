@@ -229,7 +229,7 @@ abstract class EnUs {
     'gs_disable_failed': 'Failed to disable wellness protection',
     'gs_activity_permission_denied_warning': 'Activity permission is denied. Tap here to allow.',
     'gs_activity_permission_settings_title': 'Permission Required',
-    'gs_activity_permission_settings_body': 'Please allow Motion & Fitness permission in app settings.',
+    'gs_activity_permission_settings_body': 'Please allow Physical activity (Motion & Fitness) permission in app settings.',
     'gs_activity_permission_settings_go': 'Go to Settings',
 
     // ── Guardian Notifications ──

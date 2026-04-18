@@ -218,7 +218,7 @@ abstract class KoKr {
     'gs_disable_failed': '안부 보호 해제에 실패했습니다',
     'gs_activity_permission_denied_warning': '걸음수 권한이 거부되어 있습니다. 여기를 눌러 허용해 주세요.',
     'gs_activity_permission_settings_title': '권한 설정 필요',
-    'gs_activity_permission_settings_body': '앱 설정에서 신체 활동 권한을 허용해 주세요.',
+    'gs_activity_permission_settings_body': '앱 설정에서 신체 활동(피트니스) 권한을 허용해 주세요.',
     'gs_activity_permission_settings_go': '설정으로 이동',
 
     // ── 보호자 알림 ──

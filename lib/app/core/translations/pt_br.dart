@@ -231,7 +231,7 @@ abstract class PtBr {
     'gs_disable_failed': 'Falha ao desativar a proteção',
     'gs_activity_permission_denied_warning': 'Permissão de pedômetro negada. Toque aqui para permitir.',
     'gs_activity_permission_settings_title': 'Permissão necessária',
-    'gs_activity_permission_settings_body': 'Permita a permissão de Movimento e Atividade Física nas configurações do aplicativo.',
+    'gs_activity_permission_settings_body': 'Permita a permissão Atividade física (Movimento e Atividade Física) nas configurações do aplicativo.',
     'gs_activity_permission_settings_go': 'Ir para Configurações',
 
     // ── Notificações do guardião ──

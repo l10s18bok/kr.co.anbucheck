@@ -215,7 +215,7 @@ abstract class ZhCn {
     'gs_disable_failed': '安否保护禁用失败',
     'gs_activity_permission_denied_warning': '计步权限已被拒绝。点击此处授予权限。',
     'gs_activity_permission_settings_title': '需要权限设置',
-    'gs_activity_permission_settings_body': '请在应用设置中允许"运动与健身"权限。',
+    'gs_activity_permission_settings_body': '请在应用设置中允许身体活动（运动与健身）权限。',
     'gs_activity_permission_settings_go': '前往设置',
 
     // ── 守护者通知 ──

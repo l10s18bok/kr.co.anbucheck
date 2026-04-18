@@ -234,7 +234,7 @@ abstract class FrFr {
     'gs_disable_failed': 'Échec de la désactivation de la protection',
     'gs_activity_permission_denied_warning': 'L\'autorisation de compteur de pas est refusée. Appuyez ici pour autoriser.',
     'gs_activity_permission_settings_title': 'Autorisation requise',
-    'gs_activity_permission_settings_body': 'Veuillez autoriser l\'autorisation Mouvement et Forme dans les paramètres de l\'application.',
+    'gs_activity_permission_settings_body': 'Veuillez autoriser l\'autorisation Activité physique (Mouvement et Forme) dans les paramètres de l\'application.',
     'gs_activity_permission_settings_go': 'Aller aux paramètres',
 
     // ── Notifications (Protecteur) ──

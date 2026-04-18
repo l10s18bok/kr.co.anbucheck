@@ -230,7 +230,7 @@ abstract class ViVn {
     'gs_disable_failed': 'Không thể tắt bảo vệ',
     'gs_activity_permission_denied_warning': 'Quyền đếm bước chân bị từ chối. Nhấn vào đây để cho phép.',
     'gs_activity_permission_settings_title': 'Cần cấp quyền',
-    'gs_activity_permission_settings_body': 'Vui lòng cấp quyền Chuyển động và Thể hình trong cài đặt ứng dụng.',
+    'gs_activity_permission_settings_body': 'Vui lòng cấp quyền Hoạt động thể chất (Chuyển động và Thể hình) trong cài đặt ứng dụng.',
     'gs_activity_permission_settings_go': 'Đi đến Cài đặt',
 
     // ── Thong bao nguoi bao ve ──

@@ -231,7 +231,7 @@ abstract class EsEs {
     'gs_disable_failed': 'Error al desactivar la protección',
     'gs_activity_permission_denied_warning': 'Permiso de podómetro denegado. Toque aquí para permitir.',
     'gs_activity_permission_settings_title': 'Permiso necesario',
-    'gs_activity_permission_settings_body': 'Permita el permiso de Movimiento y Estado Físico en la configuración de la aplicación.',
+    'gs_activity_permission_settings_body': 'Permita el permiso Actividad física (Movimiento y Estado Físico) en la configuración de la aplicación.',
     'gs_activity_permission_settings_go': 'Ir a Configuración',
 
     // ── Notificaciones (Protector) ──

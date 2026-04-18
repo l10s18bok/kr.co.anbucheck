@@ -231,7 +231,7 @@ abstract class ItIt {
     'gs_disable_failed': 'Disattivazione della protezione fallita',
     'gs_activity_permission_denied_warning': 'Autorizzazione contapassi negata. Tocca qui per consentire.',
     'gs_activity_permission_settings_title': 'Autorizzazione richiesta',
-    'gs_activity_permission_settings_body': 'Consenti l\'autorizzazione Movimento e Fitness nelle impostazioni dell\'app.',
+    'gs_activity_permission_settings_body': 'Consenti l\'autorizzazione Attività fisica (Movimento e Fitness) nelle impostazioni dell\'app.',
     'gs_activity_permission_settings_go': 'Vai alle impostazioni',
 
     // ── Notifiche guardiano ──
