@@ -321,8 +321,8 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     if (deviceToken == null) return;
     try {
       final data = await DeviceRemoteDatasource().getMyDevice(deviceToken);
-      final hour = data['heartbeat_hour'] as int? ?? 9;
-      final minute = data['heartbeat_minute'] as int? ?? 30;
+      final hour = data['heartbeat_hour'] as int? ?? 18;
+      final minute = data['heartbeat_minute'] as int? ?? 0;
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
       await _tokenDs.saveSubscriptionActive(subscriptionActive);
       _guardianConnected.value = subscriptionActive;

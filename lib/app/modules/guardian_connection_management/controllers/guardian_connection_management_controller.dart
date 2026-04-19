@@ -144,7 +144,7 @@ class ConnectedSubject {
     required this.alias,
     required this.code,
     this.deviceId,
-    this.heartbeatHour = 9,
-    this.heartbeatMinute = 30,
+    this.heartbeatHour = 18,
+    this.heartbeatMinute = 0,
   });
 }

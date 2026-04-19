@@ -245,8 +245,8 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   Future<void> _syncScheduleFromServer({bool forceRemote = false}) async {
     final cached = forceRemote ? null : _deviceData;
     if (cached != null) {
-      final hour = cached['heartbeat_hour'] as int? ?? 9;
-      final minute = cached['heartbeat_minute'] as int? ?? 30;
+      final hour = cached['heartbeat_hour'] as int? ?? 18;
+      final minute = cached['heartbeat_minute'] as int? ?? 0;
       final subscriptionActive = cached['subscription_active'] as bool? ?? true;
       _guardianConnected.value = subscriptionActive;
       _guardianCount.value = cached['guardian_count'] as int? ?? 0;
@@ -258,8 +258,8 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     if (deviceToken == null) return;
     try {
       final data = await DeviceRemoteDatasource().getMyDevice(deviceToken);
-      final hour = data['heartbeat_hour'] as int? ?? 9;
-      final minute = data['heartbeat_minute'] as int? ?? 30;
+      final hour = data['heartbeat_hour'] as int? ?? 18;
+      final minute = data['heartbeat_minute'] as int? ?? 0;
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
       await _tokenDs.saveSubscriptionActive(subscriptionActive);
       _guardianConnected.value = subscriptionActive;

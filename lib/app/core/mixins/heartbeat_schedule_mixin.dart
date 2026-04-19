@@ -12,9 +12,9 @@ import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.d
 /// Heartbeat 시각 변경 기능 Mixin
 /// 대상자/보호자 컨트롤러에서 공통으로 사용
 mixin HeartbeatScheduleMixin on GetxController {
-  late final heartbeatTime = '${'common_am'.tr} 09:30'.obs;
-  final heartbeatHour = 9.obs;
-  final heartbeatMinute = 30.obs;
+  late final heartbeatTime = '${'common_pm'.tr} 06:00'.obs;
+  final heartbeatHour = 18.obs;
+  final heartbeatMinute = 0.obs;
 
   /// 로컬 저장된 스케줄 로드 (onInit / onResumed에서 호출)
   /// iOS 백그라운드 복귀 시 SharedPreferences 캐시가 디스크와 불일치할 수 있으므로
