@@ -17,7 +17,7 @@
 
 ### 1.2 목적
 스마트폰 사용 패턴을 기반으로 사용자의 안녕을 자동으로 확인하는 크로스 플랫폼(Android/iOS) 시스템의 서버 측 설계.
-클라이언트로부터 heartbeat를 수신하고, 매일 고정 시각(기본 09:30) + 2시간 내 미수신 시 보호자에게 FCM Push 경고를 발송하는 역할을 담당한다. Heartbeat 트리거는 클라이언트 자체 스케줄링(WorkManager/BGTaskScheduler)으로 동작하며, 서버는 Silent Push를 발송하지 않는다.
+클라이언트로부터 heartbeat를 수신하고, 매일 고정 시각(기본 18:00) + 2시간 내 미수신 시 보호자에게 FCM Push 경고를 발송하는 역할을 담당한다. Heartbeat 트리거는 클라이언트 자체 스케줄링(WorkManager/BGTaskScheduler)으로 동작하며, 서버는 Silent Push를 발송하지 않는다.
 
 **기술 스택:** Python + FastAPI + PostgreSQL (asyncpg) + Railway
 
@@ -108,7 +108,7 @@
 |--|-------------|----------|
 | heartbeat 트리거 | **클라이언트 WorkManager** (OS 네이티브 스케줄링) | **클라이언트 BGTaskScheduler** (OS 네이티브 스케줄링) |
 | 서버 역할 | heartbeat 수신 + 미수신 시 경고 생성 | heartbeat 수신 + 미수신 시 경고 생성 |
-| 확인 주기 | 매일 고정 시각 (기본 09:30) | 매일 고정 시각 (기본 09:30) |
+| 확인 주기 | 매일 고정 시각 (기본 18:00) | 매일 고정 시각 (기본 18:00) |
 | 미수신 체크 | 기기별 heartbeat 시각 + 2시간 경과 시 서버가 매 1분 체크 | 동일 |
 | 시각 변경 | 대상자가 변경 → 서버 DB 갱신 → 클라이언트 WorkManager 재예약 | 대상자가 변경 → 서버 DB 갱신 → 클라이언트 BGTask 재예약 |
 
@@ -187,7 +187,7 @@ heartbeat 수신 → last_seen 갱신
                   scheduler의 미수신 경로(`warning`/`urgent`)와 별도 문구로 분기됨
 
 [heartbeat 미수신 시 (기기별 고정 시각 + 2시간 경과 시 체크)]
-지정 시각 + 2시간 내 미수신 대상자 감지 (기본: 09:30 → 11:30 체크)
+지정 시각 + 2시간 내 미수신 대상자 감지 (기본: 18:00 → 20:00 체크)
   ├─ 보호자 구독 만료 → 알림 미발송 (heartbeat는 계속 수신)
   ├─ battery_level ≤ 10% → 정보 등급 1회 발송 후 종료 (이후 상향 없음)
   └─ 누적 미수신 횟수 기반 (기존 활성 경고 상태로 결정):
@@ -434,8 +434,8 @@ Response: 200 OK
       "status": "normal",
       "alert": null,
       "device_id": "uuid-v4",
-      "heartbeat_hour": 9,
-      "heartbeat_minute": 30,
+      "heartbeat_hour": 18,
+      "heartbeat_minute": 0,
       "battery_level": 85
     }
   ],
@@ -494,14 +494,17 @@ Body:
 // manual: 사용자가 직접 "안부 보고하기" 버튼을 눌렀을 때 true (기본값 false)
 //         ※ 클라이언트가 동일 날짜 재시도를 lastManualReportDate로 차단하므로, 서버에 도달한 manual=true는 당일 첫 수동 보고
 // steps_delta:
-//   - 자동 (manual=false) → 오늘 자정 ~ 현재 시각 누적 걸음수 (권한 거부 시 null)
-//   - 수동 (manual=true)  → **항상 null** (클라이언트가 활동 정보 알림 추가 생성을 차단하기 위해 강제 null)
+//   - 자동/수동 공통 → 오늘 자정 ~ 현재 시각 누적 걸음수 (권한 거부 시 null)
+//   - 활동 정보 알림은 서버가 `manual=false AND steps_delta > 0` 조건일 때만 생성하므로
+//     수동 보고가 걸음수를 실어 와도 "수동 안부 확인" 알림 외 추가 알림은 발생하지 않는다.
+//   - 일별 걸음수 이력(`heartbeat_logs`)은 자동/수동 모두 집계 대상이라, 자동 heartbeat이 실패한 날에도
+//     수동 보고로 당일 걸음수 기록을 확보할 수 있다.
 Response: 200 OK
 {
   "status": "ok",
   "server_time": "2026-03-18T14:32:01+09:00",
-  "heartbeat_hour": 9,
-  "heartbeat_minute": 30
+  "heartbeat_hour": 18,
+  "heartbeat_minute": 0
 }
 ```
 
@@ -863,8 +866,8 @@ Headers:
 Response: 200 OK
 {
   "device_id": "uuid-v4",
-  "heartbeat_hour": 9,
-  "heartbeat_minute": 30,
+  "heartbeat_hour": 18,
+  "heartbeat_minute": 0,
   "last_seen": "2026-03-18T14:32:00+09:00",
   "subscription_active": true,
   "subscription_plan": "free_trial",
@@ -1032,8 +1035,8 @@ CREATE TABLE IF NOT EXISTS devices (
     last_steps      INTEGER,                           -- 마이그레이션 호환용 이전 걸음수
     battery_level   INTEGER,                           -- 마지막 배터리 잔량 (0~100)
     suspicious_count INTEGER DEFAULT 0,                -- 연속 suspicious 횟수
-    heartbeat_hour  INTEGER NOT NULL DEFAULT 9,        -- heartbeat 시각 (시, 0~23, 기본 9)
-    heartbeat_minute INTEGER NOT NULL DEFAULT 30,      -- heartbeat 시각 (분, 0~59, 기본 30)
+    heartbeat_hour  INTEGER NOT NULL DEFAULT 18,       -- heartbeat 시각 (시, 0~23, 기본 18)
+    heartbeat_minute INTEGER NOT NULL DEFAULT 0,       -- heartbeat 시각 (분, 0~59, 기본 0)
     timezone        TEXT NOT NULL DEFAULT 'Asia/Seoul', -- 기기 시간대 (IANA timezone)
     last_seen       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -1221,7 +1224,7 @@ CREATE TABLE IF NOT EXISTS guardian_notification_settings (
      AND (d.heartbeat_hour * 60 + d.heartbeat_minute + 120) = :current_minutes_of_day
      AND d.last_seen < $2  -- 오늘 KST 자정을 UTC로 변환한 값
 
-   ※ 기본: heartbeat_hour=9, heartbeat_minute=30 → 11:30(690분)에 체크
+   ※ 기본: heartbeat_hour=18, heartbeat_minute=0 → 20:00(1200분)에 체크
 
 2. 보호자 구독 확인:
    a. 보호자 구독 만료 → 알림 미발송 (heartbeat는 계속 수신)

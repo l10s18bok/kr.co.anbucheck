@@ -39,7 +39,7 @@ flowchart TD
     FGCheck -->|NO| End0([종료 — 이미 전송 완료])
 
     Collect[데이터 수집]
-    Collect --> Steps[걸음수 조회<br/>pedometer_2<br/>오늘 자정 ~ 현재 누적<br/>steps_delta<br/>※ 수동 보고는 항상 null]
+    Collect --> Steps[걸음수 조회<br/>pedometer_2<br/>오늘 자정 ~ 현재 누적<br/>steps_delta<br/>※ 자동/수동 모두 실제 값 전송]
     Collect --> Battery[배터리 상태 조회<br/>battery_level]
 
     Steps --> StepsCheck{steps_delta > 0?}
@@ -68,7 +68,7 @@ flowchart TD
 
     Queue --> LocalNoti1[대상자 로컬 알림<br/>📱 인터넷 연결이 꺼져 있습니다<br/>안부 확인이 전송되지 않고 있으며<br/>보호자에게 경고가 발생할 수 있습니다]
 
-    Send --> AlarmReset[로컬 안전망 알림 갱신<br/>기존 알림 취소<br/>다음날 같은 시각으로 재예약<br/>heartbeat 시각 + 30분<br/>기본 10:00, 매일 반복]
+    Send --> AlarmReset[로컬 안전망 알림 갱신<br/>기존 알림 취소<br/>다음날 같은 시각으로 재예약<br/>heartbeat 시각 + 30분<br/>기본 18:30, 매일 반복]
 
     AlarmReset --> SaveEnd[센서 값 로컬 저장<br/>완료]
 
@@ -110,8 +110,8 @@ flowchart TD
     CheckSuspicious -->|true| Wait1([⏱ suspicious_count 기반 보호자 경고 에스컬레이션<br/>1회 → caution + caution_suspicious<br/>2회 → warning + warning_suspicious<br/>3회+ → urgent + urgent_suspicious<br/>※ scheduler 미수신 경로와 별도 문구 사용])
 
     StatusNormal --> SaveNoti[보호자 알림 DB 저장<br/>guardian_notifications<br/>alert_level: info<br/>is_push_sent: true/false]
-    SaveNoti --> StepsNoti{steps_delta != null<br/>AND steps_delta > 0?}
-    StepsNoti -->|YES| StepsCompare[활동 정보 알림 DB 저장<br/>🚶 활동 정보<br/>오늘 N보를 걸으셨습니다.<br/>Push 발송 없음<br/>※ 수동 보고는 stepsDelta=null이라 진입 안 됨]
+    SaveNoti --> StepsNoti{manual=false<br/>AND steps_delta != null<br/>AND steps_delta > 0?}
+    StepsNoti -->|YES| StepsCompare[활동 정보 알림 DB 저장<br/>🚶 활동 정보<br/>오늘 N보를 걸으셨습니다.<br/>Push 발송 없음<br/>※ 수동 보고는 manual=true 가드로 진입 안 됨<br/>(이력 집계용 steps_delta는 그대로 heartbeat_logs에 저장)]
     StepsNoti -->|NO| End3([완료])
     StepsCompare --> End3
 ```
@@ -190,7 +190,7 @@ GET /api/v1/notifications 호출
 
 ```mermaid
 flowchart LR
-    Normal([🟢 정상<br/>매일 고정 시각<br/>기본 09:30])
+    Normal([🟢 정상<br/>매일 고정 시각<br/>기본 18:00])
     Caution([🟡 주의<br/>미수신 1회])
     Warning([🔴 경고<br/>미수신 2회 이상])
     Urgent([⬛ 긴급<br/>경고 3회 이상 누적])
@@ -297,8 +297,8 @@ flowchart TD
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
-        Install --> FirstWM[WorkManager 예약<br/>one-off 예약시각 정각<br/>+ periodic 1시간 폴링<br/>heartbeat 시각 기본 09:30]
-        FirstWM --> FirstAlarm[iOS: 로컬 안전망 알림 예약<br/>heartbeat 시각 + 30분<br/>기본 매일 10:00]
+        Install --> FirstWM[WorkManager 예약<br/>one-off 예약시각 정각<br/>+ periodic 1시간 폴링<br/>heartbeat 시각 기본 18:00]
+        FirstWM --> FirstAlarm[iOS: 로컬 안전망 알림 예약<br/>heartbeat 시각 + 30분<br/>기본 매일 18:30]
     end
 
     FirstAlarm --> Wait
@@ -335,13 +335,13 @@ flowchart TD
 
 | 상황 | WorkManager/BGTask | 앱 열기 자동 전송 | 로컬 안전망 알림 | 결과 |
 |------|-------------------|-----------------|----------------|------|
-| 정상 동작 (09:30) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | iOS: 재예약되어 표시 안 됨 | 정상 |
+| 정상 동작 (18:00) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | iOS: 재예약되어 표시 안 됨 | 정상 |
 | 앱 스와이프 종료 (Android OneUI/MIUI) + 화면 꺼짐 Doze | one-off **지연/미실행 가능** → periodic 1시간 폴링이 최대 1시간 내 백업 발화 | 앱 열면 자동 전송 | Android: 해당 없음 (오늘의 안부 확인 메시지 로컬 알림 미사용) | periodic 폴링으로 대부분 복구. 둘 다 실패 시 앱 열기까지 미전송 — 배터리 "제한없음" 설정이 최종 예방책 |
-| 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **iOS: 10:00 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
-| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **iOS: 10:00 표시** | 네트워크 복구 + 앱 실행 시 복구 |
+| 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **iOS: 18:30 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
+| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **iOS: 18:30 표시** | 네트워크 복구 + 앱 실행 시 복구 |
 | 알림 권한 거부 (iOS) | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **iOS: 표시 불가** | BGTask/앱 열기로 대응 |
 
-※ 위 시각은 기본값(09:30) 기준.
+※ 위 시각은 기본값(18:00) 기준.
 ※ 예약 시각 변경은 대상자 앱에서만 가능. 변경 시 WorkManager 재예약 + iOS 로컬 안전망 알림 재예약이 동시에 수행됨.
 
 
