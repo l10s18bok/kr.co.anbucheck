@@ -234,12 +234,10 @@ class HeartbeatService {
   ///   - iOS: CMPedometer.queryPedometerData (M-coprocessor 누적, 7일 보관)
   ///   - Android: Google Fit Local Recording API
   ///
-  /// [manual]=true일 때는 null을 반환하여 서버의 활동 정보 알림 생성을 차단한다.
-  /// 서버는 steps_delta가 null이 아니고 > 0일 때만 활동 알림을 생성하므로
-  /// (heartbeat_service.py:144), 수동 보고 시 null로 전송하면 "수동 안부 확인"
-  /// 알림 1건만 보호자에게 도달.
+  /// 자동/수동 모두 실제 걸음수를 전송한다. 서버는 `manual=true`일 때
+  /// 활동 정보 알림(`message_key=steps`) 생성을 건너뛰므로, 수동 보고 시에도
+  /// 이중 알림이 발생하지 않고 일별 걸음수 이력은 정확히 반영된다.
   Future<int?> _getStepsDelta({bool manual = false}) async {
-    if (manual) return null;
     try {
       final now = DateTime.now();
       final midnight = DateTime(now.year, now.month, now.day);
@@ -247,7 +245,7 @@ class HeartbeatService {
 
       final steps = await p2.Pedometer().getStepCount(from: midnight, to: now)
           .timeout(const Duration(seconds: 3));
-      debugPrint('[HeartbeatService] getStepCount $midnight~$now steps=$steps');
+      debugPrint('[HeartbeatService] getStepCount $midnight~$now steps=$steps (manual=$manual)');
       return steps;
     } catch (e) {
       debugPrint('[HeartbeatService] getStepCount 실패: $e');
