@@ -25,6 +25,7 @@ dependencies:
   firebase_messaging: ^15.2.4
   flutter_local_notifications: ^18.0.1
   shared_preferences: ^2.5.3
+  sqflite: ^2.4.0
   share_plus: ^12.0.1
   sensors_plus: ^7.0.0
   pedometer_2: ^5.0.4
