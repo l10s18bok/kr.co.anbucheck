@@ -133,7 +133,17 @@ abstract class IdId {
     'subject_home_manual_report_limit_reached': 'Anda sudah mengirim laporan keamanan hari ini. Silakan coba lagi besok.',
     'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
     'subject_home_emergency_confirm_body':
-        'Peringatan darurat akan dikirim ke semua wali Anda.\nApakah Anda yakin ingin meminta bantuan?',
+        'Peringatan darurat akan dikirim ke semua wali.\nLokasi Anda saat ini juga akan dibagikan.\nYakin ingin meminta bantuan?',
+    'emergency_sent_with_location': 'Peringatan darurat telah dikirim (dengan lokasi)',
+    'emergency_sent_without_location': 'Peringatan darurat telah dikirim',
+    'notifications_view_location': '🗺️ Lihat lokasi',
+    'emergency_map_title': 'Lokasi darurat',
+    'emergency_map_subject_label': 'Orang yang dilindungi',
+    'emergency_map_captured_at_label': 'Waktu pengambilan',
+    'emergency_map_accuracy_label': 'Akurasi',
+    'emergency_map_open_external': 'Buka di aplikasi peta eksternal',
+    'emergency_map_no_location': 'Tidak ada informasi lokasi',
+    'emergency_location_permission_denied_snackbar': 'Peringatan darurat dikirim tanpa izin lokasi',
     'subject_home_emergency_confirm_send': 'Kirim permintaan darurat',
     'subject_home_share_text':
         'Pantau kesejahteraan saya melalui aplikasi Anbu!\nKode undangan: @code',

@@ -34,6 +34,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
         params = Map<String, dynamic>.from(rawParams);
       }
 
+      final rawCapturedAt = row['location_captured_at'] as String?;
+
       return NotificationEntity(
         id: row['id'] as int?,
         title: row['title'] as String,
@@ -47,6 +49,12 @@ class NotificationRepositoryImpl implements NotificationRepository {
         receivedAt: DateTime.parse(row['created_at'] as String).toLocal(),
         messageKey: row['message_key'] as String?,
         messageParams: params,
+        locationLat: (row['location_lat'] as num?)?.toDouble(),
+        locationLng: (row['location_lng'] as num?)?.toDouble(),
+        locationAccuracy: (row['location_accuracy'] as num?)?.toDouble(),
+        locationCapturedAt: rawCapturedAt != null
+            ? DateTime.parse(rawCapturedAt).toLocal()
+            : null,
       );
     }).toList();
   }

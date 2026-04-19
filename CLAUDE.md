@@ -106,6 +106,11 @@ lib/
 | 2차 | `lib/app/modules/subject_home/controllers/subject_home_controller.dart` | 앱 열기/복귀 시 안전망. onInit/onResumed에서 예약시각 경과 + 미전송 시 자동 전송. 서버 스케줄 동기화로 WorkManager 체인 복구도 담당 |
 | 3차 (iOS) | `lib/app/core/services/local_alarm_service.dart` | iOS 전용 오늘의 안부 확인 메시지 로컬 알림. heartbeat 예약 시각 정각에 매일 반복 → 앱 포그라운드 전환 시 홈 화면 onInit/onResumed에서 자동 전송 |
 | 공유 캐시 | `lib/app/core/services/guardian_subject_service.dart` | 보호자 대상자 목록 공유 캐시 (2분 TTL). 대시보드·설정·연결관리에서 동일 데이터 사용. 구독 상태 동기화 |
+| 긴급 위치 | `lib/app/modules/guardian_emergency_map/` | 대상자 긴급 도움 요청 시 첨부된 위치를 보호자가 Google Maps로 확인하는 페이지. FCM 탭(포그라운드/백그라운드/Kill) + 알림 목록 [🗺️ 위치 보기] 버튼에서 진입 |
+
+## 위치 수집 범위
+
+정기 heartbeat에는 위치를 일절 포함하지 않는다. 대상자가 [🚨 도움이 필요해요] 버튼을 누른 경우에 한해 사용자 동의 하에 1회 수집하여 보호자 전원에게 전달하고, 서버는 `notification_events` 테이블에만 저장한다(최대 24시간 보관, 자정 정리 스케줄러가 일괄 삭제). 백그라운드 위치는 절대 사용하지 않는다 (`ACCESS_BACKGROUND_LOCATION` / `Always` / `Background Modes: location` 모두 금지).
 
 ## 참조 문서
 

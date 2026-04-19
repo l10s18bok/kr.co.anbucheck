@@ -1,3 +1,4 @@
 "CFBundleDisplayName" = "Anbu";
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "يُستخدم لاكتشاف الخطوات والتحقق من نشاطك.";
+"NSLocationWhenInUseUsageDescription" = "يُستخدم فقط عند طلب المساعدة الطارئة لمشاركة موقعك الحالي مع الأوصياء لمساعدتهم على الوصول إليك بسرعة. لا يتم جمع الموقع في أوقات أخرى.";

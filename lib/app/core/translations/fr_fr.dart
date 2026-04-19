@@ -132,7 +132,17 @@ abstract class FrFr {
     'subject_home_manual_report_limit_reached': "Vous avez déjà envoyé le rapport de sécurité d'aujourd'hui. Veuillez réessayer demain.",
     'subject_home_emergency_confirm_title': "Demande d'aide d'urgence",
     'subject_home_emergency_confirm_body':
-        "Une alerte d'urgence sera envoyée à tous vos protecteurs.\nÊtes-vous sûr de vouloir demander de l'aide ?",
+        "Une alerte d'urgence sera envoyée à tous les gardiens.\nVotre position actuelle sera également partagée.\nVoulez-vous vraiment demander de l'aide ?",
+    'emergency_sent_with_location': "Alerte d'urgence envoyée (avec position)",
+    'emergency_sent_without_location': "Alerte d'urgence envoyée",
+    'notifications_view_location': '🗺️ Voir la position',
+    'emergency_map_title': "Position d'urgence",
+    'emergency_map_subject_label': 'Personne surveillée',
+    'emergency_map_captured_at_label': 'Horodatage',
+    'emergency_map_accuracy_label': 'Précision',
+    'emergency_map_open_external': "Ouvrir dans l'application de cartes externe",
+    'emergency_map_no_location': 'Aucune information de position',
+    'emergency_location_permission_denied_snackbar': "Alerte d'urgence envoyée sans autorisation de localisation",
     'subject_home_emergency_confirm_send': "Envoyer la demande d'urgence",
     'subject_home_share_text':
         'Veillez sur moi avec l\'application Anbu !\nCode d\'invitation : @code',

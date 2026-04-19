@@ -23,6 +23,8 @@ import 'package:anbucheck/app/modules/guardian_connection_management/bindings/gu
 import 'package:anbucheck/app/modules/guardian_connection_management/views/guardian_connection_management_page.dart';
 import 'package:anbucheck/app/modules/guardian_safety_code/bindings/guardian_safety_code_binding.dart';
 import 'package:anbucheck/app/modules/guardian_safety_code/views/guardian_safety_code_page.dart';
+import 'package:anbucheck/app/modules/guardian_emergency_map/bindings/guardian_emergency_map_binding.dart';
+import 'package:anbucheck/app/modules/guardian_emergency_map/views/guardian_emergency_map_page.dart';
 
 part 'app_routes.dart';
 
@@ -91,6 +93,11 @@ class AppPages {
       name: AppRoutes.guardianSafetyCode,
       page: () => const GuardianSafetyCodePage(),
       binding: GuardianSafetyCodeBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.guardianEmergencyMap,
+      page: () => const GuardianEmergencyMapPage(),
+      binding: GuardianEmergencyMapBinding(),
     ),
   ];
 }

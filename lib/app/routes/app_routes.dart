@@ -14,4 +14,5 @@ abstract class AppRoutes {
   static const guardianNotificationSettings = '/guardian-notification-settings';
   static const guardianConnectionManagement = '/guardian-connection-management';
   static const guardianSafetyCode = '/guardian-safety-code';
+  static const guardianEmergencyMap = '/guardian-emergency-map';
 }

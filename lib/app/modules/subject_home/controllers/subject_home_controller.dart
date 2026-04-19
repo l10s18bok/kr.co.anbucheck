@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
@@ -437,6 +439,8 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   bool get isSendingEmergency => _isSendingEmergency.value;
 
   /// 긴급 도움 요청: urgent alert 즉시 생성 + 보호자 전원에게 긴급 Push 발송
+  /// 위치는 사용자 동의 기반으로 1회 수집하여 첨부하되, 권한 거부/GPS 실패/타임아웃
+  /// 어떤 경우에도 긴급 API 호출 자체는 반드시 실행된다.
   Future<void> sendEmergency() async {
     if (_isSendingEmergency.value) return;
     _isSendingEmergency.value = true;
@@ -444,12 +448,49 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       final deviceToken = await _tokenDs.getDeviceToken();
       final deviceId = await _tokenDs.getDeviceId();
       if (deviceToken == null || deviceId == null) return;
-      await EmergencyRemoteDatasource(deviceToken).send(deviceId);
-      AppSnackbar.message('subject_home_emergency_sent'.tr);
+
+      final location = await _captureCurrentLocation();
+
+      await EmergencyRemoteDatasource(deviceToken)
+          .send(deviceId, location: location);
+
+      AppSnackbar.message(
+        location != null
+            ? 'emergency_sent_with_location'.tr
+            : 'emergency_sent_without_location'.tr,
+      );
     } catch (_) {
       AppSnackbar.message('subject_home_emergency_failed'.tr);
     } finally {
       _isSendingEmergency.value = false;
+    }
+  }
+
+  /// 긴급 요청 전송 직전 1회성으로 현재 위치를 획득한다.
+  /// 권한 거부·서비스 비활성·GPS 타임아웃 등 어떤 예외에서도 null을 반환하며,
+  /// 절대 throw 하지 않는다 (긴급 요청 자체의 성공과 독립적으로 동작).
+  Future<EmergencyLocation?> _captureCurrentLocation() async {
+    try {
+      final status = await Permission.locationWhenInUse.request();
+      if (!status.isGranted) return null;
+
+      final serviceOn = await Geolocator.isLocationServiceEnabled();
+      if (!serviceOn) return null;
+
+      final pos = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      ).timeout(const Duration(seconds: 5));
+
+      return EmergencyLocation(
+        latitude: pos.latitude,
+        longitude: pos.longitude,
+        accuracyMeters: pos.accuracy,
+        capturedAt: DateTime.now(),
+      );
+    } catch (_) {
+      return null;
     }
   }
 

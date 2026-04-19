@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import UserNotifications
+import GoogleMaps
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -10,6 +11,12 @@ import UserNotifications
   ) -> Bool {
     // iOS G+S는 BGTaskScheduler / WorkManager 백그라운드 태스크를 사용하지 않음
     // 로컬 알림(UserNotifications) + 앱 열기 자동 전송만으로 동작
+
+    // Google Maps SDK 초기화 — Info.plist의 GMSApiKey에서 키 로드
+    if let key = Bundle.main.object(forInfoDictionaryKey: "GMSApiKey") as? String,
+       !key.isEmpty, key != "YOUR_IOS_MAPS_API_KEY" {
+      GMSServices.provideAPIKey(key)
+    }
 
     // Flutter 엔진 + Firebase + 플러그인 초기화
     let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -63,8 +70,23 @@ import UserNotifications
     let type = userInfo["type"] as? String ?? ""
 
     if let vc = getFlutterVC() {
+      // Dart에서 lat/lng 등 부가 데이터까지 라우팅 분기에 활용하도록 userInfo 전체를
+      // JSON 문자열로 전달. FCM이 내부적으로 추가하는 비-JSON 키가 섞여 있을 수 있으므로,
+      // 문자열 value만 선별하고 실패 시 type 문자열로 폴백.
+      var payload: String = type
+      var stringMap: [String: String] = [:]
+      for (k, v) in userInfo {
+        if let key = k as? String, let value = v as? String {
+          stringMap[key] = value
+        }
+      }
+      if !stringMap.isEmpty,
+         let jsonData = try? JSONSerialization.data(withJSONObject: stringMap, options: []),
+         let jsonStr = String(data: jsonData, encoding: .utf8) {
+        payload = jsonStr
+      }
       let channel = FlutterMethodChannel(name: "kr.co.anbucheck/fcm", binaryMessenger: vc.engine.binaryMessenger)
-      channel.invokeMethod("onNotificationTap", arguments: type)
+      channel.invokeMethod("onNotificationTap", arguments: payload)
     }
 
     // firebase_messaging에도 위임 (종료 상태에서 getInitialMessage 경로 보존 + 플러그인 체인)

@@ -133,7 +133,17 @@ abstract class RuRu {
     'subject_home_manual_report_limit_reached': 'Вы уже отправили сегодняшний отчёт о безопасности. Попробуйте завтра снова.',
     'subject_home_emergency_confirm_title': 'Запрос экстренной помощи',
     'subject_home_emergency_confirm_body':
-        'Экстренное оповещение будет отправлено всем вашим опекунам.\nВы уверены, что хотите запросить помощь?',
+        'Экстренное оповещение будет отправлено всем опекунам.\nТакже будет передано ваше текущее местоположение.\nВы действительно хотите запросить помощь?',
+    'emergency_sent_with_location': 'Экстренное оповещение отправлено (с местоположением)',
+    'emergency_sent_without_location': 'Экстренное оповещение отправлено',
+    'notifications_view_location': '🗺️ Показать местоположение',
+    'emergency_map_title': 'Экстренное местоположение',
+    'emergency_map_subject_label': 'Подопечный',
+    'emergency_map_captured_at_label': 'Время получения',
+    'emergency_map_accuracy_label': 'Точность',
+    'emergency_map_open_external': 'Открыть во внешнем приложении карт',
+    'emergency_map_no_location': 'Нет информации о местоположении',
+    'emergency_location_permission_denied_snackbar': 'Экстренное оповещение отправлено без разрешения на местоположение',
     'subject_home_emergency_confirm_send': 'Отправить экстренный запрос',
     'subject_home_share_text':
         'Проверяйте моё самочувствие через приложение Anbu!\nКод приглашения: @code',

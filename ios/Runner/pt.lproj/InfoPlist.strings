@@ -1,3 +1,4 @@
 "CFBundleDisplayName" = "Anbu";
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "Usado para detectar passos e confirmar sua atividade.";
+"NSLocationWhenInUseUsageDescription" = "Usado apenas ao solicitar ajuda de emergência para compartilhar sua localização atual com seus guardiões, para que eles possam chegar mais rápido. A localização não é coletada em outros momentos.";

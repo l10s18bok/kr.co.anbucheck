@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- AdMob 광고 ID (Android 13+ 필수 선언) -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <!-- 긴급 도움 요청 시에만 1회 위치 수집 (포그라운드) — 백그라운드 위치 선언 금지 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
 <application
         android:label="@string/app_name"
@@ -49,6 +52,10 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5477604587043205~8973493189"/>
+        <!-- Google Maps API 키 — local.properties의 MAPS_API_KEY를 manifestPlaceholders로 주입 -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}"/>
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

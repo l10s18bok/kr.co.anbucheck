@@ -131,7 +131,17 @@ abstract class PlPl {
     'subject_home_manual_report_limit_reached': 'Wysłałeś już dzisiejszy raport bezpieczeństwa. Spróbuj ponownie jutro.',
     'subject_home_emergency_confirm_title': 'Prośba o pomoc awaryjną',
     'subject_home_emergency_confirm_body':
-        'Alarm awaryjny zostanie wysłany do wszystkich opiekunów.\nCzy na pewno chcesz poprosić o pomoc?',
+        'Alarm awaryjny zostanie wysłany do wszystkich opiekunów.\nTwoja obecna lokalizacja również zostanie udostępniona.\nCzy na pewno chcesz poprosić o pomoc?',
+    'emergency_sent_with_location': 'Alarm awaryjny wysłany (z lokalizacją)',
+    'emergency_sent_without_location': 'Alarm awaryjny wysłany',
+    'notifications_view_location': '🗺️ Pokaż lokalizację',
+    'emergency_map_title': 'Lokalizacja alarmowa',
+    'emergency_map_subject_label': 'Podopieczny',
+    'emergency_map_captured_at_label': 'Czas uzyskania',
+    'emergency_map_accuracy_label': 'Dokładność',
+    'emergency_map_open_external': 'Otwórz w zewnętrznej aplikacji map',
+    'emergency_map_no_location': 'Brak informacji o lokalizacji',
+    'emergency_location_permission_denied_snackbar': 'Alarm awaryjny wysłany bez uprawnień do lokalizacji',
     'subject_home_emergency_confirm_send': 'Wyślij prośbę awaryjną',
     'subject_home_share_text':
         'Sprawdz moje samopoczucie w aplikacji Anbu!\nKod zaproszenia: @code',

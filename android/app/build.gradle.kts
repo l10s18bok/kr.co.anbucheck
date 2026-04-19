@@ -18,6 +18,15 @@ val keystoreProperties = Properties().apply {
     }
 }
 
+// local.properties의 MAPS_API_KEY를 AndroidManifest의 ${MAPS_API_KEY} 치환에 사용
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(FileInputStream(localPropertiesFile))
+    }
+}
+val mapsApiKey: String = (localProperties["MAPS_API_KEY"] as String?) ?: ""
+
 // pedometer_2가 Google Fit Local Recording API(Android 10+)를 사용해
 // 플러그인 최소 SDK가 29다. 프로젝트 minSdk를 이에 맞춰 상향한다.
 val pluginRequiredMinSdk = 29
@@ -46,6 +55,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     signingConfigs {

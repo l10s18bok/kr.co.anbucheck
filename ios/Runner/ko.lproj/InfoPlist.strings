@@ -1,3 +1,4 @@
 "CFBundleDisplayName" = "안부";
 "CFBundleName" = "안부";
 "NSMotionUsageDescription" = "걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.";
+"NSLocationWhenInUseUsageDescription" = "긴급 도움 요청 시 현재 위치를 보호자에게 전달하여 빠른 이동을 돕습니다. 평상시에는 위치를 수집하지 않습니다.";

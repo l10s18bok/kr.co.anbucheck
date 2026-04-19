@@ -38,6 +38,7 @@
 - 대상자-보호자 연결은 서버가 발급한 **고유 코드(invite_code)**로 매칭
 - DB가 유출되어도 개인 식별 불가 (device_id, invite_code만 존재)
 - 보호자가 대상자를 식별하기 위한 별칭은 클라이언트 로컬에만 저장
+- **위치정보는 정기 heartbeat에서 수집하지 않음.** 대상자가 `POST /api/v1/emergency` 호출 시 사용자 동의 하에 lat/lng/accuracy를 1회 첨부할 수 있으며, 서버는 `notification_events` 테이블에만 저장하고 대상자 기기 타임존 자정 스케줄러가 다른 알림과 함께 일괄 삭제 (§4.7 / §6.4 참조)
 
 
 ### 1.5 수익 모델
@@ -530,7 +531,13 @@ Headers:
   Authorization: Bearer <device_token>  (대상자)
 Body:
 {
-  "device_id": "uuid-v4"
+  "device_id": "uuid-v4",
+  "location": {                    // optional — 사용자 동의 시에만 첨부
+    "latitude": 37.5665,           // -90.0 ~ 90.0
+    "longitude": 126.9780,         // -180.0 ~ 180.0
+    "accuracy_meters": 12.5,       // optional, ge=0
+    "captured_at": "2026-04-19T14:32:00+09:00"  // optional, ISO 8601
+  }
 }
 Response: 200 OK
 {
@@ -542,11 +549,12 @@ Response: 200 OK
 - **대상자만** 호출 가능 (`require_subject` 인증, 보호자가 호출 시 403)
 - 기존 heartbeat 경고 에스컬레이션(suspicious_count, days_inactive)과 **완전히 독립** 동작
 - 즉시 urgent 등급 경고 생성 (caution→warning→urgent 단계를 거치지 않음)
-- `alerts` 테이블에 `alert_level='urgent'`, `note='emergency_request'`로 저장
-- `notification_events` 테이블에 `message_key='emergency'`로 저장
-- 연결된 보호자 전원에게 긴급 Push 발송 (DND 무시, `asyncio.gather` 병렬)
+- `alerts` 테이블에 `alert_level='urgent'`, `note='emergency_request'`로 저장 (위치 저장 안 함 — alerts는 활성 상태 추적 전용)
+- `notification_events` 테이블에 `message_key='emergency'`로 저장. `location` 필드 첨부 시 `location_lat/lng/accuracy/captured_at` 컬럼에 같이 기록 (모두 nullable, 권한 거부/GPS 실패 시 생략 가능)
+- 연결된 보호자 전원에게 긴급 Push 발송 (DND 무시, `asyncio.gather` 병렬). FCM `data` 필드에 `lat`/`lng`/`accuracy` 값이 있을 때만 문자열로 포함 — 보호자 앱이 이 값으로 지도 페이지 라우팅
 - 보호자 구독 만료와 무관하게 항상 발송
 - 클라이언트에서 확인 다이얼로그를 표시하여 오탐 방지
+- 위치 프라이버시: 정기 heartbeat에는 수집하지 않으며, 저장 범위는 `notification_events` 1곳, 보관 기간은 최대 24시간 (자정 정리 스케줄러가 삭제)
 
 
 ### 4.8 구독 상태 확인 (보호자용) 
@@ -1128,13 +1136,20 @@ ON CONFLICT (platform) DO NOTHING;
 -- 알림 이벤트 테이블 (대상자 중심)
 -- 대상자별 1건 저장, 보호자 조회 시 guardians 테이블 JOIN으로 필터링
 CREATE TABLE IF NOT EXISTS notification_events (
-    id                  SERIAL PRIMARY KEY,
-    subject_user_id     INTEGER NOT NULL,              -- 대상자 user_id
-    invite_code         TEXT,                          -- 대상자 고유 코드 (조회 편의)
-    alert_level         TEXT NOT NULL,                 -- info, caution, warning, urgent, health
-    title               TEXT NOT NULL,
-    body                TEXT NOT NULL,
-    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    id                    SERIAL PRIMARY KEY,
+    subject_user_id       INTEGER NOT NULL,              -- 대상자 user_id
+    invite_code           TEXT,                          -- 대상자 고유 코드 (조회 편의)
+    alert_level           TEXT NOT NULL,                 -- info, caution, warning, urgent, health
+    message_key           TEXT,                          -- 클라이언트 번역 키 (auto_report, emergency, ...)
+    message_params        TEXT,                          -- JSON 파라미터 (예: {"days": 3})
+    title                 TEXT NOT NULL,
+    body                  TEXT NOT NULL,
+    -- 긴급 도움 요청 시에만 첨부되는 위치 (사용자 동의 기반, 1회성)
+    location_lat          DOUBLE PRECISION,
+    location_lng          DOUBLE PRECISION,
+    location_accuracy     DOUBLE PRECISION,
+    location_captured_at  TIMESTAMPTZ,
+    created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_ne_subject_created ON notification_events (subject_user_id, created_at DESC);
@@ -1415,8 +1430,8 @@ ORDER BY g.guardian_user_id, d.updated_at DESC;
 
 
 ### 8.2 데이터
-- **개인정보 미수집**: 이름, 전화번호, 위치정보, 사용 앱 목록 등 일절 저장하지 않음
-- 수집 데이터: device_id, 가속도+자이로 센서 값, suspicious 플래그, 앱 버전 — 최소 수준
+- **개인정보 최소 저장**: 이름, 전화번호, 사용 앱 목록 일절 저장하지 않음. 위치정보는 정기 heartbeat에서 미수집이며, 대상자가 긴급 도움 요청 버튼을 누른 경우에만 사용자 동의 하에 `notification_events` 테이블에 1회 저장되고 대상자 기기 타임존 자정 스케줄러가 일괄 삭제
+- 수집 데이터: device_id, 가속도+자이로 센서 값, suspicious 플래그, 앱 버전, 긴급 요청 시 lat/lng/accuracy — 최소 수준
 - DB 유출 시에도 개인 식별 불가 (invite_code, device_id만 존재)
 
 
@@ -1687,7 +1702,7 @@ CMD ["python", "main.py"]
 | `/api/v1/app/version-check` | GET | 앱 버전 체크 (강제 업데이트 판정) |
 | `/api/v1/admin/app-version` | PUT | 앱 버전 설정 (Admin, Postman용) |
 | `/api/v1/admin/app-version` | GET | 앱 버전 설정 조회 (Admin, Postman용) |
-| `/api/v1/emergency` | POST | 긴급 도움 요청 (대상자 → 보호자 전원 즉시 urgent Push, 에스컬레이션 독립) |
+| `/api/v1/emergency` | POST | 긴급 도움 요청 (대상자 → 보호자 전원 즉시 urgent Push, 에스컬레이션 독립. body.location optional: lat/lng/accuracy/captured_at 첨부 시 `notification_events`에 저장 + FCM data에 포함) |
 | `/health` | GET | 헬스체크 |
 
 > FrontEnd 상세는 [PRD-FrontEnd.md](PRD-FrontEnd.md) 참조

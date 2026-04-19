@@ -237,22 +237,37 @@ flowchart TD
 ```mermaid
 flowchart TD
     Start([대상자: 🚨 도움이 필요해요 버튼 탭])
-    Start --> Confirm{확인 다이얼로그<br/>보호자 전원에게 긴급 알림이<br/>발송됩니다. 정말 도움을<br/>요청하시겠습니까?}
+    Start --> Confirm{확인 다이얼로그<br/>보호자 전원에게 긴급 알림이<br/>발송됩니다.<br/>현재 위치도 함께 전달됩니다.<br/>정말 도움을 요청하시겠습니까?}
 
     Confirm -->|취소| End0([종료])
-    Confirm -->|긴급 요청 보내기| Send[POST /api/v1/emergency<br/>device_id 전송]
+    Confirm -->|긴급 요청 보내기| PermCheck[Permission.locationWhenInUse.request<br/>위치 권한 요청 최초 1회]
+
+    PermCheck --> PermResult{권한 허용?}
+    PermResult -->|거부/영구거부| NoLoc[location = null 으로 전송 계속]
+    PermResult -->|허용| SvcCheck[Geolocator.isLocationServiceEnabled]
+
+    SvcCheck --> SvcResult{위치 서비스 ON?}
+    SvcResult -->|OFF| NoLoc
+    SvcResult -->|ON| GetLoc[Geolocator.getCurrentPosition<br/>high accuracy, 5s timeout]
+
+    GetLoc --> GetResult{GPS fix 성공?}
+    GetResult -->|타임아웃/예외| NoLoc
+    GetResult -->|성공| WithLoc[location = &#123;lat, lng, accuracy, captured_at&#125;]
+
+    NoLoc --> Send[POST /api/v1/emergency<br/>device_id + optional location]
+    WithLoc --> Send
 
     Send --> Auth{require_subject<br/>인증 확인}
     Auth -->|실패| Error([에러 — 대상자만 호출 가능])
     Auth -->|성공| CreateAlert[alerts 테이블에 즉시 생성<br/>alert_level: urgent<br/>note: emergency_request<br/>days_inactive: 0]
 
-    CreateAlert --> SaveNoti[notification_events 저장<br/>message_key: emergency<br/>alert_level: urgent]
+    CreateAlert --> SaveNoti[notification_events 저장<br/>message_key: emergency<br/>alert_level: urgent<br/>location_lat/lng/accuracy/captured_at<br/>location 있을 때만]
 
     SaveNoti --> FindGuardians[연결된 보호자 전원 조회<br/>guardians + devices JOIN]
 
-    FindGuardians --> Push[보호자 전원에게 긴급 Push 발송<br/>asyncio.gather 병렬 처리<br/>DND 무시, 구독 만료 무관]
+    FindGuardians --> Push[보호자 전원에게 긴급 Push 발송<br/>FCM data에 lat/lng/accuracy 포함 가능<br/>asyncio.gather 병렬, DND 무시, 구독 만료 무관]
 
-    Push --> Response([200 OK 응답<br/>긴급 알림이 전송되었습니다])
+    Push --> Response([200 OK 응답<br/>클라: 위치 포함 여부에 따라 스낵바 분기])
 
     style CreateAlert fill:#FFEBEE,stroke:#B71C1C
     style Push fill:#FFEBEE,stroke:#B71C1C
@@ -269,6 +284,7 @@ flowchart TD
 | 보호자 범위 | 연결된 전원 |
 | 반복 발송 | 없음 (1회 즉시 발송) |
 | 클라이언트 | 확인 다이얼로그로 오탐 방지 |
+| 위치 | optional — 사용자 동의 + 서비스 ON + 5s 내 GPS fix일 때만 첨부. 거부/실패 어떤 경우에도 긴급 API 호출 자체는 항상 실행 |
 
 
 ## 8. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)

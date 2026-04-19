@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
@@ -20,38 +22,48 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 /// 로컬 알림 탭 핸들러 (top-level 함수 필수)
+/// payload는 JSON 문자열 `{"type": "...", "lat": "...", ...}` 또는 plain type 문자열 (하위 호환)
 @pragma('vm:entry-point')
 void onDidReceiveNotificationResponse(NotificationResponse response) {
   final payload = response.payload;
-  if (payload == null) return;
-  _handleNotificationTap(payload);
+  if (payload == null || payload.isEmpty) return;
+
+  String type = payload;
+  Map<String, dynamic>? data;
+  try {
+    final decoded = jsonDecode(payload);
+    if (decoded is Map) {
+      data = Map<String, dynamic>.from(decoded);
+      type = (data['type'] as String?) ?? payload;
+    }
+  } catch (_) {
+    // JSON 아니면 type 문자열로 간주 (기존 payload 호환)
+  }
+  _handleNotificationTap(type, data: data);
 }
 
 /// 알림 탭 시 라우팅
 /// 오늘의 안부 확인 메시지 로컬 알림 (iOS 전용): 앱 포그라운드 전환만 → 홈 화면에서 미전송 체크 + 자동 전송
 /// 보호자 Push 알림: type에 따라 알림 목록 또는 대시보드로 이동
-void _handleNotificationTap(String type) {
+/// alert_emergency + data에 lat/lng 포함 시: guardianEmergencyMap으로 이동
+void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
   switch (type) {
+    case 'alert_emergency':
+      final routed = _tryRouteToEmergencyMap(data);
+      if (routed) break;
+      // 위치 없으면 기존 알림 목록 라우팅으로 fallthrough
+      _routeToNotifications();
+      break;
     case 'alert':
     case 'alert_urgent':
     case 'alert_warning':
     case 'alert_caution':
-    case 'alert_emergency':
     case 'alert_resolved':
     case 'alert_cleared':
     case 'auto_report':
     case 'manual_report':
     case 'alert_info':
-      // 하단 탭과 동일하게 스택 리셋 — toNamed로 push하면 dashboard 컨트롤러가
-      // 배경에 살아있어 이후 탭 전환 시 중복 컨트롤러 충돌로 앱이 멈춘다
-      if (Get.currentRoute == AppRoutes.guardianNotifications) {
-        // 이미 알림 화면이면 스택 유지하되 목록 갱신
-        try {
-          Get.find<GuardianNotificationsController>().load();
-        } catch (_) {}
-      } else {
-        Get.offAllNamed(AppRoutes.guardianNotifications);
-      }
+      _routeToNotifications();
       break;
     case 'heartbeat':
       break;
@@ -77,6 +89,59 @@ void _handleNotificationTap(String type) {
   }
 }
 
+/// 경고/정보 알림 공통 라우팅 — 이미 알림 화면이면 스택 유지하고 목록 갱신,
+/// 아니면 알림 화면으로 스택 리셋 (toNamed push 시 dashboard 컨트롤러 중복 이슈 회피)
+void _routeToNotifications() {
+  if (Get.currentRoute == AppRoutes.guardianNotifications) {
+    try {
+      Get.find<GuardianNotificationsController>().load();
+    } catch (_) {}
+  } else {
+    Get.offAllNamed(AppRoutes.guardianNotifications);
+  }
+}
+
+/// alert_emergency + data에 lat/lng 포함 시 지도 페이지로 이동 (true 반환).
+/// 위치 없거나 파싱 실패 시 false — 호출자가 대체 라우팅 수행.
+bool _tryRouteToEmergencyMap(Map<String, dynamic>? data) {
+  if (data == null) return false;
+  final lat = _toDouble(data['lat']);
+  final lng = _toDouble(data['lng']);
+  if (lat == null || lng == null) return false;
+
+  final accuracy = _toDouble(data['accuracy']);
+  final inviteCode = data['invite_code']?.toString() ?? '';
+
+  // 별칭 비동기 조회 후 라우팅 (조회 실패해도 초대코드로 표시)
+  NicknameLocalDatasource().getNickname(inviteCode).then((nick) {
+    Get.toNamed(AppRoutes.guardianEmergencyMap, arguments: {
+      'lat': lat,
+      'lng': lng,
+      'accuracy': accuracy,
+      'capturedAt': DateTime.now(),
+      'subjectNickname': nick ?? '',
+      'inviteCode': inviteCode,
+    });
+  }).catchError((_) {
+    Get.toNamed(AppRoutes.guardianEmergencyMap, arguments: {
+      'lat': lat,
+      'lng': lng,
+      'accuracy': accuracy,
+      'capturedAt': DateTime.now(),
+      'subjectNickname': '',
+      'inviteCode': inviteCode,
+    });
+  });
+  return true;
+}
+
+double? _toDouble(dynamic v) {
+  if (v is double) return v;
+  if (v is int) return v.toDouble();
+  if (v is String && v.isNotEmpty) return double.tryParse(v);
+  return null;
+}
+
 /// FCM 푸시 알림 서비스
 /// - 토큰 발급 및 갱신 관리
 /// - 포그라운드: flutter_local_notifications로 시스템 알림 표시
@@ -93,6 +158,10 @@ class FcmService extends GetxService {
   /// Splash의 2초 delay/버전체크보다 먼저 fire되어 알림 페이지로 갔다가
   /// 뒤늦은 offNamed(dashboard)가 덮어쓰는 bounce 문제가 있음
   static String? pendingLaunchFcmType;
+
+  /// kill 상태 FCM 런치 시 data 전체 캐시 (alert_emergency lat/lng 등)
+  /// SplashController가 소비하여 지도 페이지 라우팅 분기에 사용
+  static Map<String, dynamic>? pendingLaunchFcmData;
 
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
@@ -185,9 +254,20 @@ class FcmService extends GetxService {
             Get.find<GuardianSubjectService>().refresh();
           } catch (_) {}
         } else if (call.method == 'onNotificationTap') {
-          final type = call.arguments?.toString() ?? '';
-          debugPrint('[FCM] iOS 알림 탭: $type');
-          _handleNotificationTap(type);
+          // AppDelegate가 JSON 문자열(`{"type":..., "lat":...}`)을 보내는 신형 경로와,
+          // 기존 type 문자열만 보내는 구형 경로를 모두 수용
+          final raw = call.arguments?.toString() ?? '';
+          debugPrint('[FCM] iOS 알림 탭: $raw');
+          String type = raw;
+          Map<String, dynamic>? data;
+          try {
+            final decoded = jsonDecode(raw);
+            if (decoded is Map) {
+              data = Map<String, dynamic>.from(decoded);
+              type = (data['type'] as String?) ?? raw;
+            }
+          } catch (_) {}
+          _handleNotificationTap(type, data: data);
         }
       });
     }
@@ -207,6 +287,9 @@ class FcmService extends GetxService {
         final type = initialMessage.data['type']?.toString() ?? '';
         if (type.isNotEmpty) {
           pendingLaunchFcmType = type;
+          // alert_emergency의 lat/lng 등 부가 정보를 지도 페이지 라우팅에 사용
+          pendingLaunchFcmData =
+              Map<String, dynamic>.from(initialMessage.data);
         }
       }
     } catch (_) {}
@@ -309,6 +392,9 @@ class FcmService extends GetxService {
     final groupKey = 'anbu_subject_${message.data['subject_user_id'] ?? message.data['invite_code'] ?? 'default'}';
 
     // 시스템 알림 표시
+    // payload는 type + 부가 데이터(lat/lng 등)를 JSON 문자열로 저장해,
+    // 탭 시 onDidReceiveNotificationResponse에서 파싱 후 라우팅 분기에 사용
+    final payloadJson = jsonEncode(Map<String, dynamic>.from(message.data));
     _localNotifications.show(
       message.hashCode,
       notification.title ?? 'app_name'.tr,
@@ -330,17 +416,17 @@ class FcmService extends GetxService {
           threadIdentifier: groupKey,
         ),
       ),
-      payload: message.data['type'] ?? '',
+      payload: payloadJson,
     );
 
     _refreshSubjectsIfNeeded(message.data['type']);
   }
 
-  /// 알림 탭하여 앱 열기 처리
+  /// 알림 탭하여 앱 열기 처리 (백그라운드에서 탭 시 FCM 플러그인이 전달)
   void _handleMessageOpenedApp(RemoteMessage message) {
     debugPrint('[FCM] 알림 탭: ${message.data}');
-    final type = message.data['type'] ?? '';
-    _handleNotificationTap(type);
+    final type = message.data['type']?.toString() ?? '';
+    _handleNotificationTap(type, data: Map<String, dynamic>.from(message.data));
   }
 
   /// 보호자 알림 수신 시 GuardianSubjectService 강제 갱신

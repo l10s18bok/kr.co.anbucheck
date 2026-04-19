@@ -132,7 +132,17 @@ abstract class NlNl {
     'subject_home_manual_report_limit_reached': 'U heeft het veiligheidsrapport van vandaag al verzonden. Probeer het morgen opnieuw.',
     'subject_home_emergency_confirm_title': 'Noodhulpverzoek',
     'subject_home_emergency_confirm_body':
-        'Er wordt een noodmelding naar al uw beschermers gestuurd.\nWeet u zeker dat u hulp wilt vragen?',
+        'Een noodmelding wordt naar alle voogden verzonden.\nOok uw huidige locatie wordt gedeeld.\nWilt u echt om hulp vragen?',
+    'emergency_sent_with_location': 'Noodmelding verzonden (met locatie)',
+    'emergency_sent_without_location': 'Noodmelding verzonden',
+    'notifications_view_location': '🗺️ Locatie bekijken',
+    'emergency_map_title': 'Noodlocatie',
+    'emergency_map_subject_label': 'Hulpbehoevende',
+    'emergency_map_captured_at_label': 'Vastgelegd op',
+    'emergency_map_accuracy_label': 'Nauwkeurigheid',
+    'emergency_map_open_external': 'Open in externe kaart-app',
+    'emergency_map_no_location': 'Geen locatie-informatie',
+    'emergency_location_permission_denied_snackbar': 'Noodmelding verzonden zonder locatierechten',
     'subject_home_emergency_confirm_send': 'Noodverzoek verzenden',
     'subject_home_share_text':
         'Controleer hoe het met me gaat via de Anbu-app!\nUitnodigingscode: @code',

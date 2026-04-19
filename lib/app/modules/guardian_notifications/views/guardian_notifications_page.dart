@@ -7,6 +7,7 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
+import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 알림 목록 페이지 — 당일 알림만 표시 (서버 API 기반)
 class GuardianNotificationsPage
@@ -291,6 +292,40 @@ class _NotificationCard extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (item.messageKey == 'emergency' && item.hasLocation) ...[
+                    SizedBox(height: 8.h),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                        onPressed: () {
+                          Get.toNamed(
+                            AppRoutes.guardianEmergencyMap,
+                            arguments: {
+                              'lat': item.locationLat,
+                              'lng': item.locationLng,
+                              'accuracy': item.locationAccuracy,
+                              'capturedAt': item.locationCapturedAt ??
+                                  item.receivedAt,
+                              'subjectNickname': item.nickname ?? '',
+                              'inviteCode': item.inviteCode ?? '',
+                            },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 6.h,
+                          ),
+                          minimumSize: Size.zero,
+                          tapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          foregroundColor: const Color(0xFF4355B9),
+                        ),
+                        icon: const Icon(Icons.map_outlined, size: 18),
+                        label: Text('notifications_view_location'.tr),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
