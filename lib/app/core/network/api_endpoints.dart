@@ -67,6 +67,12 @@ class ApiEndpoints {
   static String subjectUnlink(int guardianId) =>
       '/api/v1/subjects/$guardianId/unlink';
 
+  /// GET /api/v1/subjects/{subjectUserId}/step-history?days={N}
+  /// - 보호자가 특정 대상자의 N일 걸음수 이력 조회
+  /// - 7 ≤ days ≤ 30 (서버가 클램프)
+  static String subjectStepHistory(int subjectUserId, int days) =>
+      '/api/v1/subjects/$subjectUserId/step-history?days=$days';
+
   // ────────────────────────────────────────────────
   // [보호자 전용] 구독 (인앱 결제)
   // ────────────────────────────────────────────────

@@ -15,6 +15,7 @@ import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
+import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -28,6 +29,11 @@ class GuardianDashboardController extends BaseController
 
   /// 현재 카드 슬라이드 인덱스
   final currentCardIndex = 0.obs;
+
+  /// 30일 걸음수 캐시 (invite_code → 30일 배열). 차트 다이얼로그에서 사용.
+  final monthlyStepsCache = <String, List<int?>>{}.obs;
+
+  final _subjectDs = SubjectRemoteDatasource();
 
   /// 전화 후 앱 복귀 시 강조할 대상자 코드
   final highlightedInviteCode = RxnString();
@@ -157,8 +163,8 @@ class GuardianDashboardController extends BaseController
     if (deviceToken == null) return;
     try {
       final data = await DeviceRemoteDatasource().getMyDevice(deviceToken);
-      final hour = data['heartbeat_hour'] as int? ?? 9;
-      final minute = data['heartbeat_minute'] as int? ?? 30;
+      final hour = data['heartbeat_hour'] as int? ?? 18;
+      final minute = data['heartbeat_minute'] as int? ?? 0;
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
       final count = data['guardian_count'] as int? ?? 0;
       await _tokenDs.saveHeartbeatSchedule(hour, minute);
@@ -258,12 +264,14 @@ class GuardianDashboardController extends BaseController
     const alertOrder = ['urgent', 'warning', 'caution', 'info', 'normal'];
     subjects.value = _svc.subjects.map((s) => SubjectStatus(
           guardianId: s.guardianId,
+          userId: s.userId,
           inviteCode: s.inviteCode,
           alias: s.alias,
           alertLevel: s.status,
           lastCheck: _formatLastSeen(s.lastSeen),
           daysInactive: s.alertDaysInactive,
           batteryLevel: s.batteryLevel,
+          weeklySteps: s.weeklySteps,
         )).toList()
       ..sort((a, b) {
         final ai = alertOrder.indexOf(a.alertLevel);
@@ -271,6 +279,24 @@ class GuardianDashboardController extends BaseController
         return (ai < 0 ? alertOrder.length : ai)
             .compareTo(bi < 0 ? alertOrder.length : bi);
       });
+  }
+
+  /// 차트 다이얼로그 오픈 전 30일 데이터 확보.
+  /// 캐시 있으면 즉시 true, 없으면 서버 호출 후 캐시. 실패 시 false.
+  Future<bool> loadMonthlyStepsIfNeeded(SubjectStatus s) async {
+    if (monthlyStepsCache.containsKey(s.inviteCode)) return true;
+    final token = await _tokenDs.getDeviceToken();
+    if (token == null) return false;
+    try {
+      final history =
+          await _subjectDs.getStepHistory(token, s.userId, days: 30);
+      monthlyStepsCache[s.inviteCode] = history;
+      return true;
+    } catch (_) {
+      AppSnackbar.show(
+          'common_error'.tr, 'guardian_error_load_step_history'.tr);
+      return false;
+    }
   }
 
   String _formatLastSeen(String? lastSeen) {
@@ -349,8 +375,8 @@ class GuardianDashboardController extends BaseController
       if (deviceToken == null) return;
       final result = await _userDs.enableSubject(deviceToken);
       final code = result['invite_code'] as String;
-      final hour = result['heartbeat_hour'] as int? ?? 9;
-      final minute = result['heartbeat_minute'] as int? ?? 30;
+      final hour = result['heartbeat_hour'] as int? ?? 18;
+      final minute = result['heartbeat_minute'] as int? ?? 0;
 
       // 로컬 저장
       await _tokenDs.saveIsAlsoSubject(true);
@@ -466,21 +492,27 @@ class GuardianDashboardController extends BaseController
 /// 대상자 상태 모델
 class SubjectStatus {
   final int guardianId;
+  final int userId;
   final String inviteCode;
   final String alias;
   final String alertLevel; // normal, caution, warning, urgent
   final String lastCheck;
   final int daysInactive;
   final int? batteryLevel;
+  /// 최근 7일 걸음수. index 0 = 6일 전, index 6 = 오늘.
+  /// null = 등록 전, 0 = heartbeat 없음, >0 = 실제 걸음수.
+  final List<int?> weeklySteps;
 
   const SubjectStatus({
     required this.guardianId,
+    required this.userId,
     required this.inviteCode,
     required this.alias,
     required this.alertLevel,
     required this.lastCheck,
     this.daysInactive = 0,
     this.batteryLevel,
+    this.weeklySteps = const [],
   });
 
   bool get isNormal => alertLevel == 'normal';
@@ -488,9 +520,24 @@ class SubjectStatus {
   bool get isWarning => alertLevel == 'warning';
   bool get isUrgent => alertLevel == 'urgent';
 
-  String get activityLabel {
-    if (isNormal) return 'guardian_activity_stable'.tr;
+  /// 기본 활동량 라벨 (7일 기준)
+  String get activityLabel => activityLabelFor(weeklySteps);
+
+  /// 걸음수 배열(7일 또는 30일)을 받아 활동량 라벨 산출.
+  /// · 경고 등급(caution/warning/urgent) → "안전 확인이 필요합니다"
+  /// · 유효 샘플(null 제외) 3건 미만 → "데이터 수집 중"
+  ///   (설치 직후 기간 — 0이 오전에 1건만 있어도 평균 0으로 "운동 필요"로 오판정되는 걸 방지)
+  /// · 그 외: null 제외, 0 포함 평균으로 판정
+  ///   - 평균 ≥ 6000 → "아주 활동적"
+  ///   - 평균 ≥ 3000 → "활동적"
+  ///   - 그 외       → "운동 필요"
+  String activityLabelFor(List<int?> steps) {
     if (!isNormal) return 'guardian_safety_needed'.tr;
-    return '';
+    final valid = steps.whereType<int>().toList();
+    if (valid.length < 3) return 'guardian_activity_collecting'.tr;
+    final avg = valid.reduce((a, b) => a + b) / valid.length;
+    if (avg >= 6000) return 'guardian_activity_very_active'.tr;
+    if (avg >= 3000) return 'guardian_activity_active'.tr;
+    return 'guardian_activity_needs_exercise'.tr;
   }
 }

@@ -39,6 +39,10 @@ class GuardianSubjectService extends GetxService {
           .map((s) => s as Map<String, dynamic>)
           .map((s) {
         final inviteCode = s['invite_code'] as String? ?? '';
+        final rawWeekly = (s['weekly_steps'] as List?) ?? const [];
+        final weeklySteps = rawWeekly
+            .map((e) => e == null ? null : (e as num).toInt())
+            .toList();
         return SubjectItem(
           guardianId: s['guardian_id'] as int,
           userId: s['user_id'] as int,
@@ -50,9 +54,10 @@ class GuardianSubjectService extends GetxService {
               (s['alert'] as Map<String, dynamic>?)?['days_inactive'] as int? ??
                   0,
           deviceId: s['device_id'] as String?,
-          heartbeatHour: s['heartbeat_hour'] as int? ?? 9,
-          heartbeatMinute: s['heartbeat_minute'] as int? ?? 30,
+          heartbeatHour: s['heartbeat_hour'] as int? ?? 18,
+          heartbeatMinute: s['heartbeat_minute'] as int? ?? 0,
           batteryLevel: s['battery_level'] as int?,
+          weeklySteps: weeklySteps,
         );
       }).toList();
 
@@ -127,6 +132,9 @@ class SubjectItem {
   final int heartbeatHour;
   final int heartbeatMinute;
   final int? batteryLevel;
+  /// 최근 7일 걸음수. index 0 = 6일 전, index 6 = 오늘.
+  /// null = 등록 전 날짜 (빈 막대), 0 = heartbeat 없음, >0 = 실제 걸음수.
+  final List<int?> weeklySteps;
 
   const SubjectItem({
     required this.guardianId,
@@ -137,9 +145,10 @@ class SubjectItem {
     required this.status,
     this.alertDaysInactive = 0,
     this.deviceId,
-    this.heartbeatHour = 9,
-    this.heartbeatMinute = 30,
+    this.heartbeatHour = 18,
+    this.heartbeatMinute = 0,
     this.batteryLevel,
+    this.weeklySteps = const [],
   });
 
   bool get isNormal => status == 'normal';
@@ -149,6 +158,7 @@ class SubjectItem {
     String? status,
     int? heartbeatHour,
     int? heartbeatMinute,
+    List<int?>? weeklySteps,
   }) {
     return SubjectItem(
       guardianId: guardianId,
@@ -162,6 +172,7 @@ class SubjectItem {
       heartbeatHour: heartbeatHour ?? this.heartbeatHour,
       heartbeatMinute: heartbeatMinute ?? this.heartbeatMinute,
       batteryLevel: batteryLevel,
+      weeklySteps: weeklySteps ?? this.weeklySteps,
     );
   }
 }

@@ -55,4 +55,24 @@ class SubjectRemoteDatasource {
       throw Exception('경고 클리어 실패 (${result.statusCode})');
     }
   }
+
+  /// GET /api/v1/subjects/{subjectUserId}/step-history — N일 걸음수 이력
+  /// 반환: 길이 N 리스트, index 0 = (N-1)일 전, 마지막 index = 오늘.
+  /// 값은 int 또는 null (등록 전 날짜는 null).
+  Future<List<int?>> getStepHistory(
+    String deviceToken,
+    int subjectUserId, {
+    int days = 30,
+  }) async {
+    final result = await ApiClientFactory.instance.get<dynamic>(
+      ApiEndpoints.subjectStepHistory(subjectUserId, days),
+      headers: _auth(deviceToken),
+    );
+    if (!result.isOk) {
+      throw Exception('걸음수 이력 조회 실패 (${result.statusCode})');
+    }
+    final body = Map<String, dynamic>.from(result.body as Map);
+    final raw = (body['step_history'] as List?) ?? const [];
+    return raw.map((e) => e == null ? null : (e as num).toInt()).toList();
+  }
 }
