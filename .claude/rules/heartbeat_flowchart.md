@@ -39,7 +39,7 @@ flowchart TD
     FGCheck -->|NO| End0([종료 — 이미 전송 완료])
 
     Collect[데이터 수집]
-    Collect --> Steps[걸음수 조회<br/>pedometer_2<br/>steps_delta]
+    Collect --> Steps[걸음수 조회<br/>pedometer_2<br/>오늘 자정 ~ 현재 누적<br/>steps_delta<br/>※ 수동 보고는 항상 null]
     Collect --> Battery[배터리 상태 조회<br/>battery_level]
 
     Steps --> StepsCheck{steps_delta > 0?}
@@ -110,8 +110,8 @@ flowchart TD
     CheckSuspicious -->|true| Wait1([⏱ suspicious_count 기반 보호자 경고 에스컬레이션<br/>1회 → caution + caution_suspicious<br/>2회 → warning + warning_suspicious<br/>3회+ → urgent + urgent_suspicious<br/>※ scheduler 미수신 경로와 별도 문구 사용])
 
     StatusNormal --> SaveNoti[보호자 알림 DB 저장<br/>guardian_notifications<br/>alert_level: info<br/>is_push_sent: true/false]
-    SaveNoti --> StepsNoti{steps_delta > 0?}
-    StepsNoti -->|YES| StepsCompare[활동 정보 알림 DB 저장<br/>🚶 활동 정보<br/>M/D 오전/오후 HH:MM ~ M/D 오전/오후 HH:MM 사이 N보를 걸으셨습니다.<br/>Push 발송 없음]
+    SaveNoti --> StepsNoti{steps_delta != null<br/>AND steps_delta > 0?}
+    StepsNoti -->|YES| StepsCompare[활동 정보 알림 DB 저장<br/>🚶 활동 정보<br/>오늘 N보를 걸으셨습니다.<br/>Push 발송 없음<br/>※ 수동 보고는 stepsDelta=null이라 진입 안 됨]
     StepsNoti -->|NO| End3([완료])
     StepsCompare --> End3
 ```

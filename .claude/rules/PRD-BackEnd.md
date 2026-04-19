@@ -491,7 +491,10 @@ Body:
   "battery_level": 85
 }
 // manual: 사용자가 직접 "안부 보고하기" 버튼을 눌렀을 때 true (기본값 false)
-// steps_delta: 이전 heartbeat 이후 걸음수 증가량 (권한 거부 시 null)
+//         ※ 클라이언트가 동일 날짜 재시도를 lastManualReportDate로 차단하므로, 서버에 도달한 manual=true는 당일 첫 수동 보고
+// steps_delta:
+//   - 자동 (manual=false) → 오늘 자정 ~ 현재 시각 누적 걸음수 (권한 거부 시 null)
+//   - 수동 (manual=true)  → **항상 null** (클라이언트가 활동 정보 알림 추가 생성을 차단하기 위해 강제 null)
 Response: 200 OK
 {
   "status": "ok",
@@ -1527,7 +1530,7 @@ message_params TEXT,          -- JSON 파라미터 (예: '{"days": 3}')
 | `warning_suspicious` | warning | 폰 사용 흔적 연속 없음 (suspicious=true 2회) | - |
 | `urgent` | urgent | 긴급 미수신 3회+ (scheduler) | `{"days": 3}` |
 | `urgent_suspicious` | urgent | 폰 사용 흔적 연속 없음 (suspicious=true 3회+) | `{"days": 3}` |
-| `steps` | health | 걸음수 활동 정보 | `{"from_time": "...", "to_time": "...", "steps": "342"}` |
+| `steps` | health | 걸음수 활동 정보 ("오늘 N보를 걸으셨습니다") | `{"steps": "342"}` |
 | `emergency` | urgent | 긴급 도움 요청 (대상자 직접) | - |
 | `cleared_by_guardian` | info | 보호자 수동 경고 클리어 (다른 보호자에게 발송) | - |
 
