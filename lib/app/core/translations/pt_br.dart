@@ -179,6 +179,7 @@ abstract class PtBr {
     'guardian_last_check_hours': 'Última verificação: @hours h atrás',
     'guardian_last_check_days': 'Última verificação: @days dia(s) atrás',
     'guardian_activity_stable': 'Atividade: estável',
+    'guardian_activity_prefix': 'Atividade',
     'guardian_activity_very_active': 'Muito ativo',
     'guardian_activity_active': 'Ativo',
     'guardian_activity_needs_exercise': 'Precisa de exercício',

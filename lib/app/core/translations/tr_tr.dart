@@ -177,6 +177,7 @@ abstract class TrTr {
     'guardian_last_check_hours': 'Son kontrol: @hours sa önce',
     'guardian_last_check_days': 'Son kontrol: @days gün önce',
     'guardian_activity_stable': 'Aktivite: Stabil',
+    'guardian_activity_prefix': 'Aktivite',
     'guardian_activity_very_active': 'Çok aktif',
     'guardian_activity_active': 'Aktif',
     'guardian_activity_needs_exercise': 'Egzersiz gerekli',

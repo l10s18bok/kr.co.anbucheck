@@ -178,6 +178,7 @@ abstract class EsEs {
     'guardian_last_check_hours': 'Última verif.: hace @hours h',
     'guardian_last_check_days': 'Última verif.: hace @days día(s)',
     'guardian_activity_stable': 'Actividad: estable',
+    'guardian_activity_prefix': 'Actividad',
     'guardian_activity_very_active': 'Muy activo',
     'guardian_activity_active': 'Activo',
     'guardian_activity_needs_exercise': 'Necesita ejercicio',

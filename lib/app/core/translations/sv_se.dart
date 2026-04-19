@@ -174,6 +174,7 @@ abstract class SvSe {
     'guardian_last_check_hours': 'Senaste kontroll: @hours tim sedan',
     'guardian_last_check_days': 'Senaste kontroll: @days dag(ar) sedan',
     'guardian_activity_stable': 'Aktivitet: Stabil',
+    'guardian_activity_prefix': 'Aktivitet',
     'guardian_activity_very_active': 'Mycket aktiv',
     'guardian_activity_active': 'Aktiv',
     'guardian_activity_needs_exercise': 'Behöver motion',

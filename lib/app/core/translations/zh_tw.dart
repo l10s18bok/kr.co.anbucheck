@@ -167,6 +167,7 @@ abstract class ZhTw {
     'guardian_last_check_hours': '上次確認：@hours 小時前',
     'guardian_last_check_days': '上次確認：@days 天前',
     'guardian_activity_stable': '活動量：穩定',
+    'guardian_activity_prefix': '活動量',
     'guardian_activity_very_active': '非常活躍',
     'guardian_activity_active': '活躍',
     'guardian_activity_needs_exercise': '需要運動',

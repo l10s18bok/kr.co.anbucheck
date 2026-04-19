@@ -176,6 +176,7 @@ abstract class HiIn {
     'guardian_last_check_hours': 'अंतिम जांच: @hours घंटे पहले',
     'guardian_last_check_days': 'अंतिम जांच: @days दिन पहले',
     'guardian_activity_stable': 'गतिविधि: स्थिर',
+    'guardian_activity_prefix': 'गतिविधि',
     'guardian_activity_very_active': 'बहुत सक्रिय',
     'guardian_activity_active': 'सक्रिय',
     'guardian_activity_needs_exercise': 'व्यायाम आवश्यक',

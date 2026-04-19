@@ -168,6 +168,7 @@ abstract class JaJp {
     'guardian_last_check_hours': '最終確認：@hours時間前',
     'guardian_last_check_days': '最終確認：@days日前',
     'guardian_activity_stable': '活動量：安定',
+    'guardian_activity_prefix': '活動量',
     'guardian_activity_very_active': 'とても活発',
     'guardian_activity_active': '活発',
     'guardian_activity_needs_exercise': '運動が必要',

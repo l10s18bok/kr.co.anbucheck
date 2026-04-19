@@ -178,6 +178,7 @@ abstract class ViVn {
     'guardian_last_check_hours': 'Lan kiem tra cuoi: @hours gio truoc',
     'guardian_last_check_days': 'Lan kiem tra cuoi: @days ngay truoc',
     'guardian_activity_stable': 'Hoat dong: On dinh',
+    'guardian_activity_prefix': 'Hoat dong',
     'guardian_activity_very_active': 'Rất năng động',
     'guardian_activity_active': 'Năng động',
     'guardian_activity_needs_exercise': 'Cần vận động',

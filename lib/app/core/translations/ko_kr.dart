@@ -169,6 +169,7 @@ abstract class KoKr {
     'guardian_last_check_hours': '마지막 확인: @hours시간 전',
     'guardian_last_check_days': '마지막 확인: @days일 전',
     'guardian_activity_stable': '활동량: 안정적임',
+    'guardian_activity_prefix': '활동량',
     'guardian_activity_very_active': '아주 활동적',
     'guardian_activity_active': '활동적',
     'guardian_activity_needs_exercise': '운동 필요',

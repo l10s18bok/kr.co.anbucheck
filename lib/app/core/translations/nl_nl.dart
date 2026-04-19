@@ -180,6 +180,7 @@ abstract class NlNl {
     'guardian_last_check_hours': 'Laatste controle: @hours uur geleden',
     'guardian_last_check_days': 'Laatste controle: @days dag(en) geleden',
     'guardian_activity_stable': 'Activiteit: stabiel',
+    'guardian_activity_prefix': 'Activiteit',
     'guardian_activity_very_active': 'Zeer actief',
     'guardian_activity_active': 'Actief',
     'guardian_activity_needs_exercise': 'Beweging nodig',

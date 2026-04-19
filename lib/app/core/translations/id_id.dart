@@ -181,6 +181,7 @@ abstract class IdId {
     'guardian_last_check_hours': 'Pemeriksaan terakhir: @hours jam lalu',
     'guardian_last_check_days': 'Pemeriksaan terakhir: @days hari lalu',
     'guardian_activity_stable': 'Aktivitas: Stabil',
+    'guardian_activity_prefix': 'Aktivitas',
     'guardian_activity_very_active': 'Sangat aktif',
     'guardian_activity_active': 'Aktif',
     'guardian_activity_needs_exercise': 'Perlu olahraga',

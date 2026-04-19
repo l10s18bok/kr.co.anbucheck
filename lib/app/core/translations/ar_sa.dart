@@ -172,6 +172,7 @@ abstract class ArSa {
     'guardian_last_check_hours': 'آخر اطمئنان: منذ @hours ساعة',
     'guardian_last_check_days': 'آخر اطمئنان: منذ @days يوم',
     'guardian_activity_stable': 'النشاط: مستقر',
+    'guardian_activity_prefix': 'النشاط',
     'guardian_activity_very_active': 'نشيط جدًا',
     'guardian_activity_active': 'نشيط',
     'guardian_activity_needs_exercise': 'بحاجة لتمارين',

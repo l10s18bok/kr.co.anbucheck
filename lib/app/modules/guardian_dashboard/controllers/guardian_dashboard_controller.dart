@@ -524,20 +524,22 @@ class SubjectStatus {
   String get activityLabel => activityLabelFor(weeklySteps);
 
   /// 걸음수 배열(7일 또는 30일)을 받아 활동량 라벨 산출.
-  /// · 경고 등급(caution/warning/urgent) → "안전 확인이 필요합니다"
-  /// · 유효 샘플(null 제외) 3건 미만 → "데이터 수집 중"
-  ///   (설치 직후 기간 — 0이 오전에 1건만 있어도 평균 0으로 "운동 필요"로 오판정되는 걸 방지)
-  /// · 그 외: null 제외, 0 포함 평균으로 판정
+  /// · 경고 등급(caution/warning/urgent) → "안전 확인이 필요합니다" (접두어 없음)
+  /// · 그 외에는 모두 "활동량 : <판정>" 형태로 반환
+  ///   - 유효 샘플 3건 미만 → "데이터 수집 중"
   ///   - 평균 ≥ 6000 → "아주 활동적"
   ///   - 평균 ≥ 3000 → "활동적"
   ///   - 그 외       → "운동 필요"
   String activityLabelFor(List<int?> steps) {
     if (!isNormal) return 'guardian_safety_needed'.tr;
+    final prefix = '${'guardian_activity_prefix'.tr} : ';
     final valid = steps.whereType<int>().toList();
-    if (valid.length < 3) return 'guardian_activity_collecting'.tr;
+    if (valid.length < 3) {
+      return '$prefix${'guardian_activity_collecting'.tr}';
+    }
     final avg = valid.reduce((a, b) => a + b) / valid.length;
-    if (avg >= 6000) return 'guardian_activity_very_active'.tr;
-    if (avg >= 3000) return 'guardian_activity_active'.tr;
-    return 'guardian_activity_needs_exercise'.tr;
+    if (avg >= 6000) return '$prefix${'guardian_activity_very_active'.tr}';
+    if (avg >= 3000) return '$prefix${'guardian_activity_active'.tr}';
+    return '$prefix${'guardian_activity_needs_exercise'.tr}';
   }
 }

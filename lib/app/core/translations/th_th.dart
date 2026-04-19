@@ -174,6 +174,7 @@ abstract class ThTh {
     'guardian_last_check_hours': 'ตรวจสอบล่าสุด: @hours ชั่วโมงที่แล้ว',
     'guardian_last_check_days': 'ตรวจสอบล่าสุด: @days วันที่แล้ว',
     'guardian_activity_stable': 'กิจกรรม: คงที่',
+    'guardian_activity_prefix': 'กิจกรรม',
     'guardian_activity_very_active': 'กระฉับกระเฉงมาก',
     'guardian_activity_active': 'กระฉับกระเฉง',
     'guardian_activity_needs_exercise': 'ต้องออกกำลังกาย',

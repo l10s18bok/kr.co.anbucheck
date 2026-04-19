@@ -181,6 +181,7 @@ abstract class FrFr {
     'guardian_last_check_hours': 'Dernière vérif. : il y a @hours h',
     'guardian_last_check_days': 'Dernière vérif. : il y a @days jour(s)',
     'guardian_activity_stable': 'Activité : stable',
+    'guardian_activity_prefix': 'Activité',
     'guardian_activity_very_active': 'Très actif',
     'guardian_activity_active': 'Actif',
     'guardian_activity_needs_exercise': "Besoin d'exercice",

@@ -167,6 +167,7 @@ abstract class ZhCn {
     'guardian_last_check_hours': '上次确认：@hours 小时前',
     'guardian_last_check_days': '上次确认：@days 天前',
     'guardian_activity_stable': '活动量：稳定',
+    'guardian_activity_prefix': '活动量',
     'guardian_activity_very_active': '非常活跃',
     'guardian_activity_active': '活跃',
     'guardian_activity_needs_exercise': '需要运动',

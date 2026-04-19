@@ -181,6 +181,7 @@ abstract class RuRu {
     'guardian_last_check_hours': 'Последняя проверка: @hours ч назад',
     'guardian_last_check_days': 'Последняя проверка: @days дн назад',
     'guardian_activity_stable': 'Активность: стабильная',
+    'guardian_activity_prefix': 'Активность',
     'guardian_activity_very_active': 'Очень активен',
     'guardian_activity_active': 'Активен',
     'guardian_activity_needs_exercise': 'Нужны упражнения',

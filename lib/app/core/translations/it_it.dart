@@ -179,6 +179,7 @@ abstract class ItIt {
     'guardian_last_check_hours': 'Ultimo controllo: @hours ore fa',
     'guardian_last_check_days': 'Ultimo controllo: @days giorno/i fa',
     'guardian_activity_stable': 'Attività: stabile',
+    'guardian_activity_prefix': 'Attività',
     'guardian_activity_very_active': 'Molto attivo',
     'guardian_activity_active': 'Attivo',
     'guardian_activity_needs_exercise': 'Necessita esercizio',

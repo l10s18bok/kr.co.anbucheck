@@ -177,6 +177,7 @@ abstract class EnUs {
     'guardian_last_check_hours': 'Last check: @hours hr ago',
     'guardian_last_check_days': 'Last check: @days day(s) ago',
     'guardian_activity_stable': 'Activity: Stable',
+    'guardian_activity_prefix': 'Activity',
     'guardian_activity_very_active': 'Very active',
     'guardian_activity_active': 'Active',
     'guardian_activity_needs_exercise': 'Needs exercise',

@@ -182,6 +182,7 @@ abstract class DeDe {
     'guardian_last_check_hours': 'Letzte Prüfung: vor @hours Std.',
     'guardian_last_check_days': 'Letzte Prüfung: vor @days Tag(en)',
     'guardian_activity_stable': 'Aktivität: stabil',
+    'guardian_activity_prefix': 'Aktivität',
     'guardian_activity_very_active': 'Sehr aktiv',
     'guardian_activity_active': 'Aktiv',
     'guardian_activity_needs_exercise': 'Bewegung nötig',

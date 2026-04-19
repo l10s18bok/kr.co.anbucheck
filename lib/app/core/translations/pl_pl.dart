@@ -179,6 +179,7 @@ abstract class PlPl {
     'guardian_last_check_hours': 'Ostatnie sprawdzenie: @hours godz. temu',
     'guardian_last_check_days': 'Ostatnie sprawdzenie: @days dni temu',
     'guardian_activity_stable': 'Aktywnosc: Stabilna',
+    'guardian_activity_prefix': 'Aktywnosc',
     'guardian_activity_very_active': 'Bardzo aktywny',
     'guardian_activity_active': 'Aktywny',
     'guardian_activity_needs_exercise': 'Potrzeba ruchu',
