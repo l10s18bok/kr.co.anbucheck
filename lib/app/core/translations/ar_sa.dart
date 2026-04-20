@@ -322,7 +322,7 @@ abstract class ArSa {
     'heartbeat_schedule_hint_ios':
         'يصل إشعار دفع الاطمئنان في هذا الوقت يوميًا. انقر على الإشعار أو افتح التطبيق في ذلك الوقت لإرسال إشارة الاطمئنان.',
     'heartbeat_daily_time': 'يومياً في @time',
-    'heartbeat_scheduled_today': 'تم جدولة الاطمئنان اليوم في @time.',
+    'heartbeat_scheduled_today': 'سيتم إرسال إشارة الاطمئنان إلى الحراس يومياً في @time.',
     'heartbeat_change_failed_title': 'فشل تغيير الوقت',
     'heartbeat_change_failed_message': 'تعذر التحديث على الخادم.',
 

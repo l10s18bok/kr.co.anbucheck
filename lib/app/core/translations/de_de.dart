@@ -336,7 +336,7 @@ abstract class DeDe {
     'heartbeat_schedule_hint_ios':
         'Eine Wellness-Push-Benachrichtigung trifft täglich zu dieser Zeit ein. Tippen Sie auf die Benachrichtigung oder öffnen Sie die App um diese Zeit, um Ihr Wellness-Signal zu senden.',
     'heartbeat_daily_time': 'Täglich um @time',
-    'heartbeat_scheduled_today': 'Wohlbefindens-Check heute um @time geplant.',
+    'heartbeat_scheduled_today': 'Ihr Wohlbefindens-Signal wird täglich um @time an Ihre Betreuer gesendet.',
     'heartbeat_change_failed_title': 'Zeitänderung fehlgeschlagen',
     'heartbeat_change_failed_message': 'Konnte nicht auf dem Server aktualisiert werden.',
 

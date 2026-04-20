@@ -330,7 +330,7 @@ abstract class TrTr {
     'heartbeat_schedule_hint_ios':
         'Her gün bu saatte iyilik push bildirimi gelir. Bildirime dokunun veya o sırada uygulamayı açın, böylece iyilik sinyaliniz gönderilir.',
     'heartbeat_daily_time': 'Her gün @time',
-    'heartbeat_scheduled_today': 'Bugün @time için hal hatır kontrolü planlandı.',
+    'heartbeat_scheduled_today': 'İyilik sinyaliniz her gün @time saatinde koruyucularınıza iletilecek.',
     'heartbeat_change_failed_title': 'Saat Değişikliği Başarısız',
     'heartbeat_change_failed_message': 'Sunucuda güncellenemedi.',
 

@@ -329,7 +329,7 @@ abstract class EnUs {
     'heartbeat_schedule_hint_ios':
         'A wellness push notification arrives at this time every day. Tap the notification or open the app around then to send your wellness signal.',
     'heartbeat_daily_time': 'Daily at @time',
-    'heartbeat_scheduled_today': 'Wellness check scheduled at @time today.',
+    'heartbeat_scheduled_today': 'Your wellness check will be delivered to your guardians every day at @time.',
     'heartbeat_change_failed_title': 'Time Change Failed',
     'heartbeat_change_failed_message': 'Could not update on server.',
 

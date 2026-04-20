@@ -333,7 +333,7 @@ abstract class PlPl {
     'heartbeat_schedule_hint_ios':
         'Powiadomienie push o pomyślności przychodzi codziennie o tej godzinie. Dotknij powiadomienia lub otwórz aplikację o tej porze, aby wysłać sygnał pomyślności.',
     'heartbeat_daily_time': 'Codziennie o @time',
-    'heartbeat_scheduled_today': 'Sprawdzenie samopoczucia zaplanowane na @time dzisiaj.',
+    'heartbeat_scheduled_today': 'Twój sygnał pomyślności będzie codziennie wysyłany do Twoich opiekunów o @time.',
     'heartbeat_change_failed_title': 'Zmiana czasu nie powiodla sie',
     'heartbeat_change_failed_message': 'Nie udalo sie zaktualizowac na serwerze.',
 

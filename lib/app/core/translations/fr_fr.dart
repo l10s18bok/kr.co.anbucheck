@@ -337,7 +337,7 @@ abstract class FrFr {
     'heartbeat_schedule_hint_ios':
         'Une notification push de bien-être arrive chaque jour à cette heure. Appuyez sur la notification ou ouvrez l\'application à ce moment-là pour envoyer votre signal de bien-être.',
     'heartbeat_daily_time': 'Tous les jours à @time',
-    'heartbeat_scheduled_today': 'Vérification du bien-être prévue aujourd\'hui à @time.',
+    'heartbeat_scheduled_today': 'Votre signal de bien-être sera transmis à vos protecteurs chaque jour à @time.',
     'heartbeat_change_failed_title': 'Échec du changement d\'heure',
     'heartbeat_change_failed_message':
         'La modification n\'a pas pu être enregistrée sur le serveur.',

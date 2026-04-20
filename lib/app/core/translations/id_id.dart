@@ -336,7 +336,7 @@ abstract class IdId {
     'heartbeat_schedule_hint_ios':
         'Notifikasi push kesehatan datang setiap hari pada waktu ini. Ketuk notifikasi atau buka aplikasi di sekitar waktu itu untuk mengirim sinyal kesehatan Anda.',
     'heartbeat_daily_time': 'Setiap hari pukul @time',
-    'heartbeat_scheduled_today': 'Pemeriksaan kesejahteraan dijadwalkan pukul @time hari ini.',
+    'heartbeat_scheduled_today': 'Sinyal kesejahteraan Anda akan dikirim ke penjaga Anda setiap hari pukul @time.',
     'heartbeat_change_failed_title': 'Perubahan Waktu Gagal',
     'heartbeat_change_failed_message': 'Tidak dapat memperbarui di server.',
 

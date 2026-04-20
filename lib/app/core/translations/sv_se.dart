@@ -327,7 +327,7 @@ abstract class SvSe {
     'heartbeat_schedule_hint_ios':
         'En hälso-pushavisering kommer varje dag vid denna tid. Tryck på aviseringen eller öppna appen vid den tidpunkten för att skicka din hälsosignal.',
     'heartbeat_daily_time': 'Dagligen kl. @time',
-    'heartbeat_scheduled_today': 'Valmaendekontroll schemalagd kl. @time idag.',
+    'heartbeat_scheduled_today': 'Din valmaendesignal skickas till dina vardare varje dag kl. @time.',
     'heartbeat_change_failed_title': 'Tidandring misslyckades',
     'heartbeat_change_failed_message': 'Kunde inte uppdatera pa servern.',
 

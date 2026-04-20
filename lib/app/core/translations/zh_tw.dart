@@ -313,7 +313,7 @@ abstract class ZhTw {
     'heartbeat_schedule_change_title_ios': '更改安否推播通知時間',
     'heartbeat_schedule_hint_ios': '每天在此時間會收到安否推播通知。點按通知或在前後開啟應用程式即可傳送安否信號。',
     'heartbeat_daily_time': '每天 @time',
-    'heartbeat_scheduled_today': '今天 @time 已預約問安。',
+    'heartbeat_scheduled_today': '每天 @time 將向守護者傳送問安。',
     'heartbeat_change_failed_title': '更改時間失敗',
     'heartbeat_change_failed_message': '未能同步至伺服器。',
 

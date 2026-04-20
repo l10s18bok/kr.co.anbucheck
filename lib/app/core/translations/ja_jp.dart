@@ -315,7 +315,7 @@ abstract class JaJp {
     'heartbeat_schedule_change_title_ios': '安否プッシュ通知の時刻変更',
     'heartbeat_schedule_hint_ios': '毎日この時刻に安否プッシュ通知が届きます。通知をタップするか、その前後にアプリを開くと安否が送信されます。',
     'heartbeat_daily_time': '毎日 @time',
-    'heartbeat_scheduled_today': '本日@timeに安否確認が予約されています。',
+    'heartbeat_scheduled_today': '毎日@timeに見守り人へ安否をお届けします。',
     'heartbeat_change_failed_title': '時刻の変更に失敗しました',
     'heartbeat_change_failed_message': 'サーバーに反映されませんでした。',
 

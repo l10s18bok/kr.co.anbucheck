@@ -332,7 +332,7 @@ abstract class ViVn {
     'heartbeat_schedule_hint_ios':
         'Thông báo đẩy an toàn sẽ đến vào thời điểm này mỗi ngày. Chạm vào thông báo hoặc mở ứng dụng quanh thời điểm đó để gửi tín hiệu an toàn.',
     'heartbeat_daily_time': 'Hang ngay luc @time',
-    'heartbeat_scheduled_today': 'Kiem tra suc khoe da len lich luc @time hom nay.',
+    'heartbeat_scheduled_today': 'Tin hieu an toan cua ban se duoc gui den nguoi bao ve moi ngay luc @time.',
     'heartbeat_change_failed_title': 'Doi thoi gian that bai',
     'heartbeat_change_failed_message': 'Khong the cap nhat tren may chu.',
 

@@ -335,7 +335,7 @@ abstract class RuRu {
     'heartbeat_schedule_hint_ios':
         'Push-уведомление о благополучии приходит каждый день в это время. Нажмите на уведомление или откройте приложение в это время, чтобы отправить сигнал благополучия.',
     'heartbeat_daily_time': 'Ежедневно в @time',
-    'heartbeat_scheduled_today': 'Проверка самочувствия запланирована на @time сегодня.',
+    'heartbeat_scheduled_today': 'Ваш сигнал благополучия будет отправляться опекунам каждый день в @time.',
     'heartbeat_change_failed_title': 'Ошибка изменения времени',
     'heartbeat_change_failed_message': 'Не удалось сохранить изменения на сервере.',
 

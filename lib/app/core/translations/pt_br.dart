@@ -334,7 +334,7 @@ abstract class PtBr {
     'heartbeat_schedule_hint_ios':
         'Uma notificação push de bem-estar chega todos os dias neste horário. Toque na notificação ou abra o aplicativo nesse momento para enviar seu sinal de bem-estar.',
     'heartbeat_daily_time': 'Diariamente às @time',
-    'heartbeat_scheduled_today': 'Verificação de bem-estar agendada para @time hoje.',
+    'heartbeat_scheduled_today': 'Seu sinal de bem-estar será enviado aos seus guardiões todos os dias às @time.',
     'heartbeat_change_failed_title': 'Falha ao alterar horário',
     'heartbeat_change_failed_message': 'Não foi possível atualizar no servidor.',
 

@@ -316,7 +316,7 @@ abstract class KoKr {
     'heartbeat_schedule_change_title_ios': '안부 푸시 알림 시각 변경',
     'heartbeat_schedule_hint_ios': '매일 이 시각에 안부 푸시 알림이 도착합니다. 알림을 탭하거나 그 전후로 앱을 열면 안부가 전송됩니다.',
     'heartbeat_daily_time': '매일 @time',
-    'heartbeat_scheduled_today': '오늘 @time에 안부 확인이 예약되었습니다.',
+    'heartbeat_scheduled_today': '매일 @time에 보호자에게 안부가 전달됩니다.',
     'heartbeat_change_failed_title': '시각 변경 실패',
     'heartbeat_change_failed_message': '서버에 반영되지 않았습니다.',
 

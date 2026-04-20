@@ -334,7 +334,7 @@ abstract class EsEs {
     'heartbeat_schedule_hint_ios':
         'Una notificación push de bienestar llega cada día a esta hora. Toca la notificación o abre la aplicación en ese momento para enviar tu señal de bienestar.',
     'heartbeat_daily_time': 'Cada día a las @time',
-    'heartbeat_scheduled_today': 'Verificación de bienestar programada hoy a las @time.',
+    'heartbeat_scheduled_today': 'Tu señal de bienestar se enviará a tus protectores cada día a las @time.',
     'heartbeat_change_failed_title': 'Error al cambiar la hora',
     'heartbeat_change_failed_message': 'No se pudo guardar en el servidor.',
 

@@ -334,7 +334,7 @@ abstract class NlNl {
     'heartbeat_schedule_hint_ios':
         'Een welzijns-pushmelding komt elke dag op deze tijd binnen. Tik op de melding of open de app rond dat tijdstip om uw welzijnssignaal te verzenden.',
     'heartbeat_daily_time': 'Dagelijks om @time',
-    'heartbeat_scheduled_today': 'Welzijnscontrole gepland om @time vandaag.',
+    'heartbeat_scheduled_today': 'Uw welzijnssignaal wordt elke dag om @time naar uw beschermers gestuurd.',
     'heartbeat_change_failed_title': 'Tijdswijziging mislukt',
     'heartbeat_change_failed_message': 'Kan niet bijwerken op de server.',
 

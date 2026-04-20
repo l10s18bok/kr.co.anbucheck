@@ -325,7 +325,7 @@ abstract class ThTh {
     'heartbeat_schedule_hint_ios':
         'การแจ้งเตือนพุชสุขภาพจะมาถึงทุกวันในเวลานี้ แตะที่การแจ้งเตือนหรือเปิดแอปในช่วงเวลานั้นเพื่อส่งสัญญาณสุขภาพของคุณ',
     'heartbeat_daily_time': 'ทุกวันเวลา @time',
-    'heartbeat_scheduled_today': 'การตรวจสอบความเป็นอยู่กำหนดเวลา @time วันนี้',
+    'heartbeat_scheduled_today': 'สัญญาณความปลอดภัยของคุณจะถูกส่งถึงผู้ดูแลทุกวันเวลา @time',
     'heartbeat_change_failed_title': 'เปลี่ยนเวลาไม่สำเร็จ',
     'heartbeat_change_failed_message': 'ไม่สามารถอัปเดตบนเซิร์ฟเวอร์ได้',
 

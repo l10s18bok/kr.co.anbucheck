@@ -328,7 +328,7 @@ abstract class HiIn {
     'heartbeat_schedule_hint_ios':
         'हर दिन इस समय एक वेलनेस पुश सूचना आती है। अपना वेलनेस संकेत भेजने के लिए सूचना पर टैप करें या उस समय के आसपास ऐप खोलें।',
     'heartbeat_daily_time': 'रोज @time पर',
-    'heartbeat_scheduled_today': 'आज @time पर कुशलता जांच निर्धारित है।',
+    'heartbeat_scheduled_today': 'आपका कुशलता संकेत हर दिन @time पर आपके अभिभावकों को भेजा जाएगा।',
     'heartbeat_change_failed_title': 'समय बदलना विफल',
     'heartbeat_change_failed_message': 'सर्वर पर अपडेट नहीं हो सका।',
 

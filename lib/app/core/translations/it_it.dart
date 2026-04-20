@@ -336,7 +336,7 @@ abstract class ItIt {
     'heartbeat_schedule_hint_ios':
         'Una notifica push di benessere arriva ogni giorno a quest\'ora. Tocca la notifica o apri l\'app in quel momento per inviare il tuo segnale di benessere.',
     'heartbeat_daily_time': 'Ogni giorno alle @time',
-    'heartbeat_scheduled_today': 'Verifica del benessere programmata alle @time oggi.',
+    'heartbeat_scheduled_today': 'Il tuo segnale di benessere sarà inviato ai tuoi guardiani ogni giorno alle @time.',
     'heartbeat_change_failed_title': "Modifica dell'orario non riuscita",
     'heartbeat_change_failed_message': 'Impossibile aggiornare sul server.',
 
