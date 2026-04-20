@@ -26,6 +26,17 @@ class HeartbeatLockDatasource {
     return sql.openDatabase(
       path,
       version: 1,
+      // 다른 isolate가 writer lock을 잡고 있을 때 SQLITE_BUSY를 바로 던지지 않고
+      // 최대 5초까지 SQLite 내부에서 재시도하게 한다. 대부분의 동시 INSERT 경합은
+      // 이 구간 안에 UniqueConstraintError(=다른 isolate가 먼저 INSERT 성공)로
+      // 자연 수렴해 catch 블록의 단일 경로로 처리된다.
+      //
+      // ⚠️ Android sqflite는 값을 반환하는 PRAGMA를 `execute()`로 실행하면
+      // "Queries can be performed using SQLiteDatabase query or rawQuery methods only"
+      // 에러로 거부한다. `rawQuery()`를 사용해야 한다 (iOS는 어느 쪽도 OK).
+      onConfigure: (db) async {
+        await db.rawQuery('PRAGMA busy_timeout = 5000');
+      },
       onCreate: (db, _) async {
         await db.execute(
           'CREATE TABLE $_table ('
@@ -61,7 +72,12 @@ class HeartbeatLockDatasource {
       debugPrint('[HeartbeatLock] 락 획득 ($scheduledKey)');
       return true;
     } on DatabaseException catch (e) {
-      if (e.isUniqueConstraintError()) {
+      // UniqueConstraint: 다른 isolate가 이미 INSERT 성공 (CAS 본래 경로)
+      // SQLITE_BUSY / "database is locked": busy_timeout(5초)을 넘겨도 writer
+      //   lock을 못 잡은 경우. 다른 isolate가 여전히 transaction 중이라는 뜻이고,
+      //   그게 완료되면 어차피 UniqueConstraint로 실패할 것이므로 동일하게
+      //   "나는 전송 안 함"을 의미한다.
+      if (e.isUniqueConstraintError() || _isBusyError(e)) {
         debugPrint('[HeartbeatLock] 다른 isolate 전송 중 — 스킵 ($scheduledKey)');
         return false;
       }
@@ -69,6 +85,11 @@ class HeartbeatLockDatasource {
     } finally {
       await db.close();
     }
+  }
+
+  static bool _isBusyError(DatabaseException e) {
+    final msg = e.toString();
+    return msg.contains('SQLITE_BUSY') || msg.contains('database is locked');
   }
 
   /// 락 해제 (전송 완료 or 실패 후 finally에서 호출)
