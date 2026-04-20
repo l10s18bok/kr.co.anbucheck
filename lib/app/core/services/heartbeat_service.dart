@@ -6,6 +6,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/heartbeat_remote_datasource.dart';
@@ -22,6 +23,7 @@ class HeartbeatService {
 
   final _sensorDs     = SensorLocalDatasource();
   final _heartbeatDs  = HeartbeatLocalDatasource();
+  final _lockDs       = HeartbeatLockDatasource();
   final _tokenDs      = TokenLocalDatasource();
   final _battery      = Battery();
 
@@ -57,18 +59,18 @@ class HeartbeatService {
     //
     // 책임 분리 구조:
     //   - lastScheduledKey: 성공 마커. API 전송 성공 + lastHeartbeatDate 저장 후에만 save.
-    //   - heartbeat_in_flight: mutual exclusion 락. 센서/전송 시작 직전 now ms를 save,
-    //     정상 종료 시 finally로 clear. TTL 30초 초과 시 이전 isolate가 크래시한 것으로
-    //     간주하고 새 진입자가 이어받는다.
-    //
-    // 과거에는 lastScheduledKey를 선점 save해 락과 성공 마커를 겸용했는데, Worker가
-    // Doze/OEM 절전으로 중도 종료되면 성공 마커만 남아 2차 안전망(앱 복귀 자동 전송)이
-    // HeartbeatService의 dedup 가드에 영구 차단되는 ghost state 버그가 있었다.
+    //     당일 재전송 차단 전용 (SharedPreferences).
+    //   - HeartbeatLockDatasource: cross-isolate mutual exclusion 락 (SQLite UNIQUE).
+    //     WorkManager는 워커마다 새 isolate를 생성하므로 SharedPreferences 기반
+    //     reload→check→save 패턴은 CAS가 아니어서 두 isolate가 같은 ms에 진입하면
+    //     둘 다 통과하는 race window가 존재했다. SQLite UNIQUE INSERT는 cross-isolate
+    //     원자 연산이라 하나만 성공하고 나머지는 UniqueConstraintError로 즉시 실패한다.
     await getReloadedPrefs();
     final now = DateTime.now();
     final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
     final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
 
+    bool lockAcquired = false;
     if (!manual) {
       final lastKey = await _tokenDs.getLastScheduledKey();
       if (lastKey == scheduledKey) {
@@ -76,19 +78,11 @@ class HeartbeatService {
         return;
       }
 
-      // in-flight TTL 락 검사: 다른 isolate가 현재 전송 중이면 스킵
-      final inFlight = await _tokenDs.getHeartbeatInFlight();
-      if (inFlight != null) {
-        final elapsedMs = now.millisecondsSinceEpoch - inFlight;
-        if (elapsedMs >= 0 && elapsedMs < 30000) {
-          debugPrint('[HeartbeatService] 다른 isolate 전송 중 — 스킵 (${elapsedMs}ms)');
-          return;
-        }
-        debugPrint('[HeartbeatService] stale in_flight 감지 (${elapsedMs}ms) — 이어받음');
-      }
-
-      await _tokenDs.saveHeartbeatInFlight(now.millisecondsSinceEpoch);
-      debugPrint('[HeartbeatService] in_flight 락 획득 ($scheduledKey) — 전송 진행');
+      // SQLite UNIQUE INSERT로 락 획득. 다른 isolate가 이미 잡고 있으면 false 반환.
+      // TTL 30초 초과한 stale 락은 tryAcquire 내부에서 일괄 삭제되므로 crashed
+      // isolate가 남긴 락도 새 진입자가 이어받을 수 있다.
+      lockAcquired = await _lockDs.tryAcquire(scheduledKey);
+      if (!lockAcquired) return;
     }
 
     try {
@@ -127,12 +121,14 @@ class HeartbeatService {
         stepsDelta:   stepsDelta,
         suspicious:   suspicious,
         batteryLevel: batteryLevel,
+        // 자동 heartbeat만 key 전송 — 수동 보고는 서버 dedup 우회.
+        scheduledKey: manual ? null : scheduledKey,
       );
 
       await _sendOrSavePending(request, deviceToken, schedHour, schedMinute);
     } finally {
-      if (!manual) {
-        await _tokenDs.clearHeartbeatInFlight();
+      if (lockAcquired) {
+        await _lockDs.release(scheduledKey);
       }
     }
   }
@@ -306,6 +302,7 @@ class HeartbeatService {
         stepsDelta:   json['steps_delta'] as int?,
         suspicious:   json['suspicious'] as bool,
         batteryLevel: json['battery_level'] as int?,
+        scheduledKey: json['scheduled_key'] as String?,
       );
 }
 

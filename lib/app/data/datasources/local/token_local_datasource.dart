@@ -19,7 +19,6 @@ class TokenLocalDatasource {
   static const _keySubscriptionActive = 'subscription_active';
   static const _keyIsAlsoSubject = 'is_also_subject';
   static const _keyLastScheduledKey = 'last_scheduled_key';
-  static const _keyHeartbeatInFlight = 'heartbeat_in_flight';
 
   // iOS Keychain: 재설치 후에도 device_id 복원용 (identifierForVendor는 vendor 앱
   // 전부 삭제 후 재설치 시 변경되므로, Keychain 백업이 없으면 계정 복원이 불가능)
@@ -198,28 +197,6 @@ class TokenLocalDatasource {
     await prefs.remove(_keyLastScheduledKey);
   }
 
-  // ── heartbeat 진행 중 마커 (ms epoch, TTL 30초) ─────────────
-  // 동일 예약시각에 여러 isolate가 동시 진입하는 것을 차단하는 mutual
-  // exclusion 락. 과거에는 lastScheduledKey를 선점 save해 락과 성공 마커를
-  // 겸용했는데, Worker가 Doze/OEM 절전으로 중도 종료되면 성공 마커만 남아
-  // 2차 안전망이 영구 차단되는 ghost state 버그가 있었다. 이제는 책임을
-  // 분리해 in_flight는 락 전용이며, TTL 초과 시 이전 isolate가 크래시한
-  // 것으로 간주하고 새 진입자가 이어받는다.
-  Future<int?> getHeartbeatInFlight() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_keyHeartbeatInFlight);
-  }
-
-  Future<void> saveHeartbeatInFlight(int epochMs) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_keyHeartbeatInFlight, epochMs);
-  }
-
-  Future<void> clearHeartbeatInFlight() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_keyHeartbeatInFlight);
-  }
-
   // ── 구독 활성화 여부 ──────────────────────────────────────
   Future<bool> getSubscriptionActive() async {
     final prefs = await SharedPreferences.getInstance();
@@ -265,7 +242,6 @@ class TokenLocalDatasource {
     await prefs.remove(_keyLastManualReportDate);
     await prefs.remove(_keyIsAlsoSubject);
     await prefs.remove(_keyLastScheduledKey);
-    await prefs.remove(_keyHeartbeatInFlight);
     await prefs.setBool(_keySubscriptionActive, false);
   }
 

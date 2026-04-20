@@ -12,6 +12,7 @@ import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
@@ -378,6 +379,10 @@ class GuardianDashboardController extends BaseController
       final hour = result['heartbeat_hour'] as int? ?? 18;
       final minute = result['heartbeat_minute'] as int? ?? 0;
 
+      // 이전 G+S 세션이 비정상 종료로 남긴 락 잔재가 첫 heartbeat를 차단하지
+      // 않도록 활성화 직전에 청소. TTL 30초 자연 해제보다 확실.
+      await HeartbeatLockDatasource().clearAll();
+
       // 로컬 저장
       await _tokenDs.saveIsAlsoSubject(true);
       await _tokenDs.saveInviteCode(code);
@@ -433,6 +438,8 @@ class GuardianDashboardController extends BaseController
       );
       await _tokenDs.saveLastHeartbeatDate('');
       await _tokenDs.saveLastHeartbeatTime('');
+      // G+S 재활성화 시 이전 락이 남아있으면 첫 heartbeat가 스킵될 수 있음
+      await HeartbeatLockDatasource().clearAll();
 
       isAlsoSubject.value = false;
       inviteCode.value = '';
