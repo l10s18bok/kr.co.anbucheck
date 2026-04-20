@@ -121,6 +121,8 @@ class HeartbeatService {
         stepsDelta:   stepsDelta,
         suspicious:   suspicious,
         batteryLevel: batteryLevel,
+        // 자동 heartbeat만 key 전송 — 수동 보고는 서버 dedup 우회.
+        scheduledKey: manual ? null : scheduledKey,
       );
 
       await _sendOrSavePending(request, deviceToken, schedHour, schedMinute);
@@ -300,6 +302,7 @@ class HeartbeatService {
         stepsDelta:   json['steps_delta'] as int?,
         suspicious:   json['suspicious'] as bool,
         batteryLevel: json['battery_level'] as int?,
+        scheduledKey: json['scheduled_key'] as String?,
       );
 }
 

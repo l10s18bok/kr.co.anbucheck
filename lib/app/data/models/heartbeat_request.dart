@@ -18,6 +18,14 @@ class HeartbeatRequest {
   /// 배터리 잔량 (0~100), 조회 실패 시 null
   final int? batteryLevel;
 
+  /// HTTP 재전송 중복 차단용 idempotency key.
+  /// 자동 heartbeat: "YYYY-MM-DD_HH:MM" (예약 시각 기준).
+  /// 수동 보고(manual=true)는 null — 서버 dedup 우회.
+  /// 서버가 같은 (device_id, scheduled_key) 조합을 이미 기록했다면 부수효과(알림/Push)
+  /// 없이 200 OK만 반환하므로, dio connectionError 후 retry가 보호자에게 같은 알림을
+  /// 두 번 보내는 race를 구조적으로 차단한다.
+  final String? scheduledKey;
+
   const HeartbeatRequest({
     required this.deviceId,
     required this.timestamp,
@@ -25,6 +33,7 @@ class HeartbeatRequest {
     this.stepsDelta,
     required this.suspicious,
     this.batteryLevel,
+    this.scheduledKey,
   });
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +43,7 @@ class HeartbeatRequest {
         if (stepsDelta != null) 'steps_delta': stepsDelta,
         'suspicious': suspicious,
         if (batteryLevel != null) 'battery_level': batteryLevel,
+        if (scheduledKey != null) 'scheduled_key': scheduledKey,
       };
 }
 
