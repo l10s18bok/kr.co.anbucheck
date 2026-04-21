@@ -195,6 +195,7 @@ abstract class ThTh {
     'guardian_chart_today': 'วันนี้',
     'guardian_safety_needed': 'จำเป็นต้องตรวจสอบความปลอดภัย',
     'guardian_error_load_subjects': 'ไม่สามารถโหลดรายชื่อผู้อยู่ในการดูแล',
+    'guardian_safety_confirmed': 'ยืนยันความปลอดภัยแล้ว',
     'guardian_error_clear_alerts': 'ไม่สามารถล้างการแจ้งเตือน',
 
     // ── เพิ่มผู้อยู่ในการดูแล ──

@@ -195,6 +195,7 @@ abstract class SvSe {
     'guardian_chart_today': 'Idag',
     'guardian_safety_needed': 'Sakerhetskontroll behovs',
     'guardian_error_load_subjects': 'Kunde inte ladda skyddspersoner.',
+    'guardian_safety_confirmed': 'Säkerhet bekräftad.',
     'guardian_error_clear_alerts': 'Kunde inte rensa aviseringar.',
 
     // ── Lagg till skyddsperson ──

@@ -197,6 +197,7 @@ abstract class EnUs {
     'guardian_chart_today': 'Today',
     'guardian_safety_needed': 'Safety check needed',
     'guardian_error_load_subjects': 'Failed to load subjects.',
+    'guardian_safety_confirmed': 'Safety confirmed.',
     'guardian_error_clear_alerts': 'Failed to clear alerts.',
 
     // ── Guardian Add Subject ──

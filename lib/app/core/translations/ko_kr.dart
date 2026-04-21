@@ -189,6 +189,7 @@ abstract class KoKr {
     'guardian_chart_today': '오늘',
     'guardian_safety_needed': '안전 확인이 필요합니다',
     'guardian_error_load_subjects': '보호 대상자 목록을 불러오지 못했습니다.',
+    'guardian_safety_confirmed': '안전이 확인되었습니다.',
     'guardian_error_clear_alerts': '경고 해제에 실패했습니다.',
 
     // ── 보호자 대상자 추가 ──

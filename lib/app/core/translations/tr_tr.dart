@@ -198,6 +198,7 @@ abstract class TrTr {
     'guardian_chart_today': 'Bugün',
     'guardian_safety_needed': 'Güvenlik kontrolü gerekli',
     'guardian_error_load_subjects': 'Takip edilenler listesi yüklenemedi.',
+    'guardian_safety_confirmed': 'Güvenlik onaylandı.',
     'guardian_error_clear_alerts': 'Uyarılar temizlenemedi.',
 
     // ── Takip Edilen Ekleme ──

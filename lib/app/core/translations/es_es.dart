@@ -199,6 +199,7 @@ abstract class EsEs {
     'guardian_chart_today': 'Hoy',
     'guardian_safety_needed': 'Se necesita verificación de seguridad',
     'guardian_error_load_subjects': 'No se pudo cargar la lista de personas protegidas.',
+    'guardian_safety_confirmed': 'Seguridad confirmada.',
     'guardian_error_clear_alerts': 'No se pudieron eliminar las alertas.',
 
     // ── Agregar persona protegida ──

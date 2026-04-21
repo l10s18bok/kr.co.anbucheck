@@ -204,6 +204,7 @@ abstract class DeDe {
     'guardian_chart_today': 'Heute',
     'guardian_safety_needed': 'Sicherheitsprüfung erforderlich',
     'guardian_error_load_subjects': 'Schutzpersonen konnten nicht geladen werden.',
+    'guardian_safety_confirmed': 'Sicherheit bestätigt.',
     'guardian_error_clear_alerts': 'Warnungen konnten nicht aufgehoben werden.',
 
     // ── Schutzperson hinzufügen ──

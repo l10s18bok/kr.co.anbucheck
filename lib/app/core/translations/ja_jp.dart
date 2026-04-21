@@ -188,6 +188,7 @@ abstract class JaJp {
     'guardian_chart_today': '今日',
     'guardian_safety_needed': '安全確認が必要です',
     'guardian_error_load_subjects': '対象者リストの読み込みに失敗しました。',
+    'guardian_safety_confirmed': '安全が確認されました。',
     'guardian_error_clear_alerts': '警告の解除に失敗しました。',
 
     // ── 見守り対象者の追加 ──

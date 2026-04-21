@@ -202,6 +202,7 @@ abstract class NlNl {
     'guardian_chart_today': 'Vandaag',
     'guardian_safety_needed': 'Veiligheidscontrole nodig',
     'guardian_error_load_subjects': 'Kan de lijst met beschermelingen niet laden.',
+    'guardian_safety_confirmed': 'Veiligheid bevestigd.',
     'guardian_error_clear_alerts': 'Kan waarschuwingen niet wissen.',
 
     // ── Beschermeling toevoegen ──

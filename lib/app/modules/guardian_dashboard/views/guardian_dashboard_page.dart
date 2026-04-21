@@ -297,7 +297,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                               showActionButtons: !isNormal,
                               isHighlighted: isHighlighted,
                               onCall: () => controller.onCallTapped(subject.inviteCode),
-                              onConfirmSafety: () => controller.confirmSafety(subject.inviteCode),
+                              onConfirmSafety: () => controller.confirmSafety(subject.inviteCode, subject.alias),
                               batteryLevel: isNormal ? subject.batteryLevel : null,
                               steps: steps,
                               onOpenFullChart: () async {

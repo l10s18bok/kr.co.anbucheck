@@ -18,6 +18,10 @@ class GuardianEmergencyMapPage extends GetWidget<GuardianEmergencyMapController>
         title: Text('emergency_map_title'.tr),
         backgroundColor: AppColors.guardianPrimary,
         foregroundColor: AppColors.guardianOnPrimary,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded, size: 20.w),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: SafeArea(
         child: Obx(() {

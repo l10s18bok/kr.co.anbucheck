@@ -323,10 +323,14 @@ class GuardianDashboardController extends BaseController
   }
 
   /// 안전확인 완료 처리 — 서버 경고 클리어 후 로컬 상태 갱신
-  Future<void> confirmSafety(String inviteCode) async {
+  Future<void> confirmSafety(String inviteCode, String nickname) async {
     clearHighlight();
     try {
       await _svc.clearAlerts(inviteCode);
+      AppSnackbar.show(
+        '',
+        '$nickname ${'guardian_safety_confirmed'.tr}',
+      );
     } catch (_) {
       AppSnackbar.show('common_error'.tr, 'guardian_error_clear_alerts'.tr);
     }

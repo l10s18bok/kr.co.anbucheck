@@ -193,6 +193,7 @@ abstract class ArSa {
     'guardian_chart_today': 'اليوم',
     'guardian_safety_needed': 'مطلوب التحقق من السلامة',
     'guardian_error_load_subjects': 'تعذر تحميل قائمة المتابَعين.',
+    'guardian_safety_confirmed': 'تم تأكيد السلامة.',
     'guardian_error_clear_alerts': 'تعذر مسح التنبيهات.',
 
     // ── إضافة متابَع ──

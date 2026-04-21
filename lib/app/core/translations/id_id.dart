@@ -202,6 +202,7 @@ abstract class IdId {
     'guardian_chart_today': 'Today',
     'guardian_safety_needed': 'Pemeriksaan keselamatan diperlukan',
     'guardian_error_load_subjects': 'Gagal memuat daftar orang yang dilindungi.',
+    'guardian_safety_confirmed': 'Keamanan dikonfirmasi.',
     'guardian_error_clear_alerts': 'Gagal menghapus peringatan.',
 
     // ── Penjaga Tambah Orang yang Dilindungi ──

@@ -197,6 +197,7 @@ abstract class HiIn {
     'guardian_chart_today': 'आज',
     'guardian_safety_needed': 'सुरक्षा जांच आवश्यक',
     'guardian_error_load_subjects': 'संरक्षित व्यक्तियों की सूची लोड करने में विफल।',
+    'guardian_safety_confirmed': 'सुरक्षा की पुष्टि हो गई।',
     'guardian_error_clear_alerts': 'चेतावनियां हटाने में विफल।',
 
     // ── अभिभावक संरक्षित व्यक्ति जोड़ें ──

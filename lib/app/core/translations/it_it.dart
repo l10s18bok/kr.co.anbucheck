@@ -200,6 +200,7 @@ abstract class ItIt {
     'guardian_chart_today': 'Oggi',
     'guardian_safety_needed': 'Verifica di sicurezza necessaria',
     'guardian_error_load_subjects': 'Impossibile caricare la lista degli assistiti.',
+    'guardian_safety_confirmed': 'Sicurezza confermata.',
     'guardian_error_clear_alerts': 'Impossibile cancellare gli avvisi.',
 
     // ── Aggiunta assistito ──

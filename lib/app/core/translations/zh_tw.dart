@@ -187,6 +187,7 @@ abstract class ZhTw {
     'guardian_chart_today': '今天',
     'guardian_safety_needed': '需要確認安全',
     'guardian_error_load_subjects': '載入被守護者列表失敗。',
+    'guardian_safety_confirmed': '安全已確認。',
     'guardian_error_clear_alerts': '解除警報失敗。',
 
     // ── 守護者新增被守護者 ──

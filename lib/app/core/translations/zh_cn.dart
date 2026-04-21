@@ -187,6 +187,7 @@ abstract class ZhCn {
     'guardian_chart_today': '今天',
     'guardian_safety_needed': '需要确认安全',
     'guardian_error_load_subjects': '加载被守护者列表失败。',
+    'guardian_safety_confirmed': '安全已确认。',
     'guardian_error_clear_alerts': '解除警报失败。',
 
     // ── 守护者添加被守护者 ──

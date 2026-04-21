@@ -200,6 +200,7 @@ abstract class PtBr {
     'guardian_chart_today': 'Hoje',
     'guardian_safety_needed': 'Verificação de segurança necessária',
     'guardian_error_load_subjects': 'Não foi possível carregar a lista de protegidos.',
+    'guardian_safety_confirmed': 'Segurança confirmada.',
     'guardian_error_clear_alerts': 'Não foi possível limpar os alertas.',
 
     // ── Adicionar protegido ──

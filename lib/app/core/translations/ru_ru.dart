@@ -202,6 +202,7 @@ abstract class RuRu {
     'guardian_chart_today': 'Сегодня',
     'guardian_safety_needed': 'Необходима проверка безопасности',
     'guardian_error_load_subjects': 'Не удалось загрузить список подопечных.',
+    'guardian_safety_confirmed': 'Безопасность подтверждена.',
     'guardian_error_clear_alerts': 'Не удалось сбросить тревоги.',
 
     // ── Добавление подопечного ──

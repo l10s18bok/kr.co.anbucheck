@@ -199,6 +199,7 @@ abstract class ViVn {
     'guardian_chart_today': 'Hôm nay',
     'guardian_safety_needed': 'Can kiem tra an toan',
     'guardian_error_load_subjects': 'Khong the tai danh sach nguoi duoc bao ve.',
+    'guardian_safety_confirmed': 'Đã xác nhận an toàn.',
     'guardian_error_clear_alerts': 'Khong the xoa canh bao.',
 
     // ── Them nguoi duoc bao ve ──

@@ -202,6 +202,7 @@ abstract class FrFr {
     'guardian_chart_today': 'Today',
     'guardian_safety_needed': 'Vérification de sécurité nécessaire',
     'guardian_error_load_subjects': 'Impossible de charger la liste des personnes protégées.',
+    'guardian_safety_confirmed': 'Sécurité confirmée.',
     'guardian_error_clear_alerts': 'Impossible de lever les alertes.',
 
     // ── Ajouter une personne protégée ──

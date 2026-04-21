@@ -200,6 +200,7 @@ abstract class PlPl {
     'guardian_chart_today': 'Dziś',
     'guardian_safety_needed': 'Wymagane sprawdzenie bezpieczenstwa',
     'guardian_error_load_subjects': 'Nie udalo sie zaladowac listy podopiecznych.',
+    'guardian_safety_confirmed': 'Bezpieczeństwo potwierdzone.',
     'guardian_error_clear_alerts': 'Nie udalo sie usunac alertow.',
 
     // ── Dodawanie podopiecznego ──
