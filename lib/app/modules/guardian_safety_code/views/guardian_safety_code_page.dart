@@ -509,7 +509,6 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
   void _showEmergencyConfirm() {
     Get.dialog(
       AlertDialog(
-        backgroundColor: AppColors.surface,
         title: Text(
           'subject_home_emergency_confirm_title'.tr,
           style: AppTextTheme.headlineSmall(

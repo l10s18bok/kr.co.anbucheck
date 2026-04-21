@@ -337,7 +337,6 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColors.surface,
       title: Text('connection_edit_title'.tr, style: AppTextTheme.headlineSmall()),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -350,7 +349,7 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
             decoration: InputDecoration(
               hintText: widget.alias,
               filled: true,
-              fillColor: AppColors.surfaceContainerLowest,
+              fillColor: const Color(0xFFF5F5F5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.r),
                 borderSide: BorderSide.none,

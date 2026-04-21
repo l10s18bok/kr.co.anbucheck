@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
-import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -53,7 +52,6 @@ class ModeSelectController extends BaseController {
         final choice = await Get.dialog<String>(
           barrierDismissible: false,
           AlertDialog(
-            backgroundColor: AppColors.surface,
             title: Text('onboarding_already_registered_title'.tr),
             content: Text(
               messageKey.trParams({

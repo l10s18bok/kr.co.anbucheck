@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
-import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -76,7 +75,6 @@ class PermissionController extends BaseController {
   Future<bool> _showNotificationDeniedDialog() async {
     final result = await Get.dialog<bool>(
       AlertDialog(
-        backgroundColor: AppColors.surface,
         title: Text('permission_notification_required_title'.tr),
         content: Text(
           'permission_notification_required_message'.tr,
