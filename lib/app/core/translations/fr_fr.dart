@@ -258,6 +258,14 @@ abstract class FrFr {
     'gs_activity_permission_settings_body': 'Veuillez autoriser l\'autorisation Activité physique (Mouvement et Forme) dans les paramètres de l\'application.',
     'gs_activity_permission_settings_go': 'Aller aux paramètres',
 
+    // ── Mode Protecteur → G+S (Drawer/Dialogue) ──
+    'drawer_enable_guardian': 'Gérer aussi le bien-être familial',
+    's_to_gs_dialog_title': 'Ajouter la fonction Protecteur',
+    's_to_gs_dialog_body':
+        'Ajoutez la fonction Protecteur pour suivre également le bien-être de votre famille ou de vos proches.\n(Remarque : la fonction Protecteur est gratuite pendant 3 mois, puis passe à un abonnement payant.)\n\nVotre propre code de sécurité et l\'envoi des signaux de bien-être actuels restent inchangés et gratuits.',
+    's_to_gs_dialog_confirm': 'Continuer',
+    's_to_gs_switch_failed': 'Échec de l\'activation de la fonction Protecteur',
+
     // ── Notifications (Protecteur) ──
     'notifications_title': 'Notifications',
     'notifications_today': 'Notifications du jour',

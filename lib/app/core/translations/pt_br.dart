@@ -255,6 +255,14 @@ abstract class PtBr {
     'gs_activity_permission_settings_body': 'Permita a permissão Atividade física (Movimento e Atividade Física) nas configurações do aplicativo.',
     'gs_activity_permission_settings_go': 'Ir para Configurações',
 
+    // ── Modo Guardião → G+S (Drawer/Diálogo) ──
+    'drawer_enable_guardian': 'Também gerenciar o bem-estar da família',
+    's_to_gs_dialog_title': 'Adicionar função de Guardião',
+    's_to_gs_dialog_body':
+        'Adicione a função de Guardião para também acompanhar o bem-estar de familiares ou pessoas queridas.\n(Observação: a função de Guardião é gratuita por 3 meses e depois passa a uma assinatura paga.)\n\nSeu próprio código de segurança e o envio dos sinais de bem-estar em uso permanecerão inalterados e continuarão gratuitos.',
+    's_to_gs_dialog_confirm': 'Continuar',
+    's_to_gs_switch_failed': 'Falha ao ativar a função de Guardião',
+
     // ── Notificações do guardião ──
     'notifications_title': 'Notificações',
     'notifications_today': 'Notificações de hoje',

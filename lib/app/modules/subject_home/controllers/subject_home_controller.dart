@@ -27,6 +27,7 @@ import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dar
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/emergency_remote_datasource.dart';
+import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 대상자 홈 컨트롤러
@@ -501,6 +502,29 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   Future<void> loadAppVersion() async {
     final info = await PackageInfo.fromPlatform();
     appVersion.value = '${info.version} (${info.buildNumber})';
+  }
+
+  // ── S → G+S 전환 ──────────────────────────────────
+  /// 대상자 모드 사용자가 보호자 기능을 추가로 활성화.
+  /// 서버 role을 guardian으로 전환 + 3개월 무료 체험 구독 생성.
+  /// invite_code와 heartbeat 예약은 그대로 유지되므로 기존 S 기능은 끊김 없이
+  /// 지속되고, 이후엔 기존 G+S 사용자와 동일한 경로로 동작한다.
+  Future<void> switchToGuardian() async {
+    final deviceToken = await _tokenDs.getDeviceToken();
+    if (deviceToken == null) return;
+    try {
+      final result = await UserRemoteDatasource().switchToGuardian(deviceToken);
+      await _tokenDs.saveUserRole('guardian');
+      await _tokenDs.saveIsAlsoSubject(true);
+      final sub = result['subscription'];
+      if (sub is Map && sub['is_active'] == true) {
+        await _tokenDs.saveSubscriptionActive(true);
+      }
+      Get.offAllNamed(AppRoutes.guardianDashboard);
+    } catch (e) {
+      AppSnackbar.show('common_error'.tr, 's_to_gs_switch_failed'.tr,
+          position: SnackPosition.TOP);
+    }
   }
 
   // ── 탈퇴 ──────────────────────────────────────────

@@ -257,6 +257,14 @@ abstract class IdId {
     'gs_activity_permission_settings_body': 'Harap izinkan izin Aktivitas Fisik (Gerakan & Kebugaran) di pengaturan aplikasi.',
     'gs_activity_permission_settings_go': 'Buka Pengaturan',
 
+    // ── Mode Penjaga → G+S (Drawer/Dialog) ──
+    'drawer_enable_guardian': 'Kelola juga kesejahteraan keluarga',
+    's_to_gs_dialog_title': 'Tambahkan Fitur Penjaga',
+    's_to_gs_dialog_body':
+        'Tambahkan fitur Penjaga agar Anda juga dapat memantau kesejahteraan keluarga atau orang terkasih.\n(Catatan: fitur Penjaga gratis selama 3 bulan, setelah itu beralih ke langganan berbayar.)\n\nKode keamanan Anda dan pengiriman sinyal kesejahteraan yang sedang digunakan akan tetap sama dan terus gratis digunakan.',
+    's_to_gs_dialog_confirm': 'Lanjutkan',
+    's_to_gs_switch_failed': 'Gagal mengaktifkan fitur Penjaga',
+
     // ── Notifikasi Penjaga ──
     'notifications_title': 'Notifikasi',
     'notifications_today': 'Notifikasi Hari Ini',

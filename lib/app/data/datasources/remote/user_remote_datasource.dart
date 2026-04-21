@@ -71,6 +71,21 @@ class UserRemoteDatasource {
     }
   }
 
+  /// POST /api/v1/users/switch-to-guardian — 대상자가 보호자 기능 추가 (S → G+S)
+  /// role을 guardian으로 전환하고 3개월 무료 체험 구독 생성. invite_code와
+  /// heartbeat 예약은 서버에서 그대로 유지되므로 S 기능은 끊김 없이 지속된다.
+  Future<Map<String, dynamic>> switchToGuardian(String deviceToken) async {
+    final result = await ApiClientFactory.instance.post<dynamic>(
+      '${ApiEndpoints.users}/switch-to-guardian',
+      {},
+      headers: {'Authorization': 'Bearer $deviceToken'},
+    );
+    if (!result.isOk) {
+      throw Exception('보호자 기능 활성화 실패 (${result.statusCode})');
+    }
+    return Map<String, dynamic>.from(result.body as Map);
+  }
+
   /// POST /api/v1/users
   Future<Map<String, dynamic>> register({
     required String role,

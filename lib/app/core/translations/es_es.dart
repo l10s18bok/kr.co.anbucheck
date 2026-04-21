@@ -255,6 +255,14 @@ abstract class EsEs {
     'gs_activity_permission_settings_body': 'Permita el permiso Actividad física (Movimiento y Estado Físico) en la configuración de la aplicación.',
     'gs_activity_permission_settings_go': 'Ir a Configuración',
 
+    // ── Modo Protector → G+S (Drawer/Diálogo) ──
+    'drawer_enable_guardian': 'Gestionar también el bienestar familiar',
+    's_to_gs_dialog_title': 'Añadir función de Protector',
+    's_to_gs_dialog_body':
+        'Añade la función de Protector para también velar por el bienestar de tu familia o seres queridos.\n(Nota: la función de Protector es gratuita durante 3 meses y luego pasa a ser una suscripción de pago.)\n\nTu propio código de seguridad y el envío de señales de bienestar actuales se mantienen sin cambios y seguirán siendo gratuitos.',
+    's_to_gs_dialog_confirm': 'Continuar',
+    's_to_gs_switch_failed': 'No se pudo activar la función de Protector',
+
     // ── Notificaciones (Protector) ──
     'notifications_title': 'Notificaciones',
     'notifications_today': 'Notificaciones de hoy',

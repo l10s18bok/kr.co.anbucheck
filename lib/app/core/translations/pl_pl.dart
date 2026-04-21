@@ -255,6 +255,14 @@ abstract class PlPl {
     'gs_activity_permission_settings_body': 'Zezwól na uprawnienie Aktywność fizyczna (Ruch i sprawność) w ustawieniach aplikacji.',
     'gs_activity_permission_settings_go': 'Przejdź do Ustawień',
 
+    // ── Tryb opiekuna → G+S (Szuflada/Dialog) ──
+    'drawer_enable_guardian': 'Zarządzaj też dobrostanem rodziny',
+    's_to_gs_dialog_title': 'Dodaj funkcję opiekuna',
+    's_to_gs_dialog_body':
+        'Dodaj funkcję opiekuna, aby móc również czuwać nad dobrostanem rodziny lub bliskich.\n(Uwaga: funkcja opiekuna jest bezpłatna przez 3 miesiące, po czym przechodzi w płatną subskrypcję.)\n\nTwój własny kod bezpieczeństwa i obecnie używane wysyłanie sygnałów o samopoczuciu pozostaną bez zmian i nadal będą bezpłatne.',
+    's_to_gs_dialog_confirm': 'Kontynuuj',
+    's_to_gs_switch_failed': 'Nie udało się włączyć funkcji opiekuna',
+
     // ── Powiadomienia opiekuna ──
     'notifications_title': 'Powiadomienia',
     'notifications_today': 'Dzisiejsze powiadomienia',

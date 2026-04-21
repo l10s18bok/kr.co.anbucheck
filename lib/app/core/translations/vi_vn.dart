@@ -254,6 +254,14 @@ abstract class ViVn {
     'gs_activity_permission_settings_body': 'Vui lòng cấp quyền Hoạt động thể chất (Chuyển động và Thể hình) trong cài đặt ứng dụng.',
     'gs_activity_permission_settings_go': 'Đi đến Cài đặt',
 
+    // ── Chế độ Người bảo vệ → G+S (Drawer/Hộp thoại) ──
+    'drawer_enable_guardian': 'Quản lý cả sự an toàn của gia đình',
+    's_to_gs_dialog_title': 'Thêm tính năng Người bảo vệ',
+    's_to_gs_dialog_body':
+        'Thêm tính năng Người bảo vệ để cũng có thể theo dõi sự an toàn của gia đình hoặc những người thân yêu.\n(Lưu ý: Tính năng Người bảo vệ miễn phí trong 3 tháng, sau đó chuyển sang gói đăng ký trả phí.)\n\nMã an toàn của bạn và việc gửi tín hiệu an toàn hiện đang sử dụng sẽ được giữ nguyên và vẫn miễn phí.',
+    's_to_gs_dialog_confirm': 'Tiếp tục',
+    's_to_gs_switch_failed': 'Không thể bật tính năng Người bảo vệ',
+
     // ── Thong bao nguoi bao ve ──
     'notifications_title': 'Thong bao',
     'notifications_today': 'Thong bao hom nay',

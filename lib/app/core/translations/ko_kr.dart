@@ -243,6 +243,14 @@ abstract class KoKr {
     'gs_activity_permission_settings_body': '앱 설정에서 신체 활동(피트니스) 권한을 허용해 주세요.',
     'gs_activity_permission_settings_go': '설정으로 이동',
 
+    // ── 보호자 모드에서 G+S 전환 (Drawer/다이얼로그) ──
+    'drawer_enable_guardian': '가족 안부도 관리하기',
+    's_to_gs_dialog_title': '보호자 기능 추가',
+    's_to_gs_dialog_body':
+        '가족이나 소중한 사람의 안부를 관리할 수 있는 보호자 기능을 추가합니다.\n(주의: 보호자 기능은 3개월 무료 후 유료로 전환됩니다.)\n\n내 안전 코드와 현재 사용 중인 안부 전송은 그대로 유지되며, 계속 무료로 이용 가능합니다.',
+    's_to_gs_dialog_confirm': '계속하기',
+    's_to_gs_switch_failed': '보호자 기능 활성화에 실패했습니다',
+
     // ── 보호자 알림 ──
     'notifications_title': '알림',
     'notifications_today': '오늘 받은 알림',
