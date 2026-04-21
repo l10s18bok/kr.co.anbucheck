@@ -59,6 +59,8 @@ abstract class PlPl {
         'Wymagane do otrzymywania powiadomien o bezpieczenstwie podopiecznych',
     'permission_activity': 'Rozpoznawanie aktywnosci',
     'permission_activity_desc': 'Sluzy do wykrywania krokow i potwierdzania aktywnosci',
+    'permission_location': 'Lokalizacja',
+    'permission_location_desc': 'Udostepniana opiekunom tylko przy wyslaniu wezwania pomocy',
     'permission_activity_dialog_title': 'Informacja o uprawnieniu aktywnosci',
     'permission_activity_dialog_message':
         'Sluzy do wykrywania krokow i potwierdzania aktywnosci.\nProsze wybrac "Zezwol" na nastepnym ekranie.',

@@ -59,6 +59,8 @@ abstract class EsEs {
         'Necesario para recibir alertas sobre la seguridad de sus protegidos',
     'permission_activity': 'Reconocimiento de actividad',
     'permission_activity_desc': 'Se utiliza para detectar pasos y confirmar la actividad',
+    'permission_location': 'Ubicación',
+    'permission_location_desc': 'Se comparte con los protectores solo al enviar una solicitud de emergencia',
     'permission_activity_dialog_title': 'Información sobre el permiso de actividad',
     'permission_activity_dialog_message':
         'Se utiliza para detectar pasos y confirmar la actividad.\nPulse "Permitir" en la siguiente pantalla.',

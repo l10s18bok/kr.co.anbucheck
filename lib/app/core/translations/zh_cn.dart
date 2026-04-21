@@ -57,6 +57,8 @@ abstract class ZhCn {
     'permission_notification_guardian_desc': '接收被守护者安全状态提醒时需要此权限',
     'permission_activity': '身体活动权限',
     'permission_activity_desc': '用于检测步数以确认活动状态',
+    'permission_location': '位置信息',
+    'permission_location_desc': '仅在发送紧急求助时将当前位置发送给监护人',
     'permission_activity_dialog_title': '身体活动权限说明',
     'permission_activity_dialog_message': '用于检测步数以确认活动状态。\n请在下一个界面中选择"允许"。',
     'permission_notification_required_title': '需要通知权限',

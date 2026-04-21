@@ -59,6 +59,8 @@ abstract class TrTr {
         'Takip edilenlerin güvenlik durumu bildirimlerini almak için gereklidir',
     'permission_activity': 'Aktivite Tanıma',
     'permission_activity_desc': 'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır',
+    'permission_location': 'Konum',
+    'permission_location_desc': 'Yalnızca acil yardım talebinde koruyuculara iletilir',
     'permission_activity_dialog_title': 'Aktivite İzni Bilgisi',
     'permission_activity_dialog_message':
         'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır.\nLütfen sonraki ekranda "İzin Ver"e dokunun.',

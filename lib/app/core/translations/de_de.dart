@@ -62,6 +62,9 @@ abstract class DeDe {
     'permission_activity': 'Aktivitätserkennung',
     'permission_activity_desc':
         'Wird verwendet, um Schritte zu erkennen und Aktivität zu bestätigen',
+    'permission_location': 'Standort',
+    'permission_location_desc':
+        'Wird nur bei Notfallanfragen an Ihre Betreuer übermittelt',
     'permission_activity_dialog_title': 'Hinweis zur Aktivitätsberechtigung',
     'permission_activity_dialog_message':
         'Wird verwendet, um Schritte zu erkennen und Aktivität zu bestätigen.\nBitte tippen Sie im nächsten Bildschirm auf „Erlauben".',

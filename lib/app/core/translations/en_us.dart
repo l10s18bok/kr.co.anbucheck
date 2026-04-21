@@ -58,6 +58,8 @@ abstract class EnUs {
         'Required to receive safety status alerts for your subjects',
     'permission_activity': 'Activity Recognition',
     'permission_activity_desc': 'Used to detect steps and confirm activity',
+    'permission_location': 'Location',
+    'permission_location_desc': 'Shared with guardians only when you send an emergency request',
     'permission_activity_dialog_title': 'Activity Permission Info',
     'permission_activity_dialog_message':
         'Used to detect steps and confirm activity.\nPlease tap "Allow" on the next screen.',

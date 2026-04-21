@@ -9,9 +9,12 @@ import 'package:anbucheck/app/routes/app_pages.dart';
 /// 권한 안내 및 요청 컨트롤러
 /// 모드 선택 후 진입, arguments['mode']로 모드 구분
 ///
-/// Lazy Permission 정책:
-/// - Android 대상자 / Android G+S 복원(isAlsoSubject=true): 알림 + 신체 활동 권한 요청
-/// - Android 순수 보호자: 알림 권한만 요청 (heartbeat 전송 없음)
+/// 권한 요청 정책:
+/// - Android 대상자 / Android G+S 복원(isAlsoSubject=true):
+///   알림 + 신체 활동 + 위치(긴급 요청용) 권한을 이 화면에서 한 번에 요청.
+///   위치 권한은 긴급 버튼 탭 시점에 Lazy로 요청하면 기존 거부 이력 때문에
+///   OS 팝업이 억제되는 문제가 있어 사전 요청으로 전환.
+/// - Android 순수 보호자: 알림 권한만 요청 (heartbeat 전송·긴급 요청 없음)
 /// - iOS (보호자 전용): 알림(APNs) 권한만 요청. 모션 권한은 G+S 활성화 시점에 요청
 class PermissionController extends BaseController {
   late final String mode;
@@ -48,12 +51,18 @@ class PermissionController extends BaseController {
         }
       }
 
-      // Lazy Permission: 걸음수 권한은 "걸음수 전송이 실제로 필요한 시점"에만 요청한다.
-      // - Android 대상자 / G+S 복원(isAlsoSubject=true): 이 화면에서 미리 요청
-      // - Android 순수 보호자: heartbeat 전송이 없으므로 요청하지 않음
-      // - iOS (항상 보호자 전용): G+S 활성화 시점에 요청 (여기서는 요청 안 함)
+      // 걸음수 권한: Android 대상자 / G+S 복원(isAlsoSubject=true)만 요청.
+      // iOS는 G+S 활성화 시점에 CMPedometer 호출로 요청하므로 여기서는 생략.
       if (Platform.isAndroid && (isSubjectMode || isAlsoSubject)) {
         await Permission.activityRecognition.request();
+      }
+
+      // 위치 권한(긴급 도움 요청 첨부용): 대상자 기능이 있는 모든 Android 경로에
+      // 사전 요청한다. Lazy로 긴급 버튼 탭 시점에 요청하면 기존 거부 이력 때문에
+      // OS 팝업이 억제되고 권한 획득이 실패하는 문제가 발생해 사전 요청으로 전환.
+      // 거부 시에도 긴급 요청은 위치 없이 전송되므로 기능 자체는 계속 동작.
+      if (Platform.isAndroid && (isSubjectMode || isAlsoSubject)) {
+        await Permission.locationWhenInUse.request();
       }
 
       Get.offNamed(AppRoutes.onboarding, arguments: {'mode': mode});

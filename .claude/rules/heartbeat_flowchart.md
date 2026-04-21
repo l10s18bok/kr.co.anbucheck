@@ -240,7 +240,7 @@ flowchart TD
     Start --> Confirm{확인 다이얼로그<br/>보호자 전원에게 긴급 알림이<br/>발송됩니다.<br/>현재 위치도 함께 전달됩니다.<br/>정말 도움을 요청하시겠습니까?}
 
     Confirm -->|취소| End0([종료])
-    Confirm -->|긴급 요청 보내기| PermCheck[Permission.locationWhenInUse.request<br/>위치 권한 요청 최초 1회]
+    Confirm -->|긴급 요청 보내기| PermCheck[Permission.locationWhenInUse.request<br/>권한은 §9.0 권한 화면에서 up-front로 이미 요청됨<br/>긴급 버튼 탭 시점은 상태 확인 + 허용 상태면 즉시 통과]
 
     PermCheck --> PermResult{권한 허용?}
     PermResult -->|거부/영구거부| NoLoc[location = null 으로 전송 계속]

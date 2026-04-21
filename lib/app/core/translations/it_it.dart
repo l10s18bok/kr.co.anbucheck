@@ -60,6 +60,8 @@ abstract class ItIt {
         'Necessario per ricevere le notifiche sullo stato di sicurezza dei Suoi assistiti',
     'permission_activity': 'Riconoscimento attività',
     'permission_activity_desc': "Utilizzato per rilevare i passi e verificare l'attività",
+    'permission_location': 'Posizione',
+    'permission_location_desc': 'Condivisa con i tutori solo durante una richiesta di aiuto urgente',
     'permission_activity_dialog_title': 'Informazioni sul permesso attività',
     'permission_activity_dialog_message':
         'Utilizzato per rilevare i passi e verificare l\'attività.\nSelezioni "Consenti" nella schermata successiva.',

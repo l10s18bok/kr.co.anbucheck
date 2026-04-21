@@ -57,6 +57,8 @@ abstract class ZhTw {
     'permission_notification_guardian_desc': '接收被守護者安全狀態提醒時需要此權限',
     'permission_activity': '身體活動權限',
     'permission_activity_desc': '用於偵測步數以確認活動狀態',
+    'permission_location': '位置資訊',
+    'permission_location_desc': '僅在發送緊急求助時將目前位置傳送給監護人',
     'permission_activity_dialog_title': '身體活動權限說明',
     'permission_activity_dialog_message': '用於偵測步數以確認活動狀態。\n請在下一個畫面中選擇「允許」。',
     'permission_notification_required_title': '需要通知權限',

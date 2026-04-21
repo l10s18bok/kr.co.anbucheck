@@ -60,6 +60,8 @@ abstract class IdId {
         'Diperlukan untuk menerima notifikasi status keselamatan orang yang dilindungi',
     'permission_activity': 'Pengenalan Aktivitas',
     'permission_activity_desc': 'Digunakan untuk mendeteksi langkah dan memastikan aktivitas',
+    'permission_location': 'Lokasi',
+    'permission_location_desc': 'Dibagikan ke pelindung hanya saat mengirim permintaan bantuan darurat',
     'permission_activity_dialog_title': 'Info Izin Aktivitas',
     'permission_activity_dialog_message':
         'Digunakan untuk mendeteksi langkah dan memastikan aktivitas.\nSilakan ketuk "Izinkan" di layar berikutnya.',

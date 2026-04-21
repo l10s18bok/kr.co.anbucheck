@@ -58,6 +58,8 @@ abstract class ThTh {
         'จำเป็นเพื่อรับการแจ้งเตือนสถานะความปลอดภัยของผู้อยู่ในการดูแล',
     'permission_activity': 'การรับรู้กิจกรรม',
     'permission_activity_desc': 'ใช้ในการตรวจจับก้าวเดินและยืนยันกิจกรรม',
+    'permission_location': 'ตำแหน่งที่ตั้ง',
+    'permission_location_desc': 'ส่งให้ผู้ดูแลเฉพาะเมื่อขอความช่วยเหลือฉุกเฉินเท่านั้น',
     'permission_activity_dialog_title': 'ข้อมูลสิทธิ์กิจกรรม',
     'permission_activity_dialog_message':
         'ใช้ในการตรวจจับก้าวเดินและยืนยันกิจกรรม\nกรุณาแตะ "อนุญาต" ในหน้าจอถัดไป',

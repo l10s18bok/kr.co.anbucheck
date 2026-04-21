@@ -57,6 +57,8 @@ abstract class ArSa {
     'permission_notification_guardian_desc': 'مطلوب لتلقي إشعارات حالة سلامة المتابَعين',
     'permission_activity': 'التعرف على النشاط',
     'permission_activity_desc': 'يُستخدم لاكتشاف الخطوات والتأكد من النشاط',
+    'permission_location': 'الموقع',
+    'permission_location_desc': 'تتم مشاركته مع الأوصياء فقط عند إرسال طلب مساعدة طارئ',
     'permission_activity_dialog_title': 'معلومات عن إذن النشاط',
     'permission_activity_dialog_message':
         'يُستخدم لاكتشاف الخطوات والتأكد من النشاط.\nيرجى الضغط على «السماح» في الشاشة التالية.',

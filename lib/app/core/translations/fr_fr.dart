@@ -60,6 +60,8 @@ abstract class FrFr {
         'Nécessaire pour recevoir les alertes sur la sécurité de vos proches',
     'permission_activity': 'Reconnaissance d\'activité',
     'permission_activity_desc': 'Utilisée pour détecter les pas et confirmer l\'activité',
+    'permission_location': 'Localisation',
+    'permission_location_desc': 'Partagée avec vos proches uniquement lors d\'un appel d\'urgence',
     'permission_activity_dialog_title': 'À propos de l\'autorisation d\'activité',
     'permission_activity_dialog_message':
         'Utilisée pour détecter les pas et confirmer l\'activité.\nVeuillez appuyer sur « Autoriser » à l\'écran suivant.',

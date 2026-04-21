@@ -43,7 +43,7 @@ class PermissionPage extends GetWidget<PermissionController> {
                     : 'permission_notification_guardian_desc'.tr,
               ),
 
-              // 2. 신체 활동 권한 카드 (Lazy Permission)
+              // 2. 신체 활동 권한 카드
               //   - Android 대상자 / G+S 복원: 카드 표시 + 권한 요청
               //   - Android 순수 보호자 / iOS: heartbeat 전송이 이 시점에 필요 없으므로 숨김
               //     (iOS는 G+S 활성화 시점에 CMPedometer 트리거로 시스템 팝업 표시)
@@ -54,6 +54,19 @@ class PermissionPage extends GetWidget<PermissionController> {
                   icon: Icons.directions_walk_rounded,
                   title: 'permission_activity'.tr,
                   description: 'permission_activity_desc'.tr,
+                ),
+              ],
+
+              // 3. 위치 권한 카드 (긴급 도움 요청 시 1회성 첨부용)
+              //   - 활동 인식 권한과 동일 조건: Android 대상자 기능 사용 경로만 노출
+              //   - 거부해도 긴급 요청 자체는 동작하며 위치 없이 전송됨
+              if (Platform.isAndroid &&
+                  (controller.isSubjectMode || controller.isAlsoSubject)) ...[
+                SizedBox(height: AppSpacing.lg),
+                _PermissionCard(
+                  icon: Icons.location_on_rounded,
+                  title: 'permission_location'.tr,
+                  description: 'permission_location_desc'.tr,
                 ),
               ],
 

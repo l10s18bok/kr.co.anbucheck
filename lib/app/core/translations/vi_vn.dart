@@ -59,6 +59,8 @@ abstract class ViVn {
         'Can thiet de nhan thong bao ve tinh trang an toan cua nguoi duoc bao ve',
     'permission_activity': 'Nhan dien hoat dong',
     'permission_activity_desc': 'Dung de phat hien buoc chan va xac nhan hoat dong',
+    'permission_location': 'Vi tri',
+    'permission_location_desc': 'Chi gui vi tri den nguoi bao ho khi yeu cau cuu giup khan cap',
     'permission_activity_dialog_title': 'Thong tin quyen hoat dong',
     'permission_activity_dialog_message':
         'Dung de phat hien buoc chan va xac nhan hoat dong.\nVui long nhan "Cho phep" tren man hinh tiep theo.',

@@ -59,6 +59,8 @@ abstract class HiIn {
         'आपके संरक्षित व्यक्तियों की सुरक्षा सूचनाएं प्राप्त करने के लिए आवश्यक',
     'permission_activity': 'गतिविधि पहचान',
     'permission_activity_desc': 'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है',
+    'permission_location': 'स्थान',
+    'permission_location_desc': 'आपातकालीन सहायता अनुरोध पर ही संरक्षकों के साथ साझा किया जाता है',
     'permission_activity_dialog_title': 'गतिविधि अनुमति जानकारी',
     'permission_activity_dialog_message':
         'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है।\nकृपया अगली स्क्रीन पर "अनुमति दें" दबाएं।',

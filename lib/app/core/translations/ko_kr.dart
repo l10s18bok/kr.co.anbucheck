@@ -57,6 +57,8 @@ abstract class KoKr {
     'permission_notification_guardian_desc': '보호 대상자의 안전 상태 알림을 받기 위해 필요합니다',
     'permission_activity': '신체 활동 권한',
     'permission_activity_desc': '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다',
+    'permission_location': '위치 정보',
+    'permission_location_desc': '긴급 도움 요청 시에만 현재 위치를 보호자에게 전달합니다',
     'permission_activity_dialog_title': '신체 활동 권한 안내',
     'permission_activity_dialog_message': '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.\n다음 화면에서 "허용"을 선택해 주세요.',
     'permission_notification_required_title': '알림 권한이 필요합니다',

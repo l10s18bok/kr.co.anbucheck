@@ -59,6 +59,9 @@ abstract class NlNl {
     'permission_activity': 'Activiteitsherkenning',
     'permission_activity_desc':
         'Wordt gebruikt om stappen te detecteren en activiteit te bevestigen',
+    'permission_location': 'Locatie',
+    'permission_location_desc':
+        'Wordt alleen bij een noodoproep met uw beschermers gedeeld',
     'permission_activity_dialog_title': 'Informatie over activiteitstoestemming',
     'permission_activity_dialog_message':
         'Wordt gebruikt om stappen te detecteren en activiteit te bevestigen.\nSelecteer "Toestaan" op het volgende scherm.',

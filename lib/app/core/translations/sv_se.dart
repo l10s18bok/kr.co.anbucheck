@@ -58,6 +58,8 @@ abstract class SvSe {
         'Kravs for att ta emot sakerhetsaviseringar for dina skyddspersoner',
     'permission_activity': 'Aktivitetsigenkanning',
     'permission_activity_desc': 'Anvands for att upptacka steg och bekrafta aktivitet',
+    'permission_location': 'Plats',
+    'permission_location_desc': 'Delas med anhoriga endast vid en nodbegaran om hjalp',
     'permission_activity_dialog_title': 'Info om aktivitetsbehorighet',
     'permission_activity_dialog_message':
         'Anvands for att upptacka steg och bekrafta aktivitet.\nTryck pa "Tillat" pa nasta skarm.',

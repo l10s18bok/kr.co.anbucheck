@@ -57,6 +57,8 @@ abstract class JaJp {
     'permission_notification_guardian_desc': '見守り対象者の安全状態の通知を受け取るために必要です',
     'permission_activity': '身体活動の権限',
     'permission_activity_desc': '歩数を検出して活動状況を確認するために使用されます',
+    'permission_location': '位置情報',
+    'permission_location_desc': '緊急ヘルプ要請の時にのみ、現在地を保護者に送信します',
     'permission_activity_dialog_title': '身体活動の権限について',
     'permission_activity_dialog_message': '歩数を検出して活動状況を確認するために使用されます。\n次の画面で「許可」を選択してください。',
     'permission_notification_required_title': '通知の権限が必要です',

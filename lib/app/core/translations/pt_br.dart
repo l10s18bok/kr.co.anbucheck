@@ -59,6 +59,8 @@ abstract class PtBr {
         'Necessária para receber alertas sobre o estado de segurança dos seus protegidos',
     'permission_activity': 'Reconhecimento de atividade',
     'permission_activity_desc': 'Usado para detectar passos e confirmar atividade',
+    'permission_location': 'Localização',
+    'permission_location_desc': 'Compartilhada com os protetores apenas em pedidos de ajuda de emergência',
     'permission_activity_dialog_title': 'Informações sobre a permissão de atividade',
     'permission_activity_dialog_message':
         'Usado para detectar passos e confirmar atividade.\nToque em "Permitir" na próxima tela.',
