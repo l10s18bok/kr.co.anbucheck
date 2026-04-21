@@ -127,6 +127,7 @@ abstract class ZhCn {
     'subject_home_emergency_sent': '紧急警报已发送',
     'subject_home_emergency_failed': '紧急警报发送失败',
     'subject_home_manual_report_limit_reached': '今天的安全报告已完成。请明天再试。',
+    'subject_home_manual_report_sent': '已向监护人发送问候。',
     'subject_home_emergency_confirm_title': '紧急求助',
     'subject_home_emergency_confirm_body':
         '将向所有监护人发送紧急警报。\n当前位置也将一同共享。\n确定要请求帮助吗？',
@@ -262,6 +263,7 @@ abstract class ZhCn {
     'notifications_today': '今日通知',
     'notifications_empty': '今天没有通知',
     'notifications_delete_all_title': '删除全部通知',
+    'notifications_auto_delete_notice': '今日收到的通知将在午夜(0:00)自动删除。',
     'notifications_delete_all_message': '确定要删除今天的所有通知吗？',
     'notifications_delete_failed': '删除通知失败。',
     'notifications_guide_title': '通知等级说明',

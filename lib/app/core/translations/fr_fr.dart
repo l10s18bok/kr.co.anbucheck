@@ -139,6 +139,7 @@ abstract class FrFr {
     'subject_home_emergency_sent': "L'alerte d'urgence a été envoyée",
     'subject_home_emergency_failed': "Échec de l'envoi de l'alerte d'urgence",
     'subject_home_manual_report_limit_reached': "Vous avez déjà envoyé le rapport de sécurité d'aujourd'hui. Veuillez réessayer demain.",
+    'subject_home_manual_report_sent': 'Votre message a été envoyé à vos proches.',
     'subject_home_emergency_confirm_title': "Demande d'aide d'urgence",
     'subject_home_emergency_confirm_body':
         "Une alerte d'urgence sera envoyée à tous les gardiens.\nVotre position actuelle sera également partagée.\nVoulez-vous vraiment demander de l'aide ?",
@@ -281,6 +282,7 @@ abstract class FrFr {
     'notifications_today': 'Notifications du jour',
     'notifications_empty': 'Aucune notification aujourd\'hui',
     'notifications_delete_all_title': 'Supprimer toutes les notifications',
+    'notifications_auto_delete_notice': 'Les notifications du jour sont automatiquement supprimées à minuit (0:00).',
     'notifications_delete_all_message': 'Supprimer toutes les notifications du jour ?',
     'notifications_delete_failed': 'Impossible de supprimer les notifications.',
     'notifications_guide_title': 'Guide des niveaux de notification',

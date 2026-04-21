@@ -134,6 +134,7 @@ abstract class ThTh {
     'subject_home_emergency_sent': 'ส่งการแจ้งเตือนฉุกเฉินแล้ว',
     'subject_home_emergency_failed': 'ไม่สามารถส่งการแจ้งเตือนฉุกเฉินได้',
     'subject_home_manual_report_limit_reached': 'คุณได้ส่งรายงานความปลอดภัยของวันนี้แล้ว โปรดลองอีกครั้งในวันพรุ่งนี้',
+    'subject_home_manual_report_sent': 'ส่งข้อความสวัสดิภาพถึงผู้ดูแลของคุณแล้ว',
     'subject_home_emergency_confirm_title': 'ขอความช่วยเหลือฉุกเฉิน',
     'subject_home_emergency_confirm_body':
         'จะส่งการแจ้งเตือนฉุกเฉินไปยังผู้ดูแลทุกคน\nตำแหน่งปัจจุบันของคุณจะถูกแชร์ไปด้วย\nคุณต้องการขอความช่วยเหลือจริงหรือ?',
@@ -273,6 +274,7 @@ abstract class ThTh {
     'notifications_today': 'การแจ้งเตือนวันนี้',
     'notifications_empty': 'ไม่มีการแจ้งเตือนวันนี้',
     'notifications_delete_all_title': 'ลบการแจ้งเตือนทั้งหมด',
+    'notifications_auto_delete_notice': 'การแจ้งเตือนวันนี้จะถูกลบโดยอัตโนมัติเมื่อเที่ยงคืน (0:00)',
     'notifications_delete_all_message': 'ลบการแจ้งเตือนทั้งหมดวันนี้?',
     'notifications_delete_failed': 'ไม่สามารถลบการแจ้งเตือน',
     'notifications_guide_title': 'คู่มือระดับการแจ้งเตือน',

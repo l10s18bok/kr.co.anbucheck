@@ -134,6 +134,7 @@ abstract class SvSe {
     'subject_home_emergency_sent': 'Nödlarmet har skickats',
     'subject_home_emergency_failed': 'Det gick inte att skicka nödlarmet',
     'subject_home_manual_report_limit_reached': 'Du har redan skickat dagens säkerhetsrapport. Försök igen imorgon.',
+    'subject_home_manual_report_sent': 'Ditt meddelande har skickats till dina kontakter.',
     'subject_home_emergency_confirm_title': 'Nödhjälpbegäran',
     'subject_home_emergency_confirm_body':
         'Ett nödlarm kommer att skickas till alla vårdgivare.\nDin nuvarande plats delas också.\nVill du verkligen be om hjälp?',
@@ -273,6 +274,7 @@ abstract class SvSe {
     'notifications_today': 'Dagens aviseringar',
     'notifications_empty': 'Inga aviseringar idag',
     'notifications_delete_all_title': 'Radera alla aviseringar',
+    'notifications_auto_delete_notice': 'Dagens aviseringar raderas automatiskt vid midnatt (0:00).',
     'notifications_delete_all_message': 'Radera alla dagens aviseringar?',
     'notifications_delete_failed': 'Kunde inte radera aviseringar.',
     'notifications_guide_title': 'Guide for aviseringsniva',

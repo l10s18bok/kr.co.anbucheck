@@ -132,6 +132,7 @@ abstract class ArSa {
     'subject_home_emergency_sent': 'تم إرسال تنبيه الطوارئ',
     'subject_home_emergency_failed': 'فشل إرسال تنبيه الطوارئ',
     'subject_home_manual_report_limit_reached': 'لقد قمت بالفعل بإرسال تقرير السلامة لهذا اليوم. يرجى المحاولة غدًا.',
+    'subject_home_manual_report_sent': 'تم إرسال رسالة سلامتك إلى جهات الاتصال.',
     'subject_home_emergency_confirm_title': 'طلب مساعدة طارئة',
     'subject_home_emergency_confirm_body':
         'سيتم إرسال تنبيه طارئ إلى جميع الأوصياء.\nسيتم أيضًا مشاركة موقعك الحالي.\nهل ترغب حقًا في طلب المساعدة؟',
@@ -270,6 +271,7 @@ abstract class ArSa {
     'notifications_today': 'إشعارات اليوم',
     'notifications_empty': 'لا توجد إشعارات اليوم',
     'notifications_delete_all_title': 'حذف جميع الإشعارات',
+    'notifications_auto_delete_notice': 'يتم حذف إشعارات اليوم تلقائيًا عند منتصف الليل (0:00).',
     'notifications_delete_all_message': 'هل تريد حذف جميع إشعارات اليوم؟',
     'notifications_delete_failed': 'تعذر حذف الإشعارات.',
     'notifications_guide_title': 'دليل مستويات الإشعارات',

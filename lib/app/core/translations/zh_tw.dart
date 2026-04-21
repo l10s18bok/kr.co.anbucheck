@@ -127,6 +127,7 @@ abstract class ZhTw {
     'subject_home_emergency_sent': '緊急警報已發送',
     'subject_home_emergency_failed': '緊急警報發送失敗',
     'subject_home_manual_report_limit_reached': '今天的安全報告已完成。請明天再試。',
+    'subject_home_manual_report_sent': '已向守護者傳送問候。',
     'subject_home_emergency_confirm_title': '緊急求助',
     'subject_home_emergency_confirm_body':
         '將向所有監護人發送緊急警報。\n目前位置也會一同分享。\n確定要請求幫助嗎？',
@@ -262,6 +263,7 @@ abstract class ZhTw {
     'notifications_today': '今日通知',
     'notifications_empty': '今天沒有通知',
     'notifications_delete_all_title': '刪除全部通知',
+    'notifications_auto_delete_notice': '今日收到的通知將在午夜(0:00)自動刪除。',
     'notifications_delete_all_message': '確定要刪除今天的所有通知嗎？',
     'notifications_delete_failed': '刪除通知失敗。',
     'notifications_guide_title': '通知等級說明',

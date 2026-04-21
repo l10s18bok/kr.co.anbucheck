@@ -128,6 +128,7 @@ abstract class JaJp {
     'subject_home_emergency_sent': '緊急通知が送信されました',
     'subject_home_emergency_failed': '緊急通知の送信に失敗しました',
     'subject_home_manual_report_limit_reached': '本日の安全報告は既に完了しています。明日もう一度お試しください。',
+    'subject_home_manual_report_sent': '見守り人に安否をお伝えしました。',
     'subject_home_emergency_confirm_title': '緊急ヘルプリクエスト',
     'subject_home_emergency_confirm_body':
         'すべての保護者に緊急通知が送信されます。\n現在地も共有されます。\n本当に助けを求めますか？',
@@ -264,6 +265,7 @@ abstract class JaJp {
     'notifications_today': '今日の通知',
     'notifications_empty': '今日の通知はありません',
     'notifications_delete_all_title': '通知をすべて削除',
+    'notifications_auto_delete_notice': '本日の通知は深夜0時に自動的に削除されます。',
     'notifications_delete_all_message': '今日の通知をすべて削除しますか？',
     'notifications_delete_failed': '通知の削除に失敗しました。',
     'notifications_guide_title': '通知レベルの説明',

@@ -138,6 +138,7 @@ abstract class ViVn {
     'subject_home_emergency_sent': 'Cảnh báo khẩn cấp đã được gửi',
     'subject_home_emergency_failed': 'Gửi cảnh báo khẩn cấp thất bại',
     'subject_home_manual_report_limit_reached': 'Bạn đã gửi báo cáo an toàn hôm nay. Vui lòng thử lại vào ngày mai.',
+    'subject_home_manual_report_sent': 'Đã gửi thông báo an toàn đến người giám hộ của bạn.',
     'subject_home_emergency_confirm_title': 'Yêu cầu trợ giúp khẩn cấp',
     'subject_home_emergency_confirm_body':
         'Cảnh báo khẩn cấp sẽ được gửi đến tất cả người giám hộ.\nVị trí hiện tại của bạn cũng sẽ được chia sẻ.\nBạn có thực sự muốn yêu cầu trợ giúp không?',
@@ -277,6 +278,7 @@ abstract class ViVn {
     'notifications_today': 'Thong bao hom nay',
     'notifications_empty': 'Khong co thong bao hom nay',
     'notifications_delete_all_title': 'Xoa tat ca thong bao',
+    'notifications_auto_delete_notice': 'Thông báo hôm nay sẽ tự động bị xóa vào nửa đêm (0:00).',
     'notifications_delete_all_message': 'Xoa tat ca thong bao hom nay?',
     'notifications_delete_failed': 'Khong the xoa thong bao.',
     'notifications_guide_title': 'Huong dan cap do thong bao',

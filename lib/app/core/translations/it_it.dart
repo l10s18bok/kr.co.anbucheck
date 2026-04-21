@@ -139,6 +139,7 @@ abstract class ItIt {
     'subject_home_emergency_sent': "L'allerta di emergenza è stata inviata",
     'subject_home_emergency_failed': "Invio dell'allerta di emergenza fallito",
     'subject_home_manual_report_limit_reached': 'Hai già inviato il rapporto di sicurezza di oggi. Riprova domani.',
+    'subject_home_manual_report_sent': 'Il tuo messaggio è stato inviato ai tuoi contatti.',
     'subject_home_emergency_confirm_title': 'Richiesta di aiuto di emergenza',
     'subject_home_emergency_confirm_body':
         "Un'allerta di emergenza sarà inviata a tutti i tutori.\nAnche la tua posizione attuale sarà condivisa.\nVuoi davvero richiedere aiuto?",
@@ -278,6 +279,7 @@ abstract class ItIt {
     'notifications_today': 'Notifiche di oggi',
     'notifications_empty': 'Nessuna notifica oggi',
     'notifications_delete_all_title': 'Elimina tutte le notifiche',
+    'notifications_auto_delete_notice': 'Le notifiche di oggi vengono eliminate automaticamente a mezzanotte (0:00).',
     'notifications_delete_all_message': 'Eliminare tutte le notifiche di oggi?',
     'notifications_delete_failed': 'Impossibile eliminare le notifiche.',
     'notifications_guide_title': 'Guida ai livelli di notifica',

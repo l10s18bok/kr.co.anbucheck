@@ -143,6 +143,7 @@ abstract class DeDe {
     'subject_home_emergency_sent': 'Notruf wurde gesendet',
     'subject_home_emergency_failed': 'Notruf konnte nicht gesendet werden',
     'subject_home_manual_report_limit_reached': 'Sie haben den heutigen Sicherheitsbericht bereits gesendet. Bitte versuchen Sie es morgen erneut.',
+    'subject_home_manual_report_sent': 'Ihre Nachricht wurde an Ihre Kontaktpersonen gesendet.',
     'subject_home_emergency_confirm_title': 'Nothilfe anfordern',
     'subject_home_emergency_confirm_body':
         'Ein Notruf wird an alle Betreuer gesendet.\nIhr aktueller Standort wird ebenfalls geteilt.\nMöchten Sie wirklich Hilfe anfordern?',
@@ -282,6 +283,7 @@ abstract class DeDe {
     'notifications_today': 'Heutige Benachrichtigungen',
     'notifications_empty': 'Heute keine Benachrichtigungen',
     'notifications_delete_all_title': 'Alle Benachrichtigungen löschen',
+    'notifications_auto_delete_notice': 'Die heutigen Benachrichtigungen werden um Mitternacht (0:00) automatisch gelöscht.',
     'notifications_delete_all_message': 'Alle heutigen Benachrichtigungen löschen?',
     'notifications_delete_failed': 'Benachrichtigungen konnten nicht gelöscht werden.',
     'notifications_guide_title': 'Erklärung der Benachrichtigungsstufen',

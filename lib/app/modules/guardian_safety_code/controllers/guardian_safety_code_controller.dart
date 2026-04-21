@@ -12,7 +12,6 @@ import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
-import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
@@ -371,10 +370,10 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
       await _tokenDs.saveLastManualReportDate(today);
       // Dashboard Rx를 갱신해 카드 표시를 즉시 reported 상태로 전환
       await _dashboard.reloadHeartbeatState();
+      AppSnackbar.message('subject_home_manual_report_sent'.tr);
     } finally {
       _isReporting.value = false;
     }
-    await PhoneUtils.pickContactAndCall();
   }
 
   final _isSendingEmergency = false.obs;

@@ -129,6 +129,7 @@ abstract class KoKr {
     'subject_home_emergency_sent': '긴급 알림이 전송되었습니다',
     'subject_home_emergency_failed': '긴급 알림 전송에 실패했습니다',
     'subject_home_manual_report_limit_reached': '오늘은 이미 안전 보고를 완료했습니다. 내일 다시 가능합니다.',
+    'subject_home_manual_report_sent': '보호자에게 안부를 전했습니다.',
     'subject_home_emergency_confirm_title': '긴급 도움 요청',
     'subject_home_emergency_confirm_body':
         '보호자 전원에게 긴급 알림이 발송됩니다.\n현재 위치도 함께 전달됩니다.\n정말 도움을 요청하시겠습니까?',
@@ -265,6 +266,7 @@ abstract class KoKr {
     'notifications_today': '오늘 받은 알림',
     'notifications_empty': '오늘 받은 알림이 없습니다',
     'notifications_delete_all_title': '알림 전체 삭제',
+    'notifications_auto_delete_notice': '오늘 받은 알림은 자정(0:00)에 자동 삭제됩니다.',
     'notifications_delete_all_message': '오늘 받은 알림을 모두 삭제하시겠습니까?',
     'notifications_delete_failed': '알림 삭제에 실패했습니다.',
     'notifications_guide_title': '알림 등급 안내',

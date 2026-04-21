@@ -136,6 +136,7 @@ abstract class EnUs {
     'subject_home_emergency_sent': 'Emergency alert has been sent',
     'subject_home_emergency_failed': 'Failed to send emergency alert',
     'subject_home_manual_report_limit_reached': "You've already submitted today's safety report. Please try again tomorrow.",
+    'subject_home_manual_report_sent': 'Your wellness check has been sent to your guardians.',
     'subject_home_emergency_confirm_title': 'Emergency Help Request',
     'subject_home_emergency_confirm_body':
         'An emergency alert will be sent to all guardians.\nYour current location will be shared too.\nDo you really want to request help?',
@@ -275,6 +276,7 @@ abstract class EnUs {
     'notifications_today': 'Today\'s Notifications',
     'notifications_empty': 'No notifications today',
     'notifications_delete_all_title': 'Delete All Notifications',
+    'notifications_auto_delete_notice': "Today's notifications are automatically deleted at midnight (0:00).",
     'notifications_delete_all_message': 'Delete all today\'s notifications?',
     'notifications_delete_failed': 'Failed to delete notifications.',
     'notifications_guide_title': 'Notification Level Guide',

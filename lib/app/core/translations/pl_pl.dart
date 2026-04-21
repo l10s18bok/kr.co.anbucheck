@@ -138,6 +138,7 @@ abstract class PlPl {
     'subject_home_emergency_sent': 'Alarm awaryjny został wysłany',
     'subject_home_emergency_failed': 'Nie udało się wysłać alarmu awaryjnego',
     'subject_home_manual_report_limit_reached': 'Wysłałeś już dzisiejszy raport bezpieczeństwa. Spróbuj ponownie jutro.',
+    'subject_home_manual_report_sent': 'Twoja wiadomość została wysłana do kontaktów.',
     'subject_home_emergency_confirm_title': 'Prośba o pomoc awaryjną',
     'subject_home_emergency_confirm_body':
         'Alarm awaryjny zostanie wysłany do wszystkich opiekunów.\nTwoja obecna lokalizacja również zostanie udostępniona.\nCzy na pewno chcesz poprosić o pomoc?',
@@ -278,6 +279,7 @@ abstract class PlPl {
     'notifications_today': 'Dzisiejsze powiadomienia',
     'notifications_empty': 'Brak powiadomien na dzisiaj',
     'notifications_delete_all_title': 'Usun wszystkie powiadomienia',
+    'notifications_auto_delete_notice': 'Dzisiejsze powiadomienia są automatycznie usuwane o północy (0:00).',
     'notifications_delete_all_message': 'Usunac wszystkie dzisiejsze powiadomienia?',
     'notifications_delete_failed': 'Nie udalo sie usunac powiadomien.',
     'notifications_guide_title': 'Przewodnik po poziomach powiadomien',

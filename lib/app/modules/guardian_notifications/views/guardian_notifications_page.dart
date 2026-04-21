@@ -54,54 +54,71 @@ class GuardianNotificationsPage
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          Obx(() {
-            final items = controller.notifications;
+      body: Obx(() {
+        final items = controller.notifications;
 
-            if (items.isEmpty && !controller.isLoading) {
-              return const _EmptyState();
-            }
+        if (items.isEmpty && !controller.isLoading) {
+          return const _EmptyState();
+        }
 
-            return SingleChildScrollView(
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(height: AppSpacing.lg),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('notifications_today'.tr,
-                          style: AppTextTheme.labelMedium(
-                              color: const Color(0xFF4355B9), fw: FontWeight.w600)),
-                      GestureDetector(
-                        onTap: controller.isLoading ? null : () => _confirmDeleteAll(context),
-                        child: Icon(Icons.delete_outline_rounded,
-                            size: 24.w,
-                            color: controller.isLoading
-                                ? const Color(0xFFE53935).withValues(alpha: 0.4)
-                                : const Color(0xFFE53935)),
-                      ),
-                    ],
+                  Text('notifications_today'.tr,
+                      style: AppTextTheme.labelMedium(
+                          color: const Color(0xFF4355B9), fw: FontWeight.w600)),
+                  GestureDetector(
+                    onTap: controller.isLoading ? null : () => _confirmDeleteAll(context),
+                    child: Icon(Icons.delete_outline_rounded,
+                        size: 24.w,
+                        color: controller.isLoading
+                            ? const Color(0xFFE53935).withValues(alpha: 0.4)
+                            : const Color(0xFFE53935)),
                   ),
-                  SizedBox(height: AppSpacing.md),
-                  ...items.map((item) => _NotificationCard(item: item)),
-                  SizedBox(height: AppSpacing.sp6),
                 ],
               ),
-            );
-          }),
-          Obx(() => controller.isLoading
-              ? Container(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  child: const Center(
-                    child: CircularProgressIndicator(color: Color(0xFF4355B9)),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+              child: Text(
+                'notifications_auto_delete_notice'.tr,
+                style: AppTextTheme.bodySmall(
+                  color: const Color(0xFFE53935).withValues(alpha: 0.7),
+                ).copyWith(fontSize: 11.sp),
+              ),
+            ),
+            SizedBox(height: AppSpacing.md),
+            Expanded(
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...items.map((item) => _NotificationCard(item: item)),
+                        SizedBox(height: AppSpacing.sp6),
+                      ],
+                    ),
                   ),
-                )
-              : const SizedBox.shrink()),
-        ],
-      ),
+                  if (controller.isLoading)
+                    Container(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      child: const Center(
+                        child: CircularProgressIndicator(color: Color(0xFF4355B9)),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }),
       bottomNavigationBar: const GuardianBottomNav(currentIndex: 2),
     ),
     );

@@ -140,6 +140,7 @@ abstract class RuRu {
     'subject_home_emergency_sent': 'Экстренное оповещение отправлено',
     'subject_home_emergency_failed': 'Не удалось отправить экстренное оповещение',
     'subject_home_manual_report_limit_reached': 'Вы уже отправили сегодняшний отчёт о безопасности. Попробуйте завтра снова.',
+    'subject_home_manual_report_sent': 'Ваше сообщение о благополучии отправлено контактам.',
     'subject_home_emergency_confirm_title': 'Запрос экстренной помощи',
     'subject_home_emergency_confirm_body':
         'Экстренное оповещение будет отправлено всем опекунам.\nТакже будет передано ваше текущее местоположение.\nВы действительно хотите запросить помощь?',
@@ -280,6 +281,7 @@ abstract class RuRu {
     'notifications_today': 'Сегодняшние уведомления',
     'notifications_empty': 'Сегодня уведомлений нет',
     'notifications_delete_all_title': 'Удалить все уведомления',
+    'notifications_auto_delete_notice': 'Сегодняшние уведомления автоматически удаляются в полночь (0:00).',
     'notifications_delete_all_message': 'Удалить все сегодняшние уведомления?',
     'notifications_delete_failed': 'Не удалось удалить уведомления.',
     'notifications_guide_title': 'Уровни уведомлений',

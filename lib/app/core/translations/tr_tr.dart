@@ -137,6 +137,7 @@ abstract class TrTr {
     'subject_home_emergency_sent': 'Acil durum uyarısı gönderildi',
     'subject_home_emergency_failed': 'Acil durum uyarısı gönderilemedi',
     'subject_home_manual_report_limit_reached': 'Bugünün güvenlik raporunu zaten gönderdiniz. Lütfen yarın tekrar deneyin.',
+    'subject_home_manual_report_sent': 'Durumunuz kişilerinize iletildi.',
     'subject_home_emergency_confirm_title': 'Acil yardım talebi',
     'subject_home_emergency_confirm_body':
         'Tüm bakıcılara bir acil durum uyarısı gönderilecek.\nMevcut konumunuz da paylaşılacak.\nGerçekten yardım istemek istiyor musunuz?',
@@ -276,6 +277,7 @@ abstract class TrTr {
     'notifications_today': 'Bugünkü Bildirimler',
     'notifications_empty': 'Bugün bildirim yok',
     'notifications_delete_all_title': 'Tüm Bildirimleri Sil',
+    'notifications_auto_delete_notice': 'Bugünkü bildirimler gece yarısı (0:00) otomatik olarak silinir.',
     'notifications_delete_all_message': 'Bugünkü tüm bildirimler silinsin mi?',
     'notifications_delete_failed': 'Bildirimler silinemedi.',
     'notifications_guide_title': 'Bildirim Seviyeleri Rehberi',

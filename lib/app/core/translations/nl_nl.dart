@@ -140,6 +140,7 @@ abstract class NlNl {
     'subject_home_emergency_sent': 'Noodmelding is verzonden',
     'subject_home_emergency_failed': 'Noodmelding kon niet worden verzonden',
     'subject_home_manual_report_limit_reached': 'U heeft het veiligheidsrapport van vandaag al verzonden. Probeer het morgen opnieuw.',
+    'subject_home_manual_report_sent': 'Uw bericht is verzonden naar uw contacten.',
     'subject_home_emergency_confirm_title': 'Noodhulpverzoek',
     'subject_home_emergency_confirm_body':
         'Een noodmelding wordt naar alle voogden verzonden.\nOok uw huidige locatie wordt gedeeld.\nWilt u echt om hulp vragen?',
@@ -280,6 +281,7 @@ abstract class NlNl {
     'notifications_today': 'Meldingen van vandaag',
     'notifications_empty': 'Geen meldingen vandaag',
     'notifications_delete_all_title': 'Alle meldingen verwijderen',
+    'notifications_auto_delete_notice': 'De meldingen van vandaag worden automatisch verwijderd om middernacht (0:00).',
     'notifications_delete_all_message': 'Alle meldingen van vandaag verwijderen?',
     'notifications_delete_failed': 'Kan meldingen niet verwijderen.',
     'notifications_guide_title': 'Gids meldingsniveaus',

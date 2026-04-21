@@ -20,7 +20,6 @@ import 'package:anbucheck/app/core/network/api_endpoints.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
-import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
@@ -480,15 +479,10 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       await HeartbeatService().execute(manual: true);
       await _tokenDs.saveLastManualReportDate(today);
       await _reloadHeartbeatState();
+      AppSnackbar.message('subject_home_manual_report_sent'.tr);
     } finally {
       _isReporting.value = false;
     }
-    await PhoneUtils.pickContactAndCall();
-  }
-
-  /// 연락처 선택 → 전화 걸기 (안전 보고)
-  Future<void> openPhoneDialer() async {
-    await PhoneUtils.pickContactAndCall();
   }
 
   /// 긴급 도움 요청 전송 중 상태

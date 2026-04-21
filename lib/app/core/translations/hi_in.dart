@@ -136,6 +136,7 @@ abstract class HiIn {
     'subject_home_emergency_sent': 'आपातकालीन अलर्ट भेज दिया गया',
     'subject_home_emergency_failed': 'आपातकालीन अलर्ट भेजने में विफल',
     'subject_home_manual_report_limit_reached': 'आपने आज की सुरक्षा रिपोर्ट पहले ही भेज दी है। कृपया कल पुनः प्रयास करें।',
+    'subject_home_manual_report_sent': 'आपका संदेश आपके अभिभावकों को भेज दिया गया है।',
     'subject_home_emergency_confirm_title': 'आपातकालीन सहायता अनुरोध',
     'subject_home_emergency_confirm_body':
         'सभी अभिभावकों को आपातकालीन अलर्ट भेजा जाएगा।\nआपकी वर्तमान स्थिति भी साझा की जाएगी।\nक्या आप वास्तव में सहायता का अनुरोध करना चाहते हैं?',
@@ -275,6 +276,7 @@ abstract class HiIn {
     'notifications_today': 'आज की सूचनाएं',
     'notifications_empty': 'आज कोई सूचना नहीं',
     'notifications_delete_all_title': 'सभी सूचनाएं हटाएं',
+    'notifications_auto_delete_notice': 'आज की सूचनाएं स्वचालित रूप से आधी रात (0:00) को हटा दी जाती हैं।',
     'notifications_delete_all_message': 'आज की सभी सूचनाएं हटाएं?',
     'notifications_delete_failed': 'सूचनाएं हटाने में विफल।',
     'notifications_guide_title': 'सूचना स्तर मार्गदर्शिका',

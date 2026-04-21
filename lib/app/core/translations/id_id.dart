@@ -140,6 +140,7 @@ abstract class IdId {
     'subject_home_emergency_sent': 'Peringatan darurat telah dikirim',
     'subject_home_emergency_failed': 'Gagal mengirim peringatan darurat',
     'subject_home_manual_report_limit_reached': 'Anda sudah mengirim laporan keamanan hari ini. Silakan coba lagi besok.',
+    'subject_home_manual_report_sent': 'Pesan keamanan Anda telah dikirim ke kontak Anda.',
     'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
     'subject_home_emergency_confirm_body':
         'Peringatan darurat akan dikirim ke semua wali.\nLokasi Anda saat ini juga akan dibagikan.\nYakin ingin meminta bantuan?',
@@ -280,6 +281,7 @@ abstract class IdId {
     'notifications_today': 'Notifikasi Hari Ini',
     'notifications_empty': 'Tidak ada notifikasi hari ini',
     'notifications_delete_all_title': 'Hapus Semua Notifikasi',
+    'notifications_auto_delete_notice': 'Notifikasi hari ini akan dihapus secara otomatis pada tengah malam (0:00).',
     'notifications_delete_all_message': 'Hapus semua notifikasi hari ini?',
     'notifications_delete_failed': 'Gagal menghapus notifikasi.',
     'notifications_guide_title': 'Panduan Tingkat Notifikasi',

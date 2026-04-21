@@ -139,6 +139,7 @@ abstract class PtBr {
     'subject_home_emergency_sent': 'Alerta de emergência enviado',
     'subject_home_emergency_failed': 'Falha ao enviar alerta de emergência',
     'subject_home_manual_report_limit_reached': 'Você já enviou o relatório de segurança de hoje. Tente novamente amanhã.',
+    'subject_home_manual_report_sent': 'Sua mensagem foi enviada aos seus contatos.',
     'subject_home_emergency_confirm_title': 'Pedido de ajuda de emergência',
     'subject_home_emergency_confirm_body':
         'Um alerta de emergência será enviado a todos os guardiões.\nSua localização atual também será compartilhada.\nTem certeza de que deseja pedir ajuda?',
@@ -278,6 +279,7 @@ abstract class PtBr {
     'notifications_today': 'Notificações de hoje',
     'notifications_empty': 'Nenhuma notificação hoje',
     'notifications_delete_all_title': 'Excluir todas as notificações',
+    'notifications_auto_delete_notice': 'As notificações de hoje são excluídas automaticamente à meia-noite (0:00).',
     'notifications_delete_all_message': 'Excluir todas as notificações de hoje?',
     'notifications_delete_failed': 'Não foi possível excluir as notificações.',
     'notifications_guide_title': 'Guia de níveis de notificação',

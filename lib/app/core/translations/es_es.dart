@@ -138,6 +138,7 @@ abstract class EsEs {
     'subject_home_emergency_sent': 'La alerta de emergencia ha sido enviada',
     'subject_home_emergency_failed': 'Error al enviar la alerta de emergencia',
     'subject_home_manual_report_limit_reached': 'Ya has enviado el informe de seguridad de hoy. Por favor, inténtalo de nuevo mañana.',
+    'subject_home_manual_report_sent': 'Tu mensaje ha sido enviado a tus contactos.',
     'subject_home_emergency_confirm_title': 'Solicitud de ayuda de emergencia',
     'subject_home_emergency_confirm_body':
         'Se enviará una alerta de emergencia a todos los cuidadores.\nTambién se compartirá tu ubicación actual.\n¿Realmente quieres solicitar ayuda?',
@@ -278,6 +279,7 @@ abstract class EsEs {
     'notifications_today': 'Notificaciones de hoy',
     'notifications_empty': 'No hay notificaciones hoy',
     'notifications_delete_all_title': 'Eliminar todas las notificaciones',
+    'notifications_auto_delete_notice': 'Las notificaciones de hoy se eliminan automáticamente a medianoche (0:00).',
     'notifications_delete_all_message': '¿Eliminar todas las notificaciones de hoy?',
     'notifications_delete_failed': 'No se pudieron eliminar las notificaciones.',
     'notifications_guide_title': 'Guía de niveles de notificación',
