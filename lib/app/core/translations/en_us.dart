@@ -253,6 +253,14 @@ abstract class EnUs {
     'gs_activity_permission_settings_body': 'Please allow Physical activity (Motion & Fitness) permission in app settings.',
     'gs_activity_permission_settings_go': 'Go to Settings',
 
+    // ── Guardian → G+S switch (Drawer/Dialog) ──
+    'drawer_enable_guardian': 'Also manage family wellness',
+    's_to_gs_dialog_title': 'Add Guardian Feature',
+    's_to_gs_dialog_body':
+        'Add the guardian feature so you can also monitor the wellness of family or loved ones.\n(Note: The guardian feature is free for 3 months, then switches to a paid subscription.)\n\nYour own safety code and wellness reporting will remain unchanged and stay free to use.',
+    's_to_gs_dialog_confirm': 'Continue',
+    's_to_gs_switch_failed': 'Failed to enable the guardian feature',
+
     // ── Guardian Notifications ──
     'notifications_title': 'Notifications',
     'notifications_today': 'Today\'s Notifications',

@@ -253,6 +253,14 @@ abstract class TrTr {
     'gs_activity_permission_settings_body': 'Lütfen uygulama ayarlarından Fiziksel aktivite (Hareket ve Fitness) iznine izin verin.',
     'gs_activity_permission_settings_go': 'Ayarlara Git',
 
+    // ── Koruyucu modunda G+S geçişi (Drawer/Diyalog) ──
+    'drawer_enable_guardian': 'Ailenin iyiliğini de takip et',
+    's_to_gs_dialog_title': 'Koruyucu Özelliğini Ekle',
+    's_to_gs_dialog_body':
+        'Aile bireylerinizin veya sevdiklerinizin iyiliğini de takip edebilmek için koruyucu özelliğini ekleyin.\n(Not: Koruyucu özelliği 3 ay boyunca ücretsizdir, ardından ücretli aboneliğe geçer.)\n\nKendi güvenlik kodunuz ve şu anda kullandığınız iyilik bildirimleri aynı şekilde devam eder ve ücretsiz kalır.',
+    's_to_gs_dialog_confirm': 'Devam Et',
+    's_to_gs_switch_failed': 'Koruyucu özelliği etkinleştirilemedi',
+
     // ── Koruyucu Bildirimler ──
     'notifications_title': 'Bildirimler',
     'notifications_today': 'Bugünkü Bildirimler',

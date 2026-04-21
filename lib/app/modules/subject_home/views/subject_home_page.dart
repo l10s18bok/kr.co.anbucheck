@@ -536,6 +536,21 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
 
             Divider(color: AppColors.surfaceContainerHigh, height: 1),
 
+            // 가족 안부 관리 기능 추가 (S → G+S 전환)
+            ListTile(
+              leading: Icon(Icons.family_restroom_rounded,
+                  size: 22.w, color: const Color(0xFF4355B9)),
+              title: Text('drawer_enable_guardian'.tr,
+                  style: AppTextTheme.bodyLarge(color: const Color(0xFF4355B9))),
+              onTap: () {
+                scaffoldKey.currentState?.closeDrawer();
+                Future.delayed(const Duration(milliseconds: 300),
+                    () => _showSwitchToGuardianConfirm());
+              },
+            ),
+
+            Divider(color: AppColors.surfaceContainerHigh, height: 1),
+
             // 법적 문서 링크
             ListTile(
               leading: Icon(Icons.description_outlined, size: 22.w, color: AppColors.onSurfaceVariant),
@@ -581,6 +596,44 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           Container(
             width: 1,
             color: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// S → G+S 전환 안내 다이얼로그
+  void _showSwitchToGuardianConfirm() {
+    Get.dialog(
+      AlertDialog(
+        title: Row(
+          children: [
+            Expanded(
+              child: Text('s_to_gs_dialog_title'.tr,
+                  style: AppTextTheme.headlineSmall(
+                      fw: FontWeight.w700,
+                      color: const Color(0xFF1A1C1C))),
+            ),
+            GestureDetector(
+              onTap: () => Get.back(),
+              child: Padding(
+                padding: EdgeInsets.all(4.w),
+                child: Icon(Icons.close_rounded,
+                    size: 24.w, color: const Color(0xFF3F4948)),
+              ),
+            ),
+          ],
+        ),
+        content: Text('s_to_gs_dialog_body'.tr,
+            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+              controller.switchToGuardian();
+            },
+            child: Text('s_to_gs_dialog_confirm'.tr,
+                style: AppTextTheme.bodyMedium(color: const Color(0xFF4355B9))),
           ),
         ],
       ),

@@ -256,6 +256,14 @@ abstract class NlNl {
     'gs_activity_permission_settings_body': 'Sta de machtiging Fysieke activiteit (Beweging en Fitness) toe in de app-instellingen.',
     'gs_activity_permission_settings_go': 'Ga naar Instellingen',
 
+    // ── Beschermer → G+S omschakeling (Drawer/Dialoog) ──
+    'drawer_enable_guardian': 'Ook gezinswelzijn beheren',
+    's_to_gs_dialog_title': 'Beschermer-functie toevoegen',
+    's_to_gs_dialog_body':
+        'Voeg de beschermer-functie toe om ook het welzijn van familie of dierbaren te volgen.\n(Let op: de beschermer-functie is 3 maanden gratis en wordt daarna een betaald abonnement.)\n\nJe eigen veiligheidscode en de huidige verzending van welzijnssignalen blijven ongewijzigd en blijven gratis te gebruiken.',
+    's_to_gs_dialog_confirm': 'Doorgaan',
+    's_to_gs_switch_failed': 'Inschakelen van de beschermer-functie mislukt',
+
     // ── Meldingen beschermer ──
     'notifications_title': 'Meldingen',
     'notifications_today': 'Meldingen van vandaag',

@@ -250,6 +250,14 @@ abstract class SvSe {
     'gs_activity_permission_settings_body': 'Tillåt behörighet för Fysisk aktivitet (Rörelse och kondition) i appinställningarna.',
     'gs_activity_permission_settings_go': 'Gå till inställningar',
 
+    // ── Vårdare → G+S växling (Drawer/Dialog) ──
+    'drawer_enable_guardian': 'Hantera även familjens välmående',
+    's_to_gs_dialog_title': 'Lägg till vårdare-funktion',
+    's_to_gs_dialog_body':
+        'Lägg till vårdare-funktionen så att du även kan följa familjens eller nära och käras välmående.\n(Observera: vårdare-funktionen är gratis i 3 månader och övergår sedan till en betald prenumeration.)\n\nDin egen säkerhetskod och den välmåendesignal du skickar idag förblir oförändrade och fortsatt gratis att använda.',
+    's_to_gs_dialog_confirm': 'Fortsätt',
+    's_to_gs_switch_failed': 'Kunde inte aktivera vårdare-funktionen',
+
     // ── Vardarens aviseringar ──
     'notifications_title': 'Aviseringar',
     'notifications_today': 'Dagens aviseringar',

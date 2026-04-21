@@ -240,6 +240,14 @@ abstract class ZhCn {
     'gs_activity_permission_settings_body': '请在应用设置中允许身体活动（运动与健身）权限。',
     'gs_activity_permission_settings_go': '前往设置',
 
+    // ── 守护者模式下启用G+S (Drawer/对话框) ──
+    'drawer_enable_guardian': '同时管理家人的安康',
+    's_to_gs_dialog_title': '添加守护者功能',
+    's_to_gs_dialog_body':
+        '添加守护者功能，即可同时关注家人或所爱之人的安康。\n（注意：守护者功能免费试用3个月，到期后将转为付费订阅。）\n\n您自己的安全码和当前使用的安康信号发送功能将保持不变，并继续免费使用。',
+    's_to_gs_dialog_confirm': '继续',
+    's_to_gs_switch_failed': '启用守护者功能失败',
+
     // ── 守护者通知 ──
     'notifications_title': '通知',
     'notifications_today': '今日通知',

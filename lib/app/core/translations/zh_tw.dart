@@ -240,6 +240,14 @@ abstract class ZhTw {
     'gs_activity_permission_settings_body': '請在應用程式設定中允許體能活動（動態與健身）權限。',
     'gs_activity_permission_settings_go': '前往設定',
 
+    // ── 守護者模式下啟用G+S (Drawer/對話框) ──
+    'drawer_enable_guardian': '同時管理家人的安康',
+    's_to_gs_dialog_title': '新增守護者功能',
+    's_to_gs_dialog_body':
+        '新增守護者功能，即可同時關注家人或所愛之人的安康。\n（注意：守護者功能免費試用3個月，到期後將轉為付費訂閱。）\n\n您自己的安全碼和目前使用的安康信號傳送功能將維持不變，並繼續免費使用。',
+    's_to_gs_dialog_confirm': '繼續',
+    's_to_gs_switch_failed': '啟用守護者功能失敗',
+
     // ── 守護者通知 ──
     'notifications_title': '通知',
     'notifications_today': '今日通知',

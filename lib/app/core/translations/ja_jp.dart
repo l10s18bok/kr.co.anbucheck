@@ -242,6 +242,14 @@ abstract class JaJp {
     'gs_activity_permission_settings_body': 'アプリ設定で身体活動（モーションとフィットネス）の権限を許可してください。',
     'gs_activity_permission_settings_go': '設定へ移動',
 
+    // ── 保護者モードでG+S切り替え (Drawer/ダイアログ) ──
+    'drawer_enable_guardian': '家族の安否も管理する',
+    's_to_gs_dialog_title': '保護者機能を追加',
+    's_to_gs_dialog_body':
+        '家族や大切な方の安否を管理できる保護者機能を追加します。\n（ご注意：保護者機能は3ヶ月間の無料期間後、有料プランに切り替わります。）\n\n現在ご利用中の安全コードと安否送信はそのまま維持され、引き続き無料でご利用いただけます。',
+    's_to_gs_dialog_confirm': '続ける',
+    's_to_gs_switch_failed': '保護者機能の有効化に失敗しました',
+
     // ── 見守り通知 ──
     'notifications_title': '通知',
     'notifications_today': '今日の通知',

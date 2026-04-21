@@ -258,6 +258,14 @@ abstract class DeDe {
     'gs_activity_permission_settings_body': 'Bitte erlauben Sie die Berechtigung „Körperliche Aktivität (Bewegung & Fitness)" in den App-Einstellungen.',
     'gs_activity_permission_settings_go': 'Zu den Einstellungen',
 
+    // ── Betreuer → G+S Umschaltung (Drawer/Dialog) ──
+    'drawer_enable_guardian': 'Auch Familienwohl verwalten',
+    's_to_gs_dialog_title': 'Betreuer-Funktion hinzufügen',
+    's_to_gs_dialog_body':
+        'Fügen Sie die Betreuer-Funktion hinzu, um auch das Wohlbefinden von Familie oder geliebten Menschen zu überwachen.\n(Hinweis: Die Betreuer-Funktion ist 3 Monate kostenlos und wird anschließend kostenpflichtig.)\n\nIhr persönlicher Sicherheitscode und die derzeitige Übermittlung Ihrer Wohlbefindenssignale bleiben unverändert und weiterhin kostenlos.',
+    's_to_gs_dialog_confirm': 'Weiter',
+    's_to_gs_switch_failed': 'Aktivierung der Betreuer-Funktion fehlgeschlagen',
+
     // ── Betreuer-Benachrichtigungen ──
     'notifications_title': 'Benachrichtigungen',
     'notifications_today': 'Heutige Benachrichtigungen',

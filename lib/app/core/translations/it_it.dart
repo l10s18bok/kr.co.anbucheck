@@ -255,6 +255,14 @@ abstract class ItIt {
     'gs_activity_permission_settings_body': 'Consenti l\'autorizzazione Attività fisica (Movimento e Fitness) nelle impostazioni dell\'app.',
     'gs_activity_permission_settings_go': 'Vai alle impostazioni',
 
+    // ── Modalità Guardiano → G+S (Drawer/Dialog) ──
+    'drawer_enable_guardian': 'Gestisci anche il benessere dei familiari',
+    's_to_gs_dialog_title': 'Aggiungi funzione Guardiano',
+    's_to_gs_dialog_body':
+        'Aggiungi la funzione Guardiano per monitorare anche il benessere di familiari o persone care.\n(Nota: la funzione Guardiano è gratuita per 3 mesi, poi passa a un abbonamento a pagamento.)\n\nIl tuo codice di sicurezza e l\'invio dei segnali di benessere attualmente in uso restano invariati e continueranno ad essere gratuiti.',
+    's_to_gs_dialog_confirm': 'Continua',
+    's_to_gs_switch_failed': 'Attivazione della funzione Guardiano fallita',
+
     // ── Notifiche guardiano ──
     'notifications_title': 'Notifiche',
     'notifications_today': 'Notifiche di oggi',
