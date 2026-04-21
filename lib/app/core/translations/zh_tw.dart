@@ -146,7 +146,7 @@ abstract class ZhTw {
     'drawer_withdraw_message': '帳號及所有資料將被刪除。\n確定要註銷嗎？',
 
     // ── 守護者儀表板 ──
-    'guardian_status_normal': '正常',
+    'guardian_status_normal': '安全',
     'guardian_status_caution': '注意',
     'guardian_status_warning': '警告',
     'guardian_status_urgent': '緊急',

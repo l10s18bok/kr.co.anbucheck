@@ -147,7 +147,7 @@ abstract class JaJp {
     'drawer_withdraw_message': 'アカウントとすべてのデータが削除されます。\n本当に退会しますか？',
 
     // ── 見守りダッシュボード ──
-    'guardian_status_normal': '正常',
+    'guardian_status_normal': '安全',
     'guardian_status_caution': '注意',
     'guardian_status_warning': '警告',
     'guardian_status_urgent': '緊急',

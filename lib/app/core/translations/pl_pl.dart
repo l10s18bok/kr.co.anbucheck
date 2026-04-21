@@ -157,7 +157,7 @@ abstract class PlPl {
     'drawer_withdraw_message': 'Twoje konto i wszystkie dane zostana usuniete.\nCzy na pewno?',
 
     // ── Panel opiekuna ──
-    'guardian_status_normal': 'Normalny',
+    'guardian_status_normal': 'Bezpieczny',
     'guardian_status_caution': 'Uwaga',
     'guardian_status_warning': 'Ostrzezenie',
     'guardian_status_urgent': 'Pilne',

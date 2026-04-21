@@ -159,7 +159,7 @@ abstract class FrFr {
         'Votre compte et toutes vos données seront supprimés.\nÊtes-vous sûr(e) ?',
 
     // ── Tableau de bord (Protecteur) ──
-    'guardian_status_normal': 'Normal',
+    'guardian_status_normal': 'Sûr',
     'guardian_status_caution': 'Attention',
     'guardian_status_warning': 'Alerte',
     'guardian_status_urgent': 'Urgent',

@@ -148,7 +148,7 @@ abstract class KoKr {
     'drawer_withdraw_message': '계정과 모든 데이터가 삭제됩니다.\n정말 탈퇴하시겠습니까?',
 
     // ── 보호자 대시보드 ──
-    'guardian_status_normal': '정상',
+    'guardian_status_normal': '안전',
     'guardian_status_caution': '주의',
     'guardian_status_warning': '경고',
     'guardian_status_urgent': '긴급',

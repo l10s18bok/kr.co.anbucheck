@@ -152,7 +152,7 @@ abstract class SvSe {
     'drawer_withdraw_message': 'Ditt konto och all data raderas.\nAr du saker?',
 
     // ── Vardarens instrumentpanel ──
-    'guardian_status_normal': 'Normal',
+    'guardian_status_normal': 'Saker',
     'guardian_status_caution': 'Forsiktighet',
     'guardian_status_warning': 'Varning',
     'guardian_status_urgent': 'Bradskande',

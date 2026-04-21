@@ -158,7 +158,7 @@ abstract class NlNl {
     'drawer_withdraw_message': 'Uw account en alle gegevens worden verwijderd.\nWeet u het zeker?',
 
     // ── Dashboard beschermer ──
-    'guardian_status_normal': 'Normaal',
+    'guardian_status_normal': 'Veilig',
     'guardian_status_caution': 'Let op',
     'guardian_status_warning': 'Waarschuwing',
     'guardian_status_urgent': 'Dringend',

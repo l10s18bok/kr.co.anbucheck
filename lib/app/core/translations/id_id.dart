@@ -159,7 +159,7 @@ abstract class IdId {
     'drawer_withdraw_message': 'Akun dan semua data Anda akan dihapus.\nApakah Anda yakin?',
 
     // ── Dashboard Penjaga ──
-    'guardian_status_normal': 'Normal',
+    'guardian_status_normal': 'Aman',
     'guardian_status_caution': 'Perhatian',
     'guardian_status_warning': 'Peringatan',
     'guardian_status_urgent': 'Mendesak',

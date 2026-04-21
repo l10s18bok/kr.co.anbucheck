@@ -146,7 +146,7 @@ abstract class ZhCn {
     'drawer_withdraw_message': '账户及所有数据将被删除。\n确定要注销吗？',
 
     // ── 守护者仪表盘 ──
-    'guardian_status_normal': '正常',
+    'guardian_status_normal': '安全',
     'guardian_status_caution': '注意',
     'guardian_status_warning': '警告',
     'guardian_status_urgent': '紧急',

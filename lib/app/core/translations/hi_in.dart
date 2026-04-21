@@ -154,7 +154,7 @@ abstract class HiIn {
     'drawer_withdraw_message': 'आपका खाता और सभी डेटा हटा दिया जाएगा।\nक्या आप सुनिश्चित हैं?',
 
     // ── अभिभावक डैशबोर्ड ──
-    'guardian_status_normal': 'सामान्य',
+    'guardian_status_normal': 'सुरक्षित',
     'guardian_status_caution': 'सावधानी',
     'guardian_status_warning': 'चेतावनी',
     'guardian_status_urgent': 'अत्यावश्यक',

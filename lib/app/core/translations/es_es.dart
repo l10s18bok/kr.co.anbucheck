@@ -156,7 +156,7 @@ abstract class EsEs {
     'drawer_withdraw_message': 'Su cuenta y todos sus datos serán eliminados.\n¿Está seguro/a?',
 
     // ── Panel del protector ──
-    'guardian_status_normal': 'Normal',
+    'guardian_status_normal': 'Seguro',
     'guardian_status_caution': 'Precaución',
     'guardian_status_warning': 'Alerta',
     'guardian_status_urgent': 'Urgente',

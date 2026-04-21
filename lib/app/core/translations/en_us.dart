@@ -155,7 +155,7 @@ abstract class EnUs {
     'drawer_withdraw_message': 'Your account and all data will be deleted.\nAre you sure?',
 
     // ── Guardian Dashboard ──
-    'guardian_status_normal': 'Normal',
+    'guardian_status_normal': 'Safe',
     'guardian_status_caution': 'Caution',
     'guardian_status_warning': 'Warning',
     'guardian_status_urgent': 'Urgent',

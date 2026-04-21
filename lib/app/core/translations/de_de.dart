@@ -160,7 +160,7 @@ abstract class DeDe {
     'drawer_withdraw_message': 'Ihr Konto und alle Daten werden gelöscht.\nSind Sie sicher?',
 
     // ── Betreuer-Dashboard ──
-    'guardian_status_normal': 'Normal',
+    'guardian_status_normal': 'Sicher',
     'guardian_status_caution': 'Achtung',
     'guardian_status_warning': 'Warnung',
     'guardian_status_urgent': 'Dringend',

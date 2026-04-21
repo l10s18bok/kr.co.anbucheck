@@ -156,7 +156,7 @@ abstract class ViVn {
     'drawer_withdraw_message': 'Tai khoan va tat ca du lieu se bi xoa.\nBan co chac khong?',
 
     // ── Bang dieu khien nguoi bao ve ──
-    'guardian_status_normal': 'Binh thuong',
+    'guardian_status_normal': 'An toan',
     'guardian_status_caution': 'Chu y',
     'guardian_status_warning': 'Canh bao',
     'guardian_status_urgent': 'Khan cap',

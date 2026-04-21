@@ -152,7 +152,7 @@ abstract class ThTh {
     'drawer_withdraw_message': 'บัญชีและข้อมูลทั้งหมดจะถูกลบ\nคุณแน่ใจหรือไม่?',
 
     // ── แดชบอร์ดผู้ดูแล ──
-    'guardian_status_normal': 'ปกติ',
+    'guardian_status_normal': 'ปลอดภัย',
     'guardian_status_caution': 'ระวัง',
     'guardian_status_warning': 'เตือน',
     'guardian_status_urgent': 'เร่งด่วน',

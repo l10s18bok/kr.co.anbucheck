@@ -155,7 +155,7 @@ abstract class TrTr {
     'drawer_withdraw_message': 'Hesabınız ve tüm verileriniz silinecektir.\nEmin misiniz?',
 
     // ── Koruyucu Paneli ──
-    'guardian_status_normal': 'Normal',
+    'guardian_status_normal': 'Güvende',
     'guardian_status_caution': 'Dikkat',
     'guardian_status_warning': 'Uyarı',
     'guardian_status_urgent': 'Acil',

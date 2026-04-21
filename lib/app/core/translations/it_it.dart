@@ -157,7 +157,7 @@ abstract class ItIt {
     'drawer_withdraw_message': 'Il Suo account e tutti i dati verranno eliminati.\nÈ sicuro/a?',
 
     // ── Dashboard guardiano ──
-    'guardian_status_normal': 'Normale',
+    'guardian_status_normal': 'Sicuro',
     'guardian_status_caution': 'Attenzione',
     'guardian_status_warning': 'Avviso',
     'guardian_status_urgent': 'Urgente',

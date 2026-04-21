@@ -150,7 +150,7 @@ abstract class ArSa {
     'drawer_withdraw_message': 'سيتم حذف حسابك وجميع بياناتك.\nهل أنت متأكد؟',
 
     // ── لوحة الحارس ──
-    'guardian_status_normal': 'طبيعي',
+    'guardian_status_normal': 'آمن',
     'guardian_status_caution': 'تنبيه',
     'guardian_status_warning': 'تحذير',
     'guardian_status_urgent': 'عاجل',

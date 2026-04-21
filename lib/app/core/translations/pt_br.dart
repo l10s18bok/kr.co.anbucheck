@@ -157,7 +157,7 @@ abstract class PtBr {
     'drawer_withdraw_message': 'Sua conta e todos os dados serão excluídos.\nTem certeza?',
 
     // ── Painel do guardião ──
-    'guardian_status_normal': 'Normal',
+    'guardian_status_normal': 'Seguro',
     'guardian_status_caution': 'Atenção',
     'guardian_status_warning': 'Alerta',
     'guardian_status_urgent': 'Urgente',

@@ -159,7 +159,7 @@ abstract class RuRu {
     'drawer_withdraw_message': 'Ваш аккаунт и все данные будут удалены.\nВы уверены?',
 
     // ── Панель опекуна ──
-    'guardian_status_normal': 'Норма',
+    'guardian_status_normal': 'Безопасно',
     'guardian_status_caution': 'Внимание',
     'guardian_status_warning': 'Предупреждение',
     'guardian_status_urgent': 'Срочно',
