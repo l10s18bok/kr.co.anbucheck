@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
@@ -205,6 +206,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   Future<void> _showLocationSettingsDialog() async {
     final goToSettings = await Get.dialog<bool>(
       AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Text('location_permission_settings_title'.tr,
             style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
         content: Text(
@@ -253,6 +255,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     // 앱이 백그라운드 전환되며 pop이 반영되지 못해 복귀 시 다이얼로그가 남았음.
     final goToSettings = await Get.dialog<bool>(
       AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Text('gs_activity_permission_settings_title'.tr,
             style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
         content: Text('gs_activity_permission_settings_body'.tr,

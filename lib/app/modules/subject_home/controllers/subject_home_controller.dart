@@ -11,6 +11,7 @@ import 'package:battery_plus/battery_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
@@ -171,6 +172,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
     await Get.dialog<void>(
       AlertDialog(
+        backgroundColor: AppColors.surface,
         title: _buildHibernationTitle(),
         content: Text('permission_hibernation_message'.tr),
         actions: [
@@ -226,6 +228,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
     await Get.dialog<void>(
       AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Text('permission_battery_required_title'.tr),
         content: Text('permission_battery_required_message'.tr),
         actions: [
@@ -371,6 +374,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       if (status.isPermanentlyDenied || status.isRestricted) {
         final goToSettings = await Get.dialog<bool>(
           AlertDialog(
+            backgroundColor: AppColors.surface,
             title: Text('location_permission_settings_title'.tr,
                 style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
             content: Text(

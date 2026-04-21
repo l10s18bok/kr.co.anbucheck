@@ -351,6 +351,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
     }
     Get.dialog(
       AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Text(
           'gs_enable_dialog_title'.tr,
           style: AppTextTheme.headlineSmall(fw: FontWeight.w700),
@@ -388,6 +389,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
     Get.dialog(
       barrierDismissible: false,
       AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Text(
           'gs_enable_dialog_title'.tr,
           style: AppTextTheme.headlineSmall(fw: FontWeight.w700),
@@ -459,6 +461,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
   void _showDeleteConfirm() {
     Get.dialog(
       AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Text('drawer_withdraw'.tr, style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
         content: Text(
           'drawer_withdraw_message'.tr,

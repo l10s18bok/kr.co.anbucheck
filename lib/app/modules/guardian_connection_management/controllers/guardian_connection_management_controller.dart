@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
@@ -115,6 +116,7 @@ class _ConfirmUnlinkDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: AppColors.surface,
       title: Text('connection_unlink_title'.tr),
       content: Text('connection_unlink_confirm'.trParams({'alias': alias})),
       actions: [

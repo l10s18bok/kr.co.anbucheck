@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
@@ -198,6 +199,7 @@ class GuardianDashboardController extends BaseController
 
     await Get.dialog<void>(
       AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Text('permission_battery_required_title'.tr),
         content: Text('permission_battery_required_message'.tr),
         actions: [

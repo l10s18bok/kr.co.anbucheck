@@ -337,6 +337,7 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: AppColors.surface,
       title: Text('connection_edit_title'.tr, style: AppTextTheme.headlineSmall()),
       content: Column(
         mainAxisSize: MainAxisSize.min,
