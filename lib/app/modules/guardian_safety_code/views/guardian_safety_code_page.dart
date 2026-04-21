@@ -79,7 +79,8 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
           }),
         ],
       ),
-      body: RefreshIndicator(
+      body: SafeArea(
+        child: RefreshIndicator(
         onRefresh: controller.pullToRefresh,
         color: const Color(0xFF00685E),
         child: SingleChildScrollView(
@@ -88,7 +89,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.sm),
             Text(
               'subject_home_share_title'.tr,
               style: AppTextTheme.headlineMedium(
@@ -97,7 +98,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
                     : const Color(0xFF00685E),
               ),
             ),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.sm),
             _buildSafetyCodeCard(),
             _buildActivityPermissionWarning(),
             SizedBox(height: AppSpacing.lg),
@@ -131,6 +132,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
           ],
         ),
         ),
+      ),
       ),
     );
   }
