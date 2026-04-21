@@ -669,7 +669,6 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
 /// · 0    = heartbeat 없음: 연회색 짧은 막대
 /// · >0   = 실제 걸음수. 오늘 막대는 주황(`_todayColor`)으로 강조, 그 외는 파랑(`_chartColor` alpha 0.7)
 class _StepsBarChart extends StatelessWidget {
-  static const Color _chartColor = Color(0xFF1A237E); // 진한 파랑 (Indigo 900)
   static const Color _todayColor = Color(0xFFFB8C00); // 오늘 강조 (Orange 600)
 
   final List<int?> steps;
@@ -680,6 +679,11 @@ class _StepsBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (steps.isEmpty) return const SizedBox.shrink();
+
+    // 다크모드에서는 진한 파랑이 잘 보이지 않으므로 Cyan으로 전환
+    final chartColor = AppColors.isDark
+        ? const Color(0xFF00BCD4) // Cyan 500
+        : const Color(0xFF1A237E); // Indigo 900
 
     // null 제외 최댓값. 모두 null/0이면 1로 대체해 나눗셈 방지.
     final values = steps.whereType<int>().toList();
@@ -718,7 +722,7 @@ class _StepsBarChart extends StatelessWidget {
               if (v == null || v == 0) return null;
               return BarTooltipItem(
                 _formatSteps(v),
-                AppTextTheme.labelSmall(color: _chartColor, fw: FontWeight.w700),
+                AppTextTheme.labelSmall(color: chartColor, fw: FontWeight.w700),
               );
             },
           ),
@@ -769,7 +773,7 @@ class _StepsBarChart extends StatelessWidget {
                     _formatSteps(maxVal),
                     softWrap: false,
                     overflow: TextOverflow.visible,
-                    style: AppTextTheme.labelSmall(color: _chartColor, fw: FontWeight.w700),
+                    style: AppTextTheme.labelSmall(color: chartColor, fw: FontWeight.w700),
                   ),
                 );
               },
@@ -786,7 +790,7 @@ class _StepsBarChart extends StatelessWidget {
                   width: _rodWidth(steps.length),
                   color: _rodColor(
                     steps[i],
-                    _chartColor,
+                    chartColor,
                     emptyColor,
                     isToday: i == steps.length - 1,
                   ),
