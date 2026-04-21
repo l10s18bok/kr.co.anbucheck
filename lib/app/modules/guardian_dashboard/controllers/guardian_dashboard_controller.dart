@@ -360,12 +360,17 @@ class GuardianDashboardController extends BaseController
     if (isEnabling.value) return;
     isEnabling.value = true;
     try {
-      // Lazy Permission — 걸음수 권한은 G+S 활성화 시점에만 요청한다.
-      // 권한 거부 시에도 활성화는 계속 진행하며, 안전코드 화면의 경고 위젯이
-      // 재요청을 유도한다. 따라서 결과와 무관하게 삼키고 통과시킨다.
+      // Lazy Permission — 걸음수·위치 권한은 G+S 활성화 시점에 요청한다.
+      // 순수 보호자는 초기 권한 화면에서 두 권한을 요청받지 않았으므로
+      // 이 시점이 사실상 up-front 요청 기회다.
+      // 거부 시에도 활성화는 계속 진행하며, 안전코드 화면의 경고 위젯이
+      // 재요청을 유도한다. 따라서 결과와 무관하게 삼킨다.
       if (Platform.isAndroid) {
         try {
           await Permission.activityRecognition.request();
+        } catch (_) {}
+        try {
+          await Permission.locationWhenInUse.request();
         } catch (_) {}
       } else if (Platform.isIOS) {
         // iOS: Permission.activityRecognition.request()는 시스템 팝업을 띄우지 않음.
@@ -373,6 +378,9 @@ class GuardianDashboardController extends BaseController
         // 최초 1회 모션 권한 시스템 팝업을 띄운다.
         try {
           await Permission.sensors.request();
+        } catch (_) {}
+        try {
+          await Permission.locationWhenInUse.request();
         } catch (_) {}
       }
 
