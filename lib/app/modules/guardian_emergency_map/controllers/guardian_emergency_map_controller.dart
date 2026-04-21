@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -66,9 +68,33 @@ class GuardianEmergencyMapController extends BaseController {
   Future<void> openExternalMap() async {
     final pos = latLng;
     if (pos == null) return;
-    final uri = Uri.parse(
-      'https://www.google.com/maps/?q=${pos.latitude},${pos.longitude}',
-    );
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
+    final lat = pos.latitude;
+    final lng = pos.longitude;
+
+    if (Platform.isIOS) {
+      // Apple Maps scheme — 미설치 기기 없으므로 폴백 불필요
+      final appleUri = Uri.parse('maps://?q=$lat,$lng');
+      if (await canLaunchUrl(appleUri)) {
+        await launchUrl(appleUri, mode: LaunchMode.externalApplication);
+        return;
+      }
+      // canLaunchUrl 실패 시 웹 폴백
+      await launchUrl(
+        Uri.parse('https://maps.apple.com/?q=$lat,$lng'),
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      // Android: geo: scheme → 기기 기본 지도 앱 선택기
+      final geoUri = Uri.parse('geo:$lat,$lng?q=$lat,$lng');
+      if (await canLaunchUrl(geoUri)) {
+        await launchUrl(geoUri, mode: LaunchMode.externalApplication);
+        return;
+      }
+      // geo: 미지원 시 Google Maps 웹 폴백
+      await launchUrl(
+        Uri.parse('https://www.google.com/maps/?q=$lat,$lng'),
+        mode: LaunchMode.externalApplication,
+      );
+    }
   }
 }
