@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:pedometer_2/pedometer_2.dart' as p2;
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
@@ -184,6 +185,21 @@ class HeartbeatService {
     int schedHour,
     int schedMinute,
   ) async {
+    // 전송 시도 전 네트워크 상태 확인. 완전 오프라인(비행기 모드, Wi-Fi/모바일 전부 꺼짐)
+    // 이면 retry 15초 낭비 없이 즉시 pending 저장 + 사용자 안내.
+    // "Wi-Fi 잡혔지만 인터넷 안 됨" 또는 API 중간 끊김은 connectivity_plus 한계로
+    // 구분 불가 → retry 경로로 넘어가되 별도 알림 띄우지 않음.
+    final connectivity = await Connectivity().checkConnectivity();
+    final isOffline = connectivity.every((r) => r == ConnectivityResult.none);
+    if (isOffline) {
+      debugPrint('[HeartbeatService] 오프라인 감지 → pending 저장 후 종료');
+      await _heartbeatDs.savePending(request.toJson());
+      if (!request.manual) {
+        await LocalAlarmService.notifySendFailed();
+      }
+      return;
+    }
+
     final remote = HeartbeatRemoteDatasource(deviceToken);
     for (var attempt = 1; attempt <= 3; attempt++) {
       try {
@@ -194,10 +210,6 @@ class HeartbeatService {
         debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
         if (attempt == 3) {
           await _heartbeatDs.savePending(request.toJson());
-          // 자동 heartbeat에 한해 사용자에게 인터넷 확인 안내 (수동은 즉시 UI 피드백 있음)
-          if (!request.manual) {
-            await LocalAlarmService.notifySendFailed();
-          }
           return;
         }
         await Future.delayed(Duration(seconds: attempt * 5));
