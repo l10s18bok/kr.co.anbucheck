@@ -91,7 +91,7 @@ lib/
 
 **G+S 관련 컨트롤러:**
 - `GuardianDashboardController` — G+S 라이프사이클 + heartbeat 자동 재전송 단독 소유: 활성화/비활성화, WorkManager/LocalAlarm 예약, `_checkAndSendHeartbeat` 미전송 체크, 안전코드 페이지 진입. onInit/onResumed와 FcmService `gs_deadman` 탭 모두 `refreshAndSend()` 단일 진입점 경유. Dashboard/Settings 바인딩에서 `permanent: true`로 공유 등록하여 SafetyCode에서도 `Get.find` 가능
-- `GuardianSafetyCodeController` — UI 전용 (invite_code, heartbeat 스케줄 변경, 수동 보고, 긴급 요청). 보고 상태 표시는 Dashboard의 `lastHeartbeatDate`/`lastHeartbeatTime`/`isReportedToday` Rx를 구독. 수동 보고(`reportNow`) 후 `_dashboard.reloadHeartbeatState()` 호출해 카드 즉시 갱신
+- `GuardianSafetyCodeController` — UI 전용 (invite_code, heartbeat 스케줄 변경, 수동 보고, 긴급 요청). 보고 상태 표시는 Dashboard의 `lastHeartbeatDate`/`lastHeartbeatTime`/`isReportedToday` Rx를 구독. 수동 보고(`reportNow`) 후 `_dashboard.reloadHeartbeatState()` 호출해 카드 즉시 갱신. 긴급 요청(`sendEmergency`)은 S 홈과 동일하게 공통 헬퍼 `captureEmergencyLocation()`로 위치 획득 후 `EmergencyRemoteDatasource.send(deviceId, location: ...)` — G+S 사용자도 긴급 시 위치가 첨부됨. `locationPermissionDenied` Rx + `requestLocationPermissionAgain()`으로 긴급 버튼 아래 권한 경고 위젯 동작
 - `GuardianSettingsController` — UI 전용. G+S 활성화/해제/탈퇴 시 Dashboard 컨트롤러에 위임
 - `ModeSelectController` — 재설치 시 `has_invite_code`로 G+S 감지 → `isAlsoSubject` 전달
 
@@ -107,7 +107,8 @@ lib/
 | 2차 | `lib/app/modules/subject_home/controllers/subject_home_controller.dart` | 앱 열기/복귀 시 안전망. onInit/onResumed에서 예약시각 경과 + 미전송 시 자동 전송. 서버 스케줄 동기화로 WorkManager 체인 복구도 담당 |
 | 3차 (iOS) | `lib/app/core/services/local_alarm_service.dart` | iOS 전용 오늘의 안부 확인 메시지 로컬 알림. heartbeat 예약 시각 정각에 매일 반복 → 앱 포그라운드 전환 시 홈 화면 onInit/onResumed에서 자동 전송 |
 | 공유 캐시 | `lib/app/core/services/guardian_subject_service.dart` | 보호자 대상자 목록 공유 캐시 (2분 TTL). 대시보드·설정·연결관리에서 동일 데이터 사용. 구독 상태 동기화 |
-| 긴급 위치 | `lib/app/modules/guardian_emergency_map/` | 대상자 긴급 도움 요청 시 첨부된 위치를 보호자가 Google Maps로 확인하는 페이지. FCM 탭(포그라운드/백그라운드/Kill) + 알림 목록 [🗺️ 위치 보기] 버튼에서 진입 |
+| 긴급 위치 | `lib/app/modules/guardian_emergency_map/` | 대상자 긴급 도움 요청 시 첨부된 위치를 보호자가 Google Maps로 확인하는 페이지. **진입 경로는 알림 목록의 [🗺️ 위치 보기] 버튼 단 하나**. FCM 탭은 `alert_emergency` 포함 모든 `alert_*` type을 알림 목록으로 라우팅하며 (`_routeToNotifications` 자동 새로고침), 사용자가 목록에서 해당 emergency 카드의 버튼을 탭해 지도로 진입 — 단일 진입점 유지로 뒤로가기 스택/새로고침 일관성 확보 |
+| 긴급 위치 획득 | `lib/app/data/datasources/remote/emergency_remote_datasource.dart` — `captureEmergencyLocation()` | S 홈 / G+S SafetyCode 긴급 버튼이 공통 사용하는 top-level 헬퍼. 2단계 폴백: (1) `getLastKnownPosition` (수 ms 내 반환) → (2) `getCurrentPosition` medium 정확도 + 10초 타임아웃. high는 GPS only라 실내/콜드 스타트에서 timeout 빈발, medium은 GPS+Wi-Fi+셀룰러 병용해 실내에서도 fix 가능. 권한 거부·GPS 실패·타임아웃 어떤 예외에서도 null 반환하고 throw하지 않는다 — 긴급 API 호출 자체는 위치 유무와 독립 |
 
 ## 위치 수집 범위
 

@@ -10,9 +10,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
+import 'package:anbucheck/app/core/utils/extensions.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
@@ -41,6 +42,9 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
   final _notificationGranted = false.obs;
   bool get notificationGranted => _notificationGranted.value;
+
+  /// 위치 권한(긴급 요청 첨부용) 거부 여부 — 긴급 버튼 아래 경고 텍스트가 구독
+  final locationPermissionDenied = false.obs;
 
   /// 보호자 연결 여부 (subscription_active를 proxy로 사용)
   final _guardianConnected = false.obs;
@@ -142,6 +146,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     super.onInit();
     _loadStatus().then((_) => _checkAndSendHeartbeat());
     _checkNotificationPermission();
+    refreshLocationPermissionStatus();
     _initBattery();
     _initConnectivity();
     // 배터리 최적화 없이도 정상 동작 확인됨 — 필요 시 주석 해제
@@ -247,6 +252,8 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   @override
   void onResumed() {
     super.onResumed();
+    // 앱 설정에서 위치 권한을 허용하고 복귀한 경우 즉시 경고 위젯 숨기기
+    refreshLocationPermissionStatus();
     // SharedPreferences reload → 스케줄 로드 → heartbeat 상태 갱신 순서 보장
     loadScheduleFromLocal()
         .then((_) => _reloadHeartbeatState())
@@ -345,6 +352,54 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   Future<void> _checkNotificationPermission() async {
     _notificationGranted.value =
         await Permission.notification.status.isGranted;
+  }
+
+  /// 위치 권한 상태 확인 — 긴급 버튼 아래 경고 텍스트가 구독
+  Future<void> refreshLocationPermissionStatus() async {
+    try {
+      final status = await Permission.locationWhenInUse.status;
+      locationPermissionDenied.value = !status.isGranted;
+    } catch (_) {
+      // 권한 체크 실패 시 경고를 띄우지 않는다
+    }
+  }
+
+  /// 경고 텍스트 탭 시 위치 권한 재요청
+  /// 일반 거부면 재요청, 영구 거부면 설정 이동 다이얼로그
+  Future<void> requestLocationPermissionAgain() async {
+    try {
+      final status = await Permission.locationWhenInUse.status;
+      if (status.isPermanentlyDenied || status.isRestricted) {
+        final goToSettings = await Get.dialog<bool>(
+          AlertDialog(
+            title: Text('location_permission_settings_title'.tr,
+                style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
+            content: Text(
+                Platform.isIOS
+                    ? 'location_permission_settings_body_ios'.tr
+                    : 'location_permission_settings_body_android'.tr,
+                style: AppTextTheme.bodyMedium()),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(result: false),
+                child: Text('common_cancel'.tr),
+              ),
+              TextButton(
+                onPressed: () => Get.back(result: true),
+                child: Text('gs_activity_permission_settings_go'.tr),
+              ),
+            ],
+          ),
+        );
+        if (goToSettings == true) {
+          await openAppSettings();
+        }
+      } else {
+        await Permission.locationWhenInUse.request();
+      }
+    } finally {
+      await refreshLocationPermissionStatus();
+    }
   }
 
   /// 배터리 상태 초기화 및 실시간 감시
@@ -451,7 +506,9 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
       final deviceId = await _tokenDs.getDeviceId();
       if (deviceToken == null || deviceId == null) return;
 
-      final location = await _captureCurrentLocation();
+      final location = await captureEmergencyLocation();
+      '[긴급] API 전송 직전 좌표: ${location == null ? "null" : "${location.latitude}, ${location.longitude} (acc=${location.accuracyMeters})"}'
+          .printLog();
 
       await EmergencyRemoteDatasource(deviceToken)
           .send(deviceId, location: location);
@@ -468,33 +525,6 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     }
   }
 
-  /// 긴급 요청 전송 직전 1회성으로 현재 위치를 획득한다.
-  /// 권한 거부·서비스 비활성·GPS 타임아웃 등 어떤 예외에서도 null을 반환하며,
-  /// 절대 throw 하지 않는다 (긴급 요청 자체의 성공과 독립적으로 동작).
-  Future<EmergencyLocation?> _captureCurrentLocation() async {
-    try {
-      final status = await Permission.locationWhenInUse.request();
-      if (!status.isGranted) return null;
-
-      final serviceOn = await Geolocator.isLocationServiceEnabled();
-      if (!serviceOn) return null;
-
-      final pos = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
-      ).timeout(const Duration(seconds: 5));
-
-      return EmergencyLocation(
-        latitude: pos.latitude,
-        longitude: pos.longitude,
-        accuracyMeters: pos.accuracy,
-        capturedAt: DateTime.now(),
-      );
-    } catch (_) {
-      return null;
-    }
-  }
 
   // ── 앱 버전 ────────────────────────────────────────
   final appVersion = ''.obs;

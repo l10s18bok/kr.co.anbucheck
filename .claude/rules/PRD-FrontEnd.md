@@ -1845,6 +1845,15 @@ G+S 라이프사이클(활성화/해제/스케줄 예약)은 `GuardianDashboardC
   - 텍스트 탭 → Android: `Permission.activityRecognition.request()` 재호출 (영구 거부 시 `openAppSettings()` 대체), iOS: `Permission.sensors.request()`로 CMMotionActivityManager 호출해 모션 권한 팝업 유도 또는 설정 이동
   - 포그라운드 복귀 시(`onResumed`) 권한 상태 재확인 → 허용됐으면 위젯 숨김 (Rx로 상태 반응)
 
+- **긴급 버튼 아래 위치 권한 경고** (S 모드 홈 + G+S 안전코드 공통):
+  - `SubjectHomeController` / `GuardianSafetyCodeController`에 `locationPermissionDenied` Rx, `refreshLocationPermissionStatus()`, `requestLocationPermissionAgain()` 추가. onInit/onResumed에서 상태 재조회
+  - 🚨 도움이 필요해요 버튼 **바로 아래**에 권한 상태 감시 위젯 배치. `Permission.locationWhenInUse.status`로 판정
+  - 거부 상태일 때만: 빨간색 경고 카드 "긴급 요청 시 위치가 전달되지 않습니다. 탭하여 허용." 노출 (`location_permission_warning` 키, 20개 언어 번역)
+  - 텍스트 탭 → 일반 거부: `Permission.locationWhenInUse.request()` 재호출 (OS가 허용하는 경우 시스템 팝업). 영구 거부/restricted: 설정 이동 다이얼로그 → `openAppSettings()`
+  - 다이얼로그 본문은 **플랫폼별 분기**: iOS는 "'안부'를 찾아 선택한 뒤, '위치' 항목에서 '앱을 사용하는 동안'을 선택"(`location_permission_settings_body_ios`), Android는 "'권한' → '위치' 순서로 선택한 뒤 '앱 사용 중에만 허용'을 선택"(`location_permission_settings_body_android`). 20개 언어 모두 해당 OS의 실제 현지화된 Settings UI 레이블을 사용
+  - **iOS 18 한계 대응**: Apple이 iOS 18에서 Settings 구조를 재편하면서 `UIApplication.openSettingsURLString`이 앱 페이지 직접 딥링크를 보장하지 않음 (Settings → Apps 리스트에 도달하고 멈추는 케이스 발생). 앱에서 우회 불가 (App Store 심사 상 `prefs:` URL 금지)이므로 다이얼로그 본문의 단계별 안내가 유일한 완화책
+  - 포그라운드 복귀 시(`onResumed`) 상태 재확인 → 허용됐으면 위젯 숨김
+
 - **비활성화** (`GuardianDashboardController.disableSubjectFeature()`):
   1. 서버 `POST /api/v1/users/disable-subject`
   2. 예약 취소:

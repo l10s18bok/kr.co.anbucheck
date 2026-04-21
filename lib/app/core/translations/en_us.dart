@@ -60,6 +60,12 @@ abstract class EnUs {
     'permission_activity_desc': 'Used to detect steps and confirm activity',
     'permission_location': 'Location',
     'permission_location_desc': 'Shared with guardians only when you send an emergency request',
+    'location_permission_warning': 'Location will not be sent with an emergency request. Tap to allow.',
+    'location_permission_settings_title': 'Location Permission Required',
+    'location_permission_settings_body_ios':
+        "Find and tap 'Anbu', then under 'Location' select 'While Using the App'.",
+    'location_permission_settings_body_android':
+        "Tap 'Permissions' → 'Location', then select 'Allow only while using the app'.",
     'permission_activity_dialog_title': 'Activity Permission Info',
     'permission_activity_dialog_message':
         'Used to detect steps and confirm activity.\nPlease tap "Allow" on the next screen.',

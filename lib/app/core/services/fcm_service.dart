@@ -7,7 +7,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
-import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
@@ -45,16 +44,13 @@ void onDidReceiveNotificationResponse(NotificationResponse response) {
 /// 알림 탭 시 라우팅
 /// 오늘의 안부 확인 메시지 로컬 알림 (iOS 전용): 앱 포그라운드 전환만 → 홈 화면에서 미전송 체크 + 자동 전송
 /// 보호자 Push 알림: type에 따라 알림 목록 또는 대시보드로 이동
-/// alert_emergency + data에 lat/lng 포함 시: guardianEmergencyMap으로 이동
+/// alert_emergency도 다른 alert_* 와 동일하게 알림 목록으로 이동하며, 사용자는 목록의
+/// [🗺️ 위치 보기] 버튼으로 지도 페이지 진입. 목록이 자동 새로고침되므로 뒤로가기 시
+/// stale 상태 이슈가 없고, 라우팅 분기가 일관되게 유지된다.
 void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
   switch (type) {
-    case 'alert_emergency':
-      final routed = _tryRouteToEmergencyMap(data);
-      if (routed) break;
-      // 위치 없으면 기존 알림 목록 라우팅으로 fallthrough
-      _routeToNotifications();
-      break;
     case 'alert':
+    case 'alert_emergency':
     case 'alert_urgent':
     case 'alert_warning':
     case 'alert_caution':
@@ -99,47 +95,6 @@ void _routeToNotifications() {
   } else {
     Get.offAllNamed(AppRoutes.guardianNotifications);
   }
-}
-
-/// alert_emergency + data에 lat/lng 포함 시 지도 페이지로 이동 (true 반환).
-/// 위치 없거나 파싱 실패 시 false — 호출자가 대체 라우팅 수행.
-bool _tryRouteToEmergencyMap(Map<String, dynamic>? data) {
-  if (data == null) return false;
-  final lat = _toDouble(data['lat']);
-  final lng = _toDouble(data['lng']);
-  if (lat == null || lng == null) return false;
-
-  final accuracy = _toDouble(data['accuracy']);
-  final inviteCode = data['invite_code']?.toString() ?? '';
-
-  // 별칭 비동기 조회 후 라우팅 (조회 실패해도 초대코드로 표시)
-  NicknameLocalDatasource().getNickname(inviteCode).then((nick) {
-    Get.toNamed(AppRoutes.guardianEmergencyMap, arguments: {
-      'lat': lat,
-      'lng': lng,
-      'accuracy': accuracy,
-      'capturedAt': DateTime.now(),
-      'subjectNickname': nick ?? '',
-      'inviteCode': inviteCode,
-    });
-  }).catchError((_) {
-    Get.toNamed(AppRoutes.guardianEmergencyMap, arguments: {
-      'lat': lat,
-      'lng': lng,
-      'accuracy': accuracy,
-      'capturedAt': DateTime.now(),
-      'subjectNickname': '',
-      'inviteCode': inviteCode,
-    });
-  });
-  return true;
-}
-
-double? _toDouble(dynamic v) {
-  if (v is double) return v;
-  if (v is int) return v.toDouble();
-  if (v is String && v.isNotEmpty) return double.tryParse(v);
-  return null;
 }
 
 /// FCM 푸시 알림 서비스

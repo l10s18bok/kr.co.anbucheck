@@ -62,6 +62,13 @@ abstract class ItIt {
     'permission_activity_desc': "Utilizzato per rilevare i passi e verificare l'attività",
     'permission_location': 'Posizione',
     'permission_location_desc': 'Condivisa con i tutori solo durante una richiesta di aiuto urgente',
+    'location_permission_warning':
+        "La posizione non verrà inviata con la richiesta di emergenza. Tocca per consentire.",
+    'location_permission_settings_title': 'Autorizzazione alla posizione richiesta',
+    'location_permission_settings_body_ios':
+        "Cerca e seleziona 'Anbu', poi in 'Posizione' scegli 'Mentre uso l'app'.",
+    'location_permission_settings_body_android':
+        "Seleziona 'Autorizzazioni' → 'Posizione', poi scegli 'Consenti solo durante l'uso dell'app'.",
     'permission_activity_dialog_title': 'Informazioni sul permesso attività',
     'permission_activity_dialog_message':
         'Utilizzato per rilevare i passi e verificare l\'attività.\nSelezioni "Consenti" nella schermata successiva.',

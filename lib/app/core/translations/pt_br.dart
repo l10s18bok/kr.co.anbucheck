@@ -61,6 +61,13 @@ abstract class PtBr {
     'permission_activity_desc': 'Usado para detectar passos e confirmar atividade',
     'permission_location': 'Localização',
     'permission_location_desc': 'Compartilhada com os protetores apenas em pedidos de ajuda de emergência',
+    'location_permission_warning':
+        'A localização não será enviada no pedido de emergência. Toque para permitir.',
+    'location_permission_settings_title': 'Permissão de localização necessária',
+    'location_permission_settings_body_ios':
+        "Localize e selecione 'Anbu', depois em 'Localização' escolha 'Ao Usar o App'.",
+    'location_permission_settings_body_android':
+        "Selecione 'Permissões' → 'Local' e escolha 'Permitir somente ao usar o app'.",
     'permission_activity_dialog_title': 'Informações sobre a permissão de atividade',
     'permission_activity_dialog_message':
         'Usado para detectar passos e confirmar atividade.\nToque em "Permitir" na próxima tela.',

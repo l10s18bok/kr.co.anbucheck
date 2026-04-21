@@ -62,6 +62,13 @@ abstract class IdId {
     'permission_activity_desc': 'Digunakan untuk mendeteksi langkah dan memastikan aktivitas',
     'permission_location': 'Lokasi',
     'permission_location_desc': 'Dibagikan ke pelindung hanya saat mengirim permintaan bantuan darurat',
+    'location_permission_warning':
+        'Lokasi tidak akan dikirim saat permintaan darurat. Ketuk untuk mengizinkan.',
+    'location_permission_settings_title': 'Izin Lokasi Diperlukan',
+    'location_permission_settings_body_ios':
+        "Temukan dan pilih 'Anbu', lalu di 'Lokasi' pilih 'Ketika Menggunakan App Ini'.",
+    'location_permission_settings_body_android':
+        "Pilih 'Izin' → 'Lokasi', lalu pilih 'Izinkan hanya saat menggunakan aplikasi'.",
     'permission_activity_dialog_title': 'Info Izin Aktivitas',
     'permission_activity_dialog_message':
         'Digunakan untuk mendeteksi langkah dan memastikan aktivitas.\nSilakan ketuk "Izinkan" di layar berikutnya.',

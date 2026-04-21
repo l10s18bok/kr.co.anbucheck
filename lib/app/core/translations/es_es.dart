@@ -61,6 +61,13 @@ abstract class EsEs {
     'permission_activity_desc': 'Se utiliza para detectar pasos y confirmar la actividad',
     'permission_location': 'Ubicación',
     'permission_location_desc': 'Se comparte con los protectores solo al enviar una solicitud de emergencia',
+    'location_permission_warning':
+        'No se enviará la ubicación en las solicitudes de emergencia. Toca para permitir.',
+    'location_permission_settings_title': 'Permiso de ubicación requerido',
+    'location_permission_settings_body_ios':
+        "Busca y selecciona 'Anbu', luego en 'Ubicación' elige 'Al usar la app'.",
+    'location_permission_settings_body_android':
+        "Selecciona 'Permisos' → 'Ubicación', luego elige 'Permitir solo mientras uso la app'.",
     'permission_activity_dialog_title': 'Información sobre el permiso de actividad',
     'permission_activity_dialog_message':
         'Se utiliza para detectar pasos y confirmar la actividad.\nPulse "Permitir" en la siguiente pantalla.',

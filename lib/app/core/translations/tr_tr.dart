@@ -61,6 +61,13 @@ abstract class TrTr {
     'permission_activity_desc': 'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır',
     'permission_location': 'Konum',
     'permission_location_desc': 'Yalnızca acil yardım talebinde koruyuculara iletilir',
+    'location_permission_warning':
+        'Acil yardım talebinde konum gönderilmeyecek. İzin vermek için dokunun.',
+    'location_permission_settings_title': 'Konum İzni Gerekli',
+    'location_permission_settings_body_ios':
+        "'Anbu'yu bulup seçin, ardından 'Konum' altında 'Uygulamayı kullanırken' seçeneğini seçin.",
+    'location_permission_settings_body_android':
+        "'İzinler' → 'Konum' seçin, ardından 'Yalnızca uygulamayı kullanırken izin ver' seçeneğini seçin.",
     'permission_activity_dialog_title': 'Aktivite İzni Bilgisi',
     'permission_activity_dialog_message':
         'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır.\nLütfen sonraki ekranda "İzin Ver"e dokunun.',

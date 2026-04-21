@@ -59,6 +59,12 @@ abstract class ZhCn {
     'permission_activity_desc': '用于检测步数以确认活动状态',
     'permission_location': '位置信息',
     'permission_location_desc': '仅在发送紧急求助时将当前位置发送给监护人',
+    'location_permission_warning': '紧急求助时位置不会被发送。点按以允许。',
+    'location_permission_settings_title': '需要位置权限设置',
+    'location_permission_settings_body_ios':
+        '找到并选择"Anbu",然后在"位置"中选择"使用App期间"。',
+    'location_permission_settings_body_android':
+        '依次选择"权限"→"位置",然后选择"仅在使用该应用时允许"。',
     'permission_activity_dialog_title': '身体活动权限说明',
     'permission_activity_dialog_message': '用于检测步数以确认活动状态。\n请在下一个界面中选择"允许"。',
     'permission_notification_required_title': '需要通知权限',

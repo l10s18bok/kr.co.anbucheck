@@ -61,6 +61,13 @@ abstract class ViVn {
     'permission_activity_desc': 'Dung de phat hien buoc chan va xac nhan hoat dong',
     'permission_location': 'Vi tri',
     'permission_location_desc': 'Chi gui vi tri den nguoi bao ho khi yeu cau cuu giup khan cap',
+    'location_permission_warning':
+        'Vi tri se khong duoc gui khi yeu cau cuu giup khan cap. Cham de cho phep.',
+    'location_permission_settings_title': 'Can quyen vi tri',
+    'location_permission_settings_body_ios':
+        "Tim va chon 'Anbu', sau do trong muc 'Vi tri' chon 'Khi dang su dung ung dung'.",
+    'location_permission_settings_body_android':
+        "Chon 'Quyen' → 'Vi tri', sau do chon 'Chi cho phep khi dang su dung ung dung'.",
     'permission_activity_dialog_title': 'Thong tin quyen hoat dong',
     'permission_activity_dialog_message':
         'Dung de phat hien buoc chan va xac nhan hoat dong.\nVui long nhan "Cho phep" tren man hinh tiep theo.',

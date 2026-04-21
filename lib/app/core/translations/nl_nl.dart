@@ -62,6 +62,13 @@ abstract class NlNl {
     'permission_location': 'Locatie',
     'permission_location_desc':
         'Wordt alleen bij een noodoproep met uw beschermers gedeeld',
+    'location_permission_warning':
+        'Bij een noodoproep wordt geen locatie verzonden. Tik om toe te staan.',
+    'location_permission_settings_title': 'Locatietoestemming vereist',
+    'location_permission_settings_body_ios':
+        "Zoek en selecteer 'Anbu', kies vervolgens bij 'Locatie' de optie 'Bij gebruik van de app'.",
+    'location_permission_settings_body_android':
+        "Selecteer 'Rechten' → 'Locatie' en kies 'Alleen toestaan bij gebruik van de app'.",
     'permission_activity_dialog_title': 'Informatie over activiteitstoestemming',
     'permission_activity_dialog_message':
         'Wordt gebruikt om stappen te detecteren en activiteit te bevestigen.\nSelecteer "Toestaan" op het volgende scherm.',

@@ -62,6 +62,13 @@ abstract class FrFr {
     'permission_activity_desc': 'Utilisée pour détecter les pas et confirmer l\'activité',
     'permission_location': 'Localisation',
     'permission_location_desc': 'Partagée avec vos proches uniquement lors d\'un appel d\'urgence',
+    'location_permission_warning':
+        'La position ne sera pas envoyée lors d\'un appel d\'urgence. Touchez pour autoriser.',
+    'location_permission_settings_title': 'Autorisation de localisation requise',
+    'location_permission_settings_body_ios':
+        "Trouvez et sélectionnez « Anbu », puis dans « Position » choisissez « Lorsque l'app est active ».",
+    'location_permission_settings_body_android':
+        "Sélectionnez « Autorisations » → « Position », puis choisissez « Autoriser uniquement lorsque l'app est utilisée ».",
     'permission_activity_dialog_title': 'À propos de l\'autorisation d\'activité',
     'permission_activity_dialog_message':
         'Utilisée pour détecter les pas et confirmer l\'activité.\nVeuillez appuyer sur « Autoriser » à l\'écran suivant.',

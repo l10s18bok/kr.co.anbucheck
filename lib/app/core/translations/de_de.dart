@@ -65,6 +65,13 @@ abstract class DeDe {
     'permission_location': 'Standort',
     'permission_location_desc':
         'Wird nur bei Notfallanfragen an Ihre Betreuer übermittelt',
+    'location_permission_warning':
+        'Bei Notfallanfragen wird kein Standort gesendet. Tippen, um zu erlauben.',
+    'location_permission_settings_title': 'Standortberechtigung erforderlich',
+    'location_permission_settings_body_ios':
+        '„Anbu" auswählen und unter „Ort" „Beim Verwenden der App" wählen.',
+    'location_permission_settings_body_android':
+        '„Berechtigungen" → „Standort" auswählen und „Nur während der Nutzung der App zulassen" wählen.',
     'permission_activity_dialog_title': 'Hinweis zur Aktivitätsberechtigung',
     'permission_activity_dialog_message':
         'Wird verwendet, um Schritte zu erkennen und Aktivität zu bestätigen.\nBitte tippen Sie im nächsten Bildschirm auf „Erlauben".',

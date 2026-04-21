@@ -62,6 +62,13 @@ abstract class RuRu {
     'permission_activity_desc': 'Используется для подсчёта шагов и подтверждения активности',
     'permission_location': 'Геолокация',
     'permission_location_desc': 'Передаётся опекунам только при отправке экстренного запроса',
+    'location_permission_warning':
+        'Геолокация не будет отправлена с экстренным запросом. Нажмите, чтобы разрешить.',
+    'location_permission_settings_title': 'Требуется разрешение геолокации',
+    'location_permission_settings_body_ios':
+        'Найдите и выберите «Anbu», затем в разделе «Геопозиция» выберите «При использовании приложения».',
+    'location_permission_settings_body_android':
+        'Выберите «Разрешения» → «Геолокация», затем выберите «Разрешить только во время использования приложения».',
     'permission_activity_dialog_title': 'Информация о разрешении',
     'permission_activity_dialog_message':
         'Используется для подсчёта шагов и подтверждения активности.\nПожалуйста, нажмите «Разрешить» на следующем экране.',

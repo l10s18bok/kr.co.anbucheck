@@ -59,6 +59,12 @@ abstract class ZhTw {
     'permission_activity_desc': '用於偵測步數以確認活動狀態',
     'permission_location': '位置資訊',
     'permission_location_desc': '僅在發送緊急求助時將目前位置傳送給監護人',
+    'location_permission_warning': '緊急求助時位置不會被傳送。點按以允許。',
+    'location_permission_settings_title': '需要位置權限設定',
+    'location_permission_settings_body_ios':
+        '找到並選擇「Anbu」,然後在「位置」中選擇「使用App期間」。',
+    'location_permission_settings_body_android':
+        '依序選擇「權限」→「位置」,然後選擇「僅在使用此應用程式時允許」。',
     'permission_activity_dialog_title': '身體活動權限說明',
     'permission_activity_dialog_message': '用於偵測步數以確認活動狀態。\n請在下一個畫面中選擇「允許」。',
     'permission_notification_required_title': '需要通知權限',

@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
+import 'package:anbucheck/app/core/utils/extensions.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
@@ -91,6 +92,10 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   /// 권한이 거부된 상태인지 여부 — 안전코드 화면 경고 위젯이 구독
   final activityPermissionDenied = false.obs;
 
+  // ── 위치 권한(긴급 요청 첨부용) 상태 ──
+  /// 권한이 거부된 상태인지 여부 — 긴급 버튼 아래 경고 텍스트가 구독
+  final locationPermissionDenied = false.obs;
+
   final _tokenDs = TokenLocalDatasource();
 
   /// 설정 페이지에서 진입 시 전달받은 서버 데이터 (중복 API 호출 방지)
@@ -107,6 +112,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     super.onInit();
     _loadStatus();
     refreshActivityPermissionStatus();
+    refreshLocationPermissionStatus();
     // iOS 재설치/최초 진입 케이스: 권한 상태가 notDetermined면 안전코드 화면
     // 첫 진입 시 자동으로 시스템 팝업을 띄운다. 한 번 거부된 상태(isPermanentlyDenied)
     // 에서는 permission_handler가 request() 호출해도 OS가 팝업을 띄우지 않으므로
@@ -120,6 +126,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     loadScheduleFromLocal();
     // 앱 설정에서 권한을 허용하고 복귀한 경우 즉시 경고 위젯 숨기기
     refreshActivityPermissionStatus();
+    refreshLocationPermissionStatus();
   }
 
   /// 걸음수 권한 상태 확인 — 안전코드 화면 진입/복귀 시 호출
@@ -167,6 +174,59 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
       }
     } finally {
       await refreshActivityPermissionStatus();
+    }
+  }
+
+  /// 위치 권한 상태 확인 — 긴급 버튼 아래 경고 텍스트가 구독
+  Future<void> refreshLocationPermissionStatus() async {
+    try {
+      final status = await Permission.locationWhenInUse.status;
+      locationPermissionDenied.value = !status.isGranted;
+    } catch (_) {
+      // 권한 체크 실패 시 경고를 띄우지 않는다
+    }
+  }
+
+  /// 경고 텍스트 탭 시 위치 권한 재요청
+  /// 일반 거부면 재요청, 영구 거부면 설정 이동 다이얼로그
+  Future<void> requestLocationPermissionAgain() async {
+    try {
+      final status = await Permission.locationWhenInUse.status;
+      if (status.isPermanentlyDenied || status.isRestricted) {
+        await _showLocationSettingsDialog();
+      } else {
+        await Permission.locationWhenInUse.request();
+      }
+    } finally {
+      await refreshLocationPermissionStatus();
+    }
+  }
+
+  /// 위치 권한 설정 이동 다이얼로그 — 영구 거부 상태에서만 호출
+  Future<void> _showLocationSettingsDialog() async {
+    final goToSettings = await Get.dialog<bool>(
+      AlertDialog(
+        title: Text('location_permission_settings_title'.tr,
+            style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
+        content: Text(
+            Platform.isIOS
+                ? 'location_permission_settings_body_ios'.tr
+                : 'location_permission_settings_body_android'.tr,
+            style: AppTextTheme.bodyMedium()),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text('common_cancel'.tr),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: Text('gs_activity_permission_settings_go'.tr),
+          ),
+        ],
+      ),
+    );
+    if (goToSettings == true) {
+      await openAppSettings();
     }
   }
 
@@ -320,7 +380,9 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   final _isSendingEmergency = false.obs;
   bool get isSendingEmergency => _isSendingEmergency.value;
 
-  /// 긴급 도움 요청: urgent alert 즉시 생성 + 보호자 전원에게 긴급 Push 발송
+  /// 긴급 도움 요청: urgent alert 즉시 생성 + 보호자 전원에게 긴급 Push 발송.
+  /// 위치는 사용자 동의 기반으로 1회 수집하여 첨부하되, 권한 거부/GPS 실패/타임아웃
+  /// 어떤 경우에도 긴급 API 호출 자체는 반드시 실행된다.
   Future<void> sendEmergency() async {
     if (_isSendingEmergency.value) return;
     _isSendingEmergency.value = true;
@@ -328,8 +390,19 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
       final deviceToken = await _tokenDs.getDeviceToken();
       final deviceId = await _tokenDs.getDeviceId();
       if (deviceToken == null || deviceId == null) return;
-      await EmergencyRemoteDatasource(deviceToken).send(deviceId);
-      AppSnackbar.message('subject_home_emergency_sent'.tr);
+
+      final location = await captureEmergencyLocation();
+      '[긴급] API 전송 직전 좌표: ${location == null ? "null" : "${location.latitude}, ${location.longitude} (acc=${location.accuracyMeters})"}'
+          .printLog();
+
+      await EmergencyRemoteDatasource(deviceToken)
+          .send(deviceId, location: location);
+
+      AppSnackbar.message(
+        location != null
+            ? 'emergency_sent_with_location'.tr
+            : 'emergency_sent_without_location'.tr,
+      );
     } catch (_) {
       AppSnackbar.message('subject_home_emergency_failed'.tr);
     } finally {

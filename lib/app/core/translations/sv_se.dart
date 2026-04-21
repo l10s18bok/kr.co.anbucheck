@@ -60,6 +60,13 @@ abstract class SvSe {
     'permission_activity_desc': 'Anvands for att upptacka steg och bekrafta aktivitet',
     'permission_location': 'Plats',
     'permission_location_desc': 'Delas med anhoriga endast vid en nodbegaran om hjalp',
+    'location_permission_warning':
+        'Platsen skickas inte vid en nodbegaran. Tryck for att tillata.',
+    'location_permission_settings_title': 'Platsbehorighet kravs',
+    'location_permission_settings_body_ios':
+        "Hitta och valj 'Anbu', valj sedan 'Nar appen anvands' under 'Plats'.",
+    'location_permission_settings_body_android':
+        "Valj 'Behorigheter' → 'Plats' och valj sedan 'Tillat endast medan appen anvands'.",
     'permission_activity_dialog_title': 'Info om aktivitetsbehorighet',
     'permission_activity_dialog_message':
         'Anvands for att upptacka steg och bekrafta aktivitet.\nTryck pa "Tillat" pa nasta skarm.',

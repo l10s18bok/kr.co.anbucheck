@@ -124,6 +124,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
             ),
             SizedBox(height: AppSpacing.lg),
             _buildEmergencyButton(),
+            _buildLocationPermissionWarning(),
             SizedBox(height: AppSpacing.sp6),
             const BannerAdWidget(),
             // SizedBox(height: AppSpacing.sp6),
@@ -137,7 +138,8 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
   Widget _buildSafetyCodeCard() {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(AppSpacing.sp4),
+      padding: EdgeInsets.fromLTRB(
+          AppSpacing.sp4, AppSpacing.sp4, AppSpacing.sp4, AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(20.r),
@@ -329,6 +331,56 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
     });
   }
 
+  /// 위치 권한 거부 시 긴급 버튼 아래 경고 텍스트.
+  /// 탭 시 컨트롤러가 재요청 또는 설정 이동을 수행한다.
+  Widget _buildLocationPermissionWarning() {
+    return Obx(() {
+      if (!controller.locationPermissionDenied.value) {
+        return const SizedBox.shrink();
+      }
+      return Padding(
+        padding: EdgeInsets.only(top: AppSpacing.md),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12.r),
+            onTap: controller.requestLocationPermissionAgain,
+            child: Container(
+              width: double.infinity,
+              constraints: BoxConstraints(minHeight: 48.h),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFEBEE),
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(
+                  color: const Color(0xFFB71C1C).withValues(alpha: 0.3),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.warning_amber_rounded,
+                      size: 20.w, color: const Color(0xFFB71C1C)),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Text(
+                      'location_permission_warning'.tr,
+                      style: AppTextTheme.bodySmall(
+                        color: const Color(0xFFB71C1C),
+                        fw: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
   Widget _buildReportButton() {
     return Obx(() {
       final sending = controller.isReporting;
@@ -337,7 +389,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
         onTap: (sending || disabled) ? null : controller.reportNow,
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: (sending || disabled)
@@ -395,7 +447,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
         onTap: (sending || disabled) ? null : () => _showEmergencyConfirm(),
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
           decoration: BoxDecoration(
             color: (sending || disabled)
                 ? const Color(0xFFFFCDD2)

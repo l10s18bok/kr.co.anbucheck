@@ -59,6 +59,12 @@ abstract class KoKr {
     'permission_activity_desc': '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다',
     'permission_location': '위치 정보',
     'permission_location_desc': '긴급 도움 요청 시에만 현재 위치를 보호자에게 전달합니다',
+    'location_permission_warning': '긴급 요청 시 위치가 전달되지 않습니다. 탭하여 허용.',
+    'location_permission_settings_title': '위치 권한 설정 필요',
+    'location_permission_settings_body_ios':
+        "'안부'를 찾아 선택한 뒤, '위치' 항목에서 '앱을 사용하는 동안'을 선택해 주세요.",
+    'location_permission_settings_body_android':
+        "'권한' → '위치' 순서로 선택한 뒤 '앱 사용 중에만 허용'을 선택해 주세요.",
     'permission_activity_dialog_title': '신체 활동 권한 안내',
     'permission_activity_dialog_message': '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.\n다음 화면에서 "허용"을 선택해 주세요.',
     'permission_notification_required_title': '알림 권한이 필요합니다',

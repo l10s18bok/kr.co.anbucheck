@@ -59,6 +59,13 @@ abstract class ArSa {
     'permission_activity_desc': 'يُستخدم لاكتشاف الخطوات والتأكد من النشاط',
     'permission_location': 'الموقع',
     'permission_location_desc': 'تتم مشاركته مع الأوصياء فقط عند إرسال طلب مساعدة طارئ',
+    'location_permission_warning':
+        'لن يتم إرسال الموقع مع طلب الطوارئ. اضغط للسماح.',
+    'location_permission_settings_title': 'إذن الموقع مطلوب',
+    'location_permission_settings_body_ios':
+        'ابحث عن «Anbu» واختره، ثم في «الموقع» اختر «عند استخدام التطبيق».',
+    'location_permission_settings_body_android':
+        'اختر «الأذونات» ← «الموقع»، ثم اختر «السماح فقط أثناء استخدام التطبيق».',
     'permission_activity_dialog_title': 'معلومات عن إذن النشاط',
     'permission_activity_dialog_message':
         'يُستخدم لاكتشاف الخطوات والتأكد من النشاط.\nيرجى الضغط على «السماح» في الشاشة التالية.',

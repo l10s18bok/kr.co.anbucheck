@@ -59,6 +59,12 @@ abstract class JaJp {
     'permission_activity_desc': '歩数を検出して活動状況を確認するために使用されます',
     'permission_location': '位置情報',
     'permission_location_desc': '緊急ヘルプ要請の時にのみ、現在地を保護者に送信します',
+    'location_permission_warning': '緊急要請時に位置情報が送信されません。タップして許可してください。',
+    'location_permission_settings_title': '位置情報の権限設定が必要です',
+    'location_permission_settings_body_ios':
+        '「Anbu」を選択し、「位置情報」で「このAppの使用中のみ許可」を選択してください。',
+    'location_permission_settings_body_android':
+        '「権限」→「位置情報」の順に選択し、「アプリの使用中のみ許可」を選択してください。',
     'permission_activity_dialog_title': '身体活動の権限について',
     'permission_activity_dialog_message': '歩数を検出して活動状況を確認するために使用されます。\n次の画面で「許可」を選択してください。',
     'permission_notification_required_title': '通知の権限が必要です',

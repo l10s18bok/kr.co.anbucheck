@@ -61,6 +61,13 @@ abstract class HiIn {
     'permission_activity_desc': 'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है',
     'permission_location': 'स्थान',
     'permission_location_desc': 'आपातकालीन सहायता अनुरोध पर ही संरक्षकों के साथ साझा किया जाता है',
+    'location_permission_warning':
+        'आपातकालीन अनुरोध के साथ स्थान नहीं भेजा जाएगा। अनुमति देने के लिए टैप करें।',
+    'location_permission_settings_title': 'स्थान अनुमति आवश्यक',
+    'location_permission_settings_body_ios':
+        '"Anbu" खोजकर चुनें, फिर "स्थान" में "ऐप का उपयोग करते समय" चुनें।',
+    'location_permission_settings_body_android':
+        '"अनुमतियाँ" → "स्थान" चुनें, फिर "केवल ऐप का उपयोग करते समय अनुमति दें" चुनें।',
     'permission_activity_dialog_title': 'गतिविधि अनुमति जानकारी',
     'permission_activity_dialog_message':
         'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है।\nकृपया अगली स्क्रीन पर "अनुमति दें" दबाएं।',

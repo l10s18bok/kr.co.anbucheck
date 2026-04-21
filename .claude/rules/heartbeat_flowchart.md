@@ -248,11 +248,15 @@ flowchart TD
 
     SvcCheck --> SvcResult{위치 서비스 ON?}
     SvcResult -->|OFF| NoLoc
-    SvcResult -->|ON| GetLoc[Geolocator.getCurrentPosition<br/>high accuracy, 5s timeout]
+    SvcResult -->|ON| LastKnown[Geolocator.getLastKnownPosition<br/>1차 폴백 — 다른 앱이 최근 GPS를 썼으면 수 ms 내 반환]
+
+    LastKnown --> LastKnownResult{캐시 위치 존재?}
+    LastKnownResult -->|YES| WithLoc[location = &#123;lat, lng, accuracy, captured_at&#125;]
+    LastKnownResult -->|NO| GetLoc[Geolocator.getCurrentPosition<br/>2차 폴백 — medium accuracy, 10s timeout<br/>medium은 GPS+Wi-Fi+셀룰러 병용 → 실내에서도 fix 가능]
 
     GetLoc --> GetResult{GPS fix 성공?}
     GetResult -->|타임아웃/예외| NoLoc
-    GetResult -->|성공| WithLoc[location = &#123;lat, lng, accuracy, captured_at&#125;]
+    GetResult -->|성공| WithLoc
 
     NoLoc --> Send[POST /api/v1/emergency<br/>device_id + optional location]
     WithLoc --> Send
@@ -284,7 +288,7 @@ flowchart TD
 | 보호자 범위 | 연결된 전원 |
 | 반복 발송 | 없음 (1회 즉시 발송) |
 | 클라이언트 | 확인 다이얼로그로 오탐 방지 |
-| 위치 | optional — 사용자 동의 + 서비스 ON + 5s 내 GPS fix일 때만 첨부. 거부/실패 어떤 경우에도 긴급 API 호출 자체는 항상 실행 |
+| 위치 | optional — 사용자 동의 + 서비스 ON일 때 2단계 폴백으로 획득: (1) `getLastKnownPosition` 캐시 위치 선행 (수 ms) → (2) `getCurrentPosition` medium 정확도 + 10초 타임아웃. 거부/실패 어떤 경우에도 긴급 API 호출 자체는 항상 실행. S 모드 홈과 G+S 안전코드 페이지 양쪽 긴급 버튼이 공통 `captureEmergencyLocation()` 헬퍼를 공유 |
 
 
 ## 8. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)

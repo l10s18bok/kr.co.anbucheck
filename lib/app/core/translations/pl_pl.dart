@@ -61,6 +61,13 @@ abstract class PlPl {
     'permission_activity_desc': 'Sluzy do wykrywania krokow i potwierdzania aktywnosci',
     'permission_location': 'Lokalizacja',
     'permission_location_desc': 'Udostepniana opiekunom tylko przy wyslaniu wezwania pomocy',
+    'location_permission_warning':
+        'Lokalizacja nie zostanie wyslana przy wezwaniu pomocy. Dotknij, aby zezwolic.',
+    'location_permission_settings_title': 'Wymagane uprawnienie lokalizacji',
+    'location_permission_settings_body_ios':
+        "Znajdz i wybierz 'Anbu', a nastepnie w 'Lokalizacja' wybierz 'Podczas korzystania z aplikacji'.",
+    'location_permission_settings_body_android':
+        "Wybierz 'Uprawnienia' → 'Lokalizacja', a nastepnie 'Zezwalaj tylko podczas korzystania z aplikacji'.",
     'permission_activity_dialog_title': 'Informacja o uprawnieniu aktywnosci',
     'permission_activity_dialog_message':
         'Sluzy do wykrywania krokow i potwierdzania aktywnosci.\nProsze wybrac "Zezwol" na nastepnym ekranie.',
