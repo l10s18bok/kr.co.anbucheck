@@ -161,7 +161,7 @@ abstract class PlPl {
     'guardian_status_caution': 'Uwaga',
     'guardian_status_warning': 'Ostrzezenie',
     'guardian_status_urgent': 'Pilne',
-    'guardian_status_confirmed': 'Bezpieczenstwo potwierdzone',
+    'guardian_status_confirmed': '✅ Bezpieczny',
     'guardian_subscription_expired': 'Subskrypcja wygasla',
     'guardian_subscription_expired_message':
         'Powiadomienia o alertach nie sa wysylane.\nOdnow subskrypcje, aby kontynuowac ochrone.',

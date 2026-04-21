@@ -162,7 +162,7 @@ abstract class NlNl {
     'guardian_status_caution': 'Let op',
     'guardian_status_warning': 'Waarschuwing',
     'guardian_status_urgent': 'Dringend',
-    'guardian_status_confirmed': 'Veiligheid bevestigd',
+    'guardian_status_confirmed': '✅ Veilig',
     'guardian_subscription_expired': 'Abonnement verlopen',
     'guardian_subscription_expired_message':
         'Waarschuwingsmeldingen worden niet verzonden.\nVerleng uw abonnement om de bescherming voort te zetten.',

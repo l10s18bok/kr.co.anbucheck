@@ -150,7 +150,7 @@ abstract class ZhCn {
     'guardian_status_caution': '注意',
     'guardian_status_warning': '警告',
     'guardian_status_urgent': '紧急',
-    'guardian_status_confirmed': '安全已确认',
+    'guardian_status_confirmed': '✅ 安全',
     'guardian_subscription_expired': '订阅已过期',
     'guardian_subscription_expired_message': '警报通知已停止发送。\n请续订以继续守护服务。',
     'guardian_subscribe': '订阅',

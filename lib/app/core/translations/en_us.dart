@@ -159,7 +159,7 @@ abstract class EnUs {
     'guardian_status_caution': 'Caution',
     'guardian_status_warning': 'Warning',
     'guardian_status_urgent': 'Urgent',
-    'guardian_status_confirmed': 'Safety Confirmed',
+    'guardian_status_confirmed': '✅ Safe',
     'guardian_subscription_expired': 'Subscription expired',
     'guardian_subscription_expired_message':
         'Alert notifications are not being sent.\nRenew your subscription to continue protection.',

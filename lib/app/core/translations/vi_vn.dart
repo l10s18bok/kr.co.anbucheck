@@ -160,7 +160,7 @@ abstract class ViVn {
     'guardian_status_caution': 'Chu y',
     'guardian_status_warning': 'Canh bao',
     'guardian_status_urgent': 'Khan cap',
-    'guardian_status_confirmed': 'Da xac nhan an toan',
+    'guardian_status_confirmed': '✅ An toan',
     'guardian_subscription_expired': 'Goi dang ky da het han',
     'guardian_subscription_expired_message':
         'Thong bao canh bao khong duoc gui.\nGia han dang ky de tiep tuc bao ve.',

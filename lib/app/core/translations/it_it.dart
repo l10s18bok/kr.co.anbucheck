@@ -161,7 +161,7 @@ abstract class ItIt {
     'guardian_status_caution': 'Attenzione',
     'guardian_status_warning': 'Avviso',
     'guardian_status_urgent': 'Urgente',
-    'guardian_status_confirmed': 'Sicurezza confermata',
+    'guardian_status_confirmed': '✅ Sicuro',
     'guardian_subscription_expired': 'Abbonamento scaduto',
     'guardian_subscription_expired_message':
         'Le notifiche di avviso non vengono inviate.\nRinnovi il Suo abbonamento per continuare la protezione.',

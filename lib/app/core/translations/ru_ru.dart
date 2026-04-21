@@ -163,7 +163,7 @@ abstract class RuRu {
     'guardian_status_caution': 'Внимание',
     'guardian_status_warning': 'Предупреждение',
     'guardian_status_urgent': 'Срочно',
-    'guardian_status_confirmed': 'Безопасность подтверждена',
+    'guardian_status_confirmed': '✅ Безопасно',
     'guardian_subscription_expired': 'Подписка истекла',
     'guardian_subscription_expired_message':
         'Уведомления о тревогах не отправляются.\nПродлите подписку для продолжения защиты.',

@@ -163,7 +163,7 @@ abstract class IdId {
     'guardian_status_caution': 'Perhatian',
     'guardian_status_warning': 'Peringatan',
     'guardian_status_urgent': 'Mendesak',
-    'guardian_status_confirmed': 'Keselamatan Dikonfirmasi',
+    'guardian_status_confirmed': '✅ Aman',
     'guardian_subscription_expired': 'Langganan kedaluwarsa',
     'guardian_subscription_expired_message':
         'Notifikasi peringatan tidak terkirim.\nPerpanjang langganan untuk melanjutkan perlindungan.',

@@ -151,7 +151,7 @@ abstract class JaJp {
     'guardian_status_caution': '注意',
     'guardian_status_warning': '警告',
     'guardian_status_urgent': '緊急',
-    'guardian_status_confirmed': '安全確認済み',
+    'guardian_status_confirmed': '✅ 安全',
     'guardian_subscription_expired': 'サブスクリプションの期限が切れました',
     'guardian_subscription_expired_message': '警告の通知が送信されていません。\nサブスクリプションを更新して見守りサービスを続けましょう。',
     'guardian_subscribe': 'サブスクリプション登録',

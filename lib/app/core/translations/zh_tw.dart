@@ -150,7 +150,7 @@ abstract class ZhTw {
     'guardian_status_caution': '注意',
     'guardian_status_warning': '警告',
     'guardian_status_urgent': '緊急',
-    'guardian_status_confirmed': '安全已確認',
+    'guardian_status_confirmed': '✅ 安全',
     'guardian_subscription_expired': '訂閱已過期',
     'guardian_subscription_expired_message': '警報通知已停止發送。\n請續訂以繼續守護服務。',
     'guardian_subscribe': '訂閱',

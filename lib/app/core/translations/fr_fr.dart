@@ -163,7 +163,7 @@ abstract class FrFr {
     'guardian_status_caution': 'Attention',
     'guardian_status_warning': 'Alerte',
     'guardian_status_urgent': 'Urgent',
-    'guardian_status_confirmed': 'Sécurité confirmée',
+    'guardian_status_confirmed': '✅ Sûr',
     'guardian_subscription_expired': 'Abonnement expiré',
     'guardian_subscription_expired_message':
         'Les alertes ne sont plus envoyées.\nRenouvelez votre abonnement pour maintenir la protection.',

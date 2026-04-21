@@ -154,7 +154,7 @@ abstract class ArSa {
     'guardian_status_caution': 'تنبيه',
     'guardian_status_warning': 'تحذير',
     'guardian_status_urgent': 'عاجل',
-    'guardian_status_confirmed': 'تم تأكيد السلامة',
+    'guardian_status_confirmed': '✅ آمن',
     'guardian_subscription_expired': 'انتهى الاشتراك',
     'guardian_subscription_expired_message':
         'لا يتم إرسال إشعارات التنبيه.\nجدّد اشتراكك لمواصلة خدمة الحماية.',

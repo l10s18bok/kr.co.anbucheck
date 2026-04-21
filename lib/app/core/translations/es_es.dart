@@ -160,7 +160,7 @@ abstract class EsEs {
     'guardian_status_caution': 'Precaución',
     'guardian_status_warning': 'Alerta',
     'guardian_status_urgent': 'Urgente',
-    'guardian_status_confirmed': 'Seguridad confirmada',
+    'guardian_status_confirmed': '✅ Seguro',
     'guardian_subscription_expired': 'Suscripción vencida',
     'guardian_subscription_expired_message':
         'Las alertas ya no se están enviando.\nRenueve su suscripción para mantener la protección.',

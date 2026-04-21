@@ -164,7 +164,7 @@ abstract class DeDe {
     'guardian_status_caution': 'Achtung',
     'guardian_status_warning': 'Warnung',
     'guardian_status_urgent': 'Dringend',
-    'guardian_status_confirmed': 'Sicherheit bestätigt',
+    'guardian_status_confirmed': '✅ Sicher',
     'guardian_subscription_expired': 'Abo abgelaufen',
     'guardian_subscription_expired_message':
         'Warnmeldungen werden nicht mehr gesendet.\nErneuern Sie Ihr Abo, um den Schutz fortzusetzen.',

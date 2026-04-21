@@ -161,7 +161,7 @@ abstract class PtBr {
     'guardian_status_caution': 'Atenção',
     'guardian_status_warning': 'Alerta',
     'guardian_status_urgent': 'Urgente',
-    'guardian_status_confirmed': 'Segurança confirmada',
+    'guardian_status_confirmed': '✅ Seguro',
     'guardian_subscription_expired': 'Assinatura expirada',
     'guardian_subscription_expired_message':
         'As notificações de alerta não estão sendo enviadas.\nRenove sua assinatura para continuar a proteção.',

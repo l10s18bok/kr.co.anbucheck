@@ -156,7 +156,7 @@ abstract class SvSe {
     'guardian_status_caution': 'Forsiktighet',
     'guardian_status_warning': 'Varning',
     'guardian_status_urgent': 'Bradskande',
-    'guardian_status_confirmed': 'Sakerhet bekraftad',
+    'guardian_status_confirmed': '✅ Saker',
     'guardian_subscription_expired': 'Prenumerationen har gatt ut',
     'guardian_subscription_expired_message':
         'Aviseringar skickas inte.\nFornya prenumerationen for att fortsatta skyddet.',

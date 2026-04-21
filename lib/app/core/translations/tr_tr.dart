@@ -159,7 +159,7 @@ abstract class TrTr {
     'guardian_status_caution': 'Dikkat',
     'guardian_status_warning': 'Uyarı',
     'guardian_status_urgent': 'Acil',
-    'guardian_status_confirmed': 'Güvenlik Onaylandı',
+    'guardian_status_confirmed': '✅ Güvende',
     'guardian_subscription_expired': 'Abonelik sona erdi',
     'guardian_subscription_expired_message':
         'Uyarı bildirimleri gönderilmiyor.\nKoruma hizmetine devam etmek için aboneliğinizi yenileyin.',

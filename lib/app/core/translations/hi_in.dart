@@ -158,7 +158,7 @@ abstract class HiIn {
     'guardian_status_caution': 'सावधानी',
     'guardian_status_warning': 'चेतावनी',
     'guardian_status_urgent': 'अत्यावश्यक',
-    'guardian_status_confirmed': 'सुरक्षा पुष्ट',
+    'guardian_status_confirmed': '✅ सुरक्षित',
     'guardian_subscription_expired': 'सदस्यता समाप्त हो गई',
     'guardian_subscription_expired_message':
         'चेतावनी सूचनाएं नहीं भेजी जा रही हैं।\nसुरक्षा जारी रखने के लिए सदस्यता नवीनीकृत करें।',

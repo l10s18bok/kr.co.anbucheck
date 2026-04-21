@@ -156,7 +156,7 @@ abstract class ThTh {
     'guardian_status_caution': 'ระวัง',
     'guardian_status_warning': 'เตือน',
     'guardian_status_urgent': 'เร่งด่วน',
-    'guardian_status_confirmed': 'ยืนยันความปลอดภัยแล้ว',
+    'guardian_status_confirmed': '✅ ปลอดภัย',
     'guardian_subscription_expired': 'การสมัครหมดอายุแล้ว',
     'guardian_subscription_expired_message':
         'การแจ้งเตือนไม่ได้ถูกส่ง\nต่ออายุการสมัครเพื่อดูแลต่อ',

@@ -152,7 +152,7 @@ abstract class KoKr {
     'guardian_status_caution': '주의',
     'guardian_status_warning': '경고',
     'guardian_status_urgent': '긴급',
-    'guardian_status_confirmed': '안전확인됨',
+    'guardian_status_confirmed': '✅ 안전',
     'guardian_subscription_expired': '구독이 만료되었습니다',
     'guardian_subscription_expired_message': '경고 알림이 발송되지 않고 있습니다.\n구독을 갱신하여 보호 서비스를 계속하세요.',
     'guardian_subscribe': '구독하기',
