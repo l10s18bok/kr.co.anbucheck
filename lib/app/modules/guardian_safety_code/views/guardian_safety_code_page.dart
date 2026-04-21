@@ -125,7 +125,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
             SizedBox(height: AppSpacing.lg),
             _buildEmergencyButton(),
             _buildLocationPermissionWarning(),
-            SizedBox(height: AppSpacing.sp6),
+            SizedBox(height: AppSpacing.sm),
             const BannerAdWidget(),
             // SizedBox(height: AppSpacing.sp6),
           ],
