@@ -373,5 +373,7 @@ abstract class HiIn {
     'wellbeing_check_title': '💛 कुशलता जांच',
     'wellbeing_check_body': 'क्या आप ठीक हैं? कृपया इस सूचना पर टैप करें।',
     'noti_channel_name': 'Anbu सूचनाएँ',
+    'notification_send_failed_title': '📶 कृपया अपना इंटरनेट कनेक्शन जांचें',
+    'notification_send_failed_body': 'अपनी कुशलता जांच फिर से भेजने के लिए ऐप खोलें।',
   };
 }

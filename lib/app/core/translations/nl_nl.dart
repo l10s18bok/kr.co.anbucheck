@@ -383,5 +383,7 @@ abstract class NlNl {
     'wellbeing_check_title': '💛 Welzijnscontrole',
     'wellbeing_check_body': 'Gaat het goed met u? Tik op deze melding.',
     'noti_channel_name': 'Anbu-meldingen',
+    'notification_send_failed_title': '📶 Controleer je internetverbinding',
+    'notification_send_failed_body': 'Open de app om je welzijnscheck opnieuw te versturen.',
   };
 }

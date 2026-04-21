@@ -11,8 +11,10 @@ import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 /// 알림 탭 → 앱 포그라운드 전환 → 홈 화면 자동 전송 로직이 heartbeat를 전송.
 /// Android는 WorkManager periodic이 안전망 역할을 하므로 로컬 알림 불필요.
 class LocalAlarmService {
-  static const _alarmId = 0x416C6172; // 'Alar' hex — 중복 방지 고정 ID
+  static const _alarmId = 0x416C6172; // 'Alar' hex — iOS 정기 알림용 고정 ID
+  static const _sendFailedId = 0x53466169; // 'SFai' hex — Android 전송 실패 알림용 고정 ID
   static const alarmPayload = 'gs_deadman';
+  static const sendFailedPayload = 'send_failed';
 
   static FlutterLocalNotificationsPlugin? _plugin;
 
@@ -101,6 +103,40 @@ class LocalAlarmService {
   static Future<void> cancel() async {
     if (Platform.isAndroid) return;
     await _cancelInternal();
+  }
+
+  /// heartbeat 전송이 retry 3회 모두 실패해 pending 큐에 적재됐을 때 호출 (Android 전용).
+  /// 네트워크 끊김 등으로 사용자가 인지해야 할 상황을 정보성 알림으로 전달.
+  /// 인터넷 복구 시 자동 재전송되므로 사용자에게 강한 액션을 요구하지 않는다.
+  static Future<void> notifySendFailed() async {
+    if (Platform.isIOS) return;
+    await _ensureInitialized();
+
+    final title = await NotificationTextCache.get(
+        'notification_send_failed_title',
+        fallback: '📶 Check your internet connection');
+    final body = await NotificationTextCache.get(
+        'notification_send_failed_body',
+        fallback: 'Open the app to resend your wellness check.');
+    final channelName = await NotificationTextCache.get(
+        'noti_channel_name', fallback: 'Anbu Alerts');
+
+    await _plugin!.show(
+      _sendFailedId,
+      title,
+      body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          _androidChannelId,
+          channelName,
+          importance: Importance.high,
+          priority: Priority.high,
+          icon: '@mipmap/ic_launcher',
+        ),
+      ),
+      payload: sendFailedPayload,
+    );
+    debugPrint('[LocalAlarm] 전송 실패 알림 표시');
   }
 
   /// 내부 취소 (schedule 내에서도 호출)

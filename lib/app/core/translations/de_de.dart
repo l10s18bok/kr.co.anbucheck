@@ -385,5 +385,7 @@ abstract class DeDe {
     'wellbeing_check_title': '💛 Wohlbefindens-Prüfung',
     'wellbeing_check_body': 'Geht es Ihnen gut? Bitte tippen Sie auf diese Benachrichtigung.',
     'noti_channel_name': 'Anbu-Benachrichtigungen',
+    'notification_send_failed_title': '📶 Bitte überprüfen Sie Ihre Internetverbindung',
+    'notification_send_failed_body': 'Öffnen Sie die App, um Ihre Wohlbefindensprüfung erneut zu senden.',
   };
 }

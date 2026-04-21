@@ -15,6 +15,8 @@ class NotificationTextCache {
     'wellbeing_check_title',
     'wellbeing_check_body',
     'noti_channel_name',
+    'notification_send_failed_title',
+    'notification_send_failed_body',
   ];
 
   /// 포그라운드에서 호출 — 현재 locale 기준 번역 문자열을 캐시

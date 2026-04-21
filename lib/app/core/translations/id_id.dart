@@ -385,5 +385,7 @@ abstract class IdId {
     'wellbeing_check_title': '💛 Pemeriksaan Kesejahteraan',
     'wellbeing_check_body': 'Apakah Anda baik-baik saja? Silakan ketuk notifikasi ini.',
     'noti_channel_name': 'Peringatan Anbu',
+    'notification_send_failed_title': '📶 Periksa koneksi internet Anda',
+    'notification_send_failed_body': 'Buka aplikasi untuk mengirim ulang laporan kesejahteraan.',
   };
 }

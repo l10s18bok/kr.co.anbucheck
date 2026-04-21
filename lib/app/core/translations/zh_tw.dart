@@ -353,5 +353,7 @@ abstract class ZhTw {
     'wellbeing_check_title': '💛 安否確認',
     'wellbeing_check_body': '您還好嗎？請點擊此通知。',
     'noti_channel_name': 'Anbu提醒',
+    'notification_send_failed_title': '📶 請檢查網路連線',
+    'notification_send_failed_body': '開啟應用程式重新傳送安康報告。',
   };
 }

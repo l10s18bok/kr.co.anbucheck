@@ -386,5 +386,7 @@ abstract class ItIt {
     'wellbeing_check_title': '💛 Verifica di benessere',
     'wellbeing_check_body': 'Come sta? Per favore, tocca questa notifica.',
     'noti_channel_name': 'Avvisi Anbu',
+    'notification_send_failed_title': '📶 Controlla la tua connessione Internet',
+    'notification_send_failed_body': 'Apri l\'app per inviare di nuovo il tuo controllo di benessere.',
   };
 }

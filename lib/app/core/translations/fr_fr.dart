@@ -388,5 +388,7 @@ abstract class FrFr {
     'wellbeing_check_title': '💛 Vérification de bien-être',
     'wellbeing_check_body': 'Comment allez-vous ? Veuillez appuyer sur cette notification.',
     'noti_channel_name': 'Alertes Anbu',
+    'notification_send_failed_title': '📶 Vérifiez votre connexion Internet',
+    'notification_send_failed_body': 'Ouvrez l\'application pour renvoyer votre signalement de bien-être.',
   };
 }

@@ -380,5 +380,7 @@ abstract class RuRu {
     'wellbeing_check_title': '💛 Проверка самочувствия',
     'wellbeing_check_body': 'У вас всё хорошо? Пожалуйста, нажмите на это уведомление.',
     'noti_channel_name': 'Уведомления Anbu',
+    'notification_send_failed_title': '📶 Проверьте интернет-соединение',
+    'notification_send_failed_body': 'Откройте приложение, чтобы повторно отправить отчёт о самочувствии.',
   };
 }

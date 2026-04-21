@@ -373,5 +373,7 @@ abstract class EnUs {
     'wellbeing_check_title': '💛 Wellness Check',
     'wellbeing_check_body': 'Are you doing well? Please tap this notification.',
     'noti_channel_name': 'Anbu Alerts',
+    'notification_send_failed_title': '📶 Check your internet connection',
+    'notification_send_failed_body': 'Open the app to resend your wellness check.',
   };
 }

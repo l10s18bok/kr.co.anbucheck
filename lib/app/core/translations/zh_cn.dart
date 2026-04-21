@@ -353,5 +353,7 @@ abstract class ZhCn {
     'wellbeing_check_title': '💛 安否确认',
     'wellbeing_check_body': '您还好吗？请点击此通知。',
     'noti_channel_name': 'Anbu提醒',
+    'notification_send_failed_title': '📶 请检查互联网连接',
+    'notification_send_failed_body': '打开应用重新发送安康报告。',
   };
 }

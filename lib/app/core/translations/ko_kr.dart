@@ -357,5 +357,7 @@ abstract class KoKr {
     'wellbeing_check_title': '💛 안부 확인',
     'wellbeing_check_body': '잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요.',
     'noti_channel_name': '안부 알림',
+    'notification_send_failed_title': '📶 인터넷 연결을 확인해주세요',
+    'notification_send_failed_body': '앱을 열어 안부를 다시 보내주세요.',
   };
 }

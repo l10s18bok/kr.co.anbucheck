@@ -367,5 +367,7 @@ abstract class ArSa {
     'wellbeing_check_title': '💛 التحقق من السلامة',
     'wellbeing_check_body': 'هل أنت بخير؟ يرجى الضغط على هذا الإشعار.',
     'noti_channel_name': 'تنبيهات Anbu',
+    'notification_send_failed_title': '📶 يرجى التحقق من اتصال الإنترنت',
+    'notification_send_failed_body': 'افتح التطبيق لإعادة إرسال تقرير سلامتك.',
   };
 }

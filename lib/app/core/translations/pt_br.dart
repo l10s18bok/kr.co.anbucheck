@@ -383,5 +383,7 @@ abstract class PtBr {
     'wellbeing_check_title': '💛 Verificação de bem-estar',
     'wellbeing_check_body': 'Está tudo bem? Por favor, toque nesta notificação.',
     'noti_channel_name': 'Alertas Anbu',
+    'notification_send_failed_title': '📶 Verifique sua conexão com a Internet',
+    'notification_send_failed_body': 'Abra o aplicativo para reenviar seu check de bem-estar.',
   };
 }

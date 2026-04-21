@@ -194,6 +194,10 @@ class HeartbeatService {
         debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
         if (attempt == 3) {
           await _heartbeatDs.savePending(request.toJson());
+          // 자동 heartbeat에 한해 사용자에게 인터넷 확인 안내 (수동은 즉시 UI 피드백 있음)
+          if (!request.manual) {
+            await LocalAlarmService.notifySendFailed();
+          }
           return;
         }
         await Future.delayed(Duration(seconds: attempt * 5));

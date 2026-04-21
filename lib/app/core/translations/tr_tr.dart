@@ -375,5 +375,7 @@ abstract class TrTr {
     'wellbeing_check_title': '💛 Sağlık Kontrolü',
     'wellbeing_check_body': 'İyi misiniz? Lütfen bu bildirime dokunun.',
     'noti_channel_name': 'Anbu Uyarıları',
+    'notification_send_failed_title': '📶 İnternet bağlantınızı kontrol edin',
+    'notification_send_failed_body': 'İyilik kontrolünü yeniden göndermek için uygulamayı açın.',
   };
 }
