@@ -13,9 +13,10 @@ import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart
 import 'package:anbucheck/app/data/datasources/remote/heartbeat_remote_datasource.dart';
 import 'package:anbucheck/app/data/models/heartbeat_request.dart';
 
-/// 센서 변화 임계값 (가속도/자이로 — 걸음수 0일 때만 사용)
-const _accelThreshold = 5.0;  // m/s²
+/// 센서 변화 임계값 (가속도/자이로/지자기 — 걸음수 0일 때만 사용)
+const _accelThreshold = 5.0;  // m/s²  (~30도 기울기 변화)
 const _gyroThreshold  = 0.3;  // rad/s
+const _magThreshold   = 20.0; // μT    (~30도 수평 회전 변화)
 
 /// Heartbeat 수집 → suspicious 판정 → 서버 전송 (오프라인 시 큐 저장)
 class HeartbeatService {
@@ -103,13 +104,14 @@ class HeartbeatService {
         } else {
           // 걸음수 변화 없거나 권한 거부 → 가속도/자이로로 보완 판정
           final sensor = await _collectSensor();
-          debugPrint('[HeartbeatService] sensor=${sensor != null ? 'accel(${sensor.accelX.toStringAsFixed(2)},${sensor.accelY.toStringAsFixed(2)},${sensor.accelZ.toStringAsFixed(2)}) gyro(${sensor.gyroX.toStringAsFixed(2)},${sensor.gyroY.toStringAsFixed(2)},${sensor.gyroZ.toStringAsFixed(2)})' : 'null'}');
+          debugPrint('[HeartbeatService] sensor=${sensor != null ? 'accel(${sensor.accelX.toStringAsFixed(2)},${sensor.accelY.toStringAsFixed(2)},${sensor.accelZ.toStringAsFixed(2)}) gyro(${sensor.gyroX.toStringAsFixed(2)},${sensor.gyroY.toStringAsFixed(2)},${sensor.gyroZ.toStringAsFixed(2)}) mag(${sensor.magX?.toStringAsFixed(2)},${sensor.magY?.toStringAsFixed(2)},${sensor.magZ?.toStringAsFixed(2)})' : 'null'}');
           suspicious = await _calcSuspicious(sensor);
           debugPrint('[HeartbeatService] suspicious=$suspicious');
           if (sensor != null) {
             await _sensorDs.saveSnapshot(
               accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
               gyroX:  sensor.gyroX,  gyroY:  sensor.gyroY,  gyroZ:  sensor.gyroZ,
+              magX:   sensor.magX,   magY:   sensor.magY,   magZ:   sensor.magZ,
             );
           }
         }
@@ -137,13 +139,14 @@ class HeartbeatService {
   /// 센서 기준값만 로컬에 저장 (서버 전송 없음)
   /// 최초 설치 직후 보호자 미연결 상태에서 호출
   /// pedometer_2의 getStepCount(from, to)는 iOS/Android 모두 절대 구간을 반환하므로
-  /// 걸음수 baseline 저장은 불필요. 가속도/자이로만 저장한다.
+  /// 걸음수 baseline 저장은 불필요. 가속도/자이로/지자기만 저장한다.
   Future<void> saveSensorBaseline() async {
     final sensor = await _collectSensor();
     if (sensor != null) {
       await _sensorDs.saveSnapshot(
         accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
-        gyroX: sensor.gyroX, gyroY: sensor.gyroY, gyroZ: sensor.gyroZ,
+        gyroX:  sensor.gyroX,  gyroY:  sensor.gyroY,  gyroZ:  sensor.gyroZ,
+        magX:   sensor.magX,   magY:   sensor.magY,   magZ:   sensor.magZ,
       );
     }
   }
@@ -266,15 +269,23 @@ class HeartbeatService {
   }
 
   /// 센서 스냅샷 1회 수집 (500ms 타임아웃, 실패 시 null)
+  /// 지자기 센서는 미지원 기기를 위해 실패해도 null로 처리하고 계속 진행
   Future<_SensorSnapshot?> _collectSensor() async {
     try {
       final accel = await accelerometerEventStream().first
           .timeout(const Duration(milliseconds: 500));
       final gyro = await gyroscopeEventStream().first
           .timeout(const Duration(milliseconds: 500));
+      double? magX, magY, magZ;
+      try {
+        final mag = await magnetometerEventStream().first
+            .timeout(const Duration(milliseconds: 500));
+        magX = mag.x; magY = mag.y; magZ = mag.z;
+      } catch (_) {}
       return _SensorSnapshot(
         accelX: accel.x, accelY: accel.y, accelZ: accel.z,
         gyroX:  gyro.x,  gyroY:  gyro.y,  gyroZ:  gyro.z,
+        magX:   magX,    magY:   magY,    magZ:   magZ,
       );
     } catch (_) {
       return null;
@@ -282,6 +293,7 @@ class HeartbeatService {
   }
 
   /// 이전 스냅샷과 비교하여 suspicious 판정
+  /// 가속도(기울기) + 자이로(회전속도) + 지자기(수평방향) 3축 종합 판정
   Future<bool> _calcSuspicious(_SensorSnapshot? current) async {
     if (current == null) return false;
 
@@ -290,7 +302,8 @@ class HeartbeatService {
       // 첫 heartbeat — 기준점 저장 후 정상 판정
       await _sensorDs.saveSnapshot(
         accelX: current.accelX, accelY: current.accelY, accelZ: current.accelZ,
-        gyroX: current.gyroX, gyroY: current.gyroY, gyroZ: current.gyroZ,
+        gyroX:  current.gyroX,  gyroY:  current.gyroY,  gyroZ:  current.gyroZ,
+        magX:   current.magX,   magY:   current.magY,   magZ:   current.magZ,
       );
       return false;
     }
@@ -307,7 +320,19 @@ class HeartbeatService {
       pow((current.gyroZ - (prev['gyro_z'] ?? 0)), 2),
     );
 
-    return accelDelta < _accelThreshold && gyroDelta < _gyroThreshold;
+    // 지자기 센서가 있을 때만 수평 회전 판정 — 미지원 기기는 무시
+    final hasMag = current.magX != null && prev['mag_x'] != null;
+    final magDelta = hasMag
+        ? sqrt(
+            pow((current.magX! - (prev['mag_x'] ?? 0)), 2) +
+            pow((current.magY! - (prev['mag_y'] ?? 0)), 2) +
+            pow((current.magZ! - (prev['mag_z'] ?? 0)), 2),
+          )
+        : double.infinity; // 지자기 없으면 판정에서 제외 (항상 통과)
+
+    return accelDelta < _accelThreshold
+        && gyroDelta < _gyroThreshold
+        && magDelta < _magThreshold;
   }
 
   HeartbeatRequest _fromJson(Map<String, dynamic> json) =>
@@ -325,9 +350,11 @@ class HeartbeatService {
 class _SensorSnapshot {
   final double accelX, accelY, accelZ;
   final double gyroX,  gyroY,  gyroZ;
+  final double? magX,  magY,   magZ;
 
   const _SensorSnapshot({
     required this.accelX, required this.accelY, required this.accelZ,
     required this.gyroX,  required this.gyroY,  required this.gyroZ,
+    this.magX, this.magY, this.magZ,
   });
 }
