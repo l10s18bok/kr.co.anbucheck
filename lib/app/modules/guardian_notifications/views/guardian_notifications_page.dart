@@ -128,14 +128,13 @@ class GuardianNotificationsPage
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainerLowest,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-        title: Text('notifications_delete_all_title'.tr, style: AppTextTheme.headlineSmall()),
-        content: Text('notifications_delete_all_message'.tr, style: AppTextTheme.bodyMedium()),
+        title: Text('notifications_delete_all_title'.tr, style: AppTextTheme.headlineSmall(color: const Color(0xFF1A1C1C))),
+        content: Text('notifications_delete_all_message'.tr, style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('common_cancel'.tr, style: AppTextTheme.bodyLarge(color: AppColors.textTertiary)),
+            child: Text('common_cancel'.tr, style: AppTextTheme.bodyLarge(color: const Color(0xFF9E9E9E))),
           ),
           TextButton(
             onPressed: () {
@@ -153,9 +152,8 @@ class GuardianNotificationsPage
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainerLowest,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-        title: Text('notifications_guide_title'.tr, style: AppTextTheme.headlineSmall()),
+        title: Text('notifications_guide_title'.tr, style: AppTextTheme.headlineSmall(color: const Color(0xFF1A1C1C))),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +187,7 @@ class GuardianNotificationsPage
                 description: 'notifications_level_urgent_desc'.tr,
               ),
               SizedBox(height: AppSpacing.lg),
-              Divider(color: AppColors.outlineVariant),
+              const Divider(color: Color(0xFFE0E0E0)),
               SizedBox(height: AppSpacing.md),
               _alertGuideItem(
                 icon: Icons.notifications_rounded,
@@ -200,7 +198,7 @@ class GuardianNotificationsPage
               SizedBox(height: AppSpacing.md),
               Text(
                 'notifications_activity_note'.tr,
-                style: AppTextTheme.bodySmall(color: AppColors.textTertiary).copyWith(fontSize: 11.sp),
+                style: AppTextTheme.bodySmall(color: const Color(0xFF9E9E9E)).copyWith(fontSize: 11.sp),
               ),
             ],
           ),
@@ -230,9 +228,9 @@ class GuardianNotificationsPage
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
+              Text(title, style: AppTextTheme.bodyLarge(fw: FontWeight.w600, color: const Color(0xFF1A1C1C))),
               SizedBox(height: 2.h),
-              Text(description, style: AppTextTheme.bodySmall(color: AppColors.textSecondary)),
+              Text(description, style: AppTextTheme.bodySmall(color: const Color(0xFF3F4948))),
             ],
           ),
         ),

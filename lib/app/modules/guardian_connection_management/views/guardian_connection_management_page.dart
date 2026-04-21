@@ -337,17 +337,19 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('connection_edit_title'.tr, style: AppTextTheme.headlineSmall()),
+      title: Text('connection_edit_title'.tr, style: AppTextTheme.headlineSmall(color: const Color(0xFF212121))),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('connection_alias_label'.tr, style: AppTextTheme.labelMedium(color: AppColors.textSecondary)),
+          Text('connection_alias_label'.tr, style: AppTextTheme.labelMedium(color: const Color(0xFF757575))),
           SizedBox(height: AppSpacing.sm),
           TextField(
             controller: _aliasController,
+            cursorColor: const Color(0xFF212121),
             decoration: InputDecoration(
               hintText: widget.alias,
+              hintStyle: AppTextTheme.bodyLarge(color: const Color(0xFF9E9E9E)),
               filled: true,
               fillColor: const Color(0xFFF5F5F5),
               border: OutlineInputBorder(
@@ -360,18 +362,18 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
                 vertical: AppSpacing.md,
               ),
             ),
-            style: AppTextTheme.bodyLarge(),
+            style: AppTextTheme.bodyLarge(color: const Color(0xFF212121)),
           ),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('common_cancel'.tr, style: AppTextTheme.bodyMedium(color: AppColors.textSecondary)),
+          child: Text('common_cancel'.tr, style: AppTextTheme.bodyMedium(color: const Color(0xFF757575))),
         ),
         TextButton(
           onPressed: _save,
-          child: Text('common_save'.tr, style: AppTextTheme.bodyMedium(color: AppColors.onSurface)),
+          child: Text('common_save'.tr, style: AppTextTheme.bodyMedium(color: const Color(0xFF212121))),
         ),
       ],
     );

@@ -206,12 +206,12 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     final goToSettings = await Get.dialog<bool>(
       AlertDialog(
         title: Text('location_permission_settings_title'.tr,
-            style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
+            style: AppTextTheme.headlineSmall(fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
         content: Text(
             Platform.isIOS
                 ? 'location_permission_settings_body_ios'.tr
                 : 'location_permission_settings_body_android'.tr,
-            style: AppTextTheme.bodyMedium()),
+            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -254,9 +254,9 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
     final goToSettings = await Get.dialog<bool>(
       AlertDialog(
         title: Text('gs_activity_permission_settings_title'.tr,
-            style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
+            style: AppTextTheme.headlineSmall(fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
         content: Text('gs_activity_permission_settings_body'.tr,
-            style: AppTextTheme.bodyMedium()),
+            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),

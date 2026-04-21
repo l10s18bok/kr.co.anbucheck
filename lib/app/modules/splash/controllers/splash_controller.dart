@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app/core/base/base_controller.dart';
-import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
@@ -168,7 +167,6 @@ class SplashController extends BaseController {
   Future<void> _showForceUpdateDialog(String version, String storeUrl) async {
     await Get.dialog(
       AlertDialog(
-        backgroundColor: AppColors.surface,
         title: Text('update_required_title'.tr),
         content: Text('update_required_message'.trParams({'version': version})),
         actions: [

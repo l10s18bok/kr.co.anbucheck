@@ -658,7 +658,6 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
   void _showSwitchToGuardianConfirm() {
     Get.dialog(
       AlertDialog(
-        backgroundColor: AppColors.surface,
         title: Row(
           children: [
             Expanded(
@@ -698,7 +697,6 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
     scaffoldKey.currentState?.closeDrawer();
     Get.dialog(
       AlertDialog(
-        backgroundColor: AppColors.surface,
         title: Text('drawer_withdraw'.tr, style: AppTextTheme.headlineSmall(
             fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
         content: Text('drawer_withdraw_message'.tr,

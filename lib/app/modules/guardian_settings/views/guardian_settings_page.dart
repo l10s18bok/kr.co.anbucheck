@@ -353,7 +353,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
       AlertDialog(
         title: Text(
           'gs_enable_dialog_title'.tr,
-          style: AppTextTheme.headlineSmall(fw: FontWeight.w700),
+          style: AppTextTheme.headlineSmall(fw: FontWeight.w700, color: const Color(0xFF1A1C1C)),
         ),
         content: Text(
           'gs_enable_dialog_body'.tr,
@@ -390,7 +390,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
       AlertDialog(
         title: Text(
           'gs_enable_dialog_title'.tr,
-          style: AppTextTheme.headlineSmall(fw: FontWeight.w700),
+          style: AppTextTheme.headlineSmall(fw: FontWeight.w700, color: const Color(0xFF1A1C1C)),
         ),
         content: SingleChildScrollView(
           child: Column(
