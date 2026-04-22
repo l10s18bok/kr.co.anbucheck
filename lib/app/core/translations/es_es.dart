@@ -29,7 +29,7 @@ abstract class EsEs {
     'app_tagline': 'Velamos por su bienestar.',
     'app_service_desc': 'Servicio automático de verificación de bienestar',
     'app_guardian_title': 'Protector Anbu',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Verificando bienestar...',
@@ -60,7 +60,8 @@ abstract class EsEs {
     'permission_activity': 'Reconocimiento de actividad',
     'permission_activity_desc': 'Se utiliza para detectar pasos y confirmar la actividad',
     'permission_location': 'Ubicación',
-    'permission_location_desc': 'Se comparte con los protectores solo al enviar una solicitud de emergencia',
+    'permission_location_desc':
+        'Se comparte con los protectores solo al enviar una solicitud de emergencia',
     'location_permission_warning':
         'No se enviará la ubicación en las solicitudes de emergencia. Toca para permitir.',
     'location_permission_settings_title': 'Permiso de ubicación requerido',
@@ -137,7 +138,8 @@ abstract class EsEs {
     'subject_home_emergency_loading': 'Enviando alerta de emergencia...',
     'subject_home_emergency_sent': 'La alerta de emergencia ha sido enviada',
     'subject_home_emergency_failed': 'Error al enviar la alerta de emergencia',
-    'subject_home_manual_report_limit_reached': 'Ya has enviado el informe de seguridad de hoy. Por favor, inténtalo de nuevo mañana.',
+    'subject_home_manual_report_limit_reached':
+        'Ya has enviado el informe de seguridad de hoy. Por favor, inténtalo de nuevo mañana.',
     'subject_home_manual_report_sent': 'Tu mensaje ha sido enviado a tus contactos.',
     'subject_home_emergency_confirm_title': 'Solicitud de ayuda de emergencia',
     'subject_home_emergency_confirm_body':
@@ -151,7 +153,8 @@ abstract class EsEs {
     'emergency_map_accuracy_label': 'Precisión',
     'emergency_map_open_external': 'Abrir en la aplicación de mapas externa',
     'emergency_map_no_location': 'No hay información de ubicación',
-    'emergency_location_permission_denied_snackbar': 'Alerta de emergencia enviada sin permiso de ubicación',
+    'emergency_location_permission_denied_snackbar':
+        'Alerta de emergencia enviada sin permiso de ubicación',
     'subject_home_emergency_confirm_send': 'Enviar solicitud de emergencia',
     'subject_home_share_text': '¡Cuide de mí con la aplicación Anbu!\nCódigo de invitación: @code',
     'subject_home_share_subject': 'Código de invitación Anbu',
@@ -261,9 +264,11 @@ abstract class EsEs {
     'gs_disable_confirm': 'Desactivar',
     'gs_disabled_message': 'La protección ha sido desactivada',
     'gs_disable_failed': 'Error al desactivar la protección',
-    'gs_activity_permission_denied_warning': 'Permiso de podómetro denegado. Toque aquí para permitir.',
+    'gs_activity_permission_denied_warning':
+        'Permiso de podómetro denegado. Toque aquí para permitir.',
     'gs_activity_permission_settings_title': 'Permiso necesario',
-    'gs_activity_permission_settings_body': 'Permita el permiso Actividad física (Movimiento y Estado Físico) en la configuración de la aplicación.',
+    'gs_activity_permission_settings_body':
+        'Permita el permiso Actividad física (Movimiento y Estado Físico) en la configuración de la aplicación.',
     'gs_activity_permission_settings_go': 'Ir a Configuración',
 
     // ── Modo Protector → G+S (Drawer/Diálogo) ──
@@ -279,7 +284,8 @@ abstract class EsEs {
     'notifications_today': 'Notificaciones de hoy',
     'notifications_empty': 'No hay notificaciones hoy',
     'notifications_delete_all_title': 'Eliminar todas las notificaciones',
-    'notifications_auto_delete_notice': 'Las notificaciones de hoy se eliminan automáticamente a medianoche (0:00).',
+    'notifications_auto_delete_notice':
+        'Las notificaciones de hoy se eliminan automáticamente a medianoche (0:00).',
     'notifications_delete_all_message': '¿Eliminar todas las notificaciones de hoy?',
     'notifications_delete_failed': 'No se pudieron eliminar las notificaciones.',
     'notifications_guide_title': 'Guía de niveles de notificación',
@@ -288,7 +294,8 @@ abstract class EsEs {
     'notifications_level_caution': 'Precaución',
     'notifications_level_caution_desc': 'Aún no hay señal de bienestar ni actividad del teléfono',
     'notifications_level_warning': 'Alerta',
-    'notifications_level_warning_desc': 'Sin señal de bienestar ni actividad del teléfono durante varios días',
+    'notifications_level_warning_desc':
+        'Sin señal de bienestar ni actividad del teléfono durante varios días',
     'notifications_level_urgent': 'Urgente',
     'notifications_level_urgent_desc': 'Se requiere verificación inmediata',
     'notifications_level_info': 'Información',
@@ -354,7 +361,8 @@ abstract class EsEs {
     'heartbeat_schedule_hint_ios':
         'Una notificación push de bienestar llega cada día a esta hora. Toca la notificación o abre la aplicación en ese momento para enviar tu señal de bienestar.',
     'heartbeat_daily_time': 'Cada día a las @time',
-    'heartbeat_scheduled_today': 'Tu señal de bienestar se enviará a tus protectores cada día a las @time.',
+    'heartbeat_scheduled_today':
+        'Tu señal de bienestar se enviará a tus protectores cada día a las @time.',
     'heartbeat_change_failed_title': 'Error al cambiar la hora',
     'heartbeat_change_failed_message': 'No se pudo guardar en el servidor.',
 

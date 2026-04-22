@@ -1819,7 +1819,7 @@ ios/Runner/
 │  [이용약관 ↗]               │
 │                             │
 │  ANBU GUARD NETWORK         │
-│  © 2026 Averic SB Inc.     │
+│  © 2026 Ark SB Inc.     │
 │                             │
 │  [홈] [연결] [알림] [설정]   │
 └─────────────────────────────┘

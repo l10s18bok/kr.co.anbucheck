@@ -29,7 +29,7 @@ abstract class TrTr {
     'app_tagline': 'Hal hatır soruyoruz.',
     'app_service_desc': 'Otomatik hal hatır sorgulama hizmeti',
     'app_guardian_title': 'Anbu Koruyucu',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Açılış Ekranı ──
     'splash_loading': 'Hal hatır soruluyor...',
@@ -136,7 +136,8 @@ abstract class TrTr {
     'subject_home_emergency_loading': 'Acil durum uyarısı gönderiliyor...',
     'subject_home_emergency_sent': 'Acil durum uyarısı gönderildi',
     'subject_home_emergency_failed': 'Acil durum uyarısı gönderilemedi',
-    'subject_home_manual_report_limit_reached': 'Bugünün güvenlik raporunu zaten gönderdiniz. Lütfen yarın tekrar deneyin.',
+    'subject_home_manual_report_limit_reached':
+        'Bugünün güvenlik raporunu zaten gönderdiniz. Lütfen yarın tekrar deneyin.',
     'subject_home_manual_report_sent': 'Durumunuz kişilerinize iletildi.',
     'subject_home_emergency_confirm_title': 'Acil yardım talebi',
     'subject_home_emergency_confirm_body':
@@ -150,7 +151,8 @@ abstract class TrTr {
     'emergency_map_accuracy_label': 'Doğruluk',
     'emergency_map_open_external': 'Harici harita uygulamasında aç',
     'emergency_map_no_location': 'Konum bilgisi yok',
-    'emergency_location_permission_denied_snackbar': 'Konum izni olmadan acil durum uyarısı gönderildi',
+    'emergency_location_permission_denied_snackbar':
+        'Konum izni olmadan acil durum uyarısı gönderildi',
     'subject_home_emergency_confirm_send': 'Acil talep gönder',
     'subject_home_share_text': 'Anbu uygulamasıyla hal hatırımı sorun!\nDavet kodu: @code',
     'subject_home_share_subject': 'Anbu Davet Kodu',
@@ -259,9 +261,11 @@ abstract class TrTr {
     'gs_disable_confirm': 'Devre dışı bırak',
     'gs_disabled_message': 'Koruma devre dışı bırakıldı',
     'gs_disable_failed': 'Koruma devre dışı bırakılamadı',
-    'gs_activity_permission_denied_warning': 'Adım sayar izni reddedildi. İzin vermek için buraya dokunun.',
+    'gs_activity_permission_denied_warning':
+        'Adım sayar izni reddedildi. İzin vermek için buraya dokunun.',
     'gs_activity_permission_settings_title': 'İzin Gerekli',
-    'gs_activity_permission_settings_body': 'Lütfen uygulama ayarlarından Fiziksel aktivite (Hareket ve Fitness) iznine izin verin.',
+    'gs_activity_permission_settings_body':
+        'Lütfen uygulama ayarlarından Fiziksel aktivite (Hareket ve Fitness) iznine izin verin.',
     'gs_activity_permission_settings_go': 'Ayarlara Git',
 
     // ── Koruyucu modunda G+S geçişi (Drawer/Diyalog) ──
@@ -277,7 +281,8 @@ abstract class TrTr {
     'notifications_today': 'Bugünkü Bildirimler',
     'notifications_empty': 'Bugün bildirim yok',
     'notifications_delete_all_title': 'Tüm Bildirimleri Sil',
-    'notifications_auto_delete_notice': 'Bugünkü bildirimler gece yarısı (0:00) otomatik olarak silinir.',
+    'notifications_auto_delete_notice':
+        'Bugünkü bildirimler gece yarısı (0:00) otomatik olarak silinir.',
     'notifications_delete_all_message': 'Bugünkü tüm bildirimler silinsin mi?',
     'notifications_delete_failed': 'Bildirimler silinemedi.',
     'notifications_guide_title': 'Bildirim Seviyeleri Rehberi',
@@ -350,7 +355,8 @@ abstract class TrTr {
     'heartbeat_schedule_hint_ios':
         'Her gün bu saatte iyilik push bildirimi gelir. Bildirime dokunun veya o sırada uygulamayı açın, böylece iyilik sinyaliniz gönderilir.',
     'heartbeat_daily_time': 'Her gün @time',
-    'heartbeat_scheduled_today': 'İyilik sinyaliniz her gün @time saatinde koruyucularınıza iletilecek.',
+    'heartbeat_scheduled_today':
+        'İyilik sinyaliniz her gün @time saatinde koruyucularınıza iletilecek.',
     'heartbeat_change_failed_title': 'Saat Değişikliği Başarısız',
     'heartbeat_change_failed_message': 'Sunucuda güncellenemedi.',
 

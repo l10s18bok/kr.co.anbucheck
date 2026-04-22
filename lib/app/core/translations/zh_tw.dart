@@ -29,7 +29,7 @@ abstract class ZhTw {
     'app_tagline': '關心您的平安',
     'app_service_desc': '自動問安服務',
     'app_guardian_title': 'Anbu 守護者',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── 啟動頁 ──
     'splash_loading': '正在確認平安...',
@@ -61,10 +61,8 @@ abstract class ZhTw {
     'permission_location_desc': '僅在發送緊急求助時將目前位置傳送給監護人',
     'location_permission_warning': '緊急求助時位置不會被傳送。點按以允許。',
     'location_permission_settings_title': '需要位置權限設定',
-    'location_permission_settings_body_ios':
-        '找到並選擇「Anbu」,然後在「位置」中選擇「使用App期間」。',
-    'location_permission_settings_body_android':
-        '依序選擇「權限」→「位置」,然後選擇「僅在使用此應用程式時允許」。',
+    'location_permission_settings_body_ios': '找到並選擇「Anbu」,然後在「位置」中選擇「使用App期間」。',
+    'location_permission_settings_body_android': '依序選擇「權限」→「位置」,然後選擇「僅在使用此應用程式時允許」。',
     'permission_activity_dialog_title': '身體活動權限說明',
     'permission_activity_dialog_message': '用於偵測步數以確認活動狀態。\n請在下一個畫面中選擇「允許」。',
     'permission_notification_required_title': '需要通知權限',
@@ -129,8 +127,7 @@ abstract class ZhTw {
     'subject_home_manual_report_limit_reached': '今天的安全報告已完成。請明天再試。',
     'subject_home_manual_report_sent': '已向守護者傳送問候。',
     'subject_home_emergency_confirm_title': '緊急求助',
-    'subject_home_emergency_confirm_body':
-        '將向所有監護人發送緊急警報。\n目前位置也會一同分享。\n確定要請求幫助嗎？',
+    'subject_home_emergency_confirm_body': '將向所有監護人發送緊急警報。\n目前位置也會一同分享。\n確定要請求幫助嗎？',
     'emergency_sent_with_location': '緊急警報已發送（含位置）',
     'emergency_sent_without_location': '緊急警報已發送',
     'notifications_view_location': '🗺️ 檢視位置',

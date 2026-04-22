@@ -29,7 +29,7 @@ abstract class NlNl {
     'app_tagline': 'Wij controleren uw welzijn.',
     'app_service_desc': 'Automatische welzijnscontrole',
     'app_guardian_title': 'Anbu Beschermer',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Welzijn wordt gecontroleerd...',
@@ -60,8 +60,7 @@ abstract class NlNl {
     'permission_activity_desc':
         'Wordt gebruikt om stappen te detecteren en activiteit te bevestigen',
     'permission_location': 'Locatie',
-    'permission_location_desc':
-        'Wordt alleen bij een noodoproep met uw beschermers gedeeld',
+    'permission_location_desc': 'Wordt alleen bij een noodoproep met uw beschermers gedeeld',
     'location_permission_warning':
         'Bij een noodoproep wordt geen locatie verzonden. Tik om toe te staan.',
     'location_permission_settings_title': 'Locatietoestemming vereist',
@@ -139,7 +138,8 @@ abstract class NlNl {
     'subject_home_emergency_loading': 'Noodmelding wordt verzonden...',
     'subject_home_emergency_sent': 'Noodmelding is verzonden',
     'subject_home_emergency_failed': 'Noodmelding kon niet worden verzonden',
-    'subject_home_manual_report_limit_reached': 'U heeft het veiligheidsrapport van vandaag al verzonden. Probeer het morgen opnieuw.',
+    'subject_home_manual_report_limit_reached':
+        'U heeft het veiligheidsrapport van vandaag al verzonden. Probeer het morgen opnieuw.',
     'subject_home_manual_report_sent': 'Uw bericht is verzonden naar uw contacten.',
     'subject_home_emergency_confirm_title': 'Noodhulpverzoek',
     'subject_home_emergency_confirm_body':
@@ -263,9 +263,11 @@ abstract class NlNl {
     'gs_disable_confirm': 'Deactiveren',
     'gs_disabled_message': 'Welzijnsbescherming is gedeactiveerd',
     'gs_disable_failed': 'Welzijnsbescherming deactiveren mislukt',
-    'gs_activity_permission_denied_warning': 'Stappenteller-toestemming geweigerd. Tik hier om toe te staan.',
+    'gs_activity_permission_denied_warning':
+        'Stappenteller-toestemming geweigerd. Tik hier om toe te staan.',
     'gs_activity_permission_settings_title': 'Toestemming vereist',
-    'gs_activity_permission_settings_body': 'Sta de machtiging Fysieke activiteit (Beweging en Fitness) toe in de app-instellingen.',
+    'gs_activity_permission_settings_body':
+        'Sta de machtiging Fysieke activiteit (Beweging en Fitness) toe in de app-instellingen.',
     'gs_activity_permission_settings_go': 'Ga naar Instellingen',
 
     // ── Beschermer → G+S omschakeling (Drawer/Dialoog) ──
@@ -281,14 +283,16 @@ abstract class NlNl {
     'notifications_today': 'Meldingen van vandaag',
     'notifications_empty': 'Geen meldingen vandaag',
     'notifications_delete_all_title': 'Alle meldingen verwijderen',
-    'notifications_auto_delete_notice': 'De meldingen van vandaag worden automatisch verwijderd om middernacht (0:00).',
+    'notifications_auto_delete_notice':
+        'De meldingen van vandaag worden automatisch verwijderd om middernacht (0:00).',
     'notifications_delete_all_message': 'Alle meldingen van vandaag verwijderen?',
     'notifications_delete_failed': 'Kan meldingen niet verwijderen.',
     'notifications_guide_title': 'Gids meldingsniveaus',
     'notifications_level_health': 'Normaal',
     'notifications_level_health_desc': 'Het welzijn van de beschermeling is normaal bevestigd',
     'notifications_level_caution': 'Let op',
-    'notifications_level_caution_desc': 'Nog geen welzijnssignaal of telefoonactiviteit gedetecteerd',
+    'notifications_level_caution_desc':
+        'Nog geen welzijnssignaal of telefoonactiviteit gedetecteerd',
     'notifications_level_warning': 'Waarschuwing',
     'notifications_level_warning_desc': 'Meerdere dagen geen welzijnssignaal of telefoonactiviteit',
     'notifications_level_urgent': 'Dringend',
@@ -355,7 +359,8 @@ abstract class NlNl {
     'heartbeat_schedule_hint_ios':
         'Een welzijns-pushmelding komt elke dag op deze tijd binnen. Tik op de melding of open de app rond dat tijdstip om uw welzijnssignaal te verzenden.',
     'heartbeat_daily_time': 'Dagelijks om @time',
-    'heartbeat_scheduled_today': 'Uw welzijnssignaal wordt elke dag om @time naar uw beschermers gestuurd.',
+    'heartbeat_scheduled_today':
+        'Uw welzijnssignaal wordt elke dag om @time naar uw beschermers gestuurd.',
     'heartbeat_change_failed_title': 'Tijdswijziging mislukt',
     'heartbeat_change_failed_message': 'Kan niet bijwerken op de server.',
 

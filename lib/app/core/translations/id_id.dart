@@ -29,7 +29,7 @@ abstract class IdId {
     'app_tagline': 'Memantau kesejahteraan Anda.',
     'app_service_desc': 'Layanan pemeriksaan kesejahteraan otomatis',
     'app_guardian_title': 'Penjaga Anbu',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Memeriksa kesejahteraan...',
@@ -61,7 +61,8 @@ abstract class IdId {
     'permission_activity': 'Pengenalan Aktivitas',
     'permission_activity_desc': 'Digunakan untuk mendeteksi langkah dan memastikan aktivitas',
     'permission_location': 'Lokasi',
-    'permission_location_desc': 'Dibagikan ke pelindung hanya saat mengirim permintaan bantuan darurat',
+    'permission_location_desc':
+        'Dibagikan ke pelindung hanya saat mengirim permintaan bantuan darurat',
     'location_permission_warning':
         'Lokasi tidak akan dikirim saat permintaan darurat. Ketuk untuk mengizinkan.',
     'location_permission_settings_title': 'Izin Lokasi Diperlukan',
@@ -139,7 +140,8 @@ abstract class IdId {
     'subject_home_emergency_loading': 'Mengirim peringatan darurat...',
     'subject_home_emergency_sent': 'Peringatan darurat telah dikirim',
     'subject_home_emergency_failed': 'Gagal mengirim peringatan darurat',
-    'subject_home_manual_report_limit_reached': 'Anda sudah mengirim laporan keamanan hari ini. Silakan coba lagi besok.',
+    'subject_home_manual_report_limit_reached':
+        'Anda sudah mengirim laporan keamanan hari ini. Silakan coba lagi besok.',
     'subject_home_manual_report_sent': 'Pesan keamanan Anda telah dikirim ke kontak Anda.',
     'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
     'subject_home_emergency_confirm_body':
@@ -263,9 +265,11 @@ abstract class IdId {
     'gs_disable_confirm': 'Nonaktifkan',
     'gs_disabled_message': 'Perlindungan telah dinonaktifkan',
     'gs_disable_failed': 'Gagal menonaktifkan perlindungan',
-    'gs_activity_permission_denied_warning': 'Izin penghitung langkah ditolak. Ketuk di sini untuk mengizinkan.',
+    'gs_activity_permission_denied_warning':
+        'Izin penghitung langkah ditolak. Ketuk di sini untuk mengizinkan.',
     'gs_activity_permission_settings_title': 'Izin Diperlukan',
-    'gs_activity_permission_settings_body': 'Harap izinkan izin Aktivitas Fisik (Gerakan & Kebugaran) di pengaturan aplikasi.',
+    'gs_activity_permission_settings_body':
+        'Harap izinkan izin Aktivitas Fisik (Gerakan & Kebugaran) di pengaturan aplikasi.',
     'gs_activity_permission_settings_go': 'Buka Pengaturan',
 
     // ── Mode Penjaga → G+S (Drawer/Dialog) ──
@@ -281,7 +285,8 @@ abstract class IdId {
     'notifications_today': 'Notifikasi Hari Ini',
     'notifications_empty': 'Tidak ada notifikasi hari ini',
     'notifications_delete_all_title': 'Hapus Semua Notifikasi',
-    'notifications_auto_delete_notice': 'Notifikasi hari ini akan dihapus secara otomatis pada tengah malam (0:00).',
+    'notifications_auto_delete_notice':
+        'Notifikasi hari ini akan dihapus secara otomatis pada tengah malam (0:00).',
     'notifications_delete_all_message': 'Hapus semua notifikasi hari ini?',
     'notifications_delete_failed': 'Gagal menghapus notifikasi.',
     'notifications_guide_title': 'Panduan Tingkat Notifikasi',
@@ -290,7 +295,8 @@ abstract class IdId {
     'notifications_level_caution': 'Perhatian',
     'notifications_level_caution_desc': 'Belum ada sinyal kesejahteraan atau aktivitas ponsel',
     'notifications_level_warning': 'Peringatan',
-    'notifications_level_warning_desc': 'Tidak ada sinyal kesejahteraan atau aktivitas ponsel selama beberapa hari berturut-turut',
+    'notifications_level_warning_desc':
+        'Tidak ada sinyal kesejahteraan atau aktivitas ponsel selama beberapa hari berturut-turut',
     'notifications_level_urgent': 'Mendesak',
     'notifications_level_urgent_desc': 'Perlu pemeriksaan segera sekarang',
     'notifications_level_info': 'Info',
@@ -356,7 +362,8 @@ abstract class IdId {
     'heartbeat_schedule_hint_ios':
         'Notifikasi push kesehatan datang setiap hari pada waktu ini. Ketuk notifikasi atau buka aplikasi di sekitar waktu itu untuk mengirim sinyal kesehatan Anda.',
     'heartbeat_daily_time': 'Setiap hari pukul @time',
-    'heartbeat_scheduled_today': 'Sinyal kesejahteraan Anda akan dikirim ke penjaga Anda setiap hari pukul @time.',
+    'heartbeat_scheduled_today':
+        'Sinyal kesejahteraan Anda akan dikirim ke penjaga Anda setiap hari pukul @time.',
     'heartbeat_change_failed_title': 'Perubahan Waktu Gagal',
     'heartbeat_change_failed_message': 'Tidak dapat memperbarui di server.',
 

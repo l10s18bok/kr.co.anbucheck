@@ -29,7 +29,7 @@ abstract class RuRu {
     'app_tagline': 'Проверяем, что у вас всё хорошо.',
     'app_service_desc': 'Автоматическая проверка самочувствия',
     'app_guardian_title': 'Anbu Опекун',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Заставка ──
     'splash_loading': 'Проверяем самочувствие...',
@@ -139,7 +139,8 @@ abstract class RuRu {
     'subject_home_emergency_loading': 'Отправка экстренного оповещения...',
     'subject_home_emergency_sent': 'Экстренное оповещение отправлено',
     'subject_home_emergency_failed': 'Не удалось отправить экстренное оповещение',
-    'subject_home_manual_report_limit_reached': 'Вы уже отправили сегодняшний отчёт о безопасности. Попробуйте завтра снова.',
+    'subject_home_manual_report_limit_reached':
+        'Вы уже отправили сегодняшний отчёт о безопасности. Попробуйте завтра снова.',
     'subject_home_manual_report_sent': 'Ваше сообщение о благополучии отправлено контактам.',
     'subject_home_emergency_confirm_title': 'Запрос экстренной помощи',
     'subject_home_emergency_confirm_body':
@@ -153,7 +154,8 @@ abstract class RuRu {
     'emergency_map_accuracy_label': 'Точность',
     'emergency_map_open_external': 'Открыть во внешнем приложении карт',
     'emergency_map_no_location': 'Нет информации о местоположении',
-    'emergency_location_permission_denied_snackbar': 'Экстренное оповещение отправлено без разрешения на местоположение',
+    'emergency_location_permission_denied_snackbar':
+        'Экстренное оповещение отправлено без разрешения на местоположение',
     'subject_home_emergency_confirm_send': 'Отправить экстренный запрос',
     'subject_home_share_text':
         'Проверяйте моё самочувствие через приложение Anbu!\nКод приглашения: @code',
@@ -263,9 +265,11 @@ abstract class RuRu {
     'gs_disable_confirm': 'Отключить',
     'gs_disabled_message': 'Защита отключена',
     'gs_disable_failed': 'Не удалось отключить защиту',
-    'gs_activity_permission_denied_warning': 'Разрешение на шагомер отклонено. Нажмите здесь, чтобы разрешить.',
+    'gs_activity_permission_denied_warning':
+        'Разрешение на шагомер отклонено. Нажмите здесь, чтобы разрешить.',
     'gs_activity_permission_settings_title': 'Требуется разрешение',
-    'gs_activity_permission_settings_body': 'Разрешите доступ к физической активности (Движение и фитнес) в настройках приложения.',
+    'gs_activity_permission_settings_body':
+        'Разрешите доступ к физической активности (Движение и фитнес) в настройках приложения.',
     'gs_activity_permission_settings_go': 'Перейти к настройкам',
 
     // ── Режим опекуна → G+S (Drawer/Диалог) ──
@@ -281,7 +285,8 @@ abstract class RuRu {
     'notifications_today': 'Сегодняшние уведомления',
     'notifications_empty': 'Сегодня уведомлений нет',
     'notifications_delete_all_title': 'Удалить все уведомления',
-    'notifications_auto_delete_notice': 'Сегодняшние уведомления автоматически удаляются в полночь (0:00).',
+    'notifications_auto_delete_notice':
+        'Сегодняшние уведомления автоматически удаляются в полночь (0:00).',
     'notifications_delete_all_message': 'Удалить все сегодняшние уведомления?',
     'notifications_delete_failed': 'Не удалось удалить уведомления.',
     'notifications_guide_title': 'Уровни уведомлений',
@@ -290,7 +295,8 @@ abstract class RuRu {
     'notifications_level_caution': 'Внимание',
     'notifications_level_caution_desc': 'Пока нет сигнала благополучия или активности телефона',
     'notifications_level_warning': 'Предупреждение',
-    'notifications_level_warning_desc': 'Нет сигнала благополучия или активности телефона несколько дней подряд',
+    'notifications_level_warning_desc':
+        'Нет сигнала благополучия или активности телефона несколько дней подряд',
     'notifications_level_urgent': 'Срочно',
     'notifications_level_urgent_desc': 'Требуется немедленная проверка',
     'notifications_level_info': 'Информация',
@@ -355,7 +361,8 @@ abstract class RuRu {
     'heartbeat_schedule_hint_ios':
         'Push-уведомление о благополучии приходит каждый день в это время. Нажмите на уведомление или откройте приложение в это время, чтобы отправить сигнал благополучия.',
     'heartbeat_daily_time': 'Ежедневно в @time',
-    'heartbeat_scheduled_today': 'Ваш сигнал благополучия будет отправляться опекунам каждый день в @time.',
+    'heartbeat_scheduled_today':
+        'Ваш сигнал благополучия будет отправляться опекунам каждый день в @time.',
     'heartbeat_change_failed_title': 'Ошибка изменения времени',
     'heartbeat_change_failed_message': 'Не удалось сохранить изменения на сервере.',
 
@@ -401,6 +408,7 @@ abstract class RuRu {
     'wellbeing_check_body': 'У вас всё хорошо? Пожалуйста, нажмите на это уведомление.',
     'noti_channel_name': 'Уведомления Anbu',
     'notification_send_failed_title': '📶 Проверьте интернет-соединение',
-    'notification_send_failed_body': 'Откройте приложение, чтобы повторно отправить отчёт о самочувствии.',
+    'notification_send_failed_body':
+        'Откройте приложение, чтобы повторно отправить отчёт о самочувствии.',
   };
 }

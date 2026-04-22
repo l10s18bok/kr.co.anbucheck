@@ -29,7 +29,7 @@ abstract class PtBr {
     'app_tagline': 'Verificando o seu bem-estar.',
     'app_service_desc': 'Serviço automático de verificação de bem-estar',
     'app_guardian_title': 'Anbu Guardião',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Verificando...',
@@ -60,7 +60,8 @@ abstract class PtBr {
     'permission_activity': 'Reconhecimento de atividade',
     'permission_activity_desc': 'Usado para detectar passos e confirmar atividade',
     'permission_location': 'Localização',
-    'permission_location_desc': 'Compartilhada com os protetores apenas em pedidos de ajuda de emergência',
+    'permission_location_desc':
+        'Compartilhada com os protetores apenas em pedidos de ajuda de emergência',
     'location_permission_warning':
         'A localização não será enviada no pedido de emergência. Toque para permitir.',
     'location_permission_settings_title': 'Permissão de localização necessária',
@@ -138,7 +139,8 @@ abstract class PtBr {
     'subject_home_emergency_loading': 'Enviando alerta de emergência...',
     'subject_home_emergency_sent': 'Alerta de emergência enviado',
     'subject_home_emergency_failed': 'Falha ao enviar alerta de emergência',
-    'subject_home_manual_report_limit_reached': 'Você já enviou o relatório de segurança de hoje. Tente novamente amanhã.',
+    'subject_home_manual_report_limit_reached':
+        'Você já enviou o relatório de segurança de hoje. Tente novamente amanhã.',
     'subject_home_manual_report_sent': 'Sua mensagem foi enviada aos seus contatos.',
     'subject_home_emergency_confirm_title': 'Pedido de ajuda de emergência',
     'subject_home_emergency_confirm_body':
@@ -152,7 +154,8 @@ abstract class PtBr {
     'emergency_map_accuracy_label': 'Precisão',
     'emergency_map_open_external': 'Abrir no app de mapas externo',
     'emergency_map_no_location': 'Sem informações de localização',
-    'emergency_location_permission_denied_snackbar': 'Alerta de emergência enviado sem permissão de localização',
+    'emergency_location_permission_denied_snackbar':
+        'Alerta de emergência enviado sem permissão de localização',
     'subject_home_emergency_confirm_send': 'Enviar pedido de emergência',
     'subject_home_share_text': 'Verifique como estou pelo app Anbu!\nCódigo de convite: @code',
     'subject_home_share_subject': 'Código de convite Anbu',
@@ -261,9 +264,11 @@ abstract class PtBr {
     'gs_disable_confirm': 'Desativar',
     'gs_disabled_message': 'A proteção foi desativada',
     'gs_disable_failed': 'Falha ao desativar a proteção',
-    'gs_activity_permission_denied_warning': 'Permissão de pedômetro negada. Toque aqui para permitir.',
+    'gs_activity_permission_denied_warning':
+        'Permissão de pedômetro negada. Toque aqui para permitir.',
     'gs_activity_permission_settings_title': 'Permissão necessária',
-    'gs_activity_permission_settings_body': 'Permita a permissão Atividade física (Movimento e Atividade Física) nas configurações do aplicativo.',
+    'gs_activity_permission_settings_body':
+        'Permita a permissão Atividade física (Movimento e Atividade Física) nas configurações do aplicativo.',
     'gs_activity_permission_settings_go': 'Ir para Configurações',
 
     // ── Modo Guardião → G+S (Drawer/Diálogo) ──
@@ -279,7 +284,8 @@ abstract class PtBr {
     'notifications_today': 'Notificações de hoje',
     'notifications_empty': 'Nenhuma notificação hoje',
     'notifications_delete_all_title': 'Excluir todas as notificações',
-    'notifications_auto_delete_notice': 'As notificações de hoje são excluídas automaticamente à meia-noite (0:00).',
+    'notifications_auto_delete_notice':
+        'As notificações de hoje são excluídas automaticamente à meia-noite (0:00).',
     'notifications_delete_all_message': 'Excluir todas as notificações de hoje?',
     'notifications_delete_failed': 'Não foi possível excluir as notificações.',
     'notifications_guide_title': 'Guia de níveis de notificação',
@@ -288,7 +294,8 @@ abstract class PtBr {
     'notifications_level_caution': 'Atenção',
     'notifications_level_caution_desc': 'Ainda sem sinal de bem-estar ou atividade do telefone',
     'notifications_level_warning': 'Alerta',
-    'notifications_level_warning_desc': 'Sem sinal de bem-estar ou atividade do telefone por vários dias',
+    'notifications_level_warning_desc':
+        'Sem sinal de bem-estar ou atividade do telefone por vários dias',
     'notifications_level_urgent': 'Urgente',
     'notifications_level_urgent_desc': 'Verificação imediata necessária',
     'notifications_level_info': 'Info',
@@ -354,7 +361,8 @@ abstract class PtBr {
     'heartbeat_schedule_hint_ios':
         'Uma notificação push de bem-estar chega todos os dias neste horário. Toque na notificação ou abra o aplicativo nesse momento para enviar seu sinal de bem-estar.',
     'heartbeat_daily_time': 'Diariamente às @time',
-    'heartbeat_scheduled_today': 'Seu sinal de bem-estar será enviado aos seus guardiões todos os dias às @time.',
+    'heartbeat_scheduled_today':
+        'Seu sinal de bem-estar será enviado aos seus guardiões todos os dias às @time.',
     'heartbeat_change_failed_title': 'Falha ao alterar horário',
     'heartbeat_change_failed_message': 'Não foi possível atualizar no servidor.',
 

@@ -29,7 +29,7 @@ abstract class HiIn {
     'app_tagline': 'आपकी कुशलता की जांच।',
     'app_service_desc': 'स्वचालित कुशलता जांच सेवा',
     'app_guardian_title': 'Anbu अभिभावक',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── स्प्लैश ──
     'splash_loading': 'कुशलता जांच हो रही है...',
@@ -135,7 +135,8 @@ abstract class HiIn {
     'subject_home_emergency_loading': 'आपातकालीन अलर्ट भेजा जा रहा है...',
     'subject_home_emergency_sent': 'आपातकालीन अलर्ट भेज दिया गया',
     'subject_home_emergency_failed': 'आपातकालीन अलर्ट भेजने में विफल',
-    'subject_home_manual_report_limit_reached': 'आपने आज की सुरक्षा रिपोर्ट पहले ही भेज दी है। कृपया कल पुनः प्रयास करें।',
+    'subject_home_manual_report_limit_reached':
+        'आपने आज की सुरक्षा रिपोर्ट पहले ही भेज दी है। कृपया कल पुनः प्रयास करें।',
     'subject_home_manual_report_sent': 'आपका संदेश आपके अभिभावकों को भेज दिया गया है।',
     'subject_home_emergency_confirm_title': 'आपातकालीन सहायता अनुरोध',
     'subject_home_emergency_confirm_body':
@@ -149,7 +150,8 @@ abstract class HiIn {
     'emergency_map_accuracy_label': 'सटीकता',
     'emergency_map_open_external': 'बाहरी मानचित्र ऐप में खोलें',
     'emergency_map_no_location': 'कोई स्थान जानकारी उपलब्ध नहीं',
-    'emergency_location_permission_denied_snackbar': 'स्थान अनुमति के बिना आपातकालीन अलर्ट भेजा गया',
+    'emergency_location_permission_denied_snackbar':
+        'स्थान अनुमति के बिना आपातकालीन अलर्ट भेजा गया',
     'subject_home_emergency_confirm_send': 'आपातकालीन अनुरोध भेजें',
     'subject_home_share_text': 'Anbu ऐप से मेरी कुशलता जांचें!\nआमंत्रण कोड: @code',
     'subject_home_share_subject': 'Anbu आमंत्रण कोड',
@@ -258,9 +260,11 @@ abstract class HiIn {
     'gs_disable_confirm': 'निष्क्रिय करें',
     'gs_disabled_message': 'सुरक्षा निष्क्रिय हो गई',
     'gs_disable_failed': 'सुरक्षा निष्क्रिय करने में विफल',
-    'gs_activity_permission_denied_warning': 'कदम गिनने की अनुमति अस्वीकार की गई। अनुमति देने के लिए यहां टैप करें।',
+    'gs_activity_permission_denied_warning':
+        'कदम गिनने की अनुमति अस्वीकार की गई। अनुमति देने के लिए यहां टैप करें।',
     'gs_activity_permission_settings_title': 'अनुमति आवश्यक',
-    'gs_activity_permission_settings_body': 'कृपया ऐप सेटिंग्स में शारीरिक गतिविधि (गति और फ़िटनेस) अनुमति दें।',
+    'gs_activity_permission_settings_body':
+        'कृपया ऐप सेटिंग्स में शारीरिक गतिविधि (गति और फ़िटनेस) अनुमति दें।',
     'gs_activity_permission_settings_go': 'सेटिंग्स पर जाएं',
 
     // ── अभिभावक मोड → G+S स्विच (Drawer/डायलॉग) ──
@@ -276,7 +280,8 @@ abstract class HiIn {
     'notifications_today': 'आज की सूचनाएं',
     'notifications_empty': 'आज कोई सूचना नहीं',
     'notifications_delete_all_title': 'सभी सूचनाएं हटाएं',
-    'notifications_auto_delete_notice': 'आज की सूचनाएं स्वचालित रूप से आधी रात (0:00) को हटा दी जाती हैं।',
+    'notifications_auto_delete_notice':
+        'आज की सूचनाएं स्वचालित रूप से आधी रात (0:00) को हटा दी जाती हैं।',
     'notifications_delete_all_message': 'आज की सभी सूचनाएं हटाएं?',
     'notifications_delete_failed': 'सूचनाएं हटाने में विफल।',
     'notifications_guide_title': 'सूचना स्तर मार्गदर्शिका',

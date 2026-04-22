@@ -29,7 +29,7 @@ abstract class ItIt {
     'app_tagline': 'Verifichiamo il Suo benessere.',
     'app_service_desc': 'Servizio automatico di verifica del benessere',
     'app_guardian_title': 'Anbu Guardiano',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Verifica in corso...',
@@ -61,7 +61,8 @@ abstract class ItIt {
     'permission_activity': 'Riconoscimento attività',
     'permission_activity_desc': "Utilizzato per rilevare i passi e verificare l'attività",
     'permission_location': 'Posizione',
-    'permission_location_desc': 'Condivisa con i tutori solo durante una richiesta di aiuto urgente',
+    'permission_location_desc':
+        'Condivisa con i tutori solo durante una richiesta di aiuto urgente',
     'location_permission_warning':
         "La posizione non verrà inviata con la richiesta di emergenza. Tocca per consentire.",
     'location_permission_settings_title': 'Autorizzazione alla posizione richiesta',
@@ -138,7 +139,8 @@ abstract class ItIt {
     'subject_home_emergency_loading': "Invio dell'allerta di emergenza...",
     'subject_home_emergency_sent': "L'allerta di emergenza è stata inviata",
     'subject_home_emergency_failed': "Invio dell'allerta di emergenza fallito",
-    'subject_home_manual_report_limit_reached': 'Hai già inviato il rapporto di sicurezza di oggi. Riprova domani.',
+    'subject_home_manual_report_limit_reached':
+        'Hai già inviato il rapporto di sicurezza di oggi. Riprova domani.',
     'subject_home_manual_report_sent': 'Il tuo messaggio è stato inviato ai tuoi contatti.',
     'subject_home_emergency_confirm_title': 'Richiesta di aiuto di emergenza',
     'subject_home_emergency_confirm_body':
@@ -152,7 +154,8 @@ abstract class ItIt {
     'emergency_map_accuracy_label': 'Precisione',
     'emergency_map_open_external': "Apri in un'app di mappe esterna",
     'emergency_map_no_location': 'Nessuna informazione sulla posizione',
-    'emergency_location_permission_denied_snackbar': 'Allerta di emergenza inviata senza autorizzazione alla posizione',
+    'emergency_location_permission_denied_snackbar':
+        'Allerta di emergenza inviata senza autorizzazione alla posizione',
     'subject_home_emergency_confirm_send': 'Invia richiesta di emergenza',
     'subject_home_share_text': "Controlli come sto con l'app Anbu!\nCodice invito: @code",
     'subject_home_share_subject': 'Codice invito Anbu',
@@ -261,9 +264,11 @@ abstract class ItIt {
     'gs_disable_confirm': 'Disattiva',
     'gs_disabled_message': 'La protezione è stata disattivata',
     'gs_disable_failed': 'Disattivazione della protezione fallita',
-    'gs_activity_permission_denied_warning': 'Autorizzazione contapassi negata. Tocca qui per consentire.',
+    'gs_activity_permission_denied_warning':
+        'Autorizzazione contapassi negata. Tocca qui per consentire.',
     'gs_activity_permission_settings_title': 'Autorizzazione richiesta',
-    'gs_activity_permission_settings_body': 'Consenti l\'autorizzazione Attività fisica (Movimento e Fitness) nelle impostazioni dell\'app.',
+    'gs_activity_permission_settings_body':
+        'Consenti l\'autorizzazione Attività fisica (Movimento e Fitness) nelle impostazioni dell\'app.',
     'gs_activity_permission_settings_go': 'Vai alle impostazioni',
 
     // ── Modalità Guardiano → G+S (Drawer/Dialog) ──
@@ -279,7 +284,8 @@ abstract class ItIt {
     'notifications_today': 'Notifiche di oggi',
     'notifications_empty': 'Nessuna notifica oggi',
     'notifications_delete_all_title': 'Elimina tutte le notifiche',
-    'notifications_auto_delete_notice': 'Le notifiche di oggi vengono eliminate automaticamente a mezzanotte (0:00).',
+    'notifications_auto_delete_notice':
+        'Le notifiche di oggi vengono eliminate automaticamente a mezzanotte (0:00).',
     'notifications_delete_all_message': 'Eliminare tutte le notifiche di oggi?',
     'notifications_delete_failed': 'Impossibile eliminare le notifiche.',
     'notifications_guide_title': 'Guida ai livelli di notifica',
@@ -288,7 +294,8 @@ abstract class ItIt {
     'notifications_level_caution': 'Attenzione',
     'notifications_level_caution_desc': 'Nessun segnale di benessere né attività del telefono',
     'notifications_level_warning': 'Avviso',
-    'notifications_level_warning_desc': 'Nessun segnale di benessere né attività del telefono per più giorni',
+    'notifications_level_warning_desc':
+        'Nessun segnale di benessere né attività del telefono per più giorni',
     'notifications_level_urgent': 'Urgente',
     'notifications_level_urgent_desc': 'Verifica immediata necessaria',
     'notifications_level_info': 'Info',
@@ -356,7 +363,8 @@ abstract class ItIt {
     'heartbeat_schedule_hint_ios':
         'Una notifica push di benessere arriva ogni giorno a quest\'ora. Tocca la notifica o apri l\'app in quel momento per inviare il tuo segnale di benessere.',
     'heartbeat_daily_time': 'Ogni giorno alle @time',
-    'heartbeat_scheduled_today': 'Il tuo segnale di benessere sarà inviato ai tuoi guardiani ogni giorno alle @time.',
+    'heartbeat_scheduled_today':
+        'Il tuo segnale di benessere sarà inviato ai tuoi guardiani ogni giorno alle @time.',
     'heartbeat_change_failed_title': "Modifica dell'orario non riuscita",
     'heartbeat_change_failed_message': 'Impossibile aggiornare sul server.',
 
@@ -407,6 +415,7 @@ abstract class ItIt {
     'wellbeing_check_body': 'Come sta? Per favore, tocca questa notifica.',
     'noti_channel_name': 'Avvisi Anbu',
     'notification_send_failed_title': '📶 Controlla la tua connessione Internet',
-    'notification_send_failed_body': 'Apri l\'app per inviare di nuovo il tuo controllo di benessere.',
+    'notification_send_failed_body':
+        'Apri l\'app per inviare di nuovo il tuo controllo di benessere.',
   };
 }

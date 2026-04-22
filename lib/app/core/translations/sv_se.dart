@@ -29,7 +29,7 @@ abstract class SvSe {
     'app_tagline': 'Kontrollerar ditt valmaende.',
     'app_service_desc': 'Automatisk valmaendekontroll',
     'app_guardian_title': 'Anbu-vardare',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Kontrollerar valmaende...',
@@ -60,8 +60,7 @@ abstract class SvSe {
     'permission_activity_desc': 'Anvands for att upptacka steg och bekrafta aktivitet',
     'permission_location': 'Plats',
     'permission_location_desc': 'Delas med anhoriga endast vid en nodbegaran om hjalp',
-    'location_permission_warning':
-        'Platsen skickas inte vid en nodbegaran. Tryck for att tillata.',
+    'location_permission_warning': 'Platsen skickas inte vid en nodbegaran. Tryck for att tillata.',
     'location_permission_settings_title': 'Platsbehorighet kravs',
     'location_permission_settings_body_ios':
         "Hitta och valj 'Anbu', valj sedan 'Nar appen anvands' under 'Plats'.",
@@ -133,7 +132,8 @@ abstract class SvSe {
     'subject_home_emergency_loading': 'Skickar nödlarm...',
     'subject_home_emergency_sent': 'Nödlarmet har skickats',
     'subject_home_emergency_failed': 'Det gick inte att skicka nödlarmet',
-    'subject_home_manual_report_limit_reached': 'Du har redan skickat dagens säkerhetsrapport. Försök igen imorgon.',
+    'subject_home_manual_report_limit_reached':
+        'Du har redan skickat dagens säkerhetsrapport. Försök igen imorgon.',
     'subject_home_manual_report_sent': 'Ditt meddelande har skickats till dina kontakter.',
     'subject_home_emergency_confirm_title': 'Nödhjälpbegäran',
     'subject_home_emergency_confirm_body':
@@ -256,9 +256,11 @@ abstract class SvSe {
     'gs_disable_confirm': 'Inaktivera',
     'gs_disabled_message': 'Hälsoskydd har inaktiverats',
     'gs_disable_failed': 'Kunde inte inaktivera hälsoskydd',
-    'gs_activity_permission_denied_warning': 'Stegräknartillstånd nekat. Tryck här för att tillåta.',
+    'gs_activity_permission_denied_warning':
+        'Stegräknartillstånd nekat. Tryck här för att tillåta.',
     'gs_activity_permission_settings_title': 'Behörighet krävs',
-    'gs_activity_permission_settings_body': 'Tillåt behörighet för Fysisk aktivitet (Rörelse och kondition) i appinställningarna.',
+    'gs_activity_permission_settings_body':
+        'Tillåt behörighet för Fysisk aktivitet (Rörelse och kondition) i appinställningarna.',
     'gs_activity_permission_settings_go': 'Gå till inställningar',
 
     // ── Vårdare → G+S växling (Drawer/Dialog) ──
@@ -274,7 +276,8 @@ abstract class SvSe {
     'notifications_today': 'Dagens aviseringar',
     'notifications_empty': 'Inga aviseringar idag',
     'notifications_delete_all_title': 'Radera alla aviseringar',
-    'notifications_auto_delete_notice': 'Dagens aviseringar raderas automatiskt vid midnatt (0:00).',
+    'notifications_auto_delete_notice':
+        'Dagens aviseringar raderas automatiskt vid midnatt (0:00).',
     'notifications_delete_all_message': 'Radera alla dagens aviseringar?',
     'notifications_delete_failed': 'Kunde inte radera aviseringar.',
     'notifications_guide_title': 'Guide for aviseringsniva',
@@ -283,7 +286,8 @@ abstract class SvSe {
     'notifications_level_caution': 'Forsiktighet',
     'notifications_level_caution_desc': 'Ingen välmåendesignal eller telefonanvändning ännu',
     'notifications_level_warning': 'Varning',
-    'notifications_level_warning_desc': 'Ingen välmåendesignal eller telefonanvändning flera dagar i rad',
+    'notifications_level_warning_desc':
+        'Ingen välmåendesignal eller telefonanvändning flera dagar i rad',
     'notifications_level_urgent': 'Bradskande',
     'notifications_level_urgent_desc': 'Omedelbar kontroll krävs',
     'notifications_level_info': 'Info',
@@ -347,7 +351,8 @@ abstract class SvSe {
     'heartbeat_schedule_hint_ios':
         'En hälso-pushavisering kommer varje dag vid denna tid. Tryck på aviseringen eller öppna appen vid den tidpunkten för att skicka din hälsosignal.',
     'heartbeat_daily_time': 'Dagligen kl. @time',
-    'heartbeat_scheduled_today': 'Din valmaendesignal skickas till dina vardare varje dag kl. @time.',
+    'heartbeat_scheduled_today':
+        'Din valmaendesignal skickas till dina vardare varje dag kl. @time.',
     'heartbeat_change_failed_title': 'Tidandring misslyckades',
     'heartbeat_change_failed_message': 'Kunde inte uppdatera pa servern.',
 

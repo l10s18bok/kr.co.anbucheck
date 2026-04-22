@@ -29,7 +29,7 @@ abstract class ArSa {
     'app_tagline': 'نطمئن على سلامتكم.',
     'app_service_desc': 'خدمة الاطمئنان التلقائي على السلامة',
     'app_guardian_title': 'حارس Anbu',
-    'app_copyright': '© Averic SB Inc.',
+    'app_copyright': '© Ark SB Inc.',
 
     // ── شاشة البداية ──
     'splash_loading': 'جارٍ الاطمئنان...',
@@ -59,8 +59,7 @@ abstract class ArSa {
     'permission_activity_desc': 'يُستخدم لاكتشاف الخطوات والتأكد من النشاط',
     'permission_location': 'الموقع',
     'permission_location_desc': 'تتم مشاركته مع الأوصياء فقط عند إرسال طلب مساعدة طارئ',
-    'location_permission_warning':
-        'لن يتم إرسال الموقع مع طلب الطوارئ. اضغط للسماح.',
+    'location_permission_warning': 'لن يتم إرسال الموقع مع طلب الطوارئ. اضغط للسماح.',
     'location_permission_settings_title': 'إذن الموقع مطلوب',
     'location_permission_settings_body_ios':
         'ابحث عن «Anbu» واختره، ثم في «الموقع» اختر «عند استخدام التطبيق».',
@@ -131,7 +130,8 @@ abstract class ArSa {
     'subject_home_emergency_loading': 'جاري إرسال تنبيه الطوارئ...',
     'subject_home_emergency_sent': 'تم إرسال تنبيه الطوارئ',
     'subject_home_emergency_failed': 'فشل إرسال تنبيه الطوارئ',
-    'subject_home_manual_report_limit_reached': 'لقد قمت بالفعل بإرسال تقرير السلامة لهذا اليوم. يرجى المحاولة غدًا.',
+    'subject_home_manual_report_limit_reached':
+        'لقد قمت بالفعل بإرسال تقرير السلامة لهذا اليوم. يرجى المحاولة غدًا.',
     'subject_home_manual_report_sent': 'تم إرسال رسالة سلامتك إلى جهات الاتصال.',
     'subject_home_emergency_confirm_title': 'طلب مساعدة طارئة',
     'subject_home_emergency_confirm_body':
@@ -255,7 +255,8 @@ abstract class ArSa {
     'gs_disable_failed': 'فشل إلغاء الحماية',
     'gs_activity_permission_denied_warning': 'تم رفض إذن عداد الخطوات. انقر هنا للسماح.',
     'gs_activity_permission_settings_title': 'مطلوب إذن',
-    'gs_activity_permission_settings_body': 'يرجى السماح بإذن النشاط البدني (الحركة واللياقة) في إعدادات التطبيق.',
+    'gs_activity_permission_settings_body':
+        'يرجى السماح بإذن النشاط البدني (الحركة واللياقة) في إعدادات التطبيق.',
     'gs_activity_permission_settings_go': 'الانتقال إلى الإعدادات',
 
     // ── تبديل وضع الحارس إلى G+S (القائمة/الحوار) ──

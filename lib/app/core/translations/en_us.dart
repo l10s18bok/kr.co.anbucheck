@@ -29,7 +29,7 @@ abstract class EnUs {
     'app_tagline': 'Checking your wellbeing.',
     'app_service_desc': 'Automatic wellness check service',
     'app_guardian_title': 'Anbu Guardian',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Checking in...',
@@ -60,7 +60,8 @@ abstract class EnUs {
     'permission_activity_desc': 'Used to detect steps and confirm activity',
     'permission_location': 'Location',
     'permission_location_desc': 'Shared with guardians only when you send an emergency request',
-    'location_permission_warning': 'Location will not be sent with an emergency request. Tap to allow.',
+    'location_permission_warning':
+        'Location will not be sent with an emergency request. Tap to allow.',
     'location_permission_settings_title': 'Location Permission Required',
     'location_permission_settings_body_ios':
         "Find and tap 'Anbu', then under 'Location' select 'While Using the App'.",
@@ -135,7 +136,8 @@ abstract class EnUs {
     'subject_home_emergency_loading': 'Sending emergency alert...',
     'subject_home_emergency_sent': 'Emergency alert has been sent',
     'subject_home_emergency_failed': 'Failed to send emergency alert',
-    'subject_home_manual_report_limit_reached': "You've already submitted today's safety report. Please try again tomorrow.",
+    'subject_home_manual_report_limit_reached':
+        "You've already submitted today's safety report. Please try again tomorrow.",
     'subject_home_manual_report_sent': 'Your wellness check has been sent to your guardians.',
     'subject_home_emergency_confirm_title': 'Emergency Help Request',
     'subject_home_emergency_confirm_body':
@@ -149,7 +151,8 @@ abstract class EnUs {
     'emergency_map_accuracy_label': 'Accuracy',
     'emergency_map_open_external': 'Open in external map app',
     'emergency_map_no_location': 'No location information available',
-    'emergency_location_permission_denied_snackbar': 'Emergency alert sent without location permission',
+    'emergency_location_permission_denied_snackbar':
+        'Emergency alert sent without location permission',
     'subject_home_emergency_confirm_send': 'Send Emergency Request',
     'subject_home_share_text': 'Check on me with the Anbu app!\nInvite code: @code',
     'subject_home_share_subject': 'Anbu Invite Code',
@@ -260,7 +263,8 @@ abstract class EnUs {
     'gs_disable_failed': 'Failed to disable wellness protection',
     'gs_activity_permission_denied_warning': 'Activity permission is denied. Tap here to allow.',
     'gs_activity_permission_settings_title': 'Permission Required',
-    'gs_activity_permission_settings_body': 'Please allow Physical activity (Motion & Fitness) permission in app settings.',
+    'gs_activity_permission_settings_body':
+        'Please allow Physical activity (Motion & Fitness) permission in app settings.',
     'gs_activity_permission_settings_go': 'Go to Settings',
 
     // ── Guardian → G+S switch (Drawer/Dialog) ──
@@ -276,7 +280,8 @@ abstract class EnUs {
     'notifications_today': 'Today\'s Notifications',
     'notifications_empty': 'No notifications today',
     'notifications_delete_all_title': 'Delete All Notifications',
-    'notifications_auto_delete_notice': "Today's notifications are automatically deleted at midnight (0:00).",
+    'notifications_auto_delete_notice':
+        "Today's notifications are automatically deleted at midnight (0:00).",
     'notifications_delete_all_message': 'Delete all today\'s notifications?',
     'notifications_delete_failed': 'Failed to delete notifications.',
     'notifications_guide_title': 'Notification Level Guide',
@@ -348,7 +353,8 @@ abstract class EnUs {
     'heartbeat_schedule_hint_ios':
         'A wellness push notification arrives at this time every day. Tap the notification or open the app around then to send your wellness signal.',
     'heartbeat_daily_time': 'Daily at @time',
-    'heartbeat_scheduled_today': 'Your wellness check will be delivered to your guardians every day at @time.',
+    'heartbeat_scheduled_today':
+        'Your wellness check will be delivered to your guardians every day at @time.',
     'heartbeat_change_failed_title': 'Time Change Failed',
     'heartbeat_change_failed_message': 'Could not update on server.',
 
@@ -376,9 +382,11 @@ abstract class EnUs {
     'noti_caution_missing_body':
         "Today's scheduled wellness check has not been received yet. Please check in person.",
     'noti_warning_body': 'Wellness checks have been missed consecutively. Please verify in person.',
-    'noti_warning_suspicious_body': 'No signs of phone usage have been detected consecutively. Please verify in person.',
+    'noti_warning_suspicious_body':
+        'No signs of phone usage have been detected consecutively. Please verify in person.',
     'noti_urgent_body': 'No wellness check for @days day(s). Immediate verification is required.',
-    'noti_urgent_suspicious_body': 'No signs of phone usage for @days day(s). Immediate verification is required.',
+    'noti_urgent_suspicious_body':
+        'No signs of phone usage for @days day(s). Immediate verification is required.',
     'noti_steps_body': '@steps steps taken today.',
     'noti_emergency_body': 'The subject has directly requested help. Please check immediately.',
     'noti_resolved_body': 'The subject\'s wellness check has returned to normal.',

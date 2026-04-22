@@ -29,7 +29,7 @@ abstract class PlPl {
     'app_tagline': 'Sprawdzamy, czy wszystko u Ciebie w porzadku.',
     'app_service_desc': 'Automatyczna usluga sprawdzania samopoczucia',
     'app_guardian_title': 'Opiekun Anbu',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Sprawdzanie samopoczucia...',
@@ -137,7 +137,8 @@ abstract class PlPl {
     'subject_home_emergency_loading': 'Wysyłanie alarmu awaryjnego...',
     'subject_home_emergency_sent': 'Alarm awaryjny został wysłany',
     'subject_home_emergency_failed': 'Nie udało się wysłać alarmu awaryjnego',
-    'subject_home_manual_report_limit_reached': 'Wysłałeś już dzisiejszy raport bezpieczeństwa. Spróbuj ponownie jutro.',
+    'subject_home_manual_report_limit_reached':
+        'Wysłałeś już dzisiejszy raport bezpieczeństwa. Spróbuj ponownie jutro.',
     'subject_home_manual_report_sent': 'Twoja wiadomość została wysłana do kontaktów.',
     'subject_home_emergency_confirm_title': 'Prośba o pomoc awaryjną',
     'subject_home_emergency_confirm_body':
@@ -151,7 +152,8 @@ abstract class PlPl {
     'emergency_map_accuracy_label': 'Dokładność',
     'emergency_map_open_external': 'Otwórz w zewnętrznej aplikacji map',
     'emergency_map_no_location': 'Brak informacji o lokalizacji',
-    'emergency_location_permission_denied_snackbar': 'Alarm awaryjny wysłany bez uprawnień do lokalizacji',
+    'emergency_location_permission_denied_snackbar':
+        'Alarm awaryjny wysłany bez uprawnień do lokalizacji',
     'subject_home_emergency_confirm_send': 'Wyślij prośbę awaryjną',
     'subject_home_share_text':
         'Sprawdz moje samopoczucie w aplikacji Anbu!\nKod zaproszenia: @code',
@@ -261,9 +263,11 @@ abstract class PlPl {
     'gs_disable_confirm': 'Wyłącz',
     'gs_disabled_message': 'Ochrona została wyłączona',
     'gs_disable_failed': 'Nie udało się wyłączyć ochrony',
-    'gs_activity_permission_denied_warning': 'Uprawnienie krokomierza odrzucone. Dotknij tutaj, aby zezwolić.',
+    'gs_activity_permission_denied_warning':
+        'Uprawnienie krokomierza odrzucone. Dotknij tutaj, aby zezwolić.',
     'gs_activity_permission_settings_title': 'Wymagane uprawnienie',
-    'gs_activity_permission_settings_body': 'Zezwól na uprawnienie Aktywność fizyczna (Ruch i sprawność) w ustawieniach aplikacji.',
+    'gs_activity_permission_settings_body':
+        'Zezwól na uprawnienie Aktywność fizyczna (Ruch i sprawność) w ustawieniach aplikacji.',
     'gs_activity_permission_settings_go': 'Przejdź do Ustawień',
 
     // ── Tryb opiekuna → G+S (Szuflada/Dialog) ──
@@ -279,7 +283,8 @@ abstract class PlPl {
     'notifications_today': 'Dzisiejsze powiadomienia',
     'notifications_empty': 'Brak powiadomien na dzisiaj',
     'notifications_delete_all_title': 'Usun wszystkie powiadomienia',
-    'notifications_auto_delete_notice': 'Dzisiejsze powiadomienia są automatycznie usuwane o północy (0:00).',
+    'notifications_auto_delete_notice':
+        'Dzisiejsze powiadomienia są automatycznie usuwane o północy (0:00).',
     'notifications_delete_all_message': 'Usunac wszystkie dzisiejsze powiadomienia?',
     'notifications_delete_failed': 'Nie udalo sie usunac powiadomien.',
     'notifications_guide_title': 'Przewodnik po poziomach powiadomien',
@@ -288,7 +293,8 @@ abstract class PlPl {
     'notifications_level_caution': 'Uwaga',
     'notifications_level_caution_desc': 'Brak sygnału o samopoczuciu lub aktywności telefonu',
     'notifications_level_warning': 'Ostrzezenie',
-    'notifications_level_warning_desc': 'Brak sygnału o samopoczuciu lub aktywności telefonu przez kilka dni z rzędu',
+    'notifications_level_warning_desc':
+        'Brak sygnału o samopoczuciu lub aktywności telefonu przez kilka dni z rzędu',
     'notifications_level_urgent': 'Pilne',
     'notifications_level_urgent_desc': 'Natychmiastowa kontrola wymagana',
     'notifications_level_info': 'Informacja',
@@ -353,7 +359,8 @@ abstract class PlPl {
     'heartbeat_schedule_hint_ios':
         'Powiadomienie push o pomyślności przychodzi codziennie o tej godzinie. Dotknij powiadomienia lub otwórz aplikację o tej porze, aby wysłać sygnał pomyślności.',
     'heartbeat_daily_time': 'Codziennie o @time',
-    'heartbeat_scheduled_today': 'Twój sygnał pomyślności będzie codziennie wysyłany do Twoich opiekunów o @time.',
+    'heartbeat_scheduled_today':
+        'Twój sygnał pomyślności będzie codziennie wysyłany do Twoich opiekunów o @time.',
     'heartbeat_change_failed_title': 'Zmiana czasu nie powiodla sie',
     'heartbeat_change_failed_message': 'Nie udalo sie zaktualizowac na serwerze.',
 

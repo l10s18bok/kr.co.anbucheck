@@ -29,7 +29,7 @@ abstract class ViVn {
     'app_tagline': 'Kiem tra suc khoe cua ban.',
     'app_service_desc': 'Dich vu kiem tra suc khoe tu dong',
     'app_guardian_title': 'Nguoi bao ve Anbu',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Dang kiem tra suc khoe...',
@@ -137,7 +137,8 @@ abstract class ViVn {
     'subject_home_emergency_loading': 'Đang gửi cảnh báo khẩn cấp...',
     'subject_home_emergency_sent': 'Cảnh báo khẩn cấp đã được gửi',
     'subject_home_emergency_failed': 'Gửi cảnh báo khẩn cấp thất bại',
-    'subject_home_manual_report_limit_reached': 'Bạn đã gửi báo cáo an toàn hôm nay. Vui lòng thử lại vào ngày mai.',
+    'subject_home_manual_report_limit_reached':
+        'Bạn đã gửi báo cáo an toàn hôm nay. Vui lòng thử lại vào ngày mai.',
     'subject_home_manual_report_sent': 'Đã gửi thông báo an toàn đến người giám hộ của bạn.',
     'subject_home_emergency_confirm_title': 'Yêu cầu trợ giúp khẩn cấp',
     'subject_home_emergency_confirm_body':
@@ -151,7 +152,8 @@ abstract class ViVn {
     'emergency_map_accuracy_label': 'Độ chính xác',
     'emergency_map_open_external': 'Mở trong ứng dụng bản đồ bên ngoài',
     'emergency_map_no_location': 'Không có thông tin vị trí',
-    'emergency_location_permission_denied_snackbar': 'Đã gửi cảnh báo khẩn cấp mà không có quyền vị trí',
+    'emergency_location_permission_denied_snackbar':
+        'Đã gửi cảnh báo khẩn cấp mà không có quyền vị trí',
     'subject_home_emergency_confirm_send': 'Gửi yêu cầu khẩn cấp',
     'subject_home_share_text': 'Kiem tra suc khoe cua toi qua ung dung Anbu!\nMa moi: @code',
     'subject_home_share_subject': 'Ma moi Anbu',
@@ -260,9 +262,11 @@ abstract class ViVn {
     'gs_disable_confirm': 'Tắt',
     'gs_disabled_message': 'Bảo vệ đã được tắt',
     'gs_disable_failed': 'Không thể tắt bảo vệ',
-    'gs_activity_permission_denied_warning': 'Quyền đếm bước chân bị từ chối. Nhấn vào đây để cho phép.',
+    'gs_activity_permission_denied_warning':
+        'Quyền đếm bước chân bị từ chối. Nhấn vào đây để cho phép.',
     'gs_activity_permission_settings_title': 'Cần cấp quyền',
-    'gs_activity_permission_settings_body': 'Vui lòng cấp quyền Hoạt động thể chất (Chuyển động và Thể hình) trong cài đặt ứng dụng.',
+    'gs_activity_permission_settings_body':
+        'Vui lòng cấp quyền Hoạt động thể chất (Chuyển động và Thể hình) trong cài đặt ứng dụng.',
     'gs_activity_permission_settings_go': 'Đi đến Cài đặt',
 
     // ── Chế độ Người bảo vệ → G+S (Drawer/Hộp thoại) ──
@@ -288,7 +292,8 @@ abstract class ViVn {
     'notifications_level_caution': 'Chu y',
     'notifications_level_caution_desc': 'Chưa có tín hiệu an toàn hoặc dấu vết sử dụng điện thoại',
     'notifications_level_warning': 'Canh bao',
-    'notifications_level_warning_desc': 'Không có tín hiệu an toàn hoặc dấu vết sử dụng điện thoại trong nhiều ngày liên tiếp',
+    'notifications_level_warning_desc':
+        'Không có tín hiệu an toàn hoặc dấu vết sử dụng điện thoại trong nhiều ngày liên tiếp',
     'notifications_level_urgent': 'Khan cap',
     'notifications_level_urgent_desc': 'Cần kiểm tra ngay bây giờ',
     'notifications_level_info': 'Thong tin',
@@ -352,7 +357,8 @@ abstract class ViVn {
     'heartbeat_schedule_hint_ios':
         'Thông báo đẩy an toàn sẽ đến vào thời điểm này mỗi ngày. Chạm vào thông báo hoặc mở ứng dụng quanh thời điểm đó để gửi tín hiệu an toàn.',
     'heartbeat_daily_time': 'Hang ngay luc @time',
-    'heartbeat_scheduled_today': 'Tin hieu an toan cua ban se duoc gui den nguoi bao ve moi ngay luc @time.',
+    'heartbeat_scheduled_today':
+        'Tin hieu an toan cua ban se duoc gui den nguoi bao ve moi ngay luc @time.',
     'heartbeat_change_failed_title': 'Doi thoi gian that bai',
     'heartbeat_change_failed_message': 'Khong the cap nhat tren may chu.',
 

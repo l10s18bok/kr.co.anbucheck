@@ -29,7 +29,7 @@ abstract class ThTh {
     'app_tagline': 'ตรวจสอบความเป็นอยู่ของคุณ',
     'app_service_desc': 'บริการตรวจสอบความเป็นอยู่อัตโนมัติ',
     'app_guardian_title': 'ผู้ปกป้อง Anbu',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'กำลังตรวจสอบความเป็นอยู่...',
@@ -60,8 +60,7 @@ abstract class ThTh {
     'permission_activity_desc': 'ใช้ในการตรวจจับก้าวเดินและยืนยันกิจกรรม',
     'permission_location': 'ตำแหน่งที่ตั้ง',
     'permission_location_desc': 'ส่งให้ผู้ดูแลเฉพาะเมื่อขอความช่วยเหลือฉุกเฉินเท่านั้น',
-    'location_permission_warning':
-        'จะไม่ส่งตำแหน่งเมื่อขอความช่วยเหลือฉุกเฉิน แตะเพื่ออนุญาต',
+    'location_permission_warning': 'จะไม่ส่งตำแหน่งเมื่อขอความช่วยเหลือฉุกเฉิน แตะเพื่ออนุญาต',
     'location_permission_settings_title': 'ต้องการสิทธิ์ตำแหน่งที่ตั้ง',
     'location_permission_settings_body_ios':
         'ค้นหาและเลือก "Anbu" จากนั้นในหัวข้อ "ตำแหน่งที่ตั้ง" เลือก "ขณะใช้แอป"',
@@ -133,7 +132,8 @@ abstract class ThTh {
     'subject_home_emergency_loading': 'กำลังส่งการแจ้งเตือนฉุกเฉิน...',
     'subject_home_emergency_sent': 'ส่งการแจ้งเตือนฉุกเฉินแล้ว',
     'subject_home_emergency_failed': 'ไม่สามารถส่งการแจ้งเตือนฉุกเฉินได้',
-    'subject_home_manual_report_limit_reached': 'คุณได้ส่งรายงานความปลอดภัยของวันนี้แล้ว โปรดลองอีกครั้งในวันพรุ่งนี้',
+    'subject_home_manual_report_limit_reached':
+        'คุณได้ส่งรายงานความปลอดภัยของวันนี้แล้ว โปรดลองอีกครั้งในวันพรุ่งนี้',
     'subject_home_manual_report_sent': 'ส่งข้อความสวัสดิภาพถึงผู้ดูแลของคุณแล้ว',
     'subject_home_emergency_confirm_title': 'ขอความช่วยเหลือฉุกเฉิน',
     'subject_home_emergency_confirm_body':
@@ -147,7 +147,8 @@ abstract class ThTh {
     'emergency_map_accuracy_label': 'ความแม่นยำ',
     'emergency_map_open_external': 'เปิดในแอปแผนที่ภายนอก',
     'emergency_map_no_location': 'ไม่มีข้อมูลตำแหน่ง',
-    'emergency_location_permission_denied_snackbar': 'ส่งการแจ้งเตือนฉุกเฉินโดยไม่ได้รับสิทธิ์ตำแหน่ง',
+    'emergency_location_permission_denied_snackbar':
+        'ส่งการแจ้งเตือนฉุกเฉินโดยไม่ได้รับสิทธิ์ตำแหน่ง',
     'subject_home_emergency_confirm_send': 'ส่งคำขอฉุกเฉิน',
     'subject_home_share_text': 'ตรวจสอบความเป็นอยู่ของฉันผ่านแอป Anbu!\nรหัสเชิญ: @code',
     'subject_home_share_subject': 'รหัสเชิญ Anbu',
@@ -258,7 +259,8 @@ abstract class ThTh {
     'gs_disable_failed': 'ไม่สามารถปิดใช้งานการดูแลได้',
     'gs_activity_permission_denied_warning': 'สิทธิ์นับก้าวถูกปฏิเสธ แตะที่นี่เพื่ออนุญาต',
     'gs_activity_permission_settings_title': 'ต้องการสิทธิ์',
-    'gs_activity_permission_settings_body': 'โปรดอนุญาตสิทธิ์กิจกรรมทางกาย (การเคลื่อนไหวและฟิตเนส) ในการตั้งค่าแอป',
+    'gs_activity_permission_settings_body':
+        'โปรดอนุญาตสิทธิ์กิจกรรมทางกาย (การเคลื่อนไหวและฟิตเนส) ในการตั้งค่าแอป',
     'gs_activity_permission_settings_go': 'ไปที่การตั้งค่า',
 
     // ── โหมดผู้ดูแลสลับไป G+S (Drawer/กล่องโต้ตอบ) ──
@@ -274,7 +276,8 @@ abstract class ThTh {
     'notifications_today': 'การแจ้งเตือนวันนี้',
     'notifications_empty': 'ไม่มีการแจ้งเตือนวันนี้',
     'notifications_delete_all_title': 'ลบการแจ้งเตือนทั้งหมด',
-    'notifications_auto_delete_notice': 'การแจ้งเตือนวันนี้จะถูกลบโดยอัตโนมัติเมื่อเที่ยงคืน (0:00)',
+    'notifications_auto_delete_notice':
+        'การแจ้งเตือนวันนี้จะถูกลบโดยอัตโนมัติเมื่อเที่ยงคืน (0:00)',
     'notifications_delete_all_message': 'ลบการแจ้งเตือนทั้งหมดวันนี้?',
     'notifications_delete_failed': 'ไม่สามารถลบการแจ้งเตือน',
     'notifications_guide_title': 'คู่มือระดับการแจ้งเตือน',
@@ -283,7 +286,8 @@ abstract class ThTh {
     'notifications_level_caution': 'ระวัง',
     'notifications_level_caution_desc': 'ยังไม่มีสัญญาณความปลอดภัยหรือการใช้งานโทรศัพท์',
     'notifications_level_warning': 'เตือน',
-    'notifications_level_warning_desc': 'ไม่มีสัญญาณความปลอดภัยหรือการใช้งานโทรศัพท์ต่อเนื่องหลายวัน',
+    'notifications_level_warning_desc':
+        'ไม่มีสัญญาณความปลอดภัยหรือการใช้งานโทรศัพท์ต่อเนื่องหลายวัน',
     'notifications_level_urgent': 'เร่งด่วน',
     'notifications_level_urgent_desc': 'ต้องตรวจสอบโดยด่วนทันที',
     'notifications_level_info': 'ข้อมูล',
@@ -376,8 +380,7 @@ abstract class ThTh {
     'noti_warning_suspicious_body':
         'ไม่พบร่องรอยการใช้โทรศัพท์ติดต่อกัน จำเป็นต้องตรวจสอบด้วยตนเอง',
     'noti_urgent_body': 'ไม่มีการตรวจสอบความเป็นอยู่เป็นเวลา @days วัน จำเป็นต้องยืนยันทันที',
-    'noti_urgent_suspicious_body':
-        'ไม่พบร่องรอยการใช้โทรศัพท์เป็นเวลา @days วัน ต้องตรวจสอบทันที',
+    'noti_urgent_suspicious_body': 'ไม่พบร่องรอยการใช้โทรศัพท์เป็นเวลา @days วัน ต้องตรวจสอบทันที',
     'noti_steps_body': 'วันนี้เดิน @steps ก้าว',
     'noti_emergency_body': 'ผู้ถูกดูแลขอความช่วยเหลือโดยตรง กรุณาตรวจสอบทันที',
     'noti_resolved_body': 'การตรวจสอบสุขภาพของผู้ได้รับการดูแลกลับสู่ปกติแล้ว',

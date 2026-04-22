@@ -29,7 +29,7 @@ abstract class DeDe {
     'app_tagline': 'Wir schauen nach Ihrem Wohlbefinden.',
     'app_service_desc': 'Automatischer Wohlbefindens-Check',
     'app_guardian_title': 'Anbu Schutzperson',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Wohlbefinden wird geprüft...',
@@ -63,8 +63,7 @@ abstract class DeDe {
     'permission_activity_desc':
         'Wird verwendet, um Schritte zu erkennen und Aktivität zu bestätigen',
     'permission_location': 'Standort',
-    'permission_location_desc':
-        'Wird nur bei Notfallanfragen an Ihre Betreuer übermittelt',
+    'permission_location_desc': 'Wird nur bei Notfallanfragen an Ihre Betreuer übermittelt',
     'location_permission_warning':
         'Bei Notfallanfragen wird kein Standort gesendet. Tippen, um zu erlauben.',
     'location_permission_settings_title': 'Standortberechtigung erforderlich',
@@ -142,7 +141,8 @@ abstract class DeDe {
     'subject_home_emergency_loading': 'Notruf wird gesendet...',
     'subject_home_emergency_sent': 'Notruf wurde gesendet',
     'subject_home_emergency_failed': 'Notruf konnte nicht gesendet werden',
-    'subject_home_manual_report_limit_reached': 'Sie haben den heutigen Sicherheitsbericht bereits gesendet. Bitte versuchen Sie es morgen erneut.',
+    'subject_home_manual_report_limit_reached':
+        'Sie haben den heutigen Sicherheitsbericht bereits gesendet. Bitte versuchen Sie es morgen erneut.',
     'subject_home_manual_report_sent': 'Ihre Nachricht wurde an Ihre Kontaktpersonen gesendet.',
     'subject_home_emergency_confirm_title': 'Nothilfe anfordern',
     'subject_home_emergency_confirm_body':
@@ -265,9 +265,11 @@ abstract class DeDe {
     'gs_disable_confirm': 'Deaktivieren',
     'gs_disabled_message': 'Wellness-Schutz wurde deaktiviert',
     'gs_disable_failed': 'Wellness-Schutz konnte nicht deaktiviert werden',
-    'gs_activity_permission_denied_warning': 'Schrittzähler-Berechtigung verweigert. Hier tippen, um zu erlauben.',
+    'gs_activity_permission_denied_warning':
+        'Schrittzähler-Berechtigung verweigert. Hier tippen, um zu erlauben.',
     'gs_activity_permission_settings_title': 'Berechtigung erforderlich',
-    'gs_activity_permission_settings_body': 'Bitte erlauben Sie die Berechtigung „Körperliche Aktivität (Bewegung & Fitness)" in den App-Einstellungen.',
+    'gs_activity_permission_settings_body':
+        'Bitte erlauben Sie die Berechtigung „Körperliche Aktivität (Bewegung & Fitness)" in den App-Einstellungen.',
     'gs_activity_permission_settings_go': 'Zu den Einstellungen',
 
     // ── Betreuer → G+S Umschaltung (Drawer/Dialog) ──
@@ -283,16 +285,19 @@ abstract class DeDe {
     'notifications_today': 'Heutige Benachrichtigungen',
     'notifications_empty': 'Heute keine Benachrichtigungen',
     'notifications_delete_all_title': 'Alle Benachrichtigungen löschen',
-    'notifications_auto_delete_notice': 'Die heutigen Benachrichtigungen werden um Mitternacht (0:00) automatisch gelöscht.',
+    'notifications_auto_delete_notice':
+        'Die heutigen Benachrichtigungen werden um Mitternacht (0:00) automatisch gelöscht.',
     'notifications_delete_all_message': 'Alle heutigen Benachrichtigungen löschen?',
     'notifications_delete_failed': 'Benachrichtigungen konnten nicht gelöscht werden.',
     'notifications_guide_title': 'Erklärung der Benachrichtigungsstufen',
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Wohlbefinden der Schutzperson wurde bestätigt',
     'notifications_level_caution': 'Achtung',
-    'notifications_level_caution_desc': 'Noch kein Wohlbefindenssignal oder keine Handynutzung erkannt',
+    'notifications_level_caution_desc':
+        'Noch kein Wohlbefindenssignal oder keine Handynutzung erkannt',
     'notifications_level_warning': 'Warnung',
-    'notifications_level_warning_desc': 'Mehrere Tage in Folge kein Wohlbefindenssignal oder keine Handynutzung erkannt',
+    'notifications_level_warning_desc':
+        'Mehrere Tage in Folge kein Wohlbefindenssignal oder keine Handynutzung erkannt',
     'notifications_level_urgent': 'Dringend',
     'notifications_level_urgent_desc': 'Sofortige Überprüfung erforderlich',
     'notifications_level_info': 'Info',
@@ -357,7 +362,8 @@ abstract class DeDe {
     'heartbeat_schedule_hint_ios':
         'Eine Wellness-Push-Benachrichtigung trifft täglich zu dieser Zeit ein. Tippen Sie auf die Benachrichtigung oder öffnen Sie die App um diese Zeit, um Ihr Wellness-Signal zu senden.',
     'heartbeat_daily_time': 'Täglich um @time',
-    'heartbeat_scheduled_today': 'Ihr Wohlbefindens-Signal wird täglich um @time an Ihre Betreuer gesendet.',
+    'heartbeat_scheduled_today':
+        'Ihr Wohlbefindens-Signal wird täglich um @time an Ihre Betreuer gesendet.',
     'heartbeat_change_failed_title': 'Zeitänderung fehlgeschlagen',
     'heartbeat_change_failed_message': 'Konnte nicht auf dem Server aktualisiert werden.',
 
@@ -407,6 +413,7 @@ abstract class DeDe {
     'wellbeing_check_body': 'Geht es Ihnen gut? Bitte tippen Sie auf diese Benachrichtigung.',
     'noti_channel_name': 'Anbu-Benachrichtigungen',
     'notification_send_failed_title': '📶 Bitte überprüfen Sie Ihre Internetverbindung',
-    'notification_send_failed_body': 'Öffnen Sie die App, um Ihre Wohlbefindensprüfung erneut zu senden.',
+    'notification_send_failed_body':
+        'Öffnen Sie die App, um Ihre Wohlbefindensprüfung erneut zu senden.',
   };
 }

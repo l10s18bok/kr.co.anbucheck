@@ -29,7 +29,7 @@ abstract class FrFr {
     'app_tagline': 'Nous veillons sur votre bien-être.',
     'app_service_desc': 'Service automatique de suivi du bien-être',
     'app_guardian_title': 'Protecteur Anbu',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── Splash ──
     'splash_loading': 'Vérification du bien-être...',
@@ -138,7 +138,8 @@ abstract class FrFr {
     'subject_home_emergency_loading': "Envoi de l'alerte d'urgence...",
     'subject_home_emergency_sent': "L'alerte d'urgence a été envoyée",
     'subject_home_emergency_failed': "Échec de l'envoi de l'alerte d'urgence",
-    'subject_home_manual_report_limit_reached': "Vous avez déjà envoyé le rapport de sécurité d'aujourd'hui. Veuillez réessayer demain.",
+    'subject_home_manual_report_limit_reached':
+        "Vous avez déjà envoyé le rapport de sécurité d'aujourd'hui. Veuillez réessayer demain.",
     'subject_home_manual_report_sent': 'Votre message a été envoyé à vos proches.',
     'subject_home_emergency_confirm_title': "Demande d'aide d'urgence",
     'subject_home_emergency_confirm_body':
@@ -152,7 +153,8 @@ abstract class FrFr {
     'emergency_map_accuracy_label': 'Précision',
     'emergency_map_open_external': "Ouvrir dans l'application de cartes externe",
     'emergency_map_no_location': 'Aucune information de position',
-    'emergency_location_permission_denied_snackbar': "Alerte d'urgence envoyée sans autorisation de localisation",
+    'emergency_location_permission_denied_snackbar':
+        "Alerte d'urgence envoyée sans autorisation de localisation",
     'subject_home_emergency_confirm_send': "Envoyer la demande d'urgence",
     'subject_home_share_text':
         'Veillez sur moi avec l\'application Anbu !\nCode d\'invitation : @code',
@@ -264,9 +266,11 @@ abstract class FrFr {
     'gs_disable_confirm': 'Désactiver',
     'gs_disabled_message': 'La protection a été désactivée',
     'gs_disable_failed': 'Échec de la désactivation de la protection',
-    'gs_activity_permission_denied_warning': 'L\'autorisation de compteur de pas est refusée. Appuyez ici pour autoriser.',
+    'gs_activity_permission_denied_warning':
+        'L\'autorisation de compteur de pas est refusée. Appuyez ici pour autoriser.',
     'gs_activity_permission_settings_title': 'Autorisation requise',
-    'gs_activity_permission_settings_body': 'Veuillez autoriser l\'autorisation Activité physique (Mouvement et Forme) dans les paramètres de l\'application.',
+    'gs_activity_permission_settings_body':
+        'Veuillez autoriser l\'autorisation Activité physique (Mouvement et Forme) dans les paramètres de l\'application.',
     'gs_activity_permission_settings_go': 'Aller aux paramètres',
 
     // ── Mode Protecteur → G+S (Drawer/Dialogue) ──
@@ -282,16 +286,19 @@ abstract class FrFr {
     'notifications_today': 'Notifications du jour',
     'notifications_empty': 'Aucune notification aujourd\'hui',
     'notifications_delete_all_title': 'Supprimer toutes les notifications',
-    'notifications_auto_delete_notice': 'Les notifications du jour sont automatiquement supprimées à minuit (0:00).',
+    'notifications_auto_delete_notice':
+        'Les notifications du jour sont automatiquement supprimées à minuit (0:00).',
     'notifications_delete_all_message': 'Supprimer toutes les notifications du jour ?',
     'notifications_delete_failed': 'Impossible de supprimer les notifications.',
     'notifications_guide_title': 'Guide des niveaux de notification',
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Le bien-être de la personne protégée a été confirmé',
     'notifications_level_caution': 'Attention',
-    'notifications_level_caution_desc': 'Aucun signal de bien-être ni activité du téléphone détectés',
+    'notifications_level_caution_desc':
+        'Aucun signal de bien-être ni activité du téléphone détectés',
     'notifications_level_warning': 'Alerte',
-    'notifications_level_warning_desc': 'Aucun signal de bien-être ni activité du téléphone depuis plusieurs jours',
+    'notifications_level_warning_desc':
+        'Aucun signal de bien-être ni activité du téléphone depuis plusieurs jours',
     'notifications_level_urgent': 'Urgent',
     'notifications_level_urgent_desc': 'Vérification immédiate requise',
     'notifications_level_info': 'Info',
@@ -357,7 +364,8 @@ abstract class FrFr {
     'heartbeat_schedule_hint_ios':
         'Une notification push de bien-être arrive chaque jour à cette heure. Appuyez sur la notification ou ouvrez l\'application à ce moment-là pour envoyer votre signal de bien-être.',
     'heartbeat_daily_time': 'Tous les jours à @time',
-    'heartbeat_scheduled_today': 'Votre signal de bien-être sera transmis à vos protecteurs chaque jour à @time.',
+    'heartbeat_scheduled_today':
+        'Votre signal de bien-être sera transmis à vos protecteurs chaque jour à @time.',
     'heartbeat_change_failed_title': 'Échec du changement d\'heure',
     'heartbeat_change_failed_message':
         'La modification n\'a pas pu être enregistrée sur le serveur.',
@@ -409,6 +417,7 @@ abstract class FrFr {
     'wellbeing_check_body': 'Comment allez-vous ? Veuillez appuyer sur cette notification.',
     'noti_channel_name': 'Alertes Anbu',
     'notification_send_failed_title': '📶 Vérifiez votre connexion Internet',
-    'notification_send_failed_body': 'Ouvrez l\'application pour renvoyer votre signalement de bien-être.',
+    'notification_send_failed_body':
+        'Ouvrez l\'application pour renvoyer votre signalement de bien-être.',
   };
 }

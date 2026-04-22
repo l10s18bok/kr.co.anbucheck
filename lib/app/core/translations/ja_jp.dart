@@ -29,7 +29,7 @@ abstract class JaJp {
     'app_tagline': 'あなたの安否を確認します。',
     'app_service_desc': '自動安否確認サービス',
     'app_guardian_title': 'Anbu 見守り人',
-    'app_copyright': '© 2026 Averic SB Inc.',
+    'app_copyright': '© 2026 Ark SB Inc.',
 
     // ── スプラッシュ ──
     'splash_loading': '安否を確認しています...',
@@ -61,10 +61,8 @@ abstract class JaJp {
     'permission_location_desc': '緊急ヘルプ要請の時にのみ、現在地を保護者に送信します',
     'location_permission_warning': '緊急要請時に位置情報が送信されません。タップして許可してください。',
     'location_permission_settings_title': '位置情報の権限設定が必要です',
-    'location_permission_settings_body_ios':
-        '「Anbu」を選択し、「位置情報」で「このAppの使用中のみ許可」を選択してください。',
-    'location_permission_settings_body_android':
-        '「権限」→「位置情報」の順に選択し、「アプリの使用中のみ許可」を選択してください。',
+    'location_permission_settings_body_ios': '「Anbu」を選択し、「位置情報」で「このAppの使用中のみ許可」を選択してください。',
+    'location_permission_settings_body_android': '「権限」→「位置情報」の順に選択し、「アプリの使用中のみ許可」を選択してください。',
     'permission_activity_dialog_title': '身体活動の権限について',
     'permission_activity_dialog_message': '歩数を検出して活動状況を確認するために使用されます。\n次の画面で「許可」を選択してください。',
     'permission_notification_required_title': '通知の権限が必要です',
@@ -130,8 +128,7 @@ abstract class JaJp {
     'subject_home_manual_report_limit_reached': '本日の安全報告は既に完了しています。明日もう一度お試しください。',
     'subject_home_manual_report_sent': '見守り人に安否をお伝えしました。',
     'subject_home_emergency_confirm_title': '緊急ヘルプリクエスト',
-    'subject_home_emergency_confirm_body':
-        'すべての保護者に緊急通知が送信されます。\n現在地も共有されます。\n本当に助けを求めますか？',
+    'subject_home_emergency_confirm_body': 'すべての保護者に緊急通知が送信されます。\n現在地も共有されます。\n本当に助けを求めますか？',
     'emergency_sent_with_location': '緊急通知を送信しました（位置情報つき）',
     'emergency_sent_without_location': '緊急通知を送信しました',
     'notifications_view_location': '🗺️ 位置を表示',
