@@ -370,7 +370,7 @@ abstract class SvSe {
     'error_unauthorized': 'Autentisering kravs.',
 
     // ── Aviseringsinnehall ──
-    'noti_auto_report_body': 'Den schemalagda valmaendekontrollen mottogs idag.',
+    'noti_auto_report_body': 'Valmaendekontrollen mottogs utan problem.',
     'noti_manual_report_body': 'Den skyddade personen skickade manuellt en valmaendekontroll.',
     'noti_battery_low_body': 'Telefonens batteri ar under 20%. Laddning kan behovas.',
     'noti_battery_dead_body':

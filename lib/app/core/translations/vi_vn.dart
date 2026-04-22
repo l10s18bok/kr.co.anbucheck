@@ -376,7 +376,7 @@ abstract class ViVn {
     'error_unauthorized': 'Can xac thuc.',
 
     // ── Noi dung thong bao ──
-    'noti_auto_report_body': 'Kiem tra suc khoe theo lich da duoc nhan hom nay.',
+    'noti_auto_report_body': 'Kiem tra suc khoe da duoc nhan thanh cong.',
     'noti_manual_report_body': 'Nguoi duoc bao ve da gui kiem tra suc khoe thu cong.',
     'noti_battery_low_body': 'Pin dien thoai duoi 20%. Co the can sac.',
     'noti_battery_dead_body':

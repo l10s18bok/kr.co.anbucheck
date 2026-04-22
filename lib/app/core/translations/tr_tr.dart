@@ -374,7 +374,7 @@ abstract class TrTr {
     'error_unauthorized': 'Kimlik doğrulama gerekli.',
 
     // ── Bildirim Metinleri ──
-    'noti_auto_report_body': 'Planlanan hal hatır kontrolü bugün alındı.',
+    'noti_auto_report_body': 'Hal hatır kontrolü başarıyla alındı.',
     'noti_manual_report_body': 'Korunan kişi manuel olarak hal hatır kontrolü gönderdi.',
     'noti_battery_low_body': 'Telefon pili %20\'nin altında. Şarj etmek gerekebilir.',
     'noti_battery_dead_body':

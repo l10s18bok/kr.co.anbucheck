@@ -380,7 +380,7 @@ abstract class PtBr {
     'error_unauthorized': 'Autenticação necessária.',
 
     // ── Corpo das notificações ──
-    'noti_auto_report_body': 'A verificação de bem-estar agendada foi recebida hoje.',
+    'noti_auto_report_body': 'A verificação de bem-estar foi recebida com sucesso.',
     'noti_manual_report_body':
         'A pessoa protegida enviou manualmente uma verificação de bem-estar.',
     'noti_battery_low_body':

@@ -378,7 +378,7 @@ abstract class NlNl {
     'error_unauthorized': 'Authenticatie vereist.',
 
     // ── Meldingsteksten ──
-    'noti_auto_report_body': 'De geplande welzijnscontrole is vandaag ontvangen.',
+    'noti_auto_report_body': 'De welzijnscontrole is succesvol ontvangen.',
     'noti_manual_report_body':
         'De beschermde persoon heeft handmatig een welzijnscontrole verzonden.',
     'noti_battery_low_body': 'De batterij van de telefoon is onder 20 %. Opladen kan nodig zijn.',

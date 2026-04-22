@@ -381,7 +381,7 @@ abstract class IdId {
     'error_unauthorized': 'Autentikasi diperlukan.',
 
     // ── Isi Notifikasi ──
-    'noti_auto_report_body': 'Pemeriksaan kesejahteraan terjadwal telah diterima hari ini.',
+    'noti_auto_report_body': 'Pemeriksaan kesejahteraan telah diterima dengan sukses.',
     'noti_manual_report_body':
         'Orang yang dilindungi mengirim pemeriksaan kesejahteraan secara manual.',
     'noti_battery_low_body': 'Baterai ponsel di bawah 20%. Mungkin perlu diisi daya.',

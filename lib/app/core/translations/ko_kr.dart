@@ -351,7 +351,7 @@ abstract class KoKr {
     'error_unauthorized': '인증이 필요합니다.',
 
     // ── 알림 본문 ──
-    'noti_auto_report_body': '오늘 예정시각에 안부 확인이 정상 수신되었습니다.',
+    'noti_auto_report_body': '안부 확인이 정상 수신되었습니다.',
     'noti_manual_report_body': '보호 대상자가 직접 안부 확인을 보냈습니다.',
     'noti_battery_low_body': '폰 배터리가 20% 미만입니다. 충전이 필요할 수 있습니다.',
     'noti_battery_dead_body':

@@ -378,7 +378,7 @@ abstract class PlPl {
     'error_unauthorized': 'Wymagane uwierzytelnienie.',
 
     // ── Tresci powiadomien ──
-    'noti_auto_report_body': 'Zaplanowane sprawdzenie samopoczucia zostalo odebrane dzisiaj.',
+    'noti_auto_report_body': 'Sprawdzenie samopoczucia zostalo odebrane pomyslnie.',
     'noti_manual_report_body': 'Osoba chroniona reczne wyslala sprawdzenie samopoczucia.',
     'noti_battery_low_body': 'Bateria telefonu ponizej 20%. Moze byc potrzebne ladowanie.',
     'noti_battery_dead_body':

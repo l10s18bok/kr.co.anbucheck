@@ -347,7 +347,7 @@ abstract class ZhCn {
     'error_unauthorized': '需要验证身份。',
 
     // ── 通知正文 ──
-    'noti_auto_report_body': '今天的定时问安已正常收到。',
+    'noti_auto_report_body': '问安已正常收到。',
     'noti_manual_report_body': '对象者手动发送了问安。',
     'noti_battery_low_body': '手机电量低于20%，可能需要充电。',
     'noti_battery_dead_body': '手机似乎因电量耗尽而关机。最后电量：@battery_level%。充电后将自动恢复。',

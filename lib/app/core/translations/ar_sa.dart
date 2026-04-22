@@ -361,7 +361,7 @@ abstract class ArSa {
     'error_unauthorized': 'المصادقة مطلوبة.',
 
     // ── نصوص الإشعارات ──
-    'noti_auto_report_body': 'تم استلام فحص الاطمئنان المجدول اليوم.',
+    'noti_auto_report_body': 'تم استلام فحص الاطمئنان بنجاح.',
     'noti_manual_report_body': 'قام الشخص المحمي بإرسال فحص اطمئنان يدوي.',
     'noti_battery_low_body': 'بطارية الهاتف أقل من 20%. قد يحتاج إلى الشحن.',
     'noti_battery_dead_body':

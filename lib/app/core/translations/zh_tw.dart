@@ -347,7 +347,7 @@ abstract class ZhTw {
     'error_unauthorized': '需要驗證身分。',
 
     // ── 通知內文 ──
-    'noti_auto_report_body': '今天的定時問安已正常收到。',
+    'noti_auto_report_body': '問安已正常收到。',
     'noti_manual_report_body': '對象者手動發送了問安。',
     'noti_battery_low_body': '手機電量低於20%，可能需要充電。',
     'noti_battery_dead_body': '手機似乎因電量耗盡而關機。最後電量：@battery_level%。充電後將自動恢復。',

@@ -381,7 +381,7 @@ abstract class DeDe {
     'error_unauthorized': 'Authentifizierung erforderlich.',
 
     // ── Benachrichtigungstexte ──
-    'noti_auto_report_body': 'Die geplante Wohlbefindens-Prüfung wurde heute empfangen.',
+    'noti_auto_report_body': 'Die Wohlbefindens-Prüfung wurde erfolgreich empfangen.',
     'noti_manual_report_body': 'Die Schutzperson hat manuell eine Wohlbefindens-Prüfung gesendet.',
     'noti_battery_low_body':
         'Der Akkustand des Telefons liegt unter 20 %. Aufladen könnte nötig sein.',

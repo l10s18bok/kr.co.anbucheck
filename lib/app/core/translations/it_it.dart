@@ -382,7 +382,7 @@ abstract class ItIt {
     'error_unauthorized': 'Autenticazione necessaria.',
 
     // ── Corpo delle notifiche ──
-    'noti_auto_report_body': 'La verifica di benessere programmata è stata ricevuta oggi.',
+    'noti_auto_report_body': 'La verifica di benessere è stata ricevuta con successo.',
     'noti_manual_report_body':
         'La persona protetta ha inviato manualmente una verifica di benessere.',
     'noti_battery_low_body':

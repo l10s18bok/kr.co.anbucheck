@@ -384,7 +384,7 @@ abstract class FrFr {
     'error_unauthorized': 'Authentification requise.',
 
     // ── Corps des notifications ──
-    'noti_auto_report_body': 'La vérification de bien-être programmée a été reçue aujourd\'hui.',
+    'noti_auto_report_body': 'La vérification de bien-être a été reçue avec succès.',
     'noti_manual_report_body':
         'La personne protégée a envoyé manuellement une vérification de bien-être.',
     'noti_battery_low_body':

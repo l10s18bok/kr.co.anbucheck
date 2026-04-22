@@ -349,7 +349,7 @@ abstract class JaJp {
     'error_unauthorized': '認証が必要です。',
 
     // ── 通知本文 ──
-    'noti_auto_report_body': '本日の予定時刻に安否確認が正常に受信されました。',
+    'noti_auto_report_body': '安否確認が正常に受信されました。',
     'noti_manual_report_body': '対象者が手動で安否確認を送信しました。',
     'noti_battery_low_body': 'スマホのバッテリーが20%未満です。充電が必要かもしれません。',
     'noti_battery_dead_body': 'スマホがバッテリー切れで電源が落ちたようです。最後のバッテリー残量: @battery_level%。充電後に自動復旧します。',

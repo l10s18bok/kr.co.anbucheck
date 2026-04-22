@@ -380,7 +380,7 @@ abstract class EsEs {
     'error_unauthorized': 'Se requiere autenticación.',
 
     // ── Cuerpo de notificaciones ──
-    'noti_auto_report_body': 'La verificación de bienestar programada se recibió hoy.',
+    'noti_auto_report_body': 'La verificación de bienestar se recibió correctamente.',
     'noti_manual_report_body':
         'La persona protegida envió manualmente una verificación de bienestar.',
     'noti_battery_low_body':

@@ -372,7 +372,7 @@ abstract class EnUs {
     'error_unauthorized': 'Authentication required.',
 
     // ── Notification Bodies ──
-    'noti_auto_report_body': 'Scheduled wellness check was received today.',
+    'noti_auto_report_body': 'Wellness check was received successfully.',
     'noti_manual_report_body': 'The subject sent a manual wellness check.',
     'noti_battery_low_body': 'Phone battery is below 20%. Charging may be needed.',
     'noti_battery_dead_body':

@@ -371,7 +371,7 @@ abstract class HiIn {
     'error_unauthorized': 'प्रमाणीकरण आवश्यक है।',
 
     // ── सूचना सामग्री ──
-    'noti_auto_report_body': 'आज की निर्धारित कुशलता जांच प्राप्त हुई।',
+    'noti_auto_report_body': 'कुशलता जांच सफलतापूर्वक प्राप्त हुई।',
     'noti_manual_report_body': 'संरक्षित व्यक्ति ने मैन्युअल रूप से कुशलता जांच भेजी।',
     'noti_battery_low_body': 'फोन की बैटरी 20% से कम है। चार्जिंग की आवश्यकता हो सकती है।',
     'noti_battery_dead_body':
