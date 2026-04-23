@@ -127,9 +127,6 @@ mixin HeartbeatScheduleMixin on GetxController {
       heartbeatHour.value = hour;
       heartbeatMinute.value = minute;
       _applyToHeartbeatTime(hour, minute);
-      // clear 전에 오늘 전송 여부 확인 — 시각 변경 후 오늘 알림 발화 결정에 사용
-      final lastDate = await tokenDs.getLastHeartbeatDate();
-      final wasReported = lastDate == formatYmd(DateTime.now());
       // 예약시각 변경 = 새 예약 발화로 간주 → 선점 키까지 같이 비워야
       // 같은 시각으로 되돌렸을 때도 재테스트가 막히지 않음
       await tokenDs.saveLastHeartbeatDate('');
@@ -140,8 +137,7 @@ mixin HeartbeatScheduleMixin on GetxController {
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }
-      // 오늘 이미 전송했으면 새 시각이라도 오늘은 발화 금지 → 내일부터
-      await LocalAlarmService.schedule(hour, minute, forceNextDay: wasReported);
+      await LocalAlarmService.schedule(hour, minute);
       final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
       AppSnackbar.show('', message, duration: const Duration(seconds: 2));
     } catch (e) {
