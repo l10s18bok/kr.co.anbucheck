@@ -34,27 +34,41 @@ void heartbeatWorkerCallback() {
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
       final now = DateTime.now();
       final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
-      debugPrint(
-        '[HeartbeatWorker] 현재: ${now.hour}:${now.minute}:${now.second}, 예약: $hour:$minute',
-      );
-      if (now.isBefore(scheduled)) {
-        debugPrint('[HeartbeatWorker] 예약시각 이전 — 스킵');
+      // +3분 offset으로 periodic은 항상 T+3 이후 발화. WorkManager는 initialDelay
+      // 이전에 발화하지 않으므로 -15분 창으로 충분하다. 서버 측 (device_id, scheduled_key)
+      // idempotency가 중복 전송을 차단하므로 조기 통과의 부작용은 없다.
+      final earliestAllowed = scheduled.subtract(const Duration(minutes: 15));
+      if (now.isBefore(earliestAllowed)) {
+        debugPrint('[HeartbeatWorker] schedule=$hour:$minute, now=${now.hour}:${now.minute}:${now.second} → 스킵(예약시각 -15분 이전)');
         return true;
       }
+      debugPrint('[HeartbeatWorker] schedule=$hour:$minute, now=${now.hour}:${now.minute}:${now.second} → 통과(예약 -15분 창 이내)');
 
       final today = formatYmd(now);
       final lastDate = await tokenDs.getLastHeartbeatDate();
       if (lastDate == today) {
-        debugPrint('[HeartbeatWorker] 오늘 이미 전송 완료 — 스킵');
+        debugPrint('[HeartbeatWorker] lastHeartbeatDate=$lastDate, today=$today → 스킵(오늘 전송 완료)');
         return true;
       }
+      debugPrint('[HeartbeatWorker] lastHeartbeatDate=$lastDate, today=$today → 통과');
 
-      debugPrint('[HeartbeatWorker] heartbeat 전송 시도');
-      await HeartbeatService().execute();
-      debugPrint('[HeartbeatWorker] heartbeat 전송 완료');
+      await HeartbeatService().execute(fromBackground: true);
 
-      // 전송 성공 시 one-off만 내일로 재등록 (periodic은 그대로 폴링 유지)
-      await HeartbeatWorkerService.rescheduleOneOffForNextDay(hour, minute);
+      // 전송 성공 시 one-off + periodic 모두 내일로 재등록.
+      // periodic의 self-cancel(자기자신을 cancelByUniqueName)은 현재 실행 중인
+      // 작업은 유지하고 다음 예약만 취소하므로 안전하다.
+      // 전송 실패(오프라인 등) 시 lastHeartbeatDate가 오늘로 저장되지 않으므로
+      // 이 블록에 진입하지 않아 재시도 경로가 유지된다.
+      final todayAfter = formatYmd(DateTime.now());
+      final lastDateAfter = await tokenDs.getLastHeartbeatDate();
+      final sentToday = (lastDateAfter == todayAfter);
+      debugPrint('[HeartbeatWorker] 재등록 판단 sentToday=$sentToday');
+      if (sentToday) {
+        debugPrint('[HeartbeatWorker] 내일로 재등록 시작 (one-off + periodic)');
+        await HeartbeatWorkerService.schedule(hour, minute);
+      } else {
+        debugPrint('[HeartbeatWorker] 오늘 전송 미확정 — periodic 유지(다음 fire에서 재시도)');
+      }
     } catch (e) {
       debugPrint('[HeartbeatWorker] 실행 실패: $e');
     }
@@ -66,16 +80,18 @@ void heartbeatWorkerCallback() {
 ///
 /// 2계층 실행 구조:
 ///   - one-off: 예약시각에 1회 fire. 메인 전송 담당. 전송 성공 후 콜백에서
-///     rescheduleOneOffForNextDay()로 내일 예약시각에 재등록.
-///   - periodic 1시간: 안전망 폴링. one-off이 OEM 배터리 절약/Doze 등으로 누락될
-///     때 최대 1시간 내 백업 발화. 첫 fire 후 재등록하지 않고 그대로 둔다
-///     (flutter_workmanager의 UPDATE는 initialDelay를 무시하고, REPLACE는 자기자신을
-///     취소하는 이슈가 있어 건드리면 오히려 폴링이 깨진다).
+///     schedule()로 내일 예약시각에 재등록 (one-off + periodic 동시).
+///   - periodic 15분: 안전망 폴링. one-off이 Doze 등으로 누락될 때 최대 15분 내
+///     백업 발화. 첫 fire는 **예약시각 + 3분** (one-off과의 동시 발화 race를
+///     물리적으로 회피 — 정상 조건에서 one-off이 먼저 전송 성공 → schedule()로
+///     periodic을 first fire 전에 cancel). `schedule()` 호출 시마다
+///     명시적 cancel 후 재등록하여 frequency/initialDelay 변경이 반영되도록 한다.
 ///
 /// ─── 동시 발화(race) 방지 — 4계층 방어 ───
 ///
-/// Doze maintenance window 특성상 one-off과 periodic이 같은 window에서 거의 동시에
-/// fire되는 race가 실측된다. 이 race는 아래 4계층으로 순차 차단된다:
+/// 예약시각 +3분 오프셋으로 one-off과 periodic의 첫 fire 시각을 분리했지만,
+/// Doze maintenance window 특성상 두 job이 같은 window에 batch돼 동시 fire되는
+/// race가 여전히 가능하다. 이 race는 아래 4계층으로 순차 차단된다:
 ///
 /// 1) 콜백 레벨 — heartbeatWorkerCallback
 ///    `lastHeartbeatDate == today`면 즉시 스킵. 같은 날 두 번째 이상 진입 차단.
@@ -104,14 +120,27 @@ class HeartbeatWorkerService {
   static const _periodicName = 'heartbeat_periodic';
   static const _oneOffName = 'heartbeat_scheduled';
 
-  static const _pollFrequency = Duration(hours: 1);
+  /// periodic 폴링 간격. Android WorkManager의 minimum 제약(15분)과 동일.
+  static const _pollFrequency = Duration(minutes: 15);
+
+  /// periodic 첫 fire 오프셋.
+  /// +3분: one-off(예약시각 정각)가 먼저 fire → 전송 성공 → schedule()로
+  /// periodic을 first fire 전에 cancel. 정상(non-Doze) 조건에서 race 자체를 제거.
+  /// Doze 배치로 동시 fire되는 경우에는 SQLite CAS + double-schedule로 처리.
+  static const _periodicStartOffset = Duration(minutes: 3);
 
   /// Workmanager 초기화 (main()에서 1회 호출, Android에서만)
   static Future<void> init() async {
     await Workmanager().initialize(heartbeatWorkerCallback);
   }
 
-  /// 예약 등록 (one-off + periodic 1시간 동시 등록)
+  /// 예약 등록 (one-off + periodic 15분 동시 등록)
+  ///
+  /// one-off과 periodic 모두 **명시적 cancel 후 재등록**한다.
+  /// `ExistingPeriodicWorkPolicy.update`는 frequency/initialDelay 변경을 무시하기
+  /// 때문에, 예약시각 재설정이나 frequency 코드 변경이 기기에 반영되려면 기존
+  /// 스케줄을 먼저 취소해야 한다. `cancelByUniqueName`은 명시적 취소라 REPLACE
+  /// 정책의 self-cancel 이슈와 무관하게 안전하다.
   static Future<void> schedule(int hour, int minute) async {
     final delay = _computeNextDelay(hour, minute);
 
@@ -122,55 +151,33 @@ class HeartbeatWorkerService {
       _taskName,
       initialDelay: delay,
       existingWorkPolicy: ExistingWorkPolicy.replace,
+      inputData: {'source': 'one-off'},
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
-    // periodic 1시간: 안전망 폴링. one-off과 동일 시각에 첫 fire.
-    // Doze maintenance window에서 함께 집계돼 동시 fire되더라도
-    // HeartbeatLockDatasource(SQLite UNIQUE CAS)가 race를 원자적으로 차단한다.
+    // periodic 15분: 안전망 폴링. 예약시각 +3분부터 첫 fire → 이후 15분마다.
+    // 음수 오프셋으로 `delay + offset`이 음수가 되면 Android가 거부하므로
+    // `Duration.zero`로 clamp (즉시 첫 fire → 대부분 Doze에 의해 다음
+    // maintenance window로 자연 이연).
+    final rawPeriodicDelay = delay + _periodicStartOffset;
+    final periodicDelay =
+        rawPeriodicDelay.isNegative ? Duration.zero : rawPeriodicDelay;
+    await Workmanager().cancelByUniqueName(_periodicName);
     await Workmanager().registerPeriodicTask(
       _periodicName,
       _taskName,
       frequency: _pollFrequency,
-      initialDelay: delay,
+      initialDelay: periodicDelay,
       existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
+      inputData: {'source': 'periodic'},
       constraints: Constraints(networkType: NetworkType.connected),
     );
 
     debugPrint(
       '[HeartbeatWorker] 예약 등록: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} '
-      '(one-off + periodic 모두 ${delay.inHours}h ${delay.inMinutes % 60}m 후 첫 fire)',
+      '(one-off ${delay.inHours}h ${delay.inMinutes % 60}m 후, '
+      'periodic ${periodicDelay.inHours}h ${periodicDelay.inMinutes % 60}m 후 첫 fire → ${_pollFrequency.inMinutes}분 간격)',
     );
-  }
-
-  /// 콜백 내부에서 전송 성공 후 호출 — one-off만 내일 예약시각으로 재등록.
-  /// periodic은 손대지 않는다 (UPDATE는 무시되고 REPLACE는 자기자신 취소 위험).
-  static Future<void> rescheduleOneOffForNextDay(int hour, int minute) async {
-    try {
-      final now = DateTime.now();
-      final tomorrow = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        hour,
-        minute,
-      ).add(const Duration(days: 1));
-      final delay = tomorrow.difference(now);
-
-      await Workmanager().cancelByUniqueName(_oneOffName);
-      await Workmanager().registerOneOffTask(
-        _oneOffName,
-        _taskName,
-        initialDelay: delay,
-        existingWorkPolicy: ExistingWorkPolicy.replace,
-        constraints: Constraints(networkType: NetworkType.connected),
-      );
-      debugPrint(
-        '[HeartbeatWorker] one-off 내일로 재등록: ${delay.inHours}시간 ${delay.inMinutes % 60}분 후 fire',
-      );
-    } catch (e) {
-      debugPrint('[HeartbeatWorker] one-off 재등록 실패: $e');
-    }
   }
 
   /// 다음 예약시각까지의 delay 계산 (이미 지났으면 내일)

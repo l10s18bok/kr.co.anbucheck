@@ -54,7 +54,20 @@ class HeartbeatLockDatasource {
   /// 남긴 락을 새 진입자가 이어받을 수 있게 한다. 이 cleanup과 INSERT는 같은
   /// 트랜잭션으로 묶어야 cross-isolate CAS가 깨지지 않는다.
   Future<bool> tryAcquire(String scheduledKey) async {
-    final db = await _open();
+    final sql.Database db;
+    try {
+      db = await _open();
+    } on DatabaseException catch (e) {
+      // sqflite는 open 과정에서 내부적으로 'BEGIN EXCLUSIVE' 트랜잭션을 실행하는데,
+      // 다른 isolate가 이미 writer lock을 잡고 있으면 busy_timeout(5s)을 넘겨도
+      // SQLITE_BUSY로 실패할 수 있다. 이 경로도 "다른 isolate가 먼저 잡았다"는
+      // 의미이므로 UniqueConstraintError와 동일하게 false 반환으로 처리한다.
+      if (_isBusyError(e)) {
+        debugPrint('[HeartbeatLock] DB open busy — 스킵 ($scheduledKey)');
+        return false;
+      }
+      rethrow;
+    }
     final nowMs = DateTime.now().millisecondsSinceEpoch;
     try {
       await db.transaction((txn) async {

@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:pedometer_2/pedometer_2.dart' as p2;
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
@@ -31,7 +30,8 @@ class HeartbeatService {
 
   /// heartbeat 1회 실행
   /// [manual] 대상자가 직접 버튼을 눌러 전송한 경우 true
-  Future<void> execute({bool manual = false}) async {
+  /// [fromBackground] WorkManager 백그라운드 콜백에서 호출된 경우 true
+  Future<void> execute({bool manual = false, bool fromBackground = false}) async {
     if (_busy) return;
     _busy = true;
     try {
@@ -45,7 +45,7 @@ class HeartbeatService {
         await _sendPendingInternal(deviceToken);
       }
 
-      await _executeInternal(deviceId: deviceId, deviceToken: deviceToken, manual: manual);
+      await _executeInternal(deviceId: deviceId, deviceToken: deviceToken, manual: manual, fromBackground: fromBackground);
     } finally {
       _busy = false;
     }
@@ -55,6 +55,7 @@ class HeartbeatService {
     required String deviceId,
     required String deviceToken,
     bool manual = false,
+    bool fromBackground = false,
   }) async {
     // 동일 예약시각에 대한 중복 전송 방어 (날짜+예약시각 조합)
     // manual=true는 무조건 전송 (suspicious 알림 응답, 수동 보고)
@@ -100,6 +101,11 @@ class HeartbeatService {
       if (!manual) {
         if (stepsDelta != null && stepsDelta > 0) {
           // 걸음수 변화 있음 → 즉시 정상 판정
+          suspicious = false;
+        } else if (fromBackground) {
+          // 백그라운드(Doze) 실행 + 걸음수 없음 → 센서 수집 스킵 (suspicious=false)
+          // Android 9+ 백그라운드 제한으로 가속도/자이로/지자기는 항상 null 반환.
+          // 의미 없는 500ms×3 대기를 제거하고 걸음수가 유일한 실질 지표임을 반영.
           suspicious = false;
         } else {
           // 걸음수 변화 없거나 권한 거부 → 가속도/자이로로 보완 판정
@@ -188,21 +194,10 @@ class HeartbeatService {
     int schedHour,
     int schedMinute,
   ) async {
-    // 전송 시도 전 네트워크 상태 확인. 완전 오프라인(비행기 모드, Wi-Fi/모바일 전부 꺼짐)
-    // 이면 retry 15초 낭비 없이 즉시 pending 저장 + 사용자 안내.
-    // "Wi-Fi 잡혔지만 인터넷 안 됨" 또는 API 중간 끊김은 connectivity_plus 한계로
-    // 구분 불가 → retry 경로로 넘어가되 별도 알림 띄우지 않음.
-    final connectivity = await Connectivity().checkConnectivity();
-    final isOffline = connectivity.every((r) => r == ConnectivityResult.none);
-    if (isOffline) {
-      debugPrint('[HeartbeatService] 오프라인 감지 → pending 저장 후 종료');
-      await _heartbeatDs.savePending(request.toJson());
-      if (!request.manual) {
-        await LocalAlarmService.notifySendFailed();
-      }
-      return;
-    }
-
+    // WorkManager가 NetworkType.connected constraint를 만족시킨 상태에서 호출되므로
+    // connectivity_plus 사전 체크 없이 Dio 3회 retry로 바로 전송 시도한다.
+    // Doze 상태에서 connectivity_plus가 "오프라인"으로 오판하는 케이스가 확인되어
+    // 사전 체크를 제거했다 — 실제 전송은 WorkManager가 보장한 네트워크 위에서 수행.
     final remote = HeartbeatRemoteDatasource(deviceToken);
     for (var attempt = 1; attempt <= 3; attempt++) {
       try {
@@ -213,6 +208,7 @@ class HeartbeatService {
         debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
         if (attempt == 3) {
           await _heartbeatDs.savePending(request.toJson());
+          if (!request.manual) await LocalAlarmService.notifySendFailed();
           return;
         }
         await Future.delayed(Duration(seconds: attempt * 5));
