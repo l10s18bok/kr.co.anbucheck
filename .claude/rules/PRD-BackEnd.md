@@ -1429,12 +1429,12 @@ ORDER BY g.guardian_user_id, d.updated_at DESC;
 
 ### 8.1 통신
 - HTTPS 필수 (TLS 1.2+)
-- heartbeat payload 최소화 (가속도 센서 값 + 의심 플래그만 포함, 민감 정보 없음)
+- heartbeat payload 최소화 (걸음수 + suspicious 플래그 포함, 민감 정보 없음)
 
 
 ### 8.2 데이터
 - **개인정보 최소 저장**: 이름, 전화번호, 사용 앱 목록 일절 저장하지 않음. 위치정보는 정기 heartbeat에서 미수집이며, 대상자가 긴급 도움 요청 버튼을 누른 경우에만 사용자 동의 하에 `notification_events` 테이블에 1회 저장되고 대상자 기기 타임존 자정 스케줄러가 일괄 삭제
-- 수집 데이터: device_id, 가속도+자이로 센서 값, suspicious 플래그, 앱 버전, 긴급 요청 시 lat/lng/accuracy — 최소 수준
+- 수집 데이터: device_id, 걸음수(steps_delta), suspicious 플래그, 배터리 잔량, 앱 버전, 긴급 요청 시 lat/lng/accuracy — 최소 수준
 - DB 유출 시에도 개인 식별 불가 (invite_code, device_id만 존재)
 
 
