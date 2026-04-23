@@ -90,7 +90,7 @@ lib/
 - `GuardianDashboardController._scheduleHeartbeatIfGS()` — G+S일 때만 WorkManager/LocalAlarm 예약
 
 **G+S 관련 컨트롤러:**
-- `GuardianDashboardController` — G+S 라이프사이클 + heartbeat 자동 재전송 단독 소유: 활성화/비활성화, WorkManager/LocalAlarm 예약, `_checkAndSendHeartbeat` 미전송 체크, 안전코드 페이지 진입. onInit/onResumed와 FcmService `gs_deadman` 탭 모두 `refreshAndSend()` 단일 진입점 경유. Dashboard/Settings 바인딩에서 `permanent: true`로 공유 등록하여 SafetyCode에서도 `Get.find` 가능
+- `GuardianDashboardController` — G+S 라이프사이클 + heartbeat 자동 재전송 단독 소유: 활성화/비활성화, WorkManager/LocalAlarm 예약, `_checkAndSendHeartbeat` 미전송 체크, 안전코드 페이지 진입. **진입점 2원화**: (1) onInit/onResumed → `refreshAndSend()` → `_checkAndSendHeartbeat()` → `isReportedToday=false`일 때만 전송(`manual:false`), (2) FcmService `gs_deadman` 탭 → `refreshAndForceSend()` → `isReportedToday` 무관하게 **무조건** 탭한 날짜로 최신 걸음수와 함께 전송(`manual:true`). 사용자가 알림을 여러 번 탭해도 그때마다 전송. Dashboard/Settings 바인딩에서 `permanent: true`로 공유 등록하여 SafetyCode에서도 `Get.find` 가능
 - `GuardianSafetyCodeController` — UI 전용 (invite_code, heartbeat 스케줄 변경, 수동 보고, 긴급 요청). 보고 상태 표시는 Dashboard의 `lastHeartbeatDate`/`lastHeartbeatTime`/`isReportedToday` Rx를 구독. 수동 보고(`reportNow`) 후 `_dashboard.reloadHeartbeatState()` 호출해 카드 즉시 갱신. 긴급 요청(`sendEmergency`)은 S 홈과 동일하게 공통 헬퍼 `captureEmergencyLocation()`로 위치 획득 후 `EmergencyRemoteDatasource.send(deviceId, location: ...)` — G+S 사용자도 긴급 시 위치가 첨부됨. `locationPermissionDenied` Rx + `requestLocationPermissionAgain()`으로 긴급 버튼 아래 권한 경고 위젯 동작
 - `GuardianSettingsController` — UI 전용. G+S 활성화/해제/탈퇴 시 Dashboard 컨트롤러에 위임
 - `ModeSelectController` — 재설치 시 `has_invite_code`로 G+S 감지 → `isAlsoSubject` 전달

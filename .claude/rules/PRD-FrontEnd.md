@@ -1832,13 +1832,20 @@ G+S 라이프사이클(활성화/해제/스케줄 예약)은 `GuardianDashboardC
 
 **iOS G+S 모드 동작 원칙 (Android와 차이):**
 
-iOS는 BGTaskScheduler의 불안정성 때문에 백그라운드 예약 실행을 사용하지 않는다. 대신 `LocalAlarmService`가 **heartbeat 예약 시각에 정확히** 오늘의 안부 확인 메시지 로컬 알림(payload `gs_deadman`)을 표시하고, 사용자가 알림을 탭하거나 앱을 직접 열었을 때 홈 화면의 `onInit`/`onResumed`에서 미전송 여부만 확인하여 즉시 heartbeat를 전송한다.
+iOS는 BGTaskScheduler의 불안정성 때문에 백그라운드 예약 실행을 사용하지 않는다. 대신 `LocalAlarmService`가 **heartbeat 예약 시각에 정확히** 오늘의 안부 확인 메시지 로컬 알림(payload `gs_deadman`)을 표시한다.
 
-- **전송 조건**: `isReportedToday == false` 하나뿐. 시각 경과 여부는 확인하지 않음.
-  - `Platform.isAndroid && isScheduleInFuture`일 때만 예약 시각 전 전송을 차단 → iOS는 통과 → 앱만 열면 당일 미전송 시 항상 전송
-  - G+S 전용 자동 재전송은 `GuardianDashboardController._checkAndSendHeartbeat`가 단독 소유. Dashboard `onInit`(`_initGuardianSubjectMode`) / `onResumed`(`_resumeGuardianSubjectMode`) / FcmService `gs_deadman` 탭(`refreshAndSend()`) 모두 이 단일 진입점을 호출. SafetyCode 컨트롤러는 heartbeat 재전송 로직을 갖지 않고 Dashboard의 `lastHeartbeatDate`/`lastHeartbeatTime`/`isReportedToday` Rx를 구독해 카드 상태만 표시하므로, 어느 화면에서 G+S 앱이 포그라운드로 복귀하든 동일하게 미전송 체크가 동작
+**G+S iOS 전송 진입점 2원화:**
+
+| 진입점 | 호출 메서드 | 전송 조건 | `manual` 값 | 보호자 알림 |
+|--------|-----------|----------|------------|------------|
+| 앱 직접 열기 / 포그라운드 복귀 | `refreshAndSend()` → `_checkAndSendHeartbeat()` | `isReportedToday == false`일 때만 | `false` | "오늘 안부 확인 완료" |
+| 로컬 알림(`gs_deadman`) 탭 | `refreshAndForceSend()` | `isReportedToday` 무관, **무조건** 전송 | `true` | "수동 안부 확인" |
+
+- **로컬 알림 탭 시 무조건 전송**: 사용자가 알림을 탭한 행위 자체가 "오늘 안부 보내기"라는 명시적 의사 표현이므로, 이미 자동 전송이 완료된 날이라도 최신 걸음수 데이터를 포함하여 재전송한다. 알림을 여러 번 탭해도 그때마다 전송되며, 탭한 그날의 날짜로 heartbeat가 기록된다.
+- **앱 열기 시**: iOS는 `isScheduleInFuture` 조건 없이 `isReportedToday == false`이면 예약 시각 이전이라도 전송(`Platform.isAndroid && isScheduleInFuture`일 때만 차단 → iOS는 통과)
+- SafetyCode 컨트롤러는 heartbeat 재전송 로직을 갖지 않고 Dashboard의 `lastHeartbeatDate`/`lastHeartbeatTime`/`isReportedToday` Rx를 구독해 카드 상태만 표시하므로, 어느 화면에서 G+S 앱이 포그라운드로 복귀하든 동일하게 동작
 - **오늘의 안부 확인 메시지 로컬 알림 시각**: iOS G+S는 heartbeat 예약 시각 +30분이 아니라 **예약 시각과 동일** (`LocalAlarmService.schedule`에서 오프셋 제거)
-- **오늘의 안부 확인 메시지 로컬 알림 탭 라우팅** (`fcm_service._handleNotificationTap`): payload `gs_deadman` 수신 시 route와 무관하게 `Get.find<GuardianDashboardController>().refreshAndSend()`를 호출해 즉시 미전송 heartbeat 재확인(Dashboard가 permanent이므로 항상 findable). 현재 route가 `guardianSafetyCode`가 아니면 `Get.offAllNamed(guardianDashboard)` + `Get.toNamed(guardianSafetyCode)`로 스택을 `[dashboard, safetyCode]`로 재구성하여 뒤로가기 시 대시보드로 복귀. kill 상태 런치에서는 스택에 Dashboard가 없어 `offNamedUntil` predicate가 매칭되지 않고 SafetyCode가 root가 되어 뒤로가기 불가 이슈가 있었기 때문에 `offAllNamed`로 재구성한다. 이미 `guardianSafetyCode`면 스택 유지
+- **오늘의 안부 확인 메시지 로컬 알림 탭 라우팅** (`fcm_service._handleNotificationTap`): payload `gs_deadman` 수신 시 route와 무관하게 `Get.find<GuardianDashboardController>().refreshAndForceSend()`를 호출해 즉시 무조건 전송(Dashboard가 permanent이므로 항상 findable). 현재 route가 `guardianSafetyCode`가 아니면 `Get.offAllNamed(guardianDashboard)` + `Get.toNamed(guardianSafetyCode)`로 스택을 `[dashboard, safetyCode]`로 재구성하여 뒤로가기 시 대시보드로 복귀. kill 상태 런치에서는 스택에 Dashboard가 없어 `offNamedUntil` predicate가 매칭되지 않고 SafetyCode가 root가 되어 뒤로가기 불가 이슈가 있었기 때문에 `offAllNamed`로 재구성한다. 이미 `guardianSafetyCode`면 스택 유지
 - **UI 라벨 분기**: `HeartbeatScheduleTile`의 기본 label이 `Platform.isIOS`일 때 `heartbeat_schedule_title_ios`("안부 푸시 알림 시각")로 전환. 시간 변경 다이얼로그/힌트용으로 `heartbeat_schedule_change_title_ios`, `heartbeat_schedule_hint_ios` 번역 키도 추가
 - **iOS 네이티브 정리**: `Info.plist`에서 `UIBackgroundModes`의 `fetch`/`processing` 제거, `BGTaskSchedulerPermittedIdentifiers` 제거. `AppDelegate.swift`에서 `WorkmanagerPlugin.registerBGProcessingTask` 호출 제거
 - **`HeartbeatWorkerService`**: iOS 관련 코드 경로 모두 제거 (Android 전용 서비스)
