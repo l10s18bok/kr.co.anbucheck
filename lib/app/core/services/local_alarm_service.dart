@@ -45,24 +45,46 @@ class LocalAlarmService {
 
   /// heartbeat 예약 시각에 정확히 오늘의 안부 확인 메시지 로컬 알림 예약 (iOS 전용)
   /// iOS G+S: BGTaskScheduler 없이 이 알림이 유일한 예약 트리거
-  /// [forceNextDay] heartbeat 전송 성공 후 호출 시 true — 오늘 알림 방지, 내일로 강제
+  ///
+  /// [forceNextDay] true = 오늘 heartbeat 이미 전송 완료 → 오늘 알림 발화 금지, 내일부터
+  ///
+  /// 핵심 동작:
+  ///   matchDateTimeComponents: DateTimeComponents.time 을 사용하면 iOS는 scheduled의
+  ///   날짜를 무시하고 시각(HH:mm)만 보고 "다음 발생 시각"을 찾는다.
+  ///   → forceNextDay=true로 scheduled를 내일로 설정해도 현재 시각이 예약시각 이전이면
+  ///     iOS는 오늘 발화를 선택한다 (버그).
+  ///
+  ///   해결: forceNextDay=true이고 오늘 예약시각이 아직 지나지 않은 경우(=오늘 heartbeat를
+  ///   예약시각 이전에 전송한 경우)에는 matchDateTimeComponents 없이 1회성으로 내일
+  ///   정확한 날짜+시각을 지정한다. 그 외는 매일 반복 트리거를 사용한다.
   static Future<void> schedule(int heartbeatHour, int heartbeatMinute, {bool forceNextDay = false}) async {
     if (Platform.isAndroid) return;
     await _ensureInitialized();
     await _cancelInternal();
 
     final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(
+    final todayScheduled = tz.TZDateTime(
       tz.local,
       now.year, now.month, now.day,
       heartbeatHour, heartbeatMinute,
     );
-    // heartbeat 성공 후에는 내일로 강제, 그 외에는 오늘 시각이 지났으면 내일로
-    if (forceNextDay || scheduled.isBefore(now)) {
+    // 오늘 예약시각이 현재 시각보다 미래인지 (= 아직 발화 전)
+    final todayNotYetFired = todayScheduled.isAfter(now);
+
+    var scheduled = todayScheduled;
+    if (forceNextDay || !todayNotYetFired) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
 
-    debugPrint('[LocalAlarm] 예약 시도: ${scheduled.toString()} (heartbeat $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')})');
+    // forceNextDay=true이고 오늘 예약시각이 아직 지나지 않은 경우:
+    //   matchDateTimeComponents 사용 시 iOS가 오늘을 다음 발화로 선택하므로 1회성 사용
+    // 그 외(오늘 예약시각이 지났거나 forceNextDay=false인 정상 경우):
+    //   matchDateTimeComponents.time 으로 매일 반복
+    final useOneTime = forceNextDay && todayNotYetFired;
+
+    debugPrint('[LocalAlarm] 예약 시도: ${scheduled.toString()} '
+        '(heartbeat $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')}, '
+        '${useOneTime ? "1회성" : "매일반복"})');
 
     // 백그라운드 isolate에서는 GetX .tr 사용 불가 → SharedPreferences 캐시 사용
     final title = await NotificationTextCache.get(
@@ -93,7 +115,7 @@ class LocalAlarmService {
       androidScheduleMode: AndroidScheduleMode.alarmClock,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
+      matchDateTimeComponents: useOneTime ? null : DateTimeComponents.time,
       payload: alarmPayload,
     );
     debugPrint('[LocalAlarm] 예약 완료: ${scheduled.toString()}');

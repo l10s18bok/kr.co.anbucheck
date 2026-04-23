@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
@@ -175,14 +176,18 @@ class GuardianDashboardController extends BaseController
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }
-      await LocalAlarmService.schedule(hour, minute);
+      final lastDate = await _tokenDs.getLastHeartbeatDate();
+      final isReported = lastDate == formatYmd(DateTime.now());
+      await LocalAlarmService.schedule(hour, minute, forceNextDay: isReported);
     } catch (_) {
       final (h, m) = await _tokenDs.getHeartbeatSchedule();
       applySchedule(h, m);
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(h, m);
       }
-      await LocalAlarmService.schedule(h, m);
+      final lastDate = await _tokenDs.getLastHeartbeatDate();
+      final isReported = lastDate == formatYmd(DateTime.now());
+      await LocalAlarmService.schedule(h, m, forceNextDay: isReported);
     }
   }
 
