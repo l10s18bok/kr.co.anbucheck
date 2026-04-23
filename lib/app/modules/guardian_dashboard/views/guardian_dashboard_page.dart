@@ -475,16 +475,16 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onOpenFullChart,
-      child: Container(
-      width: double.infinity,
-      margin: EdgeInsets.only(right: 8.w),
-      decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border(
-          left: BorderSide(color: widget.borderColor, width: 4.w),
+    return Stack(
+      children: [
+        Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(right: 8.w),
+        decoration: BoxDecoration(
+          color: widget.backgroundColor,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border(
+            left: BorderSide(color: widget.borderColor, width: 4.w),
         ),
       ),
       child: Padding(
@@ -661,8 +661,16 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
             ],
           ],
         ),
-      ),
-      ),
+        ),
+        ),
+        if (widget.onOpenFullChart != null && !widget.showActionButtons)
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: widget.onOpenFullChart,
+              behavior: HitTestBehavior.opaque,
+            ),
+          ),
+      ],
     );
   }
 }
