@@ -73,7 +73,7 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       // Dashboard가 heartbeat 미전송 체크를 단독 소유하므로 route와 무관하게
       // Dashboard 컨트롤러(permanent)에 위임. 이미 안전코드 페이지면 스택 유지.
       try {
-        Get.find<GuardianDashboardController>().refreshAndSend();
+        Get.find<GuardianDashboardController>().refreshAndForceSend();
       } catch (_) {}
       if (Get.currentRoute != AppRoutes.guardianSafetyCode) {
         Get.offAllNamed(AppRoutes.guardianDashboard);

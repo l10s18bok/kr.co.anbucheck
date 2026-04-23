@@ -117,6 +117,17 @@ class GuardianDashboardController extends BaseController
     await _checkAndSendHeartbeat();
   }
 
+  /// 로컬 알림 탭 전용 — isReportedToday와 무관하게 무조건 전송
+  /// 사용자가 알림을 탭한 행위 자체가 "오늘 안부 보내기" 명시적 의사 표현이므로
+  /// 오늘 이미 전송했더라도 최신 걸음수로 재전송한다.
+  Future<void> refreshAndForceSend() async {
+    if (!isAlsoSubject.value) return;
+    await loadScheduleFromLocal();
+    await _reloadHeartbeatState();
+    await HeartbeatService().execute(manual: true);
+    await _reloadHeartbeatState();
+  }
+
   /// SafetyCode 등 외부에서 heartbeat 상태 재로드가 필요할 때 호출
   Future<void> reloadHeartbeatState() => _reloadHeartbeatState();
 
