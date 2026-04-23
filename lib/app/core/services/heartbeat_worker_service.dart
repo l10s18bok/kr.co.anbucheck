@@ -52,7 +52,7 @@ void heartbeatWorkerCallback() {
       }
       debugPrint('[HeartbeatWorker] lastHeartbeatDate=$lastDate, today=$today → 통과');
 
-      await HeartbeatService().execute(fromBackground: true);
+      await HeartbeatService().execute();
 
       // 전송 성공 시 one-off + periodic 모두 내일로 재등록.
       // periodic의 self-cancel(자기자신을 cancelByUniqueName)은 현재 실행 중인

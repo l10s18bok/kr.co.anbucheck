@@ -1,28 +1,24 @@
-import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:pedometer_2/pedometer_2.dart' as p2;
-import 'package:sensors_plus/sensors_plus.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
-import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/heartbeat_remote_datasource.dart';
 import 'package:anbucheck/app/data/models/heartbeat_request.dart';
 
-/// 센서 변화 임계값 (가속도/자이로/지자기 — 걸음수 0일 때만 사용)
-const _accelThreshold = 5.0;  // m/s²  (~30도 기울기 변화)
-const _gyroThreshold  = 0.3;  // rad/s
-const _magThreshold   = 20.0; // μT    (~30도 수평 회전 변화)
-
 /// Heartbeat 수집 → suspicious 판정 → 서버 전송 (오프라인 시 큐 저장)
+///
+/// suspicious 판정 기준 (걸음수 단독):
+///   - steps_delta > 0 → suspicious = false (활동 확인)
+///   - steps_delta == 0 또는 권한 거부(null) → suspicious = true (활동 증거 없음)
+///   - 수동 보고 → suspicious = false (버튼 탭 자체가 활동 증거)
 class HeartbeatService {
   /// 동일 isolate 내 중복 실행 방지 (execute + sendPending 공유)
   static bool _busy = false;
 
-  final _sensorDs     = SensorLocalDatasource();
   final _heartbeatDs  = HeartbeatLocalDatasource();
   final _lockDs       = HeartbeatLockDatasource();
   final _tokenDs      = TokenLocalDatasource();
@@ -30,8 +26,7 @@ class HeartbeatService {
 
   /// heartbeat 1회 실행
   /// [manual] 대상자가 직접 버튼을 눌러 전송한 경우 true
-  /// [fromBackground] WorkManager 백그라운드 콜백에서 호출된 경우 true
-  Future<void> execute({bool manual = false, bool fromBackground = false}) async {
+  Future<void> execute({bool manual = false}) async {
     if (_busy) return;
     _busy = true;
     try {
@@ -45,7 +40,7 @@ class HeartbeatService {
         await _sendPendingInternal(deviceToken);
       }
 
-      await _executeInternal(deviceId: deviceId, deviceToken: deviceToken, manual: manual, fromBackground: fromBackground);
+      await _executeInternal(deviceId: deviceId, deviceToken: deviceToken, manual: manual);
     } finally {
       _busy = false;
     }
@@ -55,7 +50,6 @@ class HeartbeatService {
     required String deviceId,
     required String deviceToken,
     bool manual = false,
-    bool fromBackground = false,
   }) async {
     // 동일 예약시각에 대한 중복 전송 방어 (날짜+예약시각 조합)
     // manual=true는 무조건 전송 (suspicious 알림 응답, 수동 보고)
@@ -91,37 +85,13 @@ class HeartbeatService {
     try {
       final timestamp    = now.toUtc().toIso8601String();
       final batteryLevel = await _getBatteryLevel();
+      final stepsDelta   = await _getStepsDelta();
 
-      // 자동: 오늘 자정 ~ 현재 구간 걸음수 전송
-      // 수동: 0으로 강제 전송 → 서버의 활동 정보 알림 생성 차단
-      final stepsDelta = await _getStepsDelta(manual: manual);
+      // 수동 보고: 버튼 탭 자체가 활동 증거 → suspicious 강제 false
+      // 자동: steps_delta > 0 이면 false, 0 또는 null(권한 거부)이면 true
+      final suspicious = manual ? false : (stepsDelta == null || stepsDelta == 0);
 
-      // 수동 보고는 버튼을 직접 눌렀다는 행위 자체가 활동 증거 → suspicious 강제 false
-      bool suspicious = false;
-      if (!manual) {
-        if (stepsDelta != null && stepsDelta > 0) {
-          // 걸음수 변화 있음 → 즉시 정상 판정
-          suspicious = false;
-        } else if (fromBackground) {
-          // 백그라운드(Doze) 실행 + 걸음수 없음 → 센서 수집 스킵 (suspicious=false)
-          // Android 9+ 백그라운드 제한으로 가속도/자이로/지자기는 항상 null 반환.
-          // 의미 없는 500ms×3 대기를 제거하고 걸음수가 유일한 실질 지표임을 반영.
-          suspicious = false;
-        } else {
-          // 걸음수 변화 없거나 권한 거부 → 가속도/자이로로 보완 판정
-          final sensor = await _collectSensor();
-          debugPrint('[HeartbeatService] sensor=${sensor != null ? 'accel(${sensor.accelX.toStringAsFixed(2)},${sensor.accelY.toStringAsFixed(2)},${sensor.accelZ.toStringAsFixed(2)}) gyro(${sensor.gyroX.toStringAsFixed(2)},${sensor.gyroY.toStringAsFixed(2)},${sensor.gyroZ.toStringAsFixed(2)}) mag(${sensor.magX?.toStringAsFixed(2)},${sensor.magY?.toStringAsFixed(2)},${sensor.magZ?.toStringAsFixed(2)})' : 'null'}');
-          suspicious = await _calcSuspicious(sensor);
-          debugPrint('[HeartbeatService] suspicious=$suspicious');
-          if (sensor != null) {
-            await _sensorDs.saveSnapshot(
-              accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
-              gyroX:  sensor.gyroX,  gyroY:  sensor.gyroY,  gyroZ:  sensor.gyroZ,
-              magX:   sensor.magX,   magY:   sensor.magY,   magZ:   sensor.magZ,
-            );
-          }
-        }
-      }
+      debugPrint('[HeartbeatService] steps=$stepsDelta suspicious=$suspicious manual=$manual');
 
       final request = HeartbeatRequest(
         deviceId:     deviceId,
@@ -139,21 +109,6 @@ class HeartbeatService {
       if (lockAcquired) {
         await _lockDs.release(scheduledKey);
       }
-    }
-  }
-
-  /// 센서 기준값만 로컬에 저장 (서버 전송 없음)
-  /// 최초 설치 직후 보호자 미연결 상태에서 호출
-  /// pedometer_2의 getStepCount(from, to)는 iOS/Android 모두 절대 구간을 반환하므로
-  /// 걸음수 baseline 저장은 불필요. 가속도/자이로/지자기만 저장한다.
-  Future<void> saveSensorBaseline() async {
-    final sensor = await _collectSensor();
-    if (sensor != null) {
-      await _sensorDs.saveSnapshot(
-        accelX: sensor.accelX, accelY: sensor.accelY, accelZ: sensor.accelZ,
-        gyroX:  sensor.gyroX,  gyroY:  sensor.gyroY,  gyroZ:  sensor.gyroZ,
-        magX:   sensor.magX,   magY:   sensor.magY,   magZ:   sensor.magZ,
-      );
     }
   }
 
@@ -248,7 +203,7 @@ class HeartbeatService {
   /// 자동/수동 모두 실제 걸음수를 전송한다. 서버는 `manual=true`일 때
   /// 활동 정보 알림(`message_key=steps`) 생성을 건너뛰므로, 수동 보고 시에도
   /// 이중 알림이 발생하지 않고 일별 걸음수 이력은 정확히 반영된다.
-  Future<int?> _getStepsDelta({bool manual = false}) async {
+  Future<int?> _getStepsDelta() async {
     try {
       final now = DateTime.now();
       final midnight = DateTime(now.year, now.month, now.day);
@@ -256,79 +211,12 @@ class HeartbeatService {
 
       final steps = await p2.Pedometer().getStepCount(from: midnight, to: now)
           .timeout(const Duration(seconds: 3));
-      debugPrint('[HeartbeatService] getStepCount $midnight~$now steps=$steps (manual=$manual)');
+      debugPrint('[HeartbeatService] getStepCount $midnight~$now steps=$steps');
       return steps;
     } catch (e) {
       debugPrint('[HeartbeatService] getStepCount 실패: $e');
       return null;
     }
-  }
-
-  /// 센서 스냅샷 1회 수집 (500ms 타임아웃, 실패 시 null)
-  /// 지자기 센서는 미지원 기기를 위해 실패해도 null로 처리하고 계속 진행
-  Future<_SensorSnapshot?> _collectSensor() async {
-    try {
-      final accel = await accelerometerEventStream().first
-          .timeout(const Duration(milliseconds: 500));
-      final gyro = await gyroscopeEventStream().first
-          .timeout(const Duration(milliseconds: 500));
-      double? magX, magY, magZ;
-      try {
-        final mag = await magnetometerEventStream().first
-            .timeout(const Duration(milliseconds: 500));
-        magX = mag.x; magY = mag.y; magZ = mag.z;
-      } catch (_) {}
-      return _SensorSnapshot(
-        accelX: accel.x, accelY: accel.y, accelZ: accel.z,
-        gyroX:  gyro.x,  gyroY:  gyro.y,  gyroZ:  gyro.z,
-        magX:   magX,    magY:   magY,    magZ:   magZ,
-      );
-    } catch (_) {
-      return null;
-    }
-  }
-
-  /// 이전 스냅샷과 비교하여 suspicious 판정
-  /// 가속도(기울기) + 자이로(회전속도) + 지자기(수평방향) 3축 종합 판정
-  Future<bool> _calcSuspicious(_SensorSnapshot? current) async {
-    if (current == null) return false;
-
-    final prev = await _sensorDs.getSnapshot();
-    if (prev['accel_x'] == null) {
-      // 첫 heartbeat — 기준점 저장 후 정상 판정
-      await _sensorDs.saveSnapshot(
-        accelX: current.accelX, accelY: current.accelY, accelZ: current.accelZ,
-        gyroX:  current.gyroX,  gyroY:  current.gyroY,  gyroZ:  current.gyroZ,
-        magX:   current.magX,   magY:   current.magY,   magZ:   current.magZ,
-      );
-      return false;
-    }
-
-    final accelDelta = sqrt(
-      pow((current.accelX - (prev['accel_x'] ?? 0)), 2) +
-      pow((current.accelY - (prev['accel_y'] ?? 0)), 2) +
-      pow((current.accelZ - (prev['accel_z'] ?? 0)), 2),
-    );
-
-    final gyroDelta = sqrt(
-      pow((current.gyroX - (prev['gyro_x'] ?? 0)), 2) +
-      pow((current.gyroY - (prev['gyro_y'] ?? 0)), 2) +
-      pow((current.gyroZ - (prev['gyro_z'] ?? 0)), 2),
-    );
-
-    // 지자기 센서가 있을 때만 수평 회전 판정 — 미지원 기기는 무시
-    final hasMag = current.magX != null && prev['mag_x'] != null;
-    final magDelta = hasMag
-        ? sqrt(
-            pow((current.magX! - (prev['mag_x'] ?? 0)), 2) +
-            pow((current.magY! - (prev['mag_y'] ?? 0)), 2) +
-            pow((current.magZ! - (prev['mag_z'] ?? 0)), 2),
-          )
-        : double.infinity; // 지자기 없으면 판정에서 제외 (항상 통과)
-
-    return accelDelta < _accelThreshold
-        && gyroDelta < _gyroThreshold
-        && magDelta < _magThreshold;
   }
 
   HeartbeatRequest _fromJson(Map<String, dynamic> json) =>
@@ -341,16 +229,4 @@ class HeartbeatService {
         batteryLevel: json['battery_level'] as int?,
         scheduledKey: json['scheduled_key'] as String?,
       );
-}
-
-class _SensorSnapshot {
-  final double accelX, accelY, accelZ;
-  final double gyroX,  gyroY,  gyroZ;
-  final double? magX,  magY,   magZ;
-
-  const _SensorSnapshot({
-    required this.accelX, required this.accelY, required this.accelZ,
-    required this.gyroX,  required this.gyroY,  required this.gyroZ,
-    this.magX, this.magY, this.magZ,
-  });
 }

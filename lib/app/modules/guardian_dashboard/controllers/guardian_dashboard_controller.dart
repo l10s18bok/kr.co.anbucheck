@@ -13,7 +13,6 @@ import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
-import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
@@ -444,10 +443,6 @@ class GuardianDashboardController extends BaseController
       await LocalAlarmService.cancel();
 
       await _tokenDs.saveIsAlsoSubject(false);
-      await SensorLocalDatasource().saveSnapshot(
-        accelX: 0, accelY: 0, accelZ: 0,
-        gyroX: 0, gyroY: 0, gyroZ: 0,
-      );
       await _tokenDs.saveLastHeartbeatDate('');
       await _tokenDs.saveLastHeartbeatTime('');
       // G+S 재활성화 시 이전 락이 남아있으면 첫 heartbeat가 스킵될 수 있음

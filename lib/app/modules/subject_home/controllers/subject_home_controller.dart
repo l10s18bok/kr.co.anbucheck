@@ -23,7 +23,6 @@ import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
-import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/emergency_remote_datasource.dart';
@@ -569,7 +568,6 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     }
     await LocalAlarmService.cancel();
     await _tokenDs.clear();
-    await SensorLocalDatasource().clear();
     await HeartbeatLocalDatasource().clearPending();
     await HeartbeatLockDatasource().clearAll();
     // battery_dialog_shown 플래그 제거 — 재가입 시 안내 다이얼로그 다시 표시

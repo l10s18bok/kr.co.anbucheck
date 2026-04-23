@@ -9,7 +9,6 @@ import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
-import 'package:anbucheck/app/data/datasources/local/sensor_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
@@ -115,7 +114,6 @@ class GuardianSettingsController extends BaseController {
     }
 
     await _tokenDs.clear();
-    await SensorLocalDatasource().clear();
     await HeartbeatLocalDatasource().clearPending();
     await HeartbeatLockDatasource().clearAll();
     await NicknameLocalDatasource().clearAll();
