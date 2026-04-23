@@ -475,7 +475,9 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: widget.onOpenFullChart,
+      child: Container(
       width: double.infinity,
       margin: EdgeInsets.only(right: 8.w),
       decoration: BoxDecoration(
@@ -659,6 +661,7 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
             ],
           ],
         ),
+      ),
       ),
     );
   }
