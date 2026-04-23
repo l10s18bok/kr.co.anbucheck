@@ -89,7 +89,7 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.vxs),
             Text(
               'subject_home_share_title'.tr,
               style: AppTextTheme.headlineMedium(
@@ -98,14 +98,14 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
                     : const Color(0xFF00685E),
               ),
             ),
-            SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.vxs),
             _buildSafetyCodeCard(),
             _buildActivityPermissionWarning(),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vlg),
             _buildLastCheckCard(),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vlg),
             _buildReportButton(),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vlg),
             Obx(
               () => HeartbeatScheduleTile(
                 heartbeatTime: controller.heartbeatTime.value,
@@ -123,12 +123,12 @@ class GuardianSafetyCodePage extends GetWidget<GuardianSafetyCodeController> {
                     : const Color(0xFFE0F2F1),
               ),
             ),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vlg),
             _buildEmergencyButton(),
             _buildLocationPermissionWarning(),
-            SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.vlg),
             const BannerAdWidget(),
-            // SizedBox(height: AppSpacing.sp6),
+            SizedBox(height: AppSpacing.vsm),
           ],
         ),
         ),

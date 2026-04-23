@@ -73,7 +73,8 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
           }),
         ],
       ),
-      body: RefreshIndicator(
+      body: SafeArea(
+        child: RefreshIndicator(
         onRefresh: controller.pullToRefresh,
         color: const Color(0xFF00685E),
         child: SingleChildScrollView(
@@ -82,7 +83,7 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vxs),
 
             // 안전 코드 공유 안내
             Text(
@@ -93,19 +94,19 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     : const Color(0xFF00685E),
               ),
             ),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vsm),
 
             // Safety Share Code 카드
             _buildSafetyCodeCard(),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vlg),
 
             // 마지막 안부 확인 상태 카드
             _buildLastCheckCard(),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vlg),
 
             // 지금 바로 안전 보고하기 버튼
             _buildReportButton(),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vlg),
 
             // 안부 확인 시각 변경 버튼
             Obx(
@@ -123,18 +124,19 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
                     : const Color(0xFFE0F2F1),
               ),
             ),
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.vlg),
 
             // 긴급 도움 요청 버튼
             _buildEmergencyButton(),
             _buildLocationPermissionWarning(),
-            SizedBox(height: AppSpacing.sp6),
+            SizedBox(height: AppSpacing.vlg),
 
             // 광고 배너
             const BannerAdWidget(),
-            SizedBox(height: AppSpacing.sp6),
+            SizedBox(height: AppSpacing.vlg),
           ],
         ),
+      ),
       ),
       ),
     ),

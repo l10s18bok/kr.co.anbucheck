@@ -21,10 +21,17 @@ abstract class AppSpacing {
   /// 수평 페이지 마진 (spacing.5)
   static double get horizontalMargin => sp5;
 
-  /// 작은 간격
+  /// 수평 간격 (.w 기반 — 패딩·마진·아이콘 간격 등)
   static double get xs => 4.w;
   static double get sm => 8.w;
   static double get md => 12.w;
   static double get lg => 16.w;
   static double get xl => 20.w;
+
+  /// 수직 간격 (.h 기반 — SizedBox height, 화면 높이에 비례 스케일)
+  static double get vxs => 4.h;
+  static double get vsm => 8.h;
+  static double get vmd => 12.h;
+  static double get vlg => 16.h;
+  static double get vxl => 20.h;
 }
