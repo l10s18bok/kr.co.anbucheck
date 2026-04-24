@@ -2,3 +2,4 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "Digunakan untuk mendeteksi langkah dan memastikan aktivitas Anda.";
 "NSLocationWhenInUseUsageDescription" = "Hanya digunakan saat Anda meminta bantuan darurat untuk membagikan lokasi Anda saat ini kepada wali agar dapat menjangkau Anda lebih cepat. Lokasi tidak dikumpulkan di waktu lain.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Aplikasi ini tidak menggunakan lokasi latar belakang. Kunci ini diperlukan karena referensi API di SDK lokasi. Lokasi hanya diperoleh sekali di latar depan saat Anda meminta bantuan darurat.";

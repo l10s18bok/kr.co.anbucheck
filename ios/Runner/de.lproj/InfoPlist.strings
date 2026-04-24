@@ -2,3 +2,4 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "Wird verwendet, um Schritte zu erkennen und die Aktivität zu bestätigen.";
 "NSLocationWhenInUseUsageDescription" = "Wird nur bei einem Notrufantrag verwendet, um Ihren aktuellen Standort an Ihre Betreuer zu übermitteln, damit sie Sie schneller erreichen können. Der Standort wird sonst nicht erfasst.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Diese App verwendet keine Hintergrundstandortdaten. Dieser Schlüssel ist aufgrund von API-Referenzen im Standort-SDK erforderlich. Der Standort wird nur einmal im Vordergrund abgerufen, wenn Sie explizit Notfallhilfe anfordern.";

@@ -2,3 +2,4 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "用於偵測步數以確認活動狀態。";
 "NSLocationWhenInUseUsageDescription" = "僅在您請求緊急協助時，向監護人分享您的目前位置，以便他們盡快到達。平時不會收集位置資訊。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "此應用程式不使用背景位置。此鍵由於位置SDK的API引用而必須存在。僅在您明確請求緊急協助時在前景取得一次位置。";
