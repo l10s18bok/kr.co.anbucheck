@@ -67,6 +67,21 @@ class GuardianDashboardController extends BaseController
     return scheduled.isAfter(now);
   }
 
+  /// 오늘 예약시각이 현재로부터 [_missedRecoveryWindow]보다 오래 전에 지났는지.
+  /// 자동 복구 전송은 "방금 놓친 heartbeat"에 한정한다. 새벽 예약 실수나
+  /// 장기간 앱 미실행처럼 10h+ 전에 지난 예약을 지금 전송하는 것은 실제 안부
+  /// 신호로서 의미가 약하고, 서버 기준 이미 미수신 경고가 발송됐을 가능성이 높아
+  /// 오히려 혼란을 준다. 서버 경고 발송 시점이 예약시각 +2h이므로 3h로 설정.
+  static const _missedRecoveryWindow = Duration(hours: 3);
+
+  bool get isScheduleTooOld {
+    final now = DateTime.now();
+    final scheduled = DateTime(
+        now.year, now.month, now.day, heartbeatHour.value, heartbeatMinute.value);
+    if (scheduled.isAfter(now)) return false;
+    return now.difference(scheduled) > _missedRecoveryWindow;
+  }
+
   final _svc = Get.find<GuardianSubjectService>();
   final _tokenDs = TokenLocalDatasource();
   final _userDs = UserRemoteDatasource();
@@ -143,6 +158,7 @@ class GuardianDashboardController extends BaseController
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
     if (Platform.isAndroid && isScheduleInFuture) return;
+    if (Platform.isAndroid && isScheduleTooOld) return;
     await _clearStaleScheduledKey();
     await HeartbeatService().execute(manual: false);
     await _reloadHeartbeatState();
