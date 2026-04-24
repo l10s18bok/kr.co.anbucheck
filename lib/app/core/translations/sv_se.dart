@@ -284,10 +284,10 @@ abstract class SvSe {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Skyddspersonens valmaende ar normalt bekraftat',
     'notifications_level_caution': 'Forsiktighet',
-    'notifications_level_caution_desc': 'Ingen välmåendesignal eller telefonanvändning ännu',
+    'notifications_level_caution_desc': 'Ingen välmåendesignal eller aktivitetsregistrering ännu',
     'notifications_level_warning': 'Varning',
     'notifications_level_warning_desc':
-        'Ingen välmåendesignal eller telefonanvändning flera dagar i rad',
+        'Ingen välmåendesignal eller aktivitetsregistrering flera dagar i rad',
     'notifications_level_urgent': 'Bradskande',
     'notifications_level_urgent_desc': 'Omedelbar kontroll krävs',
     'notifications_level_info': 'Info',
@@ -376,15 +376,15 @@ abstract class SvSe {
     'noti_battery_dead_body':
         'Telefonen verkar ha stangts av pa grund av tomt batteri. Senaste batteriniva: @battery_level%. Den aterstalls efter laddning.',
     'noti_caution_suspicious_body':
-        'En valmaendesignal mottogs men inga tecken pa telefonanvandning. Kontrollera personligen.',
+        'En valmaendesignal mottogs men ingen aktivitetsregistrering har upptackts idag. Kontrollera personligen.',
     'noti_caution_missing_body':
         'Dagens schemalagda valmaendekontroll har inte mottagits an. Kontrollera personligen.',
     'noti_warning_body': 'Valmaendekontroller har missats i foljd. Verifiera personligen.',
     'noti_warning_suspicious_body':
-        'Inga tecken pa telefonanvandning har upptackts i foljd. Personlig verifiering kravs.',
+        'Ingen aktivitetsregistrering har upptackts i foljd. Personlig verifiering kravs.',
     'noti_urgent_body': 'Ingen valmaendekontroll pa @days dag(ar). Omedelbar verifiering kravs.',
     'noti_urgent_suspicious_body':
-        'Inga tecken pa telefonanvandning pa @days dag(ar). Omedelbar verifiering kravs.',
+        'Ingen aktivitetsregistrering pa @days dag(ar). Omedelbar verifiering kravs.',
     'noti_steps_body': '@steps steg gått idag.',
     'noti_emergency_body': 'Den skyddade personen har direkt begärt hjälp. Kontrollera omedelbart.',
     'noti_resolved_body':

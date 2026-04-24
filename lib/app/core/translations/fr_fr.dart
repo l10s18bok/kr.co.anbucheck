@@ -295,10 +295,10 @@ abstract class FrFr {
     'notifications_level_health_desc': 'Le bien-être de la personne protégée a été confirmé',
     'notifications_level_caution': 'Attention',
     'notifications_level_caution_desc':
-        'Aucun signal de bien-être ni activité du téléphone détectés',
+        'Aucun signal de bien-être ni enregistrement d\'activité détecté',
     'notifications_level_warning': 'Alerte',
     'notifications_level_warning_desc':
-        'Aucun signal de bien-être ni activité du téléphone depuis plusieurs jours',
+        'Aucun signal de bien-être ni enregistrement d\'activité depuis plusieurs jours',
     'notifications_level_urgent': 'Urgent',
     'notifications_level_urgent_desc': 'Vérification immédiate requise',
     'notifications_level_info': 'Info',
@@ -392,17 +392,17 @@ abstract class FrFr {
     'noti_battery_dead_body':
         'Le téléphone semble s\'être éteint à cause d\'une batterie déchargée. Dernier niveau de batterie : @battery_level %. Il se rétablira après la recharge.',
     'noti_caution_suspicious_body':
-        'Un signal de bien-être a été reçu, mais aucun signe d\'utilisation du téléphone n\'a été détecté. Veuillez vérifier en personne.',
+        'Un signal de bien-être a été reçu, mais aucun enregistrement d\'activité n\'a été détecté aujourd\'hui. Veuillez vérifier en personne.',
     'noti_caution_missing_body':
         'La vérification de bien-être prévue aujourd\'hui n\'a pas encore été reçue. Veuillez vérifier en personne.',
     'noti_warning_body':
         'Les vérifications de bien-être ont été manquées consécutivement. Veuillez vérifier en personne.',
     'noti_warning_suspicious_body':
-        'Aucune utilisation du téléphone détectée de façon consécutive. Veuillez vérifier en personne.',
+        'Aucun enregistrement d\'activité détecté de façon consécutive. Veuillez vérifier en personne.',
     'noti_urgent_body':
         'Aucune vérification de bien-être depuis @days jour(s). Une vérification immédiate est requise.',
     'noti_urgent_suspicious_body':
-        'Aucune utilisation du téléphone détectée depuis @days jour(s). Une vérification immédiate est requise.',
+        'Aucun enregistrement d\'activité détecté depuis @days jour(s). Une vérification immédiate est requise.',
     'noti_steps_body': "@steps pas effectués aujourd'hui.",
     'noti_emergency_body':
         "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",

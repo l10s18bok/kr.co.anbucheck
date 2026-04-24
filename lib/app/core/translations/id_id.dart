@@ -293,10 +293,10 @@ abstract class IdId {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Kesejahteraan orang yang dilindungi dikonfirmasi normal',
     'notifications_level_caution': 'Perhatian',
-    'notifications_level_caution_desc': 'Belum ada sinyal kesejahteraan atau aktivitas ponsel',
+    'notifications_level_caution_desc': 'Belum ada sinyal kesejahteraan atau catatan aktivitas',
     'notifications_level_warning': 'Peringatan',
     'notifications_level_warning_desc':
-        'Tidak ada sinyal kesejahteraan atau aktivitas ponsel selama beberapa hari berturut-turut',
+        'Tidak ada sinyal kesejahteraan atau catatan aktivitas selama beberapa hari berturut-turut',
     'notifications_level_urgent': 'Mendesak',
     'notifications_level_urgent_desc': 'Perlu pemeriksaan segera sekarang',
     'notifications_level_info': 'Info',
@@ -388,17 +388,17 @@ abstract class IdId {
     'noti_battery_dead_body':
         'Ponsel tampaknya mati karena baterai habis. Level baterai terakhir: @battery_level%. Akan pulih setelah diisi daya.',
     'noti_caution_suspicious_body':
-        'Sinyal kesejahteraan diterima, tetapi tidak ada tanda penggunaan ponsel. Silakan periksa langsung.',
+        'Sinyal kesejahteraan diterima, tetapi hari ini tidak ada catatan aktivitas yang terdeteksi. Silakan periksa langsung.',
     'noti_caution_missing_body':
         'Pemeriksaan kesejahteraan terjadwal hari ini belum diterima. Silakan periksa langsung.',
     'noti_warning_body':
         'Pemeriksaan kesejahteraan terlewat berturut-turut. Silakan verifikasi langsung.',
     'noti_warning_suspicious_body':
-        'Tidak ada tanda penggunaan ponsel terdeteksi berturut-turut. Diperlukan verifikasi langsung.',
+        'Tidak ada catatan aktivitas terdeteksi berturut-turut. Diperlukan verifikasi langsung.',
     'noti_urgent_body':
         'Tidak ada pemeriksaan kesejahteraan selama @days hari. Verifikasi segera diperlukan.',
     'noti_urgent_suspicious_body':
-        'Tidak ada tanda penggunaan ponsel selama @days hari. Diperlukan verifikasi segera.',
+        'Tidak ada catatan aktivitas selama @days hari. Diperlukan verifikasi segera.',
     'noti_steps_body': 'Hari ini berjalan @steps langkah.',
     'noti_emergency_body': 'Orang yang dilindungi langsung meminta bantuan. Harap segera periksa.',
     'noti_resolved_body': 'Pemeriksaan kesejahteraan orang yang dilindungi telah kembali normal.',

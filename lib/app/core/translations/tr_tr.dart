@@ -289,9 +289,9 @@ abstract class TrTr {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Takip edilenin hal hatırı normal şekilde onaylandı',
     'notifications_level_caution': 'Dikkat',
-    'notifications_level_caution_desc': 'Henüz iyilik sinyali veya telefon kullanımı yok',
+    'notifications_level_caution_desc': 'Henüz iyilik sinyali veya aktivite kaydı yok',
     'notifications_level_warning': 'Uyarı',
-    'notifications_level_warning_desc': 'Birkaç gündür iyilik sinyali veya telefon kullanımı yok',
+    'notifications_level_warning_desc': 'Birkaç gündür iyilik sinyali veya aktivite kaydı yok',
     'notifications_level_urgent': 'Acil',
     'notifications_level_urgent_desc': 'Hemen kontrol gerekli',
     'notifications_level_info': 'Bilgi',
@@ -380,15 +380,15 @@ abstract class TrTr {
     'noti_battery_dead_body':
         'Telefon pil bitmesi nedeniyle kapanmış görünüyor. Son pil seviyesi: %@battery_level. Şarj edildikten sonra otomatik olarak düzelecektir.',
     'noti_caution_suspicious_body':
-        'Hal hatır sinyali alındı ancak telefon kullanım belirtisi yok. Lütfen bizzat kontrol edin.',
+        'Hal hatır sinyali alındı ancak bugün aktivite kaydı tespit edilmedi. Lütfen bizzat kontrol edin.',
     'noti_caution_missing_body':
         'Bugün planlanan hal hatır kontrolü henüz alınmadı. Lütfen bizzat kontrol edin.',
     'noti_warning_body': 'Hal hatır kontrolleri art arda kaçırıldı. Lütfen bizzat doğrulayın.',
     'noti_warning_suspicious_body':
-        'Telefon kullanım belirtisi art arda tespit edilmedi. Bizzat doğrulama gereklidir.',
+        'Aktivite kaydı art arda tespit edilmedi. Bizzat doğrulama gereklidir.',
     'noti_urgent_body': '@days gündür hal hatır kontrolü yok. Acil doğrulama gerekli.',
     'noti_urgent_suspicious_body':
-        '@days gündür telefon kullanım belirtisi tespit edilmedi. Acil doğrulama gereklidir.',
+        '@days gündür aktivite kaydı tespit edilmedi. Acil doğrulama gereklidir.',
     'noti_steps_body': 'Bugün @steps adım atıldı.',
     'noti_emergency_body': 'Korunan kişi doğrudan yardım istedi. Lütfen hemen kontrol edin.',
     'noti_resolved_body': 'Korunan kişinin sağlık kontrolü normale döndü.',

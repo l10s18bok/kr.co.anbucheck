@@ -288,9 +288,9 @@ abstract class EnUs {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'Subject\'s wellness confirmed normally',
     'notifications_level_caution': 'Caution',
-    'notifications_level_caution_desc': 'No wellness signal yet or no phone activity detected',
+    'notifications_level_caution_desc': 'No wellness signal yet or no activity record detected',
     'notifications_level_warning': 'Warning',
-    'notifications_level_warning_desc': 'No wellness signal or phone activity for consecutive days',
+    'notifications_level_warning_desc': 'No wellness signal or activity record for consecutive days',
     'notifications_level_urgent': 'Urgent',
     'notifications_level_urgent_desc': 'Immediate check needed now',
     'notifications_level_info': 'Info',
@@ -378,15 +378,15 @@ abstract class EnUs {
     'noti_battery_dead_body':
         'Phone appears to have shut down due to a dead battery. Last battery level: @battery_level%. It will recover after charging.',
     'noti_caution_suspicious_body':
-        'A wellness signal was received, but there are no signs of phone usage. Please check in person.',
+        'A wellness signal was received, but no activity record has been detected today. Please check in person.',
     'noti_caution_missing_body':
         "Today's scheduled wellness check has not been received yet. Please check in person.",
     'noti_warning_body': 'Wellness checks have been missed consecutively. Please verify in person.',
     'noti_warning_suspicious_body':
-        'No signs of phone usage have been detected consecutively. Please verify in person.',
+        'No activity record has been detected for consecutive days. Please verify in person.',
     'noti_urgent_body': 'No wellness check for @days day(s). Immediate verification is required.',
     'noti_urgent_suspicious_body':
-        'No signs of phone usage for @days day(s). Immediate verification is required.',
+        'No activity record for @days day(s). Immediate verification is required.',
     'noti_steps_body': '@steps steps taken today.',
     'noti_emergency_body': 'The subject has directly requested help. Please check immediately.',
     'noti_resolved_body': 'The subject\'s wellness check has returned to normal.',

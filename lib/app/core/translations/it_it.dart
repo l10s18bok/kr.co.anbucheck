@@ -292,10 +292,10 @@ abstract class ItIt {
     'notifications_level_health': 'Normale',
     'notifications_level_health_desc': "Il benessere dell'assistito è stato confermato normalmente",
     'notifications_level_caution': 'Attenzione',
-    'notifications_level_caution_desc': 'Nessun segnale di benessere né attività del telefono',
+    'notifications_level_caution_desc': 'Nessun segnale di benessere né registro di attività',
     'notifications_level_warning': 'Avviso',
     'notifications_level_warning_desc':
-        'Nessun segnale di benessere né attività del telefono per più giorni',
+        'Nessun segnale di benessere né registro di attività per più giorni',
     'notifications_level_urgent': 'Urgente',
     'notifications_level_urgent_desc': 'Verifica immediata necessaria',
     'notifications_level_info': 'Info',
@@ -390,17 +390,17 @@ abstract class ItIt {
     'noti_battery_dead_body':
         'Il telefono sembra essersi spento per batteria scarica. Ultimo livello batteria: @battery_level %. Si ripristinerà dopo la ricarica.',
     'noti_caution_suspicious_body':
-        'È stato ricevuto un segnale di benessere, ma non ci sono segni di utilizzo del telefono. Verifichi di persona.',
+        'È stato ricevuto un segnale di benessere, ma oggi non è stato rilevato alcun registro di attività. Verifichi di persona.',
     'noti_caution_missing_body':
         'La verifica di benessere prevista per oggi non è ancora arrivata. Verifichi di persona.',
     'noti_warning_body':
         'Le verifiche di benessere sono state mancate consecutivamente. È necessaria una verifica di persona.',
     'noti_warning_suspicious_body':
-        'Nessun segno di utilizzo del telefono rilevato consecutivamente. È necessaria una verifica di persona.',
+        'Nessun registro di attività rilevato consecutivamente. È necessaria una verifica di persona.',
     'noti_urgent_body':
         'Nessuna verifica di benessere da @days giorno/i. È necessaria una verifica immediata.',
     'noti_urgent_suspicious_body':
-        'Nessun segno di utilizzo del telefono da @days giorno/i. È necessaria una verifica immediata.',
+        'Nessun registro di attività da @days giorno/i. È necessaria una verifica immediata.',
     'noti_steps_body': '@steps passi percorsi oggi.',
     'noti_emergency_body':
         "La persona assistita ha richiesto direttamente aiuto. Verificare immediatamente.",

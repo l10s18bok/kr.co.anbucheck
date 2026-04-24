@@ -16,9 +16,9 @@
 
 | 용어 | 값 | 의미 |
 |------|-----|------|
-| `suspicious` | `true` | 걸음도 없고 worker fire 시점 화면도 깨어있지 않음 — 폰을 아무도 만지지 않은 것으로 의심되는 상태 |
-| `suspicious` | `false` | 걸음이 있거나(활동 확정) 또는 worker fire 시점 화면이 깨어있음(사용자가 폰을 깨워 Doze 해제 = 사용 흔적) — 폰 사용 확인 |
-| `isInteractiveAtTrigger` | `true`/`false` | worker 콜백이 `ScreenState.isInteractive()`로 조회한 Android `PowerManager.isInteractive()` 값. 포그라운드 호출부는 앱 포그라운드 자체가 interactive 증거이므로 항상 `true` 명시 전달 |
+| `suspicious` | `true` | 오늘 걸음 기록 없음 + worker fire 시점 화면 꺼짐 — 활동 증거 부재 (걸음 누적 + 발화 시점 스냅샷 모두 활동 신호 없음) |
+| `suspicious` | `false` | 오늘 걸음 있음(하루 활동 확정) 또는 worker fire 시점 화면 깨어있음(발화 시점 기기 사용 중) — 활동 기록 확인 |
+| `isInteractiveAtTrigger` | `true`/`false` | worker 콜백이 `ScreenState.isInteractive()`로 조회한 Android `PowerManager.isInteractive()` 값. worker fire **순간**의 1회 스냅샷이며 하루 전체 사용 여부가 아님. 포그라운드 호출부는 앱 포그라운드 자체가 interactive 증거이므로 항상 `true` 명시 전달 |
 
 
 ## 1. 클라이언트 — Heartbeat 수집 및 전송
@@ -49,7 +49,7 @@ flowchart TD
     StepsCheck -->|NO 또는 null| ScreenCheck2{isInteractiveAtTrigger = true?}
     ScreenCheck --> ScreenCheck2
     ScreenCheck2 -->|YES| Normal
-    ScreenCheck2 -->|NO 또는 null| Suspicious[suspicious = true<br/>걸음 없음 + Doze maintenance<br/>사용 흔적 없음]
+    ScreenCheck2 -->|NO 또는 null| Suspicious[suspicious = true<br/>걸음 없음 + 발화 시점 기기 미사용<br/>활동 증거 부재]
 
     Battery --> BattCheck{배터리 ≤ 20%?}
     BattCheck -->|YES| SubjectNoti[대상자 로컬 알림<br/>📱 충전이 필요합니다<br/>배터리가 부족합니다<br/>충전하지 않으면 안부 확인이<br/>중단될 수 있습니다]
@@ -99,7 +99,7 @@ flowchart TD
     AlertActive -->|YES| SuspiciousFirst{suspicious?}
 
     SuspiciousFirst -->|false| Resolve[경고 완전 해소<br/>보호자 Push 알림<br/>✅ 대상자의 안부 확인이<br/>정상 복귀되었습니다]
-    SuspiciousFirst -->|true| Downgrade[경고 등급 하향<br/>warning / urgent → caution<br/>정상 복귀 알림 없음<br/>폰 신호만 수신, 사용 흔적 없음]
+    SuspiciousFirst -->|true| Downgrade[경고 등급 하향<br/>warning / urgent → caution<br/>정상 복귀 알림 없음<br/>안부 신호만 수신, 활동 기록 없음]
 
     AlertActive -->|NO| CheckSuspicious{suspicious?}
     Resolve --> StatusNormal([✅ 정상<br/>센서 움직임 감지 — 사용 확인])

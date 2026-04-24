@@ -292,10 +292,10 @@ abstract class PtBr {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'O bem-estar do protegido foi confirmado normalmente',
     'notifications_level_caution': 'Atenção',
-    'notifications_level_caution_desc': 'Ainda sem sinal de bem-estar ou atividade do telefone',
+    'notifications_level_caution_desc': 'Ainda sem sinal de bem-estar ou registro de atividade',
     'notifications_level_warning': 'Alerta',
     'notifications_level_warning_desc':
-        'Sem sinal de bem-estar ou atividade do telefone por vários dias',
+        'Sem sinal de bem-estar ou registro de atividade por vários dias',
     'notifications_level_urgent': 'Urgente',
     'notifications_level_urgent_desc': 'Verificação imediata necessária',
     'notifications_level_info': 'Info',
@@ -388,17 +388,17 @@ abstract class PtBr {
     'noti_battery_dead_body':
         'O celular parece ter desligado por bateria esgotada. Último nível de bateria: @battery_level%. Será restaurado após o carregamento.',
     'noti_caution_suspicious_body':
-        'Um sinal de bem-estar foi recebido, mas não há sinais de uso do celular. Por favor, verifique pessoalmente.',
+        'Um sinal de bem-estar foi recebido, mas hoje não foi detectado nenhum registro de atividade. Por favor, verifique pessoalmente.',
     'noti_caution_missing_body':
         'A verificação de bem-estar agendada para hoje ainda não foi recebida. Por favor, verifique pessoalmente.',
     'noti_warning_body':
         'Verificações de bem-estar foram perdidas consecutivamente. Por favor, verifique pessoalmente.',
     'noti_warning_suspicious_body':
-        'Nenhum sinal de uso do celular detectado consecutivamente. Verificação pessoal necessária.',
+        'Nenhum registro de atividade detectado consecutivamente. Verificação pessoal necessária.',
     'noti_urgent_body':
         'Sem verificação de bem-estar há @days dia(s). Verificação imediata necessária.',
     'noti_urgent_suspicious_body':
-        'Sem sinais de uso do celular por @days dia(s). Verificação imediata necessária.',
+        'Sem registro de atividade por @days dia(s). Verificação imediata necessária.',
     'noti_steps_body': '@steps passos dados hoje.',
     'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
     'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',

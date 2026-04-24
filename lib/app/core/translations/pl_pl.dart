@@ -291,10 +291,10 @@ abstract class PlPl {
     'notifications_level_health': 'Normalny',
     'notifications_level_health_desc': 'Samopoczucie podopiecznego potwierdzone prawidlowo',
     'notifications_level_caution': 'Uwaga',
-    'notifications_level_caution_desc': 'Brak sygnału o samopoczuciu lub aktywności telefonu',
+    'notifications_level_caution_desc': 'Brak sygnału o samopoczuciu lub zapisu aktywności',
     'notifications_level_warning': 'Ostrzezenie',
     'notifications_level_warning_desc':
-        'Brak sygnału o samopoczuciu lub aktywności telefonu przez kilka dni z rzędu',
+        'Brak sygnału o samopoczuciu lub zapisu aktywności przez kilka dni z rzędu',
     'notifications_level_urgent': 'Pilne',
     'notifications_level_urgent_desc': 'Natychmiastowa kontrola wymagana',
     'notifications_level_info': 'Informacja',
@@ -384,17 +384,17 @@ abstract class PlPl {
     'noti_battery_dead_body':
         'Telefon wydaje sie byc wylaczony z powodu rozladowanej baterii. Ostatni poziom baterii: @battery_level%. Przywroci sie po naladowaniu.',
     'noti_caution_suspicious_body':
-        'Odebrano sygnal samopoczucia, ale brak oznak korzystania z telefonu. Prosze sprawdzic osobiscie.',
+        'Odebrano sygnal samopoczucia, ale dzis nie wykryto zapisu aktywności. Prosze sprawdzic osobiscie.',
     'noti_caution_missing_body':
         'Zaplanowane na dzisiaj sprawdzenie samopoczucia nie zostalo jeszcze odebrane. Prosze sprawdzic osobiscie.',
     'noti_warning_body':
         'Sprawdzenia samopoczucia zostaly pominiete z rzedu. Prosze zweryfikowac osobiscie.',
     'noti_warning_suspicious_body':
-        'Nie wykryto kolejno oznak uzycia telefonu. Wymagana osobista weryfikacja.',
+        'Nie wykryto kolejno zapisu aktywności. Wymagana osobista weryfikacja.',
     'noti_urgent_body':
         'Brak sprawdzenia samopoczucia od @days dni. Wymagana natychmiastowa weryfikacja.',
     'noti_urgent_suspicious_body':
-        'Brak oznak uzycia telefonu od @days dni. Wymagana natychmiastowa weryfikacja.',
+        'Brak zapisu aktywności od @days dni. Wymagana natychmiastowa weryfikacja.',
     'noti_steps_body': 'Dzisiaj wykonano @steps krokow.',
     'noti_emergency_body':
         'Osoba pod opieką bezpośrednio poprosiła o pomoc. Proszę natychmiast sprawdzić.',

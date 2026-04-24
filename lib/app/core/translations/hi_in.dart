@@ -288,9 +288,9 @@ abstract class HiIn {
     'notifications_level_health': 'सामान्य',
     'notifications_level_health_desc': 'संरक्षित व्यक्ति की कुशलता सामान्य रूप से पुष्ट',
     'notifications_level_caution': 'सावधानी',
-    'notifications_level_caution_desc': 'अभी तक कोई कुशल संकेत या फोन उपयोग नहीं मिला',
+    'notifications_level_caution_desc': 'अभी तक कोई कुशल संकेत या गतिविधि रिकॉर्ड नहीं मिला',
     'notifications_level_warning': 'चेतावनी',
-    'notifications_level_warning_desc': 'कई दिनों से कोई कुशल संकेत या फोन उपयोग नहीं मिला',
+    'notifications_level_warning_desc': 'कई दिनों से कोई कुशल संकेत या गतिविधि रिकॉर्ड नहीं मिला',
     'notifications_level_urgent': 'अत्यावश्यक',
     'notifications_level_urgent_desc': 'अभी तुरंत जाँच आवश्यक',
     'notifications_level_info': 'जानकारी',
@@ -377,15 +377,15 @@ abstract class HiIn {
     'noti_battery_dead_body':
         'फोन बैटरी खत्म होने से बंद हो गया लगता है। अंतिम बैटरी स्तर: @battery_level%। चार्ज करने के बाद स्वतः ठीक हो जाएगा।',
     'noti_caution_suspicious_body':
-        'कुशलता संकेत प्राप्त हुआ, लेकिन फोन उपयोग के कोई संकेत नहीं हैं। कृपया व्यक्तिगत रूप से जांचें।',
+        'कुशलता संकेत प्राप्त हुआ, लेकिन आज कोई गतिविधि रिकॉर्ड नहीं मिला। कृपया व्यक्तिगत रूप से जांचें।',
     'noti_caution_missing_body':
         'आज की निर्धारित कुशलता जांच अभी तक प्राप्त नहीं हुई है। कृपया व्यक्तिगत रूप से जांचें।',
     'noti_warning_body': 'कुशलता जांच लगातार छूट रही है। कृपया व्यक्तिगत रूप से सत्यापित करें।',
     'noti_warning_suspicious_body':
-        'लगातार फोन उपयोग के संकेत नहीं मिले। व्यक्तिगत सत्यापन आवश्यक है।',
+        'लगातार गतिविधि रिकॉर्ड नहीं मिला। व्यक्तिगत सत्यापन आवश्यक है।',
     'noti_urgent_body': '@days दिनों से कुशलता जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
     'noti_urgent_suspicious_body':
-        '@days दिनों से फोन उपयोग के कोई संकेत नहीं। तत्काल सत्यापन आवश्यक है।',
+        '@days दिनों से कोई गतिविधि रिकॉर्ड नहीं मिला। तत्काल सत्यापन आवश्यक है।',
     'noti_steps_body': 'आज @steps कदम चले।',
     'noti_emergency_body': 'संरक्षित व्यक्ति ने सीधे मदद का अनुरोध किया है। कृपया तुरंत जांचें।',
     'noti_resolved_body': 'संरक्षित व्यक्ति की स्वास्थ्य जाँच सामान्य हो गई है।',

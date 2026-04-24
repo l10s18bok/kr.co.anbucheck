@@ -292,10 +292,10 @@ abstract class EsEs {
     'notifications_level_health': 'Normal',
     'notifications_level_health_desc': 'El bienestar de la persona protegida ha sido confirmado',
     'notifications_level_caution': 'Precaución',
-    'notifications_level_caution_desc': 'Aún no hay señal de bienestar ni actividad del teléfono',
+    'notifications_level_caution_desc': 'Aún no hay señal de bienestar ni registro de actividad',
     'notifications_level_warning': 'Alerta',
     'notifications_level_warning_desc':
-        'Sin señal de bienestar ni actividad del teléfono durante varios días',
+        'Sin señal de bienestar ni registro de actividad durante varios días',
     'notifications_level_urgent': 'Urgente',
     'notifications_level_urgent_desc': 'Se requiere verificación inmediata',
     'notifications_level_info': 'Información',
@@ -388,17 +388,17 @@ abstract class EsEs {
     'noti_battery_dead_body':
         'El teléfono parece haberse apagado por batería agotada. Último nivel de batería: @battery_level %. Se recuperará después de cargar.',
     'noti_caution_suspicious_body':
-        'Se recibió una señal de bienestar, pero no hay indicios de uso del teléfono. Por favor, verifique en persona.',
+        'Se recibió una señal de bienestar, pero hoy no se ha detectado ningún registro de actividad. Por favor, verifique en persona.',
     'noti_caution_missing_body':
         'La verificación de bienestar programada para hoy aún no se ha recibido. Por favor, verifique en persona.',
     'noti_warning_body':
         'Las verificaciones de bienestar se han perdido consecutivamente. Por favor, verifique en persona.',
     'noti_warning_suspicious_body':
-        'No se detecta uso del teléfono de forma consecutiva. Se requiere verificación en persona.',
+        'No se detecta registro de actividad de forma consecutiva. Se requiere verificación en persona.',
     'noti_urgent_body':
         'Sin verificación de bienestar durante @days día(s). Se requiere verificación inmediata.',
     'noti_urgent_suspicious_body':
-        'Sin señales de uso del teléfono durante @days día(s). Se requiere verificación inmediata.',
+        'Sin registro de actividad durante @days día(s). Se requiere verificación inmediata.',
     'noti_steps_body': '@steps pasos caminados hoy.',
     'noti_emergency_body':
         'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',

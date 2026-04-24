@@ -294,10 +294,10 @@ abstract class DeDe {
     'notifications_level_health_desc': 'Wohlbefinden der Schutzperson wurde bestätigt',
     'notifications_level_caution': 'Achtung',
     'notifications_level_caution_desc':
-        'Noch kein Wohlbefindenssignal oder keine Handynutzung erkannt',
+        'Noch kein Wohlbefindenssignal oder keine Aktivitätsaufzeichnung erkannt',
     'notifications_level_warning': 'Warnung',
     'notifications_level_warning_desc':
-        'Mehrere Tage in Folge kein Wohlbefindenssignal oder keine Handynutzung erkannt',
+        'Mehrere Tage in Folge kein Wohlbefindenssignal oder keine Aktivitätsaufzeichnung erkannt',
     'notifications_level_urgent': 'Dringend',
     'notifications_level_urgent_desc': 'Sofortige Überprüfung erforderlich',
     'notifications_level_info': 'Info',
@@ -388,17 +388,17 @@ abstract class DeDe {
     'noti_battery_dead_body':
         'Das Telefon scheint wegen eines leeren Akkus ausgeschaltet zu sein. Letzter Akkustand: @battery_level %. Es wird nach dem Laden automatisch wiederhergestellt.',
     'noti_caution_suspicious_body':
-        'Ein Wohlbefindens-Signal wurde empfangen, aber es gibt keine Anzeichen für Telefonnutzung. Bitte persönlich nachsehen.',
+        'Ein Wohlbefindens-Signal wurde empfangen, aber heute wurde keine Aktivitätsaufzeichnung erkannt. Bitte persönlich nachsehen.',
     'noti_caution_missing_body':
         'Die geplante Wohlbefindens-Prüfung für heute steht noch aus. Bitte persönlich nachsehen.',
     'noti_warning_body':
         'Wohlbefindens-Prüfungen wurden hintereinander versäumt. Bitte persönlich überprüfen.',
     'noti_warning_suspicious_body':
-        'Wiederholt keine Anzeichen einer Telefonnutzung festgestellt. Bitte persönlich überprüfen.',
+        'Wiederholt keine Aktivitätsaufzeichnung festgestellt. Bitte persönlich überprüfen.',
     'noti_urgent_body':
         'Seit @days Tag(en) keine Wohlbefindens-Prüfung. Sofortige Überprüfung erforderlich.',
     'noti_urgent_suspicious_body':
-        'Seit @days Tag(en) keine Anzeichen einer Telefonnutzung. Sofortige Überprüfung erforderlich.',
+        'Seit @days Tag(en) keine Aktivitätsaufzeichnung. Sofortige Überprüfung erforderlich.',
     'noti_steps_body': 'Heute @steps Schritte gegangen.',
     'noti_emergency_body':
         'Die betreute Person hat direkt um Hilfe gebeten. Bitte sofort überprüfen.',

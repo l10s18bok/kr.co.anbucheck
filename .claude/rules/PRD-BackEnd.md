@@ -183,8 +183,9 @@ heartbeat 수신 → last_seen 갱신
                  ├─ 2회 (suspicious_count=2) → 경고(warning) 등급 + `warning_suspicious` + 보호자 Push (warning/urgent 없을 때만)
                  ├─ 3회+ (suspicious_count≥3) → 긴급(urgent) 등급 + `urgent_suspicious` + 보호자 Push (매일 반복)
                  └─ 보호자 경고 클리어 시 suspicious_count 리셋 → 다음 suspicious부터 1차 재시작
-               ※ suspicious 경로는 heartbeat는 수신되었으나 폰 사용 흔적이 없는 경우이므로
-                  scheduler의 미수신 경로(`warning`/`urgent`)와 별도 문구로 분기됨
+               ※ suspicious 경로는 heartbeat는 수신되었으나 활동 기록(걸음 + 발화 시점
+                  기기 사용)이 없는 경우이므로 scheduler의 미수신 경로(`warning`/`urgent`)와
+                  별도 문구로 분기됨
 
 [heartbeat 미수신 시 (기기별 고정 시각 + 2시간 경과 시 체크)]
 지정 시각 + 2시간 내 미수신 대상자 감지 (기본: 18:00 → 20:00 체크)
@@ -244,7 +245,7 @@ heartbeat 수신 → last_seen 갱신
 
 // 긴급 등급 — 즉시 확인 필요
 {
-  "notification": { "title": "🚨 긴급: 대상자 확인 필요", "body": "안부 확인이 없으며 마지막 확인 시 폰 사용 흔적도 없었습니다. 즉시 확인이 필요합니다." },
+  "notification": { "title": "🚨 긴급: 대상자 확인 필요", "body": "N일 연속 활동 기록이 감지되지 않습니다. 즉시 확인이 필요합니다." },
   "data": { "type": "alert_urgent", "subject_user_id": "1", "invite_code": "K7M-4PXR" }
 }
 
@@ -524,7 +525,7 @@ Response: 200 OK
     - suspicious_count=2 → warning 등급 + `message_key="warning_suspicious"` + `push_warning(reason="suspicious")` (warning/urgent 없을 때만)
     - suspicious_count≥3 → urgent 등급 + `message_key="urgent_suspicious"` + `push_urgent(reason="suspicious")` (매일 반복, days_inactive 반영)
     - 보호자 경고 클리어 시 suspicious_count 리셋 → 다음 suspicious부터 1차 재시작
-    - suspicious 경로는 scheduler 미수신 경로(`warning`/`urgent`)와 별도 문구("폰 사용 흔적 없음")로 분리됨
+    - suspicious 경로는 scheduler 미수신 경로(`warning`/`urgent`)와 별도 문구("활동 기록 없음" — 걸음 0 + 발화 시점 기기 미사용)로 분리됨
 
 
 ### 4.7 긴급 도움 요청 (대상자 전용)
@@ -1542,12 +1543,12 @@ message_params TEXT,          -- JSON 파라미터 (예: '{"days": 3}')
 | `manual_report` | info | 수동 안부 확인 | - |
 | `battery_low` | info | 배터리 20% 미만 | - |
 | `battery_dead` | info | 배터리 방전 추정 | `{"battery_level": 15}` |
-| `caution_suspicious` | caution | 폰 사용 흔적 없음 (suspicious=true 1회) | - |
+| `caution_suspicious` | caution | 활동 기록 없음 (suspicious=true 1회) | - |
 | `caution_missing` | caution | 안부 미수신 1회 (scheduler) | - |
 | `warning` | warning | 연속 미수신 2회 (scheduler) | - |
-| `warning_suspicious` | warning | 폰 사용 흔적 연속 없음 (suspicious=true 2회) | - |
+| `warning_suspicious` | warning | 활동 기록 연속 없음 (suspicious=true 2회) | - |
 | `urgent` | urgent | 긴급 미수신 3회+ (scheduler) | `{"days": 3}` |
-| `urgent_suspicious` | urgent | 폰 사용 흔적 연속 없음 (suspicious=true 3회+) | `{"days": 3}` |
+| `urgent_suspicious` | urgent | 활동 기록 연속 없음 (suspicious=true 3회+) | `{"days": 3}` |
 | `steps` | health | 걸음수 활동 정보 ("오늘 N보를 걸으셨습니다") | `{"steps": "342"}` |
 | `emergency` | urgent | 긴급 도움 요청 (대상자 직접) | - |
 | `cleared_by_guardian` | info | 보호자 수동 경고 클리어 (다른 보호자에게 발송) | - |
