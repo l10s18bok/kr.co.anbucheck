@@ -131,7 +131,7 @@ Splash → 버전 체크 → 플랫폼 분기
 
 - **매일 고정 시각** heartbeat 전송 (기본 오후 6:00, 보호자가 대상자별 변경 가능)
 - 보호 대상자 앱이 **상시 실행되지 않는** 구조 — 지정 시각에만 잠깐 깨어나 작업 후 종료
-- **걸음수(steps_delta)** 로 suspicious 판정: `steps_delta > 0 → false`, `null 또는 0 → true`
+- **suspicious 판정 우선순위**(자동 경로): (1) `steps_delta > 0` → false, (2) `isInteractiveAtTrigger=true`(worker fire 시점 화면 깨어있음 = 사용자가 폰을 깨워 Doze 해제) → false, (3) 그 외 → true. 수동 보고는 무조건 false. 포그라운드 호출부는 `isInteractiveAtTrigger: true`를 명시 전달
 - 보호자 앱은 heartbeat를 전송하지 않으므로 이 메커니즘이 동작하지 않음
 
 ```
@@ -332,23 +332,43 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 - 서버가 heartbeat를 수신했다는 것 자체가 **폰이 정상 동작 중**이라는 증거
 - 지정 시각 + 2시간 내 heartbeat 미수신 → 경고 발생 (기본: 18:00 미수신 → 20:00 "주의" -> 2번째 "경고" -> 3번이상 "긴급")
 
-**활동 지표: 걸음수(steps_delta) 단일 판정**
+**활동 지표: 걸음수 + 화면 interactive 상태 복합 판정**
 
 heartbeat가 정상 수신되더라도 사용자가 실제로 활동 중인지를 추가 판별한다.
 (백그라운드에서 heartbeat가 자동 전송되므로, 사용자가 의식불명 상태여도 heartbeat는 수신될 수 있음)
 
 ```
-[heartbeat 실행 시]
+[heartbeat 실행 시 — 자동 경로]
     │
-    └─ 걸음수 확인 (pedometer_2 패키지)
-        · **오늘 자정 ~ 현재 시각** 누적 걸음수(steps_delta) 조회
-        · steps_delta > 0   → suspicious = false (활동 확인)
-        · steps_delta == 0 또는 null → suspicious = true (활동 의심)
-        · manual = true (수동 보고)  → suspicious = false (항상)
+    ├─ 1순위: 걸음수 확인 (pedometer_2 패키지)
+    │   · **오늘 자정 ~ 현재 시각** 누적 걸음수(steps_delta) 조회
+    │   · steps_delta > 0 → suspicious = false (걸음 = 활동 증거 확정)
+    │
+    ├─ 2순위: 화면 interactive 상태 확인 (screen_state 로컬 플러그인)
+    │   · worker 콜백에서 execute 호출 직전 ScreenState.isInteractive() 1회 조회
+    │   · PowerManager.isInteractive() 네이티브 값 반환
+    │   · isInteractiveAtTrigger = true → suspicious = false
+    │     (Doze maintenance로는 화면이 깨어있지 않다 → 사용자가 폰을 깨워
+    │      Doze 해제 후 worker가 fire됐음을 의미 → 폰 사용 흔적)
+    │
+    ├─ 그 외 (steps=0/null AND isInteractive=false/null)
+    │   · suspicious = true (Doze maintenance window 자연 fire, 걸음도 없음)
+    │
+    └─ manual = true (수동 보고) → suspicious = false (항상)
+
+[포그라운드 호출부는 무조건 isInteractiveAtTrigger: true 명시 전달]
+    · 홈 자동 전송(_checkAndSendHeartbeat)·수동 보고(reportNow)·
+      G+S 활성화 첫 전송·FCM gs_deadman 탭 재전송
+    · 앱이 포그라운드에 있다는 것 자체가 interactive 확정 증거
+    · 2순위 분기에서 즉시 false로 떨어져 "걸음수만 null일 때 엉뚱하게 suspicious=true"
+      결과를 방지
 ```
 
 > **가속도/자이로/지자기 센서를 사용하지 않는 이유:**
-> Android 9+ 공식 제한(Behavior changes: Android 9)에 따라, 연속 리포팅 모드 센서(가속도계·자이로스코프·지자기)는 백그라운드 앱에서 이벤트를 수신할 수 없다. WorkManager 워커는 백그라운드 컨텍스트에서 실행되므로 이 세 센서는 항상 null을 반환한다. 반면 걸음수(TYPE_STEP_COUNTER)는 하드웨어 FIFO 배칭 방식이라 백그라운드 제한을 받지 않으며 워커에서도 정상 수집된다. 따라서 백그라운드 suspicious 판정에서 유일하게 신뢰할 수 있는 지표는 걸음수뿐이며, sensors_plus 패키지는 제거됐다.
+> Android 9+ 공식 제한(Behavior changes: Android 9)에 따라, 연속 리포팅 모드 센서(가속도계·자이로스코프·지자기)는 백그라운드 앱에서 이벤트를 수신할 수 없다. WorkManager 워커는 백그라운드 컨텍스트에서 실행되므로 이 세 센서는 항상 null을 반환한다. 반면 걸음수(TYPE_STEP_COUNTER)는 하드웨어 FIFO 배칭 방식이라 백그라운드 제한을 받지 않으며 워커에서도 정상 수집된다. 따라서 sensors_plus 패키지는 제거됐다. 센서 기반 "폰을 만졌는가" 신호의 공백은 `ScreenState.isInteractive()`(Doze 해제 여부)로 대체한다 — 센서 이벤트 스트림 없이도 worker fire 시점의 사용자 개입 여부만 1bit로 판정할 수 있어 suspicious false positive를 효과적으로 줄인다.
+
+> **screen_state 로컬 플러그인:**
+> `packages/screen_state/`에 Android 전용 FlutterPlugin으로 구현. `PowerManager.isInteractive()`를 1회 호출해 반환하는 경량 MethodChannel(`kr.co.anbucheck/screen_state`). 커스텀 MethodChannel을 `MainActivity`에 등록하면 WorkManager가 spawn하는 백그라운드 FlutterEngine에서 동작하지 않으므로, `GeneratedPluginRegistrant`가 자동 등록하는 pub 패키지 형태의 로컬 플러그인으로 분리했다. iOS/기타 플랫폼 호출 및 플러그인 실패는 항상 `true`를 반환해 기존 걸음수 판정으로 위임(false positive 방지).
 
 **의심 상태(suspicious) 발생 시 서버 동작:**
 - suspicious 플래그를 서버에 기록
@@ -385,20 +405,34 @@ void heartbeatWorkerCallback() {
   Workmanager().executeTask((taskName, inputData) async {
     // 0. 역할 확인 (대상자 모드만 실행)
     // 1. 당일 이미 전송 여부 확인 (lastHeartbeatDate)
-    // 2. 미전송 시 → heartbeat 전송 (센서 + API)
-    // 3. 다음 날 동일 시각으로 재예약
+    // 2. ScreenState.isInteractive() 조회 (화면 깨어있음 여부)
+    // 3. HeartbeatService().execute(isInteractiveAtTrigger: ...)로 전달
+    // 4. 다음 날 동일 시각으로 재예약
     return true;
   });
 }
 
-// 공통 heartbeat 전송 로직 (Android/iOS 동일 Dart 코드)
-Future<void> sendHeartbeat({bool manual = false}) async {
-  // 1. 걸음수 조회 → suspicious 판정
+// 공통 heartbeat 전송 로직 (worker/포그라운드 공통 Dart 코드)
+Future<void> sendHeartbeat({
+  bool manual = false,
+  bool? isInteractiveAtTrigger,  // worker=실측값, 포그라운드=true 명시 전달
+}) async {
+  // 1. 걸음수 조회
   final stepsDelta = await getStepsDelta();  // 오늘 자정 ~ 현재 누적 (권한 거부 시 null)
-  final suspicious = manual ? false : (stepsDelta == null || stepsDelta == 0);
 
-  // 2. heartbeat 데이터 구성 → 서버 전송
-  // (가속도/자이로 센서는 Android 9+ 백그라운드 제한으로 WorkManager에서 항상 null → 미사용)
+  // 2. suspicious 판정 우선순위:
+  //    (1) manual → false, (2) steps > 0 → false,
+  //    (3) isInteractiveAtTrigger=true → false (Doze 해제 = 폰 사용 흔적),
+  //    (4) 그 외 → true
+  bool suspicious;
+  if (manual) suspicious = false;
+  else if (stepsDelta != null && stepsDelta > 0) suspicious = false;
+  else if (isInteractiveAtTrigger == true) suspicious = false;
+  else suspicious = true;
+
+  // 3. heartbeat 데이터 구성 → 서버 전송
+  // (가속도/자이로 센서는 Android 9+ 백그라운드 제한으로 WorkManager에서 항상 null → 미사용,
+  //  "폰 사용 흔적" 신호는 ScreenState.isInteractive()로 대체)
 }
 ```
 
@@ -565,9 +599,9 @@ Day 8+: 추가 알림 없음 (향후 정책 변경 가능)
 - `steps_delta`:
   - 자동/수동 공통 → **오늘 자정 ~ 현재 시각** 누적 걸음수 (권한 허용 시), 거부 시 null
   - 활동 정보 알림 중복 방지는 **서버 가드** 담당 (`manual=false AND steps_delta is not None AND steps_delta > 0`일 때만 생성). 클라이언트는 수동 보고에서도 실제 걸음수를 실어 보내고, 보호자 대시보드의 일별 걸음수 이력(`heartbeat_logs`) 정확도를 확보한다.
-- `suspicious`: 앱에서 판정 후 전송 (steps_delta > 0이면 항상 false, 수동 보고는 항상 false)
+- `suspicious`: 앱에서 판정 후 전송 (우선순위: manual → false, steps>0 → false, `isInteractiveAtTrigger=true` → false, 그 외 → true)
 
-**필요 패키지:** `pedometer_2` (걸음수, iOS `queryPedometerData` + Android Google Fit Local Recording API 통합), `battery_plus` (배터리 잔량, 권한 불필요)
+**필요 패키지:** `pedometer_2` (걸음수, iOS `queryPedometerData` + Android Google Fit Local Recording API 통합), `battery_plus` (배터리 잔량, 권한 불필요), `screen_state`(로컬 path 의존성, Android 전용 `PowerManager.isInteractive()` 조회)
 
 
 ### 3.2 배터리 방전 오탐 방지
@@ -609,22 +643,27 @@ Day 8+: 추가 알림 없음 (향후 정책 변경 가능)
 ```
 
 
-### 3.3 suspicious 판정 (걸음수 단일 판정)
+### 3.3 suspicious 판정 (걸음수 + 화면 interactive 상태 복합)
 
-**핵심:** 걸음수(steps_delta) 하나로 판정. 오늘 자정부터 현재까지 1보라도 걸었으면 정상.
+**핵심:** 우선순위 기반 4단계 판정. 걸음수가 활동 증거로 가장 강하고, 걸음이 없어도 worker fire 시점 화면이 깨어있었다면(사용자가 폰을 깨워 Doze 해제) 폰 사용 흔적으로 간주한다.
 
 > **가속도/자이로/지자기를 사용하지 않는 이유:**
-> Android 9+ 공식 제한에 따라 연속 리포팅 모드 센서(가속도계·자이로스코프·지자기)는 백그라운드 앱에서 이벤트를 수신할 수 없다. WorkManager 워커는 백그라운드 컨텍스트이므로 이 세 센서는 항상 null. 반면 걸음수(TYPE_STEP_COUNTER)는 하드웨어 FIFO 배칭 방식이라 워커에서도 정상 수집된다. 따라서 sensors_plus 패키지는 제거됐다.
+> Android 9+ 공식 제한에 따라 연속 리포팅 모드 센서(가속도계·자이로스코프·지자기)는 백그라운드 앱에서 이벤트를 수신할 수 없다. WorkManager 워커는 백그라운드 컨텍스트이므로 이 세 센서는 항상 null. 반면 걸음수(TYPE_STEP_COUNTER)는 하드웨어 FIFO 배칭 방식이라 워커에서도 정상 수집된다. 따라서 sensors_plus 패키지는 제거됐고, 센서 기반 "폰을 만졌는가" 신호의 공백은 `ScreenState.isInteractive()`(Android `PowerManager.isInteractive()` 호출)로 대체한다.
 
 ```
-[heartbeat 수집 시 활동 판정]
+[heartbeat 수집 시 활동 판정 — 자동 경로]
 
-    steps_delta > 0      → suspicious = false (활동 확인)
-    steps_delta == 0 또는 null → suspicious = true (활동 의심)
-    manual = true        → suspicious = false (수동 보고는 항상 정상)
+    manual = true                    → suspicious = false (수동 보고는 항상 정상)
+    steps_delta > 0                  → suspicious = false (걸음 = 활동 확정)
+    isInteractiveAtTrigger = true    → suspicious = false (Doze 해제 = 폰 사용 흔적)
+    그 외(steps=0/null AND iA=false/null) → suspicious = true
 
-    ※ 걸음수 권한 거부 시 steps_delta = null → suspicious = true
-    ※ 서버의 다일 에스컬레이션 (caution→warning→urgent)이 false positive 흡수
+    ※ worker 콜백은 execute 호출 직전 ScreenState.isInteractive()를 1회 조회하여
+      isInteractiveAtTrigger로 전달 (Android 전용 로컬 플러그인 packages/screen_state/)
+    ※ 포그라운드 호출부는 앱이 포그라운드에 있다는 것 자체가 interactive 증거이므로
+      isInteractiveAtTrigger: true를 명시 전달 (홈 자동 전송·수동 보고·G+S 활성화 첫 전송)
+    ※ 걸음수 권한 거부 시 steps_delta = null — isInteractive 값이 최종 판정을 좌우
+    ※ 서버의 다일 에스컬레이션 (caution→warning→urgent)이 잔여 false positive 흡수
 
 [서버 판정]
     suspicious = false → 활성 경고 해소 여부 확인
@@ -1276,6 +1315,7 @@ ios/Runner/
 | `workmanager` | 백그라운드 예약 실행 | WorkManager(Android) / BGTaskScheduler(iOS) heartbeat 스케줄링 |
 | `flutter_local_notifications` | 로컬 알림 예약/취소 | 오늘의 안부 확인 메시지 로컬 알림 + 배터리/네트워크 안내 알림 (Android/iOS 공통) |
 | `pedometer_2` | 걸음수 조회 | **primary 활동 지표**. iOS는 `queryPedometerData(from:to:)`로 kill 구간 포함 누적값 조회. Android는 Google Fit Local Recording API 사용(Samsung TYPE_STEP_COUNTER 0 발화 버그 회피, **minSdk 29 필요**). Android: ACTIVITY_RECOGNITION 권한, iOS: NSMotionUsageDescription |
+| `screen_state` (로컬 path) | Android `PowerManager.isInteractive()` 조회 | **secondary 활동 지표**. 프로젝트 내부 플러그인(`packages/screen_state/`). worker fire 시점 화면 깨어있음 여부를 suspicious 판정 2순위로 활용. 사용자가 폰을 깨워 Doze가 해제된 상태에서 fire(true)와 Doze maintenance window 자연 fire(false)를 구분. 커스텀 MethodChannel은 `MainActivity`에 등록하면 WorkManager 백그라운드 FlutterEngine에서 동작하지 않으므로 `GeneratedPluginRegistrant`가 자동 등록하는 FlutterPlugin 형태의 pub 패키지로 분리 |
 | `shared_preferences` | 경량 로컬 저장소 | device_token, 대상자 별칭, 보류 heartbeat 1건 저장 |
 | `device_info_plus` | 기기 고유 ID + 기기 정보 | device_id (Android: SSAID, iOS: identifierForVendor), OS 타입/버전 |
 | `connectivity_plus` | 네트워크 상태 | 오프라인 시 전송 보류 |

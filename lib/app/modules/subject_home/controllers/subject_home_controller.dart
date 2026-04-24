@@ -287,7 +287,9 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
     if (Platform.isAndroid && isScheduleInFuture) return;
     if (Platform.isAndroid && isScheduleTooOld) return;
     await _clearStaleScheduledKey();
-    await HeartbeatService().execute(manual: false);
+    // 포그라운드 진입은 화면을 켜고 잠금을 풀어 앱을 연 결과이므로
+    // interactive=true가 확정 증거 — 명시 전달.
+    await HeartbeatService().execute(manual: false, isInteractiveAtTrigger: true);
     await _reloadHeartbeatState();
   }
 
@@ -491,7 +493,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
 
     _isReporting.value = true;
     try {
-      await HeartbeatService().execute(manual: true);
+      await HeartbeatService().execute(manual: true, isInteractiveAtTrigger: true);
       await _tokenDs.saveLastManualReportDate(today);
       await _reloadHeartbeatState();
       AppSnackbar.message('subject_home_manual_report_sent'.tr);

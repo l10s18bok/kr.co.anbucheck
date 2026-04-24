@@ -11,10 +11,19 @@ import 'package:anbucheck/app/data/models/heartbeat_request.dart';
 
 /// Heartbeat 수집 → suspicious 판정 → 서버 전송 (오프라인 시 큐 저장)
 ///
-/// suspicious 판정 기준 (걸음수 단독):
-///   - steps_delta > 0 → suspicious = false (활동 확인)
-///   - steps_delta == 0 또는 권한 거부(null) → suspicious = true (활동 증거 없음)
-///   - 수동 보고 → suspicious = false (버튼 탭 자체가 활동 증거)
+/// suspicious 판정 우선순위 (manual 제외 자동 경로):
+///   1) steps_delta > 0             → false (걸음 = 활동 증거)
+///   2) isInteractiveAtTrigger=true → false (worker fire 시점 화면 깨어있음 =
+///                                    사용자가 폰을 깨워 Doze 해제 → 사용 흔적)
+///   3) 그 외                       → true  (걸음 없음 + Doze maintenance/
+///                                    상태 미상 → 활동 증거 없음)
+///   - manual=true → 무조건 false (버튼 탭 자체가 활동 증거)
+///
+/// [isInteractiveAtTrigger]는 worker 콜백에서 ScreenState.isInteractive()로
+/// 조회한 값을 전달한다. 포그라운드 경로(앱 열기 자동 전송·수동 보고)에서는
+/// 앱이 포그라운드에 있다는 것 자체가 interactive 상태의 증거이므로 true를
+/// 명시 전달한다. null이 들어오는 경로는 기본적으로 존재하지 않아야 하며,
+/// 만약 null이 전달되면 걸음수 단독 판정으로 fallback된다.
 class HeartbeatService {
   /// 동일 isolate 내 중복 실행 방지 (execute + sendPending 공유)
   static bool _busy = false;
@@ -26,7 +35,9 @@ class HeartbeatService {
 
   /// heartbeat 1회 실행
   /// [manual] 대상자가 직접 버튼을 눌러 전송한 경우 true
-  Future<void> execute({bool manual = false}) async {
+  /// [isInteractiveAtTrigger] worker fire 시점의 PowerManager.isInteractive() 값.
+  ///   Android worker 콜백에서만 실제 값을 전달하며, 포그라운드 호출부는 true를 명시 전달.
+  Future<void> execute({bool manual = false, bool? isInteractiveAtTrigger}) async {
     if (_busy) return;
     _busy = true;
     try {
@@ -40,7 +51,12 @@ class HeartbeatService {
         await _sendPendingInternal(deviceToken);
       }
 
-      await _executeInternal(deviceId: deviceId, deviceToken: deviceToken, manual: manual);
+      await _executeInternal(
+        deviceId: deviceId,
+        deviceToken: deviceToken,
+        manual: manual,
+        isInteractiveAtTrigger: isInteractiveAtTrigger,
+      );
     } finally {
       _busy = false;
     }
@@ -50,6 +66,7 @@ class HeartbeatService {
     required String deviceId,
     required String deviceToken,
     bool manual = false,
+    bool? isInteractiveAtTrigger,
   }) async {
     // 동일 예약시각에 대한 중복 전송 방어 (날짜+예약시각 조합)
     // manual=true는 무조건 전송 (suspicious 알림 응답, 수동 보고)
@@ -87,11 +104,27 @@ class HeartbeatService {
       final batteryLevel = await _getBatteryLevel();
       final stepsDelta   = await _getStepsDelta();
 
-      // 수동 보고: 버튼 탭 자체가 활동 증거 → suspicious 강제 false
-      // 자동: steps_delta > 0 이면 false, 0 또는 null(권한 거부)이면 true
-      final suspicious = manual ? false : (stepsDelta == null || stepsDelta == 0);
+      // suspicious 판정 (manual 제외 자동 경로):
+      //   1) steps > 0                     → false (걸음 = 활동 증거)
+      //   2) isInteractiveAtTrigger=true   → false (화면 깨어있는 상태에서 fire
+      //                                      = 사용자가 폰을 깨워 Doze 해제)
+      //   3) 그 외                         → true  (걸음 없음 + Doze maintenance/
+      //                                      미상)
+      bool suspicious;
+      if (manual) {
+        suspicious = false;
+      } else if (stepsDelta != null && stepsDelta > 0) {
+        suspicious = false;
+      } else if (isInteractiveAtTrigger == true) {
+        suspicious = false;
+      } else {
+        suspicious = true;
+      }
 
-      debugPrint('[HeartbeatService] steps=$stepsDelta suspicious=$suspicious manual=$manual');
+      debugPrint(
+        '[HeartbeatService] suspicious 판정: steps=$stepsDelta '
+        'isInteractive=${isInteractiveAtTrigger ?? 'null'} manual=$manual → suspicious=$suspicious',
+      );
 
       final request = HeartbeatRequest(
         deviceId:     deviceId,

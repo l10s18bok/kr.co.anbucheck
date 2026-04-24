@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:screen_state/screen_state.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tzlib;
 import 'package:workmanager/workmanager.dart';
@@ -52,7 +53,13 @@ void heartbeatWorkerCallback() {
       }
       debugPrint('[HeartbeatWorker] lastHeartbeatDate=$lastDate, today=$today → 통과');
 
-      await HeartbeatService().execute();
+      // WorkManager 콜백이 어떤 경로로 fire됐는지 구분한다.
+      // isInteractive=true  → 사용자가 폰을 깨워 Doze가 해제된 상태에서 fire (= 사용 흔적)
+      // isInteractive=false → Doze maintenance window에서 자연 fire (= 사용 흔적 없음)
+      // suspicious 판정 2단계에서 이 값이 활용된다.
+      final wasInteractive = await ScreenState.isInteractive();
+      debugPrint('[HeartbeatWorker] ScreenState.isInteractive=$wasInteractive (execute 호출 직전)');
+      await HeartbeatService().execute(isInteractiveAtTrigger: wasInteractive);
 
       // 전송 성공 시 one-off + periodic 모두 내일로 재등록.
       // periodic의 self-cancel(자기자신을 cancelByUniqueName)은 현재 실행 중인

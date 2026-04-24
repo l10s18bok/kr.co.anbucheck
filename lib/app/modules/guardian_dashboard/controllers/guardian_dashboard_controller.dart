@@ -139,7 +139,7 @@ class GuardianDashboardController extends BaseController
     if (!isAlsoSubject.value) return;
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
-    await HeartbeatService().execute(manual: true);
+    await HeartbeatService().execute(manual: true, isInteractiveAtTrigger: true);
     await _reloadHeartbeatState();
   }
 
@@ -160,7 +160,9 @@ class GuardianDashboardController extends BaseController
     if (Platform.isAndroid && isScheduleInFuture) return;
     if (Platform.isAndroid && isScheduleTooOld) return;
     await _clearStaleScheduledKey();
-    await HeartbeatService().execute(manual: false);
+    // 포그라운드 진입은 화면을 켜고 잠금을 풀어 앱을 연 결과이므로
+    // interactive=true가 확정 증거 — 명시 전달.
+    await HeartbeatService().execute(manual: false, isInteractiveAtTrigger: true);
     await _reloadHeartbeatState();
   }
 
@@ -437,8 +439,9 @@ class GuardianDashboardController extends BaseController
       await LocalAlarmService.schedule(hour, minute);
 
       // 첫 heartbeat 즉시 전송 — HeartbeatService 내부 dedup으로 중복 전송 방지
+      // G+S 활성화는 사용자가 직접 버튼을 탭한 결과이므로 interactive=true 확정.
       try {
-        await HeartbeatService().execute();
+        await HeartbeatService().execute(isInteractiveAtTrigger: true);
       } catch (_) {}
       // 전송 결과를 로컬 Rx에 반영 (SafetyCode 카드가 즉시 보고 상태로 전환)
       await _reloadHeartbeatState();

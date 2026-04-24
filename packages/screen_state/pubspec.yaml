@@ -1,0 +1,19 @@
+name: screen_state
+description: Android PowerManager.isInteractive() 조회용 프로젝트 내부 플러그인.
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.3
+  flutter: ">=3.3.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: kr.co.anbucheck.screen_state
+        pluginClass: ScreenStatePlugin

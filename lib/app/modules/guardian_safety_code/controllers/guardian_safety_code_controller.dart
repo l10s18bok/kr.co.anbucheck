@@ -366,7 +366,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
 
     _isReporting.value = true;
     try {
-      await HeartbeatService().execute(manual: true);
+      await HeartbeatService().execute(manual: true, isInteractiveAtTrigger: true);
       await _tokenDs.saveLastManualReportDate(today);
       // Dashboard Rx를 갱신해 카드 표시를 즉시 reported 상태로 전환
       await _dashboard.reloadHeartbeatState();

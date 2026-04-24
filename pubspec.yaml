@@ -28,6 +28,8 @@ dependencies:
   sqflite: ^2.4.0
   share_plus: ^12.0.1
   pedometer_2: ^5.0.4
+  screen_state:
+    path: ./packages/screen_state
   device_info_plus: ^12.3.0
   timezone: ^0.9.4
   flutter_timezone: ^3.0.0
