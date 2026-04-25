@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:pedometer_2/pedometer_2.dart' as p2;
@@ -27,6 +29,25 @@ import 'package:anbucheck/app/data/models/heartbeat_request.dart';
 class HeartbeatService {
   /// 동일 isolate 내 중복 실행 방지 (execute + sendPending 공유)
   static bool _busy = false;
+
+  /// Google Fit Local Recording API 구독 선점 (Android 전용).
+  ///
+  /// Android 재설치 후 getStepCount가 최초 호출되는 시점에 구독이 생성된다.
+  /// heartbeat 전송 조건(isScheduleInFuture / isScheduleTooOld)에 막혀 당일
+  /// heartbeat가 나가지 않으면 구독이 생성되지 않아 다음날 steps_delta = 0이
+  /// 전송된다. onInit에서 이 메서드를 호출해 구독을 미리 확보한다.
+  ///
+  /// getStepCount는 로컬 쿼리라 오버헤드가 거의 없으며 매 onInit 호출이 허용된다.
+  static Future<void> warmUpStepSubscription() async {
+    if (!Platform.isAndroid) return;
+    try {
+      final now = DateTime.now();
+      final midnight = DateTime(now.year, now.month, now.day);
+      await p2.Pedometer()
+          .getStepCount(from: midnight, to: now)
+          .timeout(const Duration(seconds: 3));
+    } catch (_) {}
+  }
 
   final _heartbeatDs  = HeartbeatLocalDatasource();
   final _lockDs       = HeartbeatLockDatasource();

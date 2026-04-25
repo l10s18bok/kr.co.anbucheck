@@ -157,6 +157,7 @@ class SubjectHomeController extends BaseController with HeartbeatScheduleMixin {
   @override
   void onInit() {
     super.onInit();
+    HeartbeatService.warmUpStepSubscription();
     _loadStatus().then((_) => _checkAndSendHeartbeat());
     _checkNotificationPermission();
     refreshLocationPermissionStatus();

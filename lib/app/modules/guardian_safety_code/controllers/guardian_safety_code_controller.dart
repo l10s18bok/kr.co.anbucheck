@@ -109,6 +109,7 @@ class GuardianSafetyCodeController extends BaseController with HeartbeatSchedule
   @override
   void onInit() {
     super.onInit();
+    HeartbeatService.warmUpStepSubscription();
     _loadStatus();
     refreshActivityPermissionStatus();
     refreshLocationPermissionStatus();
