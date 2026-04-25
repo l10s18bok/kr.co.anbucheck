@@ -222,7 +222,16 @@ class FcmService extends GetxService {
               type = (data['type'] as String?) ?? raw;
             }
           } catch (_) {}
-          _handleNotificationTap(type, data: data);
+          // kill 상태 런치 시: Splash가 아직 라우팅 전 → pendingLaunchFcmType에 캐시,
+          // SplashController가 guardianDashboard 이동 후 소비.
+          // 즉시 라우팅하면 Splash의 offNamed(guardianDashboard)가 알림 페이지를
+          // 덮어쓰는 bounce가 발생하므로 getInitialMessage 경로와 동일하게 처리.
+          if (Get.currentRoute == AppRoutes.splash) {
+            pendingLaunchFcmType = type;
+            pendingLaunchFcmData = data;
+          } else {
+            _handleNotificationTap(type, data: data);
+          }
         }
       });
     }
