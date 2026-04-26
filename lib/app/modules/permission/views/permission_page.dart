@@ -27,19 +27,17 @@ class PermissionPage extends GetWidget<PermissionController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 스크롤 영역 (제목 + 권한 카드)
+              // 고정 타이틀
+              SizedBox(height: AppSpacing.vsm),
+              Text('permission_title'.tr, style: AppTextTheme.displaySmall()),
+              SizedBox(height: AppSpacing.sp8),
+
+              // 스크롤 영역 (권한 카드들)
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: AppSpacing.sp10),
-                      Text(
-                        'permission_title'.tr,
-                        style: AppTextTheme.displaySmall(),
-                      ),
-                      SizedBox(height: AppSpacing.sp8),
-
                       // 1. 알림 권한 카드 (공통)
                       _PermissionCard(
                         icon: Icons.notifications_rounded,
@@ -87,10 +85,7 @@ class PermissionPage extends GetWidget<PermissionController> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: controller.requestPermissions,
-                  child: Text(
-                    'common_confirm'.tr,
-                    style: AppTextTheme.labelLarge(),
-                  ),
+                  child: Text('common_confirm'.tr, style: AppTextTheme.labelLarge()),
                 ),
               ),
               SizedBox(height: AppSpacing.sp6),
@@ -107,11 +102,7 @@ class _PermissionCard extends StatelessWidget {
   final String title;
   final String description;
 
-  const _PermissionCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
+  const _PermissionCard({required this.icon, required this.title, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -131,11 +122,7 @@ class _PermissionCard extends StatelessWidget {
               color: AppColors.seniorPrimary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(16.r),
             ),
-            child: Icon(
-              icon,
-              size: 28.w,
-              color: AppColors.seniorPrimary,
-            ),
+            child: Icon(icon, size: 28.w, color: AppColors.seniorPrimary),
           ),
           SizedBox(width: AppSpacing.lg),
           Expanded(
