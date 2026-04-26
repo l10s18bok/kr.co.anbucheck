@@ -160,11 +160,14 @@ class SubjectHomePage extends GetWidget<SubjectHomeController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'SAFETY SHARE CODE',
-                  style: AppTextTheme.labelMedium(
-                    color: AppColors.textTertiary,
-                    fw: FontWeight.w600,
+                Expanded(
+                  child: Text(
+                    'SAFETY SHARE CODE',
+                    style: AppTextTheme.labelMedium(
+                      color: AppColors.textTertiary,
+                      fw: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Row(

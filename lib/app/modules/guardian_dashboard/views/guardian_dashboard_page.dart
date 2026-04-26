@@ -233,7 +233,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 return Column(
                   children: [
                     SizedBox(
-                      height: 180.h,
+                      height: 200.h,
                       child: PageView.builder(
                         clipBehavior: Clip.none,
                         padEnds: false,
