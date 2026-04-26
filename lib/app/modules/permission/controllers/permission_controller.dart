@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 권한 안내 및 요청 컨트롤러
@@ -55,6 +56,11 @@ class PermissionController extends BaseController {
       // iOS는 G+S 활성화 시점에 CMPedometer 호출로 요청하므로 여기서는 생략.
       if (Platform.isAndroid && (isSubjectMode || isAlsoSubject)) {
         await Permission.activityRecognition.request();
+        // 권한 승인 직후 Google Fit Local Recording 구독을 가장 이른 시점에 선점.
+        // SubjectHome.onInit warmUp만 있으면 온보딩 4페이지 클릭 타임만큼 갭이
+        // 발생해 D0(설치 당일) 첫 heartbeat 시점에 누적 데이터가 부족할 수 있다.
+        // fire-and-forget — 다음 OS 권한 팝업으로 넘어가는 동안 백그라운드 진행.
+        HeartbeatService.warmUpStepSubscription();
       }
 
       // 위치 권한(긴급 도움 요청 첨부용): 대상자 기능이 있는 모든 Android 경로에
