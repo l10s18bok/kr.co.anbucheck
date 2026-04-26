@@ -37,9 +37,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
           }
         },
         onAdFailedToLoad: (ad, error) {
-          debugPrint('[AdMob] 배너 로드 실패: ${error.message}');
           ad.dispose();
-          _bannerAd = null;
+          if (mounted) setState(() => _bannerAd = null);
         },
       ),
     )..load();
