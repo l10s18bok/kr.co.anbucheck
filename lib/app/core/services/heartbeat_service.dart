@@ -219,7 +219,6 @@ class HeartbeatService {
       if (reqKey != null) {
         await getReloadedPrefs();
         if (await _tokenDs.getLastScheduledKey() == reqKey) {
-          debugPrint('[HeartbeatService] retry 중 다른 isolate 성공 감지 — 중단 ($reqKey)');
           return;
         }
       }
@@ -236,7 +235,6 @@ class HeartbeatService {
           if (reqKey != null) {
             await getReloadedPrefs();
             if (await _tokenDs.getLastScheduledKey() == reqKey) {
-              debugPrint('[HeartbeatService] attempt 3 실패 직전 다른 isolate 성공 감지 — 알림 스킵');
               return;
             }
           }
