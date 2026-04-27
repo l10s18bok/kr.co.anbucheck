@@ -73,10 +73,6 @@ abstract class JaJp {
     'permission_activity_denied_message': '歩数を検知して安否確認の精度を向上させるために使用します。\n設定から身体活動の権限を許可してください。',
     'permission_battery': 'バッテリー最適化の除外',
     'permission_battery_desc': '毎日決まった時刻の安否確認が漏れないように、バッテリー最適化から除外します',
-    'permission_battery_required_title': 'バッテリーを「制限なし」に設定してください',
-    'permission_battery_required_message':
-        '「バッテリー最適化」または「バッテリーセーバー」に設定されていると 毎日の安否確認が遅延または漏れる可能性があります。\n\n[設定を開く]をタップした後：\n1.「バッテリー」を選択\n2.「制限なし」に変更してください',
-    'permission_battery_go_to_settings': '設定を開く',
     'permission_hibernation_title': '「使用していないアプリを一時停止」をオフにしてください',
     'permission_hibernation_highlight': '使用していないアプリを一時停止',
     'permission_hibernation_message':

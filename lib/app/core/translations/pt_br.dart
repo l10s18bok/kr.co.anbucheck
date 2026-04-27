@@ -82,10 +82,6 @@ abstract class PtBr {
     'permission_battery': 'Exclusão da otimização de bateria',
     'permission_battery_desc':
         'Exclui o aplicativo da otimização de bateria para que as verificações diárias de bem-estar não sejam perdidas',
-    'permission_battery_required_title': 'Defina a bateria como "Sem restrições"',
-    'permission_battery_required_message':
-        'Se estiver definida como "Otimização de bateria" ou "Economia de bateria", as verificações diárias de bem-estar podem ser atrasadas ou perdidas.\n\nApós tocar em [Ir para Configurações]:\n1. Selecione "Bateria"\n2. Altere para "Sem restrições"',
-    'permission_battery_go_to_settings': 'Ir para Configurações',
     'permission_hibernation_title': 'Desative "Pausar atividade se não usado"',
     'permission_hibernation_highlight': 'Pausar atividade se não usado',
     'permission_hibernation_message':

@@ -78,10 +78,6 @@ abstract class ArSa {
     'permission_battery': 'استثناء من تحسين البطارية',
     'permission_battery_desc':
         'يستثني التطبيق من تحسين البطارية حتى لا تفوت عمليات التحقق اليومية من السلامة في الوقت المحدد',
-    'permission_battery_required_title': 'يرجى تعيين البطارية إلى "غير مقيد"',
-    'permission_battery_required_message':
-        'إذا تم تعيينها على "تحسين البطارية" أو "موفر البطارية"، فقد يتأخر التحقق اليومي من السلامة أو يفوت.\n\nبعد النقر على [الذهاب إلى الإعدادات]:\n1. اختر "البطارية"\n2. غيّرها إلى "غير مقيد"',
-    'permission_battery_go_to_settings': 'الذهاب إلى الإعدادات',
     'permission_hibernation_title': 'يرجى إيقاف "إيقاف التطبيق مؤقتًا إذا لم يُستخدم"',
     'permission_hibernation_highlight': 'إيقاف التطبيق مؤقتًا إذا لم يُستخدم',
     'permission_hibernation_message':

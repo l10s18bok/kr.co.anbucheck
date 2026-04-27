@@ -83,10 +83,6 @@ abstract class IdId {
     'permission_battery': 'Pengecualian Pengoptimalan Baterai',
     'permission_battery_desc':
         'Mengecualikan aplikasi dari pengoptimalan baterai agar pemeriksaan kesejahteraan harian tidak terlewat pada waktu yang dijadwalkan',
-    'permission_battery_required_title': 'Harap atur Baterai ke "Tidak Dibatasi"',
-    'permission_battery_required_message':
-        'Jika diatur ke "Pengoptimalan Baterai" atau "Penghemat Baterai", pemeriksaan kesejahteraan harian dapat tertunda atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan]:\n1. Pilih "Baterai"\n2. Ubah menjadi "Tidak Dibatasi"',
-    'permission_battery_go_to_settings': 'Buka Pengaturan',
     'permission_hibernation_title': 'Matikan "Jeda aplikasi jika tidak digunakan"',
     'permission_hibernation_highlight': 'Jeda aplikasi jika tidak digunakan',
     'permission_hibernation_message':

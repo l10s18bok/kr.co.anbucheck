@@ -84,10 +84,6 @@ abstract class DeDe {
     'permission_battery': 'Akku-Optimierung ausschließen',
     'permission_battery_desc':
         'Schließt die App von der Akku-Optimierung aus, damit der tägliche Wohlbefindens-Check zur geplanten Zeit nicht verpasst wird',
-    'permission_battery_required_title': 'Bitte setzen Sie den Akku auf "Nicht eingeschränkt"',
-    'permission_battery_required_message':
-        'Wenn "Akku-Optimierung" oder "Energiesparmodus" aktiviert ist, kann der tägliche Wohlbefindens-Check verzögert oder verpasst werden.\n\nNach dem Tippen auf [Zu den Einstellungen]:\n1. Wählen Sie "Akku"\n2. Auf "Nicht eingeschränkt" ändern',
-    'permission_battery_go_to_settings': 'Zu den Einstellungen',
     'permission_hibernation_title': 'Bitte "App bei Nichtnutzung pausieren" deaktivieren',
     'permission_hibernation_highlight': 'App bei Nichtnutzung pausieren',
     'permission_hibernation_message':

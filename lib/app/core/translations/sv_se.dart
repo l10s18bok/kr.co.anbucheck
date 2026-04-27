@@ -79,10 +79,6 @@ abstract class SvSe {
     'permission_battery': 'Undantag från batterioptimering',
     'permission_battery_desc':
         'Utesluter appen från batterioptimering så att dagliga välmåendekontroller inte missas vid den schemalagda tiden',
-    'permission_battery_required_title': 'Ställ in batteriet på "Obegränsat"',
-    'permission_battery_required_message':
-        'Om det är inställt på "Batterioptimering" eller "Batterisparläge" kan dagliga välmåendekontroller fördröjas eller missas.\n\nEfter att du tryckt på [Ga till Installningar]:\n1. Välj "Batteri"\n2. Ändra till "Obegränsat"',
-    'permission_battery_go_to_settings': 'Ga till Installningar',
     'permission_hibernation_title': 'Stäng av "Pausa oanvända appar"',
     'permission_hibernation_highlight': 'Pausa oanvända appar',
     'permission_hibernation_message':

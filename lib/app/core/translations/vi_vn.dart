@@ -81,10 +81,6 @@ abstract class ViVn {
     'permission_battery': 'Loai tru toi uu hoa pin',
     'permission_battery_desc':
         'Loai tru ung dung khoi toi uu hoa pin de kiem tra suc khoe hang ngay khong bi bo lo vao gio da dinh',
-    'permission_battery_required_title': 'Vui long dat Pin thanh "Khong gioi han"',
-    'permission_battery_required_message':
-        'Neu duoc dat la "Toi uu hoa pin" hoac "Tiet kiem pin", viec kiem tra suc khoe hang ngay co the bi tre hoac bo lo.\n\nSau khi nhan [Di den Cai dat]:\n1. Chon "Pin"\n2. Thay doi thanh "Khong gioi han"',
-    'permission_battery_go_to_settings': 'Di den Cai dat',
     'permission_hibernation_title': 'Vui long tat "Tam dung ung dung khi khong dung"',
     'permission_hibernation_highlight': 'Tam dung ung dung khi khong dung',
     'permission_hibernation_message':

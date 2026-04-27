@@ -81,10 +81,6 @@ abstract class HiIn {
     'permission_battery': 'बैटरी अनुकूलन अपवाद',
     'permission_battery_desc':
         'निर्धारित समय पर दैनिक कुशलता जांच छूट न जाए, इसके लिए ऐप को बैटरी अनुकूलन से बाहर रखता है',
-    'permission_battery_required_title': 'कृपया बैटरी को "अप्रतिबंधित" पर सेट करें',
-    'permission_battery_required_message':
-        'यदि "बैटरी अनुकूलन" या "बैटरी सेवर" पर सेट है, तो दैनिक कुशलता जांच में देरी हो सकती है या छूट सकती है।\n\n[सेटिंग्स पर जाएं] टैप करने के बाद:\n1. "बैटरी" चुनें\n2. "अप्रतिबंधित" में बदलें',
-    'permission_battery_go_to_settings': 'सेटिंग्स पर जाएं',
     'permission_hibernation_title': '"अप्रयुक्त ऐप्स को रोकें" बंद करें',
     'permission_hibernation_highlight': 'अप्रयुक्त ऐप्स को रोकें',
     'permission_hibernation_message':

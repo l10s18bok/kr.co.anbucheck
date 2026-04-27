@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
@@ -117,9 +116,6 @@ class GuardianSettingsController extends BaseController {
     await HeartbeatLocalDatasource().clearPending();
     await HeartbeatLockDatasource().clearAll();
     await NicknameLocalDatasource().clearAll();
-    // battery_dialog_shown 플래그 제거 — 재가입 시 안내 다이얼로그 다시 표시
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('battery_dialog_shown');
 
     // 서비스 인메모리 캐시도 초기화 — permanent 등록이라 컨트롤러 해제되어도 유지됨
     _svc.clearCache();

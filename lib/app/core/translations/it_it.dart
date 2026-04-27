@@ -83,10 +83,6 @@ abstract class ItIt {
     'permission_battery': 'Esclusione ottimizzazione batteria',
     'permission_battery_desc':
         'Esclude l\'app dall\'ottimizzazione della batteria affinché il controllo giornaliero del benessere non venga perso',
-    'permission_battery_required_title': 'Imposta la batteria su "Senza restrizioni"',
-    'permission_battery_required_message':
-        'Se è impostata su "Ottimizzazione batteria" o "Risparmio energetico", il controllo giornaliero del benessere potrebbe essere ritardato o perso.\n\nDopo aver toccato [Vai alle Impostazioni]:\n1. Seleziona "Batteria"\n2. Cambia in "Senza restrizioni"',
-    'permission_battery_go_to_settings': 'Vai alle Impostazioni',
     'permission_hibernation_title': 'Disattiva "Sospendi attività se non usata"',
     'permission_hibernation_highlight': 'Sospendi attività se non usata',
     'permission_hibernation_message':

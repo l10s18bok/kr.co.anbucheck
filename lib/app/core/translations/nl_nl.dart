@@ -81,10 +81,6 @@ abstract class NlNl {
     'permission_battery': 'Uitsluiting van batterijoptimalisatie',
     'permission_battery_desc':
         'Sluit de app uit van batterijoptimalisatie zodat dagelijkse welzijnscontroles niet worden gemist',
-    'permission_battery_required_title': 'Stel de batterij in op "Onbeperkt"',
-    'permission_battery_required_message':
-        'Als "Batterijoptimalisatie" of "Batterijbesparing" is ingeschakeld, kunnen dagelijkse welzijnscontroles worden vertraagd of gemist.\n\nNa het tikken op [Ga naar Instellingen]:\n1. Selecteer "Batterij"\n2. Wijzig naar "Onbeperkt"',
-    'permission_battery_go_to_settings': 'Ga naar Instellingen',
     'permission_hibernation_title': 'Schakel "App pauzeren bij niet-gebruik" uit',
     'permission_hibernation_highlight': 'App pauzeren bij niet-gebruik',
     'permission_hibernation_message':

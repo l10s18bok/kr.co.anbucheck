@@ -80,10 +80,6 @@ abstract class EnUs {
     'permission_battery': 'Battery Optimization Exclusion',
     'permission_battery_desc':
         'Excludes the app from battery optimization so that daily wellness checks are not missed at the scheduled time',
-    'permission_battery_required_title': 'Please set Battery to "Unrestricted"',
-    'permission_battery_required_message':
-        'If set to "Battery Optimized" or "Battery Saver", daily wellness checks may be delayed or missed.\n\nAfter tapping [Go to Settings]:\n1. Select "Battery"\n2. Change it to "Unrestricted"',
-    'permission_battery_go_to_settings': 'Go to Settings',
     'permission_hibernation_title': 'Please turn off "Pause app activity if unused"',
     'permission_hibernation_highlight': 'Pause app activity if unused',
     'permission_hibernation_message':

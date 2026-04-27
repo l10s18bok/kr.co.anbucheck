@@ -74,10 +74,6 @@ abstract class KoKr {
         '걸음수를 감지하여 안부 확인 정확도를 높이는 데 사용됩니다.\n설정에서 신체 활동 권한을 허용해 주세요.',
     'permission_battery': '배터리 최적화 제외',
     'permission_battery_desc': '매일 정해진 시각에 안부 확인이 누락되지 않도록 배터리 최적화에서 제외합니다',
-    'permission_battery_required_title': '배터리 "제한없음"으로 설정해주세요',
-    'permission_battery_required_message':
-        '"배터리 최적화" 또는 "배터리 절약"으로 설정되어 있으면 매일 안부 확인이 지연되거나 누락될 수 있습니다.\n\n[설정으로 이동]을 누른 후:\n1. "배터리" 항목 선택\n2. "제한없음"으로 변경해 주세요',
-    'permission_battery_go_to_settings': '설정으로 이동',
     'permission_hibernation_title': '\'사용하지 않는 앱 일시 정지\'를 꺼주세요',
     'permission_hibernation_highlight': '사용하지 않는 앱 일시 정지',
     'permission_hibernation_message':

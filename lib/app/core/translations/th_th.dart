@@ -79,10 +79,6 @@ abstract class ThTh {
     'permission_battery': 'ยกเว้นการเพิ่มประสิทธิภาพแบตเตอรี่',
     'permission_battery_desc':
         'ยกเว้นแอปจากการเพิ่มประสิทธิภาพแบตเตอรี่เพื่อไม่ให้การตรวจสอบความเป็นอยู่ประจำวันถูกพลาดในเวลาที่กำหนด',
-    'permission_battery_required_title': 'กรุณาตั้งค่าแบตเตอรี่เป็น "ไม่จำกัด"',
-    'permission_battery_required_message':
-        'หากตั้งค่าเป็น "เพิ่มประสิทธิภาพแบตเตอรี่" หรือ "ประหยัดแบตเตอรี่" การตรวจสอบความเป็นอยู่ประจำวันอาจล่าช้าหรือถูกพลาด\n\nหลังจากแตะ [ไปที่การตั้งค่า]:\n1. เลือก "แบตเตอรี่"\n2. เปลี่ยนเป็น "ไม่จำกัด"',
-    'permission_battery_go_to_settings': 'ไปที่การตั้งค่า',
     'permission_hibernation_title': 'กรุณาปิด "หยุดแอปที่ไม่ได้ใช้ชั่วคราว"',
     'permission_hibernation_highlight': 'หยุดแอปที่ไม่ได้ใช้ชั่วคราว',
     'permission_hibernation_message':

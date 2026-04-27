@@ -82,10 +82,6 @@ abstract class EsEs {
     'permission_battery': 'Exclusión de optimización de batería',
     'permission_battery_desc':
         'Excluye la aplicación de la optimización de batería para que las verificaciones diarias de bienestar no se pierdan',
-    'permission_battery_required_title': 'Configure la batería como "Sin restricciones"',
-    'permission_battery_required_message':
-        'Si está configurada como "Optimización de batería" o "Ahorro de batería", las verificaciones diarias de bienestar pueden retrasarse o perderse.\n\nDespués de tocar [Ir a Ajustes]:\n1. Seleccione "Batería"\n2. Cambie a "Sin restricciones"',
-    'permission_battery_go_to_settings': 'Ir a Ajustes',
     'permission_hibernation_title': 'Desactive "Pausar actividad si no se usa"',
     'permission_hibernation_highlight': 'Pausar actividad si no se usa',
     'permission_hibernation_message':
