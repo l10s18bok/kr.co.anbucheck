@@ -801,9 +801,9 @@ class _StepsBarChart extends StatelessWidget {
           for (int i = 0; i < steps.length; i++)
             BarChartGroupData(
               x: i,
-              // 1000 이하 양수 막대는 항상 라벨을 막대 바로 위에 표시
+              // 7일 카드에서만 1000 이하 양수 막대 라벨을 막대 바로 위에 표시
               showingTooltipIndicators:
-                  (steps[i] != null && steps[i]! > 0 && steps[i]! <= 1000 && i != maxIdx)
+                  (!isShowing30Days && steps[i] != null && steps[i]! > 0 && steps[i]! <= 1000 && i != maxIdx)
                   ? [0]
                   : [],
               barRods: [
