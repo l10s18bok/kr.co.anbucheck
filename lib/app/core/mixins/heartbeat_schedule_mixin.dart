@@ -139,7 +139,7 @@ mixin HeartbeatScheduleMixin on GetxController {
       }
       await LocalAlarmService.schedule(hour, minute);
       final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
-      AppSnackbar.show('', message, duration: const Duration(seconds: 2));
+      AppSnackbar.show('', message);
     } catch (e) {
       AppSnackbar.show(
         'heartbeat_change_failed_title'.tr,
