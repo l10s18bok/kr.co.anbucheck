@@ -11,6 +11,7 @@ import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
+import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// GetConnect 기반 ApiClient 구현체 (컴포지션 방식)
@@ -153,7 +154,8 @@ Future<void> _handleUnauthorized() async {
 
           // 홈 화면으로 이동
           if (role == 'subject') {
-            Get.offAllNamed(AppRoutes.subjectHome);
+            Get.offAllNamed(AppRoutes.safetyHome,
+                arguments: {'role': HomeRole.subject});
           } else {
             Get.offAllNamed(AppRoutes.guardianDashboard);
           }

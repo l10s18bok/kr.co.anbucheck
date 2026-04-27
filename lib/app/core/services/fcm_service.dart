@@ -11,6 +11,7 @@ import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
+import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// FCM 백그라운드 메시지 핸들러 (top-level 함수 필수)
@@ -75,9 +76,10 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       try {
         Get.find<GuardianDashboardController>().refreshAndForceSend();
       } catch (_) {}
-      if (Get.currentRoute != AppRoutes.guardianSafetyCode) {
+      if (Get.currentRoute != AppRoutes.safetyHome) {
         Get.offAllNamed(AppRoutes.guardianDashboard);
-        Get.toNamed(AppRoutes.guardianSafetyCode);
+        Get.toNamed(AppRoutes.safetyHome,
+            arguments: {'role': HomeRole.guardianSubject});
       }
       break;
     default:

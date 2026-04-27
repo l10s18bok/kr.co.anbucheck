@@ -7,8 +7,8 @@ import 'package:anbucheck/app/modules/mode_select/bindings/mode_select_binding.d
 import 'package:anbucheck/app/modules/mode_select/views/mode_select_page.dart';
 import 'package:anbucheck/app/modules/onboarding/bindings/onboarding_binding.dart';
 import 'package:anbucheck/app/modules/onboarding/views/onboarding_page.dart';
-import 'package:anbucheck/app/modules/subject_home/bindings/subject_home_binding.dart';
-import 'package:anbucheck/app/modules/subject_home/views/subject_home_page.dart';
+import 'package:anbucheck/app/modules/safety_home/bindings/safety_home_binding.dart';
+import 'package:anbucheck/app/modules/safety_home/views/safety_home_page.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/bindings/guardian_dashboard_binding.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/views/guardian_dashboard_page.dart';
 import 'package:anbucheck/app/modules/guardian_add_subject/bindings/guardian_add_subject_binding.dart';
@@ -21,8 +21,6 @@ import 'package:anbucheck/app/modules/guardian_settings/bindings/guardian_settin
 import 'package:anbucheck/app/modules/guardian_settings/views/guardian_settings_page.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/bindings/guardian_connection_management_binding.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/views/guardian_connection_management_page.dart';
-import 'package:anbucheck/app/modules/guardian_safety_code/bindings/guardian_safety_code_binding.dart';
-import 'package:anbucheck/app/modules/guardian_safety_code/views/guardian_safety_code_page.dart';
 import 'package:anbucheck/app/modules/guardian_emergency_map/bindings/guardian_emergency_map_binding.dart';
 import 'package:anbucheck/app/modules/guardian_emergency_map/views/guardian_emergency_map_page.dart';
 
@@ -55,9 +53,9 @@ class AppPages {
       binding: OnboardingBinding(),
     ),
     GetPage(
-      name: AppRoutes.subjectHome,
-      page: () => const SubjectHomePage(),
-      binding: SubjectHomeBinding(),
+      name: AppRoutes.safetyHome,
+      page: () => const SafetyHomePage(),
+      binding: SafetyHomeBinding(),
     ),
     GetPage(
       name: AppRoutes.guardianDashboard,
@@ -88,11 +86,6 @@ class AppPages {
       name: AppRoutes.guardianConnectionManagement,
       page: () => const GuardianConnectionManagementPage(),
       binding: GuardianConnectionManagementBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.guardianSafetyCode,
-      page: () => const GuardianSafetyCodePage(),
-      binding: GuardianSafetyCodeBinding(),
     ),
     GetPage(
       name: AppRoutes.guardianEmergencyMap,

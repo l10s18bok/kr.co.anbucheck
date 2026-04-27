@@ -17,6 +17,7 @@ import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
+import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 대시보드 컨트롤러
@@ -472,7 +473,8 @@ class GuardianDashboardController extends BaseController
   /// invite_code를 arguments로 함께 전달해 SafetyCode가 SharedPreferences의
   /// reload 타이밍 이슈(iOS 특히)와 무관하게 즉시 화면에 표시할 수 있게 한다.
   void goToSafetyCode() {
-    Get.toNamed(AppRoutes.guardianSafetyCode, arguments: {
+    Get.toNamed(AppRoutes.safetyHome, arguments: {
+      'role': HomeRole.guardianSubject,
       'deviceData': {
         'invite_code': inviteCode.value,
         'heartbeat_hour': heartbeatHour.value,

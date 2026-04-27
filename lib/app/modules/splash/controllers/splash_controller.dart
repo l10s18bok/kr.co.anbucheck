@@ -15,6 +15,7 @@ import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
+import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/firebase_options.dart';
 
@@ -53,7 +54,8 @@ class SplashController extends BaseController {
 
     if (deviceToken != null && userRole != null) {
       if (userRole == 'subject') {
-        Get.offNamed(AppRoutes.subjectHome);
+        Get.offNamed(AppRoutes.safetyHome,
+            arguments: {'role': HomeRole.subject});
       } else {
         Get.offNamed(AppRoutes.guardianDashboard);
         // iOS G+S 오늘의 안부 확인 메시지 로컬 알림 탭으로 kill 상태에서 런치된 경우:
@@ -61,7 +63,8 @@ class SplashController extends BaseController {
         final pendingTap = FcmService.pendingLaunchNotificationType;
         if (pendingTap == LocalAlarmService.alarmPayload) {
           FcmService.pendingLaunchNotificationType = null;
-          Get.toNamed(AppRoutes.guardianSafetyCode);
+          Get.toNamed(AppRoutes.safetyHome,
+              arguments: {'role': HomeRole.guardianSubject});
         }
         // kill 상태에서 FCM 푸시 알림 탭으로 런치된 경우:
         // dashboard를 base로 두고 알림 목록을 그 위에 push (뒤로가기 시 dashboard 복귀)

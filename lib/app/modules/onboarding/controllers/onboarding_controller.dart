@@ -8,6 +8,7 @@ import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
+import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 온보딩 컨트롤러 (공통)
@@ -102,7 +103,8 @@ class OnboardingController extends BaseController {
     } catch (_) {}
 
     if (role == 'subject') {
-      Get.offNamed(AppRoutes.subjectHome);
+      Get.offNamed(AppRoutes.safetyHome,
+          arguments: {'role': HomeRole.subject});
     } else {
       Get.offNamed(AppRoutes.guardianDashboard);
     }
