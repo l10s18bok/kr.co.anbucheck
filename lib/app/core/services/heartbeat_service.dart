@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:pedometer_2/pedometer_2.dart' as p2;
+import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
@@ -33,9 +34,9 @@ class HeartbeatService {
   /// Google Fit Local Recording API 구독 선점 (Android 전용).
   ///
   /// Android 재설치 후 getStepCount가 최초 호출되는 시점에 구독이 생성된다.
-  /// heartbeat 전송 조건(isScheduleInFuture / isScheduleTooOld)에 막혀 당일
-  /// heartbeat가 나가지 않으면 구독이 생성되지 않아 다음날 steps_delta = 0이
-  /// 전송된다. onInit에서 이 메서드를 호출해 구독을 미리 확보한다.
+  /// heartbeat 전송 조건(isScheduleInFuture)에 막혀 당일 heartbeat가 나가지
+  /// 않으면 구독이 생성되지 않아 다음날 steps_delta = 0이 전송된다.
+  /// onInit에서 이 메서드를 호출해 구독을 미리 확보한다.
   ///
   /// getStepCount는 로컬 쿼리라 오버헤드가 거의 없으며 매 onInit 호출이 허용된다.
   static Future<void> warmUpStepSubscription() async {
@@ -192,6 +193,8 @@ class HeartbeatService {
       final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
       final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
       await _tokenDs.saveLastScheduledKey(scheduledKey);
+
+      await _onHeartbeatSent(schedHour, schedMinute);
     } catch (_) {}
   }
 
@@ -258,8 +261,21 @@ class HeartbeatService {
     final scheduledKey = '${today}_${formatHm(schedHour, schedMinute)}';
     await _tokenDs.saveLastScheduledKey(scheduledKey);
 
-    // iOS 로컬 안전망 알림: 오늘 전송 성공 → 내일로 재예약
+    await _onHeartbeatSent(schedHour, schedMinute);
+  }
+
+  /// 전송 성공 직후 housekeeping (자동/수동/pending 큐 모든 성공 경로 공통):
+  ///   - iOS 로컬 안전망 알림 → 내일로 재예약
+  ///   - Android WorkManager (one-off + periodic) → 내일자로 재등록
+  ///     (worker 콜백 끝에도 동일 호출이 있으나 idempotent — 이쪽은 포그라운드/
+  ///     pending-only 성공 경로를 커버하는 단일 책임이고 worker 블록은 안전망)
+  ///   - Android 전송 실패 알림 → 잔존 알림 제거
+  Future<void> _onHeartbeatSent(int schedHour, int schedMinute) async {
     await LocalAlarmService.schedule(schedHour, schedMinute, forceNextDay: true);
+    if (Platform.isAndroid) {
+      await HeartbeatWorkerService.schedule(schedHour, schedMinute);
+    }
+    await LocalAlarmService.cancelSendFailed();
   }
 
   Future<int?> _getBatteryLevel() async {

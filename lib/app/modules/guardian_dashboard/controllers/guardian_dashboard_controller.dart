@@ -68,21 +68,6 @@ class GuardianDashboardController extends BaseController
     return scheduled.isAfter(now);
   }
 
-  /// 오늘 예약시각이 현재로부터 [_missedRecoveryWindow]보다 오래 전에 지났는지.
-  /// 자동 복구 전송은 "방금 놓친 heartbeat"에 한정한다. 새벽 예약 실수나
-  /// 장기간 앱 미실행처럼 10h+ 전에 지난 예약을 지금 전송하는 것은 실제 안부
-  /// 신호로서 의미가 약하고, 서버 기준 이미 미수신 경고가 발송됐을 가능성이 높아
-  /// 오히려 혼란을 준다. 서버 경고 발송 시점이 예약시각 +2h이므로 3h로 설정.
-  static const _missedRecoveryWindow = Duration(hours: 3);
-
-  bool get isScheduleTooOld {
-    final now = DateTime.now();
-    final scheduled = DateTime(
-        now.year, now.month, now.day, heartbeatHour.value, heartbeatMinute.value);
-    if (scheduled.isAfter(now)) return false;
-    return now.difference(scheduled) > _missedRecoveryWindow;
-  }
-
   final _svc = Get.find<GuardianSubjectService>();
   final _tokenDs = TokenLocalDatasource();
   final _userDs = UserRemoteDatasource();
@@ -154,12 +139,14 @@ class GuardianDashboardController extends BaseController
     _lastHeartbeatTime.value = await _tokenDs.getLastHeartbeatTime() ?? '';
   }
 
-  /// 예약시각 경과(Android) + 오늘 미전송이면 heartbeat 자동 전송
-  /// iOS G+S는 시각 조건 없이 "당일 미전송"만 확인
+  /// 예약시각 경과(Android) + 오늘 미전송이면 heartbeat 자동 전송 (자정 전까지 무조건).
+  /// iOS G+S는 시각 조건 없이 "당일 미전송"만 확인.
+  /// 자정 경계만이 의미 단위 — 자정 넘어가면 `isReportedToday`가 false로 유지되더라도
+  /// `isScheduleInFuture`(다음 예약시각 이전)에 막혀 자연스럽게 다음 날로 넘어간다.
+  /// 늦은 전송 성공 시 `_onHeartbeatSent`가 WorkManager를 내일자로 재등록한다.
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
     if (Platform.isAndroid && isScheduleInFuture) return;
-    if (Platform.isAndroid && isScheduleTooOld) return;
     await _clearStaleScheduledKey();
     // 포그라운드 진입은 화면을 켜고 잠금을 풀어 앱을 연 결과이므로
     // interactive=true가 확정 증거 — 명시 전달.

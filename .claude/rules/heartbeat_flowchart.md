@@ -29,9 +29,9 @@ flowchart TD
     Start --> Trigger
 
     Trigger{트리거 종류?}
-    Trigger -->|고정 시각 Android| WM[WorkManager 2계층<br/>one-off 정확 발화 + periodic 1h 폴링<br/>one-off fire 후 내일로 재등록<br/>periodic은 재등록 없이 유지<br/>race 방어: lastScheduledKey 성공 마커<br/>+ HeartbeatLockDatasource SQLite UNIQUE CAS<br/>cross-isolate 원자 락, TTL 30초]
-    Trigger -->|고정 시각 iOS| BG[BGProcessingTask one-off<br/>OS 재량에 따라 지연 가능<br/>실행 후 다음 날 자동 재예약]
-    Trigger -->|공통| FG[앱 열기 / 포그라운드 복귀<br/>예약 시각 경과 + 오늘 미전송 시<br/>자동 heartbeat 전송]
+    Trigger -->|고정 시각 Android| WM[WorkManager 2계층<br/>one-off 정확 발화 + periodic 15분 폴링<br/>전송 성공 시 _onHeartbeatSent가<br/>schedule 호출 → one-off + periodic 둘 다<br/>cancel + 내일자 register<br/>race 방어: lastScheduledKey 성공 마커<br/>+ HeartbeatLockDatasource SQLite UNIQUE CAS<br/>cross-isolate 원자 락, TTL 30초]
+    Trigger -->|고정 시각 iOS G+S 로컬알림| BG[LocalAlarmService 예약시각 정각<br/>사용자 탭 → 앱 진입 → 자동 전송]
+    Trigger -->|공통| FG[앱 시작 / 백그라운드→포그라운드<br/>당일 미전송이면 자정 전까지<br/>무조건 자동 heartbeat 전송<br/>가드: isReportedToday + isScheduleInFuture]
 
     WM --> Collect
     BG --> Collect
@@ -292,15 +292,15 @@ flowchart TD
 
 ## 8. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)
 
-> **1차 (Android)**: WorkManager 2계층으로 등록한다 — (a) **one-off**: 예약시각에 정확히 1회 fire. 전송 성공 후 `rescheduleOneOffForNextDay()`로 내일 예약시각에 재등록. (b) **periodic 1시간**: 안전망 폴링. one-off가 OEM 배터리 절약/Doze 등으로 누락되어도 최대 1시간 내 백업 발화 + 화면 켜짐 Doze 해제 piggyback 효과. fire 후 재등록하지 않고 그대로 둔다 — workmanager의 `UPDATE`는 initialDelay를 무시하고 `REPLACE`는 자기자신을 취소하는 이슈가 있어 건드리면 오히려 폴링이 깨진다. one-off와 periodic이 거의 동시에 fire되는 race는 **3선 방어**로 차단한다: (1) 콜백 진입 시 `lastHeartbeatDate == 오늘` 검사(콜백 레벨 1차 거름), (2) `HeartbeatService._executeInternal`에서 `lastScheduledKey`(성공 마커 — API 전송 성공 후에만 save) 검사, (3) `HeartbeatLockDatasource.tryAcquire(scheduledKey)` — SQLite `UNIQUE` INSERT 기반 **cross-isolate 원자 락**. 과거에는 SharedPreferences 기반 `heartbeat_in_flight` 30초 TTL mutex를 사용했으나, WorkManager 워커마다 새 isolate가 생성되는 구조에서 `reload → check → save` 패턴이 CAS가 아니라 두 isolate가 같은 ms에 진입하면 둘 다 통과하는 TOCTOU 윈도우가 존재했다. SQLite `UNIQUE` 제약은 Android WAL로 cross-isolate writer를 진짜 직렬화해 하나만 INSERT 성공, 나머지는 `UniqueConstraintError`로 즉시 실패한다. TTL 30초 초과 stale 락은 `tryAcquire` 진입 시 동일 트랜잭션에서 일괄 청소되어 crashed isolate가 남긴 락을 새 진입자가 이어받는다. iOS는 BGTaskScheduler 불안정성 때문에 사용하지 않는다.
-> **2차**: 앱 열기/포그라운드 복귀 시 오늘 미전송이면 자동 전송한다. Android에서는 one-off/periodic 모두 실패한 경우의 최종 안전망. 진입 시 `isReportedToday=false`인데 오늘 날짜의 `lastScheduledKey`가 남아 있으면 stale ghost로 판단하고 제거한다(`_clearStaleScheduledKey`, 커밋 4260e53) — Worker가 중도 종료되어 남긴 성공 마커가 2차 안전망을 차단하지 않도록 하는 전환기 방어선으로, SubjectHome과 GuardianSafetyCode 양쪽 진입 시 수행한다.
-> **3차 (iOS 전용)**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. Android는 오늘의 안부 확인 메시지 로컬 알림이 없으며 WorkManager periodic 1시간 폴링과 포그라운드 복귀 자동 전송(2차)이 안전망 역할을 한다.
+> **1차 (Android)**: WorkManager 2계층으로 등록한다 — (a) **one-off**: 예약시각에 정확히 1회 fire. (b) **periodic 15분**: 안전망 폴링. one-off가 OEM 배터리 절약/Doze 등으로 누락되어도 최대 15분 내 백업 발화 + 화면 켜짐 Doze 해제 piggyback 효과. **두 task 모두** 전송 성공 시 `HeartbeatService._onHeartbeatSent`가 `HeartbeatWorkerService.schedule()` 호출 → `cancelByUniqueName` + `register*Task` 패턴으로 **둘 다 cancel + 내일자 register** (자동/수동/pending 큐 모든 성공 경로 공통, periodic의 self-cancel은 currently 실행 중인 task는 유지하고 다음 예약만 취소하므로 안전). worker 콜백 끝의 동일 schedule() 호출은 안전망으로 유지(idempotent — schedule이 cancel+register 패턴이라 두 번 호출되어도 결과 동일). retry 3회 실패 시 자동 경로(`manual=false`)는 `LocalAlarmService.notifySendFailed()`로 사용자 안내 알림 표시(payload 무시 — 탭하면 앱 포그라운드 전환만, 2차 안전망의 자동 재전송이 처리). one-off와 periodic이 거의 동시에 fire되는 race는 **3선 방어**로 차단한다: (1) 콜백 진입 시 `lastHeartbeatDate == 오늘` 검사(콜백 레벨 1차 거름), (2) `HeartbeatService._executeInternal`에서 `lastScheduledKey`(성공 마커 — API 전송 성공 후에만 save) 검사, (3) `HeartbeatLockDatasource.tryAcquire(scheduledKey)` — SQLite `UNIQUE` INSERT 기반 **cross-isolate 원자 락**. 과거에는 SharedPreferences 기반 `heartbeat_in_flight` 30초 TTL mutex를 사용했으나, WorkManager 워커마다 새 isolate가 생성되는 구조에서 `reload → check → save` 패턴이 CAS가 아니라 두 isolate가 같은 ms에 진입하면 둘 다 통과하는 TOCTOU 윈도우가 존재했다. SQLite `UNIQUE` 제약은 Android WAL로 cross-isolate writer를 진짜 직렬화해 하나만 INSERT 성공, 나머지는 `UniqueConstraintError`로 즉시 실패한다. TTL 30초 초과 stale 락은 `tryAcquire` 진입 시 동일 트랜잭션에서 일괄 청소되어 crashed isolate가 남긴 락을 새 진입자가 이어받는다. iOS는 BGTaskScheduler 불안정성 때문에 사용하지 않는다.
+> **2차**: 앱 시작 / 백그라운드→포그라운드 복귀 시 당일 미전송이면 **자정 전까지 무조건** 자동 전송한다. 가드는 `isReportedToday`(이미 전송 차단) + Android의 `isScheduleInFuture`(예약시각 이전 차단) 두 개로 단순화 — 자정이 유일한 의미 경계. iOS S/G+S는 `Platform.isAndroid &&` 조건이 false라 시각 가드 자체가 없음. 이전에 있던 `isScheduleTooOld`(예약 +3h 초과 차단) 가드는 늦은 정상 복귀 신호의 가치(보호자 stale 경고 즉시 해소 + WorkManager 정시 사이클 즉시 정상화 + iOS와의 동작 통일)가 차단 효과보다 커서 제거됐다. 진입 시 `isReportedToday=false`인데 오늘 날짜의 `lastScheduledKey`가 남아 있으면 stale ghost로 판단하고 제거한다(`_clearStaleScheduledKey`, 커밋 4260e53) — Worker가 중도 종료되어 남긴 성공 마커가 2차 안전망을 차단하지 않도록 하는 전환기 방어선으로, SubjectHome과 GuardianSafetyCode 양쪽 진입 시 수행한다. 늦은 전송 성공 시 `_onHeartbeatSent`가 WorkManager를 즉시 내일자로 재등록하고 잔존 send_failed 알림도 제거한다.
+> **3차 (iOS 전용)**: 로컬 알림 안전망 (heartbeat 시각 + 30분)이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. Android는 오늘의 안부 확인 메시지 로컬 알림이 없으며 WorkManager periodic 15분 폴링과 포그라운드 복귀 자동 전송(2차)이 안전망 역할을 한다.
 
 ```mermaid
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
-        Install --> FirstWM[WorkManager 예약<br/>one-off 예약시각 정각<br/>+ periodic 1시간 폴링<br/>heartbeat 시각 기본 18:00]
+        Install --> FirstWM[WorkManager 예약<br/>one-off 예약시각 정각<br/>+ periodic 15분 폴링<br/>heartbeat 시각 기본 18:00]
         FirstWM --> FirstAlarm[iOS: 로컬 안전망 알림 예약<br/>heartbeat 시각 + 30분<br/>기본 매일 18:30]
     end
 
@@ -309,7 +309,7 @@ flowchart TD
     subgraph 정상주기[정상 동작 주기]
         Wait([다음 heartbeat 대기])
         Wait -->|WorkManager/BGTaskScheduler 실행| Collect[heartbeat 수집 및 서버 전송]
-        Collect --> Reschedule[Android: one-off만 내일로 재등록<br/>periodic은 그대로 유지<br/>iOS: 로컬 안전망 알림 재예약<br/>heartbeat 시각 + 30분]
+        Collect --> Reschedule[_onHeartbeatSent 일괄 처리:<br/>Android: one-off + periodic 둘 다<br/>cancel + 내일자 register<br/>iOS: 로컬 안전망 알림 내일 재예약<br/>Android: send_failed 알림 제거]
         Reschedule --> Wait
         Wait -->|앱 실행 또는 포그라운드 복귀| AutoSend{예약 시각 지남<br/>AND 오늘 미전송?}
         AutoSend -->|YES| Collect
@@ -339,7 +339,7 @@ flowchart TD
 | 상황 | WorkManager/BGTask | 앱 열기 자동 전송 | 로컬 안전망 알림 | 결과 |
 |------|-------------------|-----------------|----------------|------|
 | 정상 동작 (18:00) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | iOS: 재예약되어 표시 안 됨 | 정상 |
-| 앱 스와이프 종료 (Android OneUI/MIUI) + 화면 꺼짐 Doze | one-off **지연/미실행 가능** → periodic 1시간 폴링이 최대 1시간 내 백업 발화 | 앱 열면 자동 전송 | Android: 해당 없음 (오늘의 안부 확인 메시지 로컬 알림 미사용) | periodic 폴링으로 대부분 복구. 둘 다 실패 시 앱 열기까지 미전송 — 배터리 "제한없음" 설정이 최종 예방책 |
+| 앱 스와이프 종료 (Android OneUI/MIUI) + 화면 꺼짐 Doze | one-off **지연/미실행 가능** → periodic 15분 폴링이 최대 15분 내 백업 발화 | 앱 열면 자동 전송 | Android: 해당 없음 (오늘의 안부 확인 메시지 로컬 알림 미사용) | periodic 폴링으로 대부분 복구. 둘 다 실패 시 앱 열기까지 미전송 — 배터리 "제한없음" 설정이 최종 예방책 |
 | 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **iOS: 18:30 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
 | 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **iOS: 18:30 표시** | 네트워크 복구 + 앱 실행 시 복구 |
 | 알림 권한 거부 (iOS) | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **iOS: 표시 불가** | BGTask/앱 열기로 대응 |

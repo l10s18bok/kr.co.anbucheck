@@ -62,16 +62,19 @@ void heartbeatWorkerCallback() {
       await HeartbeatService().execute(isInteractiveAtTrigger: wasInteractive);
 
       // 전송 성공 시 one-off + periodic 모두 내일로 재등록.
-      // periodic의 self-cancel(자기자신을 cancelByUniqueName)은 현재 실행 중인
-      // 작업은 유지하고 다음 예약만 취소하므로 안전하다.
-      // 전송 실패(오프라인 등) 시 lastHeartbeatDate가 오늘로 저장되지 않으므로
-      // 이 블록에 진입하지 않아 재시도 경로가 유지된다.
+      // 단일 책임은 HeartbeatService._onHeartbeatSent — 자동/수동/pending 모든
+      // 성공 경로에서 일관되게 호출된다. 이 블록은 안전망: 서비스 호출이
+      // 어떤 이유로 누락되어도 worker 경로만큼은 재등록을 보장한다.
+      // schedule()은 cancelByUniqueName + register 패턴이라 idempotent —
+      // 서비스에서 이미 호출됐어도 같은 결과를 한 번 더 만들 뿐 부작용 없음.
+      // periodic의 self-cancel은 현재 실행 중인 작업은 유지하고 다음 예약만
+      // 취소하므로 안전하다.
       final todayAfter = formatYmd(DateTime.now());
       final lastDateAfter = await tokenDs.getLastHeartbeatDate();
       final sentToday = (lastDateAfter == todayAfter);
       debugPrint('[HeartbeatWorker] 재등록 판단 sentToday=$sentToday');
       if (sentToday) {
-        debugPrint('[HeartbeatWorker] 내일로 재등록 시작 (one-off + periodic)');
+        debugPrint('[HeartbeatWorker] 내일로 재등록 시작 (안전망, 서비스에서도 호출됨)');
         await HeartbeatWorkerService.schedule(hour, minute);
       } else {
         debugPrint('[HeartbeatWorker] 오늘 전송 미확정 — periodic 유지(다음 fire에서 재시도)');

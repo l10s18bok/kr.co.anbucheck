@@ -139,6 +139,15 @@ class LocalAlarmService {
     debugPrint('[LocalAlarm] 전송 실패 알림 표시');
   }
 
+  /// 전송 실패 알림 제거 (Android 전용).
+  /// heartbeat 전송 성공(예: 사용자가 알림 탭 → 앱 진입 → 자동 재전송) 직후 호출하여
+  /// 잔존 알림이 사용자 혼동을 일으키지 않도록 한다.
+  static Future<void> cancelSendFailed() async {
+    if (Platform.isIOS) return;
+    await _ensureInitialized();
+    await _plugin!.cancel(_sendFailedId);
+  }
+
   /// 내부 취소 (schedule 내에서도 호출)
   static Future<void> _cancelInternal() async {
     await _ensureInitialized();
