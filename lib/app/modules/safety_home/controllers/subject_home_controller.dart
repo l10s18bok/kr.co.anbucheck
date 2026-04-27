@@ -93,10 +93,22 @@ class SubjectHomeController extends SafetyHomeBaseController {
 
   /// 예약시각 경과 + 오늘 미전송이면 heartbeat 자동 전송.
   /// iOS S 모드는 정책상 비활성이지만 코드 호환을 위해 Android 가드만 적용.
+  ///
+  /// **첫 설치(전송 이력 없음) 우회**: `lastHeartbeatDate`가 비어있으면 시각 가드를
+  /// 건너뛰고 즉시 전송한다. 이는 동시에 세 가지를 한 번에 해결한다:
+  /// (1) Google Fit Local Recording 구독 생성(걸음수 측정 시작) — 21:00 이후
+  /// 설치 시 다음날까지 D0 데이터 0이 되는 문제 해소,
+  /// (2) 서버 last_seen baseline — 등록 직후~예약시각까지의 공백 제거,
+  /// (3) 등록→heartbeat 파이프라인(token/network/권한) 즉시 검증.
+  /// `isScheduleTooOld` 가드의 전제(서버가 이미 미수신 경고 발송)는 첫 설치에는
+  /// 성립하지 않는다.
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
-    if (Platform.isAndroid && isScheduleInFuture) return;
-    if (Platform.isAndroid && isScheduleTooOld) return;
+    final hasEverSent = lastHeartbeatDate.isNotEmpty;
+    if (hasEverSent) {
+      if (Platform.isAndroid && isScheduleInFuture) return;
+      if (Platform.isAndroid && isScheduleTooOld) return;
+    }
     await _clearStaleScheduledKey();
     // 포그라운드 진입은 화면을 켜고 잠금을 풀어 앱을 연 결과이므로
     // interactive=true가 확정 증거 — 명시 전달.

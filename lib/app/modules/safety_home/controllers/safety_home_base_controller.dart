@@ -136,9 +136,20 @@ abstract class SafetyHomeBaseController extends BaseController
   @override
   void onResumed() {
     super.onResumed();
-    refreshActivityPermissionStatus();
+    _refreshActivityPermissionAndWarmUpIfGranted();
     refreshLocationPermissionStatus();
     loadScheduleFromLocal().then((_) => onResumedRoleSpecific());
+  }
+
+  /// 포그라운드 복귀 시 활동 권한 상태 재확인 + denied → granted 전환 시 warmUp 재호출.
+  /// 사용자가 OS 설정에서 권한을 늦게 허용하고 돌아온 경우, Google Fit 구독을
+  /// 즉시 선점해 D0 갭을 추가로 좁힌다. fire-and-forget — UI 흐름 블로킹 없음.
+  Future<void> _refreshActivityPermissionAndWarmUpIfGranted() async {
+    final wasDenied = activityPermissionDenied.value;
+    await refreshActivityPermissionStatus();
+    if (wasDenied && !activityPermissionDenied.value) {
+      HeartbeatService.warmUpStepSubscription();
+    }
   }
 
   // ── 카드 상태 (공통 계산 getter) ─────────────────────────────────────
@@ -215,7 +226,8 @@ abstract class SafetyHomeBaseController extends BaseController
     }
   }
 
-  /// 경고 텍스트 탭 시 권한 재요청
+  /// 경고 텍스트 탭 시 권한 재요청.
+  /// 권한이 새로 허용되면 Google Fit 구독을 즉시 선점해 D0 갭 축소.
   Future<void> requestActivityPermissionAgain() async {
     try {
       if (Platform.isAndroid) {
@@ -235,6 +247,10 @@ abstract class SafetyHomeBaseController extends BaseController
       }
     } finally {
       await refreshActivityPermissionStatus();
+      // 권한이 허용된 직후 Google Fit 구독을 즉시 선점 — fire-and-forget.
+      if (!activityPermissionDenied.value) {
+        HeartbeatService.warmUpStepSubscription();
+      }
     }
   }
 
