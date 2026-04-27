@@ -297,12 +297,12 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                               showActionButtons: !isNormal,
                               isHighlighted: isHighlighted,
                               onCall: () => controller.onCallTapped(subject.inviteCode),
-                              onConfirmSafety: () => controller.confirmSafety(subject.inviteCode, subject.alias),
+                              onConfirmSafety: () =>
+                                  controller.confirmSafety(subject.inviteCode, subject.alias),
                               batteryLevel: isNormal ? subject.batteryLevel : null,
                               steps: steps,
                               onOpenFullChart: () async {
-                                final ok = await controller
-                                    .loadMonthlyStepsIfNeeded(subject);
+                                final ok = await controller.loadMonthlyStepsIfNeeded(subject);
                                 if (!ok) return;
                                 if (!context.mounted) return;
                                 // 차트가 작게 시작해 튀어나오는 느낌 — scale(0.7→1.0, easeOutBack) + fade
@@ -311,10 +311,8 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                                   barrierDismissible: true,
                                   barrierLabel: 'dismiss',
                                   barrierColor: Colors.black54,
-                                  transitionDuration:
-                                      const Duration(milliseconds: 300),
-                                  pageBuilder: (_, _, _) =>
-                                      _StepsChartDialog(subject: subject),
+                                  transitionDuration: const Duration(milliseconds: 300),
+                                  pageBuilder: (_, _, _) => _StepsChartDialog(subject: subject),
                                   transitionBuilder: (_, anim, _, child) {
                                     final scale = CurvedAnimation(
                                       parent: anim,
@@ -324,9 +322,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                                     return FadeTransition(
                                       opacity: anim,
                                       child: ScaleTransition(
-                                        scale: Tween<double>(
-                                                begin: 0.7, end: 1.0)
-                                            .animate(scale),
+                                        scale: Tween<double>(begin: 0.7, end: 1.0).animate(scale),
                                         child: child,
                                       ),
                                     );
@@ -402,8 +398,10 @@ class _SubjectCard extends StatefulWidget {
 
   /// 차트에 표시할 걸음수 배열 (카드는 항상 7일). null=등록 전, 0=heartbeat 없음, >0=활동량.
   final List<int?> steps;
+
   /// 달력 아이콘 탭 → 30일 전체 차트 다이얼로그 오픈.
   final VoidCallback? onOpenFullChart;
+
   /// Hero 태그 구성용 (다이얼로그와 매칭).
   final String inviteCode;
 
@@ -475,16 +473,14 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(right: 8.w),
-        decoration: BoxDecoration(
-          color: widget.backgroundColor,
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border(
-            left: BorderSide(color: widget.borderColor, width: 4.w),
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(right: 8.w),
+      decoration: BoxDecoration(
+        color: widget.backgroundColor,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border(
+          left: BorderSide(color: widget.borderColor, width: 4.w),
         ),
       ),
       child: Padding(
@@ -559,21 +555,38 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                       onTap: widget.onOpenFullChart,
                       child: Padding(
                         padding: EdgeInsets.all(4.w),
-                        child: Icon(
-                          Icons.calendar_month_rounded,
-                          size: 18.w,
-                          color: AppColors.textSecondary,
+                        child: SizedBox(
+                          width: 30.w,
+                          height: 30.w,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Icon(
+                                Icons.calendar_month_rounded,
+                                size: 30.w,
+                                color: AppColors.textSecondary,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 5.h),
+                                color: Colors.white,
+                                child: Text(
+                                  '30',
+                                  style: TextStyle(
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.textSecondary,
+                                    height: 1,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                 ],
               ),
-              Expanded(
-                child: _StepsBarChart(
-                  steps: widget.steps,
-                  isShowing30Days: false,
-                ),
-              ),
+              Expanded(child: _StepsBarChart(steps: widget.steps, isShowing30Days: false)),
             ],
 
             // 경고: 활동 라벨 (왼쪽 정렬, 닉네임-버튼 수직 중앙)
@@ -661,16 +674,7 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
             ],
           ],
         ),
-        ),
-        ),
-        if (widget.onOpenFullChart != null && !widget.showActionButtons)
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: widget.onOpenFullChart,
-              behavior: HitTestBehavior.opaque,
-            ),
-          ),
-      ],
+      ),
     );
   }
 }
@@ -771,6 +775,8 @@ class _StepsBarChart extends StatelessWidget {
           rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           // 최댓값 막대 위에만 걸음수 표시 (쉼표 포함). fitInside로 차트
           // 좌우 끝 막대라도 라벨이 잘리지 않고 안쪽으로 정렬됨.
+          // 최댓값 막대 라벨만 차트 상단에 표시. 1000 이하 막대는
+          // showingTooltipIndicators로 막대 바로 위에 붙인다.
           topTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: maxIdx >= 0,
@@ -795,6 +801,11 @@ class _StepsBarChart extends StatelessWidget {
           for (int i = 0; i < steps.length; i++)
             BarChartGroupData(
               x: i,
+              // 1000 이하 양수 막대는 항상 라벨을 막대 바로 위에 표시
+              showingTooltipIndicators:
+                  (steps[i] != null && steps[i]! > 0 && steps[i]! <= 1000 && i != maxIdx)
+                  ? [0]
+                  : [],
               barRods: [
                 BarChartRodData(
                   toY: _rodHeight(steps[i], maxY),
@@ -851,14 +862,11 @@ class _StepsChartDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<GuardianDashboardController>();
-    final steps =
-        controller.monthlyStepsCache[subject.inviteCode] ?? const <int?>[];
+    final steps = controller.monthlyStepsCache[subject.inviteCode] ?? const <int?>[];
 
     return Dialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 40.h),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       child: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
@@ -868,21 +876,14 @@ class _StepsChartDialog extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    subject.alias,
-                    style: AppTextTheme.bodyLarge(fw: FontWeight.w700),
-                  ),
+                  child: Text(subject.alias, style: AppTextTheme.bodyLarge(fw: FontWeight.w700)),
                 ),
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () => Get.back<void>(),
                   child: Padding(
                     padding: EdgeInsets.all(6.w),
-                    child: Icon(
-                      Icons.close_rounded,
-                      size: 22.w,
-                      color: AppColors.textSecondary,
-                    ),
+                    child: Icon(Icons.close_rounded, size: 22.w, color: AppColors.textSecondary),
                   ),
                 ),
               ],
@@ -895,10 +896,7 @@ class _StepsChartDialog extends StatelessWidget {
             SizedBox(height: 12.h),
             SizedBox(
               height: 280.h,
-              child: _StepsBarChart(
-                steps: steps,
-                isShowing30Days: true,
-              ),
+              child: _StepsBarChart(steps: steps, isShowing30Days: true),
             ),
           ],
         ),
