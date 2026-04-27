@@ -410,6 +410,6 @@ abstract class DeDe {
     'noti_channel_name': 'Anbu-Benachrichtigungen',
     'notification_send_failed_title': '📶 Bitte überprüfen Sie Ihre Internetverbindung',
     'notification_send_failed_body':
-        'Öffnen Sie die App, um Ihre Wohlbefindensprüfung erneut zu senden.',
+        'Tippen Sie auf diese Nachricht, um automatisch erneut zu senden.',
   };
 }

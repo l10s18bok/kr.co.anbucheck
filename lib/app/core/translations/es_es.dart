@@ -410,6 +410,6 @@ abstract class EsEs {
     'wellbeing_check_body': '¿Se encuentra bien? Por favor, toque esta notificación.',
     'noti_channel_name': 'Alertas Anbu',
     'notification_send_failed_title': '📶 Verifique su conexión a Internet',
-    'notification_send_failed_body': 'Abra la aplicación para reenviar su reporte de bienestar.',
+    'notification_send_failed_body': 'Toque este mensaje para reenviar automáticamente.',
   };
 }

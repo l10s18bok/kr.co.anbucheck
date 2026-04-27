@@ -405,6 +405,6 @@ abstract class PlPl {
     'wellbeing_check_body': 'Czy wszystko w porządku? Proszę dotknąć tego powiadomienia.',
     'noti_channel_name': 'Powiadomienia Anbu',
     'notification_send_failed_title': '📶 Sprawdź połączenie internetowe',
-    'notification_send_failed_body': 'Otwórz aplikację, aby ponownie wysłać raport zdrowia.',
+    'notification_send_failed_body': 'Dotknij tej wiadomości, aby ponownie wysłać automatycznie.',
   };
 }

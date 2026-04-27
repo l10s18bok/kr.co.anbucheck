@@ -412,6 +412,6 @@ abstract class ItIt {
     'noti_channel_name': 'Avvisi Anbu',
     'notification_send_failed_title': '📶 Controlla la tua connessione Internet',
     'notification_send_failed_body':
-        'Apri l\'app per inviare di nuovo il tuo controllo di benessere.',
+        'Tocca questo messaggio per reinviare automaticamente.',
   };
 }

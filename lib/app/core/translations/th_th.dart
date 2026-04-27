@@ -390,6 +390,6 @@ abstract class ThTh {
     'wellbeing_check_body': 'คุณสบายดีไหม? กรุณาแตะที่การแจ้งเตือนนี้',
     'noti_channel_name': 'การแจ้งเตือน Anbu',
     'notification_send_failed_title': '📶 กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต',
-    'notification_send_failed_body': 'เปิดแอปเพื่อส่งรายงานสุขภาพอีกครั้ง',
+    'notification_send_failed_body': 'แตะข้อความนี้เพื่อส่งซ้ำโดยอัตโนมัติ',
   };
 }

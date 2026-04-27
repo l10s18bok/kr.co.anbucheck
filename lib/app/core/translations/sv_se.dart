@@ -395,6 +395,6 @@ abstract class SvSe {
     'wellbeing_check_body': 'Mår du bra? Vänligen tryck på denna avisering.',
     'noti_channel_name': 'Anbu-aviseringar',
     'notification_send_failed_title': '📶 Kontrollera din internetanslutning',
-    'notification_send_failed_body': 'Öppna appen för att skicka om din hälsorapport.',
+    'notification_send_failed_body': 'Tryck på det här meddelandet för att skicka igen automatiskt.',
   };
 }

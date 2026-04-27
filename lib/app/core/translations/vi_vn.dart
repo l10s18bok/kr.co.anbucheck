@@ -401,6 +401,6 @@ abstract class ViVn {
     'wellbeing_check_body': 'Bạn có khỏe không? Vui lòng chạm vào thông báo này.',
     'noti_channel_name': 'Cảnh báo Anbu',
     'notification_send_failed_title': '📶 Vui lòng kiểm tra kết nối Internet',
-    'notification_send_failed_body': 'Mở ứng dụng để gửi lại báo cáo sức khỏe.',
+    'notification_send_failed_body': 'Chạm vào tin nhắn này để gửi lại tự động.',
   };
 }

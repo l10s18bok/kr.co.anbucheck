@@ -368,6 +368,6 @@ abstract class JaJp {
     'wellbeing_check_body': 'お元気ですか？この通知をタップしてください。',
     'noti_channel_name': 'Anbu通知',
     'notification_send_failed_title': '📶 インターネット接続を確認してください',
-    'notification_send_failed_body': 'アプリを開いて安否を再送信してください。',
+    'notification_send_failed_body': 'このメッセージをタップすると自動的に再送信されます。',
   };
 }
