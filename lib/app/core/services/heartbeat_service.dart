@@ -208,7 +208,21 @@ class HeartbeatService {
     // Doze 상태에서 connectivity_plus가 "오프라인"으로 오판하는 케이스가 확인되어
     // 사전 체크를 제거했다 — 실제 전송은 WorkManager가 보장한 네트워크 위에서 수행.
     final remote = HeartbeatRemoteDatasource(deviceToken);
+    // manual=true 요청은 reqKey가 null이라 race 재검사를 건너뛴다 (수동 보고는 무조건 전송).
+    final reqKey = request.scheduledKey;
     for (var attempt = 1; attempt <= 3; attempt++) {
+      // retry 진행 중 다른 isolate가 같은 scheduledKey로 성공했으면 즉시 중단.
+      // 락 TTL(30초) < retry 최대 시간(75~105초, attempt 3 timeout 30초 포함)이라
+      // retry 도중 락이 자연 만료되어 다른 진입자(다른 worker / 포그라운드 진입)가
+      // 새 락으로 성공할 수 있다. 본 worker가 retry를 끝까지 진행해 attempt 3 실패
+      // 분기에서 misleading "전송 실패" 알림을 띄우는 race를 차단한다.
+      if (reqKey != null) {
+        await getReloadedPrefs();
+        if (await _tokenDs.getLastScheduledKey() == reqKey) {
+          debugPrint('[HeartbeatService] retry 중 다른 isolate 성공 감지 — 중단 ($reqKey)');
+          return;
+        }
+      }
       try {
         await remote.send(request);
         debugPrint('[HeartbeatService] API 전송 성공 (시도 $attempt)');
@@ -216,6 +230,16 @@ class HeartbeatService {
       } catch (e) {
         debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
         if (attempt == 3) {
+          // 실패 분기 진입 직전 마지막 재검사 — attempt 3 자체가 30초 timeout일 수
+          // 있어 그 사이에도 다른 isolate가 성공했을 수 있다. 이미 성공이면
+          // savePending과 알림 모두 스킵해 misleading 안내를 막는다.
+          if (reqKey != null) {
+            await getReloadedPrefs();
+            if (await _tokenDs.getLastScheduledKey() == reqKey) {
+              debugPrint('[HeartbeatService] attempt 3 실패 직전 다른 isolate 성공 감지 — 알림 스킵');
+              return;
+            }
+          }
           await _heartbeatDs.savePending(request.toJson());
           if (!request.manual) await LocalAlarmService.notifySendFailed();
           return;
