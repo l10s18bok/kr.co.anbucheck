@@ -764,11 +764,14 @@ class _StepsBarChart extends StatelessWidget {
           ),
           bottomTitles: AxisTitles(
             axisNameSize: 16,
-            axisNameWidget: Text(
-              isShowing30Days
-                  ? 'guardian_chart_x_axis_last_30_days'.tr
-                  : 'guardian_chart_x_axis_last_7_days'.tr,
-              style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
+            axisNameWidget: Align(
+              alignment: isShowing30Days ? Alignment.center : Alignment.centerRight,
+              child: Text(
+                isShowing30Days
+                    ? 'guardian_chart_x_axis_last_30_days'.tr
+                    : 'guardian_chart_x_axis_last_7_days'.tr,
+                style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
+              ),
             ),
             sideTitles: const SideTitles(showTitles: false),
           ),
