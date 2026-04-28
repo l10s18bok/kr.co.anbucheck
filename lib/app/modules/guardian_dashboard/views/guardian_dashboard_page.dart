@@ -737,7 +737,7 @@ class _StepsBarChart extends StatelessWidget {
               if (v == null || v == 0) return null;
               return BarTooltipItem(
                 _formatSteps(v),
-                AppTextTheme.labelSmall(color: chartColor, fw: FontWeight.w700),
+                AppTextTheme.labelSmall(color: AppColors.textTertiary, fw: FontWeight.w600),
               );
             },
           ),
