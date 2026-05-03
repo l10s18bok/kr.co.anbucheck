@@ -336,6 +336,29 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 - iOS: 사용자가 알림 권한을 거부하면 3차 안전망(오늘의 안부 확인 메시지 로컬 알림) 동작 안 함 → 모드 선택 후 권한 요청 안내 화면(9.0)에서 중요성 안내
 - 알림 권한은 이 앱의 핵심 기능(보호자 경고 Push 수신)에도 필수이므로, 별도 권한 추가 부담 없음
 
+**periodic 15분 폴링 설계 원칙 (변경 금지):**
+
+periodic 15분 폴링은 단순 백업 발화가 아니라 **앱을 열지 않은 채 사용자가 폰을 사용하는 행위 자체를 트리거**로 삼는 last-resort 회복 메커니즘이다. one-off가 OEM 배터리 절약/Doze로 누락된 상태에서 사용자가 앱을 열지 않고 다른 앱(전화·카톡·메모 등)만 사용하더라도, 화면 ON / Doze 해제 시점에 suspended 상태였던 periodic이 발화하여 heartbeat 시도가 일어난다. 이 후크가 사라지면 사용자가 앱을 직접 열기 전까지 회복 경로가 단절된다.
+
+**대체 메커니즘은 모두 검토 후 거부됨** — 새로 제안되더라도 아래 표를 근거로 즉시 거부:
+
+| 메커니즘 | 거부 사유 |
+|---------|----------|
+| System Broadcast (`SCREEN_ON` / `USER_PRESENT`) | Android 8+ implicit broadcast 금지. runtime registration은 프로세스가 살아있어야 동작 → 앱이 죽은 상태에서는 무용지물 |
+| FCM Silent Push | 앱 강제 종료 시 FCM 미전달 + OEM(MIUI, OneUI)이 Silent Push 자체 차단. 과거 시도 후 제거 |
+| JobScheduler 직접 사용 | WorkManager 내부 메커니즘 — 같은 제약 그대로 |
+| Foreground Service 24/7 | Google Play 정책상 wellness check 용도 정당화 어려움 + 배터리 소모로 앱 핵심 가치(제로 인터랙션, 최소 배터리) 위배 |
+| AlarmManager 기반 (`android_alarm_manager_plus` 등) | 알람 아이콘 노출 회피 |
+
+**금지된 "최적화" 방향** (실측 데이터 없이 제안된 경우 거부):
+
+- periodic frequency를 30분/60분 등으로 늘리기 → fire latency 커져 짧은 폰 사용 윈도우(잠금 해제 30초 → 재잠금)를 놓침
+- "활성 창" 도입 (예: scheduled+6h 후 self-cancel) → 늦은 시각(23시 등) 폰 사용 회복 불가
+- "OEM 차단 우려"를 이유로 폴링 약화 → 실제 부하는 Doze 단계에 따라 다름: Light Doze 초반은 maintenance window가 5~15분 주기(`light_idle_to=5min`, `light_idle_factor=2.0`, `light_max_idle_to=15min`)이라 periodic 15분과 같은 차수에서 동작하고, Deep Doze(30분 inactive 후 진입)부터는 maintenance가 시간 단위로 길어져 frequency와 무관해진다. awake 상태에서는 OEM 전력 허용 상태이므로 차단 위험 낮음
+- "self-cancel race 위험"을 이유로 폴링 자체 제거 → WorkManager의 cancel 전파 race는 공식 문서로 단정되지 않은 영역. 추정만으로 폴링 메커니즘을 제거하지 않으며, 실측 telemetry로 race 발생을 확인한 후에만 대응 검토
+
+worker 콜백 끝의 `HeartbeatWorkerService.schedule()` 중복 호출(`heartbeat_worker_service.dart:78`)은 단일 책임 분리 차원에서 제거 검토 가능하나, 이는 periodic 폴링 설계와 무관한 별도 정리 사항이다.
+
 
 ### 2.3 활동 지표
 

@@ -35,9 +35,12 @@ void heartbeatWorkerCallback() {
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
       final now = DateTime.now();
       final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
-      // +3분 offset으로 periodic은 항상 T+3 이후 발화. WorkManager는 initialDelay
-      // 이전에 발화하지 않으므로 -15분 창으로 충분하다. 서버 측 (device_id, scheduled_key)
-      // idempotency가 중복 전송을 차단하므로 조기 통과의 부작용은 없다.
+      // 예약시각 -15분 이전이면 스킵. periodic은 +3분 offset으로 등록되지만
+      // initialDelay 이후 실제 발화 시점은 Doze maintenance window에 종속되어
+      // 예측 불가하다 (Light Doze: 5/10/15분 주기, factor 2.0).
+      // -15분 창은 이 변동성을 흡수하기 위한 가드이며, 동일 maintenance window에서
+      // one-off과 periodic이 batch fire되어도 서버 측 (device_id, scheduled_key)
+      // idempotency가 중복 전송을 차단하므로 조기 통과의 사용자 영향은 없다.
       final earliestAllowed = scheduled.subtract(const Duration(minutes: 15));
       if (now.isBefore(earliestAllowed)) {
         debugPrint('[HeartbeatWorker] schedule=$hour:$minute, now=${now.hour}:${now.minute}:${now.second} → 스킵(예약시각 -15분 이전)');
@@ -61,24 +64,10 @@ void heartbeatWorkerCallback() {
       debugPrint('[HeartbeatWorker] ScreenState.isInteractive=$wasInteractive (execute 호출 직전)');
       await HeartbeatService().execute(isInteractiveAtTrigger: wasInteractive);
 
-      // 전송 성공 시 one-off + periodic 모두 내일로 재등록.
-      // 단일 책임은 HeartbeatService._onHeartbeatSent — 자동/수동/pending 모든
-      // 성공 경로에서 일관되게 호출된다. 이 블록은 안전망: 서비스 호출이
-      // 어떤 이유로 누락되어도 worker 경로만큼은 재등록을 보장한다.
-      // schedule()은 cancelByUniqueName + register 패턴이라 idempotent —
-      // 서비스에서 이미 호출됐어도 같은 결과를 한 번 더 만들 뿐 부작용 없음.
-      // periodic의 self-cancel은 현재 실행 중인 작업은 유지하고 다음 예약만
-      // 취소하므로 안전하다.
-      final todayAfter = formatYmd(DateTime.now());
-      final lastDateAfter = await tokenDs.getLastHeartbeatDate();
-      final sentToday = (lastDateAfter == todayAfter);
-      debugPrint('[HeartbeatWorker] 재등록 판단 sentToday=$sentToday');
-      if (sentToday) {
-        debugPrint('[HeartbeatWorker] 내일로 재등록 시작 (안전망, 서비스에서도 호출됨)');
-        await HeartbeatWorkerService.schedule(hour, minute);
-      } else {
-        debugPrint('[HeartbeatWorker] 오늘 전송 미확정 — periodic 유지(다음 fire에서 재시도)');
-      }
+      // 재등록 책임은 HeartbeatService._onHeartbeatSent 단일 — 자동/수동/pending/worker
+      // 모든 성공 경로에서 일관되게 호출된다. worker callback에서 별도 schedule()을
+      // 호출하지 않는다 (이전 안전망 패턴 제거: 한 번의 worker fire에서 cancel+register
+      // mutation이 4건 발생하는 부작용을 막고, 단일 책임으로 일원화).
     } catch (e) {
       debugPrint('[HeartbeatWorker] 실행 실패: $e');
     }
@@ -151,7 +140,30 @@ class HeartbeatWorkerService {
   /// 때문에, 예약시각 재설정이나 frequency 코드 변경이 기기에 반영되려면 기존
   /// 스케줄을 먼저 취소해야 한다. `cancelByUniqueName`은 명시적 취소라 REPLACE
   /// 정책의 self-cancel 이슈와 무관하게 안전하다.
+  ///
+  /// 4단계(cancel oneOff → register oneOff → cancel periodic → register periodic)는
+  /// 비원자적이라 중간 단계에서 throw하면 cancel만 적용되고 register가 누락되어
+  /// 양쪽 task 모두 사라진 상태가 영구 유지될 수 있다. 일시적 WorkManager DB
+  /// 오류 대비 최대 2회 시도(첫 시도 실패 시 2초 후 재시도)로 방어한다.
   static Future<void> schedule(int hour, int minute) async {
+    for (var attempt = 1; attempt <= 2; attempt++) {
+      try {
+        await _doSchedule(hour, minute);
+        return;
+      } catch (e) {
+        debugPrint('[HeartbeatWorker] schedule() 시도 $attempt 실패: $e');
+        if (attempt == 1) {
+          await Future.delayed(const Duration(seconds: 2));
+        }
+      }
+    }
+    debugPrint(
+      '[HeartbeatWorker] schedule() 최종 실패 — 다음 _onHeartbeatSent 호출 또는 '
+      '포그라운드 진입 시 자연 회복 대기',
+    );
+  }
+
+  static Future<void> _doSchedule(int hour, int minute) async {
     final delay = _computeNextDelay(hour, minute);
 
     // one-off: 정확히 예약시각에 1회 fire
