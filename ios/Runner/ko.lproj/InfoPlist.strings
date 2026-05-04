@@ -3,3 +3,4 @@
 "NSMotionUsageDescription" = "걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.";
 "NSLocationWhenInUseUsageDescription" = "긴급 도움 요청 시 현재 위치를 보호자에게 전달하여 빠른 이동을 돕습니다. 평상시에는 위치를 수집하지 않습니다.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "이 앱은 백그라운드 위치를 사용하지 않습니다. 이 키는 위치 SDK의 API 참조로 인해 필요하며, 앱은 긴급 도움 요청 시 포그라운드에서만 위치를 1회 획득합니다.";
+"NSUserTrackingUsageDescription" = "맞춤 광고를 표시하기 위해 광고 식별자에 접근합니다. 거부해도 앱은 정상 작동합니다.";

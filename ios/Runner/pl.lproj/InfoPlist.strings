@@ -3,3 +3,4 @@
 "NSMotionUsageDescription" = "Używane do wykrywania kroków i potwierdzania aktywności.";
 "NSLocationWhenInUseUsageDescription" = "Używane tylko podczas zgłoszenia pomocy w nagłym wypadku, aby udostępnić obecną lokalizację opiekunom, by szybciej do Ciebie dotarli. W innych momentach lokalizacja nie jest zbierana.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Ta aplikacja nie używa lokalizacji w tle. Ten klucz jest wymagany ze względu na odwołania API w SDK lokalizacji. Lokalizacja jest pobierana tylko raz na pierwszym planie przy prośbie o pomoc w nagłych przypadkach.";
+"NSUserTrackingUsageDescription" = "Używane do wyświetlania bardziej trafnych reklam. Aplikacja działa normalnie również po odmowie.";

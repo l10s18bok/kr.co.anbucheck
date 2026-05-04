@@ -3,3 +3,4 @@
 "NSMotionUsageDescription" = "Gebruikt om stappen te detecteren en activiteit te bevestigen.";
 "NSLocationWhenInUseUsageDescription" = "Alleen gebruikt bij een noodhulpverzoek om uw huidige locatie met uw voogden te delen, zodat zij u sneller kunnen bereiken. Op andere momenten wordt de locatie niet verzameld.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Deze app gebruikt geen achtergrondlocatie. Deze sleutel is vereist vanwege API-verwijzingen in de locatie-SDK. De locatie wordt slechts één keer op de voorgrond verkregen wanneer u expliciet om noodhulp vraagt.";
+"NSUserTrackingUsageDescription" = "Gebruikt om relevantere advertenties te tonen. De app werkt normaal als u weigert.";

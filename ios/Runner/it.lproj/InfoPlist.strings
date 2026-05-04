@@ -3,3 +3,4 @@
 "NSMotionUsageDescription" = "Utilizzato per rilevare i passi e confermare la tua attività.";
 "NSLocationWhenInUseUsageDescription" = "Usato solo durante una richiesta di aiuto urgente per condividere la tua posizione attuale con i tutori, così possono raggiungerti più rapidamente. La posizione non viene raccolta in altri momenti.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Questa app non utilizza la posizione in background. Questa chiave è necessaria a causa dei riferimenti API nell'SDK di posizione. La posizione viene ottenuta una sola volta in primo piano quando richiedi esplicitamente aiuto di emergenza.";
+"NSUserTrackingUsageDescription" = "Usato per mostrare annunci più pertinenti. L'app funziona normalmente anche se rifiuti.";

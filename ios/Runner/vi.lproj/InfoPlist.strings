@@ -3,3 +3,4 @@
 "NSMotionUsageDescription" = "Dùng để phát hiện số bước chân và xác nhận hoạt động của bạn.";
 "NSLocationWhenInUseUsageDescription" = "Chỉ dùng khi bạn yêu cầu trợ giúp khẩn cấp để chia sẻ vị trí hiện tại với người giám hộ, giúp họ đến với bạn nhanh hơn. Vị trí không được thu thập vào những lúc khác.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Ứng dụng này không sử dụng vị trí nền. Khóa này bắt buộc do tham chiếu API trong SDK vị trí. Vị trí chỉ được lấy một lần ở nền trước khi bạn yêu cầu trợ giúp khẩn cấp.";
+"NSUserTrackingUsageDescription" = "Dùng để hiển thị quảng cáo phù hợp hơn với sở thích của bạn. Ứng dụng vẫn hoạt động bình thường nếu bạn từ chối.";

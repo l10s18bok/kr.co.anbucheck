@@ -3,3 +3,4 @@
 "NSMotionUsageDescription" = "Används för att upptäcka steg och bekräfta din aktivitet.";
 "NSLocationWhenInUseUsageDescription" = "Används endast när du begär akut hjälp för att dela din nuvarande plats med dina vårdgivare så att de kan nå dig snabbare. Platsen samlas inte in vid andra tillfällen.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Den här appen använder inte bakgrundslokalisering. Den här nyckeln krävs på grund av API-referenser i plats-SDK. Platsen hämtas bara en gång i förgrunden när du uttryckligen begär nödhjälp.";
+"NSUserTrackingUsageDescription" = "Används för att visa annonser som bättre matchar dina intressen. Appen fungerar som vanligt om du avböjer.";

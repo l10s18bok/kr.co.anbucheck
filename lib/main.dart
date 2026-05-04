@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -16,6 +19,13 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   await HeartbeatWorkerService.init();
   Get.put(ThemeService());
+  // ATT(App Tracking Transparency) — iOS 14.5+ IDFA 접근. AdMob 초기화 전 처리.
+  // 실패/거부 어떤 경우에도 광고는 비개인화로 fallback되며 앱 동작에는 영향 없음.
+  if (Platform.isIOS) {
+    try {
+      await AppTrackingTransparency.requestTrackingAuthorization();
+    } catch (_) {}
+  }
   await Get.putAsync(() => AdService().init());
   runApp(const App());
 }

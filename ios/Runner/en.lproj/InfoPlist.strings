@@ -3,3 +3,4 @@
 "NSMotionUsageDescription" = "Used to detect steps and confirm your activity.";
 "NSLocationWhenInUseUsageDescription" = "Used only when you request emergency help to share your current location with your guardians so they can reach you faster. Location is not collected at other times.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "This app does not use background location. This key is required due to API references in the location SDK. Location is obtained only once in the foreground when you explicitly request emergency help.";
+"NSUserTrackingUsageDescription" = "Used to show ads tailored to your interests. The app works normally if you decline.";

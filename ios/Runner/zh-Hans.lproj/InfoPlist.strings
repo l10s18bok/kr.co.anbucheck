@@ -3,3 +3,4 @@
 "NSMotionUsageDescription" = "用于检测步数以确认活动状态。";
 "NSLocationWhenInUseUsageDescription" = "仅在您请求紧急帮助时，向监护人共享您的当前位置，以便他们尽快到达。平时不会收集位置信息。";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "此应用不使用后台位置。此键由于位置SDK的API引用而必须存在。仅在您明确请求紧急帮助时在前台获取一次位置。";
+"NSUserTrackingUsageDescription" = "用于展示更符合您兴趣的广告。拒绝后应用仍可正常使用。";
