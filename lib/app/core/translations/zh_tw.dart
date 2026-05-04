@@ -135,8 +135,8 @@ abstract class ZhTw {
     'emergency_map_no_location': '沒有位置資訊',
     'emergency_location_permission_denied_snackbar': '未取得位置權限，已發送緊急警報',
     'subject_home_emergency_confirm_send': '發送緊急請求',
-    'subject_home_share_text': '請用 Anbu 應用程式查看我的平安！\n邀請碼：@code',
-    'subject_home_share_subject': 'Anbu 邀請碼',
+    'subject_home_share_text': '請在 Anbu 應用程式中與我連結。\n連結碼：@code',
+    'subject_home_share_subject': 'Anbu 連結碼',
     'subject_home_code_copied': '邀請碼已複製',
 
     // ── 被守護者側邊欄 ──

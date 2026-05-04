@@ -152,8 +152,8 @@ abstract class NlNl {
     'emergency_location_permission_denied_snackbar': 'Noodmelding verzonden zonder locatierechten',
     'subject_home_emergency_confirm_send': 'Noodverzoek verzenden',
     'subject_home_share_text':
-        'Controleer hoe het met me gaat via de Anbu-app!\nUitnodigingscode: @code',
-    'subject_home_share_subject': 'Anbu-uitnodigingscode',
+        'Maak verbinding met mij via de Anbu-app.\nVerbindingscode: @code',
+    'subject_home_share_subject': 'Anbu-verbindingscode',
     'subject_home_code_copied': 'Code gekopieerd',
 
     // ── Drawer beschermeling ──

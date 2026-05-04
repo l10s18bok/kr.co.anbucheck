@@ -150,8 +150,8 @@ abstract class EnUs {
     'emergency_location_permission_denied_snackbar':
         'Emergency alert sent without location permission',
     'subject_home_emergency_confirm_send': 'Send Emergency Request',
-    'subject_home_share_text': 'Check on me with the Anbu app!\nInvite code: @code',
-    'subject_home_share_subject': 'Anbu Invite Code',
+    'subject_home_share_text': 'Please connect with me on the Anbu app.\nConnection code: @code',
+    'subject_home_share_subject': 'Anbu Connection Code',
     'subject_home_code_copied': 'Code copied',
 
     // ── Subject Drawer ──

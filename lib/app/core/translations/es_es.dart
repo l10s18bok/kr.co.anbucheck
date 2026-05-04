@@ -152,8 +152,8 @@ abstract class EsEs {
     'emergency_location_permission_denied_snackbar':
         'Alerta de emergencia enviada sin permiso de ubicación',
     'subject_home_emergency_confirm_send': 'Enviar solicitud de emergencia',
-    'subject_home_share_text': '¡Cuide de mí con la aplicación Anbu!\nCódigo de invitación: @code',
-    'subject_home_share_subject': 'Código de invitación Anbu',
+    'subject_home_share_text': 'Conéctate conmigo en la aplicación Anbu.\nCódigo de conexión: @code',
+    'subject_home_share_subject': 'Código de conexión Anbu',
     'subject_home_code_copied': 'Código copiado',
 
     // ── Menú lateral (Persona protegida) ──

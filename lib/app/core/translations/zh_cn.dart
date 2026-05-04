@@ -135,8 +135,8 @@ abstract class ZhCn {
     'emergency_map_no_location': '没有位置信息',
     'emergency_location_permission_denied_snackbar': '未获得位置权限，已发送紧急警报',
     'subject_home_emergency_confirm_send': '发送紧急请求',
-    'subject_home_share_text': '请用 Anbu 应用查看我的平安！\n邀请码：@code',
-    'subject_home_share_subject': 'Anbu 邀请码',
+    'subject_home_share_text': '请在 Anbu 应用中与我连接。\n连接码：@code',
+    'subject_home_share_subject': 'Anbu 连接码',
     'subject_home_code_copied': '邀请码已复制',
 
     // ── 被守护者侧边栏 ──

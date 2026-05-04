@@ -154,8 +154,8 @@ abstract class IdId {
     'emergency_location_permission_denied_snackbar': 'Peringatan darurat dikirim tanpa izin lokasi',
     'subject_home_emergency_confirm_send': 'Kirim permintaan darurat',
     'subject_home_share_text':
-        'Pantau kesejahteraan saya melalui aplikasi Anbu!\nKode undangan: @code',
-    'subject_home_share_subject': 'Kode Undangan Anbu',
+        'Terhubung dengan saya di aplikasi Anbu.\nKode koneksi: @code',
+    'subject_home_share_subject': 'Kode Koneksi Anbu',
     'subject_home_code_copied': 'Kode disalin',
 
     // ── Drawer Orang yang Dilindungi ──

@@ -150,8 +150,8 @@ abstract class TrTr {
     'emergency_location_permission_denied_snackbar':
         'Konum izni olmadan acil durum uyarısı gönderildi',
     'subject_home_emergency_confirm_send': 'Acil talep gönder',
-    'subject_home_share_text': 'Anbu uygulamasıyla hal hatırımı sorun!\nDavet kodu: @code',
-    'subject_home_share_subject': 'Anbu Davet Kodu',
+    'subject_home_share_text': 'Anbu uygulamasında benimle bağlantı kurun.\nBağlantı kodu: @code',
+    'subject_home_share_subject': 'Anbu Bağlantı Kodu',
     'subject_home_code_copied': 'Kod kopyalandı',
 
     // ── Takip Edilen Yan Menü ──

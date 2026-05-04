@@ -152,8 +152,8 @@ abstract class PlPl {
         'Alarm awaryjny wysłany bez uprawnień do lokalizacji',
     'subject_home_emergency_confirm_send': 'Wyślij prośbę awaryjną',
     'subject_home_share_text':
-        'Sprawdz moje samopoczucie w aplikacji Anbu!\nKod zaproszenia: @code',
-    'subject_home_share_subject': 'Kod zaproszenia Anbu',
+        'Połącz się ze mną w aplikacji Anbu.\nKod połączenia: @code',
+    'subject_home_share_subject': 'Kod połączenia Anbu',
     'subject_home_code_copied': 'Kod skopiowany',
 
     // ── Szuflada podopiecznego ──

@@ -138,8 +138,8 @@ abstract class KoKr {
     'emergency_map_no_location': '위치 정보가 없습니다',
     'emergency_location_permission_denied_snackbar': '위치 권한 없이 긴급 알림을 전송했습니다',
     'subject_home_emergency_confirm_send': '긴급 요청 보내기',
-    'subject_home_share_text': '안부(Anbu) 앱에서 제 안부를 확인해 주세요!\n초대 코드: @code',
-    'subject_home_share_subject': '안부 앱 초대 코드',
+    'subject_home_share_text': '안부 앱에서 저와 연결해 주세요.\n연결 코드: @code',
+    'subject_home_share_subject': '안부 앱 연결 코드',
     'subject_home_code_copied': '코드가 복사되었습니다',
 
     // ── 대상자 Drawer ──

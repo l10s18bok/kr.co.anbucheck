@@ -154,8 +154,8 @@ abstract class RuRu {
         'Экстренное оповещение отправлено без разрешения на местоположение',
     'subject_home_emergency_confirm_send': 'Отправить экстренный запрос',
     'subject_home_share_text':
-        'Проверяйте моё самочувствие через приложение Anbu!\nКод приглашения: @code',
-    'subject_home_share_subject': 'Код приглашения Anbu',
+        'Свяжитесь со мной через приложение Anbu.\nКод подключения: @code',
+    'subject_home_share_subject': 'Код подключения Anbu',
     'subject_home_code_copied': 'Код скопирован',
 
     // ── Боковое меню подопечного ──

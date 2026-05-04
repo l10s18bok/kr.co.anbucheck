@@ -146,8 +146,8 @@ abstract class ThTh {
     'emergency_location_permission_denied_snackbar':
         'ส่งการแจ้งเตือนฉุกเฉินโดยไม่ได้รับสิทธิ์ตำแหน่ง',
     'subject_home_emergency_confirm_send': 'ส่งคำขอฉุกเฉิน',
-    'subject_home_share_text': 'ตรวจสอบความเป็นอยู่ของฉันผ่านแอป Anbu!\nรหัสเชิญ: @code',
-    'subject_home_share_subject': 'รหัสเชิญ Anbu',
+    'subject_home_share_text': 'โปรดเชื่อมต่อกับฉันผ่านแอป Anbu\nรหัสเชื่อมต่อ: @code',
+    'subject_home_share_subject': 'รหัสเชื่อมต่อ Anbu',
     'subject_home_code_copied': 'คัดลอกรหัสแล้ว',
 
     // ── ลิ้นชักผู้อยู่ในการดูแล ──

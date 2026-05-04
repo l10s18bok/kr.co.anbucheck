@@ -154,8 +154,8 @@ abstract class DeDe {
     'emergency_map_no_location': 'Keine Standortdaten verfügbar',
     'emergency_location_permission_denied_snackbar': 'Notruf ohne Standortberechtigung gesendet',
     'subject_home_emergency_confirm_send': 'Notruf senden',
-    'subject_home_share_text': 'Schauen Sie mit der Anbu-App nach mir!\nEinladungscode: @code',
-    'subject_home_share_subject': 'Anbu Einladungscode',
+    'subject_home_share_text': 'Bitte verbinden Sie sich mit mir in der Anbu-App.\nVerbindungscode: @code',
+    'subject_home_share_subject': 'Anbu Verbindungscode',
     'subject_home_code_copied': 'Code kopiert',
 
     // ── Drawer (Schutzperson) ──

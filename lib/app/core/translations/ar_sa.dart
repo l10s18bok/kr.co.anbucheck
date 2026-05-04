@@ -143,8 +143,8 @@ abstract class ArSa {
     'emergency_map_no_location': 'لا تتوفر معلومات الموقع',
     'emergency_location_permission_denied_snackbar': 'تم إرسال تنبيه الطوارئ دون إذن الموقع',
     'subject_home_emergency_confirm_send': 'إرسال طلب الطوارئ',
-    'subject_home_share_text': 'اطمئن عليّ من خلال تطبيق Anbu!\nرمز الدعوة: @code',
-    'subject_home_share_subject': 'رمز دعوة Anbu',
+    'subject_home_share_text': 'تواصل معي عبر تطبيق Anbu.\nرمز الاتصال: @code',
+    'subject_home_share_subject': 'رمز اتصال Anbu',
     'subject_home_code_copied': 'تم نسخ الرمز',
 
     // ── القائمة الجانبية للمتابَع ──

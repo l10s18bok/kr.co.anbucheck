@@ -153,8 +153,8 @@ abstract class FrFr {
         "Alerte d'urgence envoyée sans autorisation de localisation",
     'subject_home_emergency_confirm_send': "Envoyer la demande d'urgence",
     'subject_home_share_text':
-        'Veillez sur moi avec l\'application Anbu !\nCode d\'invitation : @code',
-    'subject_home_share_subject': 'Code d\'invitation Anbu',
+        'Connectez-vous avec moi sur l\'application Anbu.\nCode de connexion : @code',
+    'subject_home_share_subject': 'Code de connexion Anbu',
     'subject_home_code_copied': 'Code copié',
 
     // ── Menu latéral (Personne protégée) ──

@@ -136,8 +136,8 @@ abstract class JaJp {
     'emergency_map_no_location': '位置情報がありません',
     'emergency_location_permission_denied_snackbar': '位置情報の権限なしで緊急通知を送信しました',
     'subject_home_emergency_confirm_send': '緊急リクエストを送信',
-    'subject_home_share_text': 'Anbuアプリで私の安否を確認してください！\n招待コード：@code',
-    'subject_home_share_subject': 'Anbu 招待コード',
+    'subject_home_share_text': 'Anbuアプリで私とつながってください。\n連携コード：@code',
+    'subject_home_share_subject': 'Anbu 連携コード',
     'subject_home_code_copied': 'コードをコピーしました',
 
     // ── 対象者ドロワー ──

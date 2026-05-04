@@ -149,8 +149,8 @@ abstract class HiIn {
     'emergency_location_permission_denied_snackbar':
         'स्थान अनुमति के बिना आपातकालीन अलर्ट भेजा गया',
     'subject_home_emergency_confirm_send': 'आपातकालीन अनुरोध भेजें',
-    'subject_home_share_text': 'Anbu ऐप से मेरी कुशलता जांचें!\nआमंत्रण कोड: @code',
-    'subject_home_share_subject': 'Anbu आमंत्रण कोड',
+    'subject_home_share_text': 'Anbu ऐप पर मुझसे जुड़ें।\nकनेक्शन कोड: @code',
+    'subject_home_share_subject': 'Anbu कनेक्शन कोड',
     'subject_home_code_copied': 'कोड कॉपी किया गया',
 
     // ── संरक्षित व्यक्ति ड्रॉअर ──
