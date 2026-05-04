@@ -322,6 +322,7 @@ abstract class TrTr {
     'connection_managed_count': 'Takip Edilen Sayısı ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Bağlı Takip Edilenler',
+    'connection_reorder_hint': 'Sıralamayı değiştirmek için aşağıdaki karta uzun basın',
     'connection_empty': 'Bağlı korunan kişi yok',
     'connection_unlink_warning': 'Bağlantıyı kesmek takip edilenin verilerini silecektir.',
     'connection_unlink_warning_detail':

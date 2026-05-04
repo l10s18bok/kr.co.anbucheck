@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/local/subject_order_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
 
@@ -9,7 +10,12 @@ import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.
 class GuardianSubjectService extends GetxService {
   final _tokenDs = TokenLocalDatasource();
   final _nicknameDs = NicknameLocalDatasource();
+  final _orderDs = SubjectOrderLocalDatasource();
   final _subjectDs = SubjectRemoteDatasource();
+
+  /// 보호자가 지정한 invite_code 표시 순서 인덱스 (정렬 키)
+  /// 저장된 순서에 없는 신규 대상자는 끝에 배치
+  final orderIndex = <String, int>{}.obs;
 
   final subjects = <SubjectItem>[].obs;
   final maxSubjects = 5.obs;
@@ -34,8 +40,9 @@ class GuardianSubjectService extends GetxService {
     try {
       final data = await _subjectDs.getSubjects(deviceToken);
       final nicknames = await _nicknameDs.getAll();
+      final savedOrder = await _orderDs.getOrder();
 
-      subjects.value = (data['subjects'] as List<dynamic>? ?? [])
+      final loaded = (data['subjects'] as List<dynamic>? ?? [])
           .map((s) => s as Map<String, dynamic>)
           .map((s) {
         final inviteCode = s['invite_code'] as String? ?? '';
@@ -60,6 +67,23 @@ class GuardianSubjectService extends GetxService {
           weeklySteps: weeklySteps,
         );
       }).toList();
+
+      // 저장된 순서 적용 — 저장된 invite_code 먼저(저장된 순서대로),
+      // 그 외 신규 대상자는 서버 응답 순서대로 뒤에 배치
+      final orderRank = <String, int>{
+        for (int i = 0; i < savedOrder.length; i++) savedOrder[i]: i,
+      };
+      loaded.sort((a, b) {
+        final ai = orderRank[a.inviteCode];
+        final bi = orderRank[b.inviteCode];
+        if (ai != null && bi != null) return ai.compareTo(bi);
+        if (ai != null) return -1;
+        if (bi != null) return 1;
+        return 0;
+      });
+
+      subjects.value = loaded;
+      _rebuildOrderIndex();
 
       maxSubjects.value = data['max_subjects'] as int? ?? 5;
       canAddMore.value = data['can_add_more'] as bool? ?? true;
@@ -89,6 +113,30 @@ class GuardianSubjectService extends GetxService {
     subjects[idx] = subjects[idx].copyWith(alias: alias);
   }
 
+  /// 보호자가 드래그 앤 드롭으로 지정한 순서를 적용 + 로컬 저장
+  /// [orderedInviteCodes]는 표시할 invite_code 전체 목록을 새 순서로 전달
+  Future<void> reorder(List<String> orderedInviteCodes) async {
+    final byCode = {for (final s in subjects) s.inviteCode: s};
+    final reordered = <SubjectItem>[
+      for (final code in orderedInviteCodes)
+        if (byCode.containsKey(code)) byCode.remove(code)!,
+    ];
+    // 누락된 항목(이론상 없음)은 끝에 보존
+    reordered.addAll(byCode.values);
+    // orderIndex를 먼저 갱신해야 subjects.value 할당으로 즉시 발화되는
+    // dashboard ever 콜백이 새 인덱스를 읽는다 (GetX의 RxList notify는 동기)
+    _rebuildOrderIndex(source: reordered);
+    subjects.value = reordered;
+    await _orderDs.saveOrder(reordered.map((s) => s.inviteCode).toList());
+  }
+
+  void _rebuildOrderIndex({List<SubjectItem>? source}) {
+    final list = source ?? subjects;
+    orderIndex.value = {
+      for (int i = 0; i < list.length; i++) list[i].inviteCode: i,
+    };
+  }
+
   /// 특정 대상자 경고 해제 — 서버 API 호출 후 로컬 캐시 갱신
   Future<void> clearAlerts(String inviteCode) async {
     final idx = subjects.indexWhere((s) => s.inviteCode == inviteCode);
@@ -107,6 +155,9 @@ class GuardianSubjectService extends GetxService {
   /// 특정 대상자 제거
   void removeByGuardianId(int guardianId) {
     subjects.removeWhere((s) => s.guardianId == guardianId);
+    _rebuildOrderIndex();
+    // 저장된 순서에서 사라진 invite_code도 정리
+    _orderDs.saveOrder(subjects.map((s) => s.inviteCode).toList());
     _lastFetched = null; // 다음 로드 시 서버 반영
   }
 
@@ -116,6 +167,7 @@ class GuardianSubjectService extends GetxService {
     subjects.clear();
     maxSubjects.value = 5;
     canAddMore.value = true;
+    orderIndex.clear();
     _lastFetched = null;
   }
 }

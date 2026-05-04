@@ -79,6 +79,16 @@ class GuardianConnectionManagementController extends BaseController {
     );
   }
 
+  /// ReorderableListView 콜백 — 드래그 앤 드롭으로 표시 순서 변경
+  Future<void> reorderSubjects(int oldIndex, int newIndex) async {
+    if (oldIndex == newIndex) return;
+    // ReorderableListView 규약: 아래로 이동 시 newIndex가 1 더 크게 들어옴
+    final adjusted = newIndex > oldIndex ? newIndex - 1 : newIndex;
+    final moved = _subjects.removeAt(oldIndex);
+    _subjects.insert(adjusted, moved);
+    await _svc.reorder(_subjects.map((s) => s.code).toList());
+  }
+
   Future<void> deleteSubject(int index) async {
     final subject = _subjects[index];
     final deviceToken = await _tokenDs.getDeviceToken();

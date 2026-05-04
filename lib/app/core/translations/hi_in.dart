@@ -320,6 +320,7 @@ abstract class HiIn {
     'connection_managed_count': 'प्रबंधित संरक्षित व्यक्ति ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'जुड़े संरक्षित व्यक्ति',
+    'connection_reorder_hint': 'क्रम बदलने के लिए नीचे कार्ड को देर तक दबाएं',
     'connection_empty': 'कोई जुड़ा हुआ संरक्षित व्यक्ति नहीं',
     'connection_unlink_warning': 'अनलिंक करने से संरक्षित व्यक्ति का डेटा हट जाएगा।',
     'connection_unlink_warning_detail':

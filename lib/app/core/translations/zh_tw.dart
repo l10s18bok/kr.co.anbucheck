@@ -298,6 +298,7 @@ abstract class ZhTw {
     'connection_managed_count': '管理的被守護者人數 ',
     'connection_managed_count_value': '@current / @max 人',
     'connection_connected_subjects': '已連線的被守護者',
+    'connection_reorder_hint': '長按下方卡片即可調整順序',
     'connection_empty': '沒有連接的保護對象',
     'connection_unlink_warning': '解除連結後，該被守護者的資料將被刪除。',
     'connection_unlink_warning_detail': '重新連結後無法恢復之前的紀錄， 需要重新輸入被守護者的邀請碼。',

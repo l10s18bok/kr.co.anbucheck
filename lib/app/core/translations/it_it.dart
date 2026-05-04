@@ -330,6 +330,7 @@ abstract class ItIt {
     'connection_managed_count': 'Assistiti gestiti ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Assistiti connessi',
+    'connection_reorder_hint': 'Tieni premuta una carta sotto per riordinare',
     'connection_empty': 'Nessuna persona protetta collegata',
     'connection_unlink_warning': "Lo scollegamento eliminerà i dati dell'assistito.",
     'connection_unlink_warning_detail':

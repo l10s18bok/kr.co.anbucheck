@@ -320,6 +320,7 @@ abstract class EnUs {
     'connection_managed_count': 'Managed Subjects ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Connected Subjects',
+    'connection_reorder_hint': 'Long-press a card below to reorder',
     'connection_empty': 'No connected subjects',
     'connection_unlink_warning': 'Unlinking will delete the subject\'s data.',
     'connection_unlink_warning_detail':

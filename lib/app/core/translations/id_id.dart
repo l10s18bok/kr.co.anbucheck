@@ -329,6 +329,7 @@ abstract class IdId {
     'connection_managed_count': 'Orang yang Dilindungi ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Orang yang Dilindungi Terhubung',
+    'connection_reorder_hint': 'Tekan dan tahan kartu di bawah untuk mengubah urutan',
     'connection_empty': 'Tidak ada orang yang dilindungi terhubung',
     'connection_unlink_warning': 'Memutuskan koneksi akan menghapus data orang yang dilindungi.',
     'connection_unlink_warning_detail':

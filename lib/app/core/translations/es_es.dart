@@ -328,6 +328,7 @@ abstract class EsEs {
     'connection_managed_count': 'Personas protegidas gestionadas ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Personas protegidas conectadas',
+    'connection_reorder_hint': 'Mantén pulsada una tarjeta abajo para reordenar',
     'connection_empty': 'No hay personas protegidas conectadas',
     'connection_unlink_warning': 'Al desvincular se eliminarán los datos de esta persona.',
     'connection_unlink_warning_detail':

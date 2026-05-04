@@ -318,6 +318,7 @@ abstract class SvSe {
     'connection_managed_count': 'Antal skyddspersoner ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Anslutna skyddspersoner',
+    'connection_reorder_hint': 'Tryck och håll på ett kort nedan för att ändra ordning',
     'connection_empty': 'Inga anslutna skyddspersoner',
     'connection_unlink_warning': 'Frankopling raderar skyddspersonens data.',
     'connection_unlink_warning_detail':

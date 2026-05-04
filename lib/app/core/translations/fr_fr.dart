@@ -331,6 +331,7 @@ abstract class FrFr {
     'connection_managed_count': 'Personnes protégées suivies ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Personnes protégées connectées',
+    'connection_reorder_hint': 'Maintenez une carte ci-dessous appuyée pour réorganiser',
     'connection_empty': 'Aucune personne protégée connectée',
     'connection_unlink_warning': 'La dissociation supprimera les données de cette personne.',
     'connection_unlink_warning_detail':

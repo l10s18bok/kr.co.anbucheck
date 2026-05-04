@@ -302,6 +302,7 @@ abstract class KoKr {
     'connection_managed_count': '관리 보호 대상자 수 ',
     'connection_managed_count_value': '@current / @max명',
     'connection_connected_subjects': '연결된 보호 대상자',
+    'connection_reorder_hint': '아래 카드를 길게 눌러 순서를 바꿔보세요',
     'connection_empty': '연결된 보호 대상자가 없습니다',
     'connection_unlink_warning': '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.',
     'connection_unlink_warning_detail': '재연결 시 이전의 기록을 복구할 수 없으며, 보호 대상자 코드를 다시 입력해야 합니다.',

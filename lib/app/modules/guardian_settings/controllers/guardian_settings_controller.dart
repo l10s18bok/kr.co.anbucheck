@@ -8,6 +8,7 @@ import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/local/subject_order_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
@@ -116,6 +117,7 @@ class GuardianSettingsController extends BaseController {
     await HeartbeatLocalDatasource().clearPending();
     await HeartbeatLockDatasource().clearAll();
     await NicknameLocalDatasource().clearAll();
+    await SubjectOrderLocalDatasource().clearAll();
 
     // 서비스 인메모리 캐시도 초기화 — permanent 등록이라 컨트롤러 해제되어도 유지됨
     _svc.clearCache();

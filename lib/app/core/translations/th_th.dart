@@ -316,6 +316,7 @@ abstract class ThTh {
     'connection_managed_count': 'จำนวนผู้อยู่ในการดูแล ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'ผู้อยู่ในการดูแลที่เชื่อมต่อ',
+    'connection_reorder_hint': 'กดค้างที่การ์ดด้านล่างเพื่อจัดเรียงใหม่',
     'connection_empty': 'ไม่มีผู้ได้รับการดูแลที่เชื่อมต่อ',
     'connection_unlink_warning': 'การยกเลิกเชื่อมต่อจะลบข้อมูลของผู้อยู่ในการดูแล',
     'connection_unlink_warning_detail':

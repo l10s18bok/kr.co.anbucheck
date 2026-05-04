@@ -82,7 +82,28 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
 
               // 연결된 대상자 섹션
               Text('connection_connected_subjects'.tr, style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
-              SizedBox(height: AppSpacing.lg),
+              // 안내 멘트는 2명 이상일 때만 표시 (1명 이하는 순서 변경 의미 없음)
+              if (controller.subjects.length >= 2) ...[
+                SizedBox(height: AppSpacing.sm),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '※',
+                      style: AppTextTheme.bodySmall(color: AppColors.textTertiary),
+                    ),
+                    SizedBox(width: 6.w),
+                    Expanded(
+                      child: Text(
+                        'connection_reorder_hint'.tr,
+                        style: AppTextTheme.bodySmall(color: AppColors.textTertiary),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppSpacing.md),
+              ] else
+                SizedBox(height: AppSpacing.lg),
 
               // 대상자 리스트 (남은 공간 채움, 내부 스크롤)
               Expanded(
@@ -109,13 +130,19 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                       : Scrollbar(
                           controller: controller.listScrollController,
                           thumbVisibility: true,
-                          child: ListView.builder(
-                            controller: controller.listScrollController,
+                          child: ReorderableListView.builder(
+                            scrollController: controller.listScrollController,
                             padding: EdgeInsets.all(AppSpacing.md),
                             itemCount: controller.subjects.length,
+                            buildDefaultDragHandles: false,
+                            onReorder: controller.reorderSubjects,
+                            proxyDecorator: _buildDragProxy,
+                            autoScrollerVelocityScalar: 4.0,
                             itemBuilder: (_, index) {
                               final subject = controller.subjects[index];
                               return _SubjectListTile(
+                                key: ValueKey(subject.code),
+                                index: index,
                                 alias: subject.alias,
                                 code: subject.code,
                                 heartbeatHour: subject.heartbeatHour,
@@ -171,9 +198,32 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
     );
   }
 
+  /// long-press drag 시작 시 카드를 살짝 들어올린 듯한 효과
+  /// (스케일 + soft shadow 가 점진적으로 적용)
+  Widget _buildDragProxy(Widget child, int index, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, _) {
+        final t = Curves.easeInOut.transform(animation.value);
+        final scale = 1 + 0.03 * t;
+        final elevation = 8 * t;
+        return Transform.scale(
+          scale: scale,
+          child: Material(
+            elevation: elevation,
+            color: Colors.transparent,
+            shadowColor: Colors.black.withValues(alpha: 0.35),
+            borderRadius: BorderRadius.circular(14.r),
+            child: child,
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _SubjectListTile extends StatelessWidget {
+  final int index;
   final String alias;
   final String code;
   final int heartbeatHour;
@@ -183,6 +233,8 @@ class _SubjectListTile extends StatelessWidget {
   final VoidCallback onDelete;
 
   const _SubjectListTile({
+    super.key,
+    required this.index,
     required this.alias,
     required this.code,
     required this.heartbeatHour,
@@ -227,30 +279,40 @@ class _SubjectListTile extends StatelessWidget {
             ),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 20.r,
-                  backgroundColor: AppColors.surfaceContainerHigh,
-                  child: Icon(Icons.person, size: 22.w, color: AppColors.onSurfaceVariant),
-                ),
-                SizedBox(width: AppSpacing.md),
+                // 편집/삭제 아이콘을 제외한 좌측 영역 long-press drag 시작 영역
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(alias, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
-                      SizedBox(height: 2.h),
-                      Text(code, style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
-                      if (hasDevice) ...[
-                        SizedBox(height: 2.h),
-                        Text(
-                          _timeLabel,
-                          style: AppTextTheme.bodySmall(
-                            color: const Color(0xFF4355B9),
-                            fw: FontWeight.w600,
+                  child: ReorderableDelayedDragStartListener(
+                    index: index,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20.r,
+                          backgroundColor: AppColors.surfaceContainerHigh,
+                          child: Icon(Icons.person, size: 22.w, color: AppColors.onSurfaceVariant),
+                        ),
+                        SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(alias, style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
+                              SizedBox(height: 2.h),
+                              Text(code, style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
+                              if (hasDevice) ...[
+                                SizedBox(height: 2.h),
+                                Text(
+                                  _timeLabel,
+                                  style: AppTextTheme.bodySmall(
+                                    color: const Color(0xFF4355B9),
+                                    fw: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ),
                       ],
-                    ],
+                    ),
                   ),
                 ),
                 IconButton(
@@ -266,29 +328,32 @@ class _SubjectListTile extends StatelessWidget {
               ],
             ),
           ),
-          // 하단 카드: 안부 보고시간 안내
+          // 하단 카드: 안부 보고시간 안내 — long-press drag 시작 영역 포함
           if (hasDevice)
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
-              decoration: BoxDecoration(
-                color: const Color(0xFF4355B9),
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(14.r)),
-              ),
-              child: RichText(
-                text: TextSpan(
-                  style: AppTextTheme.labelSmall(color: Colors.white70),
-                  children: [
-                    TextSpan(text: 'connection_heartbeat_report_time'.tr),
-                    TextSpan(
-                      text: 'connection_subject_label'.tr,
-                      style: AppTextTheme.labelSmall(
-                        color: Colors.white,
-                        fw: FontWeight.w600,
+            ReorderableDelayedDragStartListener(
+              index: index,
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF4355B9),
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(14.r)),
+                ),
+                child: RichText(
+                  text: TextSpan(
+                    style: AppTextTheme.labelSmall(color: Colors.white70),
+                    children: [
+                      TextSpan(text: 'connection_heartbeat_report_time'.tr),
+                      TextSpan(
+                        text: 'connection_subject_label'.tr,
+                        style: AppTextTheme.labelSmall(
+                          color: Colors.white,
+                          fw: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    TextSpan(text: ' ${'connection_change_only_in_app'.tr}'),
-                  ],
+                      TextSpan(text: ' ${'connection_change_only_in_app'.tr}'),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -328,6 +328,7 @@ abstract class PtBr {
     'connection_managed_count': 'Protegidos gerenciados ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Protegidos conectados',
+    'connection_reorder_hint': 'Pressione e segure um cartão abaixo para reordenar',
     'connection_empty': 'Nenhuma pessoa protegida conectada',
     'connection_unlink_warning': 'A desvinculação excluirá os dados do protegido.',
     'connection_unlink_warning_detail':

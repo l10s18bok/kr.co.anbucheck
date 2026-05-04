@@ -243,8 +243,11 @@ class GuardianDashboardController extends BaseController
   }
 
   /// _svc.subjects → subjects 매핑 (ever 콜백 및 직접 호출 공용)
+  /// 정렬: 1차 경고 등급순(urgent→warning→caution→info→normal),
+  ///       2차 보호자가 연결관리에서 지정한 사용자 순서
   void _mapSubjects() {
     const alertOrder = ['urgent', 'warning', 'caution', 'info', 'normal'];
+    final userOrder = _svc.orderIndex;
     subjects.value = _svc.subjects.map((s) => SubjectStatus(
           guardianId: s.guardianId,
           userId: s.userId,
@@ -259,8 +262,12 @@ class GuardianDashboardController extends BaseController
       ..sort((a, b) {
         final ai = alertOrder.indexOf(a.alertLevel);
         final bi = alertOrder.indexOf(b.alertLevel);
-        return (ai < 0 ? alertOrder.length : ai)
+        final levelCmp = (ai < 0 ? alertOrder.length : ai)
             .compareTo(bi < 0 ? alertOrder.length : bi);
+        if (levelCmp != 0) return levelCmp;
+        final auo = userOrder[a.inviteCode] ?? 1 << 30;
+        final buo = userOrder[b.inviteCode] ?? 1 << 30;
+        return auo.compareTo(buo);
       });
   }
 

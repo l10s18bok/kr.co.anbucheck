@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/local/subject_order_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
@@ -93,6 +94,7 @@ class ModeSelectController extends BaseController {
         }
         await _tokenDs.clear();
         await _nicknameDs.clearAll();
+        await SubjectOrderLocalDatasource().clearAll();
         await HeartbeatLockDatasource().clearAll();
         isLoading = false;
       }
