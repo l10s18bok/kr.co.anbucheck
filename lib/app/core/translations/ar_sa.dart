@@ -129,6 +129,9 @@ abstract class ArSa {
     'subject_home_manual_report_limit_reached':
         'لقد قمت بالفعل بإرسال تقرير السلامة لهذا اليوم. يرجى المحاولة غدًا.',
     'subject_home_manual_report_sent': 'تم إرسال رسالة سلامتك إلى جهات الاتصال.',
+    'safety_net_dialog_title': 'تم إرسال تقرير السلامة',
+    'safety_net_dialog_body':
+        'تم إرسال تقرير السلامة لهذا اليوم إلى مقدم الرعاية.\nيمكنك الآن إغلاق التطبيق.',
     'subject_home_emergency_confirm_title': 'طلب مساعدة طارئة',
     'subject_home_emergency_confirm_body':
         'سيتم إرسال تنبيه طارئ إلى جميع الأوصياء.\nسيتم أيضًا مشاركة موقعك الحالي.\nهل ترغب حقًا في طلب المساعدة؟',

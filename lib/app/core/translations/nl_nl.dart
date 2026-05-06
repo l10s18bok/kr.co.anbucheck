@@ -137,6 +137,9 @@ abstract class NlNl {
     'subject_home_manual_report_limit_reached':
         'U heeft het veiligheidsrapport van vandaag al verzonden. Probeer het morgen opnieuw.',
     'subject_home_manual_report_sent': 'Uw bericht is verzonden naar uw contacten.',
+    'safety_net_dialog_title': 'Welzijnscheck verzonden',
+    'safety_net_dialog_body':
+        'De welzijnscheck van vandaag is naar uw begeleider verzonden.\nU kunt de app nu sluiten.',
     'subject_home_emergency_confirm_title': 'Noodhulpverzoek',
     'subject_home_emergency_confirm_body':
         'Een noodmelding wordt naar alle voogden verzonden.\nOok uw huidige locatie wordt gedeeld.\nWilt u echt om hulp vragen?',

@@ -123,6 +123,9 @@ abstract class JaJp {
     'subject_home_emergency_failed': '緊急通知の送信に失敗しました',
     'subject_home_manual_report_limit_reached': '本日の安全報告は既に完了しています。明日もう一度お試しください。',
     'subject_home_manual_report_sent': '見守り人に安否をお伝えしました。',
+    'safety_net_dialog_title': '安否確認 完了',
+    'safety_net_dialog_body':
+        '今日の安否確認が見守り人に送信されました。\nアプリを閉じても大丈夫です。',
     'subject_home_emergency_confirm_title': '緊急ヘルプリクエスト',
     'subject_home_emergency_confirm_body': 'すべての保護者に緊急通知が送信されます。\n現在地も共有されます。\n本当に助けを求めますか？',
     'emergency_sent_with_location': '緊急通知を送信しました（位置情報つき）',

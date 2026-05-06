@@ -131,6 +131,9 @@ abstract class ThTh {
     'subject_home_manual_report_limit_reached':
         'คุณได้ส่งรายงานความปลอดภัยของวันนี้แล้ว โปรดลองอีกครั้งในวันพรุ่งนี้',
     'subject_home_manual_report_sent': 'ส่งข้อความสวัสดิภาพถึงผู้ดูแลของคุณแล้ว',
+    'safety_net_dialog_title': 'ส่งรายงานความปลอดภัยแล้ว',
+    'safety_net_dialog_body':
+        'รายงานความปลอดภัยของวันนี้ถูกส่งให้ผู้ดูแลแล้ว\nคุณสามารถปิดแอปได้แล้ว',
     'subject_home_emergency_confirm_title': 'ขอความช่วยเหลือฉุกเฉิน',
     'subject_home_emergency_confirm_body':
         'จะส่งการแจ้งเตือนฉุกเฉินไปยังผู้ดูแลทุกคน\nตำแหน่งปัจจุบันของคุณจะถูกแชร์ไปด้วย\nคุณต้องการขอความช่วยเหลือจริงหรือ?',

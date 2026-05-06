@@ -122,6 +122,8 @@ abstract class ZhTw {
     'subject_home_emergency_failed': '緊急警報發送失敗',
     'subject_home_manual_report_limit_reached': '今天的安全報告已完成。請明天再試。',
     'subject_home_manual_report_sent': '已向守護者傳送問候。',
+    'safety_net_dialog_title': '安全回報已送達',
+    'safety_net_dialog_body': '今天的安全回報已傳送給守護者。\n您現在可以關閉應用程式。',
     'subject_home_emergency_confirm_title': '緊急求助',
     'subject_home_emergency_confirm_body': '將向所有監護人發送緊急警報。\n目前位置也會一同分享。\n確定要請求幫助嗎？',
     'emergency_sent_with_location': '緊急警報已發送（含位置）',

@@ -136,6 +136,9 @@ abstract class ViVn {
     'subject_home_manual_report_limit_reached':
         'Bạn đã gửi báo cáo an toàn hôm nay. Vui lòng thử lại vào ngày mai.',
     'subject_home_manual_report_sent': 'Đã gửi thông báo an toàn đến người giám hộ của bạn.',
+    'safety_net_dialog_title': 'Đã gửi báo cáo an toàn',
+    'safety_net_dialog_body':
+        'Báo cáo an toàn hôm nay đã được gửi đến người giám hộ.\nBạn có thể đóng ứng dụng ngay bây giờ.',
     'subject_home_emergency_confirm_title': 'Yêu cầu trợ giúp khẩn cấp',
     'subject_home_emergency_confirm_body':
         'Cảnh báo khẩn cấp sẽ được gửi đến tất cả người giám hộ.\nVị trí hiện tại của bạn cũng sẽ được chia sẻ.\nBạn có thực sự muốn yêu cầu trợ giúp không?',

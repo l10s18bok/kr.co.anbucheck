@@ -124,6 +124,9 @@ abstract class KoKr {
     'subject_home_emergency_failed': '긴급 알림 전송에 실패했습니다',
     'subject_home_manual_report_limit_reached': '오늘은 이미 안전 보고를 완료했습니다. 내일 다시 가능합니다.',
     'subject_home_manual_report_sent': '보호자에게 안부를 전했습니다.',
+    'safety_net_dialog_title': '안부 전달 완료',
+    'safety_net_dialog_body':
+        '오늘의 안부가 보호자에게 전달되었습니다.\n이제 앱을 종료하셔도 됩니다.',
     'subject_home_emergency_confirm_title': '긴급 도움 요청',
     'subject_home_emergency_confirm_body':
         '보호자 전원에게 긴급 알림이 발송됩니다.\n현재 위치도 함께 전달됩니다.\n정말 도움을 요청하시겠습니까?',

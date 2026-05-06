@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
@@ -64,6 +64,14 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       break;
     case 'heartbeat':
       break;
+    case 'safety_net':
+    case 'send_failed':
+      // Android 일일 안전망 로컬 알림(`safety_net`) / retry 3회 실패 알림
+      // (`send_failed`) 탭 — 별도 라우팅 없이 앱 포그라운드 전환.
+      // S 자식 또는 G+S Dashboard의 onResumed가 미전송 heartbeat를 자동 재전송하며,
+      // 전송 후 안내 다이얼로그가 표시되도록 플래그를 set한다.
+      FcmService.pendingSafetyNetDialog = true;
+      break;
     case 'gs_deadman':
       // iOS G+S 오늘의 안부 확인 메시지 로컬 알림 탭 → 보호자 대시보드 위에 안전코드 페이지 push
       // 이미 안전코드 페이지면 스택 유지 + 컨트롤러가 즉시 미전송 heartbeat 재확인
@@ -73,6 +81,7 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       // Dashboard 바인딩은 permanent이므로 재등록되지 않아 컨트롤러 race 없음.
       // Dashboard가 heartbeat 미전송 체크를 단독 소유하므로 route와 무관하게
       // Dashboard 컨트롤러(permanent)에 위임. 이미 안전코드 페이지면 스택 유지.
+      FcmService.pendingSafetyNetDialog = true;
       try {
         Get.find<GuardianDashboardController>().refreshAndForceSend();
       } catch (_) {}
@@ -119,6 +128,42 @@ class FcmService extends GetxService {
   /// kill 상태 FCM 런치 시 data 전체 캐시 (alert_emergency lat/lng 등)
   /// SplashController가 소비하여 지도 페이지 라우팅 분기에 사용
   static Map<String, dynamic>? pendingLaunchFcmData;
+
+  /// 일일 안전망 로컬 알림(`safety_net`/`gs_deadman`) 탭으로 진입했음을 나타내는 플래그.
+  /// holding controller(`SubjectHomeController` / `GuardianDashboardController`)가
+  /// heartbeat 자동 재전송을 마친 뒤 안내 다이얼로그 1회 표시 후 false로 리셋한다.
+  static bool pendingSafetyNetDialog = false;
+
+  /// 일일 안전망 알림 탭 진입 시 한 번만 안내 다이얼로그를 띄운다.
+  /// S 모드(Android)와 G+S 모드(Android/iOS) 양쪽에서 동일하게 호출.
+  /// 확인 버튼만 노출되며 탭하면 다이얼로그가 닫힌다.
+  ///
+  /// [delivered]가 false면 플래그만 소비하고 다이얼로그는 띄우지 않는다 —
+  /// `send_failed` 알림 탭 시 네트워크가 여전히 다운돼 재전송도 실패한 케이스에서
+  /// "전달되었습니다" 거짓 안내를 막기 위함. 다음 onResumed에서 다시 발화하지
+  /// 않도록 플래그는 항상 false로 리셋된다 (네트워크 복구 후 connectivity 리스너의
+  /// `_sendPendingHeartbeat`가 자동 처리하지만 그 시점은 사용자 컨텍스트가
+  /// 끊어진 뒤라 다이얼로그를 띄우지 않는 편이 일관적).
+  static Future<void> consumeSafetyNetDialogIfPending(
+      {required bool delivered}) async {
+    if (!pendingSafetyNetDialog) return;
+    pendingSafetyNetDialog = false;
+    if (!delivered) return;
+    if (Get.context == null) return;
+    await Get.dialog<void>(
+      AlertDialog(
+        title: Text('safety_net_dialog_title'.tr),
+        content: Text('safety_net_dialog_body'.tr),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('common_confirm'.tr),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
 
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
@@ -272,6 +317,13 @@ class FcmService extends GetxService {
         final payload = launchDetails.notificationResponse!.payload;
         if (payload != null && payload.isNotEmpty) {
           pendingLaunchNotificationType = payload;
+          // kill 상태 런치 — 일일 안전망 알림 또는 retry 3회 실패 알림이면
+          // 홈 컨트롤러가 진입 시 안내 다이얼로그를 띄우도록 플래그 설정
+          if (payload == LocalAlarmService.alarmPayload ||
+              payload == LocalAlarmService.safetyNetPayload ||
+              payload == LocalAlarmService.sendFailedPayload) {
+            pendingSafetyNetDialog = true;
+          }
         }
       }
     } catch (_) {}

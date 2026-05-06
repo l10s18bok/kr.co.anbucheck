@@ -134,6 +134,9 @@ abstract class HiIn {
     'subject_home_manual_report_limit_reached':
         'आपने आज की सुरक्षा रिपोर्ट पहले ही भेज दी है। कृपया कल पुनः प्रयास करें।',
     'subject_home_manual_report_sent': 'आपका संदेश आपके अभिभावकों को भेज दिया गया है।',
+    'safety_net_dialog_title': 'कुशल-क्षेम भेजा गया',
+    'safety_net_dialog_body':
+        'आज का कुशल-क्षेम संदेश आपके अभिभावक को भेज दिया गया है।\nअब आप ऐप बंद कर सकते हैं।',
     'subject_home_emergency_confirm_title': 'आपातकालीन सहायता अनुरोध',
     'subject_home_emergency_confirm_body':
         'सभी अभिभावकों को आपातकालीन अलर्ट भेजा जाएगा।\nआपकी वर्तमान स्थिति भी साझा की जाएगी।\nक्या आप वास्तव में सहायता का अनुरोध करना चाहते हैं?',

@@ -122,6 +122,8 @@ abstract class ZhCn {
     'subject_home_emergency_failed': '紧急警报发送失败',
     'subject_home_manual_report_limit_reached': '今天的安全报告已完成。请明天再试。',
     'subject_home_manual_report_sent': '已向监护人发送问候。',
+    'safety_net_dialog_title': '安全报告已送达',
+    'safety_net_dialog_body': '今天的安全报告已发送给监护人。\n您现在可以关闭应用。',
     'subject_home_emergency_confirm_title': '紧急求助',
     'subject_home_emergency_confirm_body': '将向所有监护人发送紧急警报。\n当前位置也将一同共享。\n确定要请求帮助吗？',
     'emergency_sent_with_location': '紧急警报已发送（含位置）',

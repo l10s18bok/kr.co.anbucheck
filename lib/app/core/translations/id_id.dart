@@ -139,6 +139,9 @@ abstract class IdId {
     'subject_home_manual_report_limit_reached':
         'Anda sudah mengirim laporan keamanan hari ini. Silakan coba lagi besok.',
     'subject_home_manual_report_sent': 'Pesan keamanan Anda telah dikirim ke kontak Anda.',
+    'safety_net_dialog_title': 'Laporan keamanan terkirim',
+    'safety_net_dialog_body':
+        'Laporan keamanan hari ini telah dikirim ke pengasuh Anda.\nAnda dapat menutup aplikasi sekarang.',
     'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
     'subject_home_emergency_confirm_body':
         'Peringatan darurat akan dikirim ke semua wali.\nLokasi Anda saat ini juga akan dibagikan.\nYakin ingin meminta bantuan?',

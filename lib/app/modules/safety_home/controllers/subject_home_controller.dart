@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
+import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
@@ -56,12 +57,18 @@ class SubjectHomeController extends SafetyHomeBaseController {
   }
 
   @override
-  Future<void> onAfterLoad() => _checkAndSendHeartbeat();
+  Future<void> onAfterLoad() async {
+    await _checkAndSendHeartbeat();
+    await FcmService.consumeSafetyNetDialogIfPending(
+        delivered: isReportedToday);
+  }
 
   @override
   Future<void> onResumedRoleSpecific() async {
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
+    await FcmService.consumeSafetyNetDialogIfPending(
+        delivered: isReportedToday);
   }
 
   @override
@@ -127,6 +134,8 @@ class SubjectHomeController extends SafetyHomeBaseController {
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
+    await FcmService.consumeSafetyNetDialogIfPending(
+        delivered: isReportedToday);
   }
 
   // ── Android 휴면(Auto-Revoke) 안내 다이얼로그 ─────────────────────

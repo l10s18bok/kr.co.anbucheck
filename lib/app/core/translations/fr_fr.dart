@@ -137,6 +137,9 @@ abstract class FrFr {
     'subject_home_manual_report_limit_reached':
         "Vous avez déjà envoyé le rapport de sécurité d'aujourd'hui. Veuillez réessayer demain.",
     'subject_home_manual_report_sent': 'Votre message a été envoyé à vos proches.',
+    'safety_net_dialog_title': 'Vérification envoyée',
+    'safety_net_dialog_body':
+        "La vérification de bien-être d'aujourd'hui a été envoyée à votre proche.\nVous pouvez maintenant fermer l'application.",
     'subject_home_emergency_confirm_title': "Demande d'aide d'urgence",
     'subject_home_emergency_confirm_body':
         "Une alerte d'urgence sera envoyée à tous les gardiens.\nVotre position actuelle sera également partagée.\nVoulez-vous vraiment demander de l'aide ?",

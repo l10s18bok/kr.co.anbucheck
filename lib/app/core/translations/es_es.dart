@@ -137,6 +137,9 @@ abstract class EsEs {
     'subject_home_manual_report_limit_reached':
         'Ya has enviado el informe de seguridad de hoy. Por favor, inténtalo de nuevo mañana.',
     'subject_home_manual_report_sent': 'Tu mensaje ha sido enviado a tus contactos.',
+    'safety_net_dialog_title': 'Comprobación enviada',
+    'safety_net_dialog_body':
+        'La comprobación de bienestar de hoy ha sido enviada a tu cuidador.\nYa puedes cerrar la aplicación.',
     'subject_home_emergency_confirm_title': 'Solicitud de ayuda de emergencia',
     'subject_home_emergency_confirm_body':
         'Se enviará una alerta de emergencia a todos los cuidadores.\nTambién se compartirá tu ubicación actual.\n¿Realmente quieres solicitar ayuda?',

@@ -140,6 +140,9 @@ abstract class DeDe {
     'subject_home_manual_report_limit_reached':
         'Sie haben den heutigen Sicherheitsbericht bereits gesendet. Bitte versuchen Sie es morgen erneut.',
     'subject_home_manual_report_sent': 'Ihre Nachricht wurde an Ihre Kontaktpersonen gesendet.',
+    'safety_net_dialog_title': 'Statusmeldung gesendet',
+    'safety_net_dialog_body':
+        'Die heutige Statusmeldung wurde an Ihre Kontaktperson übermittelt.\nSie können die App jetzt schließen.',
     'subject_home_emergency_confirm_title': 'Nothilfe anfordern',
     'subject_home_emergency_confirm_body':
         'Ein Notruf wird an alle Betreuer gesendet.\nIhr aktueller Standort wird ebenfalls geteilt.\nMöchten Sie wirklich Hilfe anfordern?',

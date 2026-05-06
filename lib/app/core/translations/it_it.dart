@@ -138,6 +138,9 @@ abstract class ItIt {
     'subject_home_manual_report_limit_reached':
         'Hai già inviato il rapporto di sicurezza di oggi. Riprova domani.',
     'subject_home_manual_report_sent': 'Il tuo messaggio è stato inviato ai tuoi contatti.',
+    'safety_net_dialog_title': 'Verifica inviata',
+    'safety_net_dialog_body':
+        'La verifica di benessere di oggi è stata inviata al tuo familiare.\nOra puoi chiudere l\'app.',
     'subject_home_emergency_confirm_title': 'Richiesta di aiuto di emergenza',
     'subject_home_emergency_confirm_body':
         "Un'allerta di emergenza sarà inviata a tutti i tutori.\nAnche la tua posizione attuale sarà condivisa.\nVuoi davvero richiedere aiuto?",

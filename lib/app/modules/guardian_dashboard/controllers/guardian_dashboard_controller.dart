@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
+import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
@@ -100,6 +101,8 @@ class GuardianDashboardController extends BaseController
     if (!isAlsoSubject.value) return;
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
+    await FcmService.consumeSafetyNetDialogIfPending(
+        delivered: isReportedToday);
   }
 
   /// onResumed 진입 시: G+S인 경우 로컬 스케줄 재로드 후 heartbeat 미전송 체크
@@ -108,6 +111,8 @@ class GuardianDashboardController extends BaseController
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
+    await FcmService.consumeSafetyNetDialogIfPending(
+        delivered: isReportedToday);
   }
 
   /// FCM이 gs_deadman 로컬 알림 탭 시 호출 (이미 스택에 있을 때)
@@ -116,6 +121,8 @@ class GuardianDashboardController extends BaseController
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
+    await FcmService.consumeSafetyNetDialogIfPending(
+        delivered: isReportedToday);
   }
 
   /// 로컬 알림 탭 전용 — isReportedToday와 무관하게 무조건 전송
@@ -127,6 +134,8 @@ class GuardianDashboardController extends BaseController
     await _reloadHeartbeatState();
     await HeartbeatService().execute(manual: true, isInteractiveAtTrigger: true);
     await _reloadHeartbeatState();
+    await FcmService.consumeSafetyNetDialogIfPending(
+        delivered: isReportedToday);
   }
 
   /// SafetyCode 등 외부에서 heartbeat 상태 재로드가 필요할 때 호출
