@@ -15,7 +15,9 @@ import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 /// worker 자체가 cancel된 시나리오까지 커버하는 최후 방어선. 자정을 넘기면
 /// 자연 롤오버되어 다음 날 새벽으로 예약된다. 알림 탭은 앱 포그라운드 전환만
 /// 트리거하고, holding controller(SafetyHomeBase / GuardianDashboard)의
-/// onResumed가 자동 재전송을 처리한다.
+/// onResumed가 자동 재전송을 처리한다. `inexactAllowWhileIdle` 사용 — Doze에서
+/// 최대 ~9분 드리프트 가능하나 +3h LAST-RESORT 용도엔 무영향이며,
+/// `USE_EXACT_ALARM`(Play Store 정책상 알람/캘린더 앱 한정) 회피.
 ///
 /// 양 플랫폼 모두 heartbeat 전송 성공 시 `_onHeartbeatSent`가 cancel + 내일자
 /// 재예약을 수행한다 — 떠 있는 알림이든 예약된 알림이든 동일 ID이므로
@@ -138,7 +140,7 @@ class LocalAlarmService {
           presentSound: true,
         ),
       ),
-      androidScheduleMode: AndroidScheduleMode.alarmClock,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
