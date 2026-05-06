@@ -20,15 +20,17 @@ class BackPressHandler {
             children: [
               Image.asset('assets/icon/app_icon.png', width: 20, height: 20),
               const SizedBox(width: 8),
-              Text('back_press_exit'.tr,
-                  style: const TextStyle(color: Color(0xFF1a1c1c))),
+              Flexible(
+                child: Text('back_press_exit'.tr,
+                    style: const TextStyle(color: Color(0xFF1a1c1c))),
+              ),
             ],
           ),
           backgroundColor: Colors.white,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 8,
-          margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
+          margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 80),
           duration: const Duration(seconds: 2),
         ),
       );
