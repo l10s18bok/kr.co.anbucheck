@@ -15,7 +15,7 @@
 
 ## 기술 스택
 
-- **Flutter** 3.41.5 / Dart 3.11.3
+- **Flutter** 3.41.9 / Dart 3.11.5
 - **상태관리**: GetX / Clean Architecture (Presentation → Domain ← Data)
 - **HTTP**: GetConnect / Dio (ApiClientFactory 패턴)
 - **코드생성**: Freezed + json_serializable / flutter_screenutil (375×812 기준)
