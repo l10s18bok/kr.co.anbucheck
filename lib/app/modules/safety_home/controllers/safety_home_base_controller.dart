@@ -414,6 +414,12 @@ abstract class SafetyHomeBaseController extends BaseController
 
   /// 서버에서 heartbeat 스케줄 + 구독 상태 + 보호자 수 동기화
   /// G+S Dashboard 진입 시 deviceData arguments가 있으면 캐시 사용 (forceRemote=false 기본).
+  ///
+  /// **Android schedule 등록은 cached/원격 양쪽 분기에서 모두 수행한다** — Dashboard
+  /// 쪽 register가 #2 (4단계 비원자성)으로 partial fail이 났더라도 SafetyHome 진입에서
+  /// 한 번 더 보강. schedule()은 cancel+register idempotent라 중복 호출 비용은 무시할 수준.
+  /// 서버 호출이 실패한 catch 분기에서도 로컬 저장값으로 fallback schedule을 시도해
+  /// "WorkManager에 아무것도 등록되지 않은 채 사용자가 앱을 닫는" 영구 미전송 경로를 차단.
   Future<void> _syncScheduleFromServer({bool forceRemote = false}) async {
     final cached = forceRemote ? null : _deviceData;
     if (cached != null) {
@@ -423,6 +429,9 @@ abstract class SafetyHomeBaseController extends BaseController
       guardianConnected.value = subscriptionActive;
       guardianCount.value = cached['guardian_count'] as int? ?? 0;
       applySchedule(hour, minute);
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.schedule(hour, minute);
+      }
       return;
     }
 
@@ -444,7 +453,14 @@ abstract class SafetyHomeBaseController extends BaseController
       }
       // LocalAlarm 재예약은 HeartbeatService가 전송 성공/실패 시 전담 — 여기서 중복 호출 금지
     } catch (_) {
-      // 실패 시 로컬 저장값 유지
+      // 서버 동기화 실패 — 로컬 저장값으로 fallback schedule 등록.
+      // 첫 설치 직후 sync 실패 + 첫 heartbeat 실패가 결합돼도 WorkManager는 깔린 상태로 종료.
+      if (Platform.isAndroid) {
+        try {
+          final (h, m) = await tokenDs.getHeartbeatSchedule();
+          await HeartbeatWorkerService.schedule(h, m);
+        } catch (_) {}
+      }
     }
   }
 

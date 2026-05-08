@@ -120,11 +120,30 @@ Future<void> _handleUnauthorized() async {
     final deviceId = await tokenDs.getDeviceId();
     final savedRole = await tokenDs.getUserRole();
 
-    // 로컬에 deviceId + role이 남아 있으면 서버 확인 후 자동 재등록 시도
+    // 로컬에 deviceId + role이 남아 있으면 서버 확인 후 자동 재등록 시도.
+    //
+    // **두 단계 분리 (중요)**: 이전 구현은 checkDevice + register를 하나의 try로 감싸고
+    // 어떤 예외든 catch에서 fallthrough → cancel + clear로 처리했다. 이 경우 사용자가
+    // 서버에 멀쩡히 살아있는데도 일시 네트워크 오류로 checkDevice가 throw하면 로컬 wipe +
+    // WorkManager 영구 cancel이 발생해 "사용자 앱 안 열면 영원히 미전송" 상태로 빠질 수
+    // 있다. 따라서:
+    //   (1) checkDevice 자체 throw → 사용자 계정 존재 여부를 알 수 없으므로 cancel/clear
+    //       보류, 다음 세션 재시도. 함수 즉시 종료.
+    //   (2) checkDevice 응답으로 exists=false → 서버가 명시적으로 계정 없음을 알림 →
+    //       fallthrough하여 cancel + clear.
+    //   (3) exists=true 분기에서 register가 실패 → fallthrough (이전 동작 유지).
     if (deviceId != null && savedRole != null) {
+      Map<String, dynamic>? check;
       try {
-        final check = await UserRemoteDatasource().checkDevice(deviceId);
-        if (check['exists'] == true) {
+        check = await UserRemoteDatasource().checkDevice(deviceId);
+      } catch (e) {
+        '[401 복구] checkDevice 실패 (네트워크 오류 추정): $e → cancel/clear 보류, 다음 세션 재시도'
+            .printLog();
+        return;
+      }
+
+      if (check['exists'] == true) {
+        try {
           final role = check['role'] as String? ?? savedRole;
 
           // FCM 토큰 (미등록이면 빈 문자열로 진행 — 등록 후 갱신됨)
@@ -161,16 +180,20 @@ Future<void> _handleUnauthorized() async {
           }
           '[401 복구] 자동 재등록 성공 → $role 홈으로 이동'.printLog();
           return;
+        } catch (e) {
+          '[401 복구] 재등록 실패: $e → 모드 선택으로 이동'.printLog();
+          // fallthrough: cancel + clear
         }
-      } catch (e) {
-        '[401 복구] 자동 재등록 실패: $e → 모드 선택으로 이동'.printLog();
       }
+      // exists=false: 서버가 명시적으로 계정 없음 응답 → fallthrough: cancel + clear
     }
 
     // 재등록 불가 → 기존 로직: 로컬 초기화 + 모드 선택
+    // **순서 중요 (race 차단)**: clear를 cancel보다 먼저. 워커 isolate의 _rescheduleNextDay
+    // 가 reload 후 role=null을 보고 skip하도록.
+    await tokenDs.clear();
     await HeartbeatWorkerService.cancel();
     await LocalAlarmService.cancel();
-    await tokenDs.clear();
     Get.offAllNamed(AppRoutes.modeSelect);
     AppSnackbar.show('', '계정 정보가 만료되었습니다. 다시 등록해 주세요.',
         position: SnackPosition.TOP);

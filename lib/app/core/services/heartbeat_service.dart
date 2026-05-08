@@ -181,6 +181,7 @@ class HeartbeatService {
   Future<void> _sendPendingInternal(String deviceToken) async {
     final payload = await _heartbeatDs.getPending();
     if (payload == null) return;
+    final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
     try {
       await HeartbeatRemoteDatasource(deviceToken).send(_fromJson(payload));
       await _heartbeatDs.clearPending();
@@ -190,12 +191,17 @@ class HeartbeatService {
       await _tokenDs.saveLastHeartbeatTime(formatHm(now.hour, now.minute));
 
       // 오늘의 scheduledKey도 갱신해 _executeInternal 중복 전송 가드가 작동하도록 함
-      final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
       final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
       await _tokenDs.saveLastScheduledKey(scheduledKey);
 
       await _onHeartbeatSent(schedHour, schedMinute);
-    } catch (_) {}
+    } catch (_) {
+      // pending 전송 자체는 실패 — 큐는 그대로 남겨 다음 fire에서 재시도.
+      // 단 schedule은 반드시 재등록 — oneOff fire-and-not-rescheduled 차단.
+      try {
+        await _rescheduleNextDay(schedHour, schedMinute);
+      } catch (_) {}
+    }
   }
 
   // ── private ──────────────────────────────────────────────
@@ -243,6 +249,10 @@ class HeartbeatService {
           }
           await _heartbeatDs.savePending(request.toJson());
           if (!request.manual) await LocalAlarmService.notifySendFailed();
+          // oneOff fire-and-not-rescheduled 차단 — pending 큐가 다음 fire에서 회복할 수
+          // 있도록 schedule을 반드시 재등록한다. notifySendFailed 알림은 유지(다음 성공
+          // 시 _onHeartbeatSent의 cancelSendFailed가 정리).
+          await _rescheduleNextDay(schedHour, schedMinute);
           return;
         }
         await Future.delayed(Duration(seconds: attempt * 5));
@@ -264,17 +274,44 @@ class HeartbeatService {
     await _onHeartbeatSent(schedHour, schedMinute);
   }
 
-  /// 전송 성공 직후 housekeeping (자동/수동/pending 큐 모든 성공 경로 공통):
+  /// 다음 정시 재예약 — **모든 종료 경로 공통** (전송 성공 / retry 3회 실패 / pending 실패).
+  ///
+  /// oneOff은 fire-and-forget이라 매 fire마다 schedule 재등록이 없으면 다음 날 트리거가
+  /// 사라진다. 전송 실패 분기까지 포함해 호출함으로써 oneOff 영구 누락(periodic까지
+  /// cancel된 경우 영구 미전송)을 차단한다.
   ///   - iOS 로컬 안전망 알림 → 내일로 재예약
   ///   - Android WorkManager (one-off + periodic) → 내일자로 재등록
-  ///     (worker 콜백 끝에도 동일 호출이 있으나 idempotent — 이쪽은 포그라운드/
-  ///     pending-only 성공 경로를 커버하는 단일 책임이고 worker 블록은 안전망)
-  ///   - Android 전송 실패 알림 → 잔존 알림 제거
-  Future<void> _onHeartbeatSent(int schedHour, int schedMinute) async {
+  ///
+  /// **Race 가드**: 사용자가 G+S 비활성화/탈퇴 직후 워커 isolate에서 마지막 heartbeat가
+  /// 종료되며 이 함수가 호출되는 경우, 비활성화 의도와 정반대로 schedule을 재등록하는
+  /// race가 가능했다(disableSubjectFeature/deleteAccount의 cancel과 인터리브). SharedPreferences를
+  /// reload해 최신 role/isAlsoSubject를 다시 확인하고, heartbeat 책임이 해제된 상태면
+  /// 조용히 스킵한다. 워커 callback 진입 가드(`heartbeatWorkerCallback`의 line 33)와 동일
+  /// 조건으로 일관성 유지.
+  Future<void> _rescheduleNextDay(int schedHour, int schedMinute) async {
+    await getReloadedPrefs();
+    final role = await _tokenDs.getUserRole();
+    final isAlsoSubject = await _tokenDs.getIsAlsoSubject();
+    if (role != 'subject' && !isAlsoSubject) {
+      debugPrint(
+          '[HeartbeatService] _rescheduleNextDay 스킵 — heartbeat 책임 해제됨 '
+          '(role=$role, isAlsoSubject=$isAlsoSubject)');
+      return;
+    }
     await LocalAlarmService.schedule(schedHour, schedMinute, forceNextDay: true);
     if (Platform.isAndroid) {
       await HeartbeatWorkerService.schedule(schedHour, schedMinute);
     }
+  }
+
+  /// 전송 성공 직후 housekeeping (자동/수동/pending 큐 모든 성공 경로 공통):
+  ///   - 다음 정시 재예약 (`_rescheduleNextDay`)
+  ///   - Android 전송 실패 알림 → 잔존 알림 제거 (성공 경로 한정)
+  ///
+  /// 실패 경로는 `_rescheduleNextDay`만 직접 호출하며 `cancelSendFailed`는 부르지 않는다
+  /// (방금 띄운 `notifySendFailed` 알림을 즉시 지우면 사용자에게 안내가 도달하지 않음).
+  Future<void> _onHeartbeatSent(int schedHour, int schedMinute) async {
+    await _rescheduleNextDay(schedHour, schedMinute);
     await LocalAlarmService.cancelSendFailed();
   }
 

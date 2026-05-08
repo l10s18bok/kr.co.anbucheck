@@ -105,6 +105,10 @@ class GuardianSettingsController extends BaseController {
       } catch (_) {}
     }
 
+    // **순서 중요 (race 차단)**: clear를 cancel보다 먼저. 워커 isolate의 _rescheduleNextDay
+    // 가 reload 후 role=null을 보고 skip하도록.
+    await _tokenDs.clear();
+
     if (Get.isRegistered<GuardianDashboardController>()) {
       final dashboard = Get.find<GuardianDashboardController>();
       await dashboard.cancelHeartbeatSchedules();
@@ -113,7 +117,6 @@ class GuardianSettingsController extends BaseController {
       dashboard.resetSubjectState();
     }
 
-    await _tokenDs.clear();
     await HeartbeatLocalDatasource().clearPending();
     await HeartbeatLockDatasource().clearAll();
     await NicknameLocalDatasource().clearAll();

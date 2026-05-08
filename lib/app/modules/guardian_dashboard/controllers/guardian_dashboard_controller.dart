@@ -96,9 +96,17 @@ class GuardianDashboardController extends BaseController
   /// onInit 진입 시: G+S 스케줄 동기화 후 heartbeat 미전송 체크
   /// 순서가 중요 — isScheduleInFuture가 heartbeatHour/Minute를 참조하므로
   /// 스케줄 로드가 반드시 선행되어야 한다.
+  ///
+  /// **Rx race 차단**: `isAlsoSubject` 상태 검사는 Rx 값 대신 SharedPreferences를 직접
+  /// 읽는다. onInit에서 `_loadSubjectState`(Rx 설정)와 이 함수가 병렬 실행되며,
+  /// `_scheduleHeartbeatIfGS`가 catch 분기로 빠르게 종료되는 케이스에 `_loadSubjectState`
+  /// 보다 먼저 끝나면 Rx 값이 아직 초기값(false)이라 첫 heartbeat 전송이 누락되는 race가
+  /// 발생할 수 있었음. SharedPreferences는 onboarding의 saveIsAlsoSubject가 이미 완료한
+  /// 시점이라 진실의 원천으로 안전.
   Future<void> _initGuardianSubjectMode() async {
     await _scheduleHeartbeatIfGS();
-    if (!isAlsoSubject.value) return;
+    final isAls = await _tokenDs.getIsAlsoSubject();
+    if (!isAls) return;
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
     await FcmService.consumeSafetyNetDialogIfPending(
@@ -107,7 +115,8 @@ class GuardianDashboardController extends BaseController
 
   /// onResumed 진입 시: G+S인 경우 로컬 스케줄 재로드 후 heartbeat 미전송 체크
   Future<void> _resumeGuardianSubjectMode() async {
-    if (!isAlsoSubject.value) return;
+    final isAls = await _tokenDs.getIsAlsoSubject();
+    if (!isAls) return;
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
@@ -117,7 +126,8 @@ class GuardianDashboardController extends BaseController
 
   /// FCM이 gs_deadman 로컬 알림 탭 시 호출 (이미 스택에 있을 때)
   Future<void> refreshAndSend() async {
-    if (!isAlsoSubject.value) return;
+    final isAls = await _tokenDs.getIsAlsoSubject();
+    if (!isAls) return;
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
@@ -129,7 +139,8 @@ class GuardianDashboardController extends BaseController
   /// 사용자가 알림을 탭한 행위 자체가 "오늘 안부 보내기" 명시적 의사 표현이므로
   /// 오늘 이미 전송했더라도 최신 걸음수로 재전송한다.
   Future<void> refreshAndForceSend() async {
-    if (!isAlsoSubject.value) return;
+    final isAls = await _tokenDs.getIsAlsoSubject();
+    if (!isAls) return;
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
     await HeartbeatService().execute(manual: true, isInteractiveAtTrigger: true);
@@ -153,9 +164,18 @@ class GuardianDashboardController extends BaseController
   /// 자정 경계만이 의미 단위 — 자정 넘어가면 `isReportedToday`가 false로 유지되더라도
   /// `isScheduleInFuture`(다음 예약시각 이전)에 막혀 자연스럽게 다음 날로 넘어간다.
   /// 늦은 전송 성공 시 `_onHeartbeatSent`가 WorkManager를 내일자로 재등록한다.
+  ///
+  /// **첫 설치(전송 이력 없음) 우회**: `lastHeartbeatDate`가 비어있으면 `isScheduleInFuture`
+  /// 가드까지 건너뛰고 즉시 전송한다 (SubjectHomeController와 동일 패턴).
+  /// G+S 재설치를 자정 직후에 한 케이스에서 `isScheduleInFuture=true`에 막혀 다음 날
+  /// 예약시각까지 첫 heartbeat가 누락되는 갭을 차단. Google Fit 구독 생성, 서버 last_seen
+  /// baseline, 등록→heartbeat 파이프라인 검증을 한 번에 처리.
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
-    if (Platform.isAndroid && isScheduleInFuture) return;
+    final hasEverSent = lastHeartbeatDate.isNotEmpty;
+    if (hasEverSent) {
+      if (Platform.isAndroid && isScheduleInFuture) return;
+    }
     await _clearStaleScheduledKey();
     // 포그라운드 진입은 화면을 켜고 잠금을 풀어 앱을 연 결과이므로
     // interactive=true가 확정 증거 — 명시 전달.
@@ -437,14 +457,19 @@ class GuardianDashboardController extends BaseController
       if (deviceToken == null) return;
       await _userDs.disableSubject(deviceToken);
 
+      // **순서 중요 (race 차단)**: save를 cancel보다 먼저.
+      // 워커 isolate가 마지막 heartbeat 직후 `_rescheduleNextDay`에서 SharedPreferences를
+      // reload할 때 `isAlsoSubject=false`를 보고 skip하도록 한다. 반대 순서면
+      // worker가 `isAlsoSubject=true`로 읽고 schedule을 재등록하는 race가 생긴다.
+      await _tokenDs.saveIsAlsoSubject(false);
+      await _tokenDs.saveLastHeartbeatDate('');
+      await _tokenDs.saveLastHeartbeatTime('');
+
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.cancel();
       }
       await LocalAlarmService.cancel();
 
-      await _tokenDs.saveIsAlsoSubject(false);
-      await _tokenDs.saveLastHeartbeatDate('');
-      await _tokenDs.saveLastHeartbeatTime('');
       // G+S 재활성화 시 이전 락이 남아있으면 첫 heartbeat가 스킵될 수 있음
       await HeartbeatLockDatasource().clearAll();
 

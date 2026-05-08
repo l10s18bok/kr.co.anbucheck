@@ -248,11 +248,15 @@ class SubjectHomeController extends SafetyHomeBaseController {
         );
       } catch (_) {}
     }
+    // **순서 중요 (race 차단)**: clear를 cancel보다 먼저.
+    // 워커 isolate가 _rescheduleNextDay에서 SharedPreferences를 reload할 때 role=null을
+    // 보고 skip하도록 한다. 반대 순서면 worker가 role='subject'로 읽고 schedule을
+    // 재등록하는 race가 생긴다.
+    await tokenDs.clear();
     if (Platform.isAndroid) {
       await HeartbeatWorkerService.cancel();
     }
     await LocalAlarmService.cancel();
-    await tokenDs.clear();
     await HeartbeatLocalDatasource().clearPending();
     await HeartbeatLockDatasource().clearAll();
 
