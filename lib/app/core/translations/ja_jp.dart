@@ -73,11 +73,15 @@ abstract class JaJp {
     'permission_activity_denied_message': '歩数を検知して安否確認の精度を向上させるために使用します。\n設定から身体活動の権限を許可してください。',
     'permission_battery': 'バッテリー最適化の除外',
     'permission_battery_desc': '毎日決まった時刻の安否確認が漏れないように、バッテリー最適化から除外します',
-    'permission_hibernation_title': '「使用していないアプリを一時停止」をオフにしてください',
-    'permission_hibernation_highlight': '使用していないアプリを一時停止',
+    'permission_hibernation_title': '自動的な権限の削除をオフにしてください',
+    'permission_hibernation_highlight': '自動的な権限の削除',
     'permission_hibernation_message':
-        '数か月間アプリを開かないと、Androidがアプリを自動的に停止し、安否確認が中断される可能性があります。\n\n[アプリ設定を開く]をタップし、「使用していないアプリを一時停止」をオフにしてください。',
-    'permission_hibernation_go_to_settings': 'アプリ設定を開く',
+        'Androidは長期間使用されていないアプリの権限を自動的に削除します。Anbuは普段画面を開かないことが多いため、この機能がオンの状態だと一定期間後に権限が消え、安否確認信号の送信が停止する場合があります。\n\n下の[設定を開く]をタップすると、該当のトグル画面が直接表示されます。トグルをオフにしてください。\n\n※ 端末メーカーによって画面の表記が少し異なる場合があります。',
+    'permission_hibernation_go_to_settings': '設定を開く',
+    'stability_battery_warning_short': 'バッテリー使用制限の解除が必要です',
+    'stability_battery_dialog_title': 'バッテリー使用制限の解除',
+    'stability_battery_dialog_message':
+        'スマートフォンが省電力モードに入ると、保護者への安否確認信号が遅れたり、届かなかったりすることがあります。\n\n下の[設定を開く]をタップした後、「バッテリー」→「制限なし」に設定してください。毎日決まった時刻に安否が安定して届きます。\n\n※ 端末メーカーによって表記が少し異なる場合があります。',
 
     // ── オンボーディング ──
     'onboarding_title_1': 'ひとり暮らしの大切な人、\n心配ではありませんか？',

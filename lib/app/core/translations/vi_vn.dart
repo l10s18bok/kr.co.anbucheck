@@ -81,11 +81,15 @@ abstract class ViVn {
     'permission_battery': 'Loai tru toi uu hoa pin',
     'permission_battery_desc':
         'Loai tru ung dung khoi toi uu hoa pin de kiem tra suc khoe hang ngay khong bi bo lo vao gio da dinh',
-    'permission_hibernation_title': 'Vui long tat "Tam dung ung dung khi khong dung"',
-    'permission_hibernation_highlight': 'Tam dung ung dung khi khong dung',
+    'permission_hibernation_title': 'Hay tat tinh nang tu dong xoa quyen',
+    'permission_hibernation_highlight': 'tu dong xoa quyen',
     'permission_hibernation_message':
-        'Neu ban khong mo ung dung trong vai thang, Android co the tu dong dung ung dung, lam gian doan viec kiem tra suc khoe.\n\nNhan [Mo cai dat ung dung] va tat "Tam dung ung dung khi khong dung".',
-    'permission_hibernation_go_to_settings': 'Mo cai dat ung dung',
+        'Android tu dong xoa quyen cua cac ung dung ban khong su dung trong thoi gian dai. Anbu thuong hoat dong ma khong can ban mo, nen tinh nang nay co the khien quyen bien mat sau mot thoi gian va lam ngung viec gui tin hieu an toan.\n\nNhan [Mo cai dat] ben duoi — man hinh cong tac tuong ung se xuat hien truc tiep. Hay tat cong tac.\n\n※ Cach hien thi co the khac nhau tuy theo nha san xuat thiet bi.',
+    'permission_hibernation_go_to_settings': 'Mo cai dat',
+    'stability_battery_warning_short': 'Can tat gioi han su dung pin',
+    'stability_battery_dialog_title': 'Tat gioi han su dung pin',
+    'stability_battery_dialog_message':
+        'Khi dien thoai cua ban vao che do tiet kiem pin, tin hieu an toan gui den nguoi bao ho co the den muon hoac bi mat.\n\nSau khi nhan [Mo cai dat] ben duoi, hay dat "Pin" → "Khong gioi han". Khi do, tin hieu an toan se duoc gui mot cach dang tin cay vao gio da dinh moi ngay.\n\n※ Cach hien thi co the khac nhau tuy theo nha san xuat thiet bi.',
 
     // ── Gioi thieu ──
     'onboarding_title_1': 'Ban lo lang cho nguoi\nsong mot minh?',

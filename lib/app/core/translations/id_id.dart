@@ -83,11 +83,15 @@ abstract class IdId {
     'permission_battery': 'Pengecualian Pengoptimalan Baterai',
     'permission_battery_desc':
         'Mengecualikan aplikasi dari pengoptimalan baterai agar pemeriksaan kesejahteraan harian tidak terlewat pada waktu yang dijadwalkan',
-    'permission_hibernation_title': 'Matikan "Jeda aplikasi jika tidak digunakan"',
-    'permission_hibernation_highlight': 'Jeda aplikasi jika tidak digunakan',
+    'permission_hibernation_title': 'Matikan penghapusan izin otomatis',
+    'permission_hibernation_highlight': 'penghapusan izin otomatis',
     'permission_hibernation_message':
-        'Jika Anda tidak membuka aplikasi selama beberapa bulan, Android dapat menghentikannya secara otomatis, mengganggu pemeriksaan kesejahteraan.\n\nKetuk [Buka Pengaturan Aplikasi] dan matikan "Jeda aplikasi jika tidak digunakan".',
-    'permission_hibernation_go_to_settings': 'Buka Pengaturan Aplikasi',
+        'Android secara otomatis menghapus izin aplikasi yang sudah lama tidak Anda gunakan. Anbu biasanya berjalan tanpa dibuka, sehingga fitur ini dapat membuat izin hilang setelah beberapa waktu dan menghentikan pengiriman sinyal kesejahteraan.\n\nKetuk [Buka Pengaturan] di bawah — layar sakelar yang sesuai akan muncul langsung. Matikan sakelar.\n\n※ Pelafalan tepatnya dapat bervariasi tergantung pabrikan perangkat.',
+    'permission_hibernation_go_to_settings': 'Buka Pengaturan',
+    'stability_battery_warning_short': 'Perlu menonaktifkan pembatasan penggunaan baterai',
+    'stability_battery_dialog_title': 'Nonaktifkan pembatasan penggunaan baterai',
+    'stability_battery_dialog_message':
+        'Ketika ponsel Anda masuk ke mode hemat daya, sinyal kesejahteraan yang dikirim ke pengasuh Anda dapat terlambat atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan] di bawah, atur "Baterai" → "Tidak Dibatasi". Dengan begitu, sinyal kesejahteraan akan dikirim dengan andal pada waktu yang dijadwalkan setiap hari.\n\n※ Pelafalan tepatnya dapat bervariasi tergantung pabrikan perangkat.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Khawatir tentang seseorang\nyang tinggal sendiri?',

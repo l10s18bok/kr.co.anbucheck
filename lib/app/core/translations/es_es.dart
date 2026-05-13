@@ -82,11 +82,15 @@ abstract class EsEs {
     'permission_battery': 'Exclusión de optimización de batería',
     'permission_battery_desc':
         'Excluye la aplicación de la optimización de batería para que las verificaciones diarias de bienestar no se pierdan',
-    'permission_hibernation_title': 'Desactive "Pausar actividad si no se usa"',
-    'permission_hibernation_highlight': 'Pausar actividad si no se usa',
+    'permission_hibernation_title': 'Desactive la eliminación automática de permisos',
+    'permission_hibernation_highlight': 'eliminación automática de permisos',
     'permission_hibernation_message':
-        'Si no abre la aplicación durante varios meses, Android puede detenerla automáticamente e interrumpir las verificaciones de bienestar.\n\nToque [Abrir ajustes de la app] y desactive "Pausar actividad si no se usa".',
-    'permission_hibernation_go_to_settings': 'Abrir ajustes de la app',
+        'Android elimina automáticamente los permisos de las aplicaciones que no se han usado durante mucho tiempo. Anbu suele funcionar sin abrirse, por lo que esta función puede hacer que los permisos desaparezcan al cabo de un tiempo y se detenga el envío de la señal de bienestar.\n\nToque [Abrir ajustes] abajo — aparecerá directamente la pantalla del interruptor correspondiente. Desactive el interruptor.\n\n※ El texto exacto puede variar según el fabricante del dispositivo.',
+    'permission_hibernation_go_to_settings': 'Abrir ajustes',
+    'stability_battery_warning_short': 'Es necesario desactivar la restricción de uso de batería',
+    'stability_battery_dialog_title': 'Desactivar la restricción de uso de batería',
+    'stability_battery_dialog_message':
+        'Cuando su teléfono entra en modo de ahorro de energía, las señales de bienestar enviadas a su cuidador pueden llegar tarde o perderse.\n\nDespués de tocar [Abrir ajustes] abajo, configure "Batería" → "Sin restricciones". Así, las señales de bienestar se envían de forma fiable a la hora programada cada día.\n\n※ El texto exacto puede variar según el fabricante del dispositivo.',
 
     // ── Presentación ──
     'onboarding_title_1': '¿Le preocupa alguien\nque vive solo?',

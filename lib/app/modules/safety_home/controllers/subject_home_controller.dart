@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
@@ -13,6 +12,7 @@ import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/core/services/stability_service.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
@@ -168,7 +168,7 @@ class SubjectHomeController extends SafetyHomeBaseController {
           TextButton(
             onPressed: () async {
               Get.back();
-              await openAppSettings();
+              await Get.find<StabilityService>().openAutoRevokeSettings();
             },
             child: Text('permission_hibernation_go_to_settings'.tr),
           ),

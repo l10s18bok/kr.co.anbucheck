@@ -82,11 +82,15 @@ abstract class PtBr {
     'permission_battery': 'Exclusão da otimização de bateria',
     'permission_battery_desc':
         'Exclui o aplicativo da otimização de bateria para que as verificações diárias de bem-estar não sejam perdidas',
-    'permission_hibernation_title': 'Desative "Pausar atividade se não usado"',
-    'permission_hibernation_highlight': 'Pausar atividade se não usado',
+    'permission_hibernation_title': 'Desative a remoção automática de permissões',
+    'permission_hibernation_highlight': 'remoção automática de permissões',
     'permission_hibernation_message':
-        'Se você não abrir o app por vários meses, o Android pode pará-lo automaticamente, interrompendo as verificações de bem-estar.\n\nToque em [Abrir configurações do app] e desative "Pausar atividade se não usado".',
-    'permission_hibernation_go_to_settings': 'Abrir configurações do app',
+        'O Android remove automaticamente as permissões de aplicativos que você não usa há muito tempo. O Anbu geralmente funciona sem ser aberto, então esse recurso pode fazer com que as permissões desapareçam após algum tempo e o sinal de bem-estar pare de ser enviado.\n\nToque em [Abrir configurações] abaixo — a tela do interruptor correspondente aparecerá diretamente. Desative o interruptor.\n\n※ O texto exato pode variar conforme o fabricante do dispositivo.',
+    'permission_hibernation_go_to_settings': 'Abrir configurações',
+    'stability_battery_warning_short': 'É necessário desativar a restrição de uso de bateria',
+    'stability_battery_dialog_title': 'Desativar a restrição de uso de bateria',
+    'stability_battery_dialog_message':
+        'Quando seu telefone entra no modo de economia de energia, os sinais de bem-estar enviados ao seu cuidador podem chegar atrasados ou serem perdidos.\n\nApós tocar em [Abrir configurações] abaixo, defina "Bateria" → "Sem restrições". Assim, os sinais de bem-estar são enviados de forma confiável no horário programado todos os dias.\n\n※ O texto exato pode variar conforme o fabricante do dispositivo.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Você se preocupa com alguém\nque mora sozinho?',

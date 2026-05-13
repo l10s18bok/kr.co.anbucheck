@@ -9,6 +9,7 @@ import 'package:anbucheck/app.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/core/services/ad_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
+import 'package:anbucheck/app/core/services/stability_service.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   await HeartbeatWorkerService.init();
   Get.put(ThemeService());
+  Get.put(StabilityService());
   // ATT(App Tracking Transparency) — iOS 14.5+ IDFA 접근. AdMob 초기화 전 처리.
   // 실패/거부 어떤 경우에도 광고는 비개인화로 fallback되며 앱 동작에는 영향 없음.
   if (Platform.isIOS) {

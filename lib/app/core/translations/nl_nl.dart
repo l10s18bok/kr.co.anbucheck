@@ -81,11 +81,15 @@ abstract class NlNl {
     'permission_battery': 'Uitsluiting van batterijoptimalisatie',
     'permission_battery_desc':
         'Sluit de app uit van batterijoptimalisatie zodat dagelijkse welzijnscontroles niet worden gemist',
-    'permission_hibernation_title': 'Schakel "App pauzeren bij niet-gebruik" uit',
-    'permission_hibernation_highlight': 'App pauzeren bij niet-gebruik',
+    'permission_hibernation_title': 'Schakel automatische verwijdering van rechten uit',
+    'permission_hibernation_highlight': 'automatische verwijdering van rechten',
     'permission_hibernation_message':
-        'Als u de app enkele maanden niet opent, kan Android deze automatisch stoppen, waardoor welzijnscontroles worden onderbroken.\n\nTik op [App-instellingen openen] en schakel "App pauzeren bij niet-gebruik" uit.',
-    'permission_hibernation_go_to_settings': 'App-instellingen openen',
+        'Android verwijdert automatisch rechten van apps die je lange tijd niet hebt gebruikt. Anbu draait meestal zonder geopend te worden, dus deze functie kan ervoor zorgen dat rechten na verloop van tijd verdwijnen en het welzijnssignaal stopt.\n\nTik hieronder op [Instellingen openen] — het scherm met de schakelaar verschijnt direct. Schakel de schakelaar uit.\n\n※ De exacte tekst kan per fabrikant verschillen.',
+    'permission_hibernation_go_to_settings': 'Instellingen openen',
+    'stability_battery_warning_short': 'Batterijgebruiksbeperking moet worden uitgeschakeld',
+    'stability_battery_dialog_title': 'Batterijgebruiksbeperking uitschakelen',
+    'stability_battery_dialog_message':
+        'Wanneer je telefoon in energiebesparende modus gaat, kunnen welzijnssignalen naar je verzorger te laat aankomen of gemist worden.\n\nNa op [Instellingen openen] hieronder te tikken, stel "Batterij" → "Onbeperkt" in. Zo worden welzijnssignalen elke dag betrouwbaar op de geplande tijd verzonden.\n\n※ De exacte tekst kan per fabrikant verschillen.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Maakt u zich zorgen om iemand\ndie alleen woont?',

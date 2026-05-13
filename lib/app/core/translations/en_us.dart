@@ -80,11 +80,15 @@ abstract class EnUs {
     'permission_battery': 'Battery Optimization Exclusion',
     'permission_battery_desc':
         'Excludes the app from battery optimization so that daily wellness checks are not missed at the scheduled time',
-    'permission_hibernation_title': 'Please turn off "Pause app activity if unused"',
-    'permission_hibernation_highlight': 'Pause app activity if unused',
+    'permission_hibernation_title': 'Please turn off Auto Permission Removal',
+    'permission_hibernation_highlight': 'Auto Permission Removal',
     'permission_hibernation_message':
-        'If you don\'t open the app for several months, Android may automatically stop it and interrupt wellness checks.\n\nTap [Open App Settings], then find and turn off "Pause app activity if unused".',
-    'permission_hibernation_go_to_settings': 'Open App Settings',
+        'Android automatically removes permissions from apps you haven\'t used for a long time. Anbu typically runs without being opened, so this feature can cause permissions to disappear after a while and stop the wellness check signal.\n\nTap [Open Settings] below — the relevant toggle screen will appear directly. Please turn the toggle off.\n\n※ The exact wording may vary by device manufacturer.',
+    'permission_hibernation_go_to_settings': 'Open Settings',
+    'stability_battery_warning_short': 'Disable battery usage restrictions',
+    'stability_battery_dialog_title': 'Disable Battery Usage Restriction',
+    'stability_battery_dialog_message':
+        'When your phone enters power-saving mode, wellness check signals may reach your guardian late or be missed.\n\nAfter tapping [Open Settings] below, set "Battery" → "Unrestricted". This ensures wellness checks are delivered reliably at the scheduled time every day.\n\n※ The exact wording may vary by device manufacturer.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Worried about someone\nliving alone?',

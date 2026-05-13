@@ -72,11 +72,15 @@ abstract class ZhCn {
     'permission_activity_denied_message': '用于检测步数并提高问安准确性。\n请在设置中开启身体活动权限。',
     'permission_battery': '电池优化例外',
     'permission_battery_desc': '将应用从电池优化中排除，以免每天定时的问安检查被遗漏',
-    'permission_hibernation_title': '请关闭"暂停未使用的应用"',
-    'permission_hibernation_highlight': '暂停未使用的应用',
+    'permission_hibernation_title': '请关闭"自动撤销权限"',
+    'permission_hibernation_highlight': '自动撤销权限',
     'permission_hibernation_message':
-        '如果您几个月未打开应用,Android可能会自动停止该应用,导致安康检查中断。\n\n点击[打开应用设置],然后找到并关闭"暂停未使用的应用"。',
-    'permission_hibernation_go_to_settings': '打开应用设置',
+        'Android会自动撤销长时间未使用应用的权限。Anbu平时几乎不会被打开,如果此功能开启,一段时间后权限会消失,导致安康信号传输中断。\n\n点击下方[打开设置]后,会直接显示相应的开关页面。请关闭该开关。\n\n※ 显示文字可能因设备制造商而略有不同。',
+    'permission_hibernation_go_to_settings': '打开设置',
+    'stability_battery_warning_short': '需要解除电池使用限制',
+    'stability_battery_dialog_title': '解除电池使用限制',
+    'stability_battery_dialog_message':
+        '当手机进入省电模式时,发送给监护人的安康信号可能延迟或丢失。\n\n点击下方[打开设置]后,请将"电池"设置为"无限制"。这样可以确保每天准时稳定地传输安康信号。\n\n※ 显示文字可能因设备制造商而略有不同。',
 
     // ── 引导页 ──
     'onboarding_title_1': '担心独居的亲人\n过得好不好？',

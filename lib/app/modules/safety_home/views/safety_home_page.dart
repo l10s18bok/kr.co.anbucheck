@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:anbucheck/app/core/services/stability_service.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
@@ -16,6 +17,7 @@ import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_base_c
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/subject_home_controller.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/activity_permission_warning.dart';
+import 'package:anbucheck/app/modules/safety_home/widgets/battery_optimization_warning.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/check_state_card.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/emergency_button.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/invite_code_share_card.dart';
@@ -192,6 +194,14 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
                     ),
                   )),
               SizedBox(height: AppSpacing.vsm),
+
+              // 배터리 사용 제한 해제 권장 (S/G+S 공통, Android 전용)
+              // 제한 없음 상태이거나 iOS면 SizedBox.shrink로 공간 미사용
+              Obx(() => BatteryOptimizationWarning(
+                    needsAction:
+                        !Get.find<StabilityService>().batteryUnrestricted.value,
+                    onTap: controller.openBatteryOptimizationSettings,
+                  )),
 
               // 안전코드 공유 카드
               Obx(() => InviteCodeShareCard(

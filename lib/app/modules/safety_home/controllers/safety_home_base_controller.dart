@@ -12,6 +12,7 @@ import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
+import 'package:anbucheck/app/core/services/stability_service.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
@@ -130,6 +131,7 @@ abstract class SafetyHomeBaseController extends BaseController
     _initBattery();
     _initConnectivity();
     _autoRequestSensorPermissionIOSIfNeeded();
+    Get.find<StabilityService>().refresh();
     loadStatus().then((_) => onAfterLoad());
   }
 
@@ -138,7 +140,33 @@ abstract class SafetyHomeBaseController extends BaseController
     super.onResumed();
     _refreshActivityPermissionAndWarmUpIfGranted();
     refreshLocationPermissionStatus();
+    Get.find<StabilityService>().refresh();
     loadScheduleFromLocal().then((_) => onResumedRoleSpecific());
+  }
+
+  /// 배터리 사용 제한 해제 경고 위젯 탭 시 호출 — 설명 다이얼로그 표시 후
+  /// 사용자가 [설정 열기]를 선택하면 OS 앱 정보 페이지로 진입.
+  /// 사용자가 "배터리 → 제한 없음" 경로를 모를 수 있으므로 사전 안내 필수.
+  Future<void> openBatteryOptimizationSettings() async {
+    await Get.dialog<void>(
+      AlertDialog(
+        title: Text('stability_battery_dialog_title'.tr),
+        content: Text('stability_battery_dialog_message'.tr),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('common_later'.tr),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              await Get.find<StabilityService>().openBatterySettings();
+            },
+            child: Text('permission_hibernation_go_to_settings'.tr),
+          ),
+        ],
+      ),
+    );
   }
 
   /// 포그라운드 복귀 시 활동 권한 상태 재확인 + denied → granted 전환 시 warmUp 재호출.

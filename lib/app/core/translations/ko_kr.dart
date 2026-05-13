@@ -74,11 +74,15 @@ abstract class KoKr {
         '걸음수를 감지하여 안부 확인 정확도를 높이는 데 사용됩니다.\n설정에서 신체 활동 권한을 허용해 주세요.',
     'permission_battery': '배터리 최적화 제외',
     'permission_battery_desc': '매일 정해진 시각에 안부 확인이 누락되지 않도록 배터리 최적화에서 제외합니다',
-    'permission_hibernation_title': '\'사용하지 않는 앱 일시 정지\'를 꺼주세요',
-    'permission_hibernation_highlight': '사용하지 않는 앱 일시 정지',
+    'permission_hibernation_title': '자동 권한 해제를 꺼주세요',
+    'permission_hibernation_highlight': '자동 권한 해제',
     'permission_hibernation_message':
-        '앱을 여러 달 열지 않으면 Android가 앱을 자동으로 정지시켜 안부 확인이 중단될 수 있습니다.\n\n[앱 설정으로 이동]을 누른 뒤, "사용하지 않는 앱 일시 정지" 항목을 찾아 꺼주세요.',
-    'permission_hibernation_go_to_settings': '앱 설정으로 이동',
+        'Android는 오랫동안 사용하지 않은 앱의 권한을 자동으로 해제합니다. 안부 확인 앱은 평소에 화면을 열지 않는 경우가 많아, 이 기능이 켜져 있으면 시간이 지난 뒤 권한이 사라져 안부 신호 전송이 중단될 수 있습니다.\n\n아래 [설정 열기]를 누르면 해당 토글 화면이 바로 나타납니다. 토글을 꺼주세요.\n\n※ 기기 제조사에 따라 화면 표기는 조금씩 다를 수 있습니다.',
+    'permission_hibernation_go_to_settings': '설정 열기',
+    'stability_battery_warning_short': '배터리 사용 제한 해제가 필요해요',
+    'stability_battery_dialog_title': '배터리 사용 제한 해제',
+    'stability_battery_dialog_message':
+        '폰이 절전 모드에 들어가면 보호자에게 안부 신호가 늦게 도착하거나 누락될 수 있습니다.\n\n아래 [설정 열기]를 누르신 뒤, \'배터리\' → \'제한 없음\'으로 설정해 주세요. 매일 정확한 시각에 안부가 안정적으로 전달됩니다.\n\n※ 기기 제조사에 따라 표기는 조금씩 다를 수 있습니다.',
 
     // ── 온보딩 ──
     'onboarding_title_1': '혼자 사는 소중한 사람,\n걱정되시나요?',

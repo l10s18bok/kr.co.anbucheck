@@ -82,11 +82,15 @@ abstract class FrFr {
     'permission_battery': 'Exclusion de l\'optimisation de la batterie',
     'permission_battery_desc':
         'Exclut l\'application de l\'optimisation de la batterie afin que les vérifications quotidiennes de bien-être ne soient pas manquées',
-    'permission_hibernation_title': 'Veuillez désactiver "Suspendre l\'activité si inutilisée"',
-    'permission_hibernation_highlight': 'Suspendre l\'activité si inutilisée',
+    'permission_hibernation_title': 'Veuillez désactiver la suppression automatique des autorisations',
+    'permission_hibernation_highlight': 'suppression automatique des autorisations',
     'permission_hibernation_message':
-        'Si vous n\'ouvrez pas l\'application pendant plusieurs mois, Android peut l\'arrêter automatiquement et interrompre les vérifications de bien-être.\n\nAppuyez sur [Ouvrir les paramètres de l\'application], puis désactivez "Suspendre l\'activité si inutilisée".',
-    'permission_hibernation_go_to_settings': 'Ouvrir les paramètres de l\'application',
+        'Android supprime automatiquement les autorisations des applications que vous n\'utilisez pas depuis longtemps. Anbu fonctionne généralement sans être ouverte, donc cette fonctionnalité peut faire disparaître les autorisations après un certain temps et arrêter l\'envoi du signal de bien-être.\n\nAppuyez sur [Ouvrir les paramètres] ci-dessous — l\'écran du bouton correspondant s\'affichera directement. Veuillez désactiver le bouton.\n\n※ Les libellés exacts peuvent varier selon le fabricant de l\'appareil.',
+    'permission_hibernation_go_to_settings': 'Ouvrir les paramètres',
+    'stability_battery_warning_short': 'La restriction d\'utilisation de la batterie doit être désactivée',
+    'stability_battery_dialog_title': 'Désactiver la restriction d\'utilisation de la batterie',
+    'stability_battery_dialog_message':
+        'Lorsque votre téléphone passe en mode économie d\'énergie, les signaux de bien-être envoyés à votre proche peuvent être retardés ou manqués.\n\nAprès avoir appuyé sur [Ouvrir les paramètres] ci-dessous, réglez "Batterie" → "Sans restriction". Ainsi, les signaux de bien-être sont transmis de manière fiable à l\'heure prévue chaque jour.\n\n※ Les libellés exacts peuvent varier selon le fabricant de l\'appareil.',
 
     // ── Présentation ──
     'onboarding_title_1': 'Vous vous inquiétez pour\nquelqu\'un qui vit seul ?',

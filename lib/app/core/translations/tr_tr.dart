@@ -81,11 +81,15 @@ abstract class TrTr {
     'permission_battery': 'Pil Optimizasyonu Hariç Tutma',
     'permission_battery_desc':
         'Günlük hal hatır kontrollerinin belirlenen saatte kaçırılmaması için uygulamayı pil optimizasyonundan hariç tutar',
-    'permission_hibernation_title': '"Kullanılmazsa uygulamayı duraklat"ı kapatın',
-    'permission_hibernation_highlight': 'Kullanılmazsa uygulamayı duraklat',
+    'permission_hibernation_title': 'Otomatik izin kaldırmayı kapatın',
+    'permission_hibernation_highlight': 'Otomatik izin kaldırma',
     'permission_hibernation_message':
-        'Uygulamayı birkaç ay açmazsanız, Android uygulamayı otomatik olarak durdurabilir ve sağlık kontrollerini kesintiye uğratabilir.\n\n[Uygulama Ayarlarını Aç]\'a dokunun ve "Kullanılmazsa uygulamayı duraklat"ı kapatın.',
-    'permission_hibernation_go_to_settings': 'Uygulama Ayarlarını Aç',
+        'Android, uzun süre kullanılmayan uygulamaların izinlerini otomatik olarak kaldırır. Anbu genellikle açılmadan çalıştığı için, bu özellik bir süre sonra izinlerin kaybolmasına ve esenlik sinyalinin gönderilmemesine neden olabilir.\n\nAşağıdaki [Ayarları Aç] düğmesine dokunduğunuzda, ilgili anahtar ekranı doğrudan açılır. Anahtarı kapatın.\n\n※ Tam ifade cihaz üreticisine göre değişebilir.',
+    'permission_hibernation_go_to_settings': 'Ayarları Aç',
+    'stability_battery_warning_short': 'Pil kullanım kısıtlaması kapatılmalı',
+    'stability_battery_dialog_title': 'Pil kullanım kısıtlamasını kaldırma',
+    'stability_battery_dialog_message':
+        'Telefonunuz güç tasarrufu moduna girdiğinde, bakım vereninize giden esenlik sinyalleri gecikebilir veya kaybolabilir.\n\nAşağıdaki [Ayarları Aç] düğmesine dokunduktan sonra "Pil" → "Kısıtlama yok" ayarlayın. Böylece esenlik sinyalleri her gün belirlenen saatte güvenilir bir şekilde iletilir.\n\n※ Tam ifade cihaz üreticisine göre değişebilir.',
 
     // ── Tanıtım ──
     'onboarding_title_1': 'Yalnız yaşayan birisi için\nendişeleniyor musunuz?',

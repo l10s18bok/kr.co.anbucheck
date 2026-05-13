@@ -72,11 +72,15 @@ abstract class ZhTw {
     'permission_activity_denied_message': '用於偵測步數並提高問安準確性。\n請在設定中開啟身體活動權限。',
     'permission_battery': '電池最佳化例外',
     'permission_battery_desc': '將應用程式從電池最佳化中排除，以免每天定時的問安檢查被遺漏',
-    'permission_hibernation_title': '請關閉「暫停未使用的應用程式」',
-    'permission_hibernation_highlight': '暫停未使用的應用程式',
+    'permission_hibernation_title': '請關閉「自動撤銷權限」',
+    'permission_hibernation_highlight': '自動撤銷權限',
     'permission_hibernation_message':
-        '如果您數月未開啟應用程式,Android可能會自動停止,導致安康檢查中斷。\n\n點擊[開啟應用程式設定],然後找到並關閉「暫停未使用的應用程式」。',
-    'permission_hibernation_go_to_settings': '開啟應用程式設定',
+        'Android會自動撤銷長時間未使用應用程式的權限。Anbu平時幾乎不會被開啟,如果此功能開啟,一段時間後權限會消失,導致安康訊號傳輸中斷。\n\n點選下方[開啟設定]後,會直接顯示對應的開關畫面。請關閉該開關。\n\n※ 顯示文字可能因裝置製造商而略有不同。',
+    'permission_hibernation_go_to_settings': '開啟設定',
+    'stability_battery_warning_short': '需要解除電池使用限制',
+    'stability_battery_dialog_title': '解除電池使用限制',
+    'stability_battery_dialog_message':
+        '當手機進入省電模式時,傳送給監護人的安康訊號可能延遲或遺失。\n\n點選下方[開啟設定]後,請將「電池」設定為「無限制」。如此可以確保每天準時穩定地傳輸安康訊號。\n\n※ 顯示文字可能因裝置製造商而略有不同。',
 
     // ── 引導頁 ──
     'onboarding_title_1': '擔心獨居的親人\n過得好不好？',

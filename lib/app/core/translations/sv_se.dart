@@ -79,11 +79,15 @@ abstract class SvSe {
     'permission_battery': 'Undantag från batterioptimering',
     'permission_battery_desc':
         'Utesluter appen från batterioptimering så att dagliga välmåendekontroller inte missas vid den schemalagda tiden',
-    'permission_hibernation_title': 'Stäng av "Pausa oanvända appar"',
-    'permission_hibernation_highlight': 'Pausa oanvända appar',
+    'permission_hibernation_title': 'Stäng av automatisk borttagning av behörigheter',
+    'permission_hibernation_highlight': 'automatisk borttagning av behörigheter',
     'permission_hibernation_message':
-        'Om du inte öppnar appen på flera månader kan Android stoppa den automatiskt och avbryta välmåendekontroller.\n\nTryck på [Öppna appinställningar] och stäng av "Pausa oanvända appar".',
-    'permission_hibernation_go_to_settings': 'Öppna appinställningar',
+        'Android tar automatiskt bort behörigheter från appar du inte har använt på länge. Anbu körs vanligtvis utan att öppnas, så den här funktionen kan göra att behörigheterna försvinner efter ett tag och att välmående-signalen slutar skickas.\n\nTryck på [Öppna inställningar] nedan — den aktuella skärmen med reglaget visas direkt. Stäng av reglaget.\n\n※ Den exakta texten kan variera beroende på enhetstillverkare.',
+    'permission_hibernation_go_to_settings': 'Öppna inställningar',
+    'stability_battery_warning_short': 'Batterianvändningsbegränsning måste inaktiveras',
+    'stability_battery_dialog_title': 'Inaktivera batterianvändningsbegränsning',
+    'stability_battery_dialog_message':
+        'När telefonen går in i energisparläge kan välmående-signaler till din vårdgivare komma försenade eller missas.\n\nTryck på [Öppna inställningar] nedan och ställ in "Batteri" → "Obegränsad". Då skickas välmående-signaler tillförlitligt vid den planerade tiden varje dag.\n\n※ Den exakta texten kan variera beroende på enhetstillverkare.',
 
     // ── Introduktion ──
     'onboarding_title_1': 'Orolig for nagon\nsom bor ensam?',

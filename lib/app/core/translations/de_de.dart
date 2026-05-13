@@ -84,11 +84,15 @@ abstract class DeDe {
     'permission_battery': 'Akku-Optimierung ausschließen',
     'permission_battery_desc':
         'Schließt die App von der Akku-Optimierung aus, damit der tägliche Wohlbefindens-Check zur geplanten Zeit nicht verpasst wird',
-    'permission_hibernation_title': 'Bitte "App bei Nichtnutzung pausieren" deaktivieren',
-    'permission_hibernation_highlight': 'App bei Nichtnutzung pausieren',
+    'permission_hibernation_title': 'Bitte automatische Berechtigungsentfernung deaktivieren',
+    'permission_hibernation_highlight': 'automatische Berechtigungsentfernung',
     'permission_hibernation_message':
-        'Wenn Sie die App mehrere Monate nicht öffnen, kann Android sie automatisch stoppen und die Wohlbefindens-Checks unterbrechen.\n\nTippen Sie auf [App-Einstellungen öffnen] und deaktivieren Sie dann "App bei Nichtnutzung pausieren".',
-    'permission_hibernation_go_to_settings': 'App-Einstellungen öffnen',
+        'Android entfernt automatisch Berechtigungen von Apps, die Sie längere Zeit nicht verwendet haben. Anbu läuft in der Regel ohne geöffnet zu werden, sodass diese Funktion nach einiger Zeit dazu führen kann, dass Berechtigungen verschwinden und das Wohlbefindens-Signal nicht mehr gesendet wird.\n\nTippen Sie unten auf [Einstellungen öffnen] — der entsprechende Schalter wird direkt angezeigt. Bitte deaktivieren Sie den Schalter.\n\n※ Die genaue Bezeichnung kann je nach Gerätehersteller variieren.',
+    'permission_hibernation_go_to_settings': 'Einstellungen öffnen',
+    'stability_battery_warning_short': 'Akkunutzungsbeschränkung muss aufgehoben werden',
+    'stability_battery_dialog_title': 'Akkunutzungsbeschränkung aufheben',
+    'stability_battery_dialog_message':
+        'Wenn Ihr Telefon in den Energiesparmodus wechselt, können Wohlbefindens-Signale an Ihren Betreuer verspätet oder gar nicht ankommen.\n\nTippen Sie unten auf [Einstellungen öffnen] und stellen Sie "Akku" → "Uneingeschränkt" ein. So werden Wohlbefindens-Signale jeden Tag zuverlässig zur geplanten Zeit übermittelt.\n\n※ Die genaue Bezeichnung kann je nach Gerätehersteller variieren.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Machen Sie sich Sorgen\num jemanden, der allein lebt?',

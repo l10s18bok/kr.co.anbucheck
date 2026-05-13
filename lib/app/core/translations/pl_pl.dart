@@ -81,11 +81,15 @@ abstract class PlPl {
     'permission_battery': 'Wyłączenie z optymalizacji baterii',
     'permission_battery_desc':
         'Wyłącza aplikację z optymalizacji baterii, aby codzienne sprawdzanie samopoczucia nie było pomijane o zaplanowanej godzinie',
-    'permission_hibernation_title': 'Wyłącz "Wstrzymaj nieużywane aplikacje"',
-    'permission_hibernation_highlight': 'Wstrzymaj nieużywane aplikacje',
+    'permission_hibernation_title': 'Wyłącz automatyczne usuwanie uprawnień',
+    'permission_hibernation_highlight': 'automatyczne usuwanie uprawnień',
     'permission_hibernation_message':
-        'Jeśli nie otworzysz aplikacji przez kilka miesięcy, Android może ją automatycznie zatrzymać, przerywając sprawdzanie dobrostanu.\n\nDotknij [Otwórz ustawienia aplikacji] i wyłącz "Wstrzymaj nieużywane aplikacje".',
-    'permission_hibernation_go_to_settings': 'Otwórz ustawienia aplikacji',
+        'Android automatycznie usuwa uprawnienia aplikacji, których nie używasz przez dłuższy czas. Anbu zazwyczaj działa bez Twojego otwierania, więc ta funkcja może spowodować, że po pewnym czasie uprawnienia znikną, a sygnał dobrostanu przestanie być wysyłany.\n\nDotknij [Otwórz ustawienia] poniżej — odpowiedni ekran z przełącznikiem pojawi się od razu. Wyłącz przełącznik.\n\n※ Dokładne sformułowania mogą się różnić w zależności od producenta urządzenia.',
+    'permission_hibernation_go_to_settings': 'Otwórz ustawienia',
+    'stability_battery_warning_short': 'Wymagane wyłączenie ograniczeń użycia baterii',
+    'stability_battery_dialog_title': 'Wyłączenie ograniczeń użycia baterii',
+    'stability_battery_dialog_message':
+        'Gdy telefon przechodzi w tryb oszczędzania energii, sygnały dobrostanu wysyłane do Twojego opiekuna mogą docierać z opóźnieniem lub być utracone.\n\nPo dotknięciu [Otwórz ustawienia] poniżej ustaw "Bateria" → "Bez ograniczeń". Dzięki temu sygnały dobrostanu będą codziennie niezawodnie wysyłane o zaplanowanej godzinie.\n\n※ Dokładne sformułowania mogą się różnić w zależności od producenta urządzenia.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Martwisz sie o kogos,\nkto mieszka sam?',

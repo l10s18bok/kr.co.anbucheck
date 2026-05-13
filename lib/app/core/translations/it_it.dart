@@ -83,11 +83,15 @@ abstract class ItIt {
     'permission_battery': 'Esclusione ottimizzazione batteria',
     'permission_battery_desc':
         'Esclude l\'app dall\'ottimizzazione della batteria affinché il controllo giornaliero del benessere non venga perso',
-    'permission_hibernation_title': 'Disattiva "Sospendi attività se non usata"',
-    'permission_hibernation_highlight': 'Sospendi attività se non usata',
+    'permission_hibernation_title': 'Disattiva la rimozione automatica dei permessi',
+    'permission_hibernation_highlight': 'rimozione automatica dei permessi',
     'permission_hibernation_message':
-        'Se non apri l\'app per diversi mesi, Android potrebbe interromperla automaticamente, interrompendo i controlli di benessere.\n\nTocca [Apri impostazioni app] e disattiva "Sospendi attività se non usata".',
-    'permission_hibernation_go_to_settings': 'Apri impostazioni app',
+        'Android rimuove automaticamente i permessi delle app non utilizzate da molto tempo. Anbu di solito funziona senza essere aperta, quindi questa funzione può far scomparire i permessi dopo un po\' e interrompere l\'invio del segnale di benessere.\n\nTocca [Apri impostazioni] qui sotto — verrà mostrata direttamente la schermata dell\'interruttore. Disattiva l\'interruttore.\n\n※ La dicitura esatta può variare a seconda del produttore del dispositivo.',
+    'permission_hibernation_go_to_settings': 'Apri impostazioni',
+    'stability_battery_warning_short': 'È necessario disattivare la limitazione di utilizzo della batteria',
+    'stability_battery_dialog_title': 'Disattivare la limitazione di utilizzo della batteria',
+    'stability_battery_dialog_message':
+        'Quando il telefono entra in modalità di risparmio energetico, i segnali di benessere inviati al tuo tutore possono arrivare in ritardo o andare persi.\n\nDopo aver toccato [Apri impostazioni] qui sotto, imposta "Batteria" → "Senza restrizioni". In questo modo i segnali di benessere vengono inviati in modo affidabile all\'orario previsto ogni giorno.\n\n※ La dicitura esatta può variare a seconda del produttore del dispositivo.',
 
     // ── Onboarding ──
     'onboarding_title_1': 'Si preoccupa per qualcuno\nche vive da solo?',
