@@ -29,7 +29,7 @@ abstract class PlPl {
     'app_tagline': 'Sprawdzamy, czy wszystko u Ciebie w porzadku.',
     'app_service_desc': 'Automatyczna usluga sprawdzania samopoczucia',
     'app_guardian_title': 'Opiekun Anbu',
-    'app_copyright': '© 2026 Ark SB Inc.',
+    'app_copyright': '© 2026 Aberic Lab',
 
     // ── Splash ──
     'splash_loading': 'Sprawdzanie samopoczucia...',

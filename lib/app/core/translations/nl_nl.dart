@@ -29,7 +29,7 @@ abstract class NlNl {
     'app_tagline': 'Wij controleren uw welzijn.',
     'app_service_desc': 'Automatische welzijnscontrole',
     'app_guardian_title': 'Anbu Beschermer',
-    'app_copyright': '© 2026 Ark SB Inc.',
+    'app_copyright': '© 2026 Aberic Lab',
 
     // ── Splash ──
     'splash_loading': 'Welzijn wordt gecontroleerd...',

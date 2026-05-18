@@ -29,7 +29,7 @@ abstract class ItIt {
     'app_tagline': 'Verifichiamo il Suo benessere.',
     'app_service_desc': 'Servizio automatico di verifica del benessere',
     'app_guardian_title': 'Anbu Guardiano',
-    'app_copyright': '© 2026 Ark SB Inc.',
+    'app_copyright': '© 2026 Aberic Lab',
 
     // ── Splash ──
     'splash_loading': 'Verifica in corso...',
