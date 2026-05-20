@@ -34,34 +34,52 @@ void heartbeatWorkerCallback() {
 
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
       final now = DateTime.now();
+      final today = formatYmd(now);
+      final lastDate = await tokenDs.getLastHeartbeatDate();
+
+      // 오늘 정시 전송 이미 완료 → 스킵 (콜백 레벨 1차 거름, 동시 발화 race 차단)
+      if (lastDate == today) {
+        debugPrint('[HeartbeatWorker] lastHeartbeatDate=$lastDate, today=$today → 스킵(오늘 전송 완료)');
+        return true;
+      }
+
+      // WorkManager 콜백이 어떤 경로로 fire됐는지 구분한다.
+      // isInteractive=true  → 사용자가 폰을 깨워 Doze가 해제된 상태에서 fire (= 사용 흔적)
+      // isInteractive=false → Doze maintenance window에서 자연 fire (= 사용 흔적 없음)
+      // suspicious 판정 2단계 + 아래 회복 전송 게이트 양쪽에서 이 값을 쓴다.
+      final wasInteractive = await ScreenState.isInteractive();
+      debugPrint('[HeartbeatWorker] ScreenState.isInteractive=$wasInteractive');
+
       final scheduled = DateTime(now.year, now.month, now.day, hour, minute);
-      // 예약시각 -15분 이전이면 스킵. periodic은 +3분 offset으로 등록되지만
+      // 예약시각 -15분 이전이면 평소엔 스킵. periodic은 +3분 offset으로 등록되지만
       // initialDelay 이후 실제 발화 시점은 Doze maintenance window에 종속되어
       // 예측 불가하다 (Light Doze: 5/10/15분 주기, factor 2.0).
       // -15분 창은 이 변동성을 흡수하기 위한 가드이며, 동일 maintenance window에서
       // one-off과 periodic이 batch fire되어도 서버 측 (device_id, scheduled_key)
       // idempotency가 중복 전송을 차단하므로 조기 통과의 사용자 영향은 없다.
+      //
+      // 예외 — 회복 전송: 전날(또는 그 이전) heartbeat 미전송 갭이 있고
+      // (lastHeartbeatDate가 오늘도 어제도 아님) 화면이 깨어있으면(사용자가 폰을 연
+      // 시점), 예약시각을 기다리지 않고 "살아있음" 신호를 즉시 보낸다. 화면 활성이라
+      // suspicious=false 확정 → 오탐 없음. 회복 전송은 그 날 정시 슬롯을 소비하지
+      // 않으므로(별도 키·마커) 예약시각 정시 전송은 그대로 수행된다.
       final earliestAllowed = scheduled.subtract(const Duration(minutes: 15));
       if (now.isBefore(earliestAllowed)) {
-        debugPrint('[HeartbeatWorker] schedule=$hour:$minute, now=${now.hour}:${now.minute}:${now.second} → 스킵(예약시각 -15분 이전)');
+        final yesterday = formatYmd(now.subtract(const Duration(days: 1)));
+        final isRecovery = lastDate != null &&
+            lastDate.isNotEmpty &&
+            lastDate != today &&
+            lastDate != yesterday;
+        if (isRecovery && wasInteractive) {
+          debugPrint('[HeartbeatWorker] 예약시각 이전 — 미전송 갭 + 화면 활성 → 회복 전송');
+          await HeartbeatService().execute(recovery: true);
+        } else {
+          debugPrint('[HeartbeatWorker] 예약시각 -15분 이전 → 스킵 '
+              '(isRecovery=$isRecovery, isInteractive=$wasInteractive)');
+        }
         return true;
       }
-      debugPrint('[HeartbeatWorker] schedule=$hour:$minute, now=${now.hour}:${now.minute}:${now.second} → 통과(예약 -15분 창 이내)');
-
-      final today = formatYmd(now);
-      final lastDate = await tokenDs.getLastHeartbeatDate();
-      if (lastDate == today) {
-        debugPrint('[HeartbeatWorker] lastHeartbeatDate=$lastDate, today=$today → 스킵(오늘 전송 완료)');
-        return true;
-      }
-      debugPrint('[HeartbeatWorker] lastHeartbeatDate=$lastDate, today=$today → 통과');
-
-      // WorkManager 콜백이 어떤 경로로 fire됐는지 구분한다.
-      // isInteractive=true  → 사용자가 폰을 깨워 Doze가 해제된 상태에서 fire (= 사용 흔적)
-      // isInteractive=false → Doze maintenance window에서 자연 fire (= 사용 흔적 없음)
-      // suspicious 판정 2단계에서 이 값이 활용된다.
-      final wasInteractive = await ScreenState.isInteractive();
-      debugPrint('[HeartbeatWorker] ScreenState.isInteractive=$wasInteractive (execute 호출 직전)');
+      debugPrint('[HeartbeatWorker] schedule=$hour:$minute, lastHeartbeatDate=$lastDate → 통과');
       await HeartbeatService().execute(isInteractiveAtTrigger: wasInteractive);
 
       // 재등록 책임은 HeartbeatService._onHeartbeatSent 단일 — 자동/수동/pending/worker

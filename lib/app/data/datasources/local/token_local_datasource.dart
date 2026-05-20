@@ -19,6 +19,7 @@ class TokenLocalDatasource {
   static const _keySubscriptionActive = 'subscription_active';
   static const _keyIsAlsoSubject = 'is_also_subject';
   static const _keyLastScheduledKey = 'last_scheduled_key';
+  static const _keyLastRecoveryDate = 'last_recovery_date';
 
   // iOS Keychain: 재설치 후에도 device_id 복원용 (identifierForVendor는 vendor 앱
   // 전부 삭제 후 재설치 시 변경되므로, Keychain 백업이 없으면 계정 복원이 불가능)
@@ -197,6 +198,19 @@ class TokenLocalDatasource {
     await prefs.remove(_keyLastScheduledKey);
   }
 
+  // ── 마지막 회복 전송 날짜 (yyyy-MM-dd) ─────────────────────
+  // 예약시각 이전 회복 전송의 당일 1회 제한 마커. lastScheduledKey와 분리되어
+  // 있어 회복 전송이 그 날 정시 슬롯을 소비하지 않는다.
+  Future<String?> getLastRecoveryDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyLastRecoveryDate);
+  }
+
+  Future<void> saveLastRecoveryDate(String date) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyLastRecoveryDate, date);
+  }
+
   // ── 구독 활성화 여부 ──────────────────────────────────────
   Future<bool> getSubscriptionActive() async {
     final prefs = await SharedPreferences.getInstance();
@@ -242,6 +256,7 @@ class TokenLocalDatasource {
     await prefs.remove(_keyLastManualReportDate);
     await prefs.remove(_keyIsAlsoSubject);
     await prefs.remove(_keyLastScheduledKey);
+    await prefs.remove(_keyLastRecoveryDate);
     await prefs.setBool(_keySubscriptionActive, false);
   }
 

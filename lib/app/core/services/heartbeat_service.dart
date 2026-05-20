@@ -57,15 +57,27 @@ class HeartbeatService {
 
   /// heartbeat 1회 실행
   /// [manual] 대상자가 직접 버튼을 눌러 전송한 경우 true
+  /// [recovery] 예약시각 이전 "회복 전송"인 경우 true — 전날 미전송 갭이 있을 때
+  ///   사용자가 폰을 켠 시점에 보내는 추가 신호. 그 날 정시 슬롯을 소비하지 않으며
+  ///   (별도 키 `recovery_<날짜>` + 마커 lastRecoveryDate 사용), 걸음수는 싣지 않는다.
   /// [isInteractiveAtTrigger] worker fire 시점의 PowerManager.isInteractive() 값.
   ///   Android worker 콜백에서만 실제 값을 전달하며, 포그라운드 호출부는 true를 명시 전달.
-  Future<void> execute({bool manual = false, bool? isInteractiveAtTrigger}) async {
+  Future<void> execute({
+    bool manual = false,
+    bool recovery = false,
+    bool? isInteractiveAtTrigger,
+  }) async {
     if (_busy) return;
     _busy = true;
     try {
       final deviceId    = await _tokenDs.getDeviceId();
       final deviceToken = await _tokenDs.getDeviceToken();
       if (deviceId == null || deviceToken == null) return;
+
+      if (recovery) {
+        await _executeRecovery(deviceId, deviceToken);
+        return;
+      }
 
       // 보류 큐가 있으면 먼저 전송
       final pending = await _heartbeatDs.getPending();
@@ -164,6 +176,65 @@ class HeartbeatService {
       if (lockAcquired) {
         await _lockDs.release(scheduledKey);
       }
+    }
+  }
+
+  /// 회복 전송 — 예약시각 이전 "살아있음" 신호 (전날 미전송 갭 + 폰 켜짐).
+  ///
+  /// 정시 전송과의 결정적 차이:
+  ///   - 그 날 정시 슬롯을 소비하지 않는다 — lastHeartbeatDate / lastScheduledKey를
+  ///     건드리지 않고 재예약(_onHeartbeatSent)도 하지 않으므로, 예약시각 정시
+  ///     전송이 그대로 수행되어 종일 걸음수를 정확히 기록한다.
+  ///   - 걸음수를 싣지 않는다(steps_delta=null) — 예약시각 전 부분 집계가
+  ///     보호자에게 어중간한 "오늘 N보" 알림으로 나가는 것을 막는다.
+  ///   - 전용 키 `recovery_<날짜>`를 쓴다 — 정시 키(`<날짜>_HH:mm`)와 달라 정시
+  ///     전송을 서버 idempotency가 막지 않으며, 회복 전송 자체의 동시 발화 race는
+  ///     이 키 기반 SQLite 락 + 서버 (device_id, scheduled_key) dedup으로 차단한다.
+  ///   - 실패 시 pending 큐에 넣지 않는다 — pending 경로가 lastScheduledKey를 저장해
+  ///     슬롯을 소비하기 때문. 다음 periodic fire 또는 정시 전송이 자연 회복한다.
+  ///   - 당일 1회 제한 마커는 lastRecoveryDate(별도) — 오전 periodic 반복 발사 차단.
+  Future<void> _executeRecovery(String deviceId, String deviceToken) async {
+    await getReloadedPrefs();
+    final now = DateTime.now();
+    final today = formatYmd(now);
+
+    // 당일 회복 전송 이미 완료 → 스킵
+    if (await _tokenDs.getLastRecoveryDate() == today) {
+      debugPrint('[HeartbeatService] 회복 전송 이미 완료 — 스킵 ($today)');
+      return;
+    }
+
+    // cross-isolate 원자 락 (회복 전용 키). 동시 발화한 두 isolate 중 하나만 통과.
+    final recoveryKey = 'recovery_$today';
+    if (!await _lockDs.tryAcquire(recoveryKey)) return;
+
+    try {
+      final batteryLevel = await _getBatteryLevel();
+      final request = HeartbeatRequest(
+        deviceId:     deviceId,
+        timestamp:    now.toUtc().toIso8601String(),
+        manual:       false,
+        stepsDelta:   null, // 회복 전송은 걸음수 미포함 — 종일 집계는 정시 전송이 담당
+        suspicious:   false, // 화면 켜진 상태(회복 전송 게이트)이므로 활동 증거 있음
+        batteryLevel: batteryLevel,
+        scheduledKey: recoveryKey, // 정시 키와 분리 — 정시 전송을 서버 dedup이 막지 않음
+      );
+
+      final remote = HeartbeatRemoteDatasource(deviceToken);
+      for (var attempt = 1; attempt <= 3; attempt++) {
+        try {
+          await remote.send(request);
+          debugPrint('[HeartbeatService] 회복 전송 성공 (시도 $attempt)');
+          await _tokenDs.saveLastRecoveryDate(today);
+          return;
+        } catch (e) {
+          debugPrint('[HeartbeatService] 회복 전송 실패 (시도 $attempt): $e');
+          if (attempt == 3) return; // pending 큐 미사용 — 다음 fire/정시 전송이 회복
+          await Future.delayed(Duration(seconds: attempt * 5));
+        }
+      }
+    } finally {
+      await _lockDs.release(recoveryKey);
     }
   }
 

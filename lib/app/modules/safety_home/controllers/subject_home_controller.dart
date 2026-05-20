@@ -14,6 +14,7 @@ import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/services/stability_service.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
@@ -101,8 +102,13 @@ class SubjectHomeController extends SafetyHomeBaseController {
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
     final hasEverSent = lastHeartbeatDate.isNotEmpty;
-    if (hasEverSent) {
-      if (Platform.isAndroid && isScheduleInFuture) return;
+    if (hasEverSent && Platform.isAndroid && isScheduleInFuture) {
+      // 예약시각 이전 — 평소엔 정시까지 대기. 단 전날(이전) 미전송 갭이 있으면
+      // 앱을 연 행위가 강한 생존 신호이므로 회복 전송(추가, 정시 슬롯 미소비)을 보낸다.
+      if (_isRecoveryPending) {
+        await HeartbeatService().execute(recovery: true);
+      }
+      return;
     }
     await _clearStaleScheduledKey();
     // 포그라운드 진입은 화면을 켜고 잠금을 풀어 앱을 연 결과이므로
@@ -110,6 +116,17 @@ class SubjectHomeController extends SafetyHomeBaseController {
     await HeartbeatService()
         .execute(manual: false, isInteractiveAtTrigger: true);
     await _reloadHeartbeatState();
+  }
+
+  /// 전날(또는 그 이전) heartbeat 미전송 갭 존재 여부 — 회복 전송 트리거.
+  /// lastHeartbeatDate가 오늘도 어제도 아니면 갭. (비어있으면 첫 설치 —
+  /// hasEverSent 분기에서 이미 우회되므로 false 반환.)
+  bool get _isRecoveryPending {
+    final date = lastHeartbeatDate;
+    if (date.isEmpty) return false;
+    final now = DateTime.now();
+    return date != formatYmd(now) &&
+        date != formatYmd(now.subtract(const Duration(days: 1)));
   }
 
   /// WorkManager Worker가 lastScheduledKey를 선점 save한 뒤 Samsung OneUI
