@@ -1219,6 +1219,7 @@ Authorization: Bearer <device_token> → 항상 유효
 - 클라이언트 모듈: `IapService` (`lib/app/core/services/iap_service.dart`) + `SubscriptionRemoteDatasource` (`lib/app/data/datasources/remote/subscription_remote_datasource.dart`). Splash `_initServices`에서 `Get.putAsync(() => IapService().init(), permanent: true)`로 등록되어 보호자 설정 화면 진입 전부터 `purchaseStream`을 구독 — 결제 중 앱 강제 종료 후 재시작 시 pending 트랜잭션 누락 방지
 - 서버 합의된 receipt 포맷: **iOS** = `PurchaseDetails.purchaseID` (transactionId) / **Android** = `verificationData.serverVerificationData` (purchaseToken). 같은 포맷으로 `/verify` · `/restore` 양쪽 호출
 - 검증 응답 `{ plan, expires_at, is_active }` 도착 시점에만 클라이언트 `subscription_active`/`subscription_plan` 갱신 — entitlement는 서버 권위, 클라 단독 판단 경로 없음
+- 갱신/취소/환불은 서버가 Apple S2S V2 + Google Pub/Sub RTDN을 수신해 `subscriptions` 테이블에 자동 반영하므로 클라이언트는 폴링 없이 `GET /api/v1/devices/me`만 호출하면 최신 상태 확인 가능 (서버 측 RTDN 상세는 PRD-BackEnd §4.22)
 - UI 규칙 상세는 §9.7 (보호자 설정 화면) 참조
 
 
