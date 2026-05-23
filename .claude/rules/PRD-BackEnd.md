@@ -297,7 +297,8 @@ server/
 │   ├── subscription.py             # GET/POST /api/v1/subscription
 │   ├── guardian_notification_settings.py  # GET/PUT /api/v1/guardian/notification-settings
 │   ├── notifications.py            # GET/DELETE /api/v1/notifications
-│   └── emergency.py                # POST /api/v1/emergency (긴급 도움 요청)
+│   ├── emergency.py                # POST /api/v1/emergency (긴급 도움 요청)
+│   └── iap_notification.py         # POST /api/v1/iap/google-notifications, /apple-notifications (RTDN 수신)
 ├── services/
 │   ├── user_service.py             # 사용자 등록, invite_code 생성
 │   ├── heartbeat_service.py        # heartbeat 비즈니스 로직
@@ -305,7 +306,9 @@ server/
 │   ├── emergency_service.py        # 긴급 도움 요청 처리 (즉시 urgent 경고 생성 + Push)
 │   ├── subject_service.py          # 대상자-보호자 연결 관리
 │   ├── push_service.py             # 일반 Push 발송 (보호자 경고 알림)
-│   ├── subscription_service.py     # 구독 상태 관리
+│   ├── subscription_service.py     # 구독 상태 관리 (영수증 검증 + DB 반영)
+│   ├── iap_verify_service.py       # Apple/Google IAP API 호출 (verify + acknowledge)
+│   ├── iap_notification_service.py # RTDN 페이로드 분기 + DB UPDATE (Google + Apple 공용)
 │   └── scheduler.py                # APScheduler 미수신 경고 체크 + 구독 만료 + 정리 작업
 ├── models/
 │   ├── user.py                     # Pydantic 모델 (요청/응답 스키마)
@@ -610,9 +613,8 @@ Response: 200 OK
   3. **응답 productId 재검증**: 클라이언트가 보낸 `product_id`는 무시하고, Apple/Google 응답의 productId가 `config.IAP_PRODUCT_ID`(=`anbu_yearly`)와 일치하는지 확인 (다른 상품 영수증으로 yearly entitlement 우회 차단). 불일치 → 400
   4. `expires_at > UTC now` 재검증 (이미 만료 → 400)
   5. `subscriptions` 테이블 upsert: `plan='yearly'`, `expires_at=응답값`, `receipt_data=정규화 식별자`, `platform=ios|android`
-- `receipt_data` 컬럼에는 정규화된 식별자만 저장 (iOS: `originalTransactionId`, Android: `purchaseToken`). 8단계 RTDN 수신 시 이 식별자로 user 역매핑하는 키로 사용
+- `receipt_data` 컬럼에는 정규화된 식별자만 저장 (iOS: `originalTransactionId`, Android: `purchaseToken`). RTDN 수신 시 이 식별자로 user 역매핑하는 키로 사용 (§4.22 참조)
 - **환경변수**: `APPLE_IAP_ISSUER_ID`, `APPLE_IAP_KEY_ID`, `APPLE_IAP_KEY_P8` (single-line `\n` 자동 복원), `APPLE_BUNDLE_ID`, `GOOGLE_SERVICE_ACCOUNT_JSON`, `GOOGLE_PACKAGE_NAME`, `IAP_PRODUCT_ID`
-- **JWS 서명 검증 TODO (8단계 RTDN)**: 현재 `verify_apple_transaction`은 Apple HTTPS 응답(TLS로 인증 보장)을 PyJWT `verify_signature=False`로 디코드만 한다. RTDN 외부 수신 페이로드는 `SignedDataVerifier` + Apple Root CA로 서명 검증해야 함
 
 
 ### 4.10 구독 복원 (보호자 앱 재설치 시)
@@ -1016,6 +1018,95 @@ Response: 204 No Content
 | `users` | 삭제 | 사용자 계정 |
 
 - 대상자 탈퇴 시 연결된 보호자에게 "대상자 탈퇴 알림" Push 발송 (DB 저장 없음)
+
+
+### 4.22 인앱 결제 서버 알림 (RTDN / Server-to-Server Notifications)
+
+> 외부 시스템(Google Cloud Pub/Sub, Apple App Store Connect)이 발신하는 비동기 알림을 수신해 `subscriptions` 테이블을 자동 갱신한다. **`Authorization: Bearer <device_token>` 인증 미사용** — 발신자는 device_token을 보유하지 않는다. 대신 발신자별 서명을 검증한다.
+
+#### 4.22.1 Google Play RTDN (Pub/Sub Push)
+```
+POST /api/v1/iap/google-notifications
+Headers:
+  Authorization: Bearer <OIDC JWT (Pub/Sub Push가 자동 첨부)>
+Body (Pub/Sub envelope):
+{
+  "message": {
+    "data": "<base64-encoded JSON>",
+    "messageId": "...",
+    "publishTime": "..."
+  },
+  "subscription": "projects/{gcp-project}/subscriptions/{subscription}"
+}
+Response: 200 OK
+{ "status": "ok", "kind": "activated|revoked|noop|...", ... }
+```
+
+- **인증**: `google.oauth2.id_token.verify_oauth2_token`로 OIDC JWT 검증
+  - 서명: Google 공개키
+  - audience: `config.PUBSUB_AUDIENCE` 일치 (Pub/Sub Push subscription 생성 시 지정한 값)
+  - email claim: `config.PUBSUB_SERVICE_ACCOUNT_EMAIL` 일치 + `email_verified=true`
+  - 검증 실패 → 401/403 반환
+- **페이로드 디코딩**: `message.data`를 base64 디코딩한 JSON 사용
+  - `testNotification` (Play Console 초기 검증용) / `oneTimeProductNotification` → graceful 무시 (200 반환)
+  - `packageName != GOOGLE_PACKAGE_NAME` → graceful 무시
+- **notificationType 분기** (`services/iap_notification_service.py::handle_google_notification`):
+  | type | 이름 | 처리 |
+  |---|---|---|
+  | 1 | `SUBSCRIPTION_RECOVERED` | 재조회 후 expires_at 갱신 |
+  | 2 | `SUBSCRIPTION_RENEWED` | 재조회 후 expires_at 갱신 |
+  | 3 | `SUBSCRIPTION_CANCELED` | 재조회 — state가 ACTIVE면 expires만 갱신, 비활성이면 expired |
+  | 4 | `SUBSCRIPTION_PURCHASED` | 재조회 후 expires_at 갱신 |
+  | 5 | `SUBSCRIPTION_ON_HOLD` | 즉시 `plan='expired'` |
+  | 6 | `SUBSCRIPTION_IN_GRACE_PERIOD` | 재조회 후 expires_at 갱신 |
+  | 7 | `SUBSCRIPTION_RESTARTED` | 재조회 후 expires_at 갱신 |
+  | 8 | `SUBSCRIPTION_PRICE_CHANGE_CONFIRMED` | noop |
+  | 9 | `SUBSCRIPTION_DEFERRED` | noop |
+  | 10 | `SUBSCRIPTION_PAUSED` | 즉시 `plan='expired'` |
+  | 11 | `SUBSCRIPTION_PAUSE_SCHEDULE_CHANGED` | noop |
+  | 12 | `SUBSCRIPTION_REVOKED` | 즉시 `plan='expired'` |
+  | 13 | `SUBSCRIPTION_EXPIRED` | 즉시 `plan='expired'` |
+- **재조회 = source of truth**: 활성화 type은 알림 본문의 정보를 신뢰하지 않고 `verify_google_purchase(purchaseToken)`로 Play Developer API 재조회 → 최신 `expires_at`/`subscriptionState` 반영. RTDN 순서 역전(RENEWED 직후 EXPIRED 도착 등) 케이스 방어
+- **DB 매핑**: `UPDATE subscriptions SET ... WHERE receipt_data = $purchaseToken AND platform = 'android'`. `receipt_data`는 §4.9의 `/verify` 단계에서 채워진 값
+- **멱등성**: 같은 알림이 재전송돼도 UPDATE 결과 동일
+- **2xx 보장**: 서명 검증 통과 이후엔 어떤 실패도 200 반환 (Pub/Sub 무한 retry 폭주 방지)
+  - 재조회 실패 → `kind=verify_failed`
+  - `UPDATE affected=0` (클라이언트 `/verify` 이전에 RTDN이 먼저 도착한 race) → `kind=not_mapped`
+  - 알 수 없는 type → `kind=noop`
+  - 잘못된 productId → `kind=wrong_product`
+
+#### 4.22.2 Apple App Store Server Notifications V2
+```
+POST /api/v1/iap/apple-notifications
+Headers: (Apple은 별도 Authorization 헤더 없음 — 서명은 payload 내부 JWS)
+Body:
+{
+  "signedPayload": "<JWS>"
+}
+Response: 200 OK
+{ "status": "ok", "kind": "activated|revoked|noop|...", ... }
+```
+
+- **인증**: `app-store-server-library.SignedDataVerifier`로 JWS 서명 검증
+  - x5c 헤더의 인증서 체인을 Apple Root CA 4종으로 검증 (`apple_root_ca/*.cer` 디렉토리에서 자동 로드)
+  - `bundle_id` = `APPLE_BUNDLE_ID` 일치
+  - environment 분기: 환경변수 `APPLE_ENVIRONMENT` 우선, 미설정 시 payload `data.environment` 자동 분기
+  - 검증 실패 → 401 반환
+- **notificationType 분기** (`services/iap_notification_service.py::handle_apple_notification`):
+  | type | 처리 |
+  |---|---|
+  | `SUBSCRIBED`, `DID_RENEW`, `DID_CHANGE_RENEWAL_STATUS`, `OFFER_REDEEMED`, `PRICE_INCREASE`, `RENEWAL_EXTENDED`, `RENEWAL_EXTENSION` | `verify_apple_transaction(originalTransactionId)` 재조회 후 expires_at 갱신 |
+  | `EXPIRED`, `GRACE_PERIOD_EXPIRED`, `REVOKE`, `REFUND` | 즉시 `plan='expired'` |
+  | `DID_FAIL_TO_RENEW`, `CONSUMPTION_REQUEST`, 그 외 | noop |
+- **DB 매핑**: `UPDATE subscriptions SET ... WHERE receipt_data = $originalTransactionId AND platform = 'ios'`
+- **2xx 보장**: 서명 검증 통과 후엔 무조건 200 (재시도 폭주 방지)
+
+#### 4.22.3 운영 외부 작업
+
+- Google: GCP Pub/Sub Topic 생성 → Push subscription에 OIDC 인증 + audience 지정 → Topic에 `gcp-sa-androidpublisher`의 Publisher 권한 부여 → Play Console Monetization setup에 topic 등록
+- Apple: Apple Root CA 4종(G3/G2/AppleInc/AppleComputer) 다운로드 + 컨테이너에 번들 → App Store Connect에서 Production/Sandbox URL V2 등록
+- Railway 환경변수: `PUBSUB_AUDIENCE`, `PUBSUB_SERVICE_ACCOUNT_EMAIL` (Google 필수), `APPLE_ENVIRONMENT` (Apple 선택), `APPLE_ROOT_CA_DIR` (Apple, 기본 `./apple_root_ca`)
+- 운영 상세는 `.ref/인앱결제-연동-체크리스트.md §8` 참조
 
 
 ---
@@ -1723,6 +1814,8 @@ CMD ["python", "main.py"]
 | `/api/v1/admin/app-version` | PUT | 앱 버전 설정 (Admin, Postman용) |
 | `/api/v1/admin/app-version` | GET | 앱 버전 설정 조회 (Admin, Postman용) |
 | `/api/v1/emergency` | POST | 긴급 도움 요청 (대상자 → 보호자 전원 즉시 urgent Push, 에스컬레이션 독립. body.location optional: lat/lng/accuracy/captured_at 첨부 시 `notification_events`에 저장 + FCM data에 포함) |
+| `/api/v1/iap/google-notifications` | POST | Google Play RTDN 수신 (Pub/Sub Push OIDC JWT 인증, device_token 미사용) |
+| `/api/v1/iap/apple-notifications` | POST | Apple S2S Notifications V2 수신 (JWS 서명 검증, device_token 미사용) |
 | `/health` | GET | 헬스체크 |
 
 > FrontEnd 상세는 [PRD-FrontEnd.md](PRD-FrontEnd.md) 참조
