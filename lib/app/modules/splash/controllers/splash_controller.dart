@@ -27,7 +27,7 @@ class SplashController extends BaseController {
   final _versionDs = VersionRemoteDatasource();
 
   /// 앱 현재 버전 (pubspec.yaml과 일치하도록 유지)
-  static const String _appVersion = '1.0.0';
+  static const String _appVersion = '1.1.0';
 
   @override
   void onInit() {
