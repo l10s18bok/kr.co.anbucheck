@@ -1103,7 +1103,7 @@ Response: 200 OK
 
 #### 4.22.3 운영 외부 작업
 
-- Google: GCP Pub/Sub Topic 생성 → Push subscription에 OIDC 인증 + audience 지정 → Topic에 `gcp-sa-androidpublisher`의 Publisher 권한 부여 → Play Console Monetization setup에 topic 등록
+- Google: GCP Pub/Sub Topic 생성 → Push subscription에 OIDC 인증 + audience 지정 → Topic에 `google-play-developer-notifications@system.gserviceaccount.com` (Google Play가 모든 개발자에 공유로 쓰는 글로벌 system 계정)의 `roles/pubsub.publisher` 권한 부여 → Play Console Monetization setup에 topic 등록. UI는 system 계정을 검증 거부할 수 있어 `gcloud pubsub topics add-iam-policy-binding`으로 우회 처리하는 게 표준
 - Apple: Apple Root CA 4종(G3/G2/AppleInc/AppleComputer) 다운로드 + 컨테이너에 번들 → App Store Connect에서 Production/Sandbox URL V2 등록
 - Railway 환경변수: `PUBSUB_AUDIENCE`, `PUBSUB_SERVICE_ACCOUNT_EMAIL` (Google 필수), `APPLE_ENVIRONMENT` (Apple 선택), `APPLE_ROOT_CA_DIR` (Apple, 기본 `./apple_root_ca`)
 - 운영 상세는 `.ref/인앱결제-연동-체크리스트.md §8` 참조
