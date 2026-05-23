@@ -247,6 +247,18 @@ abstract class PtBr {
     'settings_terms': 'Termos de uso',
     'settings_app_version': 'Versão: v@version',
 
+    // ── Compras no app (assinatura anual do Responsável $9.99) ──
+    'subscription_subscribe': 'Assinar',
+    'subscription_restore': 'Restaurar compra',
+    'subscription_store_unavailable': 'Loja indisponível',
+    'subscription_product_unavailable': 'Assinatura indisponível',
+    'subscription_purchase_failed': 'Falha na compra',
+    'subscription_verify_failed': 'Falha na verificação da assinatura',
+    'subscription_restore_failed': 'Falha na restauração',
+    'subscription_restore_nothing': 'Nenhuma assinatura para restaurar',
+    'subscription_restore_success': 'Assinatura restaurada',
+    'subscription_purchase_success': 'Assinatura iniciada',
+
     // ── G+S (Guardião e protegido) ──
     'gs_enable_button': 'Receber proteção também',
     'gs_safety_code_button': 'Ver meu código de segurança',

@@ -226,6 +226,18 @@ abstract class ZhTw {
     'settings_terms': '使用條款',
     'settings_app_version': '應用版本：v@version',
 
+    // ── 應用內購買(監護人年度 $9.99 訂閱) ──
+    'subscription_subscribe': '訂閱',
+    'subscription_restore': '還原購買',
+    'subscription_store_unavailable': '無法連接到商店',
+    'subscription_product_unavailable': '無法載入商品資訊',
+    'subscription_purchase_failed': '購買失敗',
+    'subscription_verify_failed': '訂閱驗證失敗',
+    'subscription_restore_failed': '還原失敗',
+    'subscription_restore_nothing': '沒有可還原的訂閱',
+    'subscription_restore_success': '訂閱已還原',
+    'subscription_purchase_success': '訂閱已開始',
+
     // ── G+S (守護者 + 被守護者) ──
     'gs_enable_button': '我也要接受安否保護',
     'gs_safety_code_button': '查看我的安全碼',

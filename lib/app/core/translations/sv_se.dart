@@ -239,6 +239,18 @@ abstract class SvSe {
     'settings_terms': 'Anvandarvillkor',
     'settings_app_version': 'Version: v@version',
 
+    // ── App-köp (årlig $9.99-prenumeration för vårdgivare) ──
+    'subscription_subscribe': 'Prenumerera',
+    'subscription_restore': 'Återställ köp',
+    'subscription_store_unavailable': 'Butiken är inte tillgänglig',
+    'subscription_product_unavailable': 'Prenumeration ej tillgänglig',
+    'subscription_purchase_failed': 'Köpet misslyckades',
+    'subscription_verify_failed': 'Verifiering av prenumeration misslyckades',
+    'subscription_restore_failed': 'Återställning misslyckades',
+    'subscription_restore_nothing': 'Ingen prenumeration att återställa',
+    'subscription_restore_success': 'Prenumeration återställd',
+    'subscription_purchase_success': 'Prenumeration startad',
+
     // ── G+S (Vårdare + Skyddad) ──
     'gs_enable_button': 'Få hälsoskydd också',
     'gs_safety_code_button': 'Visa min säkerhetskod',

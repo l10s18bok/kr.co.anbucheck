@@ -226,6 +226,18 @@ abstract class ZhCn {
     'settings_terms': '使用条款',
     'settings_app_version': '应用版本：v@version',
 
+    // ── 应用内购买(监护人年度 $9.99 订阅) ──
+    'subscription_subscribe': '订阅',
+    'subscription_restore': '恢复购买',
+    'subscription_store_unavailable': '无法连接到商店',
+    'subscription_product_unavailable': '无法加载商品信息',
+    'subscription_purchase_failed': '购买失败',
+    'subscription_verify_failed': '订阅验证失败',
+    'subscription_restore_failed': '恢复失败',
+    'subscription_restore_nothing': '没有可恢复的订阅',
+    'subscription_restore_success': '订阅已恢复',
+    'subscription_purchase_success': '订阅已开始',
+
     // ── G+S (守护者 + 被守护者) ──
     'gs_enable_button': '我也要接受安否保护',
     'gs_safety_code_button': '查看我的安全码',

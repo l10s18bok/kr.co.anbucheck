@@ -248,6 +248,18 @@ abstract class RuRu {
     'settings_terms': 'Условия использования',
     'settings_app_version': 'Версия: v@version',
 
+    // ── Встроенные покупки (годовая подписка опекуна $9.99) ──
+    'subscription_subscribe': 'Подписаться',
+    'subscription_restore': 'Восстановить покупку',
+    'subscription_store_unavailable': 'Магазин недоступен',
+    'subscription_product_unavailable': 'Подписка недоступна',
+    'subscription_purchase_failed': 'Покупка не удалась',
+    'subscription_verify_failed': 'Не удалось проверить подписку',
+    'subscription_restore_failed': 'Восстановление не удалось',
+    'subscription_restore_nothing': 'Нет подписки для восстановления',
+    'subscription_restore_success': 'Подписка восстановлена',
+    'subscription_purchase_success': 'Подписка активирована',
+
     // ── G+S (Опекун + Подопечный) ──
     'gs_enable_button': 'Получать защиту тоже',
     'gs_safety_code_button': 'Проверить мой код безопасности',

@@ -244,6 +244,18 @@ abstract class EnUs {
     'settings_terms': 'Terms of Service',
     'settings_app_version': 'Version: v@version',
 
+    // ── In-app purchase (Guardian yearly $9.99 subscription) ──
+    'subscription_subscribe': 'Subscribe',
+    'subscription_restore': 'Restore Purchase',
+    'subscription_store_unavailable': 'Store unavailable',
+    'subscription_product_unavailable': 'Subscription unavailable',
+    'subscription_purchase_failed': 'Purchase failed',
+    'subscription_verify_failed': 'Subscription verification failed',
+    'subscription_restore_failed': 'Restore failed',
+    'subscription_restore_nothing': 'No subscription to restore',
+    'subscription_restore_success': 'Subscription restored',
+    'subscription_purchase_success': 'Subscription started',
+
     // ── G+S (Guardian + Subject) ──
     'gs_enable_button': 'Get Wellness Protection Too',
     'gs_safety_code_button': 'Check My Safety Code',

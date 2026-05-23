@@ -249,6 +249,18 @@ abstract class FrFr {
     'settings_terms': 'Conditions d\'utilisation',
     'settings_app_version': 'Version : v@version',
 
+    // ── Achats intégrés (abonnement annuel Gardien $9.99) ──
+    'subscription_subscribe': 'S\'abonner',
+    'subscription_restore': 'Restaurer l\'achat',
+    'subscription_store_unavailable': 'Boutique indisponible',
+    'subscription_product_unavailable': 'Abonnement indisponible',
+    'subscription_purchase_failed': 'Échec de l\'achat',
+    'subscription_verify_failed': 'Échec de la vérification de l\'abonnement',
+    'subscription_restore_failed': 'Échec de la restauration',
+    'subscription_restore_nothing': 'Aucun abonnement à restaurer',
+    'subscription_restore_success': 'Abonnement restauré',
+    'subscription_purchase_success': 'Abonnement activé',
+
     // ── G+S (Gardien et protégé) ──
     'gs_enable_button': 'Recevoir aussi la protection',
     'gs_safety_code_button': 'Vérifier mon code de sécurité',

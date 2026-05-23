@@ -247,6 +247,18 @@ abstract class EsEs {
     'settings_terms': 'Términos de uso',
     'settings_app_version': 'Versión: v@version',
 
+    // ── Compras en la app (suscripción anual del cuidador $9.99) ──
+    'subscription_subscribe': 'Suscribirse',
+    'subscription_restore': 'Restaurar compra',
+    'subscription_store_unavailable': 'Tienda no disponible',
+    'subscription_product_unavailable': 'Suscripción no disponible',
+    'subscription_purchase_failed': 'Compra fallida',
+    'subscription_verify_failed': 'Error al verificar la suscripción',
+    'subscription_restore_failed': 'Error al restaurar',
+    'subscription_restore_nothing': 'No hay suscripción para restaurar',
+    'subscription_restore_success': 'Suscripción restaurada',
+    'subscription_purchase_success': 'Suscripción iniciada',
+
     // ── G+S (Guardián y protegido) ──
     'gs_enable_button': 'Recibir protección también',
     'gs_safety_code_button': 'Ver mi código de seguridad',

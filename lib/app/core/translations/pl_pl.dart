@@ -246,6 +246,18 @@ abstract class PlPl {
     'settings_terms': 'Regulamin',
     'settings_app_version': 'Wersja: v@version',
 
+    // ── Zakupy w aplikacji (roczna subskrypcja Opiekuna $9.99) ──
+    'subscription_subscribe': 'Subskrybuj',
+    'subscription_restore': 'Przywróć zakup',
+    'subscription_store_unavailable': 'Sklep niedostępny',
+    'subscription_product_unavailable': 'Subskrypcja niedostępna',
+    'subscription_purchase_failed': 'Zakup nie powiódł się',
+    'subscription_verify_failed': 'Weryfikacja subskrypcji nie powiodła się',
+    'subscription_restore_failed': 'Przywracanie nie powiodło się',
+    'subscription_restore_nothing': 'Brak subskrypcji do przywrócenia',
+    'subscription_restore_success': 'Subskrypcja przywrócona',
+    'subscription_purchase_success': 'Subskrypcja rozpoczęta',
+
     // ── G+S (Opiekun + Podopieczny) ──
     'gs_enable_button': 'Otrzymuj też ochronę',
     'gs_safety_code_button': 'Sprawdź mój kod bezpieczeństwa',

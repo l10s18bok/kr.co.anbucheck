@@ -583,47 +583,63 @@ Response: 200 OK
 ```
 POST /api/v1/subscription/verify
 Headers:
-  Authorization: Bearer <device_token>  (보호자)
+  Authorization: Bearer <device_token>  (보호자만 — require_guardian)
 Body:
 {
-  "platform": "android",
-  "product_id": "anbu_yearly",
+  "platform": "android",                 // "android" | "ios"
+  "product_id": "anbu_yearly",           // 클라이언트 표시용 (서버는 응답 productId로 재검증)
   "receipt": "purchase-token-string"
 }
 Response: 200 OK
 {
   "plan": "yearly",
-  "expires_at": "2027-03-18T00:00:00+09:00",
+  "expires_at": "2027-03-18T00:00:00+00:00",  // ISO 8601 UTC
   "is_active": true
 }
 ```
 
 - 단일 상품 (`anbu_yearly`) — 대상자 최대 5명, 티어 구분 없음
+- **`receipt` 포맷 (클라이언트 합의)**:
+  - **iOS**: `PurchaseDetails.purchaseID` (= transactionId 문자열)
+  - **Android**: `verificationData.serverVerificationData` (= purchaseToken)
+- **검증 흐름** (`services/subscription_service.py::_verify_and_persist`):
+  1. `platform ∈ {ios, android}` 검증 (그 외 → 400)
+  2. 플랫폼별 검증:
+     - **iOS**: `verify_apple_transaction(receipt)` — App Store Server API `get_all_subscription_statuses(transactionId)` 호출, Production 우선 → 404 시 Sandbox 재시도 (Apple 권장 fallback). JWS 페이로드 디코드 후 정규화 식별자로 `originalTransactionId` 추출
+     - **Android**: `verify_google_purchase(receipt)` — Play Developer API `androidpublisher.purchases.subscriptionsv2.get` 호출. `subscriptionState ∈ {ACTIVE, IN_GRACE_PERIOD}` (= `GOOGLE_ACTIVE_STATES`)만 활성 인정 (그 외 → 400). `acknowledgementState == ACKNOWLEDGEMENT_STATE_PENDING`이면 서버에서 자동 `acknowledge` 호출 (3일 경과 시 Google 자동 환불 방지 안전망). 정규화 식별자로 `purchaseToken` 추출
+  3. **응답 productId 재검증**: 클라이언트가 보낸 `product_id`는 무시하고, Apple/Google 응답의 productId가 `config.IAP_PRODUCT_ID`(=`anbu_yearly`)와 일치하는지 확인 (다른 상품 영수증으로 yearly entitlement 우회 차단). 불일치 → 400
+  4. `expires_at > UTC now` 재검증 (이미 만료 → 400)
+  5. `subscriptions` 테이블 upsert: `plan='yearly'`, `expires_at=응답값`, `receipt_data=정규화 식별자`, `platform=ios|android`
+- `receipt_data` 컬럼에는 정규화된 식별자만 저장 (iOS: `originalTransactionId`, Android: `purchaseToken`). 8단계 RTDN 수신 시 이 식별자로 user 역매핑하는 키로 사용
+- **환경변수**: `APPLE_IAP_ISSUER_ID`, `APPLE_IAP_KEY_ID`, `APPLE_IAP_KEY_P8` (single-line `\n` 자동 복원), `APPLE_BUNDLE_ID`, `GOOGLE_SERVICE_ACCOUNT_JSON`, `GOOGLE_PACKAGE_NAME`, `IAP_PRODUCT_ID`
+- **JWS 서명 검증 TODO (8단계 RTDN)**: 현재 `verify_apple_transaction`은 Apple HTTPS 응답(TLS로 인증 보장)을 PyJWT `verify_signature=False`로 디코드만 한다. RTDN 외부 수신 페이로드는 `SignedDataVerifier` + Apple Root CA로 서명 검증해야 함
 
 
 ### 4.10 구독 복원 (보호자 앱 재설치 시)
 ```
 POST /api/v1/subscription/restore
 Headers:
-  Authorization: Bearer <device_token>  (보호자)
+  Authorization: Bearer <device_token>  (보호자만 — require_guardian)
 Body:
 {
-  "platform": "android",
+  "platform": "android",                 // "android" | "ios"
   "product_id": "anbu_yearly",
   "receipt": "purchase-token-string"
 }
 Response: 200 OK
 {
   "plan": "yearly",
-  "expires_at": "2027-03-18T00:00:00+09:00",
+  "expires_at": "2027-03-18T00:00:00+00:00",
   "is_active": true,
-  "restored": true
+  "restored": true                       // /restore 전용 플래그
 }
 ```
 
-- 보호자 앱 재설치 후 Apple/Google에서 기존 구독 영수증을 가져와 서버에 검증 요청
+- 보호자 앱 재설치 / 기기 교체 후 Apple/Google에서 기존 구독 영수증을 가져와 서버에 검증 요청
 - 유효한 구독이 확인되면 새 보호자 계정에 구독 활성화
+- **`/verify`와 동일한 `_verify_and_persist` 검증 로직 재사용** + 응답에 `restored: true` 플래그만 추가. 즉 검증 실패 케이스(미활성 state, productId 불일치, 만료된 구독, ACK pending 자동 호출 등)는 양 엔드포인트에서 동일하게 동작
 - 인앱 결제는 보호자의 Apple ID / Google 계정에 귀속되므로 개인정보 없이도 복구 가능
+- 클라이언트는 [구독 복원] 탭 → `restorePurchases()` → `purchaseStream`의 `PurchaseStatus.restored` 수신 시 이 엔드포인트 호출. 복원할 영수증이 없을 때는 클라이언트가 5초 안전망으로 사용자에게 "복원할 구독이 없습니다" 정보 안내 (서버 호출 발생하지 않음)
 
 
 ### 4.11 경고 목록 조회 (보호자용)

@@ -248,6 +248,18 @@ abstract class DeDe {
     'settings_terms': 'Nutzungsbedingungen',
     'settings_app_version': 'Version: v@version',
 
+    // ── In-App-Käufe (jährliches $9.99-Abonnement für Betreuer) ──
+    'subscription_subscribe': 'Abonnieren',
+    'subscription_restore': 'Kauf wiederherstellen',
+    'subscription_store_unavailable': 'Store nicht verfügbar',
+    'subscription_product_unavailable': 'Abonnement nicht verfügbar',
+    'subscription_purchase_failed': 'Kauf fehlgeschlagen',
+    'subscription_verify_failed': 'Abonnement-Überprüfung fehlgeschlagen',
+    'subscription_restore_failed': 'Wiederherstellung fehlgeschlagen',
+    'subscription_restore_nothing': 'Kein Abonnement zum Wiederherstellen',
+    'subscription_restore_success': 'Abonnement wiederhergestellt',
+    'subscription_purchase_success': 'Abonnement gestartet',
+
     // ── G+S (Betreuer + Schützling) ──
     'gs_enable_button': 'Auch Wellness-Schutz erhalten',
     'gs_safety_code_button': 'Meinen Sicherheitscode prüfen',

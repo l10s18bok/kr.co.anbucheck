@@ -247,6 +247,18 @@ abstract class ItIt {
     'settings_terms': 'Termini di servizio',
     'settings_app_version': 'Versione: v@version',
 
+    // ── Acquisti in-app (abbonamento annuale Tutore $9.99) ──
+    'subscription_subscribe': 'Abbonati',
+    'subscription_restore': 'Ripristina acquisto',
+    'subscription_store_unavailable': 'Store non disponibile',
+    'subscription_product_unavailable': 'Abbonamento non disponibile',
+    'subscription_purchase_failed': 'Acquisto non riuscito',
+    'subscription_verify_failed': 'Verifica dell\'abbonamento non riuscita',
+    'subscription_restore_failed': 'Ripristino non riuscito',
+    'subscription_restore_nothing': 'Nessun abbonamento da ripristinare',
+    'subscription_restore_success': 'Abbonamento ripristinato',
+    'subscription_purchase_success': 'Abbonamento avviato',
+
     // ── G+S (Guardiano e protetto) ──
     'gs_enable_button': 'Ricevi anche la protezione',
     'gs_safety_code_button': 'Verifica il mio codice di sicurezza',

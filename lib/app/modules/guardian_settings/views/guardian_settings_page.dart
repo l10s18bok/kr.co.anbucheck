@@ -9,10 +9,10 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
+import 'package:anbucheck/app/core/services/iap_service.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/modules/guardian_settings/controllers/guardian_settings_controller.dart';
-import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 설정 페이지 — v2: G+S 통합 카드 포함
@@ -493,6 +493,12 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
     return Obx(() {
       final plan = controller.subscriptionPlan.value;
       final isPremium = plan == 'yearly';
+      final iap = Get.isRegistered<IapService>() ? Get.find<IapService>() : null;
+      final iapAvailable = iap?.isAvailable.value ?? false;
+      final processing = iap?.isProcessing.value ?? false;
+      // 에러 스낵바 표시는 GuardianSettingsController의 ever 워커가 담당
+      // (Obx 안 postFrameCallback + 상태 재설정 패턴은 self-rebuild 트리거로 fragile).
+
       return Container(
         width: double.infinity,
         padding: EdgeInsets.all(AppSpacing.sp4),
@@ -566,14 +572,32 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                   mode: LaunchMode.externalApplication,
                 ),
               )
-            else
-              _PremiumButton(
-                label: 'guardian_subscribe'.tr,
-                filled: true,
-                onTap: () {
-                  AppSnackbar.show('common_notice'.tr, 'guardian_payment_preparing'.tr);
-                },
+            else if (!iapAvailable || iap?.productDetails.value == null) ...[
+              // 스토어 미가용 또는 상품 미등록 (Play Console anbu_yearly 등록 전,
+              // 일시 네트워크 장애로 queryProductDetails 실패 등) — 두 버튼 모두
+              // 숨기고 안내 텍스트만 표시. 버튼 노출 후 클릭만 실패하는 UX 회피.
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 6.h),
+                child: Text(
+                  'subscription_store_unavailable'.tr,
+                  style: AppTextTheme.bodySmall(color: Colors.white70),
+                ),
               ),
+            ] else ...[
+              _PremiumButton(
+                label: 'subscription_subscribe'.tr,
+                filled: true,
+                loading: processing,
+                onTap: processing ? null : controller.startSubscribe,
+              ),
+              SizedBox(height: AppSpacing.sm),
+              _PremiumButton(
+                label: 'subscription_restore'.tr,
+                filled: false,
+                loading: processing,
+                onTap: processing ? null : controller.restoreSubscription,
+              ),
+            ],
           ],
         ),
       );
@@ -584,28 +608,62 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
 class _PremiumButton extends StatelessWidget {
   final String label;
   final bool filled;
-  final VoidCallback onTap;
+  final bool loading;
+  final VoidCallback? onTap;
 
-  const _PremiumButton({required this.label, required this.filled, required this.onTap});
+  const _PremiumButton({
+    required this.label,
+    required this.filled,
+    required this.onTap,
+    this.loading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final disabled = onTap == null;
+    // 로딩 중에는 불투명도 유지 (스피너가 명확히 보이도록).
+    // 단순 disabled(!iapAvailable 등)에서만 흐려짐.
+    final opacity = (disabled && !loading) ? 0.6 : 1.0;
+    final contentColor = filled ? const Color(0xFF4355B9) : Colors.white;
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 10.h),
-        decoration: BoxDecoration(
-          color: filled ? Colors.white : Colors.transparent,
-          border: filled ? null : Border.all(color: Colors.white54),
-          borderRadius: BorderRadius.circular(24.r),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          label,
-          style: AppTextTheme.bodyMedium(
-            color: filled ? const Color(0xFF4355B9) : Colors.white,
-            fw: FontWeight.w700,
+      child: Opacity(
+        opacity: opacity,
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 10.h),
+          decoration: BoxDecoration(
+            color: filled ? Colors.white : Colors.transparent,
+            border: filled ? null : Border.all(color: Colors.white54),
+            borderRadius: BorderRadius.circular(24.r),
+          ),
+          alignment: Alignment.center,
+          // Stack으로 텍스트가 항상 layout 자리를 차지하게 해 로딩 전후 버튼
+          // 높이가 흔들리지 않도록 한다 (스피너는 텍스트보다 작아 그대로 두면
+          // 컨테이너 높이가 줄어듦).
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Opacity(
+                opacity: loading ? 0 : 1,
+                child: Text(
+                  label,
+                  style: AppTextTheme.bodyMedium(
+                    color: contentColor,
+                    fw: FontWeight.w700,
+                  ),
+                ),
+              ),
+              if (loading)
+                SizedBox(
+                  width: 18.w,
+                  height: 18.w,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(contentColor),
+                  ),
+                ),
+            ],
           ),
         ),
       ),

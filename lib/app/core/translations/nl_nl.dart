@@ -246,6 +246,18 @@ abstract class NlNl {
     'settings_terms': 'Gebruiksvoorwaarden',
     'settings_app_version': 'Versie: v@version',
 
+    // ── In-app aankopen (jaarlijks $9.99 verzorger-abonnement) ──
+    'subscription_subscribe': 'Abonneren',
+    'subscription_restore': 'Aankoop herstellen',
+    'subscription_store_unavailable': 'Store niet beschikbaar',
+    'subscription_product_unavailable': 'Abonnement niet beschikbaar',
+    'subscription_purchase_failed': 'Aankoop mislukt',
+    'subscription_verify_failed': 'Abonnementverificatie mislukt',
+    'subscription_restore_failed': 'Herstellen mislukt',
+    'subscription_restore_nothing': 'Geen abonnement om te herstellen',
+    'subscription_restore_success': 'Abonnement hersteld',
+    'subscription_purchase_success': 'Abonnement gestart',
+
     // ── G+S (Bewaker en beschermde) ──
     'gs_enable_button': 'Ook welzijnsbescherming ontvangen',
     'gs_safety_code_button': 'Mijn veiligheidscode bekijken',

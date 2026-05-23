@@ -37,7 +37,7 @@ lib/
     │   │                   # ApiEndpoints, ApiError, ApiResponse
     │   ├── services/       # FcmService, HeartbeatService, HeartbeatWorkerService,
     │   │                   # LocalAlarmService, GuardianSubjectService,
-    │   │                   # AdService, ThemeService
+    │   │                   # IapService, AdService, ThemeService
     │   ├── theme/          # AppColors, AppSpacing, AppTextTheme, AppTheme
     │   ├── translations/   # 20개 언어 (ko_kr ~ id_id) + AppTranslations
     │   ├── usecases/       # UseCase 기반 클래스
@@ -53,7 +53,8 @@ lib/
     │   │   └── remote/     # UserRemoteDatasource, DeviceRemoteDatasource,
     │   │                   # HeartbeatRemoteDatasource, SubjectRemoteDatasource,
     │   │                   # EmergencyRemoteDatasource, NotificationRemoteDatasource,
-    │   │                   # NotificationSettingsRemoteDatasource, VersionRemoteDatasource
+    │   │                   # NotificationSettingsRemoteDatasource, VersionRemoteDatasource,
+    │   │                   # SubscriptionRemoteDatasource
     │   ├── models/         # HeartbeatRequest
     │   └── repositories/   # NotificationRepositoryImpl
     ├── domain/

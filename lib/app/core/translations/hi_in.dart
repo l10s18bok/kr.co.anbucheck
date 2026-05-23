@@ -243,6 +243,18 @@ abstract class HiIn {
     'settings_terms': 'सेवा की शर्तें',
     'settings_app_version': 'संस्करण: v@version',
 
+    // ── इन-ऐप खरीदारी (अभिभावक की वार्षिक $9.99 सदस्यता) ──
+    'subscription_subscribe': 'सदस्यता लें',
+    'subscription_restore': 'खरीद पुनर्स्थापित करें',
+    'subscription_store_unavailable': 'स्टोर उपलब्ध नहीं है',
+    'subscription_product_unavailable': 'सदस्यता उपलब्ध नहीं है',
+    'subscription_purchase_failed': 'खरीदारी विफल',
+    'subscription_verify_failed': 'सदस्यता सत्यापन विफल',
+    'subscription_restore_failed': 'पुनर्स्थापना विफल',
+    'subscription_restore_nothing': 'पुनर्स्थापित करने के लिए कोई सदस्यता नहीं',
+    'subscription_restore_success': 'सदस्यता पुनर्स्थापित',
+    'subscription_purchase_success': 'सदस्यता शुरू',
+
     // ── G+S (अभिभावक + संरक्षित) ──
     'gs_enable_button': 'मेरी भी सुरक्षा करें',
     'gs_safety_code_button': 'मेरा सुरक्षा कोड देखें',

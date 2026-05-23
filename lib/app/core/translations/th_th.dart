@@ -240,6 +240,18 @@ abstract class ThTh {
     'settings_terms': 'ข้อกำหนดการใช้งาน',
     'settings_app_version': 'เวอร์ชัน: v@version',
 
+    // ── การซื้อในแอป (การสมัครสมาชิกผู้ดูแลรายปี $9.99) ──
+    'subscription_subscribe': 'สมัครสมาชิก',
+    'subscription_restore': 'กู้คืนการซื้อ',
+    'subscription_store_unavailable': 'ไม่สามารถเชื่อมต่อร้านค้า',
+    'subscription_product_unavailable': 'ไม่พบข้อมูลแพ็กเกจ',
+    'subscription_purchase_failed': 'การชำระเงินล้มเหลว',
+    'subscription_verify_failed': 'ตรวจสอบการสมัครสมาชิกล้มเหลว',
+    'subscription_restore_failed': 'การกู้คืนล้มเหลว',
+    'subscription_restore_nothing': 'ไม่มีการสมัครสมาชิกให้กู้คืน',
+    'subscription_restore_success': 'กู้คืนการสมัครสมาชิกแล้ว',
+    'subscription_purchase_success': 'เริ่มการสมัครสมาชิกแล้ว',
+
     // ── G+S (ผู้ดูแล + ผู้ได้รับการดูแล) ──
     'gs_enable_button': 'รับการดูแลสุขภาพด้วย',
     'gs_safety_code_button': 'ตรวจสอบรหัสความปลอดภัย',

@@ -236,6 +236,18 @@ abstract class ArSa {
     'settings_terms': 'شروط الاستخدام',
     'settings_app_version': 'الإصدار: v@version',
 
+    // ── الشراء داخل التطبيق (اشتراك سنوي للمراقب $9.99) ──
+    'subscription_subscribe': 'الاشتراك',
+    'subscription_restore': 'استعادة الشراء',
+    'subscription_store_unavailable': 'المتجر غير متوفر',
+    'subscription_product_unavailable': 'الاشتراك غير متوفر',
+    'subscription_purchase_failed': 'فشل الشراء',
+    'subscription_verify_failed': 'فشل التحقق من الاشتراك',
+    'subscription_restore_failed': 'فشل الاستعادة',
+    'subscription_restore_nothing': 'لا يوجد اشتراك لاستعادته',
+    'subscription_restore_success': 'تمت استعادة الاشتراك',
+    'subscription_purchase_success': 'تم بدء الاشتراك',
+
     // ── G+S (وصي + محمي) ──
     'gs_enable_button': 'احصل على الحماية أيضاً',
     'gs_safety_code_button': 'عرض رمز الأمان الخاص بي',

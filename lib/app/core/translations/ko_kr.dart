@@ -230,6 +230,18 @@ abstract class KoKr {
     'settings_terms': '이용약관',
     'settings_app_version': '앱버전 : v@version',
 
+    // ── 인앱 결제 (보호자 연 $9.99 구독) ──
+    'subscription_subscribe': '구독하기',
+    'subscription_restore': '구독 복원',
+    'subscription_store_unavailable': '스토어에 연결할 수 없습니다',
+    'subscription_product_unavailable': '상품 정보를 불러올 수 없습니다',
+    'subscription_purchase_failed': '결제에 실패했습니다',
+    'subscription_verify_failed': '구독 인증에 실패했습니다',
+    'subscription_restore_failed': '구독 복원에 실패했습니다',
+    'subscription_restore_nothing': '복원할 구독이 없습니다',
+    'subscription_restore_success': '구독이 복원되었습니다',
+    'subscription_purchase_success': '구독이 시작되었습니다',
+
     // ── G+S (보호자 겸 대상자) ──
     'gs_enable_button': '나도 안부 보호 받기',
     'gs_safety_code_button': '내 안전 코드 확인',

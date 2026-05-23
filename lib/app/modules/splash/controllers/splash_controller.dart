@@ -11,6 +11,7 @@ import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
+import 'package:anbucheck/app/core/services/iap_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.dart';
@@ -139,6 +140,11 @@ class SplashController extends BaseController {
 
     // FCM 서비스 초기화
     await Get.putAsync(() => FcmService().init());
+
+    // 인앱 결제 — purchaseStream은 앱 재시작 시 pending 트랜잭션을 재발행하므로
+    // 보호자/대상자 모드 분기 이전에 등록해야 사용자가 UI로 진입하기 전에도
+    // 콜백이 누락되지 않는다. (대상자 모드면 큐가 비어있어 비용 0)
+    await Get.putAsync(() => IapService().init(), permanent: true);
 
     // iOS 로컬 알림 텍스트 캐시 (백그라운드 isolate에서 .tr 사용 불가 → 캐시)
     await NotificationTextCache.cacheAll();

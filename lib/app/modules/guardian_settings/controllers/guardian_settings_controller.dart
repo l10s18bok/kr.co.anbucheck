@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
+import 'package:anbucheck/app/core/services/iap_service.dart';
+import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
@@ -39,6 +41,48 @@ class GuardianSettingsController extends BaseController {
     _loadAppVersion();
     _loadOsVersion();
     _loadSubscription();
+
+    // 인앱 결제 검증 성공 시 구독 상태 즉시 리프레시 (광고 제거·만료 배너 제거 반영).
+    // IapService는 Splash에서 permanent로 등록되므로 항상 존재.
+    if (Get.isRegistered<IapService>()) {
+      final iap = Get.find<IapService>();
+      iap.onVerified = (_) => _loadSubscription();
+
+      // 에러/정보 메시지가 채워지면 스낵바 1회 표시 후 비움.
+      // View(Obx) 안 addPostFrameCallback + 상태 재설정 패턴은 self-rebuild를
+      // 트리거해 fragile하므로 컨트롤러에서 ever 워커로 처리. dispose는 BaseController
+      // onClose에서 자동 정리.
+      ever<String>(iap.lastError, (msg) {
+        if (msg.isEmpty) return;
+        AppSnackbar.show('common_notice'.tr, msg.tr, type: SnackType.error);
+        iap.lastError.value = '';
+      });
+      ever<String>(iap.lastInfo, (msg) {
+        if (msg.isEmpty) return;
+        AppSnackbar.show('common_notice'.tr, msg.tr, type: SnackType.info);
+        iap.lastInfo.value = '';
+      });
+    }
+  }
+
+  @override
+  void onClose() {
+    if (Get.isRegistered<IapService>()) {
+      Get.find<IapService>().onVerified = null;
+    }
+    super.onClose();
+  }
+
+  /// UI에서 [구독하기] 버튼 탭 → buy() 호출.
+  Future<void> startSubscribe() async {
+    if (!Get.isRegistered<IapService>()) return;
+    await Get.find<IapService>().buy();
+  }
+
+  /// UI에서 [구독 복원] 버튼 탭 → restore() 호출.
+  Future<void> restoreSubscription() async {
+    if (!Get.isRegistered<IapService>()) return;
+    await Get.find<IapService>().restore();
   }
 
   Future<void> _loadAppVersion() async {

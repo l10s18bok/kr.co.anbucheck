@@ -245,6 +245,18 @@ abstract class ViVn {
     'settings_terms': 'Dieu khoan su dung',
     'settings_app_version': 'Phien ban: v@version',
 
+    // ── Mua trong ứng dụng (gói đăng ký hằng năm $9.99 của Người giám hộ) ──
+    'subscription_subscribe': 'Đăng ký',
+    'subscription_restore': 'Khôi phục mua hàng',
+    'subscription_store_unavailable': 'Không thể kết nối cửa hàng',
+    'subscription_product_unavailable': 'Không thể tải thông tin gói',
+    'subscription_purchase_failed': 'Thanh toán thất bại',
+    'subscription_verify_failed': 'Xác minh đăng ký thất bại',
+    'subscription_restore_failed': 'Khôi phục thất bại',
+    'subscription_restore_nothing': 'Không có gói đăng ký để khôi phục',
+    'subscription_restore_success': 'Đã khôi phục đăng ký',
+    'subscription_purchase_success': 'Đã bắt đầu đăng ký',
+
     // ── G+S (Người giám hộ + Được bảo vệ) ──
     'gs_enable_button': 'Nhận bảo vệ sức khỏe',
     'gs_safety_code_button': 'Xem mã an toàn của tôi',

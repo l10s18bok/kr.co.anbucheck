@@ -244,6 +244,18 @@ abstract class TrTr {
     'settings_terms': 'Kullanım Koşulları',
     'settings_app_version': 'Sürüm: v@version',
 
+    // ── Uygulama içi satın alma (Bakıcı yıllık $9.99 aboneliği) ──
+    'subscription_subscribe': 'Abone Ol',
+    'subscription_restore': 'Satın Alımı Geri Yükle',
+    'subscription_store_unavailable': 'Mağaza kullanılamıyor',
+    'subscription_product_unavailable': 'Abonelik kullanılamıyor',
+    'subscription_purchase_failed': 'Satın alma başarısız',
+    'subscription_verify_failed': 'Abonelik doğrulanamadı',
+    'subscription_restore_failed': 'Geri yükleme başarısız',
+    'subscription_restore_nothing': 'Geri yüklenecek abonelik yok',
+    'subscription_restore_success': 'Abonelik geri yüklendi',
+    'subscription_purchase_success': 'Abonelik başlatıldı',
+
     // ── G+S (Koruyucu + Korunan) ──
     'gs_enable_button': 'Ben de koruma al',
     'gs_safety_code_button': 'Güvenlik kodumu kontrol et',

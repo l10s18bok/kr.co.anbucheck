@@ -228,6 +228,18 @@ abstract class JaJp {
     'settings_terms': '利用規約',
     'settings_app_version': 'アプリバージョン：v@version',
 
+    // ── アプリ内課金(保護者の年間 $9.99 サブスクリプション) ──
+    'subscription_subscribe': '登録する',
+    'subscription_restore': '購入を復元',
+    'subscription_store_unavailable': 'ストアに接続できません',
+    'subscription_product_unavailable': '商品情報を取得できません',
+    'subscription_purchase_failed': '購入に失敗しました',
+    'subscription_verify_failed': '購読の認証に失敗しました',
+    'subscription_restore_failed': '復元に失敗しました',
+    'subscription_restore_nothing': '復元する購読がありません',
+    'subscription_restore_success': '購読を復元しました',
+    'subscription_purchase_success': '購読を開始しました',
+
     // ── G+S (保護者 + 対象者) ──
     'gs_enable_button': '私も安否保護を受ける',
     'gs_safety_code_button': '安全コードを確認',

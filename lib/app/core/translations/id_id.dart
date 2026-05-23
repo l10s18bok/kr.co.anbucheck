@@ -248,6 +248,18 @@ abstract class IdId {
     'settings_terms': 'Ketentuan Layanan',
     'settings_app_version': 'Versi: v@version',
 
+    // ── Pembelian dalam aplikasi (langganan tahunan $9.99 Pendamping) ──
+    'subscription_subscribe': 'Berlangganan',
+    'subscription_restore': 'Pulihkan Pembelian',
+    'subscription_store_unavailable': 'Toko tidak tersedia',
+    'subscription_product_unavailable': 'Langganan tidak tersedia',
+    'subscription_purchase_failed': 'Pembelian gagal',
+    'subscription_verify_failed': 'Verifikasi langganan gagal',
+    'subscription_restore_failed': 'Pemulihan gagal',
+    'subscription_restore_nothing': 'Tidak ada langganan untuk dipulihkan',
+    'subscription_restore_success': 'Langganan telah dipulihkan',
+    'subscription_purchase_success': 'Langganan dimulai',
+
     // ── G+S (Penjaga + Yang Dilindungi) ──
     'gs_enable_button': 'Terima perlindungan juga',
     'gs_safety_code_button': 'Lihat kode keamanan saya',
