@@ -236,6 +236,7 @@ abstract class ViVn {
     'settings_subscription_service': 'Dang ky & Dich vu',
     'settings_current_membership': 'Thanh vien hien tai',
     'settings_premium': 'Premium dang hoat dong',
+    'guardian_go_to_settings': 'Đến trang Cài đặt',
     'settings_expired': 'Đăng ký đã hết hạn',
     'settings_days_until_renewal': 'Còn @days ngày đến khi gia hạn',
     'settings_days_until_trial_end': 'Còn @days ngày đến khi kết thúc dùng thử',

@@ -493,9 +493,9 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
     return Obx(() {
       final plan = controller.subscriptionPlan.value;
       // 3-state 분기:
-      //  · yearly  → 인디고 + "프리미엄 구독 중" + [구독 관리]
-      //  · expired → 주황(warning) + "구독 만료" + [구독하기] + [구독 복원]
-      //  · free_trial / '' → 회색 + "무료 체험 중" + [구독하기] + [구독 복원]
+      //  · yearly  → 인디고 카드 + 흰 텍스트 + [구독 관리]
+      //  · expired → Dashboard 만료 배너와 동일 톤 (#FFF3E0 + #E65100) + [구독하기]
+      //  · free_trial / '' → 회색 카드 + 흰 텍스트 + [구독하기] + [구독 복원]
       final isPremium = plan == 'yearly';
       final isExpired = plan == 'expired';
       final iap = Get.isRegistered<IapService>() ? Get.find<IapService>() : null;
@@ -504,34 +504,24 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
       // 에러 스낵바 표시는 GuardianSettingsController의 ever 워커가 담당
       // (Obx 안 postFrameCallback + 상태 재설정 패턴은 self-rebuild 트리거로 fragile).
 
-      // 색상 그라데이션
-      final List<Color> gradient;
-      if (isPremium) {
-        gradient = [const Color(0xFF4355B9), const Color(0xFF5C6BC0)]; // 인디고
-      } else if (isExpired) {
-        gradient = [const Color(0xFFE65100), const Color(0xFFEF6C00)]; // 주황 (Dashboard 만료 배너와 톤 일치)
-      } else {
-        gradient = [const Color(0xFF607D8B), const Color(0xFF90A4AE)]; // 회색
+      // expired는 light 배경 + 주황 강조 (Dashboard와 동일 톤). 다른 상태와
+      // 색 체계가 크게 달라 별도 분기로 전체 카드를 분리한다.
+      if (isExpired) {
+        return _buildExpiredCard(iap: iap, iapAvailable: iapAvailable, processing: processing);
       }
+
+      // 색상 그라데이션 (yearly / free_trial)
+      final List<Color> gradient = isPremium
+          ? [const Color(0xFF4355B9), const Color(0xFF5C6BC0)] // 인디고
+          : [const Color(0xFF607D8B), const Color(0xFF90A4AE)]; // 회색
 
       // 타이틀 + 아이콘
-      final IconData iconData;
-      final String titleKey;
-      if (isPremium) {
-        iconData = Icons.verified_rounded;
-        titleKey = 'settings_premium';
-      } else if (isExpired) {
-        iconData = Icons.warning_amber_rounded;
-        titleKey = 'settings_expired';
-      } else {
-        iconData = Icons.card_giftcard_rounded;
-        titleKey = 'settings_free_trial';
-      }
+      final iconData = isPremium ? Icons.verified_rounded : Icons.card_giftcard_rounded;
+      final titleKey = isPremium ? 'settings_premium' : 'settings_free_trial';
 
-      // 일수 배지: expired는 의미 없으니 숨김. 그 외엔 0보다 큰 경우만 표시.
-      // 라벨도 plan별로 분리 (갱신 카운터 vs 체험 종료 카운터).
+      // 일수 배지: 0보다 큰 경우만 표시. 라벨도 plan별로 분리.
       final days = controller.subscriptionDaysRemaining.value;
-      final bool showDaysBadge = !isExpired && days > 0;
+      final bool showDaysBadge = days > 0;
       final String daysLabelKey = isPremium
           ? 'settings_days_until_renewal'
           : 'settings_days_until_trial_end';
@@ -635,6 +625,139 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
         ),
       );
     });
+  }
+
+  /// expired 전용 카드 — Dashboard 만료 배너와 색상/버튼 디자인 일치.
+  /// 배경 #FFF3E0 + 보더 #E65100 30% 알파 + 텍스트 #E65100/#4E2C00 +
+  /// ElevatedButton 스타일의 [구독하기] (filled #E65100, 흰 텍스트, 10.r 코너).
+  Widget _buildExpiredCard({
+    required IapService? iap,
+    required bool iapAvailable,
+    required bool processing,
+  }) {
+    const accent = Color(0xFFE65100);   // 강조 (Dashboard 만료 배너 #E65100)
+    const accentLight = Color(0xFFFFF3E0); // 배경 (Dashboard 만료 배너 #FFF3E0)
+    const bodyText = Color(0xFF4E2C00);  // 본문 (Dashboard 만료 배너 #4E2C00)
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.sp4),
+      decoration: BoxDecoration(
+        color: accentLight,
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: accent.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, size: 18.w, color: accent),
+              SizedBox(width: 6.w),
+              Text(
+                'settings_current_membership'.tr,
+                style: AppTextTheme.labelSmall(color: accent, fw: FontWeight.w600),
+              ),
+            ],
+          ),
+          SizedBox(height: AppSpacing.md),
+          Text(
+            'settings_expired'.tr,
+            style: AppTextTheme.headlineMedium(color: accent, fw: FontWeight.w700),
+          ),
+          SizedBox(height: 6.h),
+          // Dashboard 만료 배너와 같은 안내 메시지를 함께 표시 — 사용자에게
+          // 결제 필요성 명확히 전달
+          Text(
+            'guardian_subscription_expired_message'.tr,
+            style: AppTextTheme.bodySmall(color: bodyText),
+          ),
+          SizedBox(height: AppSpacing.lg),
+          if (!iapAvailable || iap?.productDetails.value == null) ...[
+            // 스토어 미가용 — 안내만 노출 (다른 상태와 동일 폴백 톤)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 6.h),
+              child: Text(
+                'subscription_store_unavailable'.tr,
+                style: AppTextTheme.bodySmall(color: bodyText),
+              ),
+            ),
+          ] else ...[
+            // [구독하기] — Dashboard 만료 배너와 동일한 ElevatedButton 스타일
+            SizedBox(
+              width: double.infinity,
+              height: 40.h,
+              child: ElevatedButton(
+                onPressed: processing
+                    ? null
+                    : controller.startSubscribe,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: accent,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: accent.withValues(alpha: 0.6),
+                  disabledForegroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                ),
+                child: processing
+                    ? SizedBox(
+                        width: 18.w,
+                        height: 18.w,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Text(
+                        'subscription_subscribe'.tr,
+                        style: AppTextTheme.labelMedium(
+                          color: Colors.white,
+                          fw: FontWeight.w600,
+                        ),
+                      ),
+              ),
+            ),
+            SizedBox(height: AppSpacing.sm),
+            // [구독 복원] — outline 스타일 (보조 액션, accent 강조)
+            SizedBox(
+              width: double.infinity,
+              height: 40.h,
+              child: OutlinedButton(
+                onPressed: processing
+                    ? null
+                    : controller.restoreSubscription,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: accent,
+                  disabledForegroundColor: accent.withValues(alpha: 0.6),
+                  side: BorderSide(color: accent.withValues(alpha: 0.6)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                ),
+                child: processing
+                    ? SizedBox(
+                        width: 18.w,
+                        height: 18.w,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(accent),
+                        ),
+                      )
+                    : Text(
+                        'subscription_restore'.tr,
+                        style: AppTextTheme.labelMedium(
+                          color: accent,
+                          fw: FontWeight.w600,
+                        ),
+                      ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 }
 

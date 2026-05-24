@@ -239,6 +239,7 @@ abstract class IdId {
     'settings_subscription_service': 'Langganan & Layanan',
     'settings_current_membership': 'Keanggotaan Saat Ini',
     'settings_premium': 'Premium Aktif',
+    'guardian_go_to_settings': 'Buka Pengaturan',
     'settings_expired': 'Langganan kedaluwarsa',
     'settings_days_until_renewal': '@days hari hingga perpanjangan',
     'settings_days_until_trial_end': '@days hari hingga akhir uji coba',

@@ -234,6 +234,7 @@ abstract class HiIn {
     'settings_subscription_service': 'सदस्यता और सेवा',
     'settings_current_membership': 'वर्तमान सदस्यता',
     'settings_premium': 'प्रीमियम सक्रिय',
+    'guardian_go_to_settings': 'सेटिंग पर जाएं',
     'settings_expired': 'सदस्यता समाप्त',
     'settings_days_until_renewal': 'नवीनीकरण के @days दिन शेष',
     'settings_days_until_trial_end': 'परीक्षण समाप्ति के @days दिन शेष',

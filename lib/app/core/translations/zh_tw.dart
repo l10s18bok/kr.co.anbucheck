@@ -217,6 +217,7 @@ abstract class ZhTw {
     'settings_subscription_service': '訂閱與服務',
     'settings_current_membership': '目前會員',
     'settings_premium': '進階訂閱中',
+    'guardian_go_to_settings': '前往設定頁面',
     'settings_expired': '訂閱已過期',
     'settings_days_until_renewal': '@days天後續訂',
     'settings_days_until_trial_end': '@days天後試用結束',

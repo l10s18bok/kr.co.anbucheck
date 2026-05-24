@@ -221,6 +221,7 @@ abstract class KoKr {
     'settings_subscription_service': '구독 및 서비스',
     'settings_current_membership': '현재 멤버십',
     'settings_premium': '프리미엄 구독 중',
+    'guardian_go_to_settings': '설정 페이지로 이동',
     'settings_expired': '구독 만료',
     'settings_days_until_renewal': '갱신까지 @days일',
     'settings_days_until_trial_end': '체험 종료까지 @days일',

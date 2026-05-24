@@ -239,6 +239,7 @@ abstract class RuRu {
     'settings_subscription_service': 'Подписка и сервис',
     'settings_current_membership': 'Текущая подписка',
     'settings_premium': 'Премиум активна',
+    'guardian_go_to_settings': 'Перейти к настройкам',
     'settings_expired': 'Подписка истекла',
     'settings_days_until_renewal': '@days дней до продления',
     'settings_days_until_trial_end': '@days дней до окончания пробного периода',

@@ -238,6 +238,7 @@ abstract class ItIt {
     'settings_subscription_service': 'Abbonamento e servizio',
     'settings_current_membership': 'Abbonamento attuale',
     'settings_premium': 'Premium attivo',
+    'guardian_go_to_settings': 'Vai alle impostazioni',
     'settings_expired': 'Abbonamento scaduto',
     'settings_days_until_renewal': '@days giorni al rinnovo',
     'settings_days_until_trial_end': '@days giorni alla fine della prova',

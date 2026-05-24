@@ -230,6 +230,7 @@ abstract class SvSe {
     'settings_subscription_service': 'Prenumeration och tjanst',
     'settings_current_membership': 'Nuvarande medlemskap',
     'settings_premium': 'Premium aktivt',
+    'guardian_go_to_settings': 'Gå till Inställningar',
     'settings_expired': 'Prenumeration har gått ut',
     'settings_days_until_renewal': '@days dagar tills förnyelse',
     'settings_days_until_trial_end': '@days dagar tills provperioden slutar',

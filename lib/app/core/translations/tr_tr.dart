@@ -235,6 +235,7 @@ abstract class TrTr {
     'settings_subscription_service': 'Abonelik ve Hizmet',
     'settings_current_membership': 'Mevcut Üyelik',
     'settings_premium': 'Premium Aktif',
+    'guardian_go_to_settings': 'Ayarlara git',
     'settings_expired': 'Abonelik süresi doldu',
     'settings_days_until_renewal': 'Yenileme için @days gün kaldı',
     'settings_days_until_trial_end': 'Deneme bitimine @days gün kaldı',

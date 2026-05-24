@@ -239,6 +239,7 @@ abstract class DeDe {
     'settings_subscription_service': 'Abo & Service',
     'settings_current_membership': 'Aktuelle Mitgliedschaft',
     'settings_premium': 'Premium aktiv',
+    'guardian_go_to_settings': 'Zu den Einstellungen',
     'settings_expired': 'Abonnement abgelaufen',
     'settings_days_until_renewal': 'Noch @days Tage bis zur Verlängerung',
     'settings_days_until_trial_end': 'Noch @days Tage bis zum Testende',

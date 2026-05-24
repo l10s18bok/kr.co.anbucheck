@@ -240,6 +240,7 @@ abstract class FrFr {
     'settings_subscription_service': 'Abonnement & service',
     'settings_current_membership': 'Abonnement actuel',
     'settings_premium': 'Premium actif',
+    'guardian_go_to_settings': 'Aller aux paramètres',
     'settings_expired': 'Abonnement expiré',
     'settings_days_until_renewal': '@days jours avant le renouvellement',
     'settings_days_until_trial_end': '@days jours avant la fin de l\'essai',

@@ -219,6 +219,7 @@ abstract class JaJp {
     'settings_subscription_service': 'サブスクリプション',
     'settings_current_membership': '現在のプラン',
     'settings_premium': 'プレミアム利用中',
+    'guardian_go_to_settings': '設定ページへ移動',
     'settings_expired': 'サブスクリプション期限切れ',
     'settings_days_until_renewal': '更新まで@days日',
     'settings_days_until_trial_end': '体験終了まで@days日',

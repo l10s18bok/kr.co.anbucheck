@@ -227,6 +227,7 @@ abstract class ArSa {
     'settings_subscription_service': 'الاشتراك والخدمة',
     'settings_current_membership': 'العضوية الحالية',
     'settings_premium': 'اشتراك مميز نشط',
+    'guardian_go_to_settings': 'الذهاب إلى الإعدادات',
     'settings_expired': 'انتهت صلاحية الاشتراك',
     'settings_days_until_renewal': '@days يومًا حتى التجديد',
     'settings_days_until_trial_end': '@days يومًا حتى انتهاء التجربة',

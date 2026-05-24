@@ -235,6 +235,7 @@ abstract class EnUs {
     'settings_subscription_service': 'Subscription & Service',
     'settings_current_membership': 'Current Membership',
     'settings_premium': 'Premium Active',
+    'guardian_go_to_settings': 'Go to Settings',
     'settings_expired': 'Subscription Expired',
     'settings_days_until_renewal': '@days days until renewal',
     'settings_days_until_trial_end': '@days days until trial ends',

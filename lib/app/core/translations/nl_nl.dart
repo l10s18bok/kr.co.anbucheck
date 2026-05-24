@@ -237,6 +237,7 @@ abstract class NlNl {
     'settings_subscription_service': 'Abonnement en service',
     'settings_current_membership': 'Huidig lidmaatschap',
     'settings_premium': 'Premium actief',
+    'guardian_go_to_settings': 'Ga naar Instellingen',
     'settings_expired': 'Abonnement verlopen',
     'settings_days_until_renewal': '@days dagen tot verlenging',
     'settings_days_until_trial_end': '@days dagen tot einde proef',

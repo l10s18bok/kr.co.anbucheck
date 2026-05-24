@@ -231,6 +231,7 @@ abstract class ThTh {
     'settings_subscription_service': 'การสมัครสมาชิกและบริการ',
     'settings_current_membership': 'สมาชิกปัจจุบัน',
     'settings_premium': 'พรีเมียมใช้งานอยู่',
+    'guardian_go_to_settings': 'ไปที่หน้าตั้งค่า',
     'settings_expired': 'การสมัครหมดอายุแล้ว',
     'settings_days_until_renewal': 'อีก @days วันถึงการต่ออายุ',
     'settings_days_until_trial_end': 'อีก @days วันถึงสิ้นสุดทดลองใช้',

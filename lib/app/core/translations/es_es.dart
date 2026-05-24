@@ -238,6 +238,7 @@ abstract class EsEs {
     'settings_subscription_service': 'Suscripción y servicio',
     'settings_current_membership': 'Membresía actual',
     'settings_premium': 'Premium activo',
+    'guardian_go_to_settings': 'Ir a Ajustes',
     'settings_expired': 'Suscripción caducada',
     'settings_days_until_renewal': '@days días para la renovación',
     'settings_days_until_trial_end': '@days días para el fin de la prueba',

@@ -217,6 +217,7 @@ abstract class ZhCn {
     'settings_subscription_service': '订阅与服务',
     'settings_current_membership': '当前会员',
     'settings_premium': '高级订阅中',
+    'guardian_go_to_settings': '前往设置页面',
     'settings_expired': '订阅已过期',
     'settings_days_until_renewal': '@days天后续订',
     'settings_days_until_trial_end': '@days天后试用结束',

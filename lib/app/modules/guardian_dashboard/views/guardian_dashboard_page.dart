@@ -4,7 +4,6 @@ import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
-import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
@@ -12,6 +11,7 @@ import 'package:anbucheck/app/core/utils/phone_utils.dart';
 import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
 import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
+import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
 class GuardianDashboardPage extends GetView<GuardianDashboardController> {
@@ -131,10 +131,15 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                         width: double.infinity,
                         height: 40.h,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: 인앱 결제 SDK 연동 후 구현
-                            AppSnackbar.show('common_notice'.tr, 'guardian_payment_preparing'.tr);
-                          },
+                          // IAP 결제 + [구독 복원] 흐름은 Settings 페이지가 단독
+                          // 책임 (IapService 직접 호출, purchaseStream 구독 등).
+                          // Dashboard에서 결제를 직접 호출하면:
+                          //  1) IAP 로직 중복 — 두 곳 유지 부담
+                          //  2) [구독 복원] 접근성 누락 → Apple Review 3.1.1 위배 가능
+                          //  3) 사용자 정보(days, plan 등) 풍부히 못 보여줌
+                          // → Settings 탭으로 이동 후 거기서 [구독하기]/[구독 복원]
+                          //   선택하도록 가이드.
+                          onPressed: () => Get.offNamed(AppRoutes.guardianSettings),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE65100),
                             foregroundColor: Colors.white,
@@ -143,7 +148,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             ),
                           ),
                           child: Text(
-                            'guardian_subscribe'.tr,
+                            'guardian_go_to_settings'.tr,
                             style: AppTextTheme.labelMedium(
                               color: Colors.white,
                               fw: FontWeight.w600,

@@ -238,6 +238,7 @@ abstract class PtBr {
     'settings_subscription_service': 'Assinatura e serviço',
     'settings_current_membership': 'Plano atual',
     'settings_premium': 'Premium ativo',
+    'guardian_go_to_settings': 'Ir para Configurações',
     'settings_expired': 'Assinatura expirada',
     'settings_days_until_renewal': '@days dias até a renovação',
     'settings_days_until_trial_end': '@days dias até o fim do teste',

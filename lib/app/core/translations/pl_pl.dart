@@ -237,6 +237,7 @@ abstract class PlPl {
     'settings_subscription_service': 'Subskrypcja i uslugi',
     'settings_current_membership': 'Obecne czlonkostwo',
     'settings_premium': 'Aktywna subskrypcja Premium',
+    'guardian_go_to_settings': 'Przejdź do ustawień',
     'settings_expired': 'Subskrypcja wygasła',
     'settings_days_until_renewal': '@days dni do odnowienia',
     'settings_days_until_trial_end': '@days dni do końca okresu próbnego',
