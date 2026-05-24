@@ -157,34 +157,48 @@ class GuardianSettingsController extends BaseController {
   /// 로컬 DB 전반을 클리어해 재가입 시 이전 계정 잔존 데이터가 새 계정에
   /// 오염을 일으키지 않도록 한다 (구독 상태 오표시, 걸음수 delta 왜곡,
   /// pending heartbeat 오전송, 이전 별칭 잔존 등).
+  ///
+  /// **navigation 보장**: 중간 cleanup 어느 한 단계가 silent throw/hang되면
+  /// Get.offAllNamed가 실행되지 않아 사용자가 설정 페이지에 갇히는 사례가
+  /// 발생함(예: HeartbeatLockDatasource sqlite 일시 오류, WorkManager cancel
+  /// platform exception 등). try/finally + 각 단계 개별 catch로 어떤 실패에도
+  /// 모드 선택 화면 진입이 보장되도록 한다. 서버 탈퇴와 로컬 token clear는
+  /// 이미 완료된 상태이므로 일부 cleanup이 누락되어도 splash가 재진입 시점에
+  /// 자연 복구한다.
   Future<void> deleteAccount() async {
-    final deviceToken = await _tokenDs.getDeviceToken();
-    if (deviceToken != null) {
+    try {
+      final deviceToken = await _tokenDs.getDeviceToken();
+      if (deviceToken != null) {
+        try {
+          await _userDs.deleteMe(deviceToken);
+        } catch (_) {}
+      }
+
+      // **순서 중요 (race 차단)**: clear를 cancel보다 먼저. 워커 isolate의 _rescheduleNextDay
+      // 가 reload 후 role=null을 보고 skip하도록.
       try {
-        await _userDs.deleteMe(deviceToken);
+        await _tokenDs.clear();
       } catch (_) {}
+
+      if (Get.isRegistered<GuardianDashboardController>()) {
+        try {
+          final dashboard = Get.find<GuardianDashboardController>();
+          await dashboard.cancelHeartbeatSchedules();
+          // permanent 등록이라 offAllNamed 이후에도 인스턴스가 살아있으므로,
+          // 재가입 시 이전 G+S Rx 상태(isAlsoSubject=true 등)가 남지 않도록 리셋
+          dashboard.resetSubjectState();
+        } catch (_) {}
+      }
+
+      try { await HeartbeatLocalDatasource().clearPending(); } catch (_) {}
+      try { await HeartbeatLockDatasource().clearAll(); } catch (_) {}
+      try { await NicknameLocalDatasource().clearAll(); } catch (_) {}
+      try { await SubjectOrderLocalDatasource().clearAll(); } catch (_) {}
+
+      // 서비스 인메모리 캐시도 초기화 — permanent 등록이라 컨트롤러 해제되어도 유지됨
+      try { _svc.clearCache(); } catch (_) {}
+    } finally {
+      Get.offAllNamed(AppRoutes.modeSelect);
     }
-
-    // **순서 중요 (race 차단)**: clear를 cancel보다 먼저. 워커 isolate의 _rescheduleNextDay
-    // 가 reload 후 role=null을 보고 skip하도록.
-    await _tokenDs.clear();
-
-    if (Get.isRegistered<GuardianDashboardController>()) {
-      final dashboard = Get.find<GuardianDashboardController>();
-      await dashboard.cancelHeartbeatSchedules();
-      // permanent 등록이라 offAllNamed 이후에도 인스턴스가 살아있으므로,
-      // 재가입 시 이전 G+S Rx 상태(isAlsoSubject=true 등)가 남지 않도록 리셋
-      dashboard.resetSubjectState();
-    }
-
-    await HeartbeatLocalDatasource().clearPending();
-    await HeartbeatLockDatasource().clearAll();
-    await NicknameLocalDatasource().clearAll();
-    await SubjectOrderLocalDatasource().clearAll();
-
-    // 서비스 인메모리 캐시도 초기화 — permanent 등록이라 컨트롤러 해제되어도 유지됨
-    _svc.clearCache();
-
-    Get.offAllNamed(AppRoutes.modeSelect);
   }
 }
