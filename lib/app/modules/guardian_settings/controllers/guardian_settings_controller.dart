@@ -102,9 +102,18 @@ class GuardianSettingsController extends BaseController {
   }
 
   Future<void> _loadSubscription() async {
+    // 1) 로컬 캐시로 즉시 hydrate — 서버 응답 도착 전 카드가 회색 기본값으로
+    //    잠깐 표시됐다가 인디고로 바뀌는 깜빡임 방지. SharedPreferences는
+    //    수 ms 내 반환되므로 첫 build 이전에 Rx가 최신 plan으로 set됨.
+    final cachedActive = await _tokenDs.getSubscriptionActive();
+    final cachedPlan = await _tokenDs.getSubscriptionPlan();
+    isSubscriptionActive.value = cachedActive;
+    if (cachedPlan.isNotEmpty) subscriptionPlan.value = cachedPlan;
+
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
 
+    // 2) 백그라운드로 서버 최신 상태 fetch
     try {
       final deviceDs = DeviceRemoteDatasource();
       final data = await deviceDs.getMyDevice(deviceToken);
@@ -113,6 +122,13 @@ class GuardianSettingsController extends BaseController {
       isSubscriptionActive.value = active;
       subscriptionPlan.value = plan;
       await _tokenDs.saveSubscriptionActive(active);
+      await _tokenDs.saveSubscriptionPlan(plan);
+
+      // 3) Dashboard 만료 배너 즉시 동기화 — 탭 전환만으로는 Dashboard의
+      //    onResumed/onInit가 트리거되지 않아 isSubscriptionActive가 stale.
+      if (Get.isRegistered<GuardianDashboardController>()) {
+        await Get.find<GuardianDashboardController>().refreshSubscriptionStatus();
+      }
 
       // 보호자 구독 남은 일수 조회 (보호자만 엔드포인트 접근 가능)
       try {
@@ -123,7 +139,7 @@ class GuardianSettingsController extends BaseController {
         // 대상자이거나 구독 정보 없음 — 무시
       }
     } catch (_) {
-      isSubscriptionActive.value = await _tokenDs.getSubscriptionActive();
+      // 서버 실패 시 캐시값 유지 (이미 1단계에서 set됨)
     }
   }
 

@@ -257,6 +257,14 @@ class GuardianDashboardController extends BaseController
     isSubscriptionActive.value = await _tokenDs.getSubscriptionActive();
   }
 
+  /// 설정 페이지에서 구독 상태가 변경된 직후 호출 — 대시보드 만료 배너 즉시 갱신.
+  /// Dashboard는 permanent로 메모리에 살아있으나 탭 전환은 onResumed/onInit를
+  /// 트리거하지 않아 stale 상태가 유지된다. Settings._loadSubscription이 로컬에
+  /// 저장한 값을 즉시 Rx로 반영하기 위한 진입점.
+  Future<void> refreshSubscriptionStatus() async {
+    await _loadSubscriptionStatus();
+  }
+
   /// 로컬에서 G+S 상태 로드 (앱 시작 시)
   Future<void> _loadSubjectState() async {
     final also = await _tokenDs.getIsAlsoSubject();

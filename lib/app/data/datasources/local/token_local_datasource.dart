@@ -17,6 +17,7 @@ class TokenLocalDatasource {
   static const _keyLastHeartbeatTime = 'last_heartbeat_time';
   static const _keyLastManualReportDate = 'last_manual_report_date';
   static const _keySubscriptionActive = 'subscription_active';
+  static const _keySubscriptionPlan = 'subscription_plan';
   static const _keyIsAlsoSubject = 'is_also_subject';
   static const _keyLastScheduledKey = 'last_scheduled_key';
   static const _keyLastRecoveryDate = 'last_recovery_date';
@@ -222,6 +223,19 @@ class TokenLocalDatasource {
     await prefs.setBool(_keySubscriptionActive, active);
   }
 
+  /// 구독 플랜 (free_trial / yearly / expired) — Settings 카드 첫 표시 시
+  /// 서버 응답 도착 전 마지막으로 알려진 plan으로 즉시 hydrate해 회색→인디고
+  /// 1초 깜빡임을 차단한다.
+  Future<String> getSubscriptionPlan() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keySubscriptionPlan) ?? '';
+  }
+
+  Future<void> saveSubscriptionPlan(String plan) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keySubscriptionPlan, plan);
+  }
+
   // ── 보호자+대상자(G+S) 여부 ────────────────────────────────
   Future<bool> getIsAlsoSubject() async {
     final prefs = await SharedPreferences.getInstance();
@@ -257,6 +271,7 @@ class TokenLocalDatasource {
     await prefs.remove(_keyIsAlsoSubject);
     await prefs.remove(_keyLastScheduledKey);
     await prefs.remove(_keyLastRecoveryDate);
+    await prefs.remove(_keySubscriptionPlan);
     await prefs.setBool(_keySubscriptionActive, false);
   }
 
