@@ -7,8 +7,8 @@ abstract class AppConstants {
   static const String keyToken = 'token';
   static const String keyLocale = 'locale';
 
-  // 법적 문서 URL (GitHub Pages → 추후 자체 도메인으로 교체)
-  static const String legalBaseUrl = 'https://l10s18bok.github.io/anbu-legal';
+  // 법적 문서 URL (회사 도메인 averic.co.kr 산하 호스팅)
+  static const String legalBaseUrl = 'https://averic.co.kr';
 
   /// 지원 locale → URL 경로 매핑 (20개 언어)
   static const Map<String, String> _legalLocalePaths = {
