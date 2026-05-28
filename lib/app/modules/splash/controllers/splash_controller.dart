@@ -15,7 +15,6 @@ import 'package:anbucheck/app/core/services/iap_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.dart';
-import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/firebase_options.dart';
@@ -166,10 +165,7 @@ class SplashController extends BaseController {
       return true;
     }
 
-    // 선택적 업데이트 안내 (건너뛰기 가능)
-    if (latestVersion != _appVersion) {
-      _showOptionalUpdateSnackbar(latestVersion);
-    }
+    // 선택적 업데이트 안내는 운영 인터페이스가 정해질 때까지 비활성화
     return false;
   }
 
@@ -206,15 +202,4 @@ class SplashController extends BaseController {
     return null;
   }
 
-  void _showOptionalUpdateSnackbar(String version) {
-    AppSnackbar.show(
-      'update_available_title'.tr,
-      'update_available_message'.trParams({'version': version}),
-      duration: const Duration(seconds: 4),
-      mainButton: TextButton(
-        onPressed: () => Get.back(),
-        child: Text('common_later'.tr),
-      ),
-    );
-  }
 }
