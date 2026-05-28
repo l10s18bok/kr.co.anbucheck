@@ -492,12 +492,17 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
   Widget _buildSubscriptionCard() {
     return Obx(() {
       final plan = controller.subscriptionPlan.value;
+      final isActive = controller.isSubscriptionActive.value;
       // 3-state 분기:
-      //  · yearly  → 인디고 카드 + 흰 텍스트 + [구독 관리]
-      //  · expired → Dashboard 만료 배너와 동일 톤 (#FFF3E0 + #E65100) + [구독하기]
+      //  · yearly + is_active=true  → 인디고 카드 + 흰 텍스트 + [구독 관리]
+      //  · expired OR (yearly + is_active=false) → 만료 카드 (Dashboard 만료 배너와 동일 톤 #FFF3E0 + #E65100) + [구독하기]
+      //    서버 안전망 활용: expires_at < now면 is_active=false 응답이므로
+      //    RTDN(EXPIRED) 누락·지연 상황에서 plan='yearly'가 잔존해도 만료로 인식.
+      //    plan만 보면 RTDN을 안 보낸 sandbox 환경 + production grace period 등에서
+      //    "프리미엄 구독 중" 영구 표시되는 production hole 차단.
       //  · free_trial / '' → 회색 카드 + 흰 텍스트 + [구독하기] + [구독 복원]
-      final isPremium = plan == 'yearly';
-      final isExpired = plan == 'expired';
+      final isPremium = plan == 'yearly' && isActive;
+      final isExpired = plan == 'expired' || (plan == 'yearly' && !isActive);
       final iap = Get.isRegistered<IapService>() ? Get.find<IapService>() : null;
       final iapAvailable = iap?.isAvailable.value ?? false;
       final processing = iap?.isProcessing.value ?? false;
