@@ -120,7 +120,7 @@ lib/
 | 문서             | 경로                                   | 참조 시점                            |
 | ---------------- | -------------------------------------- | ------------------------------------ |
 | 프론트엔드 PRD   | `.claude/rules/PRD-FrontEnd.md`        | UI 구현, 화면 설계, 로컬 저장소 정책 |
-| 백엔드 PRD       | `.claude/rules/PRD-BackEnd.md`         | API 명세, 요청/응답, DB 스키마       |
+| 백엔드 PRD       | `../anbucheck-server/.ref/PRD-BackEnd.md` (외부 repo) | API 명세, 요청/응답, DB 스키마       |
 | Heartbeat 플로우 | `.claude/rules/heartbeat_flowchart.md` | heartbeat 수집·전송·경고 플로우      |
 
 ## 규칙
