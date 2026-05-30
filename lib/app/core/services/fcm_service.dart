@@ -62,6 +62,12 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
     case 'alert_info':
       _routeToNotifications();
       break;
+    case 'subscription_expired':
+    case 'subscription_grace_period':
+      // 구독 만료/Grace Period(결제 재시도) 알림 — 보호자 설정 화면으로 직접 이동.
+      // 사용자가 즉시 [구독하기]/[구독 관리] 버튼으로 결제 수단 갱신 가능.
+      _routeToGuardianSettings();
+      break;
     case 'heartbeat':
       break;
     case 'safety_net':
@@ -105,6 +111,16 @@ void _routeToNotifications() {
     } catch (_) {}
   } else {
     Get.offAllNamed(AppRoutes.guardianNotifications);
+  }
+}
+
+/// 구독 만료/Grace Period 알림 라우팅 — 보호자 설정 화면으로 직접 이동해
+/// 사용자가 즉시 [구독하기]/[구독 관리] 액션을 실행하도록 유도.
+/// permanent로 등록된 GuardianSettingsController는 진입 시 onInit/onResumed에서
+/// _loadSubscription을 호출하므로 별도 refresh 호출 불필요.
+void _routeToGuardianSettings() {
+  if (Get.currentRoute != AppRoutes.guardianSettings) {
+    Get.offAllNamed(AppRoutes.guardianSettings);
   }
 }
 
