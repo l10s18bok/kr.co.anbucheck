@@ -214,6 +214,18 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 - 보호 대상자가 직접 변경: 서버에 반영 + WorkManager/BGTask 재예약 + iOS 로컬 알림 시각 갱신
 - 보호자는 heartbeat 시각을 변경할 수 없음 (대상자 본인만 변경 가능)
 
+**시각 변경 시 예약 트리거 정책 (`HeartbeatScheduleMixin.onHeartbeatTimeChanged`):**
+
+안전망 로컬 알림 재예약은 `forceNextDay = (이미 오늘 전송됨 || 새 시각이 오늘 이미 지남)` 기준으로 분기한다. (Android 안전망 알림은 heartbeat+3h라, "방금 지난 시각"으로 변경하면 heartbeat+3h가 ≈지금이 되어 **오늘 즉시 발화하는 스퓨리어스 미전송 알림**이 떴던 것을 차단.)
+
+| 상태 | 동작 |
+|------|------|
+| **이미 오늘 전송됨** (어느 시각으로 변경하든) | 모든 트리거 **내일로**(forceNextDay). `lastHeartbeatDate` 유지 → 오늘 재전송 차단(다음 사이클 = 내일) |
+| **미전송 + 새 시각이 과거** (예: 15시에 12시로 변경) | 안전망 알람 **내일로**(스퓨리어스 차단) + **즉시 heartbeat 전송**(앱에서 시각 변경 = 살아있음 증거 → 오늘분 기록 → 거짓 미수신 경고 방지). 전송 성공 시 "보호자에게 안부를 전했습니다"(`subject_home_manual_report_sent` 재사용) 스낵바, 실패 시 시각 변경 메시지로 폴백 |
+| **미전송 + 새 시각이 미래** (예: 15시에 18시로 변경) | 그 시각에 트리거 예약(오늘). Android 안전망 알람은 +3h(=21시) 설계 유지, iOS는 정시 |
+
+- 견고성: 안전망 알람은 항상 `forceNextDay`로 **결정적 재예약**(전송 실패와 무관). 즉시 전송은 그 위에 얹어 오늘분 기록 — 성공 시 `_onHeartbeatSent`가 내일자로 재확정(멱등). 즉시 전송은 `HeartbeatService.execute()`의 `_busy` + SQLite 락 + `lastScheduledKey`로 자가 직렬화돼 역할(S/G+S) 무관 중복 전송이 차단된다
+
 
 #### 주 방식: WorkManager(Android) / BGTaskScheduler(iOS) 예약 실행
 
