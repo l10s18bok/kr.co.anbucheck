@@ -116,8 +116,18 @@ mixin HeartbeatScheduleMixin on GetxController {
   }
 
   /// 시각 변경 후 서버 전송 → 성공 시 로컬 저장 + WorkManager/로컬알림 재예약
+  ///
+  /// 시각 변경의 source of truth는 **서버 저장 + 로컬 저장**이다. 그게 성공하면
+  /// 사용자에겐 성공으로 보고한다. WorkManager/로컬 안전망 재예약은 LAST-RESORT
+  /// 안전망이라 실패하더라도 전체를 "변경 실패"로 보고하면 안 된다(시각은 이미
+  /// 바뀌어 있는데 실패 스낵바가 뜨는 모순 방지). 따라서 2단계로 분리한다:
+  ///   1) 핵심(서버+로컬 저장): 실패 시에만 사용자에게 실패 보고
+  ///   2) 안전망 재예약(WorkManager/로컬알림): best-effort — 실패해도 로깅만 하고
+  ///      성공 스낵바를 그대로 표시
   Future<void> onHeartbeatTimeChanged(int hour, int minute) async {
     final tokenDs = TokenLocalDatasource();
+
+    // 1) 핵심 — 서버 전송 + 로컬 저장. 여기 실패만 진짜 실패.
     try {
       final deviceToken = await tokenDs.getDeviceToken();
       final deviceId = await tokenDs.getDeviceId();
@@ -132,20 +142,30 @@ mixin HeartbeatScheduleMixin on GetxController {
       await tokenDs.saveLastHeartbeatDate('');
       await tokenDs.saveLastHeartbeatTime('');
       await tokenDs.saveLastScheduledKey('');
-      // Android: WorkManager + 로컬 안전망 재예약
-      // iOS G+S: 오늘의 안부 확인 메시지 로컬 알림만 재예약 (BGTaskScheduler 사용 안 함)
-      if (Platform.isAndroid) {
-        await HeartbeatWorkerService.schedule(hour, minute);
-      }
-      await LocalAlarmService.schedule(hour, minute);
-      final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
-      AppSnackbar.show('', message);
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('[heartbeat-time] 시각 변경 실패(서버/로컬 저장): $e\n$st');
       AppSnackbar.show(
         'heartbeat_change_failed_title'.tr,
         'heartbeat_change_failed_message'.tr,
         duration: const Duration(seconds: 2),
       );
+      return;
     }
+
+    // 2) 안전망 재예약 — best-effort. 실패해도 시각 변경 자체는 성공이므로
+    //    사용자에겐 실패로 보고하지 않고 로깅만 한다(원인 추적용).
+    // Android: WorkManager + 로컬 안전망 재예약
+    // iOS G+S: 오늘의 안부 확인 메시지 로컬 알림만 재예약 (BGTaskScheduler 사용 안 함)
+    try {
+      if (Platform.isAndroid) {
+        await HeartbeatWorkerService.schedule(hour, minute);
+      }
+      await LocalAlarmService.schedule(hour, minute);
+    } catch (e, st) {
+      debugPrint('[heartbeat-time] 안전망 재예약 실패(무시 — 시각 변경은 성공): $e\n$st');
+    }
+
+    final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
+    AppSnackbar.show('', message);
   }
 }

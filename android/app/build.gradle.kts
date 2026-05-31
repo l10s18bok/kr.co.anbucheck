@@ -73,6 +73,11 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
+            // release는 이미 R8 코드 셰이커가 적용된다(빌드 산출물 mapping.txt로 확인).
+            // 검증된 기존 R8 구성은 그대로 두고, flutter_local_notifications가 Gson
+            // TypeToken 시그니처 제거로 깨지는 것만 막는 keep 규칙을 추가한다.
+            // (없으면 LocalAlarmService 안전망 로컬 알림이 release에서 cancel/예약로드 실패)
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
