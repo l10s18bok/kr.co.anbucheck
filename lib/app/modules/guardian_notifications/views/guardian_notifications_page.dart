@@ -55,6 +55,8 @@ class GuardianNotificationsPage
         ],
       ),
       body: Obx(() {
+        // 구독 만료 시에는 로드가 컨트롤러에서 차단되어(통신 차단) 목록이 비고,
+        // 아래 빈 상태(_EmptyState)가 표시된다.
         final items = controller.notifications;
 
         if (items.isEmpty && !controller.isLoading) {

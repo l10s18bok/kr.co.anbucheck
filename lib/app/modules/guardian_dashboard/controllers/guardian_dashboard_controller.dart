@@ -14,6 +14,7 @@ import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
@@ -41,8 +42,9 @@ class GuardianDashboardController extends BaseController
   /// 전화 후 앱 복귀 시 강조할 대상자 코드
   final highlightedInviteCode = RxnString();
 
-  /// 구독 활성 여부
-  final isSubscriptionActive = true.obs;
+  /// 구독 활성 여부 — 단일 소스 [SubscriptionService]에 위임(중복 Rx 제거).
+  /// 만료 시 대상자 카드·걸음수 그래프 로드를 차단하는 게이트로 사용.
+  RxBool get isSubscriptionActive => _sub.isActive;
 
   // ── G+S (보호자 겸 대상자) 상태 ──
   final isAlsoSubject = false.obs;
@@ -71,6 +73,7 @@ class GuardianDashboardController extends BaseController
   }
 
   final _svc = Get.find<GuardianSubjectService>();
+  final _sub = Get.find<SubscriptionService>();
   final _tokenDs = TokenLocalDatasource();
   final _userDs = UserRemoteDatasource();
 
@@ -81,6 +84,18 @@ class GuardianDashboardController extends BaseController
     if (_svc.subjects.isNotEmpty) _mapSubjects();
     // subjects 데이터 변경 시 자동 반영 (FCM 수신 후 서비스 갱신 포함)
     ever(_svc.subjects, (_) => _mapSubjects());
+    // 구독 활성 전환 시 카드 마스킹 즉시 반영 — 실제값 ↔ (정상/걸음수 0) 재매핑.
+    // /subjects는 정상 호출(연결관리와 공유)해 실제값이 캐시에 있으므로, 재구독 시
+    // 재매핑만으로 즉시 해제(네트워크 불필요). 30일 차트 캐시는 잠금/해제 경계에서
+    // 비워 다음 오픈 시 올바른 값(0 또는 실제)을 받게 한다. **표시 전용 — heartbeat 무관**.
+    ever(_sub.isActive, (active) {
+      monthlyStepsCache.clear();
+      if (active) {
+        _loadSubjects(force: true); // 최신 실제값 확보 + 재매핑
+      } else {
+        _mapSubjects(); // 마스킹 적용 (재조회 불필요)
+      }
+    });
     _loadSubjectsAndSubscription();
     _loadSubjectState();
     _initGuardianSubjectMode();
@@ -229,8 +244,7 @@ class GuardianDashboardController extends BaseController
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
       final count = data['guardian_count'] as int? ?? 0;
       await _tokenDs.saveHeartbeatSchedule(hour, minute);
-      await _tokenDs.saveSubscriptionActive(subscriptionActive);
-      isSubscriptionActive.value = subscriptionActive;
+      await _sub.set(subscriptionActive);
       guardianCount.value = count;
       applySchedule(hour, minute);
       if (Platform.isAndroid) {
@@ -249,22 +263,10 @@ class GuardianDashboardController extends BaseController
     }
   }
 
-  /// 대상자 로드 완료 후 구독 상태 읽기 (서비스가 로컬에 저장한 값)
+  /// 대상자 로드. 구독 활성 상태는 [_svc.load]가 /subjects 응답으로
+  /// [SubscriptionService.set]을 통해 갱신하므로 별도 동기화가 불필요.
   Future<void> _loadSubjectsAndSubscription({bool force = false}) async {
     await _loadSubjects(force: force);
-    await _loadSubscriptionStatus();
-  }
-
-  Future<void> _loadSubscriptionStatus() async {
-    isSubscriptionActive.value = await _tokenDs.getSubscriptionActive();
-  }
-
-  /// 설정 페이지에서 구독 상태가 변경된 직후 호출 — 대시보드 만료 배너 즉시 갱신.
-  /// Dashboard는 permanent로 메모리에 살아있으나 탭 전환은 onResumed/onInit를
-  /// 트리거하지 않아 stale 상태가 유지된다. Settings._loadSubscription이 로컬에
-  /// 저장한 값을 즉시 Rx로 반영하기 위한 진입점.
-  Future<void> refreshSubscriptionStatus() async {
-    await _loadSubscriptionStatus();
   }
 
   /// 로컬에서 G+S 상태 로드 (앱 시작 시)
@@ -302,6 +304,13 @@ class GuardianDashboardController extends BaseController
   /// 정렬: 1차 경고 등급순(urgent→warning→caution→info→normal),
   ///       2차 보호자가 연결관리에서 지정한 사용자 순서
   void _mapSubjects() {
+    // 구독 만료 시: 리스트(이름)는 그대로 보여주되 **모니터링 시각화만 마스킹**한다 —
+    // 모든 카드를 '정상'으로, 걸음수 그래프(7일)를 전부 0으로 표시(경고 등급 변화·활동
+    // 노출 차단). /subjects 자체는 정상 호출(연결관리와 공유)하므로 실제값은 캐시에 있고,
+    // 재구독 시 _mapSubjects 재실행만으로 즉시 실제값 복원(네트워크 불필요).
+    // ※ 실제로 긴급/경고 상태인 대상자도 만료 중엔 '정상'으로 보인다(거짓 안심) —
+    //   결제 끊김 시 모니터링을 가리겠다는 의도된 동작(§9.8 참조).
+    final locked = !_sub.isActive.value;
     const alertOrder = ['urgent', 'warning', 'caution', 'info', 'normal'];
     final userOrder = _svc.orderIndex;
     subjects.value = _svc.subjects.map((s) => SubjectStatus(
@@ -309,11 +318,11 @@ class GuardianDashboardController extends BaseController
           userId: s.userId,
           inviteCode: s.inviteCode,
           alias: s.alias,
-          alertLevel: s.status,
+          alertLevel: locked ? 'normal' : s.status,
           lastCheck: _formatLastSeen(s.lastSeen),
-          daysInactive: s.alertDaysInactive,
+          daysInactive: locked ? 0 : s.alertDaysInactive,
           batteryLevel: s.batteryLevel,
-          weeklySteps: s.weeklySteps,
+          weeklySteps: locked ? List<int?>.filled(7, 0) : s.weeklySteps,
         )).toList()
       ..sort((a, b) {
         final ai = alertOrder.indexOf(a.alertLevel);
@@ -330,6 +339,12 @@ class GuardianDashboardController extends BaseController
   /// 차트 다이얼로그 오픈 전 30일 데이터 확보.
   /// 캐시 있으면 즉시 true, 없으면 서버 호출 후 캐시. 실패 시 false.
   Future<bool> loadMonthlyStepsIfNeeded(SubjectStatus s) async {
+    // 구독 만료 시: 30일 상세 차트도 걸음수 전부 0으로(서버 호출 없이). 7일 그래프
+    // 마스킹과 일관. 재구독 시 ever(isActive)가 캐시를 비워 다음 오픈에 실제값 재조회.
+    if (!_sub.isActive.value) {
+      monthlyStepsCache[s.inviteCode] = List<int?>.filled(30, 0);
+      return true;
+    }
     if (monthlyStepsCache.containsKey(s.inviteCode)) return true;
     final token = await _tokenDs.getDeviceToken();
     if (token == null) return false;
@@ -550,7 +565,9 @@ class GuardianDashboardController extends BaseController
     guardianCount.value = 0;
     _lastHeartbeatDate.value = '';
     _lastHeartbeatTime.value = '';
-    isSubscriptionActive.value = false;
+    // 탈퇴/재설정 — 영속값은 TokenLocalDatasource.clear()가 false로 저장하므로
+    // 여기선 Rx만 즉시 반영(다음 계정이 잠금 상태로 시작).
+    _sub.isActive.value = false;
     subjects.clear();
     highlightedInviteCode.value = null;
   }

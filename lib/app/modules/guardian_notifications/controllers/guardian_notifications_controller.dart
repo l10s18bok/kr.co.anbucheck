@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/domain/entities/notification_entity.dart';
 import 'package:anbucheck/app/domain/usecases/delete_all_notifications_usecase.dart';
 import 'package:anbucheck/app/domain/usecases/get_notifications_usecase.dart';
@@ -18,13 +19,37 @@ class GuardianNotificationsController extends BaseController {
 
   final notifications = <NotificationEntity>[].obs;
 
+  final _sub = Get.find<SubscriptionService>();
+
+  /// 구독 활성 ever 워커. lazyPut 컨트롤러라 재방문 시 누적되지 않도록 onClose에서 dispose.
+  Worker? _subWorker;
+
   @override
   void onInit() {
     super.onInit();
     load();
+    // 구독 활성 전환 자동 반영 — 재구독 시 즉시 재조회, 만료 시 목록 비움.
+    _subWorker = ever(_sub.isActive, (active) {
+      if (active) {
+        load();
+      } else {
+        notifications.clear();
+      }
+    });
+  }
+
+  @override
+  void onClose() {
+    _subWorker?.dispose();
+    super.onClose();
   }
 
   Future<void> load() async {
+    // 구독 만료 — 알림 목록 통신 차단 + 비움. 재구독 시 ever가 재조회.
+    if (!_sub.isActive.value) {
+      notifications.clear();
+      return;
+    }
     if (isLoading) return;
     isLoading = true;
     try {

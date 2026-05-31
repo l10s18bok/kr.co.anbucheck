@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/subject_order_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -88,9 +89,15 @@ class GuardianSubjectService extends GetxService {
       maxSubjects.value = data['max_subjects'] as int? ?? 5;
       canAddMore.value = data['can_add_more'] as bool? ?? true;
 
-      // 구독 상태 동기화 (추가 API 호출 없이 /subjects 응답에서 처리)
+      // 구독 상태 동기화 (추가 API 호출 없이 /subjects 응답에서 처리).
+      // 단일 소스 SubscriptionService.set으로 일원화 — 활성 세션 중 서버가 만료를
+      // 반환하면 isActive Rx가 즉시 false로 떨어져 대시보드/알림이 잠긴다.
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
-      await _tokenDs.saveSubscriptionActive(subscriptionActive);
+      if (Get.isRegistered<SubscriptionService>()) {
+        await Get.find<SubscriptionService>().set(subscriptionActive);
+      } else {
+        await _tokenDs.saveSubscriptionActive(subscriptionActive);
+      }
 
       _lastFetched = DateTime.now();
     } catch (_) {

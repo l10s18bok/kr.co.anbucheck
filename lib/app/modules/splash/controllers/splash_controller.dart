@@ -12,6 +12,7 @@ import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/iap_service.dart';
+import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.dart';
@@ -135,6 +136,10 @@ class SplashController extends BaseController {
     // 보호자/대상자 모드 분기 이전에 등록해야 사용자가 UI로 진입하기 전에도
     // 콜백이 누락되지 않는다. (대상자 모드면 큐가 비어있어 비용 0)
     await Get.putAsync(() => IapService().init(), permanent: true);
+
+    // 구독 활성 상태 단일 소스 — 보호자 모니터링(대시보드·알림) 게이트.
+    // 영속값으로 init하여 만료 사용자가 콜드 스타트 시 곧바로 잠금 상태가 되게 한다.
+    await Get.putAsync(() => SubscriptionService().init(), permanent: true);
 
     // iOS 로컬 알림 텍스트 캐시 (백그라운드 isolate에서 .tr 사용 불가 → 캐시)
     await NotificationTextCache.cacheAll();

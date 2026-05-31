@@ -37,7 +37,7 @@ lib/
     │   │                   # ApiEndpoints, ApiError, ApiResponse
     │   ├── services/       # FcmService, HeartbeatService, HeartbeatWorkerService,
     │   │                   # LocalAlarmService, GuardianSubjectService,
-    │   │                   # IapService, AdService, ThemeService
+    │   │                   # IapService, SubscriptionService, AdService, ThemeService
     │   ├── theme/          # AppColors, AppSpacing, AppTextTheme, AppTheme
     │   ├── translations/   # 20개 언어 (ko_kr ~ id_id) + AppTranslations
     │   ├── usecases/       # UseCase 기반 클래스
@@ -95,6 +95,16 @@ lib/
 - `GuardianSafetyCodeController` — UI 전용 (invite_code, heartbeat 스케줄 변경, 수동 보고, 긴급 요청). 보고 상태 표시는 Dashboard의 `lastHeartbeatDate`/`lastHeartbeatTime`/`isReportedToday` Rx를 구독. 수동 보고(`reportNow`) 후 `_dashboard.reloadHeartbeatState()` 호출해 카드 즉시 갱신. 긴급 요청(`sendEmergency`)은 S 홈과 동일하게 공통 헬퍼 `captureEmergencyLocation()`로 위치 획득 후 `EmergencyRemoteDatasource.send(deviceId, location: ...)` — G+S 사용자도 긴급 시 위치가 첨부됨. `locationPermissionDenied` Rx + `requestLocationPermissionAgain()`으로 긴급 버튼 아래 권한 경고 위젯 동작
 - `GuardianSettingsController` — UI 전용. G+S 활성화/해제/탈퇴 시 Dashboard 컨트롤러에 위임
 - `ModeSelectController` — 재설치 시 `has_invite_code`로 G+S 감지 → `isAlsoSubject` 전달
+
+## 구독 게이팅 (보호자 모니터링 잠금)
+
+구독 만료/체험 종료 시 **보호자 모니터링의 "시각화"만 마스킹한다**(통신 차단 아님). 상세는 PRD-FrontEnd §9.8.
+
+- **`SubscriptionService`** (`core/services/subscription_service.dart`, Splash `permanent`, 영속값 init) — `subscription_active` 단일 반응형 소스(`RxBool isActive`). `subscription_active`를 쓰는 모든 경로(IAP verify, `/subjects`·`/devices/me` 응답)가 `set()`으로 일원화(Rx+영속 동시).
+- **마스킹 위치(표시 전용)**: `/subjects`는 정상 호출(연결관리와 공유 — 통신 막아봐야 옆 탭에서 받아오므로 실효 없음)하고, **대시보드 `_mapSubjects`에서 표시값만 치환** — 만료 시 `alertLevel→'normal'`(등급 변화 숨김)·`weeklySteps→[0×7]`·`daysInactive→0`, 이름/배터리/마지막확인은 실제값. 30일 차트(`loadMonthlyStepsIfNeeded`)도 만료면 서버 호출 없이 `[0×30]`. 알림은 `load`에서 `!isActive`면 비움(빈 상태). 대시보드 상단 **만료 안내 카드**가 구독 동선([설정으로 이동]) 제공.
+- **즉시 해제**: 대시보드(permanent) `ever(isActive)` true → `monthlyStepsCache.clear()` + `_loadSubjects(force)` 재매핑(캐시 실제값 즉시). 알림(lazyPut)은 탭 진입 `onInit→load` 또는 살아있으면 `ever`로 fresh. 결제는 설정(비게이트)→IAP→`/verify`(비게이트)로 항상 가능.
+- **절대 건드리지 않음**: heartbeat 전송 경로(`_checkAndSendHeartbeat`/`_scheduleHeartbeatIfGS`)와 `safety_home`(guardianCount 게이팅)에는 read-gate 없음 — 대상자 본인 안부 신호는 구독 무관 계속 동작. safety_home은 `set` 쓰기만 경유.
+- ⚠️ **거짓 안심 / emergency 불일치(의도)**: 만료 중 대시보드는 실제 긴급/경고 대상자도 '정상'으로 표시(거짓 안심) + 서버는 SOS를 구독 무관 발송하나 만료 보호자의 알림 목록이 차단돼 in-app에서 가려진다. 의도된 제품 결정 — 한쪽을 맞춰 "수정"하지 말 것.
 
 ## 핵심 파일 (Heartbeat 3계층 구조)
 

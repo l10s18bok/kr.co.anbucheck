@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subscription_remote_datasource.dart';
@@ -283,7 +284,13 @@ class IapService extends GetxService {
         restored: restored,
       );
       lastResult.value = result;
-      await _tokenDs.saveSubscriptionActive(isActive);
+      // 단일 소스 SubscriptionService.set으로 일원화 — set(true)가 즉시 전 보호자
+      // 화면 잠금 해제 트리거(대시보드/알림 ever 재조회). 미등록 시 영속만 폴백.
+      if (Get.isRegistered<SubscriptionService>()) {
+        await Get.find<SubscriptionService>().set(isActive);
+      } else {
+        await _tokenDs.saveSubscriptionActive(isActive);
+      }
 
       // 복원 emit을 받았으니 5초 안전망의 "복원할 구독 없음" 안내 차단
       _pendingRestore = false;

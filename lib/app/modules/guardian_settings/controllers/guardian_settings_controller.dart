@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/iap_service.dart';
+import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.dart';
@@ -21,6 +22,7 @@ import 'package:anbucheck/app/routes/app_pages.dart';
 /// heartbeat 전송/예약, G+S 라이프사이클은 [GuardianDashboardController]가 단독 소유한다.
 class GuardianSettingsController extends BaseController {
   final _svc = Get.find<GuardianSubjectService>();
+  final _sub = Get.find<SubscriptionService>();
   final _tokenDs = TokenLocalDatasource();
   final _userDs = UserRemoteDatasource();
 
@@ -30,9 +32,16 @@ class GuardianSettingsController extends BaseController {
 
   final appVersion = ''.obs;
   final osVersion = ''.obs;
-  final isSubscriptionActive = true.obs;
+  /// 구독 활성 여부 — 단일 소스 [SubscriptionService]에 위임(중복 Rx 제거).
+  RxBool get isSubscriptionActive => _sub.isActive;
   final subscriptionPlan = ''.obs; // free_trial, yearly, expired
   final subscriptionDaysRemaining = (-1).obs; // -1: 미조회, 0+: 남은 일수
+
+  /// IapService(permanent)의 observable을 구독하는 ever 워커.
+  /// 이 컨트롤러는 lazyPut이라 탭 재방문마다 재생성되는데, GetX는 ever 워커를
+  /// 자동 dispose하지 않으므로 onClose에서 명시적으로 정리하지 않으면 워커가
+  /// 누적돼 스낵바가 방문 횟수만큼 중복 발화한다.
+  final _iapWorkers = <Worker>[];
 
   @override
   void onInit() {
@@ -50,23 +59,27 @@ class GuardianSettingsController extends BaseController {
 
       // 에러/정보 메시지가 채워지면 스낵바 1회 표시 후 비움.
       // View(Obx) 안 addPostFrameCallback + 상태 재설정 패턴은 self-rebuild를
-      // 트리거해 fragile하므로 컨트롤러에서 ever 워커로 처리. dispose는 BaseController
-      // onClose에서 자동 정리.
-      ever<String>(iap.lastError, (msg) {
+      // 트리거해 fragile하므로 컨트롤러에서 ever 워커로 처리.
+      // 워커는 _iapWorkers에 모아 onClose에서 dispose — 재방문 누적 중복 방지.
+      _iapWorkers.add(ever<String>(iap.lastError, (msg) {
         if (msg.isEmpty) return;
         AppSnackbar.show('common_notice'.tr, msg.tr, type: SnackType.error);
         iap.lastError.value = '';
-      });
-      ever<String>(iap.lastInfo, (msg) {
+      }));
+      _iapWorkers.add(ever<String>(iap.lastInfo, (msg) {
         if (msg.isEmpty) return;
         AppSnackbar.show('common_notice'.tr, msg.tr, type: SnackType.info);
         iap.lastInfo.value = '';
-      });
+      }));
     }
   }
 
   @override
   void onClose() {
+    for (final w in _iapWorkers) {
+      w.dispose();
+    }
+    _iapWorkers.clear();
     if (Get.isRegistered<IapService>()) {
       Get.find<IapService>().onVerified = null;
     }
@@ -105,9 +118,8 @@ class GuardianSettingsController extends BaseController {
     // 1) 로컬 캐시로 즉시 hydrate — 서버 응답 도착 전 카드가 회색 기본값으로
     //    잠깐 표시됐다가 인디고로 바뀌는 깜빡임 방지. SharedPreferences는
     //    수 ms 내 반환되므로 첫 build 이전에 Rx가 최신 plan으로 set됨.
-    final cachedActive = await _tokenDs.getSubscriptionActive();
+    //    isSubscriptionActive는 SubscriptionService가 이미 영속값으로 init함.
     final cachedPlan = await _tokenDs.getSubscriptionPlan();
-    isSubscriptionActive.value = cachedActive;
     if (cachedPlan.isNotEmpty) subscriptionPlan.value = cachedPlan;
 
     final deviceToken = await _tokenDs.getDeviceToken();
@@ -119,16 +131,11 @@ class GuardianSettingsController extends BaseController {
       final data = await deviceDs.getMyDevice(deviceToken);
       final active = data['subscription_active'] as bool? ?? false;
       final plan = data['subscription_plan'] as String? ?? '';
-      isSubscriptionActive.value = active;
+      // 단일 소스 갱신 — set이 Rx를 바꾸면 Dashboard/알림이 ever로 즉시 반영하므로
+      // 별도의 Dashboard.refreshSubscriptionStatus 동기화 호출이 불필요해졌다.
       subscriptionPlan.value = plan;
-      await _tokenDs.saveSubscriptionActive(active);
+      await _sub.set(active);
       await _tokenDs.saveSubscriptionPlan(plan);
-
-      // 3) Dashboard 만료 배너 즉시 동기화 — 탭 전환만으로는 Dashboard의
-      //    onResumed/onInit가 트리거되지 않아 isSubscriptionActive가 stale.
-      if (Get.isRegistered<GuardianDashboardController>()) {
-        await Get.find<GuardianDashboardController>().refreshSubscriptionStatus();
-      }
 
       // 보호자 구독 남은 일수 조회 (보호자만 엔드포인트 접근 가능)
       try {

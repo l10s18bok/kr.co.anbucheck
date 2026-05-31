@@ -13,6 +13,7 @@ import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/stability_service.dart';
+import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
@@ -466,9 +467,16 @@ abstract class SafetyHomeBaseController extends BaseController
       final hour = data['heartbeat_hour'] as int? ?? 18;
       final minute = data['heartbeat_minute'] as int? ?? 0;
       // 구독 상태는 배너 광고 등 다른 화면이 tokenDs로 읽으므로 저장은 유지.
-      // (안전코드 페이지 자체는 구독 상태로 게이팅하지 않는다 — guardianCount만 사용)
+      // 단일 소스 SubscriptionService.set으로 일원화(쓰기만). **안전코드 페이지는
+      // 이 값을 읽기-게이트로 쓰지 않는다 — 게이팅은 guardianCount만으로 판정**(구독
+      // 만료여도 연결된 보호자가 있으면 동작). 여기서 set은 보호자 모니터링 화면
+      // (대시보드/알림)이 동일 isActive Rx를 즉시 반영하도록 하기 위한 데이터 흐름일 뿐.
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
-      await tokenDs.saveSubscriptionActive(subscriptionActive);
+      if (Get.isRegistered<SubscriptionService>()) {
+        await Get.find<SubscriptionService>().set(subscriptionActive);
+      } else {
+        await tokenDs.saveSubscriptionActive(subscriptionActive);
+      }
       guardianCount.value = data['guardian_count'] as int? ?? 0;
 
       await tokenDs.saveHeartbeatSchedule(hour, minute);

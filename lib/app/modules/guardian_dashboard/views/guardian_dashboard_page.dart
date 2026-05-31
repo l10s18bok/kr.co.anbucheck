@@ -87,7 +87,8 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
             children: [
               SizedBox(height: 8.h),
 
-              // 구독 만료 안내 배너
+              // 구독 만료 안내 카드 — 만료 시 대상자 카드는 보이되 '정상+걸음수 0'으로
+              // 마스킹(_mapSubjects)되며, 이 카드가 만료 안내 + 구독 동선을 제공한다.
               Obx(() {
                 if (controller.isSubscriptionActive.value) {
                   return const SizedBox.shrink();
