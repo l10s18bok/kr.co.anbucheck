@@ -58,10 +58,15 @@ class SplashController extends BaseController {
             arguments: {'role': HomeRole.subject});
       } else {
         Get.offNamed(AppRoutes.guardianDashboard);
-        // iOS G+S 오늘의 안부 확인 메시지 로컬 알림 탭으로 kill 상태에서 런치된 경우:
-        // dashboard를 base로 두고 safetyCode를 그 위에 push (뒤로가기 시 dashboard 복귀)
+        // 로컬 안전망 알림(iOS `gs_deadman` / Android `safety_net`·`send_failed`) 탭으로
+        // kill 상태 런치된 경우: dashboard를 base로 두고 safety_home을 그 위에 push
+        // (뒤로가기 시 dashboard 복귀). 미전송 heartbeat 재전송 + 안내 다이얼로그는
+        // Dashboard 컨트롤러 onResumed가 처리. 포그라운드/백그라운드 경로
+        // (_routeToSafetyHome)와 동일하게 safety_home으로 통일한다.
         final pendingTap = FcmService.pendingLaunchNotificationType;
-        if (pendingTap == LocalAlarmService.alarmPayload) {
+        if (pendingTap == LocalAlarmService.alarmPayload ||
+            pendingTap == LocalAlarmService.safetyNetPayload ||
+            pendingTap == LocalAlarmService.sendFailedPayload) {
           FcmService.pendingLaunchNotificationType = null;
           Get.toNamed(AppRoutes.safetyHome,
               arguments: {'role': HomeRole.guardianSubject});

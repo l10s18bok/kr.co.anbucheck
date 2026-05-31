@@ -79,11 +79,11 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       break;
     case 'safety_net':
     case 'send_failed':
-      // Android 일일 안전망 로컬 알림(`safety_net`) / retry 3회 실패 알림
-      // (`send_failed`) 탭 — 별도 라우팅 없이 앱 포그라운드 전환.
-      // S 자식 또는 G+S Dashboard의 onResumed가 미전송 heartbeat를 자동 재전송하며,
-      // 전송 후 안내 다이얼로그가 표시되도록 플래그를 set한다.
+      // Android 일일 안전망(`safety_net`) / retry 3회 실패(`send_failed`) 로컬 알림 탭
+      // → safety_home으로 이동(+포그라운드 전환). 미전송 heartbeat 자동 재전송 + 안내
+      // 다이얼로그는 홈/대시보드 컨트롤러 onResumed가 처리한다(플래그 set).
       FcmService.pendingSafetyNetDialog = true;
+      _routeToSafetyHome();
       break;
     case 'gs_deadman':
       // iOS G+S 오늘의 안부 확인 메시지 로컬 알림 탭 → 보호자 대시보드 위에 안전코드 페이지 push
@@ -128,6 +128,26 @@ void _routeToNotifications() {
 void _routeToGuardianSettings() {
   if (Get.currentRoute != AppRoutes.guardianSettings) {
     Get.offAllNamed(AppRoutes.guardianSettings);
+  }
+}
+
+/// 미전송 안내 로컬 알림(`safety_net`/`send_failed`) 탭 → safety_home으로 이동.
+/// 순수 대상자(S)는 safety_home이 유일 홈, G+S 보호자는 대시보드를 base로 두고
+/// safety_home을 push한다(gs_deadman과 동일 스택 구조 → 뒤로가기 시 대시보드 복귀).
+/// 이미 safety_home이면 스택 유지. 역할 구분은 GuardianDashboardController(보호자
+/// 전용, permanent) 등록 여부로 판정한다(순수 대상자는 미등록).
+void _routeToSafetyHome() {
+  if (Get.currentRoute == AppRoutes.safetyHome) return;
+  try {
+    Get.find<GuardianDashboardController>();
+    // 보호자(G+S) — 대시보드 base + safety_home push
+    Get.offAllNamed(AppRoutes.guardianDashboard);
+    Get.toNamed(AppRoutes.safetyHome,
+        arguments: {'role': HomeRole.guardianSubject});
+  } catch (_) {
+    // 순수 대상자(S) — safety_home이 유일 홈
+    Get.offAllNamed(AppRoutes.safetyHome,
+        arguments: {'role': HomeRole.subject});
   }
 }
 
