@@ -72,9 +72,9 @@ abstract class SafetyHomeBaseController extends BaseController
   final _inviteCode = ''.obs;
   String get inviteCode => _inviteCode.value;
 
-  final guardianConnected = false.obs;
-  bool get isGuardianConnected => guardianConnected.value;
-
+  /// 연결된 보호자 수 (서버 device/me의 guardian_count). 안전코드 페이지의 보고/긴급/
+  /// 시각변경/헤더 배지 활성화는 **이 값만**으로 판정한다(구독 상태와 무관) — 연결된
+  /// 보호자가 있으면 구독이 만료돼도 모든 기능이 동작해야 한다.
   final guardianCount = 0.obs;
 
   final notificationGranted = false.obs;
@@ -427,7 +427,6 @@ abstract class SafetyHomeBaseController extends BaseController
     } else {
       _inviteCode.value = await tokenDs.getInviteCode() ?? '';
     }
-    guardianConnected.value = await tokenDs.getSubscriptionActive();
     await loadScheduleFromLocal();
     await _syncScheduleFromServer();
   }
@@ -435,7 +434,6 @@ abstract class SafetyHomeBaseController extends BaseController
   Future<void> pullToRefresh() async {
     await getReloadedPrefs();
     _inviteCode.value = await tokenDs.getInviteCode() ?? '';
-    guardianConnected.value = await tokenDs.getSubscriptionActive();
     await loadScheduleFromLocal();
     await _syncScheduleFromServer(forceRemote: true);
   }
@@ -453,8 +451,6 @@ abstract class SafetyHomeBaseController extends BaseController
     if (cached != null) {
       final hour = cached['heartbeat_hour'] as int? ?? 18;
       final minute = cached['heartbeat_minute'] as int? ?? 0;
-      final subscriptionActive = cached['subscription_active'] as bool? ?? true;
-      guardianConnected.value = subscriptionActive;
       guardianCount.value = cached['guardian_count'] as int? ?? 0;
       applySchedule(hour, minute);
       if (Platform.isAndroid) {
@@ -469,9 +465,10 @@ abstract class SafetyHomeBaseController extends BaseController
       final data = await DeviceRemoteDatasource().getMyDevice(deviceToken);
       final hour = data['heartbeat_hour'] as int? ?? 18;
       final minute = data['heartbeat_minute'] as int? ?? 0;
+      // 구독 상태는 배너 광고 등 다른 화면이 tokenDs로 읽으므로 저장은 유지.
+      // (안전코드 페이지 자체는 구독 상태로 게이팅하지 않는다 — guardianCount만 사용)
       final subscriptionActive = data['subscription_active'] as bool? ?? true;
       await tokenDs.saveSubscriptionActive(subscriptionActive);
-      guardianConnected.value = subscriptionActive;
       guardianCount.value = data['guardian_count'] as int? ?? 0;
 
       await tokenDs.saveHeartbeatSchedule(hour, minute);

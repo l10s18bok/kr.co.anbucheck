@@ -86,10 +86,9 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
       ),
       actions: [
         Obx(() {
-          // 보호자 수 표시 — S/G+S 가시 조건 차이로 분기
-          final visible = isSubject
-              ? controller.guardianCount.value > 0
-              : controller.isGuardianConnected;
+          // 연결된 보호자가 1명 이상이면 표시 — S/G+S 공통, 구독 상태와 무관.
+          // (안전코드 페이지=대상자 기능은 구독 만료에 영향받지 않아야 한다)
+          final visible = controller.guardianCount.value > 0;
           if (!visible) return const SizedBox.shrink();
           return _buildGuardianBadge(isSubject);
         }),
@@ -227,10 +226,10 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
                   )),
               SizedBox(height: AppSpacing.vlg),
 
-              // 안전 보고 버튼 — enabled 조건이 role에 따라 다름
+              // 안전 보고 버튼 — 연결된 보호자가 있을 때만 활성 (구독 무관)
               Obx(() => ManualReportButton(
                     isReporting: controller.isReporting.value,
-                    enabled: _isReportEnabled(isSubject),
+                    enabled: _isReportEnabled,
                     onPressed: controller.reportNow,
                   )),
               SizedBox(height: AppSpacing.vlg),
@@ -239,8 +238,9 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
               Obx(
                 () => HeartbeatScheduleTile(
                   heartbeatTime: controller.heartbeatTime.value,
-                  // S는 항상 활성, G+S는 isGuardianConnected일 때만
-                  onTap: (isSubject || controller.isGuardianConnected)
+                  // 연결된 보호자가 1명 이상일 때만 활성 — S/G+S 공통, 구독 무관.
+                  // (연결이 없을 때만 비활성, 있으면 구독 만료여도 변경 가능)
+                  onTap: controller.guardianCount.value > 0
                       ? controller.showTimePickerDialog
                       : () {},
                   color: Get.find<ThemeService>().isDarkMode.value
@@ -259,7 +259,7 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
               // 긴급 도움 요청 버튼 — enabled 조건 동일
               Obx(() => EmergencyButton(
                     isSending: controller.isSendingEmergency.value,
-                    enabled: _isReportEnabled(isSubject),
+                    enabled: _isReportEnabled,
                     onPressed: () => _showEmergencyConfirm(),
                   )),
 
@@ -279,14 +279,10 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
     );
   }
 
-  /// 보고/긴급 버튼 활성화 조건
-  /// - S: guardianCount > 0 (보호자 1명 이상 연결)
-  /// - G+S: isGuardianConnected (구독 활성)
-  bool _isReportEnabled(bool isSubject) {
-    return isSubject
-        ? controller.guardianCount.value > 0
-        : controller.isGuardianConnected;
-  }
+  /// 보고/긴급/시각변경 활성화 조건 — S/G+S 공통: 연결된 보호자가 1명 이상일 때만.
+  /// 구독 만료와 무관(연결만 있으면 동작). 연결된 보호자가 없을 때만 비활성.
+  /// 화면 자체와 새로고침(pull-to-refresh)은 이 조건과 무관하게 항상 동작한다.
+  bool get _isReportEnabled => controller.guardianCount.value > 0;
 
   // ── 다이얼로그 (공통) ──────────────────────────────────────────────
 
