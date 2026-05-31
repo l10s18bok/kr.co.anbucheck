@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
@@ -115,33 +116,49 @@ mixin HeartbeatScheduleMixin on GetxController {
     await onHeartbeatTimeChanged(hour, minute);
   }
 
-  /// 시각 변경 후 서버 전송 → 성공 시 로컬 저장 + WorkManager/로컬알림 재예약
+  /// 시각 변경 후 서버 전송 → 성공 시 로컬 저장 + 예약 트리거(WorkManager/로컬알림) 재설정.
   ///
   /// 시각 변경의 source of truth는 **서버 저장 + 로컬 저장**이다. 그게 성공하면
-  /// 사용자에겐 성공으로 보고한다. WorkManager/로컬 안전망 재예약은 LAST-RESORT
-  /// 안전망이라 실패하더라도 전체를 "변경 실패"로 보고하면 안 된다(시각은 이미
-  /// 바뀌어 있는데 실패 스낵바가 뜨는 모순 방지). 따라서 2단계로 분리한다:
-  ///   1) 핵심(서버+로컬 저장): 실패 시에만 사용자에게 실패 보고
-  ///   2) 안전망 재예약(WorkManager/로컬알림): best-effort — 실패해도 로깅만 하고
-  ///      성공 스낵바를 그대로 표시
+  /// 사용자에겐 성공으로 보고한다(예약 재설정/즉시 전송 실패는 best-effort — 로깅만).
+  ///
+  /// **예약 트리거 정책** (`forceNextDay = 이미오늘전송됨 || 새시각이오늘지남`):
+  ///   1) **이미 오늘 전송됨** → 오늘 할 일은 끝 → 모든 트리거 내일로(forceNextDay).
+  ///      `lastHeartbeatDate`를 유지해 오늘 재전송을 막는다(다음 사이클 = 내일).
+  ///   2) **미전송 + 새 시각이 오늘 이미 지남(과거)** → 사용자가 앱에서 시각을 바꾼 것
+  ///      자체가 살아있음 증거이므로 **지금 즉시 heartbeat 전송**(오늘분 기록 → 거짓
+  ///      미수신 경고 방지). 안전망 알람은 내일로(forceNextDay) — 변경 직후 오늘
+  ///      즉시 발화하던 스퓨리어스 알림 차단. 전송 성공 시 `_onHeartbeatSent`가
+  ///      worker/알람을 내일로 재확정(멱등). 전송 실패해도 안전망은 이미 내일 예약됨.
+  ///   3) **미전송 + 새 시각이 미래** → 그 시각에 트리거 예약(오늘). Android 안전망
+  ///      알람은 설계대로 heartbeat+3h, iOS는 정시.
   Future<void> onHeartbeatTimeChanged(int hour, int minute) async {
     final tokenDs = TokenLocalDatasource();
 
     // 1) 핵심 — 서버 전송 + 로컬 저장. 여기 실패만 진짜 실패.
+    final bool wasReportedToday;
     try {
       final deviceToken = await tokenDs.getDeviceToken();
       final deviceId = await tokenDs.getDeviceId();
       if (deviceToken == null || deviceId == null) return;
+
+      // 시각 변경 시점의 "오늘 이미 전송됨" 여부 — 키 클리어 전에 캡처해야 정확.
+      final lastDate = await tokenDs.getLastHeartbeatDate() ?? '';
+      wasReportedToday =
+          lastDate.isNotEmpty && lastDate == formatYmd(DateTime.now());
+
       await DeviceRemoteDatasource().updateHeartbeatSchedule(deviceToken, deviceId, hour, minute);
       await tokenDs.saveHeartbeatSchedule(hour, minute);
       heartbeatHour.value = hour;
       heartbeatMinute.value = minute;
       _applyToHeartbeatTime(hour, minute);
-      // 예약시각 변경 = 새 예약 발화로 간주 → 선점 키까지 같이 비워야
-      // 같은 시각으로 되돌렸을 때도 재테스트가 막히지 않음
-      await tokenDs.saveLastHeartbeatDate('');
-      await tokenDs.saveLastHeartbeatTime('');
-      await tokenDs.saveLastScheduledKey('');
+
+      if (!wasReportedToday) {
+        // 미전송이면 선점 키를 비워 새 시각에 전송이 가능하게 한다.
+        await tokenDs.saveLastHeartbeatDate('');
+        await tokenDs.saveLastHeartbeatTime('');
+        await tokenDs.saveLastScheduledKey('');
+      }
+      // 이미 전송됨이면 lastHeartbeatDate를 유지 → 오늘 재전송 안 함, 다음 사이클은 내일.
     } catch (e, st) {
       debugPrint('[heartbeat-time] 시각 변경 실패(서버/로컬 저장): $e\n$st');
       AppSnackbar.show(
@@ -152,17 +169,42 @@ mixin HeartbeatScheduleMixin on GetxController {
       return;
     }
 
-    // 2) 안전망 재예약 — best-effort. 실패해도 시각 변경 자체는 성공이므로
-    //    사용자에겐 실패로 보고하지 않고 로깅만 한다(원인 추적용).
-    // Android: WorkManager + 로컬 안전망 재예약
-    // iOS G+S: 오늘의 안부 확인 메시지 로컬 알림만 재예약 (BGTaskScheduler 사용 안 함)
+    final now = DateTime.now();
+    final newTimeToday = DateTime(now.year, now.month, now.day, hour, minute);
+    final passedToday = !newTimeToday.isAfter(now);
+    final forceNextDay = wasReportedToday || passedToday;
+
+    // 2) 예약 트리거 재설정 — best-effort. 실패해도 시각 변경 자체는 성공.
+    //    forceNextDay로 안전망 알람을 결정적으로 예약(전송 실패와 무관하게 정확).
+    // Android: WorkManager + 로컬 안전망 알림 / iOS G+S: 로컬 알림(BGTask 미사용)
     try {
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }
-      await LocalAlarmService.schedule(hour, minute);
+      await LocalAlarmService.schedule(hour, minute, forceNextDay: forceNextDay);
     } catch (e, st) {
-      debugPrint('[heartbeat-time] 안전망 재예약 실패(무시 — 시각 변경은 성공): $e\n$st');
+      debugPrint('[heartbeat-time] 예약 트리거 재설정 실패(무시 — 시각 변경은 성공): $e\n$st');
+    }
+
+    // 3) 미전송 + 과거 시각 → 지금 즉시 전송(오늘분 기록 → 거짓 미수신 경고 방지).
+    //    execute()는 _busy + SQLite 락 + lastScheduledKey로 자가 직렬화돼 중복 전송이
+    //    구조적으로 차단되므로 역할(S/G+S) 무관하게 직접 호출해도 안전하다.
+    //    성공 시 _onHeartbeatSent가 worker/알람을 내일로 재확정(위 forceNextDay와 동일).
+    if (!wasReportedToday && passedToday) {
+      try {
+        await HeartbeatService()
+            .execute(manual: false, isInteractiveAtTrigger: true);
+        // 전송 성공 시 lastHeartbeatDate가 오늘로 저장된다 → 사용자에게 "안부 전송됨"을
+        // 안내(기존 다국어 키 재사용: "보호자에게 안부를 전했습니다."). 네트워크 실패 시엔
+        // 보류 큐로 들어가 날짜가 갱신되지 않으므로 아래 시각 변경 메시지로 폴백.
+        final after = await tokenDs.getLastHeartbeatDate() ?? '';
+        if (after == formatYmd(DateTime.now())) {
+          AppSnackbar.show('', 'subject_home_manual_report_sent'.tr);
+          return;
+        }
+      } catch (e, st) {
+        debugPrint('[heartbeat-time] 변경 직후 즉시 전송 실패(무시): $e\n$st');
+      }
     }
 
     final message = 'heartbeat_scheduled_today'.trParams({'time': heartbeatTime.value});
