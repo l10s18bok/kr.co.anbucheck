@@ -236,14 +236,16 @@ class GuardianDashboardController extends BaseController
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }
-      await LocalAlarmService.schedule(hour, minute);
+      // LocalAlarm 재예약은 HeartbeatService가 전송 성공/실패 시 forceNextDay로 전담 —
+      // 여기서 forceNextDay 없이 재호출하면, 이미 오늘 전송돼 _onHeartbeatSent가 내일로
+      // 옮겨둔 안전망 알림을 (heartbeat+3h가 오늘 미래면) 다시 오늘로 되돌린다. S 모드
+      // (_syncScheduleFromServer)와 동일하게 onInit 재예약은 하지 않는다.
     } catch (_) {
       final (h, m) = await _tokenDs.getHeartbeatSchedule();
       applySchedule(h, m);
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(h, m);
       }
-      await LocalAlarmService.schedule(h, m);
     }
   }
 

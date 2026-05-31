@@ -142,6 +142,10 @@ mixin HeartbeatScheduleMixin on GetxController {
       if (deviceToken == null || deviceId == null) return;
 
       // 시각 변경 시점의 "오늘 이미 전송됨" 여부 — 키 클리어 전에 캡처해야 정확.
+      // 다른 읽기 지점(loadStatus/_reloadHeartbeatState)과 동일하게 prefs를 reload한 뒤
+      // 읽는다 — 첫 전송 직후 등 SharedPreferences 인메모리 캐시가 디스크와 불일치할 때
+      // stale(빈) 값을 읽어 wasReportedToday=false로 오판하던 것을 방지.
+      await getReloadedPrefs();
       final lastDate = await tokenDs.getLastHeartbeatDate() ?? '';
       wasReportedToday =
           lastDate.isNotEmpty && lastDate == formatYmd(DateTime.now());
