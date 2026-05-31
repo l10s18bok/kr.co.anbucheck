@@ -2,7 +2,7 @@ name: anbucheck
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.1.4+21
+version: 1.1.4+22
 
 environment:
   sdk: ^3.11.3
@@ -54,6 +54,16 @@ dev_dependencies:
   freezed: ^2.5.7
   json_serializable: ^6.8.0
   flutter_launcher_icons: ^0.14.4
+
+# path_provider_foundation 2.6.0부터 Dart native assets(objective_c)로 전환되며
+# objective_c.framework가 추가됐는데, 이 framework는 Xcode/CocoaPods가 아닌
+# native_toolchain_c(clang)로 빌드돼 (1) dSYM이 아카이브에 안 들어가 TestFlight
+# 업로드 시 "Upload Symbols Failed" 경고가 매번 발생하고, (2) 시뮬레이터 빌드 병행 시
+# 시뮬레이터 슬라이스가 아카이브에 오염되는 문제가 있다.
+# 2.5.1은 순수 Swift/CocoaPods 구현이라 두 문제가 모두 없으므로 핀한다.
+# upstream 수정(https://github.com/flutter/flutter/issues/172807) 전까지 임시 유지.
+dependency_overrides:
+  path_provider_foundation: 2.5.1
 
 flutter_launcher_icons:
   android: true
