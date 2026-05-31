@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show TextInputFormatter;
+import 'package:flutter/services.dart'
+    show TextInputFormatter, FilteringTextInputFormatter;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
@@ -58,6 +59,10 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
               enableSuggestions: false,
               autofillHints: const [],
               inputFormatters: [
+                // invite_code는 ASCII 영숫자 + 하이픈만 — 비-ASCII(자국어 IME 조합 등)
+                // 입력 자체를 차단. (visiblePassword로 대부분 라틴 키보드가 강제되지만
+                // iOS/붙여넣기 대비 방어)
+                FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9-]')),
                 TextInputFormatter.withFunction(
                   (old, next) => next.copyWith(text: next.text.toUpperCase()),
                 ),
