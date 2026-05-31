@@ -43,13 +43,19 @@ void onDidReceiveNotificationResponse(NotificationResponse response) {
 }
 
 /// 알림 탭 시 라우팅
-/// 오늘의 안부 확인 메시지 로컬 알림 (iOS 전용): 앱 포그라운드 전환만 → 홈 화면에서 미전송 체크 + 자동 전송
-/// 보호자 Push 알림: type에 따라 알림 목록 또는 대시보드로 이동
-/// alert_emergency도 다른 alert_* 와 동일하게 알림 목록으로 이동하며, 사용자는 목록의
-/// [🗺️ 위치 보기] 버튼으로 지도 페이지 진입. 목록이 자동 새로고침되므로 뒤로가기 시
-/// stale 상태 이슈가 없고, 라우팅 분기가 일관되게 유지된다.
+///
+/// **FCM 푸시 알림**: 대부분 알림 목록(guardianNotifications)으로 이동하며 진입 시
+/// 자동 새로고침된다(컨트롤러 onInit/load). emergency도 지도로 직행하지 않고 알림
+/// 목록으로 보낸다 — 지도는 알림 목록의 [🗺️ 위치 보기] 버튼이 유일 진입점이라 뒤로가기
+/// 스택/새로고침이 일관되게 유지된다.
+/// 예외: 구독 만료/Grace Period(`subscription_*`)는 즉시 [구독하기]/[구독 관리] 액션을
+/// 위해 보호자 설정 화면으로 직접 이동한다.
+///
+/// **로컬 알림**(`gs_deadman`/`safety_net`/`send_failed`): 예정 시각 경과/통신 문제 등
+/// 미전송 상황 안내용이라 알림 목록이 아니라 홈(safety_home) 흐름으로 보낸다 — 기존 동작 유지.
 void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
   switch (type) {
+    // ── FCM 푸시 알림(emergency 포함): 전부 알림 목록으로 (+자동 새로고침) ──
     case 'alert':
     case 'alert_emergency':
     case 'alert_urgent':
@@ -69,6 +75,7 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       _routeToGuardianSettings();
       break;
     case 'heartbeat':
+      // 대상자 전용 — 보호자에게 표시되지 않음. 라우팅 없음.
       break;
     case 'safety_net':
     case 'send_failed':
@@ -140,10 +147,6 @@ class FcmService extends GetxService {
   /// Splash의 2초 delay/버전체크보다 먼저 fire되어 알림 페이지로 갔다가
   /// 뒤늦은 offNamed(dashboard)가 덮어쓰는 bounce 문제가 있음
   static String? pendingLaunchFcmType;
-
-  /// kill 상태 FCM 런치 시 data 전체 캐시 (alert_emergency lat/lng 등)
-  /// SplashController가 소비하여 지도 페이지 라우팅 분기에 사용
-  static Map<String, dynamic>? pendingLaunchFcmData;
 
   /// 일일 안전망 로컬 알림(`safety_net`/`gs_deadman`) 탭으로 진입했음을 나타내는 플래그.
   /// holding controller(`SubjectHomeController` / `GuardianDashboardController`)가
@@ -291,7 +294,6 @@ class FcmService extends GetxService {
           // 덮어쓰는 bounce가 발생하므로 getInitialMessage 경로와 동일하게 처리.
           if (Get.currentRoute == AppRoutes.splash) {
             pendingLaunchFcmType = type;
-            pendingLaunchFcmData = data;
           } else {
             _handleNotificationTap(type, data: data);
           }
@@ -314,9 +316,6 @@ class FcmService extends GetxService {
         final type = initialMessage.data['type']?.toString() ?? '';
         if (type.isNotEmpty) {
           pendingLaunchFcmType = type;
-          // alert_emergency의 lat/lng 등 부가 정보를 지도 페이지 라우팅에 사용
-          pendingLaunchFcmData =
-              Map<String, dynamic>.from(initialMessage.data);
         }
       }
     } catch (_) {}

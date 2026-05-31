@@ -67,38 +67,24 @@ class SplashController extends BaseController {
               arguments: {'role': HomeRole.guardianSubject});
         }
         // kill 상태에서 FCM 푸시 알림 탭으로 런치된 경우:
-        // dashboard를 base로 두고 알림 목록을 그 위에 push (뒤로가기 시 dashboard 복귀)
-        // alert_emergency + lat/lng 존재 시 지도 페이지로 대체 라우팅
+        // dashboard를 base로 두고 알림 목록을 그 위에 push (뒤로가기 시 dashboard 복귀).
+        // emergency 포함 모든 FCM 푸시는 알림 목록으로 이동 — 지도 직행 없음
+        // (지도는 알림 목록의 [위치 보기] 버튼이 유일 진입점). 포그라운드/백그라운드
+        // 경로(_handleNotificationTap)와 동일하게 통일한다.
         final pendingFcm = FcmService.pendingLaunchFcmType;
-        final pendingFcmData = FcmService.pendingLaunchFcmData;
         if (pendingFcm != null) {
           FcmService.pendingLaunchFcmType = null;
-          FcmService.pendingLaunchFcmData = null;
 
-          if (pendingFcm == 'alert_emergency' &&
-              _hasLatLng(pendingFcmData)) {
-            final lat = _parseDouble(pendingFcmData!['lat']);
-            final lng = _parseDouble(pendingFcmData['lng']);
-            final accuracy = _parseDouble(pendingFcmData['accuracy']);
-            final inviteCode =
-                pendingFcmData['invite_code']?.toString() ?? '';
-            Get.toNamed(AppRoutes.guardianEmergencyMap, arguments: {
-              'lat': lat,
-              'lng': lng,
-              'accuracy': accuracy,
-              'capturedAt': DateTime.now(),
-              'subjectNickname': '',
-              'inviteCode': inviteCode,
-            });
-          } else {
-            const guardianAlertTypes = {
-              'alert', 'alert_urgent', 'alert_warning', 'alert_caution',
-              'alert_emergency', 'alert_resolved', 'alert_cleared',
-              'auto_report', 'manual_report', 'alert_info',
-            };
-            if (guardianAlertTypes.contains(pendingFcm)) {
-              Get.toNamed(AppRoutes.guardianNotifications);
-            }
+          // 구독 만료/Grace Period(`subscription_*`)는 여기서 라우팅하지 않는다 —
+          // kill 런치 시 기본 진입점인 대시보드에 머물러 구독 만료 배너([구독하기])가
+          // 그대로 노출된다(기존 동작 유지). 그 외 모든 푸시는 알림 목록으로.
+          const guardianAlertTypes = {
+            'alert', 'alert_urgent', 'alert_warning', 'alert_caution',
+            'alert_emergency', 'alert_resolved', 'alert_cleared',
+            'auto_report', 'manual_report', 'alert_info',
+          };
+          if (guardianAlertTypes.contains(pendingFcm)) {
+            Get.toNamed(AppRoutes.guardianNotifications);
           }
         }
       }
@@ -185,21 +171,6 @@ class SplashController extends BaseController {
       ),
       barrierDismissible: false,
     );
-  }
-
-  /// kill 상태 런치 payload에 lat/lng 문자열(숫자)이 있는지 확인
-  bool _hasLatLng(Map<String, dynamic>? data) {
-    if (data == null) return false;
-    return _parseDouble(data['lat']) != null &&
-        _parseDouble(data['lng']) != null;
-  }
-
-  /// FCM data는 모두 문자열 — double 파싱 유틸
-  double? _parseDouble(dynamic v) {
-    if (v is double) return v;
-    if (v is int) return v.toDouble();
-    if (v is String && v.isNotEmpty) return double.tryParse(v);
-    return null;
   }
 
 }
