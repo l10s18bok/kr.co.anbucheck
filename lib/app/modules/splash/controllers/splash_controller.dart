@@ -91,6 +91,14 @@ class SplashController extends BaseController {
           };
           if (guardianAlertTypes.contains(pendingFcm)) {
             Get.toNamed(AppRoutes.guardianNotifications);
+          } else if (pendingFcm == 'subject_safety_net') {
+            // G+S 대상자 본인 안부유도 푸시(서버, Android)로 kill 런치된 경우 —
+            // gs_deadman/safety_net 로컬 알림과 동일하게 dashboard를 base로 두고
+            // safety_home을 push. 미전송 heartbeat 재전송 + 안내 다이얼로그는
+            // Dashboard 컨트롤러 onResumed가 처리(플래그 set).
+            FcmService.pendingSafetyNetDialog = true;
+            Get.toNamed(AppRoutes.safetyHome,
+                arguments: {'role': HomeRole.guardianSubject});
           }
         }
       }

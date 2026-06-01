@@ -82,11 +82,17 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
     case 'heartbeat':
       // 대상자 전용 — 보호자에게 표시되지 않음. 라우팅 없음.
       break;
+    case 'subject_safety_net':
     case 'safety_net':
     case 'send_failed':
-      // Android 일일 안전망(`safety_net`) / retry 3회 실패(`send_failed`) 로컬 알림 탭
-      // → safety_home으로 이동(+포그라운드 전환). 미전송 heartbeat 자동 재전송 + 안내
-      // 다이얼로그는 홈/대시보드 컨트롤러 onResumed가 처리한다(플래그 set).
+      // `subject_safety_net`: 서버가 미수신 체크(예약시각 +2h) 시 Android 대상자
+      //   본인 기기로 보내는 안부유도 FCM 푸시. (버그 있던 Android 일일 로컬 안전망
+      //   알림을 대체 — 서버 발송이라 OEM이 worker/로컬알람을 죽인 상황에도 도달.)
+      // `safety_net`/`send_failed`: 기존 Android 로컬 알림 — 더 이상 새로 예약되지
+      //   않지만(LocalAlarmService.schedule Android no-op), 업그레이드 기기에 남은
+      //   잔존 알림이 다음 전송 전에 1회 fire될 수 있어 핸들링을 유지한다.
+      // 셋 다 safety_home으로 이동(+포그라운드 전환). 미전송 heartbeat 자동 재전송 +
+      // 안내 다이얼로그는 홈/대시보드 컨트롤러 onResumed가 처리한다(플래그 set).
       FcmService.pendingSafetyNetDialog = true;
       _routeToSafetyHome();
       break;

@@ -76,7 +76,7 @@ flowchart TD
 
     Queue --> LocalNoti1[대상자 로컬 알림<br/>📱 인터넷 연결이 꺼져 있습니다<br/>안부 확인이 전송되지 않고 있으며<br/>보호자에게 경고가 발생할 수 있습니다]
 
-    Send --> AlarmReset[로컬 안전망 알림 갱신<br/>기존 알림 cancel(예약+표시 모두 제거)<br/>다음날 동일 시각으로 재예약<br/>iOS: heartbeat 시각 정시(기본 18:00)<br/>Android: heartbeat 시각 + 3시간(기본 21:00)<br/>매일 반복]
+    Send --> AlarmReset[로컬 안전망 알림 갱신 — iOS 전용<br/>기존 알림 cancel(예약+표시 모두 제거)<br/>다음날 heartbeat 시각 정시(기본 18:00)로 재예약<br/>매일 반복<br/>Android는 로컬 안전망 알림 없음 — 서버 푸시 subject_safety_net이 담당<br/>Android LocalAlarmService.schedule()은 기존 알림 cancel 후 즉시 return]
 
     AlarmReset --> End1([종료 — 다음 주기 대기])
 
@@ -127,10 +127,11 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    Scheduler([서버 APScheduler: 매 분 정각 실행<br/>CronTrigger(second=0)<br/>heartbeat 시각 + 2시간 경과 시 미수신 체크])
+    Scheduler([서버 APScheduler: 매 분 정각 실행<br/>CronTrigger(second=0)<br/>기기 로컬 타임존 기준 예약시각 + 2시간 경과 시 미수신 체크<br/>devices.timezone 기반 — 비-KST 사용자도 정확])
     Scheduler --> FindMissing[해당 시각까지<br/>heartbeat 미수신 대상자 조회]
 
-    FindMissing --> SubActive{보호자<br/>구독 활성?}
+    FindMissing --> SubjectSafetyNet[대상자 본인 Android 기기로<br/>subject_safety_net FCM 푸시<br/>보호자 유무·구독 게이팅 앞에서 발송 — 무관<br/>OEM이 worker/로컬알람 죽인 LAST-RESORT에도 서버 발송이라 도달<br/>미수신일마다 1회 → 무시 시 매일 반복<br/>iOS 대상자는 클라 정시 로컬 알림이 PRIMARY라 제외]
+    SubjectSafetyNet --> SubActive{보호자<br/>구독 활성?}
     SubActive -->|NO| Skip([알림 미발송<br/>heartbeat는 계속 수신])
     SubActive -->|YES| CheckLastBatt{마지막 heartbeat의<br/>battery_level < 20%?}
 
@@ -301,14 +302,17 @@ flowchart TD
 
 > **1차 (Android)**: WorkManager 2계층으로 등록한다 — (a) **one-off**: 예약시각에 정확히 1회 fire. (b) **periodic 15분**: 안전망 폴링. one-off가 OEM 배터리 절약/Doze 등으로 누락되어도 최대 15분 내 백업 발화 + 화면 켜짐 Doze 해제 piggyback 효과. **두 task 모두 전송 성공 시** `HeartbeatService._onHeartbeatSent`가 `HeartbeatWorkerService.schedule()` 호출 → `cancelByUniqueName` + `register*Task` 패턴으로 **둘 다 cancel + 내일자 register**(periodic도 내일로 재워 밤샘 폴링 off → 배터리 절약. 자동/수동/pending 큐 모든 성공 경로 공통, periodic의 self-cancel은 currently 실행 중인 task는 유지하고 다음 예약만 취소하므로 안전). worker 콜백은 schedule()을 호출하지 않는다 (이전 안전망 패턴 제거: 한 번의 worker fire에서 cancel+register mutation 4건 발생 부작용 차단). **단 풀 schedule()은 성공 경로 전용**이다 — **전송 실패 시에는** `_rescheduleNextDay(success: false)` → `HeartbeatWorkerService.rescheduleOneOffOnly()`로 **one-off만 내일자 재무장하고 periodic 15분 폴링은 살려둔다**: 오늘 아직 전송 실패 상태이므로 살아있는 periodic이 같은 날 통신 복구를 15분 내 잡아 보류 큐를 비워야 한다. 과거에는 실패 분기도 풀 schedule()을 불러 periodic을 내일로 밀어, 일시적 통신 장애가 그날의 15분 안전망을 통째로 해체하던 결함(Defect 1)이 있었다 — **이 성공/실패 분기를 합치지 말 것**. 결과적으로 **전송이 한 번도 성공하지 못한 기간 동안에는 살아있는 periodic 15분 폴링이 재시도를 담당**하며(실패 분기가 periodic을 끄지 않아 cadence 유지. one-off은 fire 후 `rescheduleOneOffOnly`로 다음 정시에 재무장된 채 함께 대기, 네트워크 단절 동안에는 `NetworkType.connected` 제약으로 둘 다 보류), 콜백 진입 시 `scheduled = 오늘 hour:minute` 기준으로 시각 가드를 적용한다 — `lastHeartbeatDate == 오늘`이면 스킵, `예약시각 -15분` 이후면 정상 정시 전송, `예약시각 -15분` 이전이면 평소엔 스킵한다(`-15분` 창은 periodic +3분 offset의 실제 발화가 Doze maintenance window에 종속돼 예측 불가한 변동성을 흡수하는 가드). **단 예약시각 이전 구간이라도 회복 전송 예외가 적용된다**: `lastHeartbeatDate`가 오늘도 어제도 아니고 비어있지도 않은 미전송 갭 + `ScreenState.isInteractive()=true`(사용자가 폰을 깨운 시점)이면 예약시각을 기다리지 않고 `HeartbeatService.execute(recovery: true)`로 "살아있음" 신호를 즉시 보낸다. 회복 전송(`_executeRecovery`)은 **그 날 정시 슬롯을 소비하지 않는다** — `lastHeartbeatDate`/`lastScheduledKey`를 갱신하지 않고 `_onHeartbeatSent`(재등록)도 호출하지 않으므로 예약시각 정시 전송이 그대로 수행돼 종일 걸음수가 정확히 기록된다(회복 전송은 정시 경로 재등록에 관여하지 않는다). 회복 전송은 `steps_delta=null`(예약시각 전 부분 집계가 어중간한 "오늘 N보" 알림으로 나가는 것 방지)·`suspicious=false`(화면 활성 = 활동 증거)로 보내며, 정시 키(`<날짜>_HH:mm`)와 분리된 전용 키 `recovery_<날짜>`를 써서 서버 `(device_id, scheduled_key)` idempotency가 정시 전송을 막지 않고 회복 전송 자체의 동시 발화 race는 이 키 기반 SQLite UNIQUE 락 + 서버 dedup으로 차단한다. 당일 1회 제한 마커는 `TokenLocalDatasource.lastRecoveryDate`(정시 마커와 별도)라 오전 periodic 반복 발사가 차단되며, 실패 시 pending 큐에 넣지 않고 다음 periodic fire 또는 정시 전송이 자연 회복한다. iOS는 worker가 없어 회복 전송 미적용(Android 전용). retry 3회 실패 시 자동 경로(`manual=false`)는 `LocalAlarmService.notifySendFailed()`로 사용자 안내 알림 표시(payload 무시 — 탭하면 앱 포그라운드 전환만, 2차 안전망의 자동 재전송이 처리). one-off와 periodic이 거의 동시에 fire되는 race는 **3선 방어**로 차단한다: (1) 콜백 진입 시 `lastHeartbeatDate == 오늘` 검사(콜백 레벨 1차 거름), (2) `HeartbeatService._executeInternal`에서 `lastScheduledKey`(성공 마커 — API 전송 성공 후에만 save) 검사, (3) `HeartbeatLockDatasource.tryAcquire(scheduledKey)` — SQLite `UNIQUE` INSERT 기반 **cross-isolate 원자 락**. 과거에는 SharedPreferences 기반 `heartbeat_in_flight` 30초 TTL mutex를 사용했으나, WorkManager 워커마다 새 isolate가 생성되는 구조에서 `reload → check → save` 패턴이 CAS가 아니라 두 isolate가 같은 ms에 진입하면 둘 다 통과하는 TOCTOU 윈도우가 존재했다. SQLite `UNIQUE` 제약은 Android WAL로 cross-isolate writer를 진짜 직렬화해 하나만 INSERT 성공, 나머지는 `UniqueConstraintError`로 즉시 실패한다. TTL 30초 초과 stale 락은 `tryAcquire` 진입 시 동일 트랜잭션에서 일괄 청소되어 crashed isolate가 남긴 락을 새 진입자가 이어받는다. iOS는 BGTaskScheduler 불안정성 때문에 사용하지 않는다.
 > **2차**: 앱 시작 / 백그라운드→포그라운드 복귀 시 당일 미전송이면 **자정 전까지 무조건** 자동 전송한다. 가드는 `isReportedToday`(이미 전송 차단) + Android의 `isScheduleInFuture`(예약시각 이전 차단) 두 개로 단순화 — 자정이 유일한 의미 경계. iOS S/G+S는 `Platform.isAndroid &&` 조건이 false라 시각 가드 자체가 없음. `isScheduleInFuture`(예약시각 이전)에 막혀 정시 전송이 보류되는 경우라도, `_isRecoveryPending`(`lastHeartbeatDate`가 오늘도 어제도 아닌 미전송 갭)이면 1차 worker와 동일한 **회복 전송**(`HeartbeatService().execute(recovery: true)`)을 보낸다 — 포그라운드 진입 자체가 살아있음 증거라 worker처럼 화면 활성 게이트는 두지 않으며, 회복 전송은 정시 슬롯을 소비하지 않으므로(별도 키 `recovery_<날짜>`·별도 마커 `lastRecoveryDate`) 예약시각 정시 전송은 그대로 수행된다. 이전에 있던 `isScheduleTooOld`(예약 +3h 초과 차단) 가드는 늦은 정상 복귀 신호의 가치(보호자 stale 경고 즉시 해소 + WorkManager 정시 사이클 즉시 정상화 + iOS와의 동작 통일)가 차단 효과보다 커서 제거됐다. 진입 시 `isReportedToday=false`인데 오늘 날짜의 `lastScheduledKey`가 남아 있으면 stale ghost로 판단하고 제거한다(`_clearStaleScheduledKey`, 커밋 4260e53) — Worker가 중도 종료되어 남긴 성공 마커가 2차 안전망을 차단하지 않도록 하는 전환기 방어선으로, SubjectHome과 GuardianSafetyCode 양쪽 진입 시 수행한다. 늦은 전송 성공 시 `_onHeartbeatSent`가 WorkManager를 즉시 내일자로 재등록하고 잔존 send_failed 알림도 제거한다.
-> **3차 (안전망)**: 일일 로컬 안부 확인 알림이 OS에 의해 표시되며, 사용자가 탭하면 앱이 열린다. 알림 자체에서 heartbeat를 전송하지 않고, 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. **iOS**는 heartbeat 예약 시각 정시에 fire (BGTaskScheduler 미사용으로 사실상 PRIMARY 트리거). **Android**는 heartbeat 예약 시각 + 3시간에 fire — WorkManager one-off + periodic 15분 + 앱 열기(2차)가 모두 실패해 worker 자체가 OEM/사용자에 의해 cancel된 시나리오를 메우는 LAST-RESORT. 자정 넘기면 자연 롤오버되어 다음 날 새벽으로 예약된다(예: 22:30 → 다음 날 01:30). 로컬 알림 탭 라우팅: iOS `gs_deadman` / Android `safety_net`·`send_failed` 모두 **safety_home으로 이동**(`fcm_service._routeToSafetyHome`, 역할 인식; kill 런치는 splash). heartbeat 성공 시 `_onHeartbeatSent`가 `schedule(forceNextDay: true)`로 cancel + 내일자 재예약하며, `cancel(_alarmId)`이 예약 + 표시 중 알림을 모두 제거하므로 stale 알림 잔존 없음.
+> **3차 (안전망)**: **iOS**와 **Android**가 서로 다른 메커니즘을 쓴다.
+> - **iOS (클라 일일 로컬 알림 — PRIMARY 트리거)**: heartbeat 예약 시각 정시에 OS가 일일 로컬 안부 확인 알림(payload `gs_deadman`)을 표시한다. BGTaskScheduler 미사용이라 사실상 PRIMARY 트리거다. 알림 자체에서 heartbeat를 전송하지 않고, 사용자가 탭하면 앱이 열려 홈 화면의 `onInit`/`onResumed`에서 예약시각 경과 + 미전송 시 자동 전송한다. heartbeat 성공 시 `_onHeartbeatSent`가 `schedule(forceNextDay: true)`로 cancel + 내일자 재예약하며(iOS 전용), `cancel(_alarmId)`이 예약 + 표시 중 알림을 모두 제거하므로 stale 알림 잔존 없음.
+> - **Android (서버 FCM 푸시 `subject_safety_net`)**: 과거에는 heartbeat 예약 시각 + 3시간 일일 로컬 알림(payload `safety_net`)을 LAST-RESORT로 썼으나 **폐지**했다. 폐지 사유: heartbeat+3h + `matchDateTimeComponents.time` 조합이 `forceNextDay`로 날짜를 내일로 밀어도 "그 시각의 다음 발생 = 오늘"로 당겨, **정상 전송한 날에도 매일 오발화**하던 결정적 버그(iOS는 0h offset이라 무관). 대체 메커니즘은 **서버 미수신 체크(기기 로컬 타임존 기준 예약시각 +2h, 기존 보호자 경고와 동일 스케줄러 tick)에서 보호자/구독 게이팅 앞에 대상자 본인 Android 기기로 발송하는 FCM 푸시 `subject_safety_net`**이다 — 보호자 유무·구독 만료와 무관하게 발송되고, OEM이 worker/로컬알람을 죽인 LAST-RESORT 상황에도 서버 발송이라 도달한다. 미수신일마다 1회 발화 → 무시 시 매일 반복(기존 동작 유지). iOS 대상자는 클라 정시 로컬 알림이 PRIMARY라 서버 푸시 제외. `LocalAlarmService.schedule()`은 Android에서 기존 알림 cancel 후 즉시 return(업그레이드 기기 잔존 알림 정리용)이라 로컬 안전망 알림을 새로 예약하지 않는다.
+> - **로컬 알림 탭 라우팅**: iOS `gs_deadman` / Android 서버 푸시 `subject_safety_net` / Android `send_failed` 모두 **safety_home으로 이동**(`fcm_service._routeToSafetyHome`/`_handleNotificationTap` — `subject_safety_net`은 `safety_net`과 동일 경로 처리; 역할 인식; kill 런치는 splash). `safety_net` payload 핸들링도 유지된다(업그레이드 기기 잔존 알림이 1회 fire될 수 있어).
 
 ```mermaid
 flowchart TD
     subgraph 최초설치[대상자 앱 최초 등록]
         Install([대상자 모드 선택<br/>서버 등록 완료])
         Install --> FirstWM[WorkManager 예약<br/>one-off 예약시각 정각<br/>+ periodic 15분 폴링<br/>heartbeat 시각 기본 18:00]
-        FirstWM --> FirstAlarm[일일 로컬 안전망 알림 예약<br/>iOS: heartbeat 시각 정시(기본 18:00)<br/>Android: heartbeat 시각 + 3시간(기본 21:00)<br/>매일 반복]
+        FirstWM --> FirstAlarm[iOS: 일일 로컬 안전망 알림 예약<br/>heartbeat 시각 정시(기본 18:00), 매일 반복<br/>Android: 로컬 예약 없음<br/>서버 푸시 subject_safety_net이 미수신 시 담당]
     end
 
     FirstAlarm --> Wait
@@ -316,7 +320,7 @@ flowchart TD
     subgraph 정상주기[정상 동작 주기]
         Wait([다음 heartbeat 대기])
         Wait -->|WorkManager/BGTaskScheduler 실행| Collect[heartbeat 수집 및 서버 전송]
-        Collect --> Reschedule[_onHeartbeatSent 일괄 처리:<br/>Android: one-off + periodic 둘 다<br/>cancel + 내일자 register<br/>iOS: 로컬 안전망 알림 내일 재예약<br/>Android: send_failed 알림 제거]
+        Collect --> Reschedule[_onHeartbeatSent 일괄 처리:<br/>Android: one-off + periodic 둘 다<br/>cancel + 내일자 register<br/>iOS: 로컬 안전망 알림 내일 재예약<br/>Android: send_failed 알림 제거<br/>Android는 로컬 안전망 알림 재예약 없음 — schedule()이 cancel 후 즉시 return]
         Reschedule --> Wait
         Wait -->|앱 실행 또는 포그라운드 복귀| AutoSend{예약 시각 지남<br/>AND 오늘 미전송?}
         AutoSend -->|YES| Collect
@@ -324,11 +328,11 @@ flowchart TD
         ServerSync --> Wait
     end
 
-    Wait -->|iOS: BGTask 미실행<br/>heartbeat 예약 시각 정시 도래| Alarm
-    Wait -->|Android: worker 영구 cancel<br/>heartbeat 시각 + 3시간 도래| Alarm
+    Wait -->|iOS: BGTask 미실행<br/>heartbeat 예약 시각 정시 도래<br/>클라 일일 로컬 알림 gs_deadman| Alarm
+    Wait -->|Android: worker 영구 cancel<br/>기기 로컬 예약시각 +2h 미수신<br/>서버 FCM 푸시 subject_safety_net| Alarm
 
-    subgraph 안전망[안전망 동작 — 일일 로컬 알림]
-        Alarm[OS가 로컬 알림 표시<br/>💗 안부 확인이 필요합니다<br/>이 메시지 알림을 한 번 터치해 주세요]
+    subgraph 안전망[안전망 동작 — iOS 클라 로컬 알림 / Android 서버 FCM 푸시]
+        Alarm[알림 표시<br/>iOS: OS가 클라 일일 로컬 알림 표시<br/>Android: 서버 푸시 subject_safety_net 표시<br/>💗 안부 확인이 필요합니다<br/>이 메시지 알림을 한 번 터치해 주세요]
 
         Alarm --> UserAction{사용자 반응?}
 
@@ -347,17 +351,17 @@ flowchart TD
 | 상황 | WorkManager/BGTask | 앱 열기 자동 전송 | 로컬 안전망 알림 | 결과 |
 |------|-------------------|-----------------|----------------|------|
 | 정상 동작 (18:00) | 실행 → heartbeat 성공 | 이미 전송 완료 → 건너뜀 | _onHeartbeatSent가 cancel + 내일자 재예약 → 표시 안 됨 | 정상 |
-| 앱 스와이프 종료 (Android OneUI/MIUI) + 화면 꺼짐 Doze | one-off **지연/미실행 가능** → periodic 15분 폴링이 최대 15분 내 백업 발화 | 앱 열면 자동 전송 | Android: +3h 안전망 알림(기본 21:00)이 사용자 유도 — periodic까지 막힌 영구 cancel 케이스의 마지막 보루 | periodic 폴링으로 대부분 복구. 모두 실패해도 +3h 알림이 받아냄 |
+| 앱 스와이프 종료 (Android OneUI/MIUI) + 화면 꺼짐 Doze | one-off **지연/미실행 가능** → periodic 15분 폴링이 최대 15분 내 백업 발화 | 앱 열면 자동 전송 | Android: 서버 푸시 subject_safety_net(기기 로컬 예약시각 +2h=기본 20:00)이 사용자 유도 — periodic까지 막힌 영구 cancel 케이스의 마지막 보루 (서버 발송이라 worker/로컬알람이 죽어도 도달) | periodic 폴링으로 대부분 복구. 모두 실패해도 서버 푸시가 받아냄 |
 | 앱 강제 종료 (iOS 스와이프) | **미실행** (Apple 정책) | 앱 열면 자동 전송 | **iOS: 정시 알림(기본 18:00) 표시 → 탭 시 복구** | 사용자가 앱을 열면 복구 |
-| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **iOS: 정시 18:00 표시 / Android: retry 3회 실패 시 send_failed 즉시 표시 + +3h 안전망 알림 21:00** | 네트워크 복구 + 앱 실행 시 복구 |
+| 네트워크 장시간 불가 | 실행되나 전송 실패 → 큐 저장 | 전송 실패 → 큐 저장 | **iOS: 정시 18:00 클라 로컬 알림 표시 / Android: retry 3회 실패 시 send_failed 즉시 표시 + 서버 푸시 subject_safety_net(+2h=기본 20:00)** | 네트워크 복구 + 앱 실행 시 복구 |
 | 알림 권한 거부 | 영향 없음 (정상 실행) | 영향 없음 (정상 전송) | **표시 불가** | BGTask/WorkManager + 앱 열기로 대응 |
 
-※ 위 시각은 기본값(18:00) 기준 — iOS 안전망 18:00, Android 안전망 21:00.
-※ 예약 시각 변경은 대상자 앱에서만 가능. 변경 시 WorkManager 재예약 + 일일 로컬 안전망 알림 재예약이 동시에 수행됨.
-※ 시각 변경 시 안전망 알림 재예약은 `forceNextDay = (이미 오늘 전송됨 || 새 시각이 오늘 지남)` 기준 (`onHeartbeatTimeChanged`):
+※ 위 시각은 기본값(18:00) 기준 — iOS 클라 로컬 안전망 18:00, Android 서버 푸시 subject_safety_net은 기기 로컬 예약시각 +2h=기본 20:00.
+※ 예약 시각 변경은 대상자 앱에서만 가능. 변경 시 WorkManager 재예약 + iOS 일일 로컬 안전망 알림 재예약이 수행됨(Android는 로컬 안전망 알림이 없으므로 서버 미수신 체크가 변경된 예약시각 +2h를 자동 반영).
+※ 시각 변경 시 안전망 알림 재예약(iOS 한정)은 `forceNextDay = (이미 오늘 전송됨 || 새 시각이 오늘 지남)` 기준 (`onHeartbeatTimeChanged`):
   - **이미 오늘 전송됨** → 모든 트리거 내일로, `lastHeartbeatDate` 유지(오늘 재전송 차단).
-  - **미전송 + 과거 시각** → 안전망 알람 내일로(Android는 heartbeat+3h가 ≈지금이 되어 오늘 즉시 발화하던 스퓨리어스 미전송 알림 차단) + **즉시 heartbeat 전송**(앱 조작=살아있음 증거, 오늘분 기록 → 거짓 미수신 경고 방지) + "안부 전했습니다" 스낵바.
-  - **미전송 + 미래 시각** → 그 시각에 트리거(오늘), Android 안전망은 +3h 유지.
+  - **미전송 + 과거 시각** → iOS 안전망 알람 내일로 + **즉시 heartbeat 전송**(앱 조작=살아있음 증거, 오늘분 기록 → 거짓 미수신 경고 방지) + "안부 전했습니다" 스낵바. (Android는 로컬 안전망 알림이 폐지돼 과거 "heartbeat+3h가 ≈지금이 되어 오늘 즉시 발화하던 스퓨리어스 미전송 알림" 문제 자체가 사라졌으며, 미수신 안내는 서버 푸시 subject_safety_net이 담당.)
+  - **미전송 + 미래 시각** → 그 시각에 트리거(오늘). iOS 안전망 알람은 정시. Android는 서버 미수신 체크가 +2h에 발화.
 
 
 ## Mermaid 렌더링 방법
