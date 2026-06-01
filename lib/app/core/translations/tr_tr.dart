@@ -43,12 +43,13 @@ abstract class TrTr {
     'update_available_message': '@version sürümü mevcut.',
 
     // ── Mod Seçimi ──
-    'mode_select_title': 'Rolünüzü seçin',
-    'mode_select_subtitle': 'Bu seçim, size uygun özellikleri ayarlamamıza yardımcı olur',
-    'mode_subject_title': 'Güvenliğimin\ntakip edilmesini istiyorum',
-    'mode_subject_button': 'Korunmak istiyorum →',
+    'mode_select_title': 'Nasıl başlamak istersiniz?',
+    'mode_select_subtitle': 'İyi olduğunuzu siz mi bildiriyorsunuz yoksa siz mi alıyorsunuz, söyleyin',
+    'mode_subject_title': 'Sadece iyi olduğumu bildirmek istiyorum',
+    'mode_subject_button': 'İyi olduğumu bildir →',
     'mode_guardian_title': 'Sevdiğim birini\ngözetlemek istiyorum',
-    'mode_guardian_button': 'Koruyucu ol →',
+    'mode_guardian_button': 'Haber al →',
+    'mode_recommend_badge': 'Önerilen',
     'mode_select_notice': 'Ekran düzeni ve bildirimler seçiminize göre değişecektir',
 
     // ── İzinler ──
@@ -92,16 +93,16 @@ abstract class TrTr {
         'Telefonunuz güç tasarrufu moduna girdiğinde, bakım vereninize giden esenlik sinyalleri gecikebilir veya kaybolabilir.\n\nAşağıdaki [Ayarları Aç] düğmesine dokunduktan sonra "Pil" → "Kısıtlama yok" ayarlayın. Böylece esenlik sinyalleri her gün belirlenen saatte güvenilir bir şekilde iletilir.\n\n※ Tam ifade cihaz üreticisine göre değişebilir.',
 
     // ── Tanıtım ──
-    'onboarding_title_1': 'Yalnız yaşayan birisi için\nendişeleniyor musunuz?',
+    'onboarding_title_1': 'Sevdiğin biri yalnız yaşıyor\nher gün aramak kolay değil',
     'onboarding_desc_1':
-        'Uzakta olsanız bile\niyi olup olmadığını merak edersiniz.\nAnbu yanınızda.',
-    'onboarding_title_2': 'Hal hatır sormak için\nbir kelime bile gerekmez',
+        'Uzakta, ve merak edersin\nbugün iyi mi diye.\nAnbu senin adına iletir.',
+    'onboarding_title_2': 'Söylenmeden\nulaşan bir söz',
     'onboarding_desc_2':
-        'Akıllı telefonu kullanmak yeterli,\nher gün otomatik olarak\nbir hal hatır sinyali gönderilir.',
+        'Günlük hayatın,\nseni merak edenler için\nönemli bir bilgidir.',
     'onboarding_title_3': 'Sevdiklerinizle\nhal hatır paylaşın',
-    'onboarding_desc_3': 'Günlük kontroller biriktikçe\nkalıcı bir huzur oluşur.\nHemen başlayın.',
-    'onboarding_title_4': 'İsim yok, telefon numarası yok\n— hiçbir şey toplanmaz',
-    'onboarding_desc_4': 'Yalnızca tek bir sinyal iletilir:\n"İyiyim."\nBilgileriniz güvende.',
+    'onboarding_desc_3': 'Her günkü işaretler\niki tarafa da huzur olur.\nSadece gerektiğinde ara.',
+    'onboarding_title_4': 'Kalbe yakın, ama\nher ayrıntıda değil',
+    'onboarding_desc_4': 'Yalnızca tek bir sinyal iletilir:\n"İyiyim."',
     'onboarding_role_subject': 'Takip Edilen',
     'onboarding_role_guardian': 'Koruyucu',
     'onboarding_role_guardian_subject': 'Koruyucu ve korunan',

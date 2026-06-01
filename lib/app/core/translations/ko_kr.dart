@@ -42,12 +42,13 @@ abstract class KoKr {
     'update_available_message': '새 버전(@version)이 있습니다.',
 
     // ── 모드 선택 ──
-    'mode_select_title': '역할을 선택하세요',
-    'mode_select_subtitle': '이 선택은 사용자에게 맞는 기능을 설정하는 데 사용됩니다',
-    'mode_subject_title': '나의 안전을 알리고 싶어요',
-    'mode_subject_button': '보호 받을래요 →',
-    'mode_guardian_title': '가족의 안전을 관리합니다',
-    'mode_guardian_button': '보호자로 시작할게요 →',
+    'mode_select_title': '어떻게 시작할까요',
+    'mode_select_subtitle': '안부를 전하는 쪽인지, 받는 쪽인지 알려주세요',
+    'mode_subject_title': '내 안부만 전하고 싶어요',
+    'mode_subject_button': '안부 전하기 →',
+    'mode_guardian_title': '관심있는 사람의 안전을 관리합니다',
+    'mode_guardian_button': '안부 받기 →',
+    'mode_recommend_badge': '추천',
     'mode_select_notice': '위 선택에 따라 화면 구성과 알림 설정이 달라집니다',
 
     // ── 권한 요청 ──
@@ -85,14 +86,14 @@ abstract class KoKr {
         '폰이 절전 모드에 들어가면 보호자에게 안부 신호가 늦게 도착하거나 누락될 수 있습니다.\n\n아래 [설정 열기]를 누르신 뒤, \'배터리\' → \'제한 없음\'으로 설정해 주세요. 매일 정확한 시각에 안부가 안정적으로 전달됩니다.\n\n※ 기기 제조사에 따라 표기는 조금씩 다를 수 있습니다.',
 
     // ── 온보딩 ──
-    'onboarding_title_1': '혼자 사는 소중한 사람,\n걱정되시나요?',
-    'onboarding_desc_1': '멀리 떨어져 있어도\n괜찮은지 궁금한 그 마음.\n안부가 함께합니다.',
-    'onboarding_title_2': '안부는\n말없이도 전해집니다',
-    'onboarding_desc_2': '스마트폰을 사용하는 것만으로\n하루 한 번, 자동으로\n안부 신호를 보냅니다.',
+    'onboarding_title_1': '혼자 지내는 소중한 사람,\n매일 챙기기 쉽지 않으시죠',
+    'onboarding_desc_1': '멀리 있어도, 바빠도\n오늘 그 사람은 안녕한지.\n안부가 대신 전해드립니다.',
+    'onboarding_title_2': '말하지 않아도\n안부는 전해집니다',
+    'onboarding_desc_2': '당신의 하루 일상이\n당신을 궁금해하는 분들에게는\n중요한 정보입니다.',
     'onboarding_title_3': '소중한 사람과\n안부를 나누세요',
-    'onboarding_desc_3': '매일의 안부가 쌓여\n서로의 안심이 됩니다.\n지금 시작해 보세요.',
-    'onboarding_title_4': '이름도, 전화번호도\n수집하지 않습니다',
-    'onboarding_desc_4': "오직 '잘 지내고 있다'는\n안부 신호 하나만 전달합니다.\n당신의 정보는 안전합니다.",
+    'onboarding_desc_3': '매일의 안부가 쌓여\n서로의 안심이 됩니다.\n필요한 순간에만 연락하세요.',
+    'onboarding_title_4': '마음은 곁에 있지만\n그 사람의 하루를 전부 알 수는 없죠',
+    'onboarding_desc_4': "오직 '잘 지내고 있다'는\n안부 신호 하나만 전달합니다.",
     'onboarding_role_subject': '보호 대상자',
     'onboarding_role_guardian': '보호자',
     'onboarding_role_guardian_subject': '보호자 겸 대상자',

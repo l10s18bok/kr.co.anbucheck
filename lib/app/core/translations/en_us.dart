@@ -42,12 +42,13 @@ abstract class EnUs {
     'update_available_message': 'Version @version is available.',
 
     // ── Mode Select ──
-    'mode_select_title': 'Choose your role',
-    'mode_select_subtitle': 'This helps us set up the right features for you',
-    'mode_subject_title': 'I want my safety\nto be monitored',
-    'mode_subject_button': 'Be protected →',
+    'mode_select_title': 'How would you like to start?',
+    'mode_select_subtitle': 'Let us know whether you will share or receive check-ins',
+    'mode_subject_title': 'I just want to share my check-in',
+    'mode_subject_button': 'Share my check-in →',
     'mode_guardian_title': 'I want to watch over\nsomeone I care about',
-    'mode_guardian_button': 'Start as guardian →',
+    'mode_guardian_button': 'Receive check-ins →',
+    'mode_recommend_badge': 'Recommended',
     'mode_select_notice': 'Screen layout and notifications will differ based on your choice',
 
     // ── Permission ──
@@ -91,18 +92,18 @@ abstract class EnUs {
         'When your phone enters power-saving mode, wellness check signals may reach your guardian late or be missed.\n\nAfter tapping [Open Settings] below, set "Battery" → "Unrestricted". This ensures wellness checks are delivered reliably at the scheduled time every day.\n\n※ The exact wording may vary by device manufacturer.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Worried about someone\nliving alone?',
+    'onboarding_title_1': 'Someone you love lives alone,\nchecking in every day is hard',
     'onboarding_desc_1':
-        'Even from far away,\nyou wonder if they\'re okay.\nAnbu is here with you.',
-    'onboarding_title_2': 'Wellness checks\nwithout a single word',
+        'Far away, and busy —\nis that person okay today?\nAnbu delivers the word for you.',
+    'onboarding_title_2': 'A word that arrives\nwithout being spoken',
     'onboarding_desc_2':
-        'Just by using their smartphone,\na daily wellness signal\nis sent automatically.',
+        'Your daily life is\nimportant news for those\nwho wonder how you are.',
     'onboarding_title_3': 'Share wellness\nwith your loved ones',
     'onboarding_desc_3':
-        'Daily check-ins build up\ninto lasting peace of mind.\nLet\'s get started.',
-    'onboarding_title_4': 'No names, no phone numbers\n— nothing collected',
+        'Daily check-ins add up\ninto peace of mind for both.\nReach out only when it matters.',
+    'onboarding_title_4': 'Close at heart,\nbut not every detail',
     'onboarding_desc_4':
-        'Only one signal is delivered:\n"I\'m doing fine."\nYour information stays safe.',
+        'Only one signal is delivered:\n"I\'m doing fine."',
     'onboarding_role_subject': 'Subject',
     'onboarding_role_guardian': 'Guardian',
     'onboarding_role_guardian_subject': 'Guardian & Subject',

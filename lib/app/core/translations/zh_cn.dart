@@ -42,12 +42,13 @@ abstract class ZhCn {
     'update_available_message': '新版本 @version 已发布。',
 
     // ── 模式选择 ──
-    'mode_select_title': '请选择您的角色',
-    'mode_select_subtitle': '我们将根据您的选择配置相应功能',
-    'mode_subject_title': '我希望有人关注我的安全',
-    'mode_subject_button': '成为被守护者 →',
-    'mode_guardian_title': '我想守护家人的安全',
-    'mode_guardian_button': '成为守护者 →',
+    'mode_select_title': '想怎么开始呢',
+    'mode_select_subtitle': '请告诉我们，您是传递安好的一方，还是接收的一方',
+    'mode_subject_title': '我只想传递我的安好',
+    'mode_subject_button': '传递安好 →',
+    'mode_guardian_title': '我想守护我牵挂之人的安全',
+    'mode_guardian_button': '接收安好 →',
+    'mode_recommend_badge': '推荐',
     'mode_select_notice': '界面布局和通知设置将根据您的选择有所不同',
 
     // ── 权限请求 ──
@@ -83,14 +84,14 @@ abstract class ZhCn {
         '当手机进入省电模式时,发送给监护人的安康信号可能延迟或丢失。\n\n点击下方[打开设置]后,请将"电池"设置为"无限制"。这样可以确保每天准时稳定地传输安康信号。\n\n※ 显示文字可能因设备制造商而略有不同。',
 
     // ── 引导页 ──
-    'onboarding_title_1': '担心独居的亲人\n过得好不好？',
-    'onboarding_desc_1': '即使相隔万里，\n也牵挂着他们是否安好。\nAnbu 与您同在。',
-    'onboarding_title_2': '不用说一句话，\n平安自然传达',
-    'onboarding_desc_2': '只要使用手机，\n每天自动发送一次\n平安信号。',
+    'onboarding_title_1': '你爱的人独自生活\n每天问一声并不容易',
+    'onboarding_desc_1': '在远方，难免牵挂\n今天她是否安好。\nAnbu 替你传递这份牵挂。',
+    'onboarding_title_2': '无需开口\n关怀也能抵达',
+    'onboarding_desc_2': '你每天的日常\n对牵挂你的人来说\n是重要的讯息。',
     'onboarding_title_3': '与亲人\n互报平安',
-    'onboarding_desc_3': '每天的问安汇聚成\n彼此的安心。\n现在就开始吧。',
-    'onboarding_title_4': '不收集姓名，\n也不收集电话号码',
-    'onboarding_desc_4': '只传递一个信号：\n「我一切安好。」\n您的信息绝对安全。',
+    'onboarding_desc_3': '每天的问候积累\n成为彼此的安心。\n只在真正需要时联系。',
+    'onboarding_title_4': '心中有你，却\n不必知道每件事',
+    'onboarding_desc_4': '只传递一个信号：\n「我一切安好。」',
     'onboarding_role_subject': '被守护者',
     'onboarding_role_guardian': '守护者',
     'onboarding_role_guardian_subject': '监护人兼被监护人',

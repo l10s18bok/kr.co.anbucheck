@@ -42,12 +42,13 @@ abstract class ItIt {
     'update_available_message': 'La versione @version è disponibile.',
 
     // ── Selezione modalità ──
-    'mode_select_title': 'Scelga il Suo ruolo',
-    'mode_select_subtitle': 'Questo ci aiuta a configurare le funzionalità più adatte a Lei',
-    'mode_subject_title': 'Desidero che la mia\nsicurezza venga monitorata',
-    'mode_subject_button': 'Voglio essere protetto →',
+    'mode_select_title': 'Come vuoi iniziare?',
+    'mode_select_subtitle': 'Dicci se vuoi far sapere che stai bene o riceverne notizia',
+    'mode_subject_title': 'Voglio solo far sapere che sto bene',
+    'mode_subject_button': 'Far sapere che sto bene →',
     'mode_guardian_title': 'Desidero vegliare su\nuna persona cara',
-    'mode_guardian_button': 'Inizia come guardiano →',
+    'mode_guardian_button': 'Ricevere notizie →',
+    'mode_recommend_badge': 'Consigliato',
     'mode_select_notice':
         'La disposizione dello schermo e le notifiche varieranno in base alla Sua scelta',
 
@@ -94,17 +95,17 @@ abstract class ItIt {
         'Quando il telefono entra in modalità di risparmio energetico, i segnali di benessere inviati al tuo tutore possono arrivare in ritardo o andare persi.\n\nDopo aver toccato [Apri impostazioni] qui sotto, imposta "Batteria" → "Senza restrizioni". In questo modo i segnali di benessere vengono inviati in modo affidabile all\'orario previsto ogni giorno.\n\n※ La dicitura esatta può variare a seconda del produttore del dispositivo.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Si preoccupa per qualcuno\nche vive da solo?',
-    'onboarding_desc_1': 'Anche da lontano,\nsi chiede se stia bene.\nAnbu è qui per Lei.',
-    'onboarding_title_2': 'La verifica del benessere\navviene senza una parola',
+    'onboarding_title_1': 'Qualcuno che ami vive da solo\ntenersi in contatto ogni giorno non è semplice',
+    'onboarding_desc_1': 'Lontano, e ti chiedi\nse oggi sta bene.\nAnbu lo trasmette per te.',
+    'onboarding_title_2': 'Una parola che arriva\nsenza essere pronunciata',
     'onboarding_desc_2':
-        'Semplicemente usando lo smartphone,\nun segnale giornaliero\nviene inviato automaticamente.',
+        'La tua quotidianità è\nun\'informazione preziosa\nper chi pensa a te.',
     'onboarding_title_3': 'Condivida il benessere\ncon i Suoi cari',
     'onboarding_desc_3':
-        'I controlli quotidiani si accumulano\nin una tranquillità duratura.\nIniziamo.',
-    'onboarding_title_4': 'Nessun nome, nessun numero\ndi telefono raccolto',
+        'Ogni segnale quotidiano\ndiventa serenità per entrambi.\nFatti vivo solo se conta davvero.',
+    'onboarding_title_4': 'Vicini nel cuore, ma\nnon in ogni dettaglio',
     'onboarding_desc_4':
-        'Viene trasmesso un solo segnale:\n"Sto bene."\nLe Sue informazioni sono al sicuro.',
+        'Viene trasmesso un solo segnale:\n"Sto bene."',
     'onboarding_role_subject': 'Assistito',
     'onboarding_role_guardian': 'Guardiano',
     'onboarding_role_guardian_subject': 'Guardiano e protetto',

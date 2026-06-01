@@ -43,12 +43,13 @@ abstract class IdId {
     'update_available_message': 'Versi @version tersedia.',
 
     // ── Pilih Mode ──
-    'mode_select_title': 'Pilih peran Anda',
-    'mode_select_subtitle': 'Ini membantu kami menyiapkan fitur yang tepat untuk Anda',
-    'mode_subject_title': 'Saya ingin keselamatan saya\ndipantau',
-    'mode_subject_button': 'Dilindungi →',
+    'mode_select_title': 'Bagaimana Anda ingin memulai?',
+    'mode_select_subtitle': 'Beri tahu kami apakah Anda mengabarkan diri atau menerima kabar',
+    'mode_subject_title': 'Saya hanya ingin mengabarkan diri saya',
+    'mode_subject_button': 'Bagikan kabar →',
     'mode_guardian_title': 'Saya ingin menjaga\norang yang saya sayangi',
-    'mode_guardian_button': 'Mulai sebagai penjaga →',
+    'mode_guardian_button': 'Terima kabar →',
+    'mode_recommend_badge': 'Rekomendasi',
     'mode_select_notice': 'Tampilan layar dan notifikasi akan berbeda berdasarkan pilihan Anda',
 
     // ── Izin ──
@@ -94,18 +95,18 @@ abstract class IdId {
         'Ketika ponsel Anda masuk ke mode hemat daya, sinyal kesejahteraan yang dikirim ke pengasuh Anda dapat terlambat atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan] di bawah, atur "Baterai" → "Tidak Dibatasi". Dengan begitu, sinyal kesejahteraan akan dikirim dengan andal pada waktu yang dijadwalkan setiap hari.\n\n※ Pelafalan tepatnya dapat bervariasi tergantung pabrikan perangkat.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Khawatir tentang seseorang\nyang tinggal sendiri?',
+    'onboarding_title_1': 'Seseorang yang kamu sayangi tinggal sendiri\nmenanyakan kabar tiap hari tidaklah mudah',
     'onboarding_desc_1':
-        'Meski dari jauh,\nAnda ingin tahu apakah mereka baik-baik saja.\nAnbu ada bersama Anda.',
-    'onboarding_title_2': 'Pemeriksaan kesejahteraan\ntanpa sepatah kata pun',
+        'Jauh, dan kamu bertanya-tanya\napakah dia baik hari ini.\nAnbu menyampaikannya untukmu.',
+    'onboarding_title_2': 'Pesan yang hadir\ntanpa perlu diucapkan',
     'onboarding_desc_2':
-        'Cukup dengan menggunakan smartphone,\nsinyal kesejahteraan harian\ndikirim secara otomatis.',
+        'Keseharianmu adalah\ninformasi penting bagi\nmereka yang menanyakanmu.',
     'onboarding_title_3': 'Bagikan kepedulian\ndengan orang tersayang',
     'onboarding_desc_3':
-        'Pemeriksaan harian membangun\nketenangan pikiran yang berkelanjutan.\nMari mulai.',
-    'onboarding_title_4': 'Tanpa nama, tanpa nomor telepon\n— tidak ada yang dikumpulkan',
+        'Kabar setiap hari menumpuk\nmenjadi ketenangan bagi keduanya.\nHubungi hanya saat benar-benar perlu.',
+    'onboarding_title_4': 'Dekat di hati, tapi\ntak harus tahu tiap detail',
     'onboarding_desc_4':
-        'Hanya satu sinyal yang dikirim:\n"Saya baik-baik saja."\nInformasi Anda tetap aman.',
+        'Hanya satu sinyal yang dikirim:\n"Saya baik-baik saja."',
     'onboarding_role_subject': 'Orang yang Dilindungi',
     'onboarding_role_guardian': 'Penjaga',
     'onboarding_role_guardian_subject': 'Penjaga dan yang dilindungi',

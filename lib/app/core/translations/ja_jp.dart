@@ -42,12 +42,13 @@ abstract class JaJp {
     'update_available_message': '新しいバージョン(@version)が利用可能です。',
 
     // ── モード選択 ──
-    'mode_select_title': '役割を選んでください',
-    'mode_select_subtitle': 'お選びいただいた役割に合わせて機能を設定します',
-    'mode_subject_title': '自分の安全を知らせたい',
-    'mode_subject_button': '見守られる側になる →',
+    'mode_select_title': 'どう始めますか',
+    'mode_select_subtitle': '安否を伝える側か、受け取る側かを選んでください',
+    'mode_subject_title': '自分の安否だけ伝えたい',
+    'mode_subject_button': '安否を伝える →',
     'mode_guardian_title': '大切な人の安全を見守りたい',
-    'mode_guardian_button': '見守る側になる →',
+    'mode_guardian_button': '安否を受け取る →',
+    'mode_recommend_badge': 'おすすめ',
     'mode_select_notice': '選択により画面構成と通知設定が異なります',
 
     // ── 権限リクエスト ──
@@ -84,14 +85,14 @@ abstract class JaJp {
         'スマートフォンが省電力モードに入ると、保護者への安否確認信号が遅れたり、届かなかったりすることがあります。\n\n下の[設定を開く]をタップした後、「バッテリー」→「制限なし」に設定してください。毎日決まった時刻に安否が安定して届きます。\n\n※ 端末メーカーによって表記が少し異なる場合があります。',
 
     // ── オンボーディング ──
-    'onboarding_title_1': 'ひとり暮らしの大切な人、\n心配ではありませんか？',
-    'onboarding_desc_1': '離れていても\n元気かどうか気になる、\nその気持ちにAnbuが寄り添います。',
-    'onboarding_title_2': '安否は\n言葉がなくても伝わります',
-    'onboarding_desc_2': 'スマートフォンを使うだけで\n1日1回、自動的に\n安否の信号を送ります。',
+    'onboarding_title_1': '大切な人が、ひとりで暮らしている\n毎日連絡するのは、なかなか難しい',
+    'onboarding_desc_1': '遠くにいて、気になるけれど\n今日も元気だろうか。\nAnbuが代わりにお届けします。',
+    'onboarding_title_2': '声に出さなくても\n届く言葉があります',
+    'onboarding_desc_2': 'あなたの日々の暮らしは\nあなたを気にかける人にとって\n大切な情報です。',
     'onboarding_title_3': '大切な人と\n安否を分かち合いましょう',
-    'onboarding_desc_3': '毎日の安否確認が積み重なり\nお互いの安心につながります。\n今すぐはじめましょう。',
-    'onboarding_title_4': '名前も電話番号も\n収集しません',
-    'onboarding_desc_4': "お伝えするのは\n「元気です」という\n安否の信号だけです。\nあなたの情報は安全です。",
+    'onboarding_desc_3': '毎日の見守りが積もり\nお互いの安心になります。\n本当に必要なときだけ連絡を。',
+    'onboarding_title_4': '心はそばに、でも\n毎日すべてを知らなくていい',
+    'onboarding_desc_4': "お伝えするのは\n「元気です」という\n安否の信号だけです。",
     'onboarding_role_subject': '見守り対象者',
     'onboarding_role_guardian': '見守り人',
     'onboarding_role_guardian_subject': '保護者兼対象者',

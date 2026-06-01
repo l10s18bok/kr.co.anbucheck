@@ -43,13 +43,14 @@ abstract class DeDe {
     'update_available_message': 'Version @version ist verfügbar.',
 
     // ── Modus-Auswahl ──
-    'mode_select_title': 'Wählen Sie Ihre Rolle',
+    'mode_select_title': 'Wie möchten Sie beginnen?',
     'mode_select_subtitle':
-        'Diese Auswahl hilft uns, die passenden Funktionen für Sie einzurichten',
-    'mode_subject_title': 'Ich möchte, dass jemand\nnach mir schaut',
-    'mode_subject_button': 'Schutz erhalten →',
+        'Sagen Sie uns, ob Sie Ihr Lebenszeichen senden oder empfangen',
+    'mode_subject_title': 'Ich möchte nur mein Lebenszeichen senden',
+    'mode_subject_button': 'Lebenszeichen senden →',
     'mode_guardian_title': 'Ich möchte nach jemandem\nschauen, der mir wichtig ist',
-    'mode_guardian_button': 'Als Schutzperson starten →',
+    'mode_guardian_button': 'Lebenszeichen empfangen →',
+    'mode_recommend_badge': 'Empfohlen',
     'mode_select_notice':
         'Die Bildschirmgestaltung und Benachrichtigungen unterscheiden sich je nach Auswahl',
 
@@ -95,18 +96,18 @@ abstract class DeDe {
         'Wenn Ihr Telefon in den Energiesparmodus wechselt, können Wohlbefindens-Signale an Ihren Betreuer verspätet oder gar nicht ankommen.\n\nTippen Sie unten auf [Einstellungen öffnen] und stellen Sie "Akku" → "Uneingeschränkt" ein. So werden Wohlbefindens-Signale jeden Tag zuverlässig zur geplanten Zeit übermittelt.\n\n※ Die genaue Bezeichnung kann je nach Gerätehersteller variieren.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Machen Sie sich Sorgen\num jemanden, der allein lebt?',
+    'onboarding_title_1': 'Jemand, den du liebst, lebt allein\njeden Tag nachzufragen ist nicht leicht',
     'onboarding_desc_1':
-        'Auch aus der Ferne\nfragt man sich, ob alles in Ordnung ist.\nAnbu ist für Sie da.',
-    'onboarding_title_2': 'Wohlbefindens-Checks\nganz ohne Worte',
+        'Weit weg, und du fragst dich,\nob es heute gut geht.\nAnbu überbringt es für dich.',
+    'onboarding_title_2': 'Ein Zeichen, das ankommt,\nohne gesagt zu werden',
     'onboarding_desc_2':
-        'Allein durch die Smartphone-Nutzung\nwird täglich automatisch\nein Wohlbefindens-Signal gesendet.',
+        'Dein Alltag ist\nfür alle, die an dich denken,\neine wichtige Nachricht.',
     'onboarding_title_3': 'Teilen Sie das Wohlbefinden\nmit Ihren Liebsten',
     'onboarding_desc_3':
-        'Tägliche Meldungen schaffen\nbleibendes Vertrauen und Sicherheit.\nLegen Sie jetzt los.',
-    'onboarding_title_4': 'Keine Namen, keine Telefonnummern\n— nichts wird erfasst',
+        'Tägliche Zeichen werden\nzu Ruhe für beide Seiten.\nMeld dich nur, wenn es zählt.',
+    'onboarding_title_4': 'Nah am Herzen, aber\nnicht in jedem Detail',
     'onboarding_desc_4':
-        'Es wird nur ein Signal übermittelt:\n„Mir geht es gut."\nIhre Daten bleiben sicher.',
+        'Es wird nur ein Signal übermittelt:\n„Mir geht es gut."',
     'onboarding_role_subject': 'Schutzperson',
     'onboarding_role_guardian': 'Betreuer',
     'onboarding_role_guardian_subject': 'Betreuer & Schützling',

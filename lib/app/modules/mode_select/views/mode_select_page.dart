@@ -23,7 +23,9 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.horizontalMargin,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -61,6 +63,7 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
                   buttonLabel: 'mode_guardian_button'.tr,
                   buttonColor: const Color(0xFF4355B9),
                   onTap: controller.selectGuardianMode,
+                  badgeText: 'mode_recommend_badge'.tr,
                 ),
               ),
 
@@ -75,8 +78,15 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: 4.w,
                     children: [
-                      Icon(Icons.info_outline, size: 14.w, color: AppColors.textTertiary),
-                      Text('mode_select_notice'.tr, style: AppTextTheme.bodySmall()),
+                      Icon(
+                        Icons.info_outline,
+                        size: 14.w,
+                        color: AppColors.textTertiary,
+                      ),
+                      Text(
+                        'mode_select_notice'.tr,
+                        style: AppTextTheme.bodySmall(),
+                      ),
                     ],
                   ),
                 ),
@@ -96,6 +106,7 @@ class _ModeCard extends StatelessWidget {
   final String buttonLabel;
   final Color buttonColor;
   final VoidCallback onTap;
+  final String? badgeText;
 
   const _ModeCard({
     required this.gradientColors,
@@ -104,67 +115,113 @@ class _ModeCard extends StatelessWidget {
     required this.buttonLabel,
     required this.buttonColor,
     required this.onTap,
+    this.badgeText,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: gradientColors,
-          ),
-          borderRadius: BorderRadius.circular(20.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.25),
-              blurRadius: 24,
-              offset: const Offset(0, 8),
-              spreadRadius: 0,
-            ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-              spreadRadius: 0,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            // 상단: 일러스트
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: EdgeInsets.all(AppSpacing.md),
-                child: SvgPicture.asset(illustrationPath, fit: BoxFit.contain),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: gradientColors,
               ),
+              borderRadius: BorderRadius.circular(20.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.25),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                  spreadRadius: 0,
+                ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.12),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                  spreadRadius: 0,
+                ),
+              ],
             ),
+            child: Column(
+              children: [
+                // 상단: 일러스트
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSpacing.md),
+                    child: SvgPicture.asset(
+                      illustrationPath,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
 
-            // 하단: 제목 + 버튼 (세로 배치)
-            Padding(
-              padding: EdgeInsets.fromLTRB(AppSpacing.sp4, 0, AppSpacing.sp4, AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTextTheme.bodyLarge(color: AppColors.onSurface, fw: FontWeight.w600),
+                // 하단: 제목 + 버튼 (세로 배치)
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    AppSpacing.sp4,
+                    0,
+                    AppSpacing.sp4,
+                    AppSpacing.md,
                   ),
-                  SizedBox(height: AppSpacing.sm),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(buttonLabel, style: AppTextTheme.bodyMedium(color: buttonColor)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTextTheme.bodyLarge(
+                          color: AppColors.onSurface,
+                          fw: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.sm),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          buttonLabel,
+                          style: AppTextTheme.bodyMedium(color: buttonColor),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          if (badgeText != null)
+            Positioned(
+              top: 12.h,
+              right: 12.w,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                decoration: BoxDecoration(
+                  color: buttonColor,
+                  borderRadius: BorderRadius.circular(20.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: buttonColor.withValues(alpha: 0.35),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  badgeText!,
+                  style: AppTextTheme.bodySmall(
+                    color: Colors.white,
+                    fw: FontWeight.w700,
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }

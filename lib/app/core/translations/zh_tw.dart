@@ -42,12 +42,13 @@ abstract class ZhTw {
     'update_available_message': '新版本 @version 已發佈。',
 
     // ── 模式選擇 ──
-    'mode_select_title': '請選擇您的角色',
-    'mode_select_subtitle': '我們將根據您的選擇配置相應功能',
-    'mode_subject_title': '我希望有人關注我的安全',
-    'mode_subject_button': '成為被守護者 →',
-    'mode_guardian_title': '我想守護家人的安全',
-    'mode_guardian_button': '成為守護者 →',
+    'mode_select_title': '想怎麼開始呢',
+    'mode_select_subtitle': '請告訴我們，您是傳遞安好的一方，還是接收的一方',
+    'mode_subject_title': '我只想傳遞我的安好',
+    'mode_subject_button': '傳遞安好 →',
+    'mode_guardian_title': '我想守護我牽掛之人的安全',
+    'mode_guardian_button': '接收安好 →',
+    'mode_recommend_badge': '推薦',
     'mode_select_notice': '介面佈局和通知設定將根據您的選擇有所不同',
 
     // ── 權限請求 ──
@@ -83,14 +84,14 @@ abstract class ZhTw {
         '當手機進入省電模式時,傳送給監護人的安康訊號可能延遲或遺失。\n\n點選下方[開啟設定]後,請將「電池」設定為「無限制」。如此可以確保每天準時穩定地傳輸安康訊號。\n\n※ 顯示文字可能因裝置製造商而略有不同。',
 
     // ── 引導頁 ──
-    'onboarding_title_1': '擔心獨居的親人\n過得好不好？',
-    'onboarding_desc_1': '即使相隔萬里，\n也牽掛著他們是否安好。\nAnbu 與您同在。',
-    'onboarding_title_2': '不用說一句話，\n平安自然傳達',
-    'onboarding_desc_2': '只要使用手機，\n每天自動發送一次\n平安訊號。',
+    'onboarding_title_1': '你深愛的人獨居在外\n每天確認並不容易',
+    'onboarding_desc_1': '在遠方，難免牽掛\n今天他是否安好。\nAnbu 替你傳遞這份牽掛。',
+    'onboarding_title_2': '無需開口\n平安也能傳達',
+    'onboarding_desc_2': '你每天的日常\n對牽掛你的人而言\n是重要的訊息。',
     'onboarding_title_3': '與親人\n互報平安',
-    'onboarding_desc_3': '每天的問安匯聚成\n彼此的安心。\n現在就開始吧。',
-    'onboarding_title_4': '不收集姓名，\n也不收集電話號碼',
-    'onboarding_desc_4': '只傳遞一個訊號：\n「我一切安好。」\n您的資訊絕對安全。',
+    'onboarding_desc_3': '每天的報平安積累\n成為彼此的安心。\n只在真正需要時聯繫。',
+    'onboarding_title_4': '心裡很近，卻\n不必知道每件事',
+    'onboarding_desc_4': '只傳遞一個訊號：\n「我一切安好。」',
     'onboarding_role_subject': '被守護者',
     'onboarding_role_guardian': '守護者',
     'onboarding_role_guardian_subject': '守護者兼被守護者',

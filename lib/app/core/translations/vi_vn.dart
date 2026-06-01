@@ -43,12 +43,13 @@ abstract class ViVn {
     'update_available_message': 'Phien ban @version da co san.',
 
     // ── Chon che do ──
-    'mode_select_title': 'Chon vai tro cua ban',
-    'mode_select_subtitle': 'Dieu nay giup chung toi thiet lap cac tinh nang phu hop cho ban',
-    'mode_subject_title': 'Toi muon su an toan cua toi\nduoc theo doi',
-    'mode_subject_button': 'Duoc bao ve →',
+    'mode_select_title': 'Bạn muốn bắt đầu thế nào?',
+    'mode_select_subtitle': 'Cho chúng tôi biết bạn báo tin bình an hay nhận tin',
+    'mode_subject_title': 'Tôi chỉ muốn báo tin bình an',
+    'mode_subject_button': 'Báo tin bình an →',
     'mode_guardian_title': 'Toi muon theo doi\nnguoi than yeu cua toi',
-    'mode_guardian_button': 'Bat dau voi tu cach nguoi bao ve →',
+    'mode_guardian_button': 'Nhận tin bình an →',
+    'mode_recommend_badge': 'Khuyên dùng',
     'mode_select_notice': 'Giao dien va thong bao se khac nhau tuy theo lua chon cua ban',
 
     // ── Quyen ──
@@ -92,17 +93,17 @@ abstract class ViVn {
         'Khi dien thoai cua ban vao che do tiet kiem pin, tin hieu an toan gui den nguoi bao ho co the den muon hoac bi mat.\n\nSau khi nhan [Mo cai dat] ben duoi, hay dat "Pin" → "Khong gioi han". Khi do, tin hieu an toan se duoc gui mot cach dang tin cay vao gio da dinh moi ngay.\n\n※ Cach hien thi co the khac nhau tuy theo nha san xuat thiet bi.',
 
     // ── Gioi thieu ──
-    'onboarding_title_1': 'Ban lo lang cho nguoi\nsong mot minh?',
-    'onboarding_desc_1': 'Du o xa,\nban van tu hoi ho co khoe khong.\nAnbu o day cung ban.',
-    'onboarding_title_2': 'Kiem tra suc khoe\nkhong can noi mot loi',
+    'onboarding_title_1': 'Người bạn yêu thương sống một mình\nhỏi thăm mỗi ngày không hề dễ',
+    'onboarding_desc_1': 'Ở xa, và bạn tự hỏi\nhôm nay họ có ổn không.\nAnbu chuyển lời thay bạn.',
+    'onboarding_title_2': 'Một lời hỏi thăm\nđến mà không cần nói',
     'onboarding_desc_2':
-        'Chi can su dung dien thoai,\nmoi ngay mot tin hieu suc khoe\nduoc gui tu dong.',
+        'Cuộc sống thường ngày của bạn\nlà thông tin quan trọng\nvới những người quan tâm bạn.',
     'onboarding_title_3': 'Chia se su quan tam\nvoi nguoi than yeu',
     'onboarding_desc_3':
-        'Nhung lan kiem tra hang ngay tich luy\nthanh su an tam lau dai.\nHay bat dau nao.',
-    'onboarding_title_4': 'Khong ten, khong so dien thoai\n— khong thu thap gi ca',
+        'Mỗi ngày dồn lại\nthành sự an tâm cho cả hai.\nChỉ liên hệ khi thật cần.',
+    'onboarding_title_4': 'Gần gũi trong lòng, nhưng\nkhông cần biết từng khoảnh khắc',
     'onboarding_desc_4':
-        'Chi mot tin hieu duoc gui:\n"Toi van khoe."\nThong tin cua ban luon an toan.',
+        'Chi mot tin hieu duoc gui:\n"Toi van khoe."',
     'onboarding_role_subject': 'Nguoi duoc bao ve',
     'onboarding_role_guardian': 'Nguoi bao ve',
     'onboarding_role_guardian_subject': 'Người giám hộ và được bảo vệ',

@@ -43,13 +43,14 @@ abstract class FrFr {
     'update_available_message': 'La version @version est disponible.',
 
     // ── Choix du mode ──
-    'mode_select_title': 'Choisissez votre rôle',
+    'mode_select_title': 'Comment souhaitez-vous commencer ?',
     'mode_select_subtitle':
-        'Ce choix nous permet de configurer les fonctionnalités adaptées à votre situation',
-    'mode_subject_title': 'Je souhaite que l\'on\nveille sur moi',
-    'mode_subject_button': 'Être protégé(e) →',
+        'Dites-nous si vous donnez de vos nouvelles ou si vous les recevez',
+    'mode_subject_title': 'Je veux seulement donner de mes nouvelles',
+    'mode_subject_button': 'Donner de mes nouvelles →',
     'mode_guardian_title': 'Je souhaite veiller\nsur un proche',
-    'mode_guardian_button': 'Devenir protecteur →',
+    'mode_guardian_button': 'Recevoir des nouvelles →',
+    'mode_recommend_badge': 'Recommandé',
     'mode_select_notice': 'L\'interface et les notifications seront adaptées selon votre choix',
 
     // ── Autorisations ──
@@ -93,17 +94,17 @@ abstract class FrFr {
         'Lorsque votre téléphone passe en mode économie d\'énergie, les signaux de bien-être envoyés à votre proche peuvent être retardés ou manqués.\n\nAprès avoir appuyé sur [Ouvrir les paramètres] ci-dessous, réglez "Batterie" → "Sans restriction". Ainsi, les signaux de bien-être sont transmis de manière fiable à l\'heure prévue chaque jour.\n\n※ Les libellés exacts peuvent varier selon le fabricant de l\'appareil.',
 
     // ── Présentation ──
-    'onboarding_title_1': 'Vous vous inquiétez pour\nquelqu\'un qui vit seul ?',
-    'onboarding_desc_1': 'Même à distance,\non se demande si tout va bien.\nAnbu est là pour vous.',
-    'onboarding_title_2': 'Le bien-être se transmet\nsans un mot',
+    'onboarding_title_1': 'Quelqu\'un que vous aimez vit seul\ndonner des nouvelles chaque jour n\'est pas simple',
+    'onboarding_desc_1': 'Loin, et l\'on se demande\nsi tout va bien aujourd\'hui.\nAnbu le transmet pour vous.',
+    'onboarding_title_2': 'Un mot qui arrive\nsans être prononcé',
     'onboarding_desc_2':
-        'Rien qu\'en utilisant son smartphone,\nun signal quotidien de bien-être\nest envoyé automatiquement.',
+        'Votre quotidien est\nune information précieuse\npour ceux qui pensent à vous.',
     'onboarding_title_3': 'Partagez le bien-être\navec vos proches',
     'onboarding_desc_3':
-        'Les vérifications quotidiennes\ncréent une tranquillité d\'esprit durable.\nCommencez dès maintenant.',
-    'onboarding_title_4': 'Ni nom, ni numéro de téléphone\n— rien n\'est collecté',
+        'Chaque jour, les signes\ndeviennent une tranquillité partagée.\nN\'appelez que si c\'est vraiment utile.',
+    'onboarding_title_4': 'Près du cœur, mais pas\ndans chaque instant',
     'onboarding_desc_4':
-        'Un seul signal est transmis :\n« Je vais bien. »\nVos données restent en sécurité.',
+        'Un seul signal est transmis :\n« Je vais bien. »',
     'onboarding_role_subject': 'Personne protégée',
     'onboarding_role_guardian': 'Protecteur',
     'onboarding_role_guardian_subject': 'Gardien et protégé',

@@ -42,12 +42,13 @@ abstract class NlNl {
     'update_available_message': 'Versie @version is beschikbaar.',
 
     // ── Modusselectie ──
-    'mode_select_title': 'Kies uw rol',
-    'mode_select_subtitle': 'Dit helpt ons de juiste functies voor u in te stellen',
-    'mode_subject_title': 'Ik wil dat mijn veiligheid\nwordt bewaakt',
-    'mode_subject_button': 'Ik wil beschermd worden →',
+    'mode_select_title': 'Hoe wil je beginnen?',
+    'mode_select_subtitle': 'Vertel ons of je van je laat horen of het ontvangt',
+    'mode_subject_title': 'Ik wil alleen van me laten horen',
+    'mode_subject_button': 'Van me laten horen →',
     'mode_guardian_title': 'Ik wil over iemand\nwaken die ik liefheb',
-    'mode_guardian_button': 'Start als beschermer →',
+    'mode_guardian_button': 'Berichten ontvangen →',
+    'mode_recommend_badge': 'Aanbevolen',
     'mode_select_notice': 'De indeling en meldingen zullen verschillen op basis van uw keuze',
 
     // ── Machtigingen ──
@@ -92,18 +93,18 @@ abstract class NlNl {
         'Wanneer je telefoon in energiebesparende modus gaat, kunnen welzijnssignalen naar je verzorger te laat aankomen of gemist worden.\n\nNa op [Instellingen openen] hieronder te tikken, stel "Batterij" → "Onbeperkt" in. Zo worden welzijnssignalen elke dag betrouwbaar op de geplande tijd verzonden.\n\n※ De exacte tekst kan per fabrikant verschillen.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Maakt u zich zorgen om iemand\ndie alleen woont?',
+    'onboarding_title_1': 'Iemand van wie je houdt woont alleen\nelke dag bellen is niet vanzelfsprekend',
     'onboarding_desc_1':
-        'Zelfs van ver weg\nvraagt u zich af of het goed gaat.\nAnbu is er voor u.',
-    'onboarding_title_2': 'Welzijnscontrole\nzonder een woord',
+        'Ver weg, en je vraagt je af\nof het vandaag goed gaat.\nAnbu brengt het over voor jou.',
+    'onboarding_title_2': 'Een woord dat aankomt\nzonder te worden uitgesproken',
     'onboarding_desc_2':
-        'Gewoon door de smartphone te gebruiken\nwordt dagelijks automatisch\neen welzijnssignaal verzonden.',
+        'Je dagelijks leven is\nbelangrijke informatie\nvoor wie aan je denkt.',
     'onboarding_title_3': 'Deel welzijn\nmet uw dierbaren',
     'onboarding_desc_3':
-        'Dagelijkse controles groeien uit\ntot blijvende gemoedsrust.\nLaten we beginnen.',
-    'onboarding_title_4': 'Geen namen, geen telefoonnummers\n— niets wordt verzameld',
+        'Dagelijkse tekens worden\nrust voor allebei.\nBel alleen als het echt telt.',
+    'onboarding_title_4': 'Dichtbij in hart, maar\nniet in elk detail',
     'onboarding_desc_4':
-        'Er wordt slechts één signaal verzonden:\n"Het gaat goed met mij."\nUw gegevens zijn veilig.',
+        'Er wordt slechts één signaal verzonden:\n"Het gaat goed met mij."',
     'onboarding_role_subject': 'Beschermeling',
     'onboarding_role_guardian': 'Beschermer',
     'onboarding_role_guardian_subject': 'Bewaker en beschermde',

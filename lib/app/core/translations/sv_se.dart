@@ -42,12 +42,13 @@ abstract class SvSe {
     'update_available_message': 'Version @version ar tillganglig.',
 
     // ── Valj lage ──
-    'mode_select_title': 'Valj din roll',
-    'mode_select_subtitle': 'Detta hjalper oss att stalla in ratt funktioner for dig',
-    'mode_subject_title': 'Jag vill att min sakerhet\novervakas',
-    'mode_subject_button': 'Bli skyddad →',
+    'mode_select_title': 'Hur vill du börja?',
+    'mode_select_subtitle': 'Berätta om du hör av dig eller tar emot livstecken',
+    'mode_subject_title': 'Jag vill bara höra av mig',
+    'mode_subject_button': 'Hör av mig →',
     'mode_guardian_title': 'Jag vill vaka over\nnagon jag bryr mig om',
-    'mode_guardian_button': 'Borja som vardare →',
+    'mode_guardian_button': 'Ta emot livstecken →',
+    'mode_recommend_badge': 'Rekommenderas',
     'mode_select_notice': 'Skarmlayout och aviseringar anpassas efter ditt val',
 
     // ── Behorigheter ──
@@ -90,15 +91,15 @@ abstract class SvSe {
         'När telefonen går in i energisparläge kan välmående-signaler till din vårdgivare komma försenade eller missas.\n\nTryck på [Öppna inställningar] nedan och ställ in "Batteri" → "Obegränsad". Då skickas välmående-signaler tillförlitligt vid den planerade tiden varje dag.\n\n※ Den exakta texten kan variera beroende på enhetstillverkare.',
 
     // ── Introduktion ──
-    'onboarding_title_1': 'Orolig for nagon\nsom bor ensam?',
-    'onboarding_desc_1': 'Aven pa avstand\nundrar du om allt ar bra.\nAnbu finns har for dig.',
-    'onboarding_title_2': 'Valmaendekontroll\nutan ett enda ord',
+    'onboarding_title_1': 'Någon du älskar bor ensam\natt höra av sig varje dag är inte lätt',
+    'onboarding_desc_1': 'Långt borta, och du undrar\nom de har det bra idag.\nAnbu förmedlar det åt dig.',
+    'onboarding_title_2': 'Ett ord som når fram\nutan att uttalas',
     'onboarding_desc_2':
-        'Bara genom att anvanda sin smartphone\nskickas en daglig signal\nautomatiskt.',
+        'Din vardag är\nviktig information för\ndem som tänker på dig.',
     'onboarding_title_3': 'Dela omtanke\nmed dina narstaende',
-    'onboarding_desc_3': 'Dagliga kontroller bygger\nvaraktig trygghet.\nLat oss borja.',
-    'onboarding_title_4': 'Inga namn, inga telefonnummer\n— inget samlas in',
-    'onboarding_desc_4': 'Bara en signal levereras:\n"Jag mar bra."\nDin information ar trygg.',
+    'onboarding_desc_3': 'Dagliga tecken blir\nett lugn för er båda.\nHör av dig bara när det räknas.',
+    'onboarding_title_4': 'Nära i hjärtat, men\ninte i varje detalj',
+    'onboarding_desc_4': 'Bara en signal levereras:\n"Jag mar bra."',
     'onboarding_role_subject': 'Skyddsperson',
     'onboarding_role_guardian': 'Vardare',
     'onboarding_role_guardian_subject': 'Vårdare och skyddad',

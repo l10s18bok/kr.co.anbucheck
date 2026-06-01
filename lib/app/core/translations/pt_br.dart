@@ -42,12 +42,13 @@ abstract class PtBr {
     'update_available_message': 'A versão @version está disponível.',
 
     // ── Seleção de modo ──
-    'mode_select_title': 'Escolha sua função',
-    'mode_select_subtitle': 'Isso nos ajuda a configurar as funcionalidades certas para você',
-    'mode_subject_title': 'Quero que minha segurança\nseja monitorada',
-    'mode_subject_button': 'Quero ser protegido →',
+    'mode_select_title': 'Como você quer começar?',
+    'mode_select_subtitle': 'Diga se você vai dar notícias suas ou recebê-las',
+    'mode_subject_title': 'Só quero dar notícias minhas',
+    'mode_subject_button': 'Dar notícias →',
     'mode_guardian_title': 'Quero cuidar de alguém\nque eu amo',
-    'mode_guardian_button': 'Começar como guardião →',
+    'mode_guardian_button': 'Receber notícias →',
+    'mode_recommend_badge': 'Recomendado',
     'mode_select_notice': 'O layout e as notificações serão diferentes de acordo com sua escolha',
 
     // ── Permissões ──
@@ -93,18 +94,18 @@ abstract class PtBr {
         'Quando seu telefone entra no modo de economia de energia, os sinais de bem-estar enviados ao seu cuidador podem chegar atrasados ou serem perdidos.\n\nApós tocar em [Abrir configurações] abaixo, defina "Bateria" → "Sem restrições". Assim, os sinais de bem-estar são enviados de forma confiável no horário programado todos os dias.\n\n※ O texto exato pode variar conforme o fabricante do dispositivo.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Você se preocupa com alguém\nque mora sozinho?',
+    'onboarding_title_1': 'Alguém que você ama mora sozinho\ndar sinal todo dia nem sempre é fácil',
     'onboarding_desc_1':
-        'Mesmo de longe,\nvocê se pergunta se está tudo bem.\nO Anbu está aqui para você.',
-    'onboarding_title_2': 'A verificação de bem-estar\nacontece sem uma palavra',
+        'Longe, e você se pergunta\nse hoje está tudo bem.\nO Anbu transmite por você.',
+    'onboarding_title_2': 'Uma palavra que chega\nsem precisar ser dita',
     'onboarding_desc_2':
-        'Apenas usando o smartphone,\num sinal diário de bem-estar\né enviado automaticamente.',
+        'O seu dia a dia é\numa informação importante\npara quem pensa em você.',
     'onboarding_title_3': 'Compartilhe o bem-estar\ncom quem você ama',
     'onboarding_desc_3':
-        'Verificações diárias se acumulam\nem tranquilidade duradoura.\nVamos começar.',
-    'onboarding_title_4': 'Sem nomes, sem números\nde telefone coletados',
+        'Cada sinal diário se soma\ne traz calma aos dois.\nLigue só quando importar.',
+    'onboarding_title_4': 'Perto no coração, mas\nnão em cada detalhe',
     'onboarding_desc_4':
-        'Apenas um sinal é transmitido:\n"Estou bem."\nSuas informações estão seguras.',
+        'Apenas um sinal é transmitido:\n"Estou bem."',
     'onboarding_role_subject': 'Protegido',
     'onboarding_role_guardian': 'Guardião',
     'onboarding_role_guardian_subject': 'Guardião e protegido',

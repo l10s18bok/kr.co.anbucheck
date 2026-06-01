@@ -43,12 +43,13 @@ abstract class PlPl {
     'update_available_message': 'Dostepna jest wersja @version.',
 
     // ── Wybor trybu ──
-    'mode_select_title': 'Wybierz swoja role',
-    'mode_select_subtitle': 'To pomoze nam skonfigurowac odpowiednie funkcje dla Ciebie',
-    'mode_subject_title': 'Chce, aby ktos\nczuwal nad moim bezpieczenstwem',
-    'mode_subject_button': 'Chce byc pod opieka →',
+    'mode_select_title': 'Jak chcesz zacząć?',
+    'mode_select_subtitle': 'Powiedz, czy dajesz znak życia, czy go odbierasz',
+    'mode_subject_title': 'Chcę tylko dać znak życia',
+    'mode_subject_button': 'Daj znak życia →',
     'mode_guardian_title': 'Chce czuwac nad bezpieczenstwem\nbliskiej osoby',
-    'mode_guardian_button': 'Zacznij jako opiekun →',
+    'mode_guardian_button': 'Odbieraj znaki →',
+    'mode_recommend_badge': 'Polecane',
     'mode_select_notice': 'Uklad ekranu i powiadomienia beda sie roznic w zaleznosci od wyboru',
 
     // ── Uprawnienia ──
@@ -92,17 +93,17 @@ abstract class PlPl {
         'Gdy telefon przechodzi w tryb oszczędzania energii, sygnały dobrostanu wysyłane do Twojego opiekuna mogą docierać z opóźnieniem lub być utracone.\n\nPo dotknięciu [Otwórz ustawienia] poniżej ustaw "Bateria" → "Bez ograniczeń". Dzięki temu sygnały dobrostanu będą codziennie niezawodnie wysyłane o zaplanowanej godzinie.\n\n※ Dokładne sformułowania mogą się różnić w zależności od producenta urządzenia.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Martwisz sie o kogos,\nkto mieszka sam?',
+    'onboarding_title_1': 'Ktoś bliski mieszka sam\ncodzienne sprawdzanie nie jest łatwe',
     'onboarding_desc_1':
-        'Nawet z daleka\nzastanawiasz sie, czy wszystko w porzadku.\nAnbu jest tu z Toba.',
-    'onboarding_title_2': 'Sprawdzanie samopoczucia\nbez jednego slowa',
+        'Daleko, a Ty się zastanawiasz,\nczy dziś wszystko dobrze.\nAnbu przekaże to za Ciebie.',
+    'onboarding_title_2': 'Słowo, które dociera\nbez słów',
     'onboarding_desc_2':
-        'Wystarczy korzystac ze smartfona,\naby codziennie automatycznie\nwyslac sygnal o samopoczuciu.',
+        'Twoja codzienność to\nważna wiadomość dla tych,\nktórzy o Ciebie myślą.',
     'onboarding_title_3': 'Podziel sie troska\nz bliskimi osobami',
-    'onboarding_desc_3': 'Codzienne sprawdzanie buduje\ntrwaly spokoj ducha.\nZacznijmy.',
-    'onboarding_title_4': 'Zadnych imion, zadnych numerow\ntelefonow — nic nie zbieramy',
+    'onboarding_desc_3': 'Codzienne znaki życia\ndają spokój obu stronom.\nOdezwij się, gdy to naprawdę ważne.',
+    'onboarding_title_4': 'Blisko sercem, lecz\nnie w każdym szczególe',
     'onboarding_desc_4':
-        'Przekazujemy tylko jeden sygnal:\n"Wszystko u mnie dobrze."\nTwoje dane sa bezpieczne.',
+        'Przekazujemy tylko jeden sygnal:\n"Wszystko u mnie dobrze."',
     'onboarding_role_subject': 'Podopieczny',
     'onboarding_role_guardian': 'Opiekun',
     'onboarding_role_guardian_subject': 'Opiekun i podopieczny',

@@ -42,13 +42,14 @@ abstract class EsEs {
     'update_available_message': 'La versión @version está disponible.',
 
     // ── Selección de modo ──
-    'mode_select_title': 'Elija su función',
+    'mode_select_title': '¿Cómo quieres empezar?',
     'mode_select_subtitle':
-        'Esta elección nos ayuda a configurar las funciones adecuadas para usted',
-    'mode_subject_title': 'Quiero que alguien\nvele por mi seguridad',
-    'mode_subject_button': 'Recibir protección →',
+        'Dinos si vas a dar señales de vida o a recibirlas',
+    'mode_subject_title': 'Solo quiero dar señales de vida',
+    'mode_subject_button': 'Dar señales de vida →',
     'mode_guardian_title': 'Quiero cuidar\nde un ser querido',
-    'mode_guardian_button': 'Ser protector →',
+    'mode_guardian_button': 'Recibir señales →',
+    'mode_recommend_badge': 'Recomendado',
     'mode_select_notice': 'La interfaz y las notificaciones serán diferentes según su elección',
 
     // ── Permisos ──
@@ -93,17 +94,17 @@ abstract class EsEs {
         'Cuando su teléfono entra en modo de ahorro de energía, las señales de bienestar enviadas a su cuidador pueden llegar tarde o perderse.\n\nDespués de tocar [Abrir ajustes] abajo, configure "Batería" → "Sin restricciones". Así, las señales de bienestar se envían de forma fiable a la hora programada cada día.\n\n※ El texto exacto puede variar según el fabricante del dispositivo.',
 
     // ── Presentación ──
-    'onboarding_title_1': '¿Le preocupa alguien\nque vive solo?',
+    'onboarding_title_1': 'Alguien a quien quieres vive solo\nsaber cómo está cada día no es fácil',
     'onboarding_desc_1':
-        'Aunque esté lejos,\nuno se pregunta si todo va bien.\nAnbu está aquí para usted.',
-    'onboarding_title_2': 'El bienestar se comparte\nsin decir una palabra',
+        'Lejos, y te preguntas\nsi hoy estará bien.\nAnbu lo transmite por ti.',
+    'onboarding_title_2': 'Una palabra que llega\nsin pronunciarse',
     'onboarding_desc_2':
-        'Con solo usar el teléfono,\nse envía automáticamente\nuna señal diaria de bienestar.',
+        'Tu día a día es\ninformación valiosa para\nquienes piensan en ti.',
     'onboarding_title_3': 'Comparta el bienestar\ncon sus seres queridos',
     'onboarding_desc_3':
-        'Las verificaciones diarias generan\ntranquilidad duradera.\nComience ahora.',
-    'onboarding_title_4': 'Sin nombres ni números\nde teléfono — no se recopila nada',
-    'onboarding_desc_4': 'Solo se transmite una señal:\n«Estoy bien».\nSu información está segura.',
+        'Cada aviso diario se suma\ny da calma a ambos.\nLlama solo cuando importa.',
+    'onboarding_title_4': 'Cerca en el corazón,\npero no en cada detalle',
+    'onboarding_desc_4': 'Solo se transmite una señal:\n«Estoy bien».',
     'onboarding_role_subject': 'Persona protegida',
     'onboarding_role_guardian': 'Protector',
     'onboarding_role_guardian_subject': 'Guardián y protegido',
