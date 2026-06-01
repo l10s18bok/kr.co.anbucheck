@@ -29,7 +29,7 @@ abstract class ViVn {
     'app_tagline': 'Kiem tra suc khoe cua ban.',
     'app_service_desc': 'Dich vu kiem tra suc khoe tu dong',
     'app_guardian_title': 'Nguoi bao ve Anbu',
-    'app_copyright': '© 2026 Aberic Lab',
+    'app_copyright': '© 2026 Averic Lab',
 
     // ── Splash ──
     'splash_loading': 'Dang kiem tra suc khoe...',

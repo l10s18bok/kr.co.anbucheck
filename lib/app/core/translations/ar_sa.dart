@@ -29,7 +29,7 @@ abstract class ArSa {
     'app_tagline': 'نطمئن على سلامتكم.',
     'app_service_desc': 'خدمة الاطمئنان التلقائي على السلامة',
     'app_guardian_title': 'حارس Anbu',
-    'app_copyright': '© Aberic Lab',
+    'app_copyright': '© Averic Lab',
 
     // ── شاشة البداية ──
     'splash_loading': 'جارٍ الاطمئنان...',

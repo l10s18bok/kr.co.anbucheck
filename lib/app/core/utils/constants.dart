@@ -10,6 +10,10 @@ abstract class AppConstants {
   // 법적 문서 URL (회사 도메인 averic.co.kr 산하 호스팅)
   static const String legalBaseUrl = 'https://averic.co.kr';
 
+  // 회사 웹사이트 (설정 화면 하단 표시·링크용)
+  static const String companyWebsiteUrl = 'https://www.averic.co.kr';
+  static const String companyWebsiteLabel = 'www.averic.co.kr';
+
   /// 지원 locale → URL 경로 매핑 (20개 언어)
   static const Map<String, String> _legalLocalePaths = {
     'ko': 'ko',

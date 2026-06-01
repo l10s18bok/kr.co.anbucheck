@@ -29,7 +29,7 @@ abstract class EsEs {
     'app_tagline': 'Velamos por su bienestar.',
     'app_service_desc': 'Servicio automático de verificación de bienestar',
     'app_guardian_title': 'Protector Anbu',
-    'app_copyright': '© 2026 Aberic Lab',
+    'app_copyright': '© 2026 Averic Lab',
 
     // ── Splash ──
     'splash_loading': 'Verificando bienestar...',

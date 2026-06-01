@@ -29,7 +29,7 @@ abstract class IdId {
     'app_tagline': 'Memantau kesejahteraan Anda.',
     'app_service_desc': 'Layanan pemeriksaan kesejahteraan otomatis',
     'app_guardian_title': 'Penjaga Anbu',
-    'app_copyright': '© 2026 Aberic Lab',
+    'app_copyright': '© 2026 Averic Lab',
 
     // ── Splash ──
     'splash_loading': 'Memeriksa kesejahteraan...',

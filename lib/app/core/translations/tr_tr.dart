@@ -29,7 +29,7 @@ abstract class TrTr {
     'app_tagline': 'Hal hatır soruyoruz.',
     'app_service_desc': 'Otomatik hal hatır sorgulama hizmeti',
     'app_guardian_title': 'Anbu Koruyucu',
-    'app_copyright': '© 2026 Aberic Lab',
+    'app_copyright': '© 2026 Averic Lab',
 
     // ── Açılış Ekranı ──
     'splash_loading': 'Hal hatır soruluyor...',

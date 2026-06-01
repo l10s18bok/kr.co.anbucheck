@@ -29,7 +29,7 @@ abstract class FrFr {
     'app_tagline': 'Nous veillons sur votre bien-être.',
     'app_service_desc': 'Service automatique de suivi du bien-être',
     'app_guardian_title': 'Protecteur Anbu',
-    'app_copyright': '© 2026 Aberic Lab',
+    'app_copyright': '© 2026 Averic Lab',
 
     // ── Splash ──
     'splash_loading': 'Vérification du bien-être...',

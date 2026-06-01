@@ -29,7 +29,7 @@ abstract class HiIn {
     'app_tagline': 'आपकी कुशलता की जांच।',
     'app_service_desc': 'स्वचालित कुशलता जांच सेवा',
     'app_guardian_title': 'Anbu अभिभावक',
-    'app_copyright': '© 2026 Aberic Lab',
+    'app_copyright': '© 2026 Averic Lab',
 
     // ── स्प्लैश ──
     'splash_loading': 'कुशलता जांच हो रही है...',

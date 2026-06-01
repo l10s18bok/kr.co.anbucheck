@@ -29,7 +29,7 @@ abstract class JaJp {
     'app_tagline': 'あなたの安否を確認します。',
     'app_service_desc': '自動安否確認サービス',
     'app_guardian_title': 'Anbu 見守り人',
-    'app_copyright': '© 2026 Aberic Lab',
+    'app_copyright': '© 2026 Averic Lab',
 
     // ── スプラッシュ ──
     'splash_loading': '安否を確認しています...',

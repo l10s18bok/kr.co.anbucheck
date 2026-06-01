@@ -261,12 +261,41 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                               ),
                             ),
                             SizedBox(height: AppSpacing.md),
-                            Text(
-                              'ANBU GUARD NETWORK',
-                              style: AppTextTheme.labelSmall(
-                                color: AppColors.textTertiary,
-                                fw: FontWeight.w600,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  'ANBU GUARD NETWORK',
+                                  style: AppTextTheme.labelSmall(
+                                    color: AppColors.textTertiary,
+                                    fw: FontWeight.w600,
+                                  ),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () => launchUrl(
+                                    Uri.parse(AppConstants.companyWebsiteUrl),
+                                    mode: LaunchMode.externalApplication,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        AppConstants.companyWebsiteLabel,
+                                        style: AppTextTheme.labelSmall(
+                                          color: AppColors.guardianPrimary,
+                                          fw: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(width: 4.w),
+                                      Icon(
+                                        Icons.open_in_new_rounded,
+                                        size: 14.w,
+                                        color: AppColors.guardianPrimary,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 4.h),
                             Text(
