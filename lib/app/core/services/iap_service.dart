@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/core/utils/extensions.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
@@ -290,6 +291,14 @@ class IapService extends GetxService {
         await Get.find<SubscriptionService>().set(isActive);
       } else {
         await _tokenDs.saveSubscriptionActive(isActive);
+      }
+
+      // 유료 전환 → 최초 설치 때 예약해 둔 "무료체험 종료" 1회 로컬 알림 취소
+      // (구독했는데 90일째 "체험 종료" 알림이 뜨는 오발송 방지).
+      if (isActive) {
+        try {
+          await LocalAlarmService.cancelTrialEnded();
+        } catch (_) {}
       }
 
       // 복원 emit을 받았으니 5초 안전망의 "복원할 구독 없음" 안내 차단

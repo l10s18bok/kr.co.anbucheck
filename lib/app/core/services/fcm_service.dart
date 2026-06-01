@@ -74,6 +74,11 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       // 사용자가 즉시 [구독하기]/[구독 관리] 버튼으로 결제 수단 갱신 가능.
       _routeToGuardianSettings();
       break;
+    case 'trial_ended':
+      // 최초 설치 보호자의 무료체험 종료 1회 로컬 알림 탭 → 보호자 설정 화면으로
+      // 직접 이동해 즉시 [구독하기] 유도 (subscription_expired와 동일 동선).
+      _routeToGuardianSettings();
+      break;
     case 'heartbeat':
       // 대상자 전용 — 보호자에게 표시되지 않음. 라우팅 없음.
       break;

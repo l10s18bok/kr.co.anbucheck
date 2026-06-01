@@ -249,6 +249,8 @@ abstract class EnUs {
 
     // ── In-app purchase (Guardian yearly $9.99 subscription) ──
     'subscription_subscribe': 'Subscribe',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Your free trial has ended. Please subscribe to continue.',
     'subscription_restore': 'Restore Purchase',
     'subscription_store_unavailable': 'Store unavailable',
     'subscription_product_unavailable': 'Subscription unavailable',

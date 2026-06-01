@@ -25,6 +25,10 @@ import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 class LocalAlarmService {
   static const _alarmId = 0x416C6172; // 'Alar' hex — 일일 안전망 알림 ID (플랫폼 공유)
   static const _sendFailedId = 0x53466169; // 'SFai' hex — Android retry 실패 알림 ID
+  static const _trialEndedId = 0x5472456E; // 'TrEn' hex — 무료체험 종료 1회 알림 ID
+
+  /// 무료체험 종료 1회성 알림 payload (탭 시 보호자 설정 화면으로 이동 → [구독하기]).
+  static const trialEndedPayload = 'trial_ended';
 
   /// iOS G+S 오늘의 안부 확인 메시지 알림 payload.
   /// FcmService._handleNotificationTap이 이 값을 보고 G+S 라우팅을 실행.
@@ -196,6 +200,59 @@ class LocalAlarmService {
     if (Platform.isIOS) return;
     await _ensureInitialized();
     await _plugin!.cancel(_sendFailedId);
+  }
+
+  /// 무료체험 종료 1회성 로컬 알림 예약 — **최초 설치 보호자 전용**.
+  /// 체험 만료 시각([fireAt], 서버 register 응답의 expires_at = 가입 +90일)에 단발로 발화.
+  /// 일일 안전망과 달리 `matchDateTimeComponents` 없이 1회만 fire하며, 고유 ID(`_trialEndedId`)라
+  /// `cancel(_alarmId)`/`cancelSendFailed` 등 기존 ID 지정 취소에는 영향받지 않는다(전체 취소 코드 없음).
+  /// 결제(구독) 성공 또는 탈퇴/모드변경 시 [cancelTrialEnded]로 명시 취소한다.
+  /// [title]/[body]는 포그라운드(onboarding)에서 `.tr`로 해석해 전달하므로 캐시가 필요 없다(1회 예약).
+  static Future<void> scheduleTrialEnded(
+    DateTime fireAt, {
+    required String title,
+    required String body,
+  }) async {
+    await _ensureInitialized();
+    final scheduled = tz.TZDateTime.from(fireAt, tz.local);
+    if (!scheduled.isAfter(tz.TZDateTime.now(tz.local))) {
+      debugPrint('[LocalAlarm] 체험 종료 알림 스킵 — 이미 지난 시각 $scheduled');
+      return;
+    }
+    final channelName = await NotificationTextCache.get(
+        'noti_channel_name', fallback: 'Anbu Alerts');
+
+    await _plugin!.zonedSchedule(
+      _trialEndedId,
+      title,
+      body,
+      scheduled,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          _androidChannelId,
+          channelName,
+          importance: Importance.high,
+          priority: Priority.high,
+          icon: '@mipmap/ic_launcher',
+        ),
+        iOS: const DarwinNotificationDetails(
+          presentAlert: true,
+          presentSound: true,
+        ),
+      ),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      // matchDateTimeComponents 없음 → 1회성 (반복 안 함)
+      payload: trialEndedPayload,
+    );
+    debugPrint('[LocalAlarm] 체험 종료 알림 예약: $scheduled');
+  }
+
+  /// 무료체험 종료 1회성 알림 취소 — 구독 성공/탈퇴/모드변경 시 호출.
+  static Future<void> cancelTrialEnded() async {
+    await _ensureInitialized();
+    await _plugin!.cancel(_trialEndedId);
   }
 
   /// 내부 취소 (schedule 내에서도 호출)

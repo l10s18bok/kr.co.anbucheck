@@ -244,6 +244,8 @@ abstract class SvSe {
 
     // ── App-köp (årlig $9.99-prenumeration för vårdgivare) ──
     'subscription_subscribe': 'Prenumerera',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Din kostnadsfria provperiod har avslutats. Prenumerera för att fortsätta.',
     'subscription_restore': 'Återställ köp',
     'subscription_store_unavailable': 'Butiken är inte tillgänglig',
     'subscription_product_unavailable': 'Prenumeration ej tillgänglig',

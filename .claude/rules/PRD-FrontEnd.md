@@ -594,6 +594,7 @@ Future<void> sendHeartbeat({
 | iOS 일일 로컬 안전망 알림 (정시) | `gs_deadman` | **safety_home** (Dashboard 위에 SafetyHome push + `refreshAndForceSend`) | iOS는 `LocalAlarmService.alarmPayload` |
 | Android 일일 로컬 안전망 알림 (+3h) | `safety_net` | **safety_home** (`_routeToSafetyHome` — 역할 인식: G+S는 Dashboard base + push, 순수 S는 단독) | 컨트롤러 onResumed가 미전송 heartbeat 자동 전송 + 안내 다이얼로그 |
 | Android retry 실패 알림 (즉시) | `send_failed` | **safety_home** (위와 동일) | retry 3회 실패 시 즉시 표시, heartbeat 성공 시 `cancelSendFailed`로 제거 |
+| 무료체험 종료 알림 (가입 +90일, 1회) | `trial_ended` | **보호자 설정** (`_routeToGuardianSettings`, 구독 동선) | 최초 설치 보호자 전용. `scheduleTrialEnded`로 단발 예약, 구독/탈퇴 시 `cancelTrialEnded`. kill 런치는 대시보드(만료 카드) — `subscription_*`와 동일 |
 
 ```
 [알림 탭 라우팅 흐름]

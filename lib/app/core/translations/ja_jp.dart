@@ -233,6 +233,8 @@ abstract class JaJp {
 
     // ── アプリ内課金(保護者の年間 $9.99 サブスクリプション) ──
     'subscription_subscribe': '登録する',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': '無料体験が終了しました。引き続きご利用いただくには定期購入してください。',
     'subscription_restore': '購入を復元',
     'subscription_store_unavailable': 'ストアに接続できません',
     'subscription_product_unavailable': '商品情報を取得できません',

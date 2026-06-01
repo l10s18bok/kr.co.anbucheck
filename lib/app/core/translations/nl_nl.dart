@@ -251,6 +251,8 @@ abstract class NlNl {
 
     // ── In-app aankopen (jaarlijks $9.99 verzorger-abonnement) ──
     'subscription_subscribe': 'Abonneren',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Je gratis proefperiode is afgelopen. Abonneer je om door te gaan.',
     'subscription_restore': 'Aankoop herstellen',
     'subscription_store_unavailable': 'Store niet beschikbaar',
     'subscription_product_unavailable': 'Abonnement niet beschikbaar',

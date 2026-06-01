@@ -254,6 +254,8 @@ abstract class FrFr {
 
     // ── Achats intégrés (abonnement annuel Gardien $9.99) ──
     'subscription_subscribe': 'S\'abonner',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Votre essai gratuit est terminé. Veuillez vous abonner pour continuer.',
     'subscription_restore': 'Restaurer l\'achat',
     'subscription_store_unavailable': 'Boutique indisponible',
     'subscription_product_unavailable': 'Abonnement indisponible',

@@ -235,6 +235,8 @@ abstract class KoKr {
 
     // ── 인앱 결제 (보호자 연 $9.99 구독) ──
     'subscription_subscribe': '구독하기',
+    'trial_ended_noti_title': '안부',
+    'trial_ended_noti_body': '무료 체험이 종료되었습니다. 계속 이용하시려면 구독해 주세요.',
     'subscription_restore': '구독 복원',
     'subscription_store_unavailable': '스토어에 연결할 수 없습니다',
     'subscription_product_unavailable': '상품 정보를 불러올 수 없습니다',

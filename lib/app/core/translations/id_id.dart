@@ -253,6 +253,8 @@ abstract class IdId {
 
     // ── Pembelian dalam aplikasi (langganan tahunan $9.99 Pendamping) ──
     'subscription_subscribe': 'Berlangganan',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Masa uji coba gratis Anda telah berakhir. Silakan berlangganan untuk melanjutkan.',
     'subscription_restore': 'Pulihkan Pembelian',
     'subscription_store_unavailable': 'Toko tidak tersedia',
     'subscription_product_unavailable': 'Langganan tidak tersedia',

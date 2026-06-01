@@ -252,6 +252,8 @@ abstract class ItIt {
 
     // ── Acquisti in-app (abbonamento annuale Tutore $9.99) ──
     'subscription_subscribe': 'Abbonati',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'La tua prova gratuita è terminata. Abbonati per continuare.',
     'subscription_restore': 'Ripristina acquisto',
     'subscription_store_unavailable': 'Store non disponibile',
     'subscription_product_unavailable': 'Abbonamento non disponibile',

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
@@ -58,6 +59,11 @@ class OnboardingController extends BaseController {
       final platform = Platform.isIOS ? 'ios' : 'android';
       final osVersion = await _getOsVersion();
 
+      // 최초 설치 판별 — register 직전 checkDevice. 서버에 device_id가 없으면 첫 설치.
+      // (register 후엔 device가 생성돼 구분 불가하므로 반드시 전에 조회. 재설치는 제외)
+      final check = await _userDs.checkDevice(deviceId);
+      final isFirstInstall = !((check['exists'] as bool?) ?? false);
+
       final response = await _userDs.register(
         role: mode,
         deviceId: deviceId,
@@ -66,7 +72,7 @@ class OnboardingController extends BaseController {
         osVersion: osVersion,
       );
 
-      await _saveAndNavigate(response, mode);
+      await _saveAndNavigate(response, mode, isFirstInstall: isFirstInstall);
     } catch (e) {
       AppSnackbar.show(
         'onboarding_registration_failed_title'.tr,
@@ -77,7 +83,8 @@ class OnboardingController extends BaseController {
     }
   }
 
-  Future<void> _saveAndNavigate(Map<String, dynamic> response, String role) async {
+  Future<void> _saveAndNavigate(Map<String, dynamic> response, String role,
+      {bool isFirstInstall = false}) async {
     await _tokenDs.saveDeviceToken(response['device_token'] as String);
     await _tokenDs.saveUserId(response['user_id'] as int);
     await _tokenDs.saveUserRole(role);
@@ -106,6 +113,23 @@ class OnboardingController extends BaseController {
       Get.offNamed(AppRoutes.safetyHome,
           arguments: {'role': HomeRole.subject});
     } else {
+      // 최초 설치 보호자: 무료체험 종료(가입 +90일)에 1회 로컬 알림 예약.
+      // POST /users 응답엔 expires_at이 없으므로 서버 FREE_TRIAL_DAYS(90)와 동일하게
+      // 로컬에서 계산한다(서버 값과 수 초 내 일치). ⚠️ 서버 FREE_TRIAL_DAYS 변경 시 이 90도 갱신.
+      // ScheduledNotificationBootReceiver가 매니페스트에 있어 재부팅에도 복원됨.
+      // 구독하면 cancelTrialEnded로 취소. 재설치(isFirstInstall=false)는 예약 안 함.
+      // 무료체험은 보호자 전용이라 subject 분기에는 두지 않는다.
+      if (isFirstInstall) {
+        try {
+          await LocalAlarmService.scheduleTrialEnded(
+            DateTime.now().add(const Duration(days: 90)),
+            title: 'trial_ended_noti_title'.tr,
+            body: 'trial_ended_noti_body'.tr,
+          );
+        } catch (e) {
+          debugPrint('[onboarding] 체험 종료 알림 예약 실패(무시): $e');
+        }
+      }
       Get.offNamed(AppRoutes.guardianDashboard);
     }
   }

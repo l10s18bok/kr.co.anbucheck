@@ -253,6 +253,8 @@ abstract class RuRu {
 
     // ── Встроенные покупки (годовая подписка опекуна $9.99) ──
     'subscription_subscribe': 'Подписаться',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Бесплатный пробный период закончился. Оформите подписку, чтобы продолжить.',
     'subscription_restore': 'Восстановить покупку',
     'subscription_store_unavailable': 'Магазин недоступен',
     'subscription_product_unavailable': 'Подписка недоступна',

@@ -241,6 +241,8 @@ abstract class ArSa {
 
     // ── الشراء داخل التطبيق (اشتراك سنوي للمراقب $9.99) ──
     'subscription_subscribe': 'الاشتراك',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'انتهت الفترة التجريبية المجانية. يرجى الاشتراك للمتابعة.',
     'subscription_restore': 'استعادة الشراء',
     'subscription_store_unavailable': 'المتجر غير متوفر',
     'subscription_product_unavailable': 'الاشتراك غير متوفر',

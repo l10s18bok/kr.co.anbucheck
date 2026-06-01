@@ -249,6 +249,8 @@ abstract class TrTr {
 
     // ── Uygulama içi satın alma (Bakıcı yıllık $9.99 aboneliği) ──
     'subscription_subscribe': 'Abone Ol',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Ücretsiz deneme süreniz sona erdi. Devam etmek için abone olun.',
     'subscription_restore': 'Satın Alımı Geri Yükle',
     'subscription_store_unavailable': 'Mağaza kullanılamıyor',
     'subscription_product_unavailable': 'Abonelik kullanılamıyor',

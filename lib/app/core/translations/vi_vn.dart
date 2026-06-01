@@ -250,6 +250,8 @@ abstract class ViVn {
 
     // ── Mua trong ứng dụng (gói đăng ký hằng năm $9.99 của Người giám hộ) ──
     'subscription_subscribe': 'Đăng ký',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Bản dùng thử miễn phí đã kết thúc. Vui lòng đăng ký để tiếp tục.',
     'subscription_restore': 'Khôi phục mua hàng',
     'subscription_store_unavailable': 'Không thể kết nối cửa hàng',
     'subscription_product_unavailable': 'Không thể tải thông tin gói',

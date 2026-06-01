@@ -248,6 +248,8 @@ abstract class HiIn {
 
     // ── इन-ऐप खरीदारी (अभिभावक की वार्षिक $9.99 सदस्यता) ──
     'subscription_subscribe': 'सदस्यता लें',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'आपका निःशुल्क परीक्षण समाप्त हो गया है। जारी रखने के लिए कृपया सदस्यता लें।',
     'subscription_restore': 'खरीद पुनर्स्थापित करें',
     'subscription_store_unavailable': 'स्टोर उपलब्ध नहीं है',
     'subscription_product_unavailable': 'सदस्यता उपलब्ध नहीं है',

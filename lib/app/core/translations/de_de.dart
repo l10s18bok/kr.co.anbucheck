@@ -253,6 +253,8 @@ abstract class DeDe {
 
     // ── In-App-Käufe (jährliches $9.99-Abonnement für Betreuer) ──
     'subscription_subscribe': 'Abonnieren',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Ihre kostenlose Testphase ist beendet. Bitte abonnieren Sie, um fortzufahren.',
     'subscription_restore': 'Kauf wiederherstellen',
     'subscription_store_unavailable': 'Store nicht verfügbar',
     'subscription_product_unavailable': 'Abonnement nicht verfügbar',

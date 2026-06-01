@@ -245,6 +245,8 @@ abstract class ThTh {
 
     // ── การซื้อในแอป (การสมัครสมาชิกผู้ดูแลรายปี $9.99) ──
     'subscription_subscribe': 'สมัครสมาชิก',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'ช่วงทดลองใช้ฟรีสิ้นสุดแล้ว กรุณาสมัครสมาชิกเพื่อใช้งานต่อ',
     'subscription_restore': 'กู้คืนการซื้อ',
     'subscription_store_unavailable': 'ไม่สามารถเชื่อมต่อร้านค้า',
     'subscription_product_unavailable': 'ไม่พบข้อมูลแพ็กเกจ',

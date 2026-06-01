@@ -251,6 +251,8 @@ abstract class PlPl {
 
     // ── Zakupy w aplikacji (roczna subskrypcja Opiekuna $9.99) ──
     'subscription_subscribe': 'Subskrybuj',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Twój bezpłatny okres próbny dobiegł końca. Subskrybuj, aby kontynuować.',
     'subscription_restore': 'Przywróć zakup',
     'subscription_store_unavailable': 'Sklep niedostępny',
     'subscription_product_unavailable': 'Subskrypcja niedostępna',

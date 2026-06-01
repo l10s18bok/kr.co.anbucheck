@@ -231,6 +231,8 @@ abstract class ZhCn {
 
     // ── 应用内购买(监护人年度 $9.99 订阅) ──
     'subscription_subscribe': '订阅',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': '免费试用已结束。如需继续使用，请订阅。',
     'subscription_restore': '恢复购买',
     'subscription_store_unavailable': '无法连接到商店',
     'subscription_product_unavailable': '无法加载商品信息',

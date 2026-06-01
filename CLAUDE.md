@@ -105,6 +105,7 @@ lib/
 - **즉시 해제**: 대시보드(permanent) `ever(isActive)` true → `monthlyStepsCache.clear()` + `_loadSubjects(force)` 재매핑(캐시 실제값 즉시). 알림(lazyPut)은 탭 진입 `onInit→load` 또는 살아있으면 `ever`로 fresh. 결제는 설정(비게이트)→IAP→`/verify`(비게이트)로 항상 가능.
 - **절대 건드리지 않음**: heartbeat 전송 경로(`_checkAndSendHeartbeat`/`_scheduleHeartbeatIfGS`)와 `safety_home`(guardianCount 게이팅)에는 read-gate 없음 — 대상자 본인 안부 신호는 구독 무관 계속 동작. safety_home은 `set` 쓰기만 경유.
 - ⚠️ **거짓 안심 / emergency 불일치(의도)**: 만료 중 대시보드는 실제 긴급/경고 대상자도 '정상'으로 표시(거짓 안심) + 서버는 SOS를 구독 무관 발송하나 만료 보호자의 알림 목록이 차단돼 in-app에서 가려진다. 의도된 제품 결정 — 한쪽을 맞춰 "수정"하지 말 것.
+- **무료체험 종료 1회 로컬 알림** (`LocalAlarmService.scheduleTrialEnded`, ID `_trialEndedId`, payload `trial_ended`): **최초 설치 보호자 전용**. onboarding `_saveAndNavigate`에서 register 직전 `checkDevice.exists==false`(첫 설치)면 가입 +90일(서버 `FREE_TRIAL_DAYS=90`과 동일, 로컬 계산)에 단발 예약(`matchDateTimeComponents` 없음, 재부팅은 `ScheduledNotificationBootReceiver`로 복원). 제목 "안부"/"Anbu", 본문 `trial_ended_noti_body`(20개 언어). 탭 → 보호자 설정(구독). **취소**: IAP verify 성공(유료 전환)·탈퇴(`deleteAccount`)에서 `cancelTrialEnded()`. 재설치·S→G+S 전환은 예약 안 함(서버 RTDN이 없는 서버 시간 기반 체험이라 푸시 대신 클라 로컬 알림으로 처리).
 
 ## 핵심 파일 (Heartbeat 3계층 구조)
 

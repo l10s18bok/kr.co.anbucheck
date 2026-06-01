@@ -231,6 +231,8 @@ abstract class ZhTw {
 
     // ── 應用內購買(監護人年度 $9.99 訂閱) ──
     'subscription_subscribe': '訂閱',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': '免費試用已結束。如需繼續使用，請訂閱。',
     'subscription_restore': '還原購買',
     'subscription_store_unavailable': '無法連接到商店',
     'subscription_product_unavailable': '無法載入商品資訊',

@@ -252,6 +252,8 @@ abstract class EsEs {
 
     // ── Compras en la app (suscripción anual del cuidador $9.99) ──
     'subscription_subscribe': 'Suscribirse',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Tu prueba gratuita ha finalizado. Suscríbete para continuar.',
     'subscription_restore': 'Restaurar compra',
     'subscription_store_unavailable': 'Tienda no disponible',
     'subscription_product_unavailable': 'Suscripción no disponible',

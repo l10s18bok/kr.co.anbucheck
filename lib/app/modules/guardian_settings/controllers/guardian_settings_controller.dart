@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/iap_service.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
@@ -199,6 +200,8 @@ class GuardianSettingsController extends BaseController {
 
       try { await HeartbeatLocalDatasource().clearPending(); } catch (_) {}
       try { await HeartbeatLockDatasource().clearAll(); } catch (_) {}
+      // 최초 설치 때 예약한 "무료체험 종료" 1회 알림 취소 (계정 삭제 → 알림도 제거)
+      try { await LocalAlarmService.cancelTrialEnded(); } catch (_) {}
       try { await NicknameLocalDatasource().clearAll(); } catch (_) {}
       try { await SubjectOrderLocalDatasource().clearAll(); } catch (_) {}
 

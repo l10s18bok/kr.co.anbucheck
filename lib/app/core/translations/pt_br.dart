@@ -252,6 +252,8 @@ abstract class PtBr {
 
     // ── Compras no app (assinatura anual do Responsável $9.99) ──
     'subscription_subscribe': 'Assinar',
+    'trial_ended_noti_title': 'Anbu',
+    'trial_ended_noti_body': 'Seu período de teste gratuito terminou. Assine para continuar.',
     'subscription_restore': 'Restaurar compra',
     'subscription_store_unavailable': 'Loja indisponível',
     'subscription_product_unavailable': 'Assinatura indisponível',
