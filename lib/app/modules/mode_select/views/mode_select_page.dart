@@ -198,7 +198,7 @@ class _ModeCard extends StatelessWidget {
           if (badgeText != null)
             Positioned(
               top: 12.h,
-              right: 12.w,
+              left: 12.w,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
                 decoration: BoxDecoration(
