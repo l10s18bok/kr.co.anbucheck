@@ -186,6 +186,10 @@ class LocalAlarmService {
           importance: Importance.high,
           priority: Priority.high,
           icon: '@mipmap/ic_launcher',
+          // 실패가 지속되면 periodic 폴링이 15분마다 이 알림을 재호출할 수 있다.
+          // onlyAlertOnce로 동일 ID 재표시는 소리/헤드업 없이 조용히 갱신만 한다
+          // (첫 1회만 알림). cancelSendFailed로 ID 취소 후 재표시되면 다시 1회 알림.
+          onlyAlertOnce: true,
         ),
       ),
       payload: sendFailedPayload,

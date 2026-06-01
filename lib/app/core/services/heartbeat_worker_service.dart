@@ -151,7 +151,7 @@ class HeartbeatWorkerService {
     await Workmanager().initialize(heartbeatWorkerCallback);
   }
 
-  /// 예약 등록 (one-off + periodic 15분 동시 등록)
+  /// 예약 등록 (periodic 15분 + one-off 동시 등록) — **전송 성공 / 시각 변경 / 앱 진입용**.
   ///
   /// one-off과 periodic 모두 **명시적 cancel 후 재등록**한다.
   /// `ExistingPeriodicWorkPolicy.update`는 frequency/initialDelay 변경을 무시하기
@@ -159,32 +159,60 @@ class HeartbeatWorkerService {
   /// 스케줄을 먼저 취소해야 한다. `cancelByUniqueName`은 명시적 취소라 REPLACE
   /// 정책의 self-cancel 이슈와 무관하게 안전하다.
   ///
-  /// 4단계(cancel oneOff → register oneOff → cancel periodic → register periodic)는
-  /// 비원자적이라 중간 단계에서 throw하면 cancel만 적용되고 register가 누락되어
-  /// 양쪽 task 모두 사라진 상태가 영구 유지될 수 있다. 일시적 WorkManager DB
-  /// 오류 대비 최대 2회 시도(첫 시도 실패 시 2초 후 재시도)로 방어한다.
+  /// 전송 성공 경로(`_onHeartbeatSent`)에서 호출되면 periodic도 내일자로 재워
+  /// 밤샘 15분 폴링을 꺼 배터리를 아낀다. **전송 실패 경로는 이 함수가 아니라
+  /// [rescheduleOneOffOnly]를 호출**한다 — 실패 시 periodic을 끄면 당일 재시도
+  /// 안전망이 사라지기 때문(periodic을 살려둬야 같은 날 네트워크 복구를 15분 내 잡음).
+  ///
+  /// **비원자성 완화 (Defect 2)**: 과거에는 cancel/register 4단계를 한 try로 묶어
+  /// 중간 throw 시 cancel만 적용되고 register가 누락되면 **양쪽 task가 영구 유실**될
+  /// 수 있었다. 이제 안전망인 periodic을 **먼저** 등록하고, periodic·one-off 등록을
+  /// **각각 독립 try + 2회 재시도**로 분리한다. 한쪽 등록이 WorkManager DB 오류로
+  /// 실패해도 다른 쪽이 stranded되지 않으며, 가장 중요한 periodic이 우선 자리잡는다.
+  /// "둘 다 영구 유실"은 두 독립 연산이 각각 2회씩 실패해야 발생해 확률이 크게 낮다.
   static Future<void> schedule(int hour, int minute) async {
+    // periodic(안전망) 우선 — one-off 등록이 실패해도 15분 폴링은 살아남는다.
+    await _retryRegister('periodic', () => _registerPeriodic(hour, minute));
+    await _retryRegister('one-off', () => _registerOneOff(hour, minute));
+  }
+
+  /// **전송 실패 경로 전용** — one-off만 내일자로 재무장하고 periodic 15분 폴링은
+  /// 건드리지 않는다.
+  ///
+  /// 전송이 한 번이라도 성공하면 [schedule]이 periodic까지 내일로 재워(배터리 절약)
+  /// 밤샘 폴링을 끄는 불변식은 유지된다. 단 **전송 실패 동안에는 당일 재시도가 살아
+  /// 있어야 하므로 periodic을 끄지 않는다** — 살아있는 periodic이 15분 주기로 같은 날
+  /// 네트워크 복구를 잡아 보류 큐를 비운다. 과거에는 실패 분기가 풀 schedule()을 불러
+  /// periodic을 내일로 밀어버려, 일시적 통신 장애가 그날의 15분 안전망을 통째로
+  /// 해체하던 결함(Defect 1)이 있었다.
+  ///
+  /// one-off은 이미 fire되어 소비됐으므로 내일자로 재무장만 한다(periodic이 당일을
+  /// 커버하고, 성공 시 schedule()이 one-off도 내일자로 재확정한다).
+  static Future<void> rescheduleOneOffOnly(int hour, int minute) async {
+    await _retryRegister('one-off(실패 재무장)', () => _registerOneOff(hour, minute));
+  }
+
+  /// 단일 등록 연산을 일시적 WorkManager DB 오류 대비 최대 2회 시도.
+  static Future<void> _retryRegister(
+      String label, Future<void> Function() op) async {
     for (var attempt = 1; attempt <= 2; attempt++) {
       try {
-        await _doSchedule(hour, minute);
+        await op();
         return;
       } catch (e) {
-        debugPrint('[HeartbeatWorker] schedule() 시도 $attempt 실패: $e');
-        if (attempt == 1) {
-          await Future.delayed(const Duration(seconds: 2));
-        }
+        debugPrint('[HeartbeatWorker] $label 등록 시도 $attempt 실패: $e');
+        if (attempt == 1) await Future.delayed(const Duration(seconds: 2));
       }
     }
     debugPrint(
-      '[HeartbeatWorker] schedule() 최종 실패 — 다음 _onHeartbeatSent 호출 또는 '
+      '[HeartbeatWorker] $label 등록 최종 실패 — 다음 _onHeartbeatSent 호출 또는 '
       '포그라운드 진입 시 자연 회복 대기',
     );
   }
 
-  static Future<void> _doSchedule(int hour, int minute) async {
+  /// one-off: 정확히 예약시각에 1회 fire
+  static Future<void> _registerOneOff(int hour, int minute) async {
     final delay = _computeNextDelay(hour, minute);
-
-    // one-off: 정확히 예약시각에 1회 fire
     await Workmanager().cancelByUniqueName(_oneOffName);
     await Workmanager().registerOneOffTask(
       _oneOffName,
@@ -194,8 +222,15 @@ class HeartbeatWorkerService {
       inputData: {'source': 'one-off'},
       constraints: Constraints(networkType: NetworkType.connected),
     );
+    debugPrint(
+      '[HeartbeatWorker] one-off 등록: ${_hhmm(hour, minute)} '
+      '(${delay.inHours}h ${delay.inMinutes % 60}m 후)',
+    );
+  }
 
-    // periodic 15분: 안전망 폴링. 예약시각 +3분부터 첫 fire → 이후 15분마다.
+  /// periodic 15분: 안전망 폴링. 예약시각 +3분부터 첫 fire → 이후 15분마다.
+  static Future<void> _registerPeriodic(int hour, int minute) async {
+    final delay = _computeNextDelay(hour, minute);
     // 음수 오프셋으로 `delay + offset`이 음수가 되면 Android가 거부하므로
     // `Duration.zero`로 clamp (즉시 첫 fire → 대부분 Doze에 의해 다음
     // maintenance window로 자연 이연).
@@ -212,13 +247,15 @@ class HeartbeatWorkerService {
       inputData: {'source': 'periodic'},
       constraints: Constraints(networkType: NetworkType.connected),
     );
-
     debugPrint(
-      '[HeartbeatWorker] 예약 등록: ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} '
-      '(one-off ${delay.inHours}h ${delay.inMinutes % 60}m 후, '
-      'periodic ${periodicDelay.inHours}h ${periodicDelay.inMinutes % 60}m 후 첫 fire → ${_pollFrequency.inMinutes}분 간격)',
+      '[HeartbeatWorker] periodic 등록: ${_hhmm(hour, minute)} '
+      '(첫 fire ${periodicDelay.inHours}h ${periodicDelay.inMinutes % 60}m 후 '
+      '→ ${_pollFrequency.inMinutes}분 간격)',
     );
   }
+
+  static String _hhmm(int hour, int minute) =>
+      '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 
   /// 다음 예약시각까지의 delay 계산 (이미 지났으면 내일)
   static Duration _computeNextDelay(int hour, int minute) {
