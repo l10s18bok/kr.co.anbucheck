@@ -244,67 +244,64 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                   ),
                   SizedBox(height: AppSpacing.sp8),
 
-                  // 하단: 앱 버전 + 브랜드 (왼쪽 정렬) + 탈퇴 (우측)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                  // 하단: 앱 버전 + 브랜드 + 회사 링크(저작권 라인) + 탈퇴(아래)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Obx(
-                              () => Text(
-                                'settings_app_version'.trParams({
-                                  'version': controller.appVersion.value,
-                                }),
-                                style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
-                              ),
+                      Obx(
+                        () => Text(
+                          'settings_app_version'.trParams({
+                            'version': controller.appVersion.value,
+                          }),
+                          style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.md),
+                      Text(
+                        'ANBU GUARD NETWORK',
+                        style: AppTextTheme.labelSmall(
+                          color: AppColors.textTertiary,
+                          fw: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      // 회사 웹사이트 링크를 저작권 라인으로 이동 — ANBU GUARD NETWORK
+                      // 라인에 두면 영어권 탈퇴 텍스트 폭에 밀려 오버플로됨
+                      Row(
+                        children: [
+                          Text(
+                            'app_copyright'.tr,
+                            style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () => launchUrl(
+                              Uri.parse(AppConstants.companyWebsiteUrl),
+                              mode: LaunchMode.externalApplication,
                             ),
-                            SizedBox(height: AppSpacing.md),
-                            Row(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'ANBU GUARD NETWORK',
+                                  AppConstants.companyWebsiteLabel,
                                   style: AppTextTheme.labelSmall(
-                                    color: AppColors.textTertiary,
+                                    color: AppColors.guardianPrimary,
                                     fw: FontWeight.w600,
                                   ),
                                 ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () => launchUrl(
-                                    Uri.parse(AppConstants.companyWebsiteUrl),
-                                    mode: LaunchMode.externalApplication,
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        AppConstants.companyWebsiteLabel,
-                                        style: AppTextTheme.labelSmall(
-                                          color: AppColors.guardianPrimary,
-                                          fw: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(width: 4.w),
-                                      Icon(
-                                        Icons.open_in_new_rounded,
-                                        size: 14.w,
-                                        color: AppColors.guardianPrimary,
-                                      ),
-                                    ],
-                                  ),
+                                SizedBox(width: 4.w),
+                                Icon(
+                                  Icons.open_in_new_rounded,
+                                  size: 14.w,
+                                  color: AppColors.guardianPrimary,
                                 ),
                               ],
                             ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              'app_copyright'.tr,
-                              style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
+                      SizedBox(height: AppSpacing.xl),
+                      // 탈퇴를 저작권 라인 우측에서 아래 단독 라인으로 이동
                       GestureDetector(
                         onTap: () => _showDeleteConfirm(),
                         child: Padding(
@@ -590,17 +587,27 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
             ),
             SizedBox(height: AppSpacing.md),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Text(
-                    titleKey.tr,
-                    style: AppTextTheme.headlineMedium(color: Colors.white, fw: FontWeight.w700),
+                  // 긴 언어(독일어 "Kostenlose Testphase", 폴란드어 27자 등)는 한 줄
+                  // 폭을 넘어 줄바꿈되므로, FittedBox로 폭에 맞게 자동 축소해 한 줄 유지.
+                  // 짧은 언어는 넘치지 않으면 원래 크기 그대로(scaleDown은 축소만 함).
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      titleKey.tr,
+                      maxLines: 1,
+                      style: AppTextTheme.headlineMedium(color: Colors.white, fw: FontWeight.w700),
+                    ),
                   ),
                 ),
                 if (showDaysBadge)
                   Padding(
-                    padding: EdgeInsets.only(bottom: 4.h, left: 8.w),
+                    // left: 제목과 배지의 최소 보장 간격 (긴 언어에선 제목이 폭을
+                    // 꽉 채워 이 값이 둘 사이 유일한 여백이 됨)
+                    padding: EdgeInsets.only(bottom: 4.h, left: 12.w),
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                       decoration: BoxDecoration(
