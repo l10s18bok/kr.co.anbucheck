@@ -37,6 +37,11 @@ class GuardianDashboardController extends BaseController
   /// 30일 걸음수 캐시 (invite_code → 30일 배열). 차트 다이얼로그에서 사용.
   final monthlyStepsCache = <String, List<int?>>{}.obs;
 
+  /// 차트 다이얼로그 중복 오픈 방지 가드. 캘린더 아이콘 탭 → 30일 데이터 로드(서버
+  /// 호출, 지연 가능) → 다이얼로그 표시 구간 동안 true. 로드 대기 중 다시 탭해 다이얼로그가
+  /// 2개 뜨던 문제 차단. UI 바인딩이 아니라 단순 가드라 Rx 불필요.
+  bool isChartDialogBusy = false;
+
   final _subjectDs = SubjectRemoteDatasource();
 
   /// 전화 후 앱 복귀 시 강조할 대상자 코드

@@ -308,32 +308,40 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                               batteryLevel: isNormal ? subject.batteryLevel : null,
                               steps: steps,
                               onOpenFullChart: () async {
-                                final ok = await controller.loadMonthlyStepsIfNeeded(subject);
-                                if (!ok) return;
-                                if (!context.mounted) return;
-                                // 차트가 작게 시작해 튀어나오는 느낌 — scale(0.7→1.0, easeOutBack) + fade
-                                await showGeneralDialog<void>(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  barrierLabel: 'dismiss',
-                                  barrierColor: Colors.black54,
-                                  transitionDuration: const Duration(milliseconds: 300),
-                                  pageBuilder: (_, _, _) => _StepsChartDialog(subject: subject),
-                                  transitionBuilder: (_, anim, _, child) {
-                                    final scale = CurvedAnimation(
-                                      parent: anim,
-                                      curve: Curves.easeOutBack,
-                                      reverseCurve: Curves.easeInBack,
-                                    );
-                                    return FadeTransition(
-                                      opacity: anim,
-                                      child: ScaleTransition(
-                                        scale: Tween<double>(begin: 0.7, end: 1.0).animate(scale),
-                                        child: child,
-                                      ),
-                                    );
-                                  },
-                                );
+                                // 중복 오픈 방지 — 로드 대기 중/다이얼로그 열린 동안 재탭 무시.
+                                // 데이터 로드가 느릴 때 두 번 탭하면 다이얼로그가 2개 뜨던 문제 차단.
+                                if (controller.isChartDialogBusy) return;
+                                controller.isChartDialogBusy = true;
+                                try {
+                                  final ok = await controller.loadMonthlyStepsIfNeeded(subject);
+                                  if (!ok) return;
+                                  if (!context.mounted) return;
+                                  // 차트가 작게 시작해 튀어나오는 느낌 — scale(0.7→1.0, easeOutBack) + fade
+                                  await showGeneralDialog<void>(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    barrierLabel: 'dismiss',
+                                    barrierColor: Colors.black54,
+                                    transitionDuration: const Duration(milliseconds: 300),
+                                    pageBuilder: (_, _, _) => _StepsChartDialog(subject: subject),
+                                    transitionBuilder: (_, anim, _, child) {
+                                      final scale = CurvedAnimation(
+                                        parent: anim,
+                                        curve: Curves.easeOutBack,
+                                        reverseCurve: Curves.easeInBack,
+                                      );
+                                      return FadeTransition(
+                                        opacity: anim,
+                                        child: ScaleTransition(
+                                          scale: Tween<double>(begin: 0.7, end: 1.0).animate(scale),
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                } finally {
+                                  controller.isChartDialogBusy = false;
+                                }
                               },
                             );
                           });
