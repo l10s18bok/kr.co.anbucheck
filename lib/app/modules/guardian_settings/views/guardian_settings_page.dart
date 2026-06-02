@@ -699,13 +699,6 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
             'settings_expired'.tr,
             style: AppTextTheme.headlineMedium(color: accent, fw: FontWeight.w700),
           ),
-          SizedBox(height: 6.h),
-          // Dashboard 만료 배너와 같은 안내 메시지를 함께 표시 — 사용자에게
-          // 결제 필요성 명확히 전달
-          Text(
-            'guardian_subscription_expired_message'.tr,
-            style: AppTextTheme.bodySmall(color: bodyText),
-          ),
           SizedBox(height: AppSpacing.lg),
           if (!iapAvailable || iap?.productDetails.value == null) ...[
             // 스토어 미가용 — 안내만 노출 (다른 상태와 동일 폴백 톤)
