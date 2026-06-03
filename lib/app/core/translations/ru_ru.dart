@@ -41,6 +41,7 @@ abstract class RuRu {
     'update_button': 'Обновить',
     'update_available_title': 'Доступно обновление',
     'update_available_message': 'Доступна версия @version.',
+    'update_later_button': 'Позже',
 
     // ── Выбор режима ──
     'mode_select_title': 'Как вы хотите начать?',

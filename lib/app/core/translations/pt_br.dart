@@ -40,6 +40,7 @@ abstract class PtBr {
     'update_button': 'Atualizar',
     'update_available_title': 'Atualização disponível',
     'update_available_message': 'A versão @version está disponível.',
+    'update_later_button': 'Mais tarde',
 
     // ── Seleção de modo ──
     'mode_select_title': 'Como você quer começar?',

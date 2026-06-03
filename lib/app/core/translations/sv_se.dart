@@ -40,6 +40,7 @@ abstract class SvSe {
     'update_button': 'Uppdatera',
     'update_available_title': 'Uppdatering tillganglig',
     'update_available_message': 'Version @version ar tillganglig.',
+    'update_later_button': 'Senare',
 
     // ── Valj lage ──
     'mode_select_title': 'Hur vill du börja?',

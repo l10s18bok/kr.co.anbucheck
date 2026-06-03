@@ -40,6 +40,7 @@ abstract class ZhTw {
     'update_button': '更新',
     'update_available_title': '有新版本',
     'update_available_message': '新版本 @version 已發佈。',
+    'update_later_button': '稍後',
 
     // ── 模式選擇 ──
     'mode_select_title': '想怎麼開始呢',

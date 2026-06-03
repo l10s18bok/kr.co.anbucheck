@@ -40,6 +40,7 @@ abstract class NlNl {
     'update_button': 'Bijwerken',
     'update_available_title': 'Update beschikbaar',
     'update_available_message': 'Versie @version is beschikbaar.',
+    'update_later_button': 'Later',
 
     // ── Modusselectie ──
     'mode_select_title': 'Hoe wil je beginnen?',

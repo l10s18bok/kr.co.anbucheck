@@ -40,6 +40,7 @@ abstract class ArSa {
     'update_button': 'تحديث',
     'update_available_title': 'تحديث متوفر',
     'update_available_message': 'الإصدار @version متوفر.',
+    'update_later_button': 'لاحقًا',
 
     // ── اختيار الوضع ──
     'mode_select_title': 'كيف تريد أن تبدأ؟',

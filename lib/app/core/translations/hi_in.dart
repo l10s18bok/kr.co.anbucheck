@@ -41,6 +41,7 @@ abstract class HiIn {
     'update_button': 'अपडेट करें',
     'update_available_title': 'अपडेट उपलब्ध',
     'update_available_message': 'संस्करण @version उपलब्ध है।',
+    'update_later_button': 'बाद में',
 
     // ── मोड चयन ──
     'mode_select_title': 'आप कैसे शुरू करना चाहेंगे?',

@@ -41,6 +41,7 @@ abstract class PlPl {
     'update_button': 'Aktualizuj',
     'update_available_title': 'Dostepna aktualizacja',
     'update_available_message': 'Dostepna jest wersja @version.',
+    'update_later_button': 'Później',
 
     // ── Wybor trybu ──
     'mode_select_title': 'Jak chcesz zacząć?',

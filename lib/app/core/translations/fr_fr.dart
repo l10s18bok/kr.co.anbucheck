@@ -41,6 +41,7 @@ abstract class FrFr {
     'update_button': 'Mettre à jour',
     'update_available_title': 'Mise à jour disponible',
     'update_available_message': 'La version @version est disponible.',
+    'update_later_button': 'Plus tard',
 
     // ── Choix du mode ──
     'mode_select_title': 'Comment souhaitez-vous commencer ?',

@@ -41,6 +41,7 @@ abstract class ViVn {
     'update_button': 'Cap nhat',
     'update_available_title': 'Co ban cap nhat moi',
     'update_available_message': 'Phien ban @version da co san.',
+    'update_later_button': 'Để sau',
 
     // ── Chon che do ──
     'mode_select_title': 'Bạn muốn bắt đầu thế nào?',

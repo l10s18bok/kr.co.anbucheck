@@ -40,6 +40,7 @@ abstract class KoKr {
     'update_button': '업데이트',
     'update_available_title': '업데이트 안내',
     'update_available_message': '새 버전(@version)이 있습니다.',
+    'update_later_button': '나중에',
 
     // ── 모드 선택 ──
     'mode_select_title': '어떻게 시작할까요',

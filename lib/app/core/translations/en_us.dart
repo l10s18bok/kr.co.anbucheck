@@ -40,6 +40,7 @@ abstract class EnUs {
     'update_button': 'Update',
     'update_available_title': 'Update Available',
     'update_available_message': 'Version @version is available.',
+    'update_later_button': 'Later',
 
     // ── Mode Select ──
     'mode_select_title': 'How would you like to start?',

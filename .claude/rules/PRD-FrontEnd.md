@@ -561,6 +561,8 @@ Future<void> sendHeartbeat({
 
 알림을 탭했을 때 앱 상태(포그라운드/백그라운드/종료)에 따라 처리 경로가 다르다.
 
+> **kill 런치 시 버전 체크 분기**: 종료 상태에서 알림 탭으로 런치되면 `initialRoute: splash`라 아래 라우팅 전에 Splash 버전 체크가 먼저 실행된다. 이때 **heartbeat 전송 유도 알림**(`subject_safety_net`/`gs_deadman`/`safety_net`/`send_failed`) 런치면 버전 체크(강제 포함)를 **skip**하고, 그 외 알림 런치면 강제만 적용·일반 업데이트는 suppress한다(핵심기능인 안부 전송 우선, 서버 heartbeat 영구 하위호환 계약이 안전 근거). 상세 분기는 §9.0 "버전 체크 skip 정책" 참조.
+
 **라우팅 정책 (핵심):**
 
 | 알림 분류 | 라우팅 대상 | 비고 |
@@ -1561,9 +1563,24 @@ ios/Runner/
 │                             │
 └─────────────────────────────┘
 ```
-- `force_update = true`: [업데이트 하기] 버튼만 표시 (닫기/건너뛰기 없음, 앱 사용 차단)
-- `force_update = false`: [업데이트 하기] + [나중에] 버튼 표시 (선택적)
-- 버튼 탭 시 서버 응답의 `store_url`로 이동 (Android: Play Store, iOS: App Store)
+- `force_update = true`: [업데이트 하기] 버튼만 표시. **닫기/건너뛰기 없음 + 안드로이드 백버튼도 차단**(`PopScope(canPop: false)` + `barrierDismissible: false`) → 업데이트 외 탈출구 없음(앱 사용 차단). 서버는 `current_version < min_version`일 때 `force_update=true`를 내려준다(`app_versions` 테이블, 플랫폼별 행)
+- `force_update = false` + **최신 버전 존재 시**: [업데이트 하기] + [나중에] 버튼 표시(선택적, 닫기 가능). [나중에] → 다이얼로그 닫고 평소 라우팅 진행. "최신 버전 존재" 판정은 클라이언트가 응답의 `latest_version`과 현재 버전을 `_compareVersions`(서버 `_compare_versions`와 동일 규칙)로 비교해 `현재 < latest`일 때만 — 별도 서버 작업 불필요(서버가 이미 `latest_version` 반환). **현재 버전은 `_currentAppVersion()`이 `PackageInfo.fromPlatform().version`으로 읽은 실제 설치 빌드 버전**(하드코딩 금지 — 하드코딩하면 출시 후 DB `latest_version`을 올렸을 때 최신 빌드 사용자에게도 잘못된 업데이트 안내가 뜨는 footgun. 조회 실패 시에만 `_appVersionFallback` 사용). 서버로 보내는 `current_version`도 동일 값
+- 버튼 탭 시 서버 응답의 `store_url`로 이동(`launchUrl` `externalApplication` 모드, Android: Play Store, iOS: App Store). `store_url`이 비었거나 파싱 실패 시 조용히 무시
+- 서버 응답 실패(`null`)·`store_url` 없음 → 다이얼로그 없이 정상 진행
+
+**버전 체크 skip 정책 (알림 런치 분기 — `splash_controller`):**
+
+kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash를 거치며 버전 체크가 라우팅보다 먼저 실행된다. 이때 **런치 경로에 따라 버전 체크를 분기**한다 — heartbeat 전송 유도 알림은 앱의 핵심기능(안부 전송)을 수행하라는 알림이므로 업데이트로 막으면 그날 안부 전송이 무산되기 때문. **서버가 heartbeat를 영구 하위호환으로 받으므로(PRD-BackEnd §4.6 계약) 구버전 전송도 항상 도달**해 "보낸 줄 알았는데 거부"하는 거짓 안심이 없다 — 이 계약이 skip의 안전 근거다.
+
+| 런치 경로 | 강제 업데이트 | 일반(선택적) 업데이트 |
+|----------|:---:|:---:|
+| heartbeat 전송 유도 알림 (`subject_safety_net`/`gs_deadman`/`safety_net`/`send_failed`) | **skip** | **skip** |
+| 보호자 알림 (`alert_*`/`auto_report`/`manual_report`) 등 그 외 알림 | 적용 | **skip**(알림 의도 방해 방지) |
+| 일반 아이콘 실행 | 적용 | 적용 |
+
+- 판정은 `_isHeartbeatNotificationLaunch()`(위 4개 payload/type 매칭) / `_isAnyNotificationLaunch()`(`pendingLaunchNotificationType`/`pendingLaunchFcmType` 둘 중 하나라도 set)로 한다. **pending 플래그는 버전 체크 단계에서 읽기만 하고 소비하지 않으며**, 실제 소비·라우팅은 그 뒤 보호자/대상자 분기에서 수행(기존 동작 유지)
+- heartbeat 알림 런치면 `_checkVersion` 자체를 호출하지 않고, 그 외 알림이면 `_checkVersion(allowOptional: false)`로 강제만 적용·일반은 suppress
+- ⚠️ **이 skip은 사유 불문하고 강제 업데이트를 우회한다**(heartbeat 호환성 외 보안 패치·`safety_home`이 렌더링하는 `/subjects`·`/devices/me` 같은 비-heartbeat 파괴적 변경이 force_update 사유인 경우 포함). 노출은 좁다 — heartbeat *전송* 자체는 §4.6 계약으로 항상 안전하고, 다음 아이콘 실행 때 강제 업데이트가 다시 적용된다. PRD-BackEnd §4.6 계약이 보장하는 것은 **heartbeat 전송**뿐이며 화면의 나머지 구버전 동작까지는 아니다. "핵심기능(안부 전송) 우선"이라는 의도된 트레이드오프 — 로직을 바꾸지 말 것
 
 **권한 요청 안내 화면 (모드 선택 후 진입):**
 ```

@@ -40,6 +40,7 @@ abstract class EsEs {
     'update_button': 'Actualizar',
     'update_available_title': 'Actualización disponible',
     'update_available_message': 'La versión @version está disponible.',
+    'update_later_button': 'Más tarde',
 
     // ── Selección de modo ──
     'mode_select_title': '¿Cómo quieres empezar?',

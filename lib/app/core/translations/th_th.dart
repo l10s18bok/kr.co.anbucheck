@@ -40,6 +40,7 @@ abstract class ThTh {
     'update_button': 'อัปเดต',
     'update_available_title': 'มีอัปเดตใหม่',
     'update_available_message': 'เวอร์ชัน @version พร้อมใช้งาน',
+    'update_later_button': 'ภายหลัง',
 
     // ── เลือกโหมด ──
     'mode_select_title': 'อยากเริ่มแบบไหนดี',

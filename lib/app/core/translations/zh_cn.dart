@@ -40,6 +40,7 @@ abstract class ZhCn {
     'update_button': '更新',
     'update_available_title': '有新版本',
     'update_available_message': '新版本 @version 已发布。',
+    'update_later_button': '稍后',
 
     // ── 模式选择 ──
     'mode_select_title': '想怎么开始呢',

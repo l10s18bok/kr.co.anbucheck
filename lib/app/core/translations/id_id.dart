@@ -41,6 +41,7 @@ abstract class IdId {
     'update_button': 'Perbarui',
     'update_available_title': 'Pembaruan tersedia',
     'update_available_message': 'Versi @version tersedia.',
+    'update_later_button': 'Nanti',
 
     // ── Pilih Mode ──
     'mode_select_title': 'Bagaimana Anda ingin memulai?',

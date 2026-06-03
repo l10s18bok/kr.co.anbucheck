@@ -40,6 +40,7 @@ abstract class ItIt {
     'update_button': 'Aggiorna',
     'update_available_title': 'Aggiornamento disponibile',
     'update_available_message': 'La versione @version è disponibile.',
+    'update_later_button': 'Più tardi',
 
     // ── Selezione modalità ──
     'mode_select_title': 'Come vuoi iniziare?',

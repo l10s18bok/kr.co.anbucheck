@@ -40,6 +40,7 @@ abstract class JaJp {
     'update_button': 'アップデート',
     'update_available_title': 'アップデートのお知らせ',
     'update_available_message': '新しいバージョン(@version)が利用可能です。',
+    'update_later_button': '後で',
 
     // ── モード選択 ──
     'mode_select_title': 'どう始めますか',

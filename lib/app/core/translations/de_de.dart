@@ -41,6 +41,7 @@ abstract class DeDe {
     'update_button': 'Aktualisieren',
     'update_available_title': 'Update verfügbar',
     'update_available_message': 'Version @version ist verfügbar.',
+    'update_later_button': 'Später',
 
     // ── Modus-Auswahl ──
     'mode_select_title': 'Wie möchten Sie beginnen?',

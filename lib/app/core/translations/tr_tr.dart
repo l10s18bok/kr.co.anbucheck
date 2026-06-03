@@ -41,6 +41,7 @@ abstract class TrTr {
     'update_button': 'Güncelle',
     'update_available_title': 'Güncelleme Mevcut',
     'update_available_message': '@version sürümü mevcut.',
+    'update_later_button': 'Daha sonra',
 
     // ── Mod Seçimi ──
     'mode_select_title': 'Nasıl başlamak istersiniz?',
