@@ -145,7 +145,9 @@ abstract class PtBr {
     'subject_home_manual_report_sent': 'Sua mensagem foi enviada aos seus contatos.',
     'safety_net_dialog_title': 'Verificação enviada',
     'safety_net_dialog_body':
-        'A verificação de bem-estar de hoje foi enviada ao seu responsável.\nVocê já pode fechar o aplicativo.',
+        'A verificação de bem-estar de hoje foi enviada ao seu responsável.',
+    'safety_net_dialog_already_body':
+        'A verificação de bem-estar de hoje já foi enviada ao seu responsável às @time.',
     'subject_home_emergency_confirm_title': 'Pedido de ajuda de emergência',
     'subject_home_emergency_confirm_body':
         'Um alerta de emergência será enviado a todos os guardiões.\nSua localização atual também será compartilhada.\nTem certeza de que deseja pedir ajuda?',

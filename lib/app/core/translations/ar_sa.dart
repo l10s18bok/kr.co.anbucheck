@@ -136,7 +136,9 @@ abstract class ArSa {
     'subject_home_manual_report_sent': 'تم إرسال رسالة سلامتك إلى جهات الاتصال.',
     'safety_net_dialog_title': 'تم إرسال تقرير السلامة',
     'safety_net_dialog_body':
-        'تم إرسال تقرير السلامة لهذا اليوم إلى مقدم الرعاية.\nيمكنك الآن إغلاق التطبيق.',
+        'تم إرسال تقرير السلامة لهذا اليوم إلى مقدم الرعاية.',
+    'safety_net_dialog_already_body':
+        'تم بالفعل إرسال تقرير سلامة اليوم إلى مقدم الرعاية في الساعة @time.',
     'subject_home_emergency_confirm_title': 'طلب مساعدة طارئة',
     'subject_home_emergency_confirm_body':
         'سيتم إرسال تنبيه طارئ إلى جميع الأوصياء.\nسيتم أيضًا مشاركة موقعك الحالي.\nهل ترغب حقًا في طلب المساعدة؟',

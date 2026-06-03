@@ -570,6 +570,18 @@ Future<void> sendHeartbeat({
 | **FCM 푸시** — Android 대상자 안전망(`subject_safety_net`) | **safety_home** | 서버 미수신 체크(예약시각 +2h)에서 보호자/구독 게이팅 **앞**에서 대상자 본인 Android 기기로 발송 → 보호자 유무·구독 무관. 미수신 heartbeat 자동 재전송 + 안내 다이얼로그는 `safety_net`과 동일 경로(홈/대시보드 onResumed) |
 | **로컬 알림** — 일일 안전망(iOS)/전송 실패(`gs_deadman`/(잔존 `safety_net`)/`send_failed`) | **safety_home** | iOS·Android·모든 앱 상태 동일. 미전송 heartbeat 자동 재전송 + 안내 다이얼로그는 홈/대시보드 컨트롤러 onResumed가 처리. (Android 일일 로컬 안전망 알림은 폐지 — `subject_safety_net` 서버 푸시로 이관, `safety_net` payload 핸들링은 잔존 기기용으로 유지) |
 
+**안전망 알림 탭 안내 다이얼로그 — "탭 이전 전송 여부"로 문구 분기 (`FcmService.consumeSafetyNetDialogIfPending`):**
+
+안전망 알림(Android `subject_safety_net`·잔존 `safety_net`·`send_failed`, iOS `gs_deadman`)을 탭하면 홈/대시보드 컨트롤러가 안내 다이얼로그를 1회 띄운다. 이때 **사용자가 알림을 탭하기 *전에* 이미 다른 경로(앱 실행·포그라운드 복귀·WorkManager periodic/one-off)로 오늘 heartbeat가 전송돼 있었는지**에 따라 문구를 분기한다 — 탭 시점에 전송된 게 아닌데도 "방금 전달됨"으로 안내하면 사용자가 혼란스럽기 때문.
+
+- **판정 방식**: 각 호출부가 `_checkAndSendHeartbeat`/force 전송 **전에** `isReportedToday`(탭 이전 전송 여부 = `wasReported`)와 `lastHeartbeatTime`(그때의 실제 전송 시각 = `priorTime`)을 캡처해 `consumeSafetyNetDialogIfPending(delivered:, alreadyReported:, reportedTime:)`로 넘긴다. **반드시 전송 전에 캡처**해야 한다 — cold-start(앱 kill 후 알림 탭 런치)의 `onAfterLoad`는 heartbeat Rx가 아직 미로드라 캡처 없이는 "이미 전송됨" 판정이 항상 false가 된다. 공통 헬퍼 `_sendAndConsumeSafetyNetDialog`(S `SubjectHomeController` / G+S `GuardianDashboardController` 각각 보유)가 `_reloadHeartbeatState → 캡처 → _checkAndSendHeartbeat → consume` 순서를 강제한다.
+- **① 탭 이전 이미 전송됨**(`wasReported=true`) → 제목 `safety_net_dialog_title`("안부 전달 완료") + 본문 `safety_net_dialog_already_body`("오늘의 안부는 이미 **@time**에 보호자에게 전달되었습니다"). `@time`은 `priorTime`을 `formatTo12Hour`로 변환한 오전/오후 12시간 표기(예: "오후 6:00") — safety_home 홈 카드의 "정상 보고됨" 표시와 동일 헬퍼.
+- **② 탭 시점에 새로 전송됨**(`wasReported=false` → 전송 성공) → 본문 `safety_net_dialog_body`("오늘의 안부가 보호자에게 전달되었습니다").
+- **전송 실패**(`delivered=false`) → 다이얼로그 미표시(플래그만 소비) — 기존 동작 유지.
+- **iOS `gs_deadman` 강제 재전송(`refreshAndForceSend`)도 동일 분기 적용**: 탭은 문서대로 최신 걸음수로 **무조건 재전송**하지만(동작 불변), 재전송이 `lastHeartbeatTime`을 지금 시각으로 덮어쓰기 **전에** `priorTime`을 캡처해 둔다. 따라서 탭 이전 이미 전송돼 있었다면 재전송이 일어나더라도 다이얼로그는 "이미 @priorTime에 전달됨"으로 정확히 안내한다(앱 실행/포그라운드 복귀로 먼저 전송된 케이스).
+- 두 메시지 모두 과거의 "이제 앱을 종료하셔도 됩니다." 안내 문장은 제거됐다(20개 언어 공통).
+- S 모드(Android 전용)는 force-send 경로가 없고 `_checkAndSendHeartbeat`(미전송 시에만 전송)만 타므로 ①/② 분기가 가장 단순하게 맞아떨어진다.
+
 **앱 상태별 처리 경로:**
 
 | 앱 상태 | iOS 처리 경로 | Android 처리 경로 |

@@ -146,7 +146,9 @@ abstract class IdId {
     'subject_home_manual_report_sent': 'Pesan keamanan Anda telah dikirim ke kontak Anda.',
     'safety_net_dialog_title': 'Laporan keamanan terkirim',
     'safety_net_dialog_body':
-        'Laporan keamanan hari ini telah dikirim ke pengasuh Anda.\nAnda dapat menutup aplikasi sekarang.',
+        'Laporan keamanan hari ini telah dikirim ke pengasuh Anda.',
+    'safety_net_dialog_already_body':
+        'Laporan keamanan hari ini sudah dikirim ke pengasuh Anda pada pukul @time.',
     'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
     'subject_home_emergency_confirm_body':
         'Peringatan darurat akan dikirim ke semua wali.\nLokasi Anda saat ini juga akan dibagikan.\nYakin ingin meminta bantuan?',

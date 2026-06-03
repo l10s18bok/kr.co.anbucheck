@@ -142,7 +142,9 @@ abstract class EnUs {
     'subject_home_manual_report_sent': 'Your wellness check has been sent to your guardians.',
     'safety_net_dialog_title': 'Wellness Check Delivered',
     'safety_net_dialog_body':
-        "Today's wellness check has been delivered to your guardian.\nYou may now close the app.",
+        "Today's wellness check has been delivered to your guardian.",
+    'safety_net_dialog_already_body':
+        "Today's wellness check was already delivered to your guardian at @time.",
     'subject_home_emergency_confirm_title': 'Emergency Help Request',
     'subject_home_emergency_confirm_body':
         'An emergency alert will be sent to all guardians.\nYour current location will be shared too.\nDo you really want to request help?',

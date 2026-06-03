@@ -144,7 +144,9 @@ abstract class EsEs {
     'subject_home_manual_report_sent': 'Tu mensaje ha sido enviado a tus contactos.',
     'safety_net_dialog_title': 'Comprobación enviada',
     'safety_net_dialog_body':
-        'La comprobación de bienestar de hoy ha sido enviada a tu cuidador.\nYa puedes cerrar la aplicación.',
+        'La comprobación de bienestar de hoy ha sido enviada a tu cuidador.',
+    'safety_net_dialog_already_body':
+        'La comprobación de bienestar de hoy ya se envió a tu cuidador a las @time.',
     'subject_home_emergency_confirm_title': 'Solicitud de ayuda de emergencia',
     'subject_home_emergency_confirm_body':
         'Se enviará una alerta de emergencia a todos los cuidadores.\nTambién se compartirá tu ubicación actual.\n¿Realmente quieres solicitar ayuda?',

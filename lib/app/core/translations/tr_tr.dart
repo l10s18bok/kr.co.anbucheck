@@ -141,8 +141,9 @@ abstract class TrTr {
         'Bugünün güvenlik raporunu zaten gönderdiniz. Lütfen yarın tekrar deneyin.',
     'subject_home_manual_report_sent': 'Durumunuz kişilerinize iletildi.',
     'safety_net_dialog_title': 'Yoklama gönderildi',
-    'safety_net_dialog_body':
-        'Bugünün yoklaması bakıcınıza iletildi.\nUygulamayı şimdi kapatabilirsiniz.',
+    'safety_net_dialog_body': 'Bugünün yoklaması bakıcınıza iletildi.',
+    'safety_net_dialog_already_body':
+        'Bugünün yoklaması saat @time itibarıyla bakıcınıza zaten iletildi.',
     'subject_home_emergency_confirm_title': 'Acil yardım talebi',
     'subject_home_emergency_confirm_body':
         'Tüm bakıcılara bir acil durum uyarısı gönderilecek.\nMevcut konumunuz da paylaşılacak.\nGerçekten yardım istemek istiyor musunuz?',

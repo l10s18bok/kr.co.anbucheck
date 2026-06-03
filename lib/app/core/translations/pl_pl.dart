@@ -143,7 +143,9 @@ abstract class PlPl {
     'subject_home_manual_report_sent': 'Twoja wiadomość została wysłana do kontaktów.',
     'safety_net_dialog_title': 'Sprawdzenie wysłane',
     'safety_net_dialog_body':
-        'Dzisiejsze sprawdzenie samopoczucia zostało wysłane do opiekuna.\nMożesz teraz zamknąć aplikację.',
+        'Dzisiejsze sprawdzenie samopoczucia zostało wysłane do opiekuna.',
+    'safety_net_dialog_already_body':
+        'Dzisiejsze sprawdzenie samopoczucia zostało już wysłane do opiekuna o @time.',
     'subject_home_emergency_confirm_title': 'Prośba o pomoc awaryjną',
     'subject_home_emergency_confirm_body':
         'Alarm awaryjny zostanie wysłany do wszystkich opiekunów.\nTwoja obecna lokalizacja również zostanie udostępniona.\nCzy na pewno chcesz poprosić o pomoc?',

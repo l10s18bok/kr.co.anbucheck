@@ -138,7 +138,9 @@ abstract class SvSe {
     'subject_home_manual_report_sent': 'Ditt meddelande har skickats till dina kontakter.',
     'safety_net_dialog_title': 'Statuskontroll skickad',
     'safety_net_dialog_body':
-        'Dagens statuskontroll har skickats till din anhörig.\nDu kan stänga appen nu.',
+        'Dagens statuskontroll har skickats till din anhörig.',
+    'safety_net_dialog_already_body':
+        'Dagens statuskontroll har redan skickats till din anhörig kl. @time.',
     'subject_home_emergency_confirm_title': 'Nödhjälpbegäran',
     'subject_home_emergency_confirm_body':
         'Ett nödlarm kommer att skickas till alla vårdgivare.\nDin nuvarande plats delas också.\nVill du verkligen be om hjälp?',

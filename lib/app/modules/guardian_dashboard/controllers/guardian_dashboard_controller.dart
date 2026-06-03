@@ -128,10 +128,7 @@ class GuardianDashboardController extends BaseController
     await _scheduleHeartbeatIfGS();
     final isAls = await _tokenDs.getIsAlsoSubject();
     if (!isAls) return;
-    await _reloadHeartbeatState();
-    await _checkAndSendHeartbeat();
-    await FcmService.consumeSafetyNetDialogIfPending(
-        delivered: isReportedToday);
+    await _sendAndConsumeSafetyNetDialog();
   }
 
   /// onResumed 진입 시: G+S인 경우 로컬 스케줄 재로드 후 heartbeat 미전송 체크
@@ -139,10 +136,7 @@ class GuardianDashboardController extends BaseController
     final isAls = await _tokenDs.getIsAlsoSubject();
     if (!isAls) return;
     await loadScheduleFromLocal();
-    await _reloadHeartbeatState();
-    await _checkAndSendHeartbeat();
-    await FcmService.consumeSafetyNetDialogIfPending(
-        delivered: isReportedToday);
+    await _sendAndConsumeSafetyNetDialog();
   }
 
   /// FCM이 gs_deadman 로컬 알림 탭 시 호출 (이미 스택에 있을 때)
@@ -150,24 +144,47 @@ class GuardianDashboardController extends BaseController
     final isAls = await _tokenDs.getIsAlsoSubject();
     if (!isAls) return;
     await loadScheduleFromLocal();
+    await _sendAndConsumeSafetyNetDialog();
+  }
+
+  /// 안전망 알림 탭 진입 공통 처리 — 미전송이면 자동 전송한 뒤 안내 다이얼로그를 띄운다.
+  /// **반드시 `_checkAndSendHeartbeat` 전에 상태를 갱신·캡처**한다(SubjectHome과 동일):
+  /// cold-start에서 Rx가 미로드라 캡처 없이는 "이미 전송됨" 판정이 항상 false가 된다.
+  /// `wasReported`(탭 이전 전송 여부)/`priorTime`(그때의 실제 전송 시각)으로
+  /// "방금 전달됨" vs "이미 N시에 전달됨"을 구분한다.
+  Future<void> _sendAndConsumeSafetyNetDialog() async {
     await _reloadHeartbeatState();
+    final wasReported = isReportedToday;
+    final priorTime = lastHeartbeatTime;
     await _checkAndSendHeartbeat();
     await FcmService.consumeSafetyNetDialogIfPending(
-        delivered: isReportedToday);
+        delivered: isReportedToday,
+        alreadyReported: wasReported,
+        reportedTime: priorTime);
   }
 
   /// 로컬 알림 탭 전용 — isReportedToday와 무관하게 무조건 전송
   /// 사용자가 알림을 탭한 행위 자체가 "오늘 안부 보내기" 명시적 의사 표현이므로
   /// 오늘 이미 전송했더라도 최신 걸음수로 재전송한다.
+  ///
+  /// 단 **안내 다이얼로그 문구는 재전송과 별개**다 — 탭하기 *전에* 이미 앱 실행/
+  /// 포그라운드 복귀로 오늘 전송이 끝나 있었다면(`wasReported`), 강제 재전송이
+  /// 일어나더라도 사용자에겐 "방금 전달됨"이 아니라 "이미 @priorTime에 전달됨"으로
+  /// 안내하는 게 정확하다(iOS gs_deadman 탭 케이스). 그래서 재전송이 lastHeartbeatTime을
+  /// 지금 시각으로 덮어쓰기 전에 이전 전송 여부/시각을 캡처해 둔다.
   Future<void> refreshAndForceSend() async {
     final isAls = await _tokenDs.getIsAlsoSubject();
     if (!isAls) return;
     await loadScheduleFromLocal();
     await _reloadHeartbeatState();
+    final wasReported = isReportedToday;
+    final priorTime = lastHeartbeatTime;
     await HeartbeatService().execute(manual: true, isInteractiveAtTrigger: true);
     await _reloadHeartbeatState();
     await FcmService.consumeSafetyNetDialogIfPending(
-        delivered: isReportedToday);
+        delivered: isReportedToday,
+        alreadyReported: wasReported,
+        reportedTime: priorTime);
   }
 
   /// SafetyCode 등 외부에서 heartbeat 상태 재로드가 필요할 때 호출

@@ -59,17 +59,28 @@ class SubjectHomeController extends SafetyHomeBaseController {
 
   @override
   Future<void> onAfterLoad() async {
-    await _checkAndSendHeartbeat();
-    await FcmService.consumeSafetyNetDialogIfPending(
-        delivered: isReportedToday);
+    await _sendAndConsumeSafetyNetDialog();
   }
 
   @override
   Future<void> onResumedRoleSpecific() async {
+    await _sendAndConsumeSafetyNetDialog();
+  }
+
+  /// 안전망 알림 탭 진입 공통 처리 — 미전송이면 자동 전송한 뒤 안내 다이얼로그를 띄운다.
+  /// **반드시 `_checkAndSendHeartbeat` 전에 상태를 갱신·캡처**한다: cold-start onAfterLoad는
+  /// `_lastHeartbeatDate` Rx가 아직 미로드라(빈 값) 캡처 없이는 "이미 전송됨" 판정이
+  /// 항상 false가 된다. 캡처한 `wasReported`(탭 이전 전송 여부)/`priorTime`(그때의 실제
+  /// 전송 시각)을 넘겨 "방금 전달됨" vs "이미 N시에 전달됨"을 구분한다.
+  Future<void> _sendAndConsumeSafetyNetDialog() async {
     await _reloadHeartbeatState();
+    final wasReported = isReportedToday;
+    final priorTime = lastHeartbeatTime;
     await _checkAndSendHeartbeat();
     await FcmService.consumeSafetyNetDialogIfPending(
-        delivered: isReportedToday);
+        delivered: isReportedToday,
+        alreadyReported: wasReported,
+        reportedTime: priorTime);
   }
 
   @override
@@ -149,10 +160,7 @@ class SubjectHomeController extends SafetyHomeBaseController {
   /// 오늘의 안부 확인 메시지 로컬 알림 탭 등으로 이미 스택에 있는 경우 외부에서 호출
   Future<void> refreshAndSend() async {
     await loadScheduleFromLocal();
-    await _reloadHeartbeatState();
-    await _checkAndSendHeartbeat();
-    await FcmService.consumeSafetyNetDialogIfPending(
-        delivered: isReportedToday);
+    await _sendAndConsumeSafetyNetDialog();
   }
 
   // ── Android 휴면(Auto-Revoke) 안내 다이얼로그 ─────────────────────

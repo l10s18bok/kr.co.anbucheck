@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
@@ -194,16 +195,29 @@ class FcmService extends GetxService {
   /// 않도록 플래그는 항상 false로 리셋된다 (네트워크 복구 후 connectivity 리스너의
   /// `_sendPendingHeartbeat`가 자동 처리하지만 그 시점은 사용자 컨텍스트가
   /// 끊어진 뒤라 다이얼로그를 띄우지 않는 편이 일관적).
+  ///
+  /// [alreadyReported]가 true면 — 사용자가 알림을 탭하기 *전에* 이미 다른 경로
+  /// (앱 실행/WorkManager periodic·one-off)로 오늘 heartbeat가 전송돼 있던 경우 —
+  /// "방금 전달됨"이 아니라 [reportedTime]("HH:mm") 시각을 넣어 "이미 그 시각에
+  /// 전달됨"으로 안내해 혼란을 막는다. 탭한 행위로 새로 전송된 경우(이전 미전송)에만
+  /// 기존 "방금 전달됨" 문구를 쓴다. 호출부가 전송 시도 *전에* 상태를 캡처해 전달한다.
   static Future<void> consumeSafetyNetDialogIfPending(
-      {required bool delivered}) async {
+      {required bool delivered,
+      bool alreadyReported = false,
+      String? reportedTime}) async {
     if (!pendingSafetyNetDialog) return;
     pendingSafetyNetDialog = false;
     if (!delivered) return;
     if (Get.context == null) return;
+    final showAlready =
+        alreadyReported && reportedTime != null && reportedTime.isNotEmpty;
     await Get.dialog<void>(
       AlertDialog(
         title: Text('safety_net_dialog_title'.tr),
-        content: Text('safety_net_dialog_body'.tr),
+        content: Text(showAlready
+            ? 'safety_net_dialog_already_body'
+                .trParams({'time': formatTo12Hour(reportedTime)})
+            : 'safety_net_dialog_body'.tr),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
