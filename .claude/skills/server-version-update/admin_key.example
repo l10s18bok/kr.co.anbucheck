@@ -1,0 +1,2 @@
+여기에 서버 ADMIN_SECRET_KEY(Railway 환경변수 값)를 한 줄로 넣고
+이 파일을 admin_key 로 복사하세요: cp admin_key.example admin_key

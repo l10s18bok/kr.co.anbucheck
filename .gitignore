@@ -57,3 +57,6 @@ ios/Runner/GoogleService-Info.plist
 
 # 로컬 참고 문서 (버전 관리 제외)
 .ref/
+
+# 서버 버전 업데이트 스킬 admin 키 (커밋 금지)
+.claude/skills/server-version-update/admin_key
