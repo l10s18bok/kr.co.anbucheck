@@ -44,6 +44,16 @@ class GuardianNotificationsController extends BaseController {
     super.onClose();
   }
 
+  /// 백그라운드 → 포그라운드 복귀 시 목록 재조회.
+  /// iOS에서 알림 페이지를 띄운 채 화면이 잠겼다가 잠김화면 알림 탭으로 복귀하는 경우,
+  /// 탭 라우팅(_routeToNotifications)이 신뢰성 있게 발화하지 않아 새 알림이 반영되지
+  /// 않던 문제 대응 — 홈/대시보드 컨트롤러와 동일하게 resume마다 fresh 로드한다.
+  @override
+  void onResumed() {
+    super.onResumed();
+    load();
+  }
+
   Future<void> load() async {
     // 구독 만료 — 알림 목록 통신 차단 + 비움. 재구독 시 ever가 재조회.
     if (!_sub.isActive.value) {
