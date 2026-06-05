@@ -39,7 +39,7 @@
 ### 1.5 수익 모델
 - **보호자가 결제**: 3개월 무료 체험 → 이후 연 $9.99 자동 갱신 구독
 - **보호 대상자 앱은 완전 무료** (결제 기능 없음)
-- **보호 대상자 최대 5명** (단일 요금, 티어 구분 없음)
+- **보호 대상자 최대 5명** (현재 단일 요금·티어 구분 없음 — 단, 한도는 보호자별 `users.max_subjects`(기본 5)로 관리되며 향후 유료 결제로 상향 가능하도록 동적화됨. 서버 응답 `max_subjects`/`can_add_more`로 내려옴)
 - **하단 고정 배너 광고** (유료 구독 보호자는 광고 제거)
 
 
@@ -1894,6 +1894,14 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 - 별칭은 **보호자 앱 로컬에만 저장** (NicknameLocalDatasource, 서버 미전송)
 - 별칭 미입력 시 고유 코드로 표시
 - 연결 완료 시 result=true 반환 → 대시보드에서 목록 즉시 갱신
+
+**연결 사전 검증 (API 호출 전 차단, `GuardianAddSubjectController.connectSubject`):**
+
+`linkSubject` API를 호출하기 전에 두 가지를 클라이언트에서 먼저 막아 불필요한 왕복과 모호한 "연결 실패" 문구를 방지한다. 서버는 동일 조건을 400으로도 막으므로(아래는 백스톱), 클라 사전 차단은 UX 개선용이다.
+
+- **본인 코드 연결 방지** (self-link): 입력 코드를 본인 `TokenLocalDatasource.getInviteCode()`와 (양쪽 `trim().toUpperCase()` 정규화 후) 비교해 같으면 즉시 `add_subject_error_self`("본인의 코드는 보호 대상자로 추가할 수 없습니다.") 표시 후 중단. G+S 보호자만 invite_code를 가지므로 이 경우에만 발동, 순수 보호자는 자연 통과. 서버 400(`"자기 자신을 대상자로 연결할 수 없습니다"`)은 백스톱.
+- **최대 인원 초과 방지**: `GuardianSubjectService.canAddMore`(서버 `/subjects` 응답의 `can_add_more`)가 false면 `add_subject_error_limit`("최대 @max명까지 등록할 수 있습니다.") 표시 후 중단. `@max`는 서버가 내려준 `GuardianSubjectService.maxSubjects`(=보호자별 `users.max_subjects`, 기본 5) — 에러 본문 파싱 없이 이미 보유한 동적 값을 사용. 서버 400(`"대상자는 최대 N명까지 등록 가능합니다"`)은 stale 캐시 race용 백스톱.
+- 서버 400은 self-link/초과가 모두 동일 코드라 catch에서 별도 분기하지 않고 기존 일반 "연결 실패"로 폴백(사전 차단이 정상 케이스를 모두 처리하므로 400 도달은 드문 race). 404(잘못된 코드)·409(이미 연결됨)는 기존대로 전용 문구.
 
 
 ### 9.7 보호자 모드 - 설정 화면
