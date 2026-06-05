@@ -206,6 +206,8 @@ abstract class ZhTw {
     'add_subject_error_login': '請先登入。',
     'add_subject_success': '被守護者已成功連結。',
     'add_subject_error_invalid_code': '無效的邀請碼。',
+    'add_subject_error_self': '無法將自己的邀請碼新增為受照護者。',
+    'add_subject_error_limit': '最多可註冊@max人。',
     'add_subject_error_already_connected': '該被守護者已連結。',
     'add_subject_error_failed': '連結失敗，請稍後再試。',
     'add_subject_button': '新增被守護者',

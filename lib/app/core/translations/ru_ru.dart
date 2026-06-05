@@ -229,6 +229,8 @@ abstract class RuRu {
     'add_subject_error_login': 'Требуется авторизация.',
     'add_subject_success': 'Подопечный успешно подключён.',
     'add_subject_error_invalid_code': 'Недействительный код.',
+    'add_subject_error_self': 'Нельзя добавить собственный код в качестве подопечного.',
+    'add_subject_error_limit': 'Можно добавить не более @max человек.',
     'add_subject_error_already_connected': 'Уже подключён.',
     'add_subject_error_failed': 'Не удалось подключить. Пожалуйста, попробуйте позже.',
     'add_subject_button': 'Добавить подопечного',

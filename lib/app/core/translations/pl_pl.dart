@@ -227,6 +227,8 @@ abstract class PlPl {
     'add_subject_error_login': 'Wymagane logowanie.',
     'add_subject_success': 'Podopieczny zostal polaczony.',
     'add_subject_error_invalid_code': 'Nieprawidlowy kod.',
+    'add_subject_error_self': 'Nie mozesz dodac wlasnego kodu jako podopiecznego.',
+    'add_subject_error_limit': 'Mozesz zarejestrowac maksymalnie @max osob.',
     'add_subject_error_already_connected': 'Juz polaczony.',
     'add_subject_error_failed': 'Polaczenie nie powiodlo sie. Prosze sprobowac ponownie.',
     'add_subject_button': 'Dodaj nowego podopiecznego',

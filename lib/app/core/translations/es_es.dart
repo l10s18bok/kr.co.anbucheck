@@ -228,6 +228,8 @@ abstract class EsEs {
     'add_subject_error_login': 'Inicio de sesión necesario.',
     'add_subject_success': 'Persona protegida vinculada correctamente.',
     'add_subject_error_invalid_code': 'Código no válido.',
+    'add_subject_error_self': 'No puedes añadir tu propio código como persona a cuidar.',
+    'add_subject_error_limit': 'Puedes registrar hasta @max personas.',
     'add_subject_error_already_connected': 'Ya está vinculado/a.',
     'add_subject_error_failed': 'Error de vinculación. Inténtelo de nuevo.',
     'add_subject_button': 'Agregar nueva persona protegida',

@@ -228,6 +228,8 @@ abstract class PtBr {
     'add_subject_error_login': 'Login necessário.',
     'add_subject_success': 'Protegido conectado com sucesso.',
     'add_subject_error_invalid_code': 'Código inválido.',
+    'add_subject_error_self': 'Você não pode adicionar seu próprio código como pessoa monitorada.',
+    'add_subject_error_limit': 'Você pode registrar até @max pessoas.',
     'add_subject_error_already_connected': 'Já conectado.',
     'add_subject_error_failed': 'Conexão falhou. Tente novamente mais tarde.',
     'add_subject_button': 'Adicionar novo protegido',

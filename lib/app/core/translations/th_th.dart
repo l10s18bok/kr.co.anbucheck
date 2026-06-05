@@ -220,6 +220,8 @@ abstract class ThTh {
     'add_subject_error_login': 'จำเป็นต้องเข้าสู่ระบบ',
     'add_subject_success': 'เชื่อมต่อผู้อยู่ในการดูแลสำเร็จ',
     'add_subject_error_invalid_code': 'รหัสไม่ถูกต้อง',
+    'add_subject_error_self': 'คุณไม่สามารถเพิ่มรหัสของตัวเองเป็นผู้ที่ได้รับการดูแลได้',
+    'add_subject_error_limit': 'คุณสามารถลงทะเบียนได้สูงสุด @max คน',
     'add_subject_error_already_connected': 'เชื่อมต่อแล้ว',
     'add_subject_error_failed': 'การเชื่อมต่อล้มเหลว กรุณาลองใหม่',
     'add_subject_button': 'เพิ่มผู้อยู่ในการดูแลใหม่',

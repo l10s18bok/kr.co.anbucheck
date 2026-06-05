@@ -226,6 +226,8 @@ abstract class ViVn {
     'add_subject_error_login': 'Can dang nhap.',
     'add_subject_success': 'Ket noi nguoi duoc bao ve thanh cong.',
     'add_subject_error_invalid_code': 'Ma khong hop le.',
+    'add_subject_error_self': 'Ban khong the them ma cua chinh minh lam nguoi duoc theo doi.',
+    'add_subject_error_limit': 'Ban co the dang ky toi da @max nguoi.',
     'add_subject_error_already_connected': 'Da ket noi roi.',
     'add_subject_error_failed': 'Ket noi that bai. Vui long thu lai.',
     'add_subject_button': 'Them nguoi duoc bao ve moi',

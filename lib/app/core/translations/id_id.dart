@@ -229,6 +229,8 @@ abstract class IdId {
     'add_subject_error_login': 'Login diperlukan.',
     'add_subject_success': 'Orang yang dilindungi berhasil terhubung.',
     'add_subject_error_invalid_code': 'Kode tidak valid.',
+    'add_subject_error_self': 'Anda tidak dapat menambahkan kode Anda sendiri sebagai orang yang dipantau.',
+    'add_subject_error_limit': 'Anda dapat mendaftarkan hingga @max orang.',
     'add_subject_error_already_connected': 'Sudah terhubung.',
     'add_subject_error_failed': 'Koneksi gagal. Silakan coba lagi.',
     'add_subject_button': 'Tambah Orang yang Dilindungi Baru',

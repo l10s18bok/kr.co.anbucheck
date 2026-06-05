@@ -208,6 +208,8 @@ abstract class JaJp {
     'add_subject_error_login': 'ログインが必要です。',
     'add_subject_success': '対象者が接続されました。',
     'add_subject_error_invalid_code': '無効なコードです。',
+    'add_subject_error_self': 'ご自身のコードは見守り対象として追加できません。',
+    'add_subject_error_limit': '最大@max人まで登録できます。',
     'add_subject_error_already_connected': 'すでに接続されています。',
     'add_subject_error_failed': '接続に失敗しました。しばらくしてからもう一度お試しください。',
     'add_subject_button': '新しい対象者を追加',

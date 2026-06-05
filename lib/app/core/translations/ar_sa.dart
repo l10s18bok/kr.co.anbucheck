@@ -217,6 +217,8 @@ abstract class ArSa {
     'add_subject_error_login': 'تسجيل الدخول مطلوب.',
     'add_subject_success': 'تم ربط المتابَع بنجاح.',
     'add_subject_error_invalid_code': 'رمز غير صالح.',
+    'add_subject_error_self': 'لا يمكنك إضافة رمزك الخاص كشخص مشمول بالرعاية.',
+    'add_subject_error_limit': 'يمكنك تسجيل ما يصل إلى @max أشخاص.',
     'add_subject_error_already_connected': 'مرتبط بالفعل.',
     'add_subject_error_failed': 'فشل الربط. يرجى المحاولة لاحقاً.',
     'add_subject_button': 'إضافة متابَع جديد',

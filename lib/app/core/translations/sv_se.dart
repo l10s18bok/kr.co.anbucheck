@@ -220,6 +220,8 @@ abstract class SvSe {
     'add_subject_error_login': 'Inloggning kravs.',
     'add_subject_success': 'Skyddsperson ansluten.',
     'add_subject_error_invalid_code': 'Ogiltig kod.',
+    'add_subject_error_self': 'Du kan inte lägga till din egen kod som en person att bevaka.',
+    'add_subject_error_limit': 'Du kan registrera upp till @max personer.',
     'add_subject_error_already_connected': 'Redan ansluten.',
     'add_subject_error_failed': 'Anslutningen misslyckades. Forsok igen.',
     'add_subject_button': 'Lagg till ny skyddsperson',

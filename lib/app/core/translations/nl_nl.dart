@@ -227,6 +227,8 @@ abstract class NlNl {
     'add_subject_error_login': 'Inloggen vereist.',
     'add_subject_success': 'Beschermeling succesvol verbonden.',
     'add_subject_error_invalid_code': 'Ongeldige code.',
+    'add_subject_error_self': 'Je kunt je eigen code niet toevoegen als zorgontvanger.',
+    'add_subject_error_limit': 'Je kunt maximaal @max personen registreren.',
     'add_subject_error_already_connected': 'Al verbonden.',
     'add_subject_error_failed': 'Verbinding mislukt. Probeer het later opnieuw.',
     'add_subject_button': 'Nieuwe beschermeling toevoegen',

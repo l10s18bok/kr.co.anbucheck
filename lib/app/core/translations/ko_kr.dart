@@ -210,6 +210,8 @@ abstract class KoKr {
     'add_subject_error_login': '로그인이 필요합니다.',
     'add_subject_success': '보호 대상자가 연결되었습니다.',
     'add_subject_error_invalid_code': '유효하지 않은 코드입니다.',
+    'add_subject_error_self': '본인의 코드는 보호 대상자로 추가할 수 없습니다.',
+    'add_subject_error_limit': '최대 @max명까지 등록할 수 있습니다.',
     'add_subject_error_already_connected': '이미 연결된 보호 대상자입니다.',
     'add_subject_error_failed': '연결에 실패했습니다. 잠시 후 다시 시도해 주세요.',
     'add_subject_button': '새로운 보호 대상자 추가',

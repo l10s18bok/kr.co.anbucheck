@@ -228,6 +228,8 @@ abstract class ItIt {
     'add_subject_error_login': 'Accesso necessario.',
     'add_subject_success': 'Assistito collegato con successo.',
     'add_subject_error_invalid_code': 'Codice non valido.',
+    'add_subject_error_self': 'Non puoi aggiungere il tuo codice come persona da assistere.',
+    'add_subject_error_limit': 'Puoi registrare fino a @max persone.',
     'add_subject_error_already_connected': 'Già collegato.',
     'add_subject_error_failed': 'Collegamento non riuscito. Riprovi più tardi.',
     'add_subject_button': 'Aggiungi nuovo assistito',

@@ -224,6 +224,8 @@ abstract class TrTr {
     'add_subject_error_login': 'Giriş yapmanız gerekli.',
     'add_subject_success': 'Takip edilen başarıyla bağlandı.',
     'add_subject_error_invalid_code': 'Geçersiz kod.',
+    'add_subject_error_self': 'Kendi kodunuzu takip edilen kişi olarak ekleyemezsiniz.',
+    'add_subject_error_limit': 'En fazla @max kişi kaydedebilirsiniz.',
     'add_subject_error_already_connected': 'Zaten bağlı.',
     'add_subject_error_failed': 'Bağlantı başarısız. Lütfen tekrar deneyin.',
     'add_subject_button': 'Yeni Takip Edilen Ekle',

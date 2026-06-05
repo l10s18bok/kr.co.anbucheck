@@ -230,6 +230,8 @@ abstract class FrFr {
     'add_subject_error_login': 'Connexion requise.',
     'add_subject_success': 'Personne protégée associée avec succès.',
     'add_subject_error_invalid_code': 'Code non valide.',
+    'add_subject_error_self': 'Vous ne pouvez pas ajouter votre propre code comme personne à suivre.',
+    'add_subject_error_limit': 'Vous pouvez enregistrer jusqu\'à @max personnes.',
     'add_subject_error_already_connected': 'Déjà associé(e).',
     'add_subject_error_failed': 'Échec de l\'association. Veuillez réessayer.',
     'add_subject_button': 'Ajouter une personne protégée',

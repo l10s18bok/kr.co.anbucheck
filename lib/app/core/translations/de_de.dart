@@ -229,6 +229,8 @@ abstract class DeDe {
     'add_subject_error_login': 'Anmeldung erforderlich.',
     'add_subject_success': 'Schutzperson erfolgreich verbunden.',
     'add_subject_error_invalid_code': 'Ungültiger Code.',
+    'add_subject_error_self': 'Sie können Ihren eigenen Code nicht als zu betreuende Person hinzufügen.',
+    'add_subject_error_limit': 'Sie können bis zu @max Personen registrieren.',
     'add_subject_error_already_connected': 'Bereits verbunden.',
     'add_subject_error_failed': 'Verbindung fehlgeschlagen. Bitte versuchen Sie es erneut.',
     'add_subject_button': 'Neue Schutzperson hinzufügen',

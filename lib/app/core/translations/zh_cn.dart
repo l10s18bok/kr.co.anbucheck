@@ -206,6 +206,8 @@ abstract class ZhCn {
     'add_subject_error_login': '请先登录。',
     'add_subject_success': '被守护者已成功连接。',
     'add_subject_error_invalid_code': '无效的邀请码。',
+    'add_subject_error_self': '无法将自己的邀请码添加为被守护者。',
+    'add_subject_error_limit': '最多可注册@max人。',
     'add_subject_error_already_connected': '该被守护者已连接。',
     'add_subject_error_failed': '连接失败，请稍后再试。',
     'add_subject_button': '添加新的被守护者',

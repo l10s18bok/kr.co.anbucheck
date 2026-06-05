@@ -225,6 +225,8 @@ abstract class EnUs {
     'add_subject_error_login': 'Login required.',
     'add_subject_success': 'Subject connected successfully.',
     'add_subject_error_invalid_code': 'Invalid code.',
+    'add_subject_error_self': 'You can\'t add your own code as a subject.',
+    'add_subject_error_limit': 'You can register up to @max people.',
     'add_subject_error_already_connected': 'Already connected.',
     'add_subject_error_failed': 'Connection failed. Please try again.',
     'add_subject_button': 'Add New Subject',

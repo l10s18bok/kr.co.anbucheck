@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
@@ -42,9 +43,31 @@ class GuardianAddSubjectController extends BaseController {
       return;
     }
 
+    final inviteCode = codeController.text.trim().toUpperCase();
+
+    // 본인 코드 연결 방지 (G+S 사용자가 자기 invite_code 입력 시).
+    // 순수 보호자는 invite_code가 없어 자연히 통과. 서버 400은 백스톱으로 유지.
+    final ownCode = (await _tokenDs.getInviteCode())?.trim().toUpperCase();
+    if (ownCode != null && ownCode.isNotEmpty && ownCode == inviteCode) {
+      AppSnackbar.show('common_error'.tr, 'add_subject_error_self'.tr);
+      return;
+    }
+
+    // 최대 등록 인원 초과 사전 차단 — 서버가 내려준 max_subjects 기반(동적).
+    // 서버 400(최대 인원 초과)은 stale 캐시 race 시의 백스톱으로 유지.
+    if (Get.isRegistered<GuardianSubjectService>()) {
+      final svc = Get.find<GuardianSubjectService>();
+      if (!svc.canAddMore.value) {
+        AppSnackbar.show(
+          'common_error'.tr,
+          'add_subject_error_limit'.trParams({'max': '${svc.maxSubjects.value}'}),
+        );
+        return;
+      }
+    }
+
     isLoading = true;
     try {
-      final inviteCode = codeController.text.trim().toUpperCase();
       await _subjectDs.linkSubject(deviceToken, inviteCode);
 
       // 별칭은 서버에 전송하지 않고 로컬에만 저장

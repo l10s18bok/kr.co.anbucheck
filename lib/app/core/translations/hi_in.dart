@@ -224,6 +224,8 @@ abstract class HiIn {
     'add_subject_error_login': 'लॉगिन आवश्यक।',
     'add_subject_success': 'संरक्षित व्यक्ति सफलतापूर्वक जुड़ गया।',
     'add_subject_error_invalid_code': 'अमान्य कोड।',
+    'add_subject_error_self': 'आप अपना खुद का कोड देखभाल प्राप्तकर्ता के रूप में नहीं जोड़ सकते।',
+    'add_subject_error_limit': 'आप अधिकतम @max लोगों को पंजीकृत कर सकते हैं।',
     'add_subject_error_already_connected': 'पहले से जुड़ा हुआ।',
     'add_subject_error_failed': 'कनेक्शन विफल। कृपया पुनः प्रयास करें।',
     'add_subject_button': 'नया संरक्षित व्यक्ति जोड़ें',
