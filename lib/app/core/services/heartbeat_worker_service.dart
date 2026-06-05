@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:screen_state/screen_state.dart';
@@ -13,6 +14,10 @@ import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart
 @pragma('vm:entry-point')
 void heartbeatWorkerCallback() {
   Workmanager().executeTask((taskName, inputData) async {
+    // 백그라운드 isolate는 main()의 debugPrint 오버라이드가 닿지 않으므로 별도 차단.
+    if (kReleaseMode) {
+      debugPrint = (String? message, {int? wrapWidth}) {};
+    }
     WidgetsFlutterBinding.ensureInitialized();
     try {
       tz.initializeTimeZones();
