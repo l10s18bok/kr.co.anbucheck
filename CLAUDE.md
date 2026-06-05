@@ -134,6 +134,20 @@ lib/
 | 백엔드 PRD       | `../anbucheck-server/.ref/PRD-BackEnd.md` (외부 repo) | API 명세, 요청/응답, DB 스키마       |
 | Heartbeat 플로우 | `.claude/rules/heartbeat_flowchart.md` | heartbeat 수집·전송·경고 플로우      |
 
+## 비공개 테스트 / 마케팅 안내 페이지 (외부 repo: averic.co.kr)
+
+Google Play 비공개 테스트 안내와 마케팅용 소개는 **별도 저장소** `../averic-lab`(GitHub Pages → `averic.co.kr`)에서 관리한다. 이 Flutter 앱 repo가 아니다.
+
+| 페이지 | URL | 용도 |
+| --- | --- | --- |
+| `averic-lab/test/index.html` | **averic.co.kr/test/** | 비공개 테스터(전문 외주 업체)용 — 절차 중심 단순 가이드 |
+| `averic-lab/preview/index.html` | **averic.co.kr/preview/** | 마케팅 / 인플루언서용 — 앱 동작·핵심기능 상세 |
+
+- 둘 다 **자기완결형 단일 HTML**(CSS/JS 인라인 + 스크린샷 base64 내장), `noindex`로 검색 비노출(URL 아는 사람만 접근).
+- **`index.html` 직접 수정 금지** — `averic-lab/_beta-test-build/`의 `build_test.py` / `build_preview.py`를 고쳐 재빌드(`python3 build_test.py`)한다. 스크린샷 원본은 `~/Desktop/안부 언어별 스크린샷/한국어/`.
+- 배포는 **averic-lab repo에서 `git push`**(GitHub Pages 자동 게시). 상세는 `averic-lab/CLAUDE.md` 참조.
+- ⚠️ **현재 미배포 상태** — `averic-lab`의 `CLAUDE.md`·`test/`·`preview/`·`_beta-test-build/`가 모두 untracked(커밋 대기)다. 사용자가 배포를 요청하면 averic-lab repo에서 커밋·push해야 averic.co.kr에 반영된다.
+
 ## 규칙
 1. 모든 응답·주석·커밋 메시지 **한글** 작성
 2. 불확실하면 추론 금지 — **코드를 직접 찾아보고** 답변
