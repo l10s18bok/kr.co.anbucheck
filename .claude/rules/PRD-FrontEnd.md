@@ -298,6 +298,10 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
     │        둘 다 cancel + 내일자 register
     │      · Android: LocalAlarmService.cancelSendFailed() — retry 실패 시 띄웠던
     │        send_failed 알림 제거
+    │      · Android: LocalAlarmService.cancelSubjectSafetyNet() — 서버 FCM 푸시
+    │        subject_safety_net 잔존 알림 제거 (getActiveNotifications()로
+    │        tag="anbu_subject_default" 알림 실제 ID 조회 후 cancel(id, tag:),
+    │        WorkManager 백그라운드 isolate에서도 _ensureInitialized()로 동작)
     │      ※ 재등록은 이 경로 단일 — worker 콜백은 schedule()을 호출하지 않음
     └─ 실행 후 자동 종료
 
@@ -2173,6 +2177,9 @@ iOS는 BGTaskScheduler의 불안정성 때문에 백그라운드 예약 실행�
     │   │          · Android: HeartbeatWorkerService.schedule() 호출 →
     │   │            one-off + periodic 둘 다 cancel + 내일자 register
     │   │          · Android: send_failed 알림 제거 (cancelSendFailed)
+    │   │          · Android: subject_safety_net 잔존 알림 제거 (cancelSubjectSafetyNet —
+    │   │            getActiveNotifications()로 tag="anbu_subject_default" ID 조회 후
+    │   │            cancel(id, tag:), WorkManager isolate도 _ensureInitialized()로 동작)
     │   │       ※ finally에서 HeartbeatLockDatasource.release() 호출 (SQLite CAS 락 해제)
     │   └─ 미연결:
     │       ├─ 보류 heartbeat 1건 저장 (shared_preferences)

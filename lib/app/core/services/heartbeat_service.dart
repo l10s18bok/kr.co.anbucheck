@@ -399,6 +399,9 @@ class HeartbeatService {
     // 전송 성공 — one-off + periodic 모두 내일자로 재등록(periodic 재워 배터리 절약).
     await _rescheduleNextDay(schedHour, schedMinute, success: true);
     await LocalAlarmService.cancelSendFailed();
+    // 서버 FCM 푸시 subject_safety_net 잔존 알림 제거 (Android 전용).
+    // 포그라운드·WorkManager periodic 어느 경로로 성공하든 공통 처리.
+    await LocalAlarmService.cancelSubjectSafetyNet();
   }
 
   Future<int?> _getBatteryLevel() async {

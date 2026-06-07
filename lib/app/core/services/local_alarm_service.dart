@@ -253,6 +253,32 @@ class LocalAlarmService {
     await _plugin!.cancel(_trialEndedId);
   }
 
+  /// 서버 FCM 푸시 `subject_safety_net` 알림 취소 (Android 전용).
+  ///
+  /// heartbeat 전송 성공(`_onHeartbeatSent`) 시 호출하여 트레이에 잔존하는
+  /// "안부 확인이 필요합니다" 알림을 제거한다.
+  ///
+  /// 서버는 `subject_safety_net` 발송 시 `tag = "anbu_subject_default"` 로
+  /// 고정하므로(data에 subject_user_id/invite_code 없음 → group_id="default"),
+  /// getActiveNotifications()로 실제 notification ID를 읽어 취소한다.
+  /// 직접 cancel(0, tag:) 하지 않는 이유: FCM이 배정하는 notification ID가
+  /// 0이 아닐 수 있어 tag만으로 정확히 매칭되지 않을 수 있기 때문.
+  static Future<void> cancelSubjectSafetyNet() async {
+    if (Platform.isIOS) return;
+    await _ensureInitialized();
+    try {
+      final active = await _plugin!.getActiveNotifications();
+      for (final n in active) {
+        if (n.tag == 'anbu_subject_default') {
+          await _plugin!.cancel(n.id ?? 0, tag: n.tag);
+          debugPrint('[LocalAlarm] subject_safety_net 알림 취소: id=${n.id}');
+        }
+      }
+    } catch (e) {
+      debugPrint('[LocalAlarm] cancelSubjectSafetyNet 실패: $e');
+    }
+  }
+
   /// 내부 취소 (schedule 내에서도 호출)
   static Future<void> _cancelInternal() async {
     await _ensureInitialized();
