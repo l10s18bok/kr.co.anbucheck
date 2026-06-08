@@ -486,6 +486,7 @@ class FcmService extends GetxService {
           priority: Priority.high,
           icon: '@mipmap/ic_launcher',
           groupKey: groupKey,
+          tag: groupKey,
         ),
         iOS: DarwinNotificationDetails(
           presentAlert: true,
