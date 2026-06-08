@@ -68,19 +68,13 @@ class SubjectHomeController extends SafetyHomeBaseController {
   }
 
   /// 안전망 알림 탭 진입 공통 처리 — 미전송이면 자동 전송한 뒤 안내 다이얼로그를 띄운다.
-  /// **반드시 `_checkAndSendHeartbeat` 전에 상태를 갱신·캡처**한다: cold-start onAfterLoad는
-  /// `_lastHeartbeatDate` Rx가 아직 미로드라(빈 값) 캡처 없이는 "이미 전송됨" 판정이
-  /// 항상 false가 된다. 캡처한 `wasReported`(탭 이전 전송 여부)/`priorTime`(그때의 실제
-  /// 전송 시각)을 넘겨 "방금 전달됨" vs "이미 N시에 전달됨"을 구분한다.
+  /// 탭 이전 전송 여부(alreadyReported/reportedTime)는 탭 시점에 FcmService가
+  /// [FcmService.pendingAlreadyReported]/[FcmService.pendingReportedTime]에 미리 캡처해두므로
+  /// 여기서 별도 캡처 없이 [consumeSafetyNetDialogIfPending]에서 직접 사용한다.
   Future<void> _sendAndConsumeSafetyNetDialog() async {
     await _reloadHeartbeatState();
-    final wasReported = isReportedToday;
-    final priorTime = lastHeartbeatTime;
     await _checkAndSendHeartbeat();
-    await FcmService.consumeSafetyNetDialogIfPending(
-        delivered: isReportedToday,
-        alreadyReported: wasReported,
-        reportedTime: priorTime);
+    await FcmService.consumeSafetyNetDialogIfPending(delivered: isReportedToday);
   }
 
   @override

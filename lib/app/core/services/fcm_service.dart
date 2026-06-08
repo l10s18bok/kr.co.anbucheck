@@ -25,7 +25,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 /// 로컬 알림 탭 핸들러 (top-level 함수 필수)
 /// payload는 JSON 문자열 `{"type": "...", "lat": "...", ...}` 또는 plain type 문자열 (하위 호환)
 @pragma('vm:entry-point')
-void onDidReceiveNotificationResponse(NotificationResponse response) {
+Future<void> onDidReceiveNotificationResponse(NotificationResponse response) async {
   final payload = response.payload;
   if (payload == null || payload.isEmpty) return;
 
@@ -40,7 +40,7 @@ void onDidReceiveNotificationResponse(NotificationResponse response) {
   } catch (_) {
     // JSON 아니면 type 문자열로 간주 (기존 payload 호환)
   }
-  _handleNotificationTap(type, data: data);
+  await _handleNotificationTap(type, data: data);
 }
 
 /// 알림 탭 시 라우팅
@@ -54,7 +54,28 @@ void onDidReceiveNotificationResponse(NotificationResponse response) {
 ///
 /// **로컬 알림**(`gs_deadman`/`safety_net`/`send_failed`): 예정 시각 경과/통신 문제 등
 /// 미전송 상황 안내용이라 알림 목록이 아니라 홈(safety_home) 흐름으로 보낸다 — 기존 동작 유지.
-void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
+/// 안전망 알림 탭 시점의 heartbeat 상태를 FcmService 정적 변수에 미리 캡처한다.
+/// [consumeSafetyNetDialogIfPending] 호출 전에 [SafetyHomeBaseController._sendPendingHeartbeat]가
+/// SharedPreferences를 먼저 덮어쓰는 race를 방지하기 위해, 라우팅 직전(탭 처리 단계)에 실행한다.
+Future<void> _captureHeartbeatStateForSafetyNet() async {
+  try {
+    final tokenDs = TokenLocalDatasource();
+    final date = await tokenDs.getLastHeartbeatDate() ?? '';
+    final now = DateTime.now();
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    FcmService.pendingAlreadyReported = date == today;
+    FcmService.pendingReportedTime = FcmService.pendingAlreadyReported
+        ? (await tokenDs.getLastHeartbeatTime() ?? '')
+        : '';
+  } catch (_) {
+    FcmService.pendingAlreadyReported = false;
+    FcmService.pendingReportedTime = '';
+  }
+}
+
+Future<void> _handleNotificationTap(String type,
+    {Map<String, dynamic>? data}) async {
   switch (type) {
     // ── FCM 푸시 알림(emergency 포함): 전부 알림 목록으로 (+자동 새로고침) ──
     case 'alert':
@@ -94,6 +115,8 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       //   잔존 알림이 다음 전송 전에 1회 fire될 수 있어 핸들링을 유지한다.
       // 셋 다 safety_home으로 이동(+포그라운드 전환). 미전송 heartbeat 자동 재전송 +
       // 안내 다이얼로그는 홈/대시보드 컨트롤러 onResumed가 처리한다(플래그 set).
+      // 탭 시점 heartbeat 상태를 먼저 캡처 — _sendPendingHeartbeat race 방지.
+      await _captureHeartbeatStateForSafetyNet();
       FcmService.pendingSafetyNetDialog = true;
       _routeToSafetyHome();
       break;
@@ -106,6 +129,8 @@ void _handleNotificationTap(String type, {Map<String, dynamic>? data}) {
       // Dashboard 바인딩은 permanent이므로 재등록되지 않아 컨트롤러 race 없음.
       // Dashboard가 heartbeat 미전송 체크를 단독 소유하므로 route와 무관하게
       // Dashboard 컨트롤러(permanent)에 위임. 이미 안전코드 페이지면 스택 유지.
+      // 탭 시점 heartbeat 상태를 먼저 캡처 — _sendPendingHeartbeat race 방지.
+      await _captureHeartbeatStateForSafetyNet();
       FcmService.pendingSafetyNetDialog = true;
       try {
         Get.find<GuardianDashboardController>().refreshAndForceSend();
@@ -185,38 +210,38 @@ class FcmService extends GetxService {
   /// heartbeat 자동 재전송을 마친 뒤 안내 다이얼로그 1회 표시 후 false로 리셋한다.
   static bool pendingSafetyNetDialog = false;
 
+  /// 안전망 알림 탭 시점의 heartbeat 전송 여부 (true = 탭 전에 이미 전송됨).
+  /// [_captureHeartbeatStateForSafetyNet]에서 설정, [consumeSafetyNetDialogIfPending]에서 소비.
+  static bool pendingAlreadyReported = false;
+
+  /// 안전망 알림 탭 시점의 마지막 heartbeat 전송 시각 (탭 전 이미 전송된 경우만 유효).
+  static String pendingReportedTime = '';
+
   /// 일일 안전망 알림 탭 진입 시 한 번만 안내 다이얼로그를 띄운다.
   /// S 모드(Android)와 G+S 모드(Android/iOS) 양쪽에서 동일하게 호출.
   /// 확인 버튼만 노출되며 탭하면 다이얼로그가 닫힌다.
   ///
   /// [delivered]가 false면 플래그만 소비하고 다이얼로그는 띄우지 않는다 —
   /// `send_failed` 알림 탭 시 네트워크가 여전히 다운돼 재전송도 실패한 케이스에서
-  /// "전달되었습니다" 거짓 안내를 막기 위함. 다음 onResumed에서 다시 발화하지
-  /// 않도록 플래그는 항상 false로 리셋된다 (네트워크 복구 후 connectivity 리스너의
-  /// `_sendPendingHeartbeat`가 자동 처리하지만 그 시점은 사용자 컨텍스트가
-  /// 끊어진 뒤라 다이얼로그를 띄우지 않는 편이 일관적).
+  /// "전달되었습니다" 거짓 안내를 막기 위함.
   ///
-  /// [alreadyReported]가 true면 — 사용자가 알림을 탭하기 *전에* 이미 다른 경로
-  /// (앱 실행/WorkManager periodic·one-off)로 오늘 heartbeat가 전송돼 있던 경우 —
-  /// "방금 전달됨"이 아니라 [reportedTime]("HH:mm") 시각을 넣어 "이미 그 시각에
-  /// 전달됨"으로 안내해 혼란을 막는다. 탭한 행위로 새로 전송된 경우(이전 미전송)에만
-  /// 기존 "방금 전달됨" 문구를 쓴다. 호출부가 전송 시도 *전에* 상태를 캡처해 전달한다.
+  /// 탭 이전 이미 전송됐는지 여부는 [pendingAlreadyReported]/[pendingReportedTime]에
+  /// 탭 시점에 미리 캡처되어 있으므로, 호출부가 별도 파라미터를 전달하지 않아도 된다.
+  /// 이를 통해 `_sendPendingHeartbeat`가 SharedPreferences를 먼저 덮어쓰는 race를 방지한다.
   static Future<void> consumeSafetyNetDialogIfPending(
-      {required bool delivered,
-      bool alreadyReported = false,
-      String? reportedTime}) async {
+      {required bool delivered}) async {
     if (!pendingSafetyNetDialog) return;
     pendingSafetyNetDialog = false;
     if (!delivered) return;
     if (Get.context == null) return;
     final showAlready =
-        alreadyReported && reportedTime != null && reportedTime.isNotEmpty;
+        pendingAlreadyReported && pendingReportedTime.isNotEmpty;
     await Get.dialog<void>(
       AlertDialog(
         title: Text('safety_net_dialog_title'.tr),
         content: Text(showAlready
             ? 'safety_net_dialog_already_body'
-                .trParams({'time': formatTo12Hour(reportedTime)})
+                .trParams({'time': formatTo12Hour(pendingReportedTime)})
             : 'safety_net_dialog_body'.tr),
         actions: [
           TextButton(
@@ -340,7 +365,7 @@ class FcmService extends GetxService {
           if (Get.currentRoute == AppRoutes.splash) {
             pendingLaunchFcmType = type;
           } else {
-            _handleNotificationTap(type, data: data);
+            await _handleNotificationTap(type, data: data);
           }
         }
       });
@@ -382,6 +407,7 @@ class FcmService extends GetxService {
           if (payload == LocalAlarmService.alarmPayload ||
               payload == LocalAlarmService.safetyNetPayload ||
               payload == LocalAlarmService.sendFailedPayload) {
+            await _captureHeartbeatStateForSafetyNet();
             pendingSafetyNetDialog = true;
           }
         }
@@ -502,10 +528,11 @@ class FcmService extends GetxService {
   }
 
   /// 알림 탭하여 앱 열기 처리 (백그라운드에서 탭 시 FCM 플러그인이 전달)
-  void _handleMessageOpenedApp(RemoteMessage message) {
+  Future<void> _handleMessageOpenedApp(RemoteMessage message) async {
     debugPrint('[FCM] 알림 탭: ${message.data}');
     final type = message.data['type']?.toString() ?? '';
-    _handleNotificationTap(type, data: Map<String, dynamic>.from(message.data));
+    await _handleNotificationTap(type,
+        data: Map<String, dynamic>.from(message.data));
   }
 
   /// 보호자 알림 수신 시 GuardianSubjectService 강제 갱신
