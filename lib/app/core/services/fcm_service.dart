@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
@@ -59,6 +60,11 @@ Future<void> onDidReceiveNotificationResponse(NotificationResponse response) asy
 /// SharedPreferences를 먼저 덮어쓰는 race를 방지하기 위해, 라우팅 직전(탭 처리 단계)에 실행한다.
 Future<void> _captureHeartbeatStateForSafetyNet() async {
   try {
+    // WorkManager 백그라운드 isolate의 쓰기가 메인 isolate 캐시에 반영되도록 reload.
+    // _reloadHeartbeatState()와 동일한 invariant — reload 없이 읽으면 stale 캐시를
+    // 볼 수 있어 "이미 @time에 전달됨" 판정이 cross-isolate 케이스에서 빗나간다.
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     final tokenDs = TokenLocalDatasource();
     final date = await tokenDs.getLastHeartbeatDate() ?? '';
     final now = DateTime.now();
