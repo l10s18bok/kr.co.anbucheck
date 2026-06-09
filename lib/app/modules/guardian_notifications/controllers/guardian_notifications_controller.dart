@@ -67,7 +67,9 @@ class GuardianNotificationsController extends BaseController {
       notifications.value = list
         ..sort((a, b) => b.receivedAt.compareTo(a.receivedAt));
     } catch (e) {
-      notifications.value = [];
+      // 실패 시 기존 목록 유지 — 장시간 잠금 해제 직후 네트워크가 준비되지 않아
+      // 요청이 실패해도 화면에 표시 중이던 알림이 사라지지 않도록 한다.
+      // 처음 로드(목록이 비어있는 초기 상태)면 빈 상태를 그대로 유지.
     } finally {
       isLoading = false;
     }
