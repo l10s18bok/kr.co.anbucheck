@@ -63,6 +63,8 @@ abstract class ViVn {
     'permission_activity_desc': 'Dung de phat hien buoc chan va xac nhan hoat dong',
     'permission_location': 'Vi tri',
     'permission_location_desc': 'Chi gui vi tri den nguoi bao ho khi yeu cau cuu giup khan cap',
+    'permission_tracking': 'Theo dõi quảng cáo',
+    'permission_tracking_desc': 'Dùng để hiển thị quảng cáo cá nhân hóa',
     'location_permission_warning':
         'Vi tri se khong duoc gui khi yeu cau cuu giup khan cap. Cham de cho phep.',
     'location_permission_settings_title': 'Can quyen vi tri',

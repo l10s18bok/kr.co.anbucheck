@@ -64,6 +64,8 @@ abstract class EsEs {
     'permission_location': 'Ubicación',
     'permission_location_desc':
         'Se comparte con los protectores solo al enviar una solicitud de emergencia',
+    'permission_tracking': 'Seguimiento de anuncios',
+    'permission_tracking_desc': 'Se usa para mostrar anuncios personalizados',
     'location_permission_warning':
         'No se enviará la ubicación en las solicitudes de emergencia. Toca para permitir.',
     'location_permission_settings_title': 'Permiso de ubicación requerido',

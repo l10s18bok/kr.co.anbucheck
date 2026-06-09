@@ -62,6 +62,8 @@ abstract class ThTh {
     'permission_activity_desc': 'ใช้ในการตรวจจับก้าวเดินและยืนยันกิจกรรม',
     'permission_location': 'ตำแหน่งที่ตั้ง',
     'permission_location_desc': 'ส่งให้ผู้ดูแลเฉพาะเมื่อขอความช่วยเหลือฉุกเฉินเท่านั้น',
+    'permission_tracking': 'การติดตามโฆษณา',
+    'permission_tracking_desc': 'ใช้เพื่อแสดงโฆษณาที่ปรับให้เหมาะสม',
     'location_permission_warning': 'จะไม่ส่งตำแหน่งเมื่อขอความช่วยเหลือฉุกเฉิน แตะเพื่ออนุญาต',
     'location_permission_settings_title': 'ต้องการสิทธิ์ตำแหน่งที่ตั้ง',
     'location_permission_settings_body_ios':

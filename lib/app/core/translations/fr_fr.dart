@@ -64,6 +64,8 @@ abstract class FrFr {
     'permission_activity_desc': 'Utilisée pour détecter les pas et confirmer l\'activité',
     'permission_location': 'Localisation',
     'permission_location_desc': 'Partagée avec vos proches uniquement lors d\'un appel d\'urgence',
+    'permission_tracking': 'Suivi publicitaire',
+    'permission_tracking_desc': 'Utilisé pour afficher des publicités personnalisées',
     'location_permission_warning':
         'La position ne sera pas envoyée lors d\'un appel d\'urgence. Touchez pour autoriser.',
     'location_permission_settings_title': 'Autorisation de localisation requise',

@@ -62,6 +62,8 @@ abstract class SvSe {
     'permission_activity_desc': 'Anvands for att upptacka steg och bekrafta aktivitet',
     'permission_location': 'Plats',
     'permission_location_desc': 'Delas med anhoriga endast vid en nodbegaran om hjalp',
+    'permission_tracking': 'Annonsspårning',
+    'permission_tracking_desc': 'Används för personanpassad reklam',
     'location_permission_warning': 'Platsen skickas inte vid en nodbegaran. Tryck for att tillata.',
     'location_permission_settings_title': 'Platsbehorighet kravs',
     'location_permission_settings_body_ios':

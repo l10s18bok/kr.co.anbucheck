@@ -63,6 +63,8 @@ abstract class NlNl {
         'Wordt gebruikt om stappen te detecteren en activiteit te bevestigen',
     'permission_location': 'Locatie',
     'permission_location_desc': 'Wordt alleen bij een noodoproep met uw beschermers gedeeld',
+    'permission_tracking': 'Advertentie-tracking',
+    'permission_tracking_desc': 'Gebruikt voor gepersonaliseerde advertenties',
     'location_permission_warning':
         'Bij een noodoproep wordt geen locatie verzonden. Tik om toe te staan.',
     'location_permission_settings_title': 'Locatietoestemming vereist',

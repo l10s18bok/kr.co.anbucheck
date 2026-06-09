@@ -63,6 +63,8 @@ abstract class PlPl {
     'permission_activity_desc': 'Sluzy do wykrywania krokow i potwierdzania aktywnosci',
     'permission_location': 'Lokalizacja',
     'permission_location_desc': 'Udostepniana opiekunom tylko przy wyslaniu wezwania pomocy',
+    'permission_tracking': 'Śledzenie reklam',
+    'permission_tracking_desc': 'Używane do wyświetlania spersonalizowanych reklam',
     'location_permission_warning':
         'Lokalizacja nie zostanie wyslana przy wezwaniu pomocy. Dotknij, aby zezwolic.',
     'location_permission_settings_title': 'Wymagane uprawnienie lokalizacji',

@@ -64,6 +64,8 @@ abstract class PtBr {
     'permission_location': 'Localização',
     'permission_location_desc':
         'Compartilhada com os protetores apenas em pedidos de ajuda de emergência',
+    'permission_tracking': 'Rastreamento de anúncios',
+    'permission_tracking_desc': 'Usado para exibir anúncios personalizados',
     'location_permission_warning':
         'A localização não será enviada no pedido de emergência. Toque para permitir.',
     'location_permission_settings_title': 'Permissão de localização necessária',

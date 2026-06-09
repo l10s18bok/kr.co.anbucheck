@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/services/ad_service.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
@@ -41,6 +43,18 @@ class PermissionController extends BaseController {
       // 1. 알림 권한
       if (Platform.isIOS) {
         await Get.find<FcmService>().requestIosPermission();
+        // iOS 시스템 알림 권한 다이얼로그를 닫은 직후 앱이 active 상태로 완전히
+        // 복귀하기 전에 requestTrackingAuthorization()을 호출하면 OS가 ATT 다이얼로그를
+        // 억제한다. 짧은 대기로 앱 상태가 안정화된 뒤 요청한다.
+        await Future.delayed(const Duration(milliseconds: 600));
+        // ATT 권한 요청 (iOS 14.5+) — 알림 권한 직후, 사용자가 앱 목적을 먼저 이해한 뒤.
+        // 거부해도 앱·heartbeat는 정상 동작하며 비개인화 광고가 표시됨.
+        await AppTrackingTransparency.requestTrackingAuthorization();
+        // ATT 결과 무관하게 AdMob 초기화 — GADDelayAppMeasurementInit 플래그로 미뤄둔
+        // GMA SDK 초기화를 여기서 완료한다. 신규/재설치 사용자용 단일 초기화 경로.
+        if (!Get.isRegistered<AdService>()) {
+          await Get.putAsync(() => AdService().init(), permanent: true);
+        }
       } else {
         final notificationStatus = await Permission.notification.request();
         if (!notificationStatus.isGranted) {

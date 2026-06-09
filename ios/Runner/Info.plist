@@ -79,6 +79,11 @@
 		<!-- AdMob App ID -->
 		<key>GADApplicationIdentifier</key>
 		<string>ca-app-pub-5477604587043205~3592445045</string>
+		<!-- GMA SDK 11.x는 GADApplicationIdentifier 존재만으로 앱 시작 시 자동 초기화 →
+		     ATT 팝업을 Splash 화면 이전에 트리거한다. YES로 설정하면 권한 화면에서
+		     MobileAds.instance.initialize()를 명시적으로 호출할 때까지 초기화를 보류한다. -->
+		<key>GADDelayAppMeasurementInit</key>
+		<true/>
 		<!-- ATT 권한 사유 (실제 표시 문구는 *.lproj/InfoPlist.strings 20개 언어로 현지화) -->
 		<key>NSUserTrackingUsageDescription</key>
 		<string>맞춤 광고를 표시하기 위해 광고 식별자에 접근합니다. 거부해도 앱은 정상 작동합니다.</string>

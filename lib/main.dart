@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,13 +26,13 @@ void main() async {
   await HeartbeatWorkerService.init();
   Get.put(ThemeService());
   Get.put(StabilityService());
-  // ATT(App Tracking Transparency) — iOS 14.5+ IDFA 접근. AdMob 초기화 전 처리.
-  // 실패/거부 어떤 경우에도 광고는 비개인화로 fallback되며 앱 동작에는 영향 없음.
-  if (Platform.isIOS) {
-    try {
-      await AppTrackingTransparency.requestTrackingAuthorization();
-    } catch (_) {}
+  // AdMob 초기화 — Android 전용.
+  // iOS는 ATT 권한 흐름이 권한 화면(PermissionController)에서 제어되므로
+  // 여기서 초기화하면 ATT 팝업이 Splash 이전에 뜨는 문제가 발생한다.
+  // iOS 신규/재설치 사용자: PermissionController.requestPermissions() 에서 ATT → init.
+  // iOS 기존 토큰 보유 사용자: SplashController._initialize() 에서 init.
+  if (!Platform.isIOS) {
+    await Get.putAsync(() => AdService().init());
   }
-  await Get.putAsync(() => AdService().init());
   runApp(const App());
 }

@@ -65,6 +65,8 @@ abstract class IdId {
     'permission_location': 'Lokasi',
     'permission_location_desc':
         'Dibagikan ke pelindung hanya saat mengirim permintaan bantuan darurat',
+    'permission_tracking': 'Pelacakan Iklan',
+    'permission_tracking_desc': 'Digunakan untuk menampilkan iklan yang dipersonalisasi',
     'location_permission_warning':
         'Lokasi tidak akan dikirim saat permintaan darurat. Ketuk untuk mengizinkan.',
     'location_permission_settings_title': 'Izin Lokasi Diperlukan',

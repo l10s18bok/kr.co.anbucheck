@@ -63,6 +63,8 @@ abstract class HiIn {
     'permission_activity_desc': 'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है',
     'permission_location': 'स्थान',
     'permission_location_desc': 'आपातकालीन सहायता अनुरोध पर ही संरक्षकों के साथ साझा किया जाता है',
+    'permission_tracking': 'विज्ञापन ट्रैकिंग',
+    'permission_tracking_desc': 'व्यक्तिगत विज्ञापन दिखाने के लिए उपयोग होता है',
     'location_permission_warning':
         'आपातकालीन अनुरोध के साथ स्थान नहीं भेजा जाएगा। अनुमति देने के लिए टैप करें।',
     'location_permission_settings_title': 'स्थान अनुमति आवश्यक',

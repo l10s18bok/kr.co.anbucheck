@@ -66,6 +66,8 @@ abstract class DeDe {
         'Wird verwendet, um Schritte zu erkennen und Aktivität zu bestätigen',
     'permission_location': 'Standort',
     'permission_location_desc': 'Wird nur bei Notfallanfragen an Ihre Betreuer übermittelt',
+    'permission_tracking': 'Werbe-Tracking',
+    'permission_tracking_desc': 'Wird für personalisierte Werbung verwendet',
     'location_permission_warning':
         'Bei Notfallanfragen wird kein Standort gesendet. Tippen, um zu erlauben.',
     'location_permission_settings_title': 'Standortberechtigung erforderlich',

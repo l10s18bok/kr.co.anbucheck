@@ -65,6 +65,8 @@ abstract class ItIt {
     'permission_location': 'Posizione',
     'permission_location_desc':
         'Condivisa con i tutori solo durante una richiesta di aiuto urgente',
+    'permission_tracking': 'Tracciamento annunci',
+    'permission_tracking_desc': 'Usato per mostrare annunci personalizzati',
     'location_permission_warning':
         "La posizione non verrà inviata con la richiesta di emergenza. Tocca per consentire.",
     'location_permission_settings_title': 'Autorizzazione alla posizione richiesta',

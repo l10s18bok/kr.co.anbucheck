@@ -12,6 +12,7 @@ import 'package:timezone/timezone.dart' as tzlib;
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
+import 'package:anbucheck/app/core/services/ad_service.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/iap_service.dart';
 import 'package:anbucheck/app/core/services/subscription_service.dart';
@@ -70,6 +71,12 @@ class SplashController extends BaseController {
     final userRole = await _tokenDs.getUserRole();
 
     if (deviceToken != null && userRole != null) {
+      // iOS 복귀 사용자: 권한 화면을 거치지 않으므로 여기서 AdMob 초기화.
+      // ATT 상태는 이전 설치에서 이미 결정되어 있어 재요청 불필요.
+      if (Platform.isIOS && !Get.isRegistered<AdService>()) {
+        await Get.putAsync(() => AdService().init(), permanent: true);
+      }
+
       if (userRole == 'subject') {
         Get.offNamed(AppRoutes.safetyHome,
             arguments: {'role': HomeRole.subject});

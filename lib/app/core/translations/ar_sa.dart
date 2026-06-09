@@ -61,6 +61,8 @@ abstract class ArSa {
     'permission_activity_desc': 'يُستخدم لاكتشاف الخطوات والتأكد من النشاط',
     'permission_location': 'الموقع',
     'permission_location_desc': 'تتم مشاركته مع الأوصياء فقط عند إرسال طلب مساعدة طارئ',
+    'permission_tracking': 'تتبع الإعلانات',
+    'permission_tracking_desc': 'يُستخدم لعرض إعلانات مخصصة',
     'location_permission_warning': 'لن يتم إرسال الموقع مع طلب الطوارئ. اضغط للسماح.',
     'location_permission_settings_title': 'إذن الموقع مطلوب',
     'location_permission_settings_body_ios':

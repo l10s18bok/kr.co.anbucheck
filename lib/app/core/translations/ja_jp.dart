@@ -61,6 +61,8 @@ abstract class JaJp {
     'permission_activity_desc': '歩数を検出して活動状況を確認するために使用されます',
     'permission_location': '位置情報',
     'permission_location_desc': '緊急ヘルプ要請の時にのみ、現在地を保護者に送信します',
+    'permission_tracking': '広告トラッキング',
+    'permission_tracking_desc': 'パーソナライズ広告を表示するために広告識別子にアクセスします',
     'location_permission_warning': '緊急要請時に位置情報が送信されません。タップして許可してください。',
     'location_permission_settings_title': '位置情報の権限設定が必要です',
     'location_permission_settings_body_ios': '「Anbu」を選択し、「位置情報」で「このAppの使用中のみ許可」を選択してください。',

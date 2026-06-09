@@ -61,6 +61,8 @@ abstract class ZhCn {
     'permission_activity_desc': '用于检测步数以确认活动状态',
     'permission_location': '位置信息',
     'permission_location_desc': '仅在发送紧急求助时将当前位置发送给监护人',
+    'permission_tracking': '广告跟踪权限',
+    'permission_tracking_desc': '用于展示个性化广告',
     'location_permission_warning': '紧急求助时位置不会被发送。点按以允许。',
     'location_permission_settings_title': '需要位置权限设置',
     'location_permission_settings_body_ios': '找到并选择"Anbu",然后在"位置"中选择"使用App期间"。',

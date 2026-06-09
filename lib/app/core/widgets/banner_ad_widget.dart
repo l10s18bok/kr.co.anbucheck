@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:anbucheck/app/core/config/ad_config.dart';
+import 'package:anbucheck/app/core/services/ad_service.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 
 /// 공통 배너 광고 위젯
@@ -90,6 +93,17 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   }
 
   void _loadAd() async {
+    // iOS: AdService(MobileAds.initialize) 등록 전에 BannerAd.load()를 호출하면
+    // GMA SDK가 ATT 팝업을 트리거한다. 등록될 때까지 2초 간격으로 재시도.
+    if (Platform.isIOS && !Get.isRegistered<AdService>()) {
+      _retryTimer?.cancel();
+      _retryTimer = Timer(const Duration(seconds: 2), () {
+        _retryTimer = null;
+        if (mounted && _bannerAd == null) _loadAd();
+      });
+      return;
+    }
+
     final width = MediaQuery.of(context).size.width.truncate();
     final adSize = await AdSize.getAnchoredAdaptiveBannerAdSize(Orientation.portrait, width);
     if (adSize == null || !mounted) return;

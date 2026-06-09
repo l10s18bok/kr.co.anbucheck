@@ -64,6 +64,8 @@ abstract class RuRu {
     'permission_activity_desc': 'Используется для подсчёта шагов и подтверждения активности',
     'permission_location': 'Геолокация',
     'permission_location_desc': 'Передаётся опекунам только при отправке экстренного запроса',
+    'permission_tracking': 'Отслеживание рекламы',
+    'permission_tracking_desc': 'Используется для показа персонализированной рекламы',
     'location_permission_warning':
         'Геолокация не будет отправлена с экстренным запросом. Нажмите, чтобы разрешить.',
     'location_permission_settings_title': 'Требуется разрешение геолокации',

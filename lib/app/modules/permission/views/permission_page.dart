@@ -74,6 +74,18 @@ class PermissionPage extends GetWidget<PermissionController> {
                         ),
                       ],
 
+                      // 4. 광고 추적 권한 카드 (iOS 전용 — ATT)
+                      //   - GMA SDK 초기화 전 사용자에게 목적을 미리 안내
+                      //   - [확인] 탭 후 ATT 시스템 팝업 → AdMob 초기화 순서를 보장
+                      if (Platform.isIOS) ...[
+                        SizedBox(height: AppSpacing.lg),
+                        _PermissionCard(
+                          icon: Icons.track_changes_rounded,
+                          title: 'permission_tracking'.tr,
+                          description: 'permission_tracking_desc'.tr,
+                        ),
+                      ],
+
                       SizedBox(height: AppSpacing.sp8),
                     ],
                   ),

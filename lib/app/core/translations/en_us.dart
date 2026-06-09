@@ -62,6 +62,8 @@ abstract class EnUs {
     'permission_activity_desc': 'Used to detect steps and confirm activity',
     'permission_location': 'Location',
     'permission_location_desc': 'Shared with guardians only when you send an emergency request',
+    'permission_tracking': 'Ad Tracking',
+    'permission_tracking_desc': 'Used to show personalized ads',
     'location_permission_warning':
         'Location will not be sent with an emergency request. Tap to allow.',
     'location_permission_settings_title': 'Location Permission Required',

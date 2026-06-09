@@ -63,6 +63,8 @@ abstract class TrTr {
     'permission_activity_desc': 'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır',
     'permission_location': 'Konum',
     'permission_location_desc': 'Yalnızca acil yardım talebinde koruyuculara iletilir',
+    'permission_tracking': 'Reklam Takibi',
+    'permission_tracking_desc': 'Kişiselleştirilmiş reklamlar için kullanılır',
     'location_permission_warning':
         'Acil yardım talebinde konum gönderilmeyecek. İzin vermek için dokunun.',
     'location_permission_settings_title': 'Konum İzni Gerekli',
