@@ -68,36 +68,34 @@ class LocalAlarmService {
     debugPrint('[LocalAlarm] 플러그인 자체 초기화 완료 (백그라운드 isolate)');
   }
 
-  /// 일일 안부 확인 안전망 로컬 알림 예약.
+  /// 일일 안부 확인 안전망 로컬 알림 등록.
   ///
-  /// - **iOS**: heartbeat 예약 시각에 정확히 매일 fire (PRIMARY 트리거)
-  /// - **Android**: 예약하지 않음 — 기존 알림만 cancel 후 즉시 return.
-  ///   (서버 FCM 푸시 `subject_safety_net`로 이관, 클래스 doc 참조)
-  ///
-  /// [forceNextDay] heartbeat 전송 성공 후 호출 시 true — 오늘 알림이 이미
-  /// 떠 있더라도 cancel하고 내일자로 강제 재예약 (iOS). (`cancel(_alarmId)`는
-  /// pending + 표시 중인 알림을 모두 제거하므로 stale 알림이 남지 않는다.)
-  static Future<void> schedule(int heartbeatHour, int heartbeatMinute, {bool forceNextDay = false}) async {
+  /// - **iOS**: heartbeat 예약 시각에 매일 반복 fire (PRIMARY 트리거).
+  ///   `matchDateTimeComponents: DateTimeComponents.time` — 한 번 등록하면 OS가
+  ///   매일 같은 시각에 자동 발화. 같은 ID로 재등록 시 기존 예약을 덮어쓰므로
+  ///   취소 없이 idempotent. **최초 설치·재설치 복원·예약시각 변경 시에만 호출**.
+  /// - **Android**: 예약하지 않음 — 기존 알림 cancel 후 즉시 return.
+  ///   (서버 FCM 푸시 `subject_safety_net`으로 이관, 클래스 doc 참조)
+  static Future<void> schedule(int heartbeatHour, int heartbeatMinute) async {
     await _ensureInitialized();
-    await _cancelInternal();
 
     // Android: 일일 안부 확인 안전망 로컬 알림을 더 이상 예약하지 않는다.
     //   heartbeat+3h + matchDateTimeComponents.time(매일 반복) 조합이, 전송 성공 후
     //   forceNextDay로 날짜를 내일로 밀어도 플러그인이 "그 시각의 다음 발생=오늘"로
-    //   당겨 발화하던 결정적 오발화 버그가 있었다(정상 전송한 날에도 heartbeat+3h에
-    //   "안부 확인 필요" 알림이 매일 오발화 — forceNextDay가 Android에서 사실상 무력).
-    //   Android 대상자 안부유도는 서버 FCM 푸시(type 'subject_safety_net',
-    //   미수신 체크 = 예약시각 +2h)로 이관됨. 위 _cancelInternal()이 기존 버전에서
-    //   이미 예약/표시된 알림까지 제거하므로, 업그레이드 기기의 잔존 알림은 다음
-    //   heartbeat 전송 시점에 정리된다. (send_failed·trial_ended·iOS 정시 알림은 무관.)
+    //   당겨 발화하던 결정적 오발화 버그가 있었다. Android 대상자 안부유도는
+    //   서버 FCM 푸시(type 'subject_safety_net', 미수신 체크 = 예약시각 +2h)로 이관됨.
+    //   업그레이드 기기 잔존 알림은 이 cancel로 정리된다.
+    //   (send_failed·trial_ended·iOS 정시 알림은 무관.)
     if (Platform.isAndroid) {
+      await _cancelInternal(); // 업그레이드 기기 잔존 알림 정리
       debugPrint('[LocalAlarm] Android 일일 안전망 알림 미예약 — 서버 푸시(subject_safety_net)로 이관');
       return;
     }
 
     // iOS: heartbeat 예약 시각 정시에 매일 fire (BGTaskScheduler 미사용 → PRIMARY 트리거).
-    //   offset 0이라 위 forceNextDay 무력화 버그에 해당하지 않는다(전송 시점엔 오늘
-    //   정시가 이미 지나 matchDateTimeComponents.time의 다음 발생이 자연히 내일이 됨).
+    //   matchDateTimeComponents.time으로 한 번만 등록하면 OS가 매일 자동 반복.
+    //   heartbeat 전송 성공 후 재등록하지 않으며, heartbeat가 예약시각 전에 전송돼도
+    //   알림은 정시에 정상 발화한다 — 탭 시 isReportedToday 체크로 중복 전송 차단.
     final now = tz.TZDateTime.now(tz.local);
     var scheduled = tz.TZDateTime(
       tz.local,
@@ -105,8 +103,8 @@ class LocalAlarmService {
       heartbeatHour, heartbeatMinute,
     );
 
-    // heartbeat 성공 후에는 내일로 강제, 그 외에는 오늘 시각이 지났으면 내일로
-    if (forceNextDay || scheduled.isBefore(now)) {
+    // 오늘 시각이 이미 지났으면 내일로 (첫 발화 시각만 결정 — 이후 매일 자동 반복)
+    if (scheduled.isBefore(now)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
 

@@ -157,19 +157,20 @@ class GuardianDashboardController extends BaseController
     await FcmService.consumeSafetyNetDialogIfPending(delivered: isReportedToday);
   }
 
-  /// 로컬 알림 탭 전용 — isReportedToday와 무관하게 무조건 전송.
-  /// 사용자가 알림을 탭한 행위 자체가 "오늘 안부 보내기" 명시적 의사 표현이므로
-  /// 오늘 이미 전송했더라도 최신 걸음수로 재전송한다.
+  /// 로컬 알림(`gs_deadman`) 탭 전용 — Android `subject_safety_net` 탭과 동일한 패턴.
   ///
-  /// 다이얼로그 문구 분기(이미 전송됨 vs 방금 전달됨)는 [FcmService.pendingAlreadyReported]/
-  /// [FcmService.pendingReportedTime]으로 탭 시점에 이미 캡처됨 — 재전송이 SharedPreferences를
-  /// 덮어쓰기 전 값이 보존되어 정확히 "이미 @priorTime에 전달됨"으로 안내된다.
+  /// 탭 이전에 [FcmService._captureHeartbeatStateForSafetyNet]이 이미 [FcmService.pendingAlreadyReported]/
+  /// [FcmService.pendingReportedTime]을 캡처해 두었으므로, 전송 스킵 시에도 다이얼로그는
+  /// "이미 @priorTime에 전달됨"으로 정확히 안내된다.
   Future<void> refreshAndForceSend() async {
     final isAls = await _tokenDs.getIsAlsoSubject();
     if (!isAls) return;
     await loadScheduleFromLocal();
-    await HeartbeatService().execute(manual: true, isInteractiveAtTrigger: true);
     await _reloadHeartbeatState();
+    if (!isReportedToday) {
+      await HeartbeatService().execute(manual: true, isInteractiveAtTrigger: true);
+      await _reloadHeartbeatState();
+    }
     await FcmService.consumeSafetyNetDialogIfPending(delivered: isReportedToday);
   }
 
@@ -257,16 +258,18 @@ class GuardianDashboardController extends BaseController
       applySchedule(hour, minute);
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
+      } else {
+        // iOS: matchDateTimeComponents.time으로 등록된 매일 반복 알림은 재등록이 idempotent.
+        // 재설치 시 prefs는 복원되지만 알람은 사라지므로 onInit에서 매번 재단언한다.
+        await LocalAlarmService.schedule(hour, minute);
       }
-      // LocalAlarm 재예약은 HeartbeatService가 전송 성공/실패 시 forceNextDay로 전담 —
-      // 여기서 forceNextDay 없이 재호출하면, 이미 오늘 전송돼 _onHeartbeatSent가 내일로
-      // 옮겨둔 안전망 알림을 (heartbeat+3h가 오늘 미래면) 다시 오늘로 되돌린다. S 모드
-      // (_syncScheduleFromServer)와 동일하게 onInit 재예약은 하지 않는다.
     } catch (_) {
       final (h, m) = await _tokenDs.getHeartbeatSchedule();
       applySchedule(h, m);
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(h, m);
+      } else {
+        await LocalAlarmService.schedule(h, m);
       }
     }
   }

@@ -379,7 +379,6 @@ class HeartbeatService {
           '(role=$role, isAlsoSubject=$isAlsoSubject)');
       return;
     }
-    await LocalAlarmService.schedule(schedHour, schedMinute, forceNextDay: true);
     if (Platform.isAndroid) {
       if (success) {
         await HeartbeatWorkerService.schedule(schedHour, schedMinute);

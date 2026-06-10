@@ -484,7 +484,8 @@ abstract class SafetyHomeBaseController extends BaseController
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }
-      // LocalAlarm 재예약은 HeartbeatService가 전송 성공/실패 시 전담 — 여기서 중복 호출 금지
+      // iOS LocalAlarm은 최초 설치·재설치·예약시각 변경 시에만 등록(matchDateTimeComponents.time).
+      // _onHeartbeatSent는 iOS 알람을 건드리지 않는다. G+S는 _scheduleHeartbeatIfGS가 담당.
     } catch (_) {
       // 서버 동기화 실패 — 로컬 저장값으로 fallback schedule 등록.
       // 첫 설치 직후 sync 실패 + 첫 heartbeat 실패가 결합돼도 WorkManager는 깔린 상태로 종료.

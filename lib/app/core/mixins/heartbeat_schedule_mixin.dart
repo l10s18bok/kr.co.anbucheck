@@ -176,16 +176,14 @@ mixin HeartbeatScheduleMixin on GetxController {
     final now = DateTime.now();
     final newTimeToday = DateTime(now.year, now.month, now.day, hour, minute);
     final passedToday = !newTimeToday.isAfter(now);
-    final forceNextDay = wasReportedToday || passedToday;
 
     // 2) 예약 트리거 재설정 — best-effort. 실패해도 시각 변경 자체는 성공.
-    //    forceNextDay로 안전망 알람을 결정적으로 예약(전송 실패와 무관하게 정확).
-    // Android: WorkManager + 로컬 안전망 알림 / iOS G+S: 로컬 알림(BGTask 미사용)
+    // Android: WorkManager / iOS G+S: 로컬 알림(BGTask 미사용, 오늘/내일은 schedule이 자동 결정)
     try {
       if (Platform.isAndroid) {
         await HeartbeatWorkerService.schedule(hour, minute);
       }
-      await LocalAlarmService.schedule(hour, minute, forceNextDay: forceNextDay);
+      await LocalAlarmService.schedule(hour, minute);
     } catch (e, st) {
       debugPrint('[heartbeat-time] 예약 트리거 재설정 실패(무시 — 시각 변경은 성공): $e\n$st');
     }
