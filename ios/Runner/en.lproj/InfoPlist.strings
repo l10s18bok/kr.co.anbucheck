@@ -2,4 +2,5 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "Used to detect steps and confirm your activity.";
 "NSLocationWhenInUseUsageDescription" = "Used only when you request emergency help to share your current location with your guardians so they can reach you faster. Location is not collected at other times.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Your location is shared with guardians only when you send an emergency request. This app does not track your location in the background.";
 "NSUserTrackingUsageDescription" = "Used to show ads tailored to your interests. The app works normally if you decline.";

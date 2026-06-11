@@ -2,4 +2,5 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "Używane do wykrywania kroków i potwierdzania aktywności.";
 "NSLocationWhenInUseUsageDescription" = "Używane tylko podczas zgłoszenia pomocy w nagłym wypadku, aby udostępnić obecną lokalizację opiekunom, by szybciej do Ciebie dotarli. W innych momentach lokalizacja nie jest zbierana.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Twoja lokalizacja jest udostępniana opiekunom tylko podczas wysyłania prośby o pomoc w nagłych przypadkach. Ta aplikacja nie śledzi Twojej lokalizacji w tle.";
 "NSUserTrackingUsageDescription" = "Używane do wyświetlania bardziej trafnych reklam. Aplikacja działa normalnie również po odmowie.";

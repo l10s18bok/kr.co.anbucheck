@@ -2,4 +2,5 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "Adımları algılamak ve etkinliğinizi doğrulamak için kullanılır.";
 "NSLocationWhenInUseUsageDescription" = "Yalnızca acil yardım istediğinizde mevcut konumunuzu bakıcılarınızla paylaşmak için kullanılır, böylece size daha hızlı ulaşabilirler. Diğer zamanlarda konum toplanmaz.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Konumunuz yalnızca acil yardım talebi gönderdiğinizde koruyucularınızla paylaşılır. Bu uygulama konumunuzu arka planda takip etmez.";
 "NSUserTrackingUsageDescription" = "Daha alakalı reklamlar göstermek için kullanılır. Reddetmeniz uygulamanın çalışmasını etkilemez.";

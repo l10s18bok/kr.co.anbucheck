@@ -2,4 +2,5 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "歩数を検出して活動状況を確認するために使用されます。";
 "NSLocationWhenInUseUsageDescription" = "緊急の助けを求めたときだけ、現在地を保護者と共有します。普段は位置情報を収集しません。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "緊急ヘルプ要請時のみ、現在地を保護者に送信します。このアプリはバックグラウンドで位置情報を追跡しません。";
 "NSUserTrackingUsageDescription" = "ご興味に合わせた広告を表示するために使用します。拒否されてもアプリは通常通り動作します。";

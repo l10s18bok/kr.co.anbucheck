@@ -2,4 +2,5 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "Dùng để phát hiện số bước chân và xác nhận hoạt động của bạn.";
 "NSLocationWhenInUseUsageDescription" = "Chỉ dùng khi bạn yêu cầu trợ giúp khẩn cấp để chia sẻ vị trí hiện tại với người giám hộ, giúp họ đến với bạn nhanh hơn. Vị trí không được thu thập vào những lúc khác.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Vị trí của bạn chỉ được chia sẻ với người giám hộ khi bạn gửi yêu cầu khẩn cấp. Ứng dụng này không theo dõi vị trí của bạn trong nền.";
 "NSUserTrackingUsageDescription" = "Dùng để hiển thị quảng cáo phù hợp hơn với sở thích của bạn. Ứng dụng vẫn hoạt động bình thường nếu bạn từ chối.";

@@ -2,4 +2,5 @@
 "CFBundleName" = "Anbu";
 "NSMotionUsageDescription" = "Utilizzato per rilevare i passi e confermare la tua attività.";
 "NSLocationWhenInUseUsageDescription" = "Usato solo durante una richiesta di aiuto urgente per condividere la tua posizione attuale con i tutori, così possono raggiungerti più rapidamente. La posizione non viene raccolta in altri momenti.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "La tua posizione viene condivisa con i tuoi tutori solo quando invii una richiesta di emergenza. Questa app non traccia la tua posizione in background.";
 "NSUserTrackingUsageDescription" = "Usato per mostrare annunci più pertinenti. L'app funziona normalmente anche se rifiuti.";
