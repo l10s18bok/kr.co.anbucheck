@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
-import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/controllers/guardian_connection_management_controller.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
@@ -34,40 +33,27 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
           ],
         ),
       ),
-      body: Padding(
+      body: Obx(
+        () => Stack(
+          children: [
+            Padding(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
-        child: Obx(
-          () => Column(
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: AppSpacing.lg),
 
-              // 헤더 카드
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(AppSpacing.lg),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Guardian Mode',
-                      style: AppTextTheme.labelSmall(
-                        color: AppColors.textTertiary,
-                        fw: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: AppSpacing.sm),
-                    RichText(
+              // 연결된 대상자 섹션
+              Row(
+                children: [
+                  Expanded(
+                    child: RichText(
                       text: TextSpan(
                         children: [
-                          TextSpan(text: 'connection_managed_count'.tr, style: AppTextTheme.headlineMedium()),
+                          TextSpan(text: '${'connection_connected_subjects'.tr} ', style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
                           TextSpan(
                             text: 'connection_managed_count_value'.trParams({'current': '${controller.subjects.length}', 'max': '${controller.maxSubjects}'}),
-                            style: AppTextTheme.headlineMedium(
+                            style: AppTextTheme.headlineSmall(
                               color: const Color(0xFF4355B9),
                               fw: FontWeight.w700,
                             ),
@@ -75,13 +61,14 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  if (controller.canAddMore)
+                    GestureDetector(
+                      onTap: controller.goToAddSubject,
+                      child: Icon(Icons.add_circle_outline_rounded, size: 26.w, color: const Color(0xFF4355B9)),
+                    ),
+                ],
               ),
-              SizedBox(height: AppSpacing.lg),
-
-              // 연결된 대상자 섹션
-              Text('connection_connected_subjects'.tr, style: AppTextTheme.headlineSmall(fw: FontWeight.w600)),
               // 안내 멘트는 2명 이상일 때만 표시 (1명 이하는 순서 변경 의미 없음)
               if (controller.subjects.length >= 2) ...[
                 SizedBox(height: AppSpacing.sm),
@@ -157,40 +144,18 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                 ),
               ),
 
-              SizedBox(height: AppSpacing.lg),
-
-              // 새로운 대상자 추가
-              AddSubjectButton(onTap: controller.goToAddSubject),
-              SizedBox(height: AppSpacing.md),
-
-              // 하단 안내 박스
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(AppSpacing.lg),
-                decoration: BoxDecoration(
-                  color: AppColors.isDark
-                      ? const Color(0xFF4E2A00).withValues(alpha: 0.5)
-                      : const Color(0xFFFFF3E0).withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.info_outline_rounded, size: 18.w, color: const Color(0xFFFF9800)),
-                    SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: Text(
-                        '${'connection_unlink_warning'.tr}'
-                        '${'connection_unlink_warning_detail'.tr}',
-                        style: AppTextTheme.bodySmall(color: const Color(0xFFE65100)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               SizedBox(height: AppSpacing.md),
             ],
           ),
+        ),
+            if (controller.isLoading)
+              Container(
+                color: AppColors.surface,
+                child: const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF4355B9)),
+                ),
+              ),
+          ],
         ),
       ),
       bottomNavigationBar: const GuardianBottomNav(currentIndex: 1),

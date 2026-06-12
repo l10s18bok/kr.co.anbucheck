@@ -15,6 +15,7 @@ class GuardianConnectionManagementController extends BaseController {
   List<ConnectedSubject> get subjects => _subjects;
 
   int get maxSubjects => _svc.maxSubjects.value;
+  bool get canAddMore => _svc.canAddMore.value;
 
   final listScrollController = ScrollController();
 
@@ -126,7 +127,34 @@ class _ConfirmUnlinkDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('connection_unlink_title'.tr),
-      content: Text('connection_unlink_confirm'.trParams({'alias': alias})),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF3E0),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.info_outline_rounded, size: 16, color: Color(0xFFFF9800)),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '${'connection_unlink_warning'.tr} ${'connection_unlink_warning_detail'.tr}',
+                    style: const TextStyle(fontSize: 13, color: Color(0xFFE65100), height: 1.5),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text('connection_unlink_confirm'.trParams({'alias': alias})),
+        ],
+      ),
       actions: [
         TextButton(
           onPressed: () => Get.back(result: false),

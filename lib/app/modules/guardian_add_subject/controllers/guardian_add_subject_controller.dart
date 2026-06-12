@@ -6,6 +6,7 @@ import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
+import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 대상자 추가 컨트롤러
 /// PRD 7.7: 고유 코드 입력 → 서버 연결 → 별칭 저장(로컬)
@@ -76,8 +77,8 @@ class GuardianAddSubjectController extends BaseController {
         await _nicknameDs.save(inviteCode, alias);
       }
 
-      Get.back(result: true);
       AppSnackbar.show('common_complete'.tr, 'add_subject_success'.tr);
+      Get.offNamed(AppRoutes.guardianConnectionManagement);
     } catch (e) {
       final msg = e.toString().contains('404')
           ? 'add_subject_error_invalid_code'.tr
