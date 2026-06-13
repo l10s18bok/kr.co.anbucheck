@@ -226,6 +226,10 @@ class HeartbeatService {
           await remote.send(request);
           debugPrint('[HeartbeatService] 회복 전송 성공 (시도 $attempt)');
           await _tokenDs.saveLastRecoveryDate(today);
+          // 통신 복구 입증 — 잔존 "망 끊김" 알림 및 서버 safety_net 알림 제거.
+          // _onHeartbeatSent는 호출하지 않음(정시 슬롯 미소비 불변식 유지).
+          await LocalAlarmService.cancelSendFailed();
+          await LocalAlarmService.cancelSubjectSafetyNet();
           return;
         } catch (e) {
           debugPrint('[HeartbeatService] 회복 전송 실패 (시도 $attempt): $e');
