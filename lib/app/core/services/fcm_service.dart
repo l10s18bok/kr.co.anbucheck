@@ -392,6 +392,17 @@ class FcmService extends GetxService {
         final type = initialMessage.data['type']?.toString() ?? '';
         if (type.isNotEmpty) {
           pendingLaunchFcmType = type;
+          // subject_safety_net kill 런치 — 로컬 알림 kill 런치(아래 블록)와 동일하게
+          // 탭 시점 heartbeat 상태를 캡처하고 다이얼로그 플래그를 설정한다.
+          // 캡처 없이 pendingSafetyNetDialog만 true로 두면 pendingAlreadyReported가
+          // false(기본값)로 남아, 이미 전송된 경우에도 "방금 전달됨"이 표시되는 버그.
+          // · G+S 경로: SplashController가 pendingSafetyNetDialog를 다시 set하나 무해.
+          // · 순수 S 경로: subject 분기는 pendingLaunchFcmType을 처리하지 않으므로
+          //   여기서 설정하지 않으면 다이얼로그가 아예 뜨지 않는다.
+          if (type == 'subject_safety_net') {
+            await _captureHeartbeatStateForSafetyNet();
+            pendingSafetyNetDialog = true;
+          }
         }
       }
     } catch (_) {}

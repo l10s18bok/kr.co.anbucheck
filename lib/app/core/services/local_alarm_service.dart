@@ -256,20 +256,24 @@ class LocalAlarmService {
   /// heartbeat 전송 성공(`_onHeartbeatSent`) 시 호출하여 트레이에 잔존하는
   /// "안부 확인이 필요합니다" 알림을 제거한다.
   ///
-  /// 서버는 `subject_safety_net` 발송 시 `tag = "anbu_subject_default"` 로
-  /// 고정하므로(data에 subject_user_id/invite_code 없음 → group_id="default"),
-  /// getActiveNotifications()로 실제 notification ID를 읽어 취소한다.
-  /// 직접 cancel(0, tag:) 하지 않는 이유: FCM이 배정하는 notification ID가
-  /// 0이 아닐 수 있어 tag만으로 정확히 매칭되지 않을 수 있기 때문.
+  /// FCM Android SDK는 `tag`가 있는 알림을 `NotificationManager.notify(tag, 0, n)`
+  /// 형식으로 표시한다 — notification id = 0으로 고정. 따라서 `cancel(0, tag:)`
+  /// 직접 호출이 가장 확실하며, WorkManager 백그라운드 isolate에서
+  /// `getActiveNotifications()`가 FCM 알림을 반환하지 않는 경우에도 동작한다.
+  /// 기존 getActiveNotifications() 루프는 id가 0이 아닌 경우를 대비해 유지한다.
   static Future<void> cancelSubjectSafetyNet() async {
     if (Platform.isIOS) return;
     await _ensureInitialized();
     try {
+      // FCM은 tag 있는 알림을 notify(tag, 0, n)으로 표시 — id=0 직접 취소.
+      // getActiveNotifications()가 WorkManager 백그라운드 isolate에서 FCM 알림을
+      // 반환하지 않는 경우에도 이 경로로 취소된다.
+      await _plugin!.cancel(0, tag: 'anbu_subject_default');
+      // getActiveNotifications()가 동작하는 환경에서 비제로 id 대비 sweep
       final active = await _plugin!.getActiveNotifications();
       for (final n in active) {
         if (n.tag == 'anbu_subject_default') {
           await _plugin!.cancel(n.id ?? 0, tag: n.tag);
-          debugPrint('[LocalAlarm] subject_safety_net 알림 취소: id=${n.id}');
         }
       }
     } catch (e) {
