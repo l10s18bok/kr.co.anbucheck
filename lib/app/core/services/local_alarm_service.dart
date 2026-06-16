@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:anbucheck/app/core/utils/notification_text_cache.dart';
@@ -252,30 +253,25 @@ class LocalAlarmService {
   }
 
   /// 서버 FCM 푸시 `subject_safety_net` 알림 취소 (Android 전용).
+  /// `subject_safety_net` 안전망 알림을 트레이에서 제거한다.
   ///
-  /// heartbeat 전송 성공(`_onHeartbeatSent`) 시 호출하여 트레이에 잔존하는
-  /// "안부 확인이 필요합니다" 알림을 제거한다.
+  /// heartbeat 전송 성공(`_onHeartbeatSent`) 시 호출된다.
   ///
-  /// FCM Android SDK는 `tag`가 있는 알림을 `NotificationManager.notify(tag, 0, n)`
-  /// 형식으로 표시한다 — notification id = 0으로 고정. 따라서 `cancel(0, tag:)`
-  /// 직접 호출이 가장 확실하며, WorkManager 백그라운드 isolate에서
-  /// `getActiveNotifications()`가 FCM 알림을 반환하지 않는 경우에도 동작한다.
-  /// 기존 getActiveNotifications() 루프는 id가 0이 아닌 경우를 대비해 유지한다.
+  /// `screen_state` 네이티브 채널의 `cancelNotificationsByTag`를 통해
+  /// OS가 실제로 표시 중인 알림의 (tag, id) 쌍을 직접 조회 후 취소한다.
+  /// — Firebase가 background에서 표시한 알림이든, 앱 포그라운드 중
+  ///   flutter_local_notifications로 표시한 알림이든 id 가정 없이 모두 제거된다.
+  /// — `screen_state` 채널은 WorkManager 백그라운드 isolate에서도 동작이
+  ///   검증된 경로다 (isInteractive와 동일 메커니즘).
+  static const _screenStateChannel = MethodChannel('kr.co.anbucheck/screen_state');
+
   static Future<void> cancelSubjectSafetyNet() async {
     if (Platform.isIOS) return;
-    await _ensureInitialized();
     try {
-      // FCM은 tag 있는 알림을 notify(tag, 0, n)으로 표시 — id=0 직접 취소.
-      // getActiveNotifications()가 WorkManager 백그라운드 isolate에서 FCM 알림을
-      // 반환하지 않는 경우에도 이 경로로 취소된다.
-      await _plugin!.cancel(0, tag: 'anbu_subject_default');
-      // getActiveNotifications()가 동작하는 환경에서 비제로 id 대비 sweep
-      final active = await _plugin!.getActiveNotifications();
-      for (final n in active) {
-        if (n.tag == 'anbu_subject_default') {
-          await _plugin!.cancel(n.id ?? 0, tag: n.tag);
-        }
-      }
+      await _screenStateChannel.invokeMethod<void>(
+        'cancelNotificationsByTag',
+        {'tag': 'anbu_safety_net'},
+      );
     } catch (e) {
       debugPrint('[LocalAlarm] cancelSubjectSafetyNet 실패: $e');
     }

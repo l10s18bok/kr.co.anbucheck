@@ -509,8 +509,13 @@ class FcmService extends GetxService {
     final notification = message.notification;
     if (notification == null) return;
 
-    // 대상자별 그룹화 키 — subject_user_id 우선, 없으면 invite_code, 둘 다 없으면 'default'
-    final groupKey = 'anbu_subject_${message.data['subject_user_id'] ?? message.data['invite_code'] ?? 'default'}';
+    // 대상자별 그룹화 키 — subject_user_id 우선, 없으면 invite_code, 둘 다 없으면 'default'.
+    // subject_safety_net은 전용 태그를 사용해야 cancelSubjectSafetyNet()과 일치한다
+    // (서버가 설정하는 AndroidNotification.tag와 동일하게 유지).
+    final type = message.data['type']?.toString() ?? '';
+    final groupKey = type == 'subject_safety_net'
+        ? 'anbu_safety_net'
+        : 'anbu_subject_${message.data['subject_user_id'] ?? message.data['invite_code'] ?? 'default'}';
 
     // 시스템 알림 표시
     // payload는 type + 부가 데이터(lat/lng 등)를 JSON 문자열로 저장해,

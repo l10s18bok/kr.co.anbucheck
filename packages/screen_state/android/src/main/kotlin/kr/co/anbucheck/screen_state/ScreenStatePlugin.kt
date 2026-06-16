@@ -1,6 +1,8 @@
 package kr.co.anbucheck.screen_state
 
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import android.os.PowerManager
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -8,7 +10,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-/// PowerManager.isInteractive() 조회만 제공하는 경량 플러그인.
+/// PowerManager.isInteractive() 조회 및 알림 취소를 제공하는 경량 플러그인.
 ///
 /// WorkManager가 생성하는 백그라운드 FlutterEngine에서도 동작하도록
 /// FlutterPlugin 인터페이스로 구현 — GeneratedPluginRegistrant가 UI/백그라운드
@@ -28,6 +30,16 @@ class ScreenStatePlugin : FlutterPlugin, MethodCallHandler {
             "isInteractive" -> {
                 val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
                 result.success(pm.isInteractive)
+            }
+            "cancelNotificationsByTag" -> {
+                val tag = call.argument<String>("tag")
+                if (tag != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    nm.activeNotifications
+                        .filter { it.tag == tag }
+                        .forEach { nm.cancel(it.tag, it.id) }
+                }
+                result.success(null)
             }
             else -> result.notImplemented()
         }
