@@ -648,6 +648,15 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                 ),
               ),
             ] else ...[
+              // 가격 + 기간 표시 (Apple 3.1.2(c) 요건)
+              if (iap?.productDetails.value != null)
+                Padding(
+                  padding: EdgeInsets.only(bottom: AppSpacing.sm),
+                  child: Text(
+                    '${iap!.productDetails.value!.price} / ${'subscription_period_annual'.tr}',
+                    style: AppTextTheme.bodySmall(color: Colors.white70),
+                  ),
+                ),
               _PremiumButton(
                 label: 'subscription_subscribe'.tr,
                 filled: true,
@@ -661,6 +670,8 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                 loading: processing,
                 onTap: processing ? null : controller.restoreSubscription,
               ),
+              // 이용약관 + 개인정보처리방침 링크 (Apple 3.1.2(c) 요건 — iOS 전용)
+              if (Platform.isIOS) _buildLegalLinks(darkBg: true),
             ],
           ],
         ),
@@ -717,6 +728,15 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
               ),
             ),
           ] else ...[
+            // 가격 + 기간 표시 (Apple 3.1.2(c) 요건)
+            if (iap?.productDetails.value != null)
+              Padding(
+                padding: EdgeInsets.only(bottom: AppSpacing.sm),
+                child: Text(
+                  '${iap!.productDetails.value!.price} / ${'subscription_period_annual'.tr}',
+                  style: AppTextTheme.bodySmall(color: bodyText),
+                ),
+              ),
             // [구독하기] — Dashboard 만료 배너와 동일한 ElevatedButton 스타일
             SizedBox(
               width: double.infinity,
@@ -788,7 +808,52 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                       ),
               ),
             ),
+            // 이용약관 + 개인정보처리방침 링크 (Apple 3.1.2(c) 요건 — iOS 전용)
+            if (Platform.isIOS) _buildLegalLinks(darkBg: false),
           ],
+        ],
+      ),
+    );
+  }
+
+  /// 이용약관 + 개인정보처리방침 링크 (Apple Guideline 3.1.2(c) 요건).
+  /// Wrap 사용 — 긴 언어(태국어·러시아어 등)에서 Row overflow 방지.
+  /// [darkBg]: true면 흰색 텍스트(그라디언트 카드), false면 어두운 텍스트(만료 카드).
+  Widget _buildLegalLinks({required bool darkBg}) {
+    final textColor = darkBg ? Colors.white70 : const Color(0xFF4E2C00);
+    return Padding(
+      padding: EdgeInsets.only(top: AppSpacing.sm),
+      child: Wrap(
+        spacing: 6.w,
+        runSpacing: 2.h,
+        children: [
+          GestureDetector(
+            onTap: () => launchUrl(
+              Uri.parse(AppConstants.termsOfServiceUrl),
+              mode: LaunchMode.externalApplication,
+            ),
+            child: Text(
+              'settings_terms'.tr,
+              style: AppTextTheme.labelSmall(
+                color: textColor,
+                fw: FontWeight.w600,
+              ),
+            ),
+          ),
+          Text('·', style: AppTextTheme.labelSmall(color: textColor)),
+          GestureDetector(
+            onTap: () => launchUrl(
+              Uri.parse(AppConstants.privacyPolicyUrl),
+              mode: LaunchMode.externalApplication,
+            ),
+            child: Text(
+              'settings_privacy_policy'.tr,
+              style: AppTextTheme.labelSmall(
+                color: textColor,
+                fw: FontWeight.w600,
+              ),
+            ),
+          ),
         ],
       ),
     );

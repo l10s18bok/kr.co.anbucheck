@@ -271,6 +271,7 @@ abstract class PtBr {
     'subscription_restore_nothing': 'Nenhuma assinatura para restaurar',
     'subscription_restore_success': 'Assinatura restaurada',
     'subscription_purchase_success': 'Assinatura iniciada',
+    'subscription_period_annual': 'ano',
 
     // ── G+S (Guardião e protegido) ──
     'gs_enable_button': 'Receber proteção também',

@@ -267,6 +267,7 @@ abstract class HiIn {
     'subscription_restore_nothing': 'पुनर्स्थापित करने के लिए कोई सदस्यता नहीं',
     'subscription_restore_success': 'सदस्यता पुनर्स्थापित',
     'subscription_purchase_success': 'सदस्यता शुरू',
+    'subscription_period_annual': 'वर्ष',
 
     // ── G+S (अभिभावक + संरक्षित) ──
     'gs_enable_button': 'मेरी भी सुरक्षा करें',

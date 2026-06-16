@@ -271,6 +271,7 @@ abstract class EsEs {
     'subscription_restore_nothing': 'No hay suscripción para restaurar',
     'subscription_restore_success': 'Suscripción restaurada',
     'subscription_purchase_success': 'Suscripción iniciada',
+    'subscription_period_annual': 'año',
 
     // ── G+S (Guardián y protegido) ──
     'gs_enable_button': 'Recibir protección también',

@@ -263,6 +263,7 @@ abstract class ThTh {
     'subscription_restore_nothing': 'ไม่มีการสมัครสมาชิกให้กู้คืน',
     'subscription_restore_success': 'กู้คืนการสมัครสมาชิกแล้ว',
     'subscription_purchase_success': 'เริ่มการสมัครสมาชิกแล้ว',
+    'subscription_period_annual': 'ปี',
 
     // ── G+S (ผู้ดูแล + ผู้ได้รับการดูแล) ──
     'gs_enable_button': 'รับการดูแลสุขภาพด้วย',

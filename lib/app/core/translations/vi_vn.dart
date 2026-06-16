@@ -269,6 +269,7 @@ abstract class ViVn {
     'subscription_restore_nothing': 'Không có gói đăng ký để khôi phục',
     'subscription_restore_success': 'Đã khôi phục đăng ký',
     'subscription_purchase_success': 'Đã bắt đầu đăng ký',
+    'subscription_period_annual': 'năm',
 
     // ── G+S (Người giám hộ + Được bảo vệ) ──
     'gs_enable_button': 'Nhận bảo vệ sức khỏe',

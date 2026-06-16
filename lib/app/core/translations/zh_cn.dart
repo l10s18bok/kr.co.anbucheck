@@ -249,6 +249,7 @@ abstract class ZhCn {
     'subscription_restore_nothing': '没有可恢复的订阅',
     'subscription_restore_success': '订阅已恢复',
     'subscription_purchase_success': '订阅已开始',
+    'subscription_period_annual': '每年',
 
     // ── G+S (守护者 + 被守护者) ──
     'gs_enable_button': '我也要接受安否保护',

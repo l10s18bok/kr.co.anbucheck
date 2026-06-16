@@ -270,6 +270,7 @@ abstract class NlNl {
     'subscription_restore_nothing': 'Geen abonnement om te herstellen',
     'subscription_restore_success': 'Abonnement hersteld',
     'subscription_purchase_success': 'Abonnement gestart',
+    'subscription_period_annual': 'jaar',
 
     // ── G+S (Bewaker en beschermde) ──
     'gs_enable_button': 'Ook welzijnsbescherming ontvangen',

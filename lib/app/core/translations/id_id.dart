@@ -272,6 +272,7 @@ abstract class IdId {
     'subscription_restore_nothing': 'Tidak ada langganan untuk dipulihkan',
     'subscription_restore_success': 'Langganan telah dipulihkan',
     'subscription_purchase_success': 'Langganan dimulai',
+    'subscription_period_annual': 'tahun',
 
     // ── G+S (Penjaga + Yang Dilindungi) ──
     'gs_enable_button': 'Terima perlindungan juga',

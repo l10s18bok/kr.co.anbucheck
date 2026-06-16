@@ -253,6 +253,7 @@ abstract class KoKr {
     'subscription_restore_nothing': '복원할 구독이 없습니다',
     'subscription_restore_success': '구독이 복원되었습니다',
     'subscription_purchase_success': '구독이 시작되었습니다',
+    'subscription_period_annual': '연간',
 
     // ── G+S (보호자 겸 대상자) ──
     'gs_enable_button': '나도 안부 보호 받기',

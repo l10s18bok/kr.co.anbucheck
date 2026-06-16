@@ -272,6 +272,7 @@ abstract class RuRu {
     'subscription_restore_nothing': 'Нет подписки для восстановления',
     'subscription_restore_success': 'Подписка восстановлена',
     'subscription_purchase_success': 'Подписка активирована',
+    'subscription_period_annual': 'год',
 
     // ── G+S (Опекун + Подопечный) ──
     'gs_enable_button': 'Получать защиту тоже',

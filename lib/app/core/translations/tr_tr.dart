@@ -267,6 +267,7 @@ abstract class TrTr {
     'subscription_restore_nothing': 'Geri yüklenecek abonelik yok',
     'subscription_restore_success': 'Abonelik geri yüklendi',
     'subscription_purchase_success': 'Abonelik başlatıldı',
+    'subscription_period_annual': 'yıl',
 
     // ── G+S (Koruyucu + Korunan) ──
     'gs_enable_button': 'Ben de koruma al',

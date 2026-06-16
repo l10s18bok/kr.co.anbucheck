@@ -271,6 +271,7 @@ abstract class ItIt {
     'subscription_restore_nothing': 'Nessun abbonamento da ripristinare',
     'subscription_restore_success': 'Abbonamento ripristinato',
     'subscription_purchase_success': 'Abbonamento avviato',
+    'subscription_period_annual': 'anno',
 
     // ── G+S (Guardiano e protetto) ──
     'gs_enable_button': 'Ricevi anche la protezione',

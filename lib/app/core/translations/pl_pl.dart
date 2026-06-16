@@ -270,6 +270,7 @@ abstract class PlPl {
     'subscription_restore_nothing': 'Brak subskrypcji do przywrócenia',
     'subscription_restore_success': 'Subskrypcja przywrócona',
     'subscription_purchase_success': 'Subskrypcja rozpoczęta',
+    'subscription_period_annual': 'rok',
 
     // ── G+S (Opiekun + Podopieczny) ──
     'gs_enable_button': 'Otrzymuj też ochronę',

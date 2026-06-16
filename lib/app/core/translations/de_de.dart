@@ -272,6 +272,7 @@ abstract class DeDe {
     'subscription_restore_nothing': 'Kein Abonnement zum Wiederherstellen',
     'subscription_restore_success': 'Abonnement wiederhergestellt',
     'subscription_purchase_success': 'Abonnement gestartet',
+    'subscription_period_annual': 'Jahr',
 
     // ── G+S (Betreuer + Schützling) ──
     'gs_enable_button': 'Auch Wellness-Schutz erhalten',

@@ -260,6 +260,7 @@ abstract class ArSa {
     'subscription_restore_nothing': 'لا يوجد اشتراك لاستعادته',
     'subscription_restore_success': 'تمت استعادة الاشتراك',
     'subscription_purchase_success': 'تم بدء الاشتراك',
+    'subscription_period_annual': 'سنة',
 
     // ── G+S (وصي + محمي) ──
     'gs_enable_button': 'احصل على الحماية أيضاً',

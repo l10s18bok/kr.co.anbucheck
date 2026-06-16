@@ -249,6 +249,7 @@ abstract class ZhTw {
     'subscription_restore_nothing': '沒有可還原的訂閱',
     'subscription_restore_success': '訂閱已還原',
     'subscription_purchase_success': '訂閱已開始',
+    'subscription_period_annual': '每年',
 
     // ── G+S (守護者 + 被守護者) ──
     'gs_enable_button': '我也要接受安否保護',

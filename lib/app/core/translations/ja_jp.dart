@@ -251,6 +251,7 @@ abstract class JaJp {
     'subscription_restore_nothing': '復元する購読がありません',
     'subscription_restore_success': '購読を復元しました',
     'subscription_purchase_success': '購読を開始しました',
+    'subscription_period_annual': '年間',
 
     // ── G+S (保護者 + 対象者) ──
     'gs_enable_button': '私も安否保護を受ける',

@@ -268,6 +268,7 @@ abstract class EnUs {
     'subscription_restore_nothing': 'No subscription to restore',
     'subscription_restore_success': 'Subscription restored',
     'subscription_purchase_success': 'Subscription started',
+    'subscription_period_annual': 'year',
 
     // ── G+S (Guardian + Subject) ──
     'gs_enable_button': 'Get Wellness Protection Too',

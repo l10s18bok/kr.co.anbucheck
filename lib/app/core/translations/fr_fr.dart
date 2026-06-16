@@ -273,6 +273,7 @@ abstract class FrFr {
     'subscription_restore_nothing': 'Aucun abonnement à restaurer',
     'subscription_restore_success': 'Abonnement restauré',
     'subscription_purchase_success': 'Abonnement activé',
+    'subscription_period_annual': 'an',
 
     // ── G+S (Gardien et protégé) ──
     'gs_enable_button': 'Recevoir aussi la protection',

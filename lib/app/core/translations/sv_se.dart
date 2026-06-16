@@ -263,6 +263,7 @@ abstract class SvSe {
     'subscription_restore_nothing': 'Ingen prenumeration att återställa',
     'subscription_restore_success': 'Prenumeration återställd',
     'subscription_purchase_success': 'Prenumeration startad',
+    'subscription_period_annual': 'år',
 
     // ── G+S (Vårdare + Skyddad) ──
     'gs_enable_button': 'Få hälsoskydd också',
