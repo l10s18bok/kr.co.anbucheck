@@ -213,7 +213,7 @@ class _SubjectListTile extends StatelessWidget {
     final period = heartbeatHour < 12 ? 'common_am'.tr : 'common_pm'.tr;
     final h = heartbeatHour == 0 ? 12 : (heartbeatHour > 12 ? heartbeatHour - 12 : heartbeatHour);
     final m = heartbeatMinute.toString().padLeft(2, '0');
-    return '매일 $period ${h.toString().padLeft(2, '0')}:$m';
+    return 'connection_heartbeat_schedule'.trParams({'time': '$period ${h.toString().padLeft(2, '0')}:$m'});
   }
 
   void _openEditDialog(BuildContext context) {
