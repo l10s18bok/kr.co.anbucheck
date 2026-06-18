@@ -215,7 +215,7 @@ class HeartbeatService {
         timestamp:    now.toUtc().toIso8601String(),
         manual:       false,
         stepsDelta:   null, // 회복 전송은 걸음수 미포함 — 종일 집계는 정시 전송이 담당
-        suspicious:   false, // 화면 켜진 상태(회복 전송 게이트)이므로 활동 증거 있음
+        suspicious:   false, // 기기 온라인 = 대상자 근처에 기기 있음 = 활동 증거
         batteryLevel: batteryLevel,
         scheduledKey: recoveryKey, // 정시 키와 분리 — 정시 전송을 서버 dedup이 막지 않음
       );

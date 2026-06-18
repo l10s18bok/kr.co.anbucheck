@@ -63,11 +63,12 @@ void heartbeatWorkerCallback() {
       // one-off과 periodic이 batch fire되어도 서버 측 (device_id, scheduled_key)
       // idempotency가 중복 전송을 차단하므로 조기 통과의 사용자 영향은 없다.
       //
-      // 예외 — 회복 전송: 전날(또는 그 이전) heartbeat 미전송 갭이 있고
-      // (lastHeartbeatDate가 오늘도 어제도 아님) 화면이 깨어있으면(사용자가 폰을 연
-      // 시점), 예약시각을 기다리지 않고 "살아있음" 신호를 즉시 보낸다. 화면 활성이라
-      // suspicious=false 확정 → 오탐 없음. 회복 전송은 그 날 정시 슬롯을 소비하지
-      // 않으므로(별도 키·마커) 예약시각 정시 전송은 그대로 수행된다.
+      // 예외 — 회복 전송: 2일 이상(어제 포함 미전송) heartbeat 갭이 있을 때
+      // 예약시각을 기다리지 않고 당일 정시 슬롯을 즉시 소비한다.
+      // 기기가 온라인 상태(NetworkType.connected 충족)라는 것 자체가
+      // 활동 증거이므로 isInteractiveAtTrigger=true → suspicious=false.
+      // _onHeartbeatSent가 WorkManager를 내일자로 재등록해 정상 사이클을 복구하며,
+      // 서버 (device_id, scheduled_key) dedup이 예약시각 정시 one-off 중복 전송을 차단.
       final earliestAllowed = scheduled.subtract(const Duration(minutes: 15));
       if (now.isBefore(earliestAllowed)) {
         final yesterday = formatYmd(now.subtract(const Duration(days: 1)));
@@ -75,9 +76,9 @@ void heartbeatWorkerCallback() {
             lastDate.isNotEmpty &&
             lastDate != today &&
             lastDate != yesterday;
-        if (isRecovery && wasInteractive) {
-          debugPrint('[HeartbeatWorker] 예약시각 이전 — 미전송 갭 + 화면 활성 → 회복 전송');
-          await HeartbeatService().execute(recovery: true);
+        if (isRecovery) {
+          debugPrint('[HeartbeatWorker] 예약시각 이전 — 미전송 갭 감지 → 회복 전송');
+          await HeartbeatService().execute(isInteractiveAtTrigger: true);
         } else {
           debugPrint('[HeartbeatWorker] 예약시각 -15분 이전 → 스킵 '
               '(isRecovery=$isRecovery, isInteractive=$wasInteractive)');
