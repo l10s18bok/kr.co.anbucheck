@@ -304,7 +304,7 @@ abstract class JaJp {
     'notifications_level_urgent_desc': '今すぐ確認が必要です',
     'notifications_level_info': '情報',
     'notifications_level_info_desc': '歩数、バッテリー不足など参考用通知',
-    'notifications_activity_note': '※ 歩数データを取得できなかった場合、活動情報が表示されないことがあります。',
+    'notifications_activity_note': '※ 歩数は当日の深夜0時から安否信号の送信時刻までの累計歩数です。',
 
     // ── 見守り通知設定 ──
     'notification_settings_title': '通知設定',

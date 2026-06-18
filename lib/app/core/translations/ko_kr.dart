@@ -306,7 +306,7 @@ abstract class KoKr {
     'notifications_level_urgent_desc': '지금 바로 확인이 필요해요',
     'notifications_level_info': '정보',
     'notifications_level_info_desc': '걸음수, 배터리 부족 등 참고용 알림',
-    'notifications_activity_note': '※ 걸음수 데이터를 수집하지 못한 경우 활동 정보가 표시되지 않을 수 있습니다.',
+    'notifications_activity_note': '※ 걸음수는 당일 자정(0시)부터 안부 신호 전송 시각까지의 누적 걸음수입니다.',
 
     // ── 보호자 알림 설정 ──
     'notification_settings_title': '알림 설정',

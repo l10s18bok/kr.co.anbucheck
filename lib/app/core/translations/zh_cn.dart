@@ -301,7 +301,7 @@ abstract class ZhCn {
     'notifications_level_urgent_desc': '需要立即确认',
     'notifications_level_info': '信息',
     'notifications_level_info_desc': '步数、电量不足等参考提醒',
-    'notifications_activity_note': '※ 如果无法采集步数数据，活动信息可能不会显示。',
+    'notifications_activity_note': '※ 步数为当日零时至安否信号发送时刻的累计步数。',
 
     // ── 守护者通知设置 ──
     'notification_settings_title': '通知设置',

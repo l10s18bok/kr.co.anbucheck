@@ -325,7 +325,7 @@ abstract class TrTr {
     'notifications_level_info': 'Bilgi',
     'notifications_level_info_desc': 'Adım, düşük pil ve diğer bilgi uyarıları',
     'notifications_activity_note':
-        '※ Adım verileri toplanamadıysa aktivite bilgisi gösterilmeyebilir.',
+        '※ Adım sayısı, gece yarısından güvenlik sinyalinin gönderildiği zamana kadar biriken adımları yansıtır.',
 
     // ── Koruyucu Bildirim Ayarları ──
     'notification_settings_title': 'Bildirim Ayarları',

@@ -332,7 +332,7 @@ abstract class DeDe {
     'notifications_level_info': 'Info',
     'notifications_level_info_desc': 'Schritte, niedriger Akku und weitere Hinweise',
     'notifications_activity_note':
-        '※ Aktivitätsdaten werden möglicherweise nicht angezeigt, wenn Schrittzahlen nicht erfasst werden konnten.',
+        '※ Die Schrittzahl entspricht den kumulierten Schritten von Mitternacht bis zur Sendezeit des Sicherheitssignals.',
 
     // ── Betreuer-Benachrichtigungseinstellungen ──
     'notification_settings_title': 'Benachrichtigungseinstellungen',

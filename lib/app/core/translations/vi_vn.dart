@@ -328,7 +328,7 @@ abstract class ViVn {
     'notifications_level_info': 'Thong tin',
     'notifications_level_info_desc': 'Số bước, pin yếu và thông báo tham khảo khác',
     'notifications_activity_note':
-        '※ Thong tin hoat dong co the khong hien thi neu khong thu thap duoc du lieu buoc chan.',
+        '※ So buoc la tong so buoc tich luy tu nua dem den thoi diem gui tin hieu an toan.',
 
     // ── Cai dat thong bao nguoi bao ve ──
     'notification_settings_title': 'Cai dat thong bao',

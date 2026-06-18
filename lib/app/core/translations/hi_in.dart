@@ -325,7 +325,7 @@ abstract class HiIn {
     'notifications_level_info': 'जानकारी',
     'notifications_level_info_desc': 'कदम, बैटरी कम और अन्य सूचनाएँ',
     'notifications_activity_note':
-        '※ यदि कदम डेटा एकत्र नहीं हो सका तो गतिविधि जानकारी नहीं दिख सकती।',
+        '※ कदम की गिनती आधी रात से सुरक्षा संकेत भेजे जाने के समय तक के संचित कदम हैं।',
 
     // ── अभिभावक सूचना सेटिंग्स ──
     'notification_settings_title': 'सूचना सेटिंग्स',

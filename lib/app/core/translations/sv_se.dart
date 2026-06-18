@@ -322,7 +322,7 @@ abstract class SvSe {
     'notifications_level_info': 'Info',
     'notifications_level_info_desc': 'Steg, låg batterinivå och andra aviseringar',
     'notifications_activity_note':
-        '※ Aktivitetsinformation kanske inte visas om stegdata inte kunde samlas in.',
+        '※ Stegräknaren visar kumulativa steg från midnatt till tidpunkten då säkerhetssignalen skickades.',
 
     // ── Vardarens aviseringsinstellningar ──
     'notification_settings_title': 'Aviseringsinstellningar',

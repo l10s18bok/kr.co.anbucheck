@@ -330,7 +330,7 @@ abstract class PtBr {
     'notifications_level_info': 'Info',
     'notifications_level_info_desc': 'Passos, bateria fraca e outros avisos',
     'notifications_activity_note':
-        '※ As informações de atividade podem não ser exibidas se os dados de passos não puderam ser coletados.',
+        '※ A contagem de passos representa os passos acumulados desde a meia-noite até o horário de envio do sinal de bem-estar.',
 
     // ── Configurações de notificação do guardião ──
     'notification_settings_title': 'Configurações de notificação',

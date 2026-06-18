@@ -330,7 +330,7 @@ abstract class NlNl {
     'notifications_level_info': 'Info',
     'notifications_level_info_desc': 'Stappen, lage batterij en andere meldingen',
     'notifications_activity_note':
-        '※ Activiteitsinformatie wordt mogelijk niet getoond als stapgegevens niet konden worden verzameld.',
+        '※ Het stappenaantal vertegenwoordigt de cumulatieve stappen van middernacht tot het moment van verzending van het welzijnssignaal.',
 
     // ── Meldingsinstellingen beschermer ──
     'notification_settings_title': 'Meldingsinstellingen',

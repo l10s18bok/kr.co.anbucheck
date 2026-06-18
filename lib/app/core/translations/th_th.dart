@@ -320,7 +320,7 @@ abstract class ThTh {
     'notifications_level_urgent_desc': 'ต้องตรวจสอบโดยด่วนทันที',
     'notifications_level_info': 'ข้อมูล',
     'notifications_level_info_desc': 'การแจ้งเตือนจำนวนก้าว แบตเตอรี่ต่ำและอื่น ๆ',
-    'notifications_activity_note': '※ ข้อมูลกิจกรรมอาจไม่แสดงหากไม่สามารถเก็บข้อมูลก้าวเดินได้',
+    'notifications_activity_note': '※ จำนวนก้าวคือก้าวสะสมตั้งแต่เที่ยงคืนจนถึงเวลาที่ส่งสัญญาณความปลอดภัย',
 
     // ── การตั้งค่าการแจ้งเตือนผู้ดูแล ──
     'notification_settings_title': 'การตั้งค่าการแจ้งเตือน',

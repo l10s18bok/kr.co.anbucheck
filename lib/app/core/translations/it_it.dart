@@ -330,7 +330,7 @@ abstract class ItIt {
     'notifications_level_info': 'Info',
     'notifications_level_info_desc': 'Passi, batteria scarica e altri avvisi',
     'notifications_activity_note':
-        "※ Le informazioni sull'attività potrebbero non essere visualizzate se i dati dei passi non sono stati raccolti.",
+        '※ Il conteggio dei passi rappresenta i passi accumulati dalla mezzanotte fino all\'ora di invio del segnale di benessere.',
 
     // ── Impostazioni notifiche guardiano ──
     'notification_settings_title': 'Impostazioni notifiche',

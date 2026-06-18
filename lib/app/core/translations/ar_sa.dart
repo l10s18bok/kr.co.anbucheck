@@ -315,7 +315,7 @@ abstract class ArSa {
     'notifications_level_urgent_desc': 'يلزم التحقق فورًا الآن',
     'notifications_level_info': 'معلومات',
     'notifications_level_info_desc': 'الخطوات وانخفاض البطارية وتنبيهات أخرى',
-    'notifications_activity_note': '※ قد لا تظهر معلومات النشاط إذا تعذر جمع بيانات الخطوات.',
+    'notifications_activity_note': '※ عدد الخطوات هو مجموع الخطوات المتراكمة من منتصف الليل حتى وقت إرسال إشارة السلامة.',
 
     // ── إعدادات إشعارات الحارس ──
     'notification_settings_title': 'إعدادات الإشعارات',

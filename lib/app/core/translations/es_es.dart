@@ -330,7 +330,7 @@ abstract class EsEs {
     'notifications_level_info': 'Información',
     'notifications_level_info_desc': 'Pasos, batería baja y otros avisos',
     'notifications_activity_note':
-        '※ Los datos de actividad pueden no mostrarse si no se pudieron obtener los pasos.',
+        '※ El recuento de pasos corresponde a los pasos acumulados desde medianoche hasta el momento del envío de la señal de bienestar.',
 
     // ── Ajustes de notificación (Protector) ──
     'notification_settings_title': 'Ajustes de notificación',

@@ -325,7 +325,7 @@ abstract class EnUs {
     'notifications_level_info': 'Info',
     'notifications_level_info_desc': 'Steps, low battery, and other reference alerts',
     'notifications_activity_note':
-        '※ Activity info may not be shown if step data could not be collected.',
+        '※ Step count reflects cumulative steps from midnight to the time the wellness signal was sent.',
 
     // ── Guardian Notification Settings ──
     'notification_settings_title': 'Notification Settings',

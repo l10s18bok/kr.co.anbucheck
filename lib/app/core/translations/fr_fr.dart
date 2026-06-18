@@ -333,7 +333,7 @@ abstract class FrFr {
     'notifications_level_info': 'Info',
     'notifications_level_info_desc': 'Pas, batterie faible et autres informations',
     'notifications_activity_note':
-        '※ Les données d\'activité peuvent ne pas s\'afficher si le nombre de pas n\'a pas pu être relevé.',
+        '※ Le nombre de pas correspond aux pas cumulés depuis minuit jusqu\'à l\'heure d\'envoi du signal de sécurité.',
 
     // ── Paramètres de notification (Protecteur) ──
     'notification_settings_title': 'Paramètres de notification',

@@ -329,7 +329,7 @@ abstract class PlPl {
     'notifications_level_info': 'Informacja',
     'notifications_level_info_desc': 'Kroki, niski poziom baterii i inne powiadomienia',
     'notifications_activity_note':
-        '※ Informacje o aktywnosci moga nie byc wyswietlane, jesli nie udalo sie zebrac danych o krokach.',
+        '※ Liczba kroków to kroki skumulowane od polnocy do czasu wyslania sygnalu bezpieczenstwa.',
 
     // ── Ustawienia powiadomien opiekuna ──
     'notification_settings_title': 'Ustawienia powiadomien',

@@ -331,7 +331,7 @@ abstract class IdId {
     'notifications_level_info': 'Info',
     'notifications_level_info_desc': 'Langkah, baterai lemah, dan pemberitahuan lainnya',
     'notifications_activity_note':
-        '※ Info aktivitas mungkin tidak ditampilkan jika data langkah tidak dapat dikumpulkan.',
+        '※ Jumlah langkah mencerminkan langkah yang terkumpul dari tengah malam hingga waktu pengiriman sinyal keselamatan.',
 
     // ── Pengaturan Notifikasi Penjaga ──
     'notification_settings_title': 'Pengaturan Notifikasi',

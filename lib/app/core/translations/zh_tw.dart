@@ -301,7 +301,7 @@ abstract class ZhTw {
     'notifications_level_urgent_desc': '需要立即確認',
     'notifications_level_info': '資訊',
     'notifications_level_info_desc': '步數、電量不足等參考提醒',
-    'notifications_activity_note': '※ 如果無法採集步數資料，活動資訊可能不會顯示。',
+    'notifications_activity_note': '※ 步數為當日零時至安否信號傳送時刻的累計步數。',
 
     // ── 守護者通知設定 ──
     'notification_settings_title': '通知設定',
