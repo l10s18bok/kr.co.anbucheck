@@ -281,9 +281,9 @@ abstract class ItIt {
     'gs_enable_dialog_title': 'Attiva protezione',
     'gs_enable_dialog_body':
         'Puoi ricevere protezione mantenendo le funzioni di guardiano.\nVerrà emesso un codice di sicurezza — condividilo con altri guardiani.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS funziona diversamente da Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Come viene inviato il tuo segnale di benessere',
     'gs_enable_dialog_ios_warning_body':
-        'Su iOS appare ogni giorno all\'orario programmato una "notifica push di benessere". Devi toccare la notifica o aprire l\'app tu stesso in quel momento affinché il tuo segnale di benessere venga inviato. Se non apri l\'app, i tuoi guardiani potrebbero ricevere un avviso di verifica mancata.',
+        'Ogni giorno all\'orario programmato appare una "notifica push di benessere". Devi toccare la notifica o aprire l\'app tu stesso in quel momento affinché il tuo segnale di benessere venga inviato. Se non apri l\'app, i tuoi guardiani potrebbero ricevere un avviso di verifica mancata.',
     'gs_enable_dialog_ios_confirm': 'Ho capito, attiva',
     'gs_enable_confirm': 'Attiva',
     'gs_enabled_message': 'La protezione è stata attivata',

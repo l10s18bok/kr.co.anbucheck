@@ -283,9 +283,9 @@ abstract class FrFr {
     'gs_enable_dialog_title': 'Activer la protection',
     'gs_enable_dialog_body':
         'Vous pouvez recevoir une protection tout en gardant vos fonctions de gardien.\nUn code de sécurité sera émis — veuillez le partager avec d\'autres gardiens.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS fonctionne différemment d\'Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Comment votre bilan de santé est envoyé',
     'gs_enable_dialog_ios_warning_body':
-        'Sur iOS, une « notification push de bien-être » apparaît chaque jour à l\'heure programmée. Vous devez appuyer sur la notification ou ouvrir l\'application vous-même à ce moment-là pour que votre signal de bien-être soit envoyé. Si vous n\'ouvrez pas l\'application, vos gardiens peuvent recevoir une alerte de vérification manquée.',
+        'Une « notification push de bien-être » apparaît chaque jour à l\'heure programmée. Vous devez appuyer sur la notification ou ouvrir l\'application vous-même à ce moment-là pour que votre signal de bien-être soit envoyé. Si vous n\'ouvrez pas l\'application, vos gardiens peuvent recevoir une alerte de vérification manquée.',
     'gs_enable_dialog_ios_confirm': 'Compris, activer',
     'gs_enable_confirm': 'Activer',
     'gs_enabled_message': 'La protection a été activée',

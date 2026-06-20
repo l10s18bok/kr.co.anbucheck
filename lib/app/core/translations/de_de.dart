@@ -282,9 +282,9 @@ abstract class DeDe {
     'gs_enable_dialog_title': 'Wellness-Schutz aktivieren',
     'gs_enable_dialog_body':
         'Sie können Wellness-Schutz erhalten und gleichzeitig Ihre Betreuer-Funktionen behalten.\nBei Aktivierung wird ein Sicherheitscode ausgestellt — bitte teilen Sie ihn mit anderen Betreuern.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS funktioniert anders als Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Wie Ihr Wellness-Check gesendet wird',
     'gs_enable_dialog_ios_warning_body':
-        'Auf iOS erscheint täglich zur festgelegten Zeit eine "Wellness-Push-Benachrichtigung". Sie müssen die Benachrichtigung antippen oder die App selbst um diese Zeit öffnen, damit Ihr Wellness-Signal gesendet wird. Wenn Sie die App nicht öffnen, erhalten Ihre Betreuer möglicherweise eine Warnung wegen ausbleibender Prüfung.',
+        'Täglich zur festgelegten Zeit erscheint eine "Wellness-Push-Benachrichtigung". Sie müssen die Benachrichtigung antippen oder die App selbst um diese Zeit öffnen, damit Ihr Wellness-Signal gesendet wird. Wenn Sie die App nicht öffnen, erhalten Ihre Betreuer möglicherweise eine Warnung wegen ausbleibender Prüfung.',
     'gs_enable_dialog_ios_confirm': 'Verstanden, aktivieren',
     'gs_enable_confirm': 'Aktivieren',
     'gs_enabled_message': 'Wellness-Schutz wurde aktiviert',

@@ -280,9 +280,9 @@ abstract class PlPl {
     'gs_enable_dialog_title': 'Włącz ochronę',
     'gs_enable_dialog_body':
         'Możesz otrzymywać ochronę, zachowując funkcje opiekuna.\nZostanie wydany kod bezpieczeństwa — udostępnij go innym opiekunom.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS działa inaczej niż Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Jak wysyłany jest sygnał pomyślności',
     'gs_enable_dialog_ios_warning_body':
-        'W systemie iOS codziennie o ustalonej godzinie pojawia się "powiadomienie push o pomyślności". Aby Twój sygnał pomyślności został wysłany, musisz dotknąć powiadomienia lub samodzielnie otworzyć aplikację o tej porze. Jeśli nie otworzysz aplikacji, Twoi opiekunowie mogą otrzymać alert o nieudanej kontroli.',
+        'Codziennie o ustalonej godzinie pojawia się "powiadomienie push o pomyślności". Aby Twój sygnał pomyślności został wysłany, musisz dotknąć powiadomienia lub samodzielnie otworzyć aplikację o tej porze. Jeśli nie otworzysz aplikacji, Twoi opiekunowie mogą otrzymać alert o nieudanej kontroli.',
     'gs_enable_dialog_ios_confirm': 'Rozumiem, włącz',
     'gs_enable_confirm': 'Włącz',
     'gs_enabled_message': 'Ochrona została włączona',

@@ -280,9 +280,9 @@ abstract class NlNl {
     'gs_enable_dialog_title': 'Welzijnsbescherming activeren',
     'gs_enable_dialog_body':
         'U kunt welzijnsbescherming ontvangen terwijl u uw bewakerfuncties behoudt.\nEr wordt een veiligheidscode uitgegeven — deel deze met andere bewakers.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS werkt anders dan Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Hoe uw welzijnssignaal wordt verzonden',
     'gs_enable_dialog_ios_warning_body':
-        'Op iOS verschijnt elke dag op het ingestelde tijdstip een "welzijns-pushmelding". U moet de melding aantikken of de app rond dat tijdstip zelf openen om uw welzijnssignaal te verzenden. Als u de app niet opent, kunnen uw bewakers een waarschuwing voor een gemiste controle ontvangen.',
+        'Elke dag op het ingestelde tijdstip verschijnt een "welzijns-pushmelding". U moet de melding aantikken of de app rond dat tijdstip zelf openen om uw welzijnssignaal te verzenden. Als u de app niet opent, kunnen uw bewakers een waarschuwing voor een gemiste controle ontvangen.',
     'gs_enable_dialog_ios_confirm': 'Begrepen, activeren',
     'gs_enable_confirm': 'Activeren',
     'gs_enabled_message': 'Welzijnsbescherming is geactiveerd',

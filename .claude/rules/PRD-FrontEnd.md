@@ -1762,6 +1762,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 │                             │
 │  [Drawer 메뉴]              │
 │  ├─ 🌙 다크모드 토글        │
+│  ├─ 👨‍👩‍👧 보호자로 전환        │
 │  ├─ 📄 이용약관             │
 │  ├─ 🔒 개인정보처리방침     │
 │  └─ 🚪 탈퇴하기             │
@@ -1769,7 +1770,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 ```
 
 - Lottie 애니메이션 없음 — 아이콘 기반 UI
-- Drawer 메뉴에서 다크모드 전환, 약관, 탈퇴 기능 제공
+- Drawer 메뉴에서 다크모드 전환, 보호자로 전환(G+S 모드 진입), 약관, 탈퇴 기능 제공
 - "지금 안부 보고하기" 버튼으로 수동 heartbeat 즉시 전송 가능 (manual = true) + 연락처 선택 → 전화 걸기
   - **하루 1회 제한**: `TokenLocalDatasource.lastManualReportDate`(yyyy-MM-dd)에 마지막 수동 보고 날짜 저장. 같은 날 재시도 시 `subject_home_manual_report_limit_reached` 안내 스낵바 표시 후 차단 (서버 호출 없음). 자정 지나면 재가능
   - 수동 보고 시에도 `stepsDelta`에 실제 누적 걸음수를 실어 보낸다. 서버가 `manual=true`를 가드로 활동 정보 알림(`steps`) 중복 생성을 차단하므로 보호자 알림 목록에는 "수동 안부 확인"(`manual_report`) 1건만 도달하며, 일별 걸음수 이력은 자동/수동 구분 없이 `heartbeat_logs`에 집계된다

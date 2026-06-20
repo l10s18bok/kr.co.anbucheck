@@ -281,9 +281,9 @@ abstract class EsEs {
     'gs_enable_dialog_title': 'Activar protección',
     'gs_enable_dialog_body':
         'Puedes recibir protección mientras mantienes tus funciones de guardián.\nSe emitirá un código de seguridad — compártelo con otros guardianes.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS funciona de forma diferente a Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Cómo se envía tu señal de bienestar',
     'gs_enable_dialog_ios_warning_body':
-        'En iOS aparece cada día a la hora programada una "notificación push de bienestar". Debes tocar la notificación o abrir la aplicación tú mismo en ese momento para que se envíe tu señal de bienestar. Si no abres la aplicación, tus guardianes pueden recibir una alerta de comprobación perdida.',
+        'Cada día a la hora programada aparece una "notificación push de bienestar". Debes tocar la notificación o abrir la aplicación tú mismo en ese momento para que se envíe tu señal de bienestar. Si no abres la aplicación, tus guardianes pueden recibir una alerta de comprobación perdida.',
     'gs_enable_dialog_ios_confirm': 'Entendido, activar',
     'gs_enable_confirm': 'Activar',
     'gs_enabled_message': 'La protección ha sido activada',

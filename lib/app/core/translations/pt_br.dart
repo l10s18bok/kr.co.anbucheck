@@ -281,9 +281,9 @@ abstract class PtBr {
     'gs_enable_dialog_title': 'Ativar proteção',
     'gs_enable_dialog_body':
         'Você pode receber proteção mantendo suas funções de guardião.\nUm código de segurança será emitido — compartilhe-o com outros guardiões.',
-    'gs_enable_dialog_ios_warning_title': '⚠ O iOS funciona de forma diferente do Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Como o seu sinal de bem-estar é enviado',
     'gs_enable_dialog_ios_warning_body':
-        'No iOS, uma "notificação push de bem-estar" aparece todos os dias no horário programado. Você deve tocar na notificação ou abrir o aplicativo por conta própria nesse horário para que seu sinal de bem-estar seja enviado. Se não abrir o aplicativo, seus guardiões podem receber um alerta de verificação perdida.',
+        'Uma "notificação push de bem-estar" aparece todos os dias no horário programado. Você deve tocar na notificação ou abrir o aplicativo por conta própria nesse horário para que seu sinal de bem-estar seja enviado. Se não abrir o aplicativo, seus guardiões podem receber um alerta de verificação perdida.',
     'gs_enable_dialog_ios_confirm': 'Entendi, ativar',
     'gs_enable_confirm': 'Ativar',
     'gs_enabled_message': 'A proteção foi ativada',

@@ -263,9 +263,9 @@ abstract class KoKr {
     'gs_enable_dialog_title': '안부 보호 활성화',
     'gs_enable_dialog_body':
         '보호자 기능을 유지하면서 나의 안부도 보호받을 수 있습니다.\n활성화하면 안전 코드가 발급되고, 다른 보호자에게 내 "안전 코드"를 알려주세요.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS는 Android와 달리 동작합니다',
+    'gs_enable_dialog_ios_warning_title': '⚠ 안부 전송 방식 안내',
     'gs_enable_dialog_ios_warning_body':
-        'iOS에서는 매일 정해진 시각에 "안부 푸시 알림"이 표시됩니다. 알림을 탭하거나 알림 전후로 직접 앱을 열어야 안부가 전송됩니다. 앱을 열지 않으면 보호자에게 미수신 경고가 발생할 수 있습니다.',
+        '매일 정해진 시각에 "안부 푸시 알림"이 표시됩니다. 알림을 탭하거나 알림 전후로 직접 앱을 열어야 안부가 전송됩니다. 앱을 열지 않으면 보호자에게 미수신 경고가 발생할 수 있습니다.',
     'gs_enable_dialog_ios_confirm': '이해했습니다, 활성화',
     'gs_enable_confirm': '활성화',
     'gs_enabled_message': '안부 보호가 활성화되었습니다',

@@ -261,9 +261,9 @@ abstract class JaJp {
     'gs_enable_dialog_title': '安否保護を有効化',
     'gs_enable_dialog_body':
         '保護者機能を維持したまま、自分の安否も保護してもらえます。\n有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOSはAndroidとは動作が異なります',
+    'gs_enable_dialog_ios_warning_title': '⚠ 安否確認の送信方法について',
     'gs_enable_dialog_ios_warning_body':
-        'iOSでは毎日決まった時刻に「安否プッシュ通知」が表示されます。通知をタップするか、その前後にご自身でアプリを開いた場合のみ安否信号が送信されます。アプリを開かないと、保護者に未受信の警告が届く可能性があります。',
+        '毎日決まった時刻に「安否プッシュ通知」が表示されます。通知をタップするか、その前後にご自身でアプリを開いた場合のみ安否信号が送信されます。アプリを開かないと、保護者に未受信の警告が届く可能性があります。',
     'gs_enable_dialog_ios_confirm': '理解しました、有効化',
     'gs_enable_confirm': '有効化',
     'gs_enabled_message': '安否保護が有効化されました',

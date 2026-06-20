@@ -402,73 +402,90 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
                   ),
                   Divider(color: AppColors.surfaceContainerHigh, height: 1),
 
-                  // 다크모드 전환
-                  Obx(() {
-                    final themeSvc = Get.find<ThemeService>();
-                    final isDark = themeSvc.isDarkMode.value;
-                    return ListTile(
-                      leading: Icon(
-                        isDark
-                            ? Icons.light_mode_rounded
-                            : Icons.dark_mode_rounded,
-                        size: 22.w,
-                        color: AppColors.onSurfaceVariant,
+                  // 스크롤 가능한 메뉴 영역 (큰 글씨 접근성 대응)
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // 다크모드 전환
+                          Obx(() {
+                            final themeSvc = Get.find<ThemeService>();
+                            final isDark = themeSvc.isDarkMode.value;
+                            return ListTile(
+                              leading: Icon(
+                                isDark
+                                    ? Icons.light_mode_rounded
+                                    : Icons.dark_mode_rounded,
+                                size: 22.w,
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                              title: Text(
+                                isDark
+                                    ? 'drawer_light_mode'.tr
+                                    : 'drawer_dark_mode'.tr,
+                                style: AppTextTheme.bodyLarge(),
+                              ),
+                              onTap: () {
+                                scaffoldKey.currentState?.closeDrawer();
+                                Future.delayed(
+                                    const Duration(milliseconds: 300),
+                                    themeSvc.toggle);
+                              },
+                            );
+                          }),
+
+                          Divider(
+                              color: AppColors.surfaceContainerHigh, height: 1),
+
+                          // S → G+S 전환
+                          ListTile(
+                            leading: Icon(Icons.family_restroom_rounded,
+                                size: 22.w, color: const Color(0xFF4355B9)),
+                            title: Text('drawer_enable_guardian'.tr,
+                                style: AppTextTheme.bodyLarge(
+                                    color: const Color(0xFF4355B9))),
+                            onTap: () {
+                              scaffoldKey.currentState?.closeDrawer();
+                              Future.delayed(const Duration(milliseconds: 300),
+                                  () => _showSwitchToGuardianConfirm(s));
+                            },
+                          ),
+
+                          Divider(
+                              color: AppColors.surfaceContainerHigh, height: 1),
+
+                          // 법적 문서
+                          ListTile(
+                            leading: Icon(Icons.description_outlined,
+                                size: 22.w,
+                                color: AppColors.onSurfaceVariant),
+                            title: Text('drawer_privacy_policy'.tr,
+                                style: AppTextTheme.bodyLarge()),
+                            trailing: Icon(Icons.open_in_new_rounded,
+                                size: 18.w,
+                                color: AppColors.onSurfaceVariant),
+                            onTap: () => launchUrl(
+                                Uri.parse(AppConstants.privacyPolicyUrl),
+                                mode: LaunchMode.externalApplication),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.gavel_rounded,
+                                size: 22.w,
+                                color: AppColors.onSurfaceVariant),
+                            title: Text('drawer_terms'.tr,
+                                style: AppTextTheme.bodyLarge()),
+                            trailing: Icon(Icons.open_in_new_rounded,
+                                size: 18.w,
+                                color: AppColors.onSurfaceVariant),
+                            onTap: () => launchUrl(
+                                Uri.parse(AppConstants.termsOfServiceUrl),
+                                mode: LaunchMode.externalApplication),
+                          ),
+                        ],
                       ),
-                      title: Text(
-                        isDark ? 'drawer_light_mode'.tr : 'drawer_dark_mode'.tr,
-                        style: AppTextTheme.bodyLarge(),
-                      ),
-                      onTap: () {
-                        scaffoldKey.currentState?.closeDrawer();
-                        Future.delayed(
-                            const Duration(milliseconds: 300), themeSvc.toggle);
-                      },
-                    );
-                  }),
-
-                  Divider(color: AppColors.surfaceContainerHigh, height: 1),
-
-                  // S → G+S 전환
-                  ListTile(
-                    leading: Icon(Icons.family_restroom_rounded,
-                        size: 22.w, color: const Color(0xFF4355B9)),
-                    title: Text('drawer_enable_guardian'.tr,
-                        style: AppTextTheme.bodyLarge(
-                            color: const Color(0xFF4355B9))),
-                    onTap: () {
-                      scaffoldKey.currentState?.closeDrawer();
-                      Future.delayed(const Duration(milliseconds: 300),
-                          () => _showSwitchToGuardianConfirm(s));
-                    },
+                    ),
                   ),
-
-                  Divider(color: AppColors.surfaceContainerHigh, height: 1),
-
-                  // 법적 문서
-                  ListTile(
-                    leading: Icon(Icons.description_outlined,
-                        size: 22.w, color: AppColors.onSurfaceVariant),
-                    title: Text('drawer_privacy_policy'.tr,
-                        style: AppTextTheme.bodyLarge()),
-                    trailing: Icon(Icons.open_in_new_rounded,
-                        size: 18.w, color: AppColors.onSurfaceVariant),
-                    onTap: () => launchUrl(
-                        Uri.parse(AppConstants.privacyPolicyUrl),
-                        mode: LaunchMode.externalApplication),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.gavel_rounded,
-                        size: 22.w, color: AppColors.onSurfaceVariant),
-                    title: Text('drawer_terms'.tr,
-                        style: AppTextTheme.bodyLarge()),
-                    trailing: Icon(Icons.open_in_new_rounded,
-                        size: 18.w, color: AppColors.onSurfaceVariant),
-                    onTap: () => launchUrl(
-                        Uri.parse(AppConstants.termsOfServiceUrl),
-                        mode: LaunchMode.externalApplication),
-                  ),
-
-                  const Spacer(),
 
                   const Divider(height: 1),
 

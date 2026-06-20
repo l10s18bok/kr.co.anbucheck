@@ -282,9 +282,9 @@ abstract class IdId {
     'gs_enable_dialog_title': 'Aktifkan perlindungan',
     'gs_enable_dialog_body':
         'Anda dapat menerima perlindungan sambil mempertahankan fungsi penjaga.\nKode keamanan akan diterbitkan — bagikan kepada penjaga lain.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS bekerja berbeda dari Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Cara sinyal kesehatan Anda dikirim',
     'gs_enable_dialog_ios_warning_body':
-        'Di iOS, "notifikasi push kesehatan" muncul setiap hari pada waktu yang dijadwalkan. Anda harus mengetuk notifikasi atau membuka aplikasi sendiri di sekitar waktu itu agar sinyal kesehatan Anda dapat dikirim. Jika Anda tidak membuka aplikasi, penjaga Anda mungkin menerima peringatan pemeriksaan terlewat.',
+        '"Notifikasi push kesehatan" muncul setiap hari pada waktu yang dijadwalkan. Anda harus mengetuk notifikasi atau membuka aplikasi sendiri di sekitar waktu itu agar sinyal kesehatan Anda dapat dikirim. Jika Anda tidak membuka aplikasi, penjaga Anda mungkin menerima peringatan pemeriksaan terlewat.',
     'gs_enable_dialog_ios_confirm': 'Saya mengerti, aktifkan',
     'gs_enable_confirm': 'Aktifkan',
     'gs_enabled_message': 'Perlindungan telah diaktifkan',

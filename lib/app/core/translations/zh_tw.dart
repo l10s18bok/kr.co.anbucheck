@@ -258,9 +258,9 @@ abstract class ZhTw {
     'gs_safety_code_title': '我的安全碼',
     'gs_enable_dialog_title': '啟用安否保護',
     'gs_enable_dialog_body': '您可以在保持守護者功能的同時接受安否保護。\n啟用後將發放安全碼，請將您的「安全碼」告知其他守護者。',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS 與 Android 運作方式不同',
+    'gs_enable_dialog_ios_warning_title': '⚠ 安否確認發送方式說明',
     'gs_enable_dialog_ios_warning_body':
-        '在 iOS 上，每天會在固定時間顯示「安否推播通知」。您必須點按通知或在該時間前後親自開啟應用程式，安否信號才會傳送。若不開啟應用程式，守護者可能會收到未接收警告。',
+        '每天會在固定時間顯示「安否推播通知」。您必須點按通知或在該時間前後親自開啟應用程式，安否信號才會傳送。若不開啟應用程式，守護者可能會收到未接收警告。',
     'gs_enable_dialog_ios_confirm': '我已了解，啟用',
     'gs_enable_confirm': '啟用',
     'gs_enabled_message': '安否保護已啟用',

@@ -258,9 +258,9 @@ abstract class ZhCn {
     'gs_safety_code_title': '我的安全码',
     'gs_enable_dialog_title': '启用安否保护',
     'gs_enable_dialog_body': '您可以在保持监护人功能的同时接受安否保护。\n启用后将发放安全码，请将您的"安全码"告知其他监护人。',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS 与 Android 工作方式不同',
+    'gs_enable_dialog_ios_warning_title': '⚠ 安否确认发送方式说明',
     'gs_enable_dialog_ios_warning_body':
-        '在 iOS 上，每天会在固定时间显示"安否推送通知"。您必须点按通知或在该时间前后亲自打开应用，安否信号才会发送。如果不打开应用，监护人可能会收到未接收警告。',
+        '每天会在固定时间显示"安否推送通知"。您必须点按通知或在该时间前后亲自打开应用，安否信号才会发送。如果不打开应用，监护人可能会收到未接收警告。',
     'gs_enable_dialog_ios_confirm': '我已了解，启用',
     'gs_enable_confirm': '启用',
     'gs_enabled_message': '安否保护已启用',

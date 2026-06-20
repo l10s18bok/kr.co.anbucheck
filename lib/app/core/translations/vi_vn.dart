@@ -279,9 +279,9 @@ abstract class ViVn {
     'gs_enable_dialog_title': 'Kích hoạt bảo vệ',
     'gs_enable_dialog_body':
         'Bạn có thể nhận bảo vệ trong khi giữ nguyên chức năng giám hộ.\nMã an toàn sẽ được cấp — hãy chia sẻ với người giám hộ khác.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS hoạt động khác Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Cách gửi tín hiệu an toàn của bạn',
     'gs_enable_dialog_ios_warning_body':
-        'Trên iOS, "thông báo đẩy an toàn" sẽ hiển thị mỗi ngày vào thời điểm đã định. Bạn phải chạm vào thông báo hoặc tự mở ứng dụng quanh thời điểm đó để tín hiệu an toàn được gửi đi. Nếu bạn không mở ứng dụng, người giám hộ của bạn có thể nhận được cảnh báo bỏ lỡ kiểm tra.',
+        '"Thông báo đẩy an toàn" sẽ hiển thị mỗi ngày vào thời điểm đã định. Bạn phải chạm vào thông báo hoặc tự mở ứng dụng quanh thời điểm đó để tín hiệu an toàn được gửi đi. Nếu bạn không mở ứng dụng, người giám hộ của bạn có thể nhận được cảnh báo bỏ lỡ kiểm tra.',
     'gs_enable_dialog_ios_confirm': 'Đã hiểu, kích hoạt',
     'gs_enable_confirm': 'Kích hoạt',
     'gs_enabled_message': 'Bảo vệ đã được kích hoạt',

@@ -278,9 +278,9 @@ abstract class EnUs {
     'gs_enable_dialog_title': 'Enable Wellness Protection',
     'gs_enable_dialog_body':
         'You can receive wellness protection while keeping your guardian features.\nA safety code will be issued — please share it with other guardians.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS works differently from Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ How your wellness check is sent',
     'gs_enable_dialog_ios_warning_body':
-        'On iOS, a "wellness push notification" appears every day at the scheduled time. You must tap the notification or open the app yourself around that time for your wellness signal to be sent. If you do not open the app, your guardians may receive a missed-check alert.',
+        'A "wellness push notification" appears every day at the scheduled time. You must tap the notification or open the app yourself around that time for your wellness signal to be sent. If you do not open the app, your guardians may receive a missed-check alert.',
     'gs_enable_dialog_ios_confirm': 'I understand, enable',
     'gs_enable_confirm': 'Enable',
     'gs_enabled_message': 'Wellness protection has been enabled',

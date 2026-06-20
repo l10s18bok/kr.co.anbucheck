@@ -273,9 +273,9 @@ abstract class SvSe {
     'gs_enable_dialog_title': 'Aktivera hälsoskydd',
     'gs_enable_dialog_body':
         'Du kan få hälsoskydd samtidigt som du behåller dina vårdarfunktioner.\nEn säkerhetskod utfärdas — dela den med andra vårdare.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS fungerar annorlunda än Android',
+    'gs_enable_dialog_ios_warning_title': '⚠ Hur din hälsosignal skickas',
     'gs_enable_dialog_ios_warning_body':
-        'På iOS visas en "hälso-pushavisering" varje dag vid den schemalagda tiden. Du måste trycka på aviseringen eller själv öppna appen vid den tidpunkten för att din hälsosignal ska skickas. Om du inte öppnar appen kan dina vårdare få en varning om missad kontroll.',
+        'En "hälso-pushavisering" visas varje dag vid den schemalagda tiden. Du måste trycka på aviseringen eller själv öppna appen vid den tidpunkten för att din hälsosignal ska skickas. Om du inte öppnar appen kan dina vårdare få en varning om missad kontroll.',
     'gs_enable_dialog_ios_confirm': 'Jag förstår, aktivera',
     'gs_enable_confirm': 'Aktivera',
     'gs_enabled_message': 'Hälsoskydd har aktiverats',

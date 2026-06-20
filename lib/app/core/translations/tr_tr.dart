@@ -277,9 +277,9 @@ abstract class TrTr {
     'gs_enable_dialog_title': 'Korumayı etkinleştir',
     'gs_enable_dialog_body':
         'Koruyucu özelliklerinizi korurken koruma alabilirsiniz.\nBir güvenlik kodu verilecektir — lütfen diğer koruyucularla paylaşın.',
-    'gs_enable_dialog_ios_warning_title': '⚠ iOS, Android\'den farklı çalışır',
+    'gs_enable_dialog_ios_warning_title': '⚠ İyilik sinyaliniz nasıl gönderilir',
     'gs_enable_dialog_ios_warning_body':
-        'iOS\'ta her gün belirlenen saatte bir "iyilik push bildirimi" görünür. İyilik sinyalinizin gönderilmesi için bildirime dokunmanız veya o sırada uygulamayı kendiniz açmanız gerekir. Uygulamayı açmazsanız koruyucularınız kaçırılan kontrol uyarısı alabilir.',
+        'Her gün belirlenen saatte bir "iyilik push bildirimi" görünür. İyilik sinyalinizin gönderilmesi için bildirime dokunmanız veya o sırada uygulamayı kendiniz açmanız gerekir. Uygulamayı açmazsanız koruyucularınız kaçırılan kontrol uyarısı alabilir.',
     'gs_enable_dialog_ios_confirm': 'Anladım, etkinleştir',
     'gs_enable_confirm': 'Etkinleştir',
     'gs_enabled_message': 'Koruma etkinleştirildi',
