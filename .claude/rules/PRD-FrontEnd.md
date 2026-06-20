@@ -1317,7 +1317,7 @@ lib/
     │   │   ├── local_alarm_service.dart  # 오늘의 안부 확인 메시지 로컬 알림
     │   │   ├── guardian_subject_service.dart  # G+S 모드 서비스
     │   │   ├── iap_service.dart        # 인앱 결제 (anbu_yearly) — purchaseStream 4상태 분기, 서버 verify 성공 후에만 completePurchase, Splash에서 permanent 등록
-    │   │   ├── ad_service.dart         # AdMob 배너 관리
+    │   │   ├── ad_service.dart         # AdMob UMP 동의 흐름 + 배너 관리
     │   │   └── theme_service.dart      # 다크모드 전환
     │   ├── theme/
     │   │   ├── app_colors.dart
@@ -1462,7 +1462,7 @@ ios/Runner/
 | `timezone` + `flutter_timezone` | 타임존 처리 | 기기 로컬 타임존 감지 + IANA timezone 변환 |
 | `sqflite` | 로컬 DB | 알림 이력 등 구조화 데이터 저장 |
 | `in_app_purchase` | 인앱 결제 | 보호자 연 $9.99 구독(`anbu_yearly`) 결제·복원. `IapService`가 `purchaseStream` 4상태(pending/purchased/restored/error/canceled) 분기, `_inFlight` Set으로 동일 purchaseID 중복 verify 차단, 서버 검증 성공 후에만 `completePurchase` 호출. Splash에서 `permanent: true`로 등록해 pending 트랜잭션 재발행 누락 방지 |
-| `google_mobile_ads` | AdMob 하단 고정 배너 | 구현 완료 — `AdService`(초기화) + `BannerAdWidget`(지수 백오프 재시도, 프리미엄 구독 보호자 광고 제거). EEA/UK/스위스 사용자 대상 UMP 동의 플로우 추가 필요 (2026-08-03 AdMob 정책 변경) |
+| `google_mobile_ads` | AdMob 하단 고정 배너 | 구현 완료 — `AdService`(UMP 동의 흐름 + 초기화) + `BannerAdWidget`(지수 백오프 재시도, `canRequestAds()` 게이트, 프리미엄 구독 보호자 광고 제거). EEA/UK/스위스 사용자에게 IAB Europe TCF 동의 폼 표시, 거부 시 광고 로드 차단 (2026-08-03 AdMob 정책 대응 완료) |
 | `geolocator` | 현재 위치 1회 획득 | 대상자 긴급 도움 요청 시 lat/lng/accuracy 획득 (포그라운드, 5초 타임아웃). 정기 heartbeat에는 사용하지 않음 |
 | `google_maps_flutter` | 지도 표시 | 보호자 긴급 위치 지도 페이지(`guardian_emergency_map`)에서 마커 표시 |
 
@@ -1633,7 +1633,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 - **위치 권한을 up-front로 전환한 이유**: Lazy로 긴급 버튼 탭 시점에 요청하면 `permission_handler`의 `.request()`가 기존 거부 이력(Android 12+ 2회 거부 시, iOS 1회 거부 시) 때문에 OS 팝업을 다시 띄우지 않아 권한 획득이 실패한다. 긴급 상황에서 설정 앱 이동으로 복구하는 플로우는 비현실적이므로 사전 요청으로 전환
 - iOS G+S 활성화 시점에 별도 플로우로 모션 권한을 요청 (§9.7 참조) — App Store 심사 시 "선택 기능 활성화 시에만 모션 권한 요청" 포지셔닝 유지
 - [확인] 탭 시 OS 권한 팝업 순차 표시:
-  - iOS: Firebase Messaging `requestPermission()`으로 APNs 권한 + FCM 토큰 발급 (모션 권한 요청 없음)
+  - iOS: Firebase Messaging `requestPermission()`으로 APNs 권한 + FCM 토큰 발급 → 600ms 대기(알림 팝업 닫힌 직후 앱 active 상태 안정화) → ATT(앱 추적 투명성) 권한 요청(`AppTrackingTransparency.requestTrackingAuthorization()`) → `AdService().init()` UMP 동의 흐름 실행(`Get.putAsync`, `permanent: true`). **신규/재설치 사용자 전용** — 기존 토큰 보유 재방문 사용자는 `SplashController`에서 UMP 실행. 모션 권한 요청 없음
   - Android 대상자/G+S 복원: `permission_handler`로 알림 권한 → `Permission.activityRecognition` → `Permission.locationWhenInUse` 순차 요청 (사전 안내 다이얼로그 없이 OS 팝업 직접 표시)
   - Android 순수 보호자: 알림 권한만 요청 (활동 인식·위치 권한 요청 없음)
   - iOS G+S 활성화 시점의 모션 권한 팝업 문구는 `ios/Runner/{lang}.lproj/InfoPlist.strings` 20개 언어로 번역되어 기기 locale에 맞게 자동 표시
@@ -1946,6 +1946,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 │  📄 약관                     │
 │  [개인정보처리방침 ↗]        │
 │  [이용약관 ↗]               │
+│  [광고 동의 설정 →]          │  ← EEA/UK/스위스 사용자에게만 표시
 │                             │
 │  ANBU GUARD NETWORK         │
 │  © 2026 Aberic Lab     │
@@ -1967,6 +1968,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
   - 에러(빨강 #B71C1C): 결제 실패 / 영수증 검증 실패 / 복원 실패
 - **결제 플로우 규칙**: 서버 `/verify` 200 응답 전까지 entitlement 노출 금지(클라 단독 판단 경로 없음), `PurchaseStatus.error`는 `completePurchase` 호출 금지(재시도 가능), 동일 `purchaseID` 중복 verify는 `_inFlight` Set으로 차단, `_pendingRestore` 플래그로 5초 안전망의 "복원할 구독 없음" 안내 정확성 보장
 - [알림 설정] → 알림 설정 페이지로 이동 (등급별 ON/OFF, DND 설정)
+- **[광고 동의 설정]** — `AdService.isPrivacyOptionsRequired()`가 `true`일 때만 표시(`FutureBuilder` 조건부). EEA/UK/스위스 사용자가 동의를 철회·변경할 수 있도록 `AdService.showPrivacyOptionsForm()` 호출. `Get.isRegistered<AdService>() == false`이면 항상 숨김(비EEA 지역에서 `canRequestAds()` 결과와 무관하게 AdService 등록 자체가 없을 때 대비). 번역 키: `settings_ad_consent`(20개 언어)
 - 다크모드 토글: ThemeService를 통한 즉시 전환
 
 **G+S (Guardian+Subject) 모드 — 보호자가 대상자 역할 겸임:**
