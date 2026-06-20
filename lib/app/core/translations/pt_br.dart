@@ -256,6 +256,7 @@ abstract class PtBr {
     'settings_terms_section': 'Jurídico',
     'settings_privacy_policy': 'Política de privacidade',
     'settings_terms': 'Termos de uso',
+    'settings_ad_consent': 'Configurações de consentimento de anúncios',
     'settings_app_version': 'Versão: v@version',
 
     // ── Compras no app (assinatura anual do Responsável $9.99) ──

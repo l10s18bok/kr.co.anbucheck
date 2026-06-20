@@ -9,6 +9,7 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
+import 'package:anbucheck/app/core/services/ad_service.dart';
 import 'package:anbucheck/app/core/services/iap_service.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
@@ -238,6 +239,41 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                               ),
                             ],
                           ),
+                        ),
+                        // EEA/UK/스위스 사용자에게만 광고 동의 관리 진입점 표시
+                        // (PrivacyOptionsRequirementStatus.required 일 때만 노출)
+                        FutureBuilder<bool>(
+                          future: Get.isRegistered<AdService>()
+                              ? AdService.to.isPrivacyOptionsRequired()
+                              : Future.value(false),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != true) {
+                              return const SizedBox.shrink();
+                            }
+                            return Column(
+                              children: [
+                                SizedBox(height: AppSpacing.md),
+                                GestureDetector(
+                                  onTap: () => AdService.to.showPrivacyOptionsForm(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'settings_ad_consent'.tr,
+                                        style: AppTextTheme.bodyMedium(
+                                            color: AppColors.textSecondary),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        size: 14.w,
+                                        color: AppColors.onSurfaceVariant,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),

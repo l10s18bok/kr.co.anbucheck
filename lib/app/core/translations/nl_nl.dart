@@ -255,6 +255,7 @@ abstract class NlNl {
     'settings_terms_section': 'Juridisch',
     'settings_privacy_policy': 'Privacybeleid',
     'settings_terms': 'Gebruiksvoorwaarden',
+    'settings_ad_consent': 'Advertentietoestemming beheren',
     'settings_app_version': 'Versie: v@version',
 
     // ── In-app aankopen (jaarlijks $9.99 verzorger-abonnement) ──

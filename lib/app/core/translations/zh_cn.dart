@@ -234,6 +234,7 @@ abstract class ZhCn {
     'settings_terms_section': '条款',
     'settings_privacy_policy': '隐私政策',
     'settings_terms': '使用条款',
+    'settings_ad_consent': '广告同意设置',
     'settings_app_version': '应用版本：v@version',
 
     // ── 应用内购买(监护人年度 $9.99 订阅) ──

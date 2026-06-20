@@ -256,6 +256,7 @@ abstract class EsEs {
     'settings_terms_section': 'Legal',
     'settings_privacy_policy': 'Política de privacidad',
     'settings_terms': 'Términos de uso',
+    'settings_ad_consent': 'Configuración de consentimiento publicitario',
     'settings_app_version': 'Versión: v@version',
 
     // ── Compras en la app (suscripción anual del cuidador $9.99) ──

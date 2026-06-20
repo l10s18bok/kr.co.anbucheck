@@ -238,6 +238,7 @@ abstract class KoKr {
     'settings_terms_section': '약관',
     'settings_privacy_policy': '개인정보처리방침',
     'settings_terms': '이용약관',
+    'settings_ad_consent': '광고 동의 설정',
     'settings_app_version': '앱버전 : v@version',
 
     // ── 인앱 결제 (보호자 연 $9.99 구독) ──

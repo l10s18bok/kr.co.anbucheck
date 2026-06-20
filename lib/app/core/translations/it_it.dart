@@ -256,6 +256,7 @@ abstract class ItIt {
     'settings_terms_section': 'Legale',
     'settings_privacy_policy': 'Informativa sulla privacy',
     'settings_terms': 'Termini di servizio',
+    'settings_ad_consent': 'Impostazioni consenso annunci',
     'settings_app_version': 'Versione: v@version',
 
     // ── Acquisti in-app (abbonamento annuale Tutore $9.99) ──

@@ -245,6 +245,7 @@ abstract class ArSa {
     'settings_terms_section': 'قانوني',
     'settings_privacy_policy': 'سياسة الخصوصية',
     'settings_terms': 'شروط الاستخدام',
+    'settings_ad_consent': 'إعدادات موافقة الإعلانات',
     'settings_app_version': 'الإصدار: v@version',
 
     // ── الشراء داخل التطبيق (اشتراك سنوي للمراقب $9.99) ──

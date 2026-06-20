@@ -252,6 +252,7 @@ abstract class HiIn {
     'settings_terms_section': 'कानूनी',
     'settings_privacy_policy': 'गोपनीयता नीति',
     'settings_terms': 'सेवा की शर्तें',
+    'settings_ad_consent': 'विज्ञापन सहमति सेटिंग',
     'settings_app_version': 'संस्करण: v@version',
 
     // ── इन-ऐप खरीदारी (अभिभावक की वार्षिक $9.99 सदस्यता) ──

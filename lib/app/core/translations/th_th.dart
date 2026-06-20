@@ -248,6 +248,7 @@ abstract class ThTh {
     'settings_terms_section': 'กฎหมาย',
     'settings_privacy_policy': 'นโยบายความเป็นส่วนตัว',
     'settings_terms': 'ข้อกำหนดการใช้งาน',
+    'settings_ad_consent': 'การตั้งค่าความยินยอมโฆษณา',
     'settings_app_version': 'เวอร์ชัน: v@version',
 
     // ── การซื้อในแอป (การสมัครสมาชิกผู้ดูแลรายปี $9.99) ──

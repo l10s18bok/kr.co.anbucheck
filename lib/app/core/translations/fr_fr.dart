@@ -258,6 +258,7 @@ abstract class FrFr {
     'settings_terms_section': 'Mentions légales',
     'settings_privacy_policy': 'Politique de confidentialité',
     'settings_terms': 'Conditions d\'utilisation',
+    'settings_ad_consent': 'Paramètres de consentement publicitaire',
     'settings_app_version': 'Version : v@version',
 
     // ── Achats intégrés (abonnement annuel Gardien $9.99) ──

@@ -236,6 +236,7 @@ abstract class JaJp {
     'settings_terms_section': '規約',
     'settings_privacy_policy': 'プライバシーポリシー',
     'settings_terms': '利用規約',
+    'settings_ad_consent': '広告同意設定',
     'settings_app_version': 'アプリバージョン：v@version',
 
     // ── アプリ内課金(保護者の年間 $9.99 サブスクリプション) ──

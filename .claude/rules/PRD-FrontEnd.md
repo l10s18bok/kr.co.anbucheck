@@ -1462,7 +1462,7 @@ ios/Runner/
 | `timezone` + `flutter_timezone` | 타임존 처리 | 기기 로컬 타임존 감지 + IANA timezone 변환 |
 | `sqflite` | 로컬 DB | 알림 이력 등 구조화 데이터 저장 |
 | `in_app_purchase` | 인앱 결제 | 보호자 연 $9.99 구독(`anbu_yearly`) 결제·복원. `IapService`가 `purchaseStream` 4상태(pending/purchased/restored/error/canceled) 분기, `_inFlight` Set으로 동일 purchaseID 중복 verify 차단, 서버 검증 성공 후에만 `completePurchase` 호출. Splash에서 `permanent: true`로 등록해 pending 트랜잭션 재발행 누락 방지 |
-| `google_mobile_ads` | AdMob 하단 고정 배너 | **미구현** — 유료 사용자 광고 제거 |
+| `google_mobile_ads` | AdMob 하단 고정 배너 | 구현 완료 — `AdService`(초기화) + `BannerAdWidget`(지수 백오프 재시도, 프리미엄 구독 보호자 광고 제거). EEA/UK/스위스 사용자 대상 UMP 동의 플로우 추가 필요 (2026-08-03 AdMob 정책 변경) |
 | `geolocator` | 현재 위치 1회 획득 | 대상자 긴급 도움 요청 시 lat/lng/accuracy 획득 (포그라운드, 5초 타임아웃). 정기 heartbeat에는 사용하지 않음 |
 | `google_maps_flutter` | 지도 표시 | 보호자 긴급 위치 지도 페이지(`guardian_emergency_map`)에서 마커 표시 |
 

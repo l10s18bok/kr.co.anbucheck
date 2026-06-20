@@ -257,6 +257,7 @@ abstract class DeDe {
     'settings_terms_section': 'Rechtliches',
     'settings_privacy_policy': 'Datenschutzrichtlinie',
     'settings_terms': 'Nutzungsbedingungen',
+    'settings_ad_consent': 'Werbeeinwilligung verwalten',
     'settings_app_version': 'Version: v@version',
 
     // ── In-App-Käufe (jährliches $9.99-Abonnement für Betreuer) ──

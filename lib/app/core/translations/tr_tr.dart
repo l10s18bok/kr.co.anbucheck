@@ -252,6 +252,7 @@ abstract class TrTr {
     'settings_terms_section': 'Yasal',
     'settings_privacy_policy': 'Gizlilik Politikası',
     'settings_terms': 'Kullanım Koşulları',
+    'settings_ad_consent': 'Reklam Onay Ayarları',
     'settings_app_version': 'Sürüm: v@version',
 
     // ── Uygulama içi satın alma (Bakıcı yıllık $9.99 aboneliği) ──

@@ -248,6 +248,7 @@ abstract class SvSe {
     'settings_terms_section': 'Juridiskt',
     'settings_privacy_policy': 'Integritetspolicy',
     'settings_terms': 'Anvandarvillkor',
+    'settings_ad_consent': 'Hantera annonsmedgivande',
     'settings_app_version': 'Version: v@version',
 
     // ── App-köp (årlig $9.99-prenumeration för vårdgivare) ──

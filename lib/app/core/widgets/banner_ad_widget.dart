@@ -104,7 +104,14 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
       return;
     }
 
+    // context 값을 async 호출 전에 캡처 (BuildContext across async gap 방지)
     final width = MediaQuery.of(context).size.width.truncate();
+
+    // UMP 동의 확인 — EEA/UK/스위스 사용자가 동의 거부 시 광고 로드 차단.
+    // 동의 상태는 사용자 결정이므로 retry하지 않는다.
+    if (!await ConsentInformation.instance.canRequestAds()) return;
+    if (!mounted) return;
+
     final adSize = await AdSize.getAnchoredAdaptiveBannerAdSize(Orientation.portrait, width);
     if (adSize == null || !mounted) return;
 

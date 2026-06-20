@@ -254,6 +254,7 @@ abstract class ViVn {
     'settings_terms_section': 'Phap ly',
     'settings_privacy_policy': 'Chinh sach bao mat',
     'settings_terms': 'Dieu khoan su dung',
+    'settings_ad_consent': 'Cai dat dong y quang cao',
     'settings_app_version': 'Phien ban: v@version',
 
     // ── Mua trong ứng dụng (gói đăng ký hằng năm $9.99 của Người giám hộ) ──

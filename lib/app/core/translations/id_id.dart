@@ -257,6 +257,7 @@ abstract class IdId {
     'settings_terms_section': 'Hukum',
     'settings_privacy_policy': 'Kebijakan Privasi',
     'settings_terms': 'Ketentuan Layanan',
+    'settings_ad_consent': 'Pengaturan persetujuan iklan',
     'settings_app_version': 'Versi: v@version',
 
     // ── Pembelian dalam aplikasi (langganan tahunan $9.99 Pendamping) ──

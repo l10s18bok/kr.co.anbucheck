@@ -257,6 +257,7 @@ abstract class RuRu {
     'settings_terms_section': 'Правовая информация',
     'settings_privacy_policy': 'Политика конфиденциальности',
     'settings_terms': 'Условия использования',
+    'settings_ad_consent': 'Настройки согласия на рекламу',
     'settings_app_version': 'Версия: v@version',
 
     // ── Встроенные покупки (годовая подписка опекуна $9.99) ──

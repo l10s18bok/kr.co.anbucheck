@@ -253,6 +253,7 @@ abstract class EnUs {
     'settings_terms_section': 'Legal',
     'settings_privacy_policy': 'Privacy Policy',
     'settings_terms': 'Terms of Service',
+    'settings_ad_consent': 'Ad Consent Settings',
     'settings_app_version': 'Version: v@version',
 
     // ── In-app purchase (Guardian yearly $9.99 subscription) ──

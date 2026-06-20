@@ -32,7 +32,7 @@ void main() async {
   // iOS 신규/재설치 사용자: PermissionController.requestPermissions() 에서 ATT → init.
   // iOS 기존 토큰 보유 사용자: SplashController._initialize() 에서 init.
   if (!Platform.isIOS) {
-    await Get.putAsync(() => AdService().init());
+    await Get.putAsync(() => AdService().init(), permanent: true);
   }
   runApp(const App());
 }

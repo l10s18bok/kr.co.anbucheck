@@ -255,6 +255,7 @@ abstract class PlPl {
     'settings_terms_section': 'Prawne',
     'settings_privacy_policy': 'Polityka prywatnosci',
     'settings_terms': 'Regulamin',
+    'settings_ad_consent': 'Ustawienia zgody na reklamy',
     'settings_app_version': 'Wersja: v@version',
 
     // ── Zakupy w aplikacji (roczna subskrypcja Opiekuna $9.99) ──

@@ -234,6 +234,7 @@ abstract class ZhTw {
     'settings_terms_section': '條款',
     'settings_privacy_policy': '隱私權政策',
     'settings_terms': '使用條款',
+    'settings_ad_consent': '廣告同意設定',
     'settings_app_version': '應用版本：v@version',
 
     // ── 應用內購買(監護人年度 $9.99 訂閱) ──
