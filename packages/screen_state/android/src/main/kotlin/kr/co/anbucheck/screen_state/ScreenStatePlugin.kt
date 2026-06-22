@@ -33,13 +33,21 @@ class ScreenStatePlugin : FlutterPlugin, MethodCallHandler {
             }
             "cancelNotificationsByTag" -> {
                 val tag = call.argument<String>("tag")
+                var matchedCount = 0
                 if (tag != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    nm.activeNotifications
-                        .filter { it.tag == tag }
-                        .forEach { nm.cancel(it.tag, it.id) }
+                    val matched = nm.activeNotifications.filter { it.tag == tag }
+                    matchedCount = matched.size
+                    matched.forEach { nm.cancel(it.tag, it.id) }
+                    // Samsung One UI 등 일부 OEM에서 백그라운드 컨텍스트의
+                    // activeNotifications가 FCM 수신 알림을 누락하는 경우가 있다.
+                    // FCM은 explicit id 없이 tagged 알림을 항상 id=0으로 발행하므로
+                    // matched 0건이면 직접 취소한다(no-op if not present).
+                    if (matchedCount == 0) {
+                        nm.cancel(tag, 0)
+                    }
                 }
-                result.success(null)
+                result.success(matchedCount)
             }
             else -> result.notImplemented()
         }

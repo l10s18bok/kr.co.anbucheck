@@ -268,10 +268,11 @@ class LocalAlarmService {
   static Future<void> cancelSubjectSafetyNet() async {
     if (Platform.isIOS) return;
     try {
-      await _screenStateChannel.invokeMethod<void>(
+      final matched = await _screenStateChannel.invokeMethod<int>(
         'cancelNotificationsByTag',
         {'tag': 'anbu_safety_net'},
       );
+      debugPrint('[LocalAlarm] cancelSubjectSafetyNet: activeNotifications 매칭=$matched');
     } catch (e) {
       debugPrint('[LocalAlarm] cancelSubjectSafetyNet 실패: $e');
     }
