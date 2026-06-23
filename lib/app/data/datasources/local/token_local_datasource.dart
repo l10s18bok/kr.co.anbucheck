@@ -21,6 +21,7 @@ class TokenLocalDatasource {
   static const _keyIsAlsoSubject = 'is_also_subject';
   static const _keyLastScheduledKey = 'last_scheduled_key';
   static const _keyLastRecoveryDate = 'last_recovery_date';
+  static const _keyPendingBuy = 'pending_buy';
 
   // iOS Keychain: 재설치 후에도 device_id 복원용 (identifierForVendor는 vendor 앱
   // 전부 삭제 후 재설치 시 변경되므로, Keychain 백업이 없으면 계정 복원이 불가능)
@@ -215,7 +216,7 @@ class TokenLocalDatasource {
   // ── 구독 활성화 여부 ──────────────────────────────────────
   Future<bool> getSubscriptionActive() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_keySubscriptionActive) ?? true; // 미설정 시 활성으로 간주 (서버 응답 전 만료 배너 깜빡임 방지)
+    return prefs.getBool(_keySubscriptionActive) ?? false; // 미설정 시 비활성으로 간주 (신규 설치 기본값 false — true이면 결제 없이 구독 활성으로 보이는 심사 리젝 원인)
   }
 
   Future<void> saveSubscriptionActive(bool active) async {
@@ -234,6 +235,19 @@ class TokenLocalDatasource {
   Future<void> saveSubscriptionPlan(String plan) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keySubscriptionPlan, plan);
+  }
+
+  // ── IAP 사용자 명시 구매 의도 플래그 ─────────────────────────
+  // buy() 호출 시 true로 설정하고 .purchased 처리 완료 후 false로 해제.
+  // 앱 강제 종료 후 재시작 시에도 pending 트랜잭션을 올바르게 verify할 수 있도록 영속.
+  Future<bool> getPendingBuy() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyPendingBuy) ?? false;
+  }
+
+  Future<void> savePendingBuy(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyPendingBuy, value);
   }
 
   // ── 보호자+대상자(G+S) 여부 ────────────────────────────────
@@ -272,6 +286,7 @@ class TokenLocalDatasource {
     await prefs.remove(_keyLastScheduledKey);
     await prefs.remove(_keyLastRecoveryDate);
     await prefs.remove(_keySubscriptionPlan);
+    await prefs.remove(_keyPendingBuy);
     await prefs.setBool(_keySubscriptionActive, false);
   }
 

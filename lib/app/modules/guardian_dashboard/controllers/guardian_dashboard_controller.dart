@@ -250,7 +250,7 @@ class GuardianDashboardController extends BaseController
       final data = await DeviceRemoteDatasource().getMyDevice(deviceToken);
       final hour = data['heartbeat_hour'] as int? ?? 18;
       final minute = data['heartbeat_minute'] as int? ?? 0;
-      final subscriptionActive = data['subscription_active'] as bool? ?? true;
+      final subscriptionActive = data['subscription_active'] as bool? ?? false;
       final count = data['guardian_count'] as int? ?? 0;
       await _tokenDs.saveHeartbeatSchedule(hour, minute);
       await _sub.set(subscriptionActive);

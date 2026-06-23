@@ -20,7 +20,7 @@ class SubscriptionService extends GetxService {
   /// 구독 활성 여부. 영속값(SharedPreferences)으로 init되며, 보호자 모니터링
   /// 게이트의 단일 진실. 하드코딩 true가 아니라 마지막으로 알려진 값으로 시작해
   /// 만료 사용자가 콜드 스타트 시 곧바로 잠금 상태가 되도록 한다.
-  final isActive = true.obs;
+  final isActive = false.obs;
 
   Future<SubscriptionService> init() async {
     isActive.value = await _tokenDs.getSubscriptionActive();

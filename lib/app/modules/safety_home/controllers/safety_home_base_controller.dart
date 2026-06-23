@@ -471,7 +471,7 @@ abstract class SafetyHomeBaseController extends BaseController
       // 이 값을 읽기-게이트로 쓰지 않는다 — 게이팅은 guardianCount만으로 판정**(구독
       // 만료여도 연결된 보호자가 있으면 동작). 여기서 set은 보호자 모니터링 화면
       // (대시보드/알림)이 동일 isActive Rx를 즉시 반영하도록 하기 위한 데이터 흐름일 뿐.
-      final subscriptionActive = data['subscription_active'] as bool? ?? true;
+      final subscriptionActive = data['subscription_active'] as bool? ?? false;
       if (Get.isRegistered<SubscriptionService>()) {
         await Get.find<SubscriptionService>().set(subscriptionActive);
       } else {

@@ -1273,9 +1273,11 @@ Authorization: Bearer <device_token> → 항상 유효
 - 서버는 영수증(receipt) 토큰만 검증
 - 보호자 앱 재설치 시 `restoreTransactions`로 기존 구독 자동 복원 가능
 - 클라이언트 모듈: `IapService` (`lib/app/core/services/iap_service.dart`) + `SubscriptionRemoteDatasource` (`lib/app/data/datasources/remote/subscription_remote_datasource.dart`). Splash `_initServices`에서 `Get.putAsync(() => IapService().init(), permanent: true)`로 등록되어 보호자 설정 화면 진입 전부터 `purchaseStream`을 구독 — 결제 중 앱 강제 종료 후 재시작 시 pending 트랜잭션 누락 방지
+- **`_pendingBuy` 게이트 (App Store 2.1(b) 대응)**: `IapService.buy()` 호출 시에만 `_pendingBuy = true`로 설정하고 영속 저장(`TokenLocalDatasource.savePendingBuy`). `purchaseStream`에서 `PurchaseStatus.purchased` 수신 시 `_pendingBuy == true`인 경우에만 `/verify`를 호출하고, 그 외(앱 재설치·강제종료 재시작 시 StoreKit 자동 재전달)는 스킵 + `completePurchase()` 즉시 호출(StoreKit 큐 영구 제거). 사용자가 명시적으로 "구독하기"를 탭한 경우에만 구독이 활성화된다 — StoreKit 재전달로 인한 자동 구독 활성화 방지. `init()` 진입 시 영속된 `_pendingBuy` 값을 복원해 결제 중 앱 강제 종료 → 재시작 케이스도 올바르게 처리
+- **`subscription_active` 기본값**: `TokenLocalDatasource.getSubscriptionActive()`는 키 미존재 시 `false` 반환(`?? false`). 신규 설치 또는 재설치 직후 SharedPreferences에 키가 없는 상태에서 구독 활성으로 보이는 오동작 방지 — 서버 응답 수신 후에만 `true`로 갱신
 - 서버 합의된 receipt 포맷: **iOS** = `PurchaseDetails.purchaseID` (transactionId) / **Android** = `verificationData.serverVerificationData` (purchaseToken). 같은 포맷으로 `/verify` · `/restore` 양쪽 호출
 - 검증 응답 `{ plan, expires_at, is_active }` 도착 시점에만 클라이언트 `subscription_active`/`subscription_plan` 갱신 — entitlement는 서버 권위, 클라 단독 판단 경로 없음
-- 갱신/취소/환불은 서버가 Apple S2S V2 + Google Pub/Sub RTDN을 수신해 `subscriptions` 테이블에 자동 반영하므로 클라이언트는 폴링 없이 `GET /api/v1/devices/me`만 호출하면 최신 상태 확인 가능 (서버 측 RTDN 상세는 PRD-BackEnd §4.22)
+- 갱신/취소/환불은 서버가 Apple S2S V2 + Google Pub/Sub RTDN을 수신해 `subscriptions` 테이블에 자동 반영하므로 클라이언트는 폴링 없이 `GET /api/v1/devices/me`만 호출하면 최신 상태 확인 가능 (서버 측 RTDN 상세는 PRD-BackEnd §4.22). **심사/테스트 환경 DB 전략**: Apple S2S V2 `DID_RENEW`는 `WHERE receipt_data = $2`로 행을 찾아 `expires_at`을 갱신하므로, 테스트 계정의 `receipt_data`를 NULL로 설정하면 S2S가 일치하는 행을 찾지 못해(`not_mapped`) `expires_at` 덮어쓰기가 차단됨 — 만료 처리된 테스트 계정이 S2S 자동 갱신으로 다시 활성화되는 현상 방지
 - UI 규칙 상세는 §9.7 (보호자 설정 화면) 참조
 
 
@@ -1461,7 +1463,7 @@ ios/Runner/
 | `permission_handler` | 런타임 권한 관리 | 알림, 활동 인식 등 권한 요청 |
 | `timezone` + `flutter_timezone` | 타임존 처리 | 기기 로컬 타임존 감지 + IANA timezone 변환 |
 | `sqflite` | 로컬 DB | 알림 이력 등 구조화 데이터 저장 |
-| `in_app_purchase` | 인앱 결제 | 보호자 연 $9.99 구독(`anbu_yearly`) 결제·복원. `IapService`가 `purchaseStream` 4상태(pending/purchased/restored/error/canceled) 분기, `_inFlight` Set으로 동일 purchaseID 중복 verify 차단, 서버 검증 성공 후에만 `completePurchase` 호출. Splash에서 `permanent: true`로 등록해 pending 트랜잭션 재발행 누락 방지 |
+| `in_app_purchase` | 인앱 결제 | 보호자 연 $9.99 구독(`anbu_yearly`) 결제·복원. `IapService`가 `purchaseStream` 4상태(pending/purchased/restored/error/canceled) 분기, **`_pendingBuy` 게이트**로 StoreKit 자동 재전달(재설치 시 `.purchased` 이벤트) 차단 — `buy()` 탭 시에만 `_pendingBuy = true`(영속), 그 외 수신된 `.purchased`는 verify 없이 스킵 + `completePurchase()` 호출(App Store 2.1(b) 대응). `_inFlight` Set으로 동일 purchaseID 중복 verify 차단, 서버 검증 성공 후에만 `completePurchase` 호출. Splash에서 `permanent: true`로 등록해 pending 트랜잭션 재발행 누락 방지 |
 | `google_mobile_ads` | AdMob 하단 고정 배너 | 구현 완료 — `AdService`(UMP 동의 흐름 + 초기화) + `BannerAdWidget`(지수 백오프 재시도, `canRequestAds()` 게이트, 프리미엄 구독 보호자 광고 제거). EEA/UK/스위스 사용자에게 IAB Europe TCF 동의 폼 표시, 거부 시 광고 로드 차단 (2026-08-03 AdMob 정책 대응 완료) |
 | `geolocator` | 현재 위치 1회 획득 | 대상자 긴급 도움 요청 시 lat/lng/accuracy 획득 (포그라운드, 5초 타임아웃). 정기 heartbeat에는 사용하지 않음 |
 | `google_maps_flutter` | 지도 표시 | 보호자 긴급 위치 지도 페이지(`guardian_emergency_map`)에서 마커 표시 |
@@ -1960,14 +1962,14 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
   - `yearly`: 인디고 그라데이션 + "프리미엄 구독 중" + [구독 관리] 버튼만 표시
   - `free_trial`/기타: 회색 그라데이션 + "무료 체험 중" + [구독하기] + [구독 복원] 두 버튼 표시
 - [구독 관리] → Apple/Google 구독 관리 페이지로 딥링크 이동 (기존 구독 취소/변경)
-- [구독하기] → `IapService.buy()` → `buyNonConsumable(PurchaseParam)` → `purchaseStream`에서 `PurchaseStatus.purchased` 수신 → 서버 `POST /api/v1/subscription/verify` → 200 응답 시 `onVerified` 콜백이 `_loadSubscription()` 재호출 → 카드 `yearly`로 자동 전환
+- [구독하기] → `IapService.buy()` → `_pendingBuy = true`(영속 저장) → `buyNonConsumable(PurchaseParam)` → `purchaseStream`에서 `PurchaseStatus.purchased` 수신 → **`_pendingBuy == true`인 경우에만** 서버 `POST /api/v1/subscription/verify` → 200 응답 시 `_pendingBuy = false` + `onVerified` 콜백이 `_loadSubscription()` 재호출 → 카드 `yearly`로 자동 전환. `_pendingBuy == false`인 경우(재설치·강제종료 재시작 시 StoreKit 자동 재전달) → verify 없이 스킵 + `completePurchase()` 호출(StoreKit 큐 영구 제거, 이후 재전달 없음)
 - [구독 복원] → `IapService.restore()` → `restorePurchases()` → `purchaseStream`에서 `PurchaseStatus.restored` 수신 시 서버 `POST /api/v1/subscription/restore` → 5초 내 emit이 없으면 "복원할 구독이 없습니다" 정보 안내. **Apple Review Guideline 3.1.1** 요구사항이라 free_trial 사용자에게도 항상 노출 (폰 교체·재설치 사용자 복구용)
 - **버튼 노출 조건**: `IapService.isAvailable == true` AND `IapService.productDetails != null`. Play Console 상품 미등록 또는 일시적 `queryProductDetails` 실패 시 두 버튼 모두 숨기고 "스토어에 연결할 수 없습니다" fallback 텍스트만 표시 — 클릭만 실패하는 UX 회피
 - **로딩 UI**: 버튼 탭 → Stack 기반으로 텍스트가 자리를 유지한 채 위에 작은 서클 스피너 표시 (버튼 높이 흔들림 방지)
 - **사용자 피드백 스낵바** (`SnackType.info`/`error`, 다크모드 토글에 영향받지 않는 고정 톤):
   - 정보(파랑 #1565C0): 구독 시작 성공 / 복원 성공 / 복원할 구독 없음
   - 에러(빨강 #B71C1C): 결제 실패 / 영수증 검증 실패 / 복원 실패
-- **결제 플로우 규칙**: 서버 `/verify` 200 응답 전까지 entitlement 노출 금지(클라 단독 판단 경로 없음), `PurchaseStatus.error`는 `completePurchase` 호출 금지(재시도 가능), 동일 `purchaseID` 중복 verify는 `_inFlight` Set으로 차단, `_pendingRestore` 플래그로 5초 안전망의 "복원할 구독 없음" 안내 정확성 보장
+- **결제 플로우 규칙**: 서버 `/verify` 200 응답 전까지 entitlement 노출 금지(클라 단독 판단 경로 없음), `PurchaseStatus.error`는 `completePurchase` 호출 금지(재시도 가능), 동일 `purchaseID` 중복 verify는 `_inFlight` Set으로 차단, `_pendingRestore` 플래그로 5초 안전망의 "복원할 구독 없음" 안내 정확성 보장. **`_pendingBuy` 게이트 불변**: `PurchaseStatus.purchased` 수신 시 `_pendingBuy == false`이면 `/verify` 호출 금지 — `_pendingBuy`는 사용자가 명시적으로 "구독하기"를 탭한 경우에만 true로 설정되며(App Store 2.1(b): 구매 없이 자동 구독 활성화 금지), 에러/취소 시에도 `false`로 초기화. `subscription_active` SharedPreferences 기본값은 반드시 `false`(`?? false`) — `true`로 변경하면 신규/재설치 앱이 서버 응답 없이 구독 활성으로 보임
 - [알림 설정] → 알림 설정 페이지로 이동 (등급별 ON/OFF, DND 설정)
 - **[광고 동의 설정]** — `AdService.isPrivacyOptionsRequired()`가 `true`일 때만 표시(`FutureBuilder` 조건부). EEA/UK/스위스 사용자가 동의를 철회·변경할 수 있도록 `AdService.showPrivacyOptionsForm()` 호출. `Get.isRegistered<AdService>() == false`이면 항상 숨김(비EEA 지역에서 `canRequestAds()` 결과와 무관하게 AdService 등록 자체가 없을 때 대비). 번역 키: `settings_ad_consent`(20개 언어)
 - 다크모드 토글: ThemeService를 통한 즉시 전환

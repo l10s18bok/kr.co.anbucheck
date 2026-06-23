@@ -92,7 +92,7 @@ class GuardianSubjectService extends GetxService {
       // 구독 상태 동기화 (추가 API 호출 없이 /subjects 응답에서 처리).
       // 단일 소스 SubscriptionService.set으로 일원화 — 활성 세션 중 서버가 만료를
       // 반환하면 isActive Rx가 즉시 false로 떨어져 대시보드/알림이 잠긴다.
-      final subscriptionActive = data['subscription_active'] as bool? ?? true;
+      final subscriptionActive = data['subscription_active'] as bool? ?? false;
       if (Get.isRegistered<SubscriptionService>()) {
         await Get.find<SubscriptionService>().set(subscriptionActive);
       } else {

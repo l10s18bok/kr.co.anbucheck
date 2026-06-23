@@ -68,6 +68,13 @@ class IapService extends GetxService {
   /// 케이스 dedup. 서버 verify가 멱등이지만 클라 단계에서 깔끔하게 거름).
   final Set<String> _inFlight = {};
 
+  /// 사용자가 [구독하기] 버튼을 탭한 후 purchaseStream에서 결과를 받기까지의 상태.
+  /// true → 사용자가 명시적으로 구독을 시작했으므로 .purchased 이벤트를 verify 진행.
+  /// false (기본) → 앱 시작 시 StoreKit이 자동갱신/재전달하는 .purchased 이벤트를 차단
+  ///                (결제 없는 자동 구독 활성화로 이어져 Guideline 2.1(b) 리젝 원인).
+  /// SharedPreferences에 영속 — 구매 중 앱 강제 종료 후 재시작 시 pending 트랜잭션 복원.
+  bool _pendingBuy = false;
+
   /// 사용자가 [구독 복원] 탭 후 purchaseStream에서 어떤 emit도 받지 못했는지
   /// 추적. 5초 안전망에서 true로 남아있으면 "복원할 구독이 없습니다" 안내.
   /// `_handleVerify(restore: true)` 진입 시 false로 전환되어 안전망 안내 차단.
@@ -78,6 +85,10 @@ class IapService extends GetxService {
 
   Future<IapService> init() async {
     try {
+      // 결제 중 앱 강제 종료 후 재시작 시 pending 트랜잭션 복원을 위해 영속값 로드
+      _pendingBuy = await _tokenDs.getPendingBuy();
+      '[IAP] pendingBuy 복원: $_pendingBuy'.printLog();
+
       // StoreKit/Play Billing hang 대비 — try/catch는 throw만 잡고 hang을 못 막는다.
       isAvailable.value = await _iap.isAvailable().timeout(
             const Duration(seconds: 5),
@@ -130,11 +141,17 @@ class IapService extends GetxService {
     try {
       isProcessing.value = true;
       lastError.value = '';
+      // 사용자 명시 구매 의도 플래그 설정 (앱 강제 종료 대비 영속)
+      // .purchased 게이트가 이 플래그를 검사하므로 buyNonConsumable 호출 전에 설정해야 함
+      _pendingBuy = true;
+      await _tokenDs.savePendingBuy(true);
       final param = PurchaseParam(productDetails: details);
       // 구독은 non-consumable (또는 auto-renewing) — buyNonConsumable 사용
       final started = await _iap.buyNonConsumable(purchaseParam: param);
       '[IAP] buyNonConsumable 시작: $started'.printLog();
       if (!started) {
+        _pendingBuy = false;
+        await _tokenDs.savePendingBuy(false);
         isProcessing.value = false;
         lastError.value = 'subscription_purchase_failed';
       }
@@ -196,24 +213,50 @@ class IapService extends GetxService {
             break;
 
           case PurchaseStatus.purchased:
-            await _handleVerify(pd, restore: false);
+            // _pendingBuy가 true일 때만 처리 — 사용자가 [구독하기] 버튼을 탭한 경우에만
+            // verify 진행. 앱 시작 시 StoreKit이 자동갱신/pending 트랜잭션을 재전달하는
+            // 케이스(결제 없는 자동 구독 활성화 → Guideline 2.1(b) 리젝 원인)를 차단.
+            if (_pendingBuy) {
+              await _handleVerify(pd, restore: false);
+            } else {
+              '[IAP] purchased 이벤트 수신 — 사용자 구매 요청 없음(자동갱신/재전달), skip'.printLog();
+              if (pd.pendingCompletePurchase) {
+                await _iap.completePurchase(pd);
+              }
+            }
             break;
 
           case PurchaseStatus.restored:
-            await _handleVerify(pd, restore: true);
+            // _pendingRestore가 true일 때만 처리 — 사용자가 [구독 복원] 버튼을 탭한
+            // 경우에만 restore 검증 진행. 앱 시작 시 StoreKit이 샌드박스/이전
+            // 트랜잭션을 자동으로 delivered하는 케이스를 차단(결제 없는 자동 구독
+            // 활성화로 이어져 Apple Guideline 2.1(b) 리젝 원인).
+            if (_pendingRestore) {
+              await _handleVerify(pd, restore: true);
+            } else {
+              '[IAP] restored 이벤트 수신 — 사용자 복원 요청 없음, skip'.printLog();
+              if (pd.pendingCompletePurchase) {
+                await _iap.completePurchase(pd);
+              }
+            }
             break;
 
           case PurchaseStatus.error:
             '[IAP] error: ${pd.error?.message}'.printLog();
             lastError.value = 'subscription_purchase_failed';
             isProcessing.value = false;
+            // 결제 실패 — pendingBuy 해제 (사용자가 다시 탭하면 재설정됨)
+            _pendingBuy = false;
+            await _tokenDs.savePendingBuy(false);
             // 실패 시 completePurchase 호출 금지 — 재시도 가능하도록 유지
             break;
 
           case PurchaseStatus.canceled:
             '[IAP] canceled'.printLog();
             isProcessing.value = false;
-            // 사용자 취소는 에러 다이얼로그 표시하지 않음
+            // 사용자 취소 — pendingBuy 해제
+            _pendingBuy = false;
+            await _tokenDs.savePendingBuy(false);
             if (pd.pendingCompletePurchase) {
               await _iap.completePurchase(pd);
             }
@@ -301,6 +344,9 @@ class IapService extends GetxService {
         } catch (_) {}
       }
 
+      // 구매/복원 플래그 해제 (verify 성공 확정 시점)
+      _pendingBuy = false;
+      await _tokenDs.savePendingBuy(false);
       // 복원 emit을 받았으니 5초 안전망의 "복원할 구독 없음" 안내 차단
       _pendingRestore = false;
 

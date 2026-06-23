@@ -659,7 +659,7 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
               ],
             ),
             SizedBox(height: AppSpacing.lg),
-            if (isPremium)
+            if (isPremium) ...[
               _PremiumButton(
                 label: 'settings_manage_subscription'.tr,
                 filled: false,
@@ -671,7 +671,11 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                   ),
                   mode: LaunchMode.externalApplication,
                 ),
-              )
+              ),
+              // 이용약관 + 개인정보처리방침 링크 (Apple 3.1.2(c) 요건 — iOS 전용)
+              // 프리미엄 상태에서도 구독 UI에 인접하게 표시
+              if (Platform.isIOS) _buildLegalLinks(darkBg: true),
+            ]
             else if (!iapAvailable || iap?.productDetails.value == null) ...[
               // 스토어 미가용 또는 상품 미등록 (Play Console anbu_yearly 등록 전,
               // 일시 네트워크 장애로 queryProductDetails 실패 등) — 두 버튼 모두
