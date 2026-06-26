@@ -33,7 +33,7 @@ class SplashController extends BaseController {
   /// 정상 경로는 _currentAppVersion()가 실제 설치된 빌드 버전을 읽는다 —
   /// 하드코딩 버전을 서버에 보내면 출시 후 DB latest_version을 올렸을 때
   /// 최신 빌드 사용자에게도 잘못된 업데이트 안내가 뜨는 footgun이 생기므로.
-  static const String _appVersionFallback = '1.1.9';
+  static const String _appVersionFallback = '1.2.0';
 
   @override
   void onInit() {
