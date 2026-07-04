@@ -1416,6 +1416,13 @@ lib/
 
 ## 6. 플랫폼별 네이티브 코드
 
+### 화면 방향: 세로 고정
+
+앱 전체가 세로 화면 전용이다 — 가로 회전 시 온보딩 목업 등 일부 레이아웃이 오버플로우하고, 이 앱의 대상 사용자에게 가로 모드가 필요하지도 않다. 3중으로 고정한다:
+- **Android**: `AndroidManifest.xml`의 `MainActivity`에 `android:screenOrientation="portrait"`
+- **iOS**: `Info.plist`의 `UISupportedInterfaceOrientations`(iPhone·iPad 공통)에서 Portrait만 남기고 Landscape/PortraitUpsideDown 제거
+- **Flutter**: `main.dart`에서 `SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])` (네이티브 설정이 주 방어선, 이는 보조)
+
 ### Android
 ```
 android/app/src/main/
@@ -1456,7 +1463,7 @@ ios/Runner/
 | `battery_plus` | 배터리 상태 | 배터리 잔량·충전 여부 조회, 권한 불필요 |
 | `freezed_annotation` + `json_annotation` | 직렬화 | Freezed DTO + json_serializable |
 | `flutter_screenutil` | 반응형 UI | 375×812 기준 dp/sp 변환 |
-| `lottie` | Lottie 애니메이션 재생 | 온보딩, 빈 상태, 로딩 등 UI 공백 연출 |
+| `lottie` | Lottie 애니메이션 재생 | Splash·모드 선택, 빈 상태, 로딩 등 UI 공백 연출 (온보딩은 §9.2 참조 — 실제 화면 위젯 목업 방식으로 Lottie/SVG 미사용) |
 | `flutter_svg` | SVG 렌더링 | 아이콘·일러스트 SVG 표시 |
 | `share_plus` | SNS 공유 | 고유 코드 공유 (카톡/문자 등) |
 | `url_launcher` | URL 열기 | 스토어 이동, 구독 관리 딥링크, 약관/개인정보처리방침 |
@@ -1679,41 +1686,48 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 5. 권한 화면으로 이동: `Get.toNamed(AppRoutes.permission, arguments: {'mode': mode, 'isAlsoSubject': needsSubjectPermission})`
 
 
-### 9.2 온보딩 (4스텝, 대상자/보호자 공통)
+### 9.2 온보딩 (모드별 분리 — 대상자 3단계 / 보호자 5단계)
 
 > 권한 요청은 모드 선택 후 이미 완료된 상태 (9.0 참조)
-> 대상자·보호자 동일한 온보딩 화면 사용, 등록 시점에 mode로 분기
+> **대상자 모드와 보호자 모드는 서로 다른 스텝 구성을 쓴다** — 이전의 "4스텝 감정 흐름(공감→해결→연결→신뢰) 공통 온보딩·unDraw SVG 일러스트" 방식은 폐기됐다. 각 스텝은 **실제 대상 화면의 위젯을 그대로 재사용하거나 동일한 스타일로 복제한 정지 목업**을 보여준다 — 이미지 에셋이 전혀 필요 없다(SVG 4개 파일 삭제됨).
 
-```
-[4스텝 감정 흐름: 공감 → 해결 → 연결 → 신뢰]
+**구조 (`OnboardingController`, `lib/app/modules/onboarding/`):**
+- `OnboardingVisual` enum(`safetyCode`/`emergencyButton`/`gsSwitch`/`addSubject`/`notifications`/`gsEnable`) + `OnboardingStepData(titleKey, descKey, visual)`로 스텝을 정의
+- `totalPages`/`steps`는 더 이상 고정값이 아니라 `mode`(subject/guardian)에 따라 `onInit`에서 동적으로 결정(`steps = mode == 'guardian' ? _guardianSteps : _subjectSteps`)
+- 보호자 스텝 중 안전코드·긴급버튼(4·5번째)은 대상자 스텝(1·2번째)과 **완전히 동일한 콘텐츠를 재사용** — G+S 활성화 시 대상자와 동일한 화면을 쓰게 되므로 미리 보여주는 것
+- `OnboardingIllustration`이 `visual`별로 목업 위젯 + 디자인(배경 패널/헤일로/액센트 도형)+진입 애니메이션을 매핑
 
-┌─────────────────────────────┐
-│                             │
-│  ┌───────────────────────┐  │
-│  │                       │  │
-│  │  [SVG: unDraw 일러스트]│  │
-│  │  배경 장식 원 +        │  │
-│  │  onboarding_*.svg     │  │
-│  │  (상단 60%, 전체 너비) │  │
-│  │                       │  │
-│  └───────────────────────┘  │
-│                             │
-│   Step 1: "혼자 사는 소중한 │
-│   사람, 걱정되시나요?"      │
-│   Step 2: "안부는 말없이도  │
-│   전해집니다"               │
-│   Step 3: "소중한 사람과    │
-│   안부를 나누세요"          │
-│   Step 4: "이름도, 전화번호 │
-│   도 수집하지 않습니다"     │
-│                             │
-│   ● ○ ○ ○  (dot 인디케이터) │
-│                             │
-│  [다음] / 마지막: [시작하기] │
-└─────────────────────────────┘
-```
+**대상자 모드 (3단계):**
 
-- PageView 기반 스와이프 + [다음] 버튼으로 이동
+| # | 화면 근거 | 목업 위젯 | 제목 | 디자인 · 애니메이션 |
+| --- | --- | --- | --- | --- |
+| 1 | safety_home 안전코드 카드 (`InviteCodeShareCard` 그대로 재사용) | `SafetyCodeMockup` | 안전코드가 자동으로 생성돼요 | 도형 액센트(teal, 모서리 점·마름모 4개) + 스케일/페이드 진입(1400ms) |
+| 2 | safety_home "도움이 필요해요" 버튼 (`EmergencyButton` 그대로 재사용) | `EmergencyButtonMockup` | 나의 현재 상태(긴급)와 위치를 알리고 싶을 때 | 컬러 헤일로(red 방사형 그라데이션) + 스케일/페이드 진입 |
+| 3 | Drawer "가족 안부도 관리하기" 메뉴 항목 (S→G+S 전환) | `GsSwitchMockup` — 실제 safety_home 헤더(☰ 햄버거+"안부" 앱명)를 프레임으로 함께 표시 | 가족의 안부도 함께 챙겨보세요 | 톤 배경 패널(indigo 10%) + 슬라이드업 페이드(900ms) |
+
+**보호자 모드 (5단계):**
+
+| # | 화면 근거 | 목업 위젯 | 제목 | 디자인 · 애니메이션 |
+| --- | --- | --- | --- | --- |
+| 1 | 대상자 추가 화면 — 고유코드 입력+별칭 입력+연결하기 버튼 (`guardian_add_subject_page`와 동일 스타일) | `AddSubjectMockup` | 소중한 사람과 연결하세요 | 톤 배경 패널(indigo) + 슬라이드(오른쪽→왼쪽) 페이드 |
+| 2 (신규) | 알림 목록 화면(주의 카드+걸음수 카드) + OS 푸시 알림 배너 | `NotificationsPreviewMockup` + `PushNotificationMockup` | 안부 알림은 이렇게 표시돼요 | 톤 배경 패널(indigo) + 헤더(🔔"알림") + **주의 카드가 먼저, 걸음수 카드가 시간차를 두고 순차적으로 위→아래 슬라이드**(위젯 자체가 `AnimationController`로 소유, Interval 0~0.6 / 0.35~1.0). 실제 OS 푸시 알림 디자인(앱 아이콘+앱명+"지금", 굵은 제목, 본문, 그림자)을 재현한 배너가 패널 위에 살짝 겹쳐 떠 있는 형태로 별도 배치 |
+| 3 | 보호자 설정 "나도 안부 보호 받기" 버튼 | `GsEnableMockup` — 실제 설정 화면 헤더(⚙"설정")를 프레임으로 함께 표시 | 내 안부 코드 활성화 | 톤 배경 패널(indigo) + 슬라이드업 페이드 |
+| 4 | = 대상자 1번과 동일 콘텐츠 재사용 | `SafetyCodeMockup` | 안전코드가 자동으로 생성돼요 | 도형 액센트 + 스케일/페이드 |
+| 5 | = 대상자 2번과 동일 콘텐츠 재사용 | `EmergencyButtonMockup` | 나의 현재 상태(긴급)와 위치를 알리고 싶을 때 | 컬러 헤일로 + 스케일/페이드 |
+
+**목업 위젯 원칙 (`onboarding_mockups.dart`):**
+- 실제 프로덕션 위젯을 그대로 재사용할 수 있는 경우(`InviteCodeShareCard`, `EmergencyButton`) 그대로 재사용해 색상/다크모드까지 100% 동일하게 유지
+- 재사용 불가한 경우(설정/알림/드로어의 헤더+행 UI)는 실제 화면과 동일한 색상·아이콘·타이포 스타일로 복제
+- 실제 `TextField`/`ElevatedButton`을 쓰되(가짜 `Container` 아님) `IgnorePointer` + `readOnly: true`로 감싸 탭·포커스·커서가 절대 발생하지 않도록 이중 차단 — 화면처럼 보이되 조작은 불가능한 "정지 화면"
+- 입력 필드는 실제 힌트 텍스트(`add_subject_alias_hint`, `123-4567`)를 그대로 사용 — 하드코딩된 예시값(예: "삼촌") 대신 실제 화면의 힌트를 노출해 로케일 무관하게 정확히 표시
+- 문자열은 하드코딩 없이 전부 `.tr` 사용(`app_name`, `settings_title`, `notifications_title`, `onboarding_push_now` 등 기존 키 재사용 포함)
+
+**저해상도/가로모드 대응:**
+- 각 스텝의 일러스트 영역(`Expanded(flex:6)`)과 텍스트 영역(`Expanded(flex:4)`)을 `LayoutBuilder`+`SingleChildScrollView`+`ConstrainedBox(minHeight)`로 감싸, 콘텐츠가 영역보다 작으면 기존처럼 중앙 정렬되고 크면(저해상도 기기·접근성 큰글씨) 잘리거나 겹치지 않고 스크롤되도록 처리
+- `OnboardingIllustration`은 내부적으로 `UnconstrainedBox(constrainedAxis: Axis.horizontal)`로 세로 제약을 풀어 목업이 실제 화면(스크롤 가능한 무제한 세로 공간)과 동일하게 콘텐츠 높이만큼만 차지하도록 함(그렇지 않으면 `Column`의 기본 `mainAxisSize.max`가 유한한 `flex:6` 영역을 억지로 꽉 채움)
+- 앱 전체가 **세로 화면 전용으로 고정**되어(Android `screenOrientation="portrait"`, iOS `UISupportedInterfaceOrientations`에서 Landscape 제거, Flutter `SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])`) 가로 회전으로 인한 목업 레이아웃 오버플로우 자체가 발생하지 않음 (§6 참조)
+
+- PageView 기반 스와이프 + [다음]/마지막 [시작하기] 버튼으로 이동. 버튼은 `Expanded(PageView)` 바깥의 별도 고정 하단 블록(인디케이터+버튼)에 있어 일러스트 콘텐츠 크기와 무관하게 항상 노출됨
 - 마지막 스텝에서 [시작하기] 탭 시 서버에 자동 등록 (`POST /api/v1/users`)
 - **기존 기기 감지는 모드 선택 화면(ModeSelectController)에서 처리** — 온보딩 진입 전에 이미 완료
 - `OnboardingController.completeOnboarding()`: 서버 등록 → `_saveAndNavigate()` → 홈 이동
@@ -1721,8 +1735,6 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
   - 대상자: invite_code + device_token 저장 → SubjectHome 이동
   - 보호자: device_token 저장 → GuardianDashboard 이동
   - G+S 복원 (invite_code 포함 응답): `isAlsoSubject=true` 로컬 저장
-- SVG 일러스트: `assets/illustrations/onboarding_empathy.svg`, `onboarding_solution.svg`, `onboarding_connection.svg`, `onboarding_trust.svg`
-- Lottie 파일 확보 시 교체 가능하도록 구조화
 
 
 ### 9.3 보호 대상자 모드 - 메인 화면

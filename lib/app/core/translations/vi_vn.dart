@@ -99,13 +99,17 @@ abstract class ViVn {
     'onboarding_safety_code_title': 'Mã an toàn được tạo tự động',
     'onboarding_safety_code_desc':
         'Chia sẻ mã này với người bảo vệ để kết nối —\ntín hiệu an toàn của bạn sẽ được gửi tự động.',
-    'onboarding_emergency_title': 'Khi bạn muốn báo tình trạng và vị trí hiện tại',
+    'onboarding_emergency_title': 'Khi bạn muốn báo tình trạng (Khẩn cấp) và vị trí hiện tại',
     'onboarding_emergency_desc': 'Nhấn nút này, tin sẽ được gửi\nngay đến tất cả người bảo vệ',
     'onboarding_gs_switch_title': 'Hãy cùng chăm sóc sự an toàn của gia đình',
     'onboarding_gs_switch_desc':
         'Nhấn [Quản lý cả sự an toàn của gia đình] trong menu\nđể dùng luôn vai trò người bảo vệ',
     'onboarding_add_subject_title': 'Kết nối với người bạn quan tâm',
     'onboarding_add_subject_desc': 'Nhập mã đã nhận và một biệt danh\nlà kết nối xong ngay',
+    'onboarding_notifications_title': 'Thông báo an toàn hiển thị như thế này',
+    'onboarding_notifications_desc':
+        'Bình thường sẽ hiện thông tin hoạt động như số bước chân, còn khi tín hiệu không đến hoặc không phát hiện hoạt động thì bạn sẽ nhận được thông báo như trên',
+    'onboarding_push_now': 'Bây giờ',
     'onboarding_gs_enable_title': 'Kích hoạt mã an toàn của riêng bạn',
     'onboarding_gs_enable_desc':
         'Trong Cài đặt, nhấn [Nhận bảo vệ sức khỏe]\nđể an toàn của bạn cũng được gửi đến người bảo vệ',

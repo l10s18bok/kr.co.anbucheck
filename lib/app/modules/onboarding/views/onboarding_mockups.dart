@@ -60,7 +60,8 @@ class PushNotificationMockup extends StatelessWidget {
                   style: AppTextTheme.labelSmall(
                       color: AppColors.textTertiary, fw: FontWeight.w600)),
               SizedBox(width: 6.w),
-              Text('지금', style: AppTextTheme.labelSmall(color: AppColors.textTertiary)),
+              Text('onboarding_push_now'.tr,
+                  style: AppTextTheme.labelSmall(color: AppColors.textTertiary)),
             ],
           ),
           SizedBox(height: 4.h),
@@ -111,34 +112,50 @@ class EmergencyButtonMockup extends StatelessWidget {
   }
 }
 
-/// ③ Drawer "가족 안부도 관리하기" 메뉴 항목 복제 (S → G+S 전환)
+/// ③ safety_home 헤더(햄버거 아이콘+"안부" 앱명, S 모드 AppBar의 leading+title과 동일) +
+/// Drawer "가족 안부도 관리하기" 메뉴 항목 복제 (S → G+S 전환). 메뉴 항목이 햄버거를 눌러 연
+/// Drawer 안에 있다는 맥락을 보여주기 위해 실제 헤더를 함께 표시한다.
 class GsSwitchMockup extends StatelessWidget {
   const GsSwitchMockup({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.family_restroom_rounded,
-              size: 22.w, color: const Color(0xFF4355B9)),
-          SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Text(
-              'drawer_enable_guardian'.tr,
-              style: AppTextTheme.bodyLarge(color: const Color(0xFF4355B9)),
-            ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.menu, size: 24.w, color: AppColors.onSurface),
+            SizedBox(width: 8.w),
+            Text('app_name'.tr, style: AppTextTheme.headlineSmall()),
+          ],
+        ),
+        SizedBox(height: AppSpacing.lg),
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(AppSpacing.lg),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(16.r),
           ),
-          Icon(Icons.chevron_right_rounded,
-              size: 22.w, color: AppColors.onSurfaceVariant),
-        ],
-      ),
+          child: Row(
+            children: [
+              Icon(Icons.family_restroom_rounded,
+                  size: 22.w, color: const Color(0xFF4355B9)),
+              SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Text(
+                  'drawer_enable_guardian'.tr,
+                  style: AppTextTheme.bodyLarge(color: const Color(0xFF4355B9)),
+                ),
+              ),
+              Icon(Icons.chevron_right_rounded,
+                  size: 22.w, color: AppColors.onSurfaceVariant),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

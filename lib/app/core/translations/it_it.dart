@@ -101,7 +101,7 @@ abstract class ItIt {
     'onboarding_safety_code_title': 'Il tuo codice di sicurezza viene generato automaticamente',
     'onboarding_safety_code_desc':
         'Condividi questo codice con il tuo guardiano per collegarvi —\nil tuo segnale di benessere verrà inviato automaticamente.',
-    'onboarding_emergency_title': 'Quando vuoi comunicare il tuo stato e la tua posizione attuali',
+    'onboarding_emergency_title': 'Quando vuoi comunicare il tuo stato (Urgente) e la tua posizione attuali',
     'onboarding_emergency_desc':
         'Tocca questo pulsante e verrà inviato\nsubito a tutti i tuoi guardiani',
     'onboarding_gs_switch_title': 'Prenditi cura anche del benessere della tua famiglia',
@@ -110,6 +110,10 @@ abstract class ItIt {
     'onboarding_add_subject_title': 'Connettiti con una persona cara',
     'onboarding_add_subject_desc':
         'Inserisci il codice ricevuto e un soprannome\nper collegarvi subito',
+    'onboarding_notifications_title': 'Ecco come appaiono le notifiche di benessere',
+    'onboarding_notifications_desc':
+        "Di norma vedrai informazioni sull'attività come i passi. Se il segnale non arriva o non viene rilevata attività, riceverai una notifica come sopra",
+    'onboarding_push_now': 'Ora',
     'onboarding_gs_enable_title': 'Attiva il tuo codice di benessere',
     'onboarding_gs_enable_desc':
         'In Impostazioni, tocca [Ricevi anche la protezione]\nper inviare il tuo benessere anche ai tuoi guardiani',

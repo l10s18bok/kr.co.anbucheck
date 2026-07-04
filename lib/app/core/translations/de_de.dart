@@ -102,7 +102,7 @@ abstract class DeDe {
     'onboarding_safety_code_title': 'Dein Sicherheitscode wird automatisch erstellt',
     'onboarding_safety_code_desc':
         'Teile diesen Code mit deinem Betreuer, um euch zu verbinden —\ndein Wellness-Signal wird dann automatisch gesendet.',
-    'onboarding_emergency_title': 'Wenn du deinen Zustand und Standort mitteilen möchtest',
+    'onboarding_emergency_title': 'Wenn du deinen Zustand (Dringend) und Standort mitteilen möchtest',
     'onboarding_emergency_desc':
         'Tippe auf diesen Button, und er erreicht\nsofort alle deine Betreuer',
     'onboarding_gs_switch_title': 'Kümmere dich auch um das Wohl deiner Familie',
@@ -111,6 +111,10 @@ abstract class DeDe {
     'onboarding_add_subject_title': 'Verbinde dich mit einer geliebten Person',
     'onboarding_add_subject_desc':
         'Gib den erhaltenen Code und einen Spitznamen ein,\num sofort verbunden zu sein',
+    'onboarding_notifications_title': 'So sehen Wellness-Benachrichtigungen aus',
+    'onboarding_notifications_desc':
+        'Normalerweise siehst du Aktivitätsinfos wie die Schrittzahl. Kommt kein Signal an oder wird keine Aktivität erkannt, wirst du wie oben benachrichtigt',
+    'onboarding_push_now': 'Jetzt',
     'onboarding_gs_enable_title': 'Aktiviere deinen eigenen Wellness-Code',
     'onboarding_gs_enable_desc':
         'Tippe in den Einstellungen auf [Auch Wellness-Schutz erhalten],\ndamit dein Wellness-Status auch an deine Betreuer geht',

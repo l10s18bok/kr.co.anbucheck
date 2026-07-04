@@ -101,7 +101,7 @@ abstract class IdId {
     'onboarding_safety_code_title': 'Kode keamananmu dibuat otomatis',
     'onboarding_safety_code_desc':
         'Bagikan kode ini ke penjagamu untuk terhubung —\nsinyal kesejahteraanmu akan terkirim otomatis.',
-    'onboarding_emergency_title': 'Saat kamu ingin memberi tahu kondisi dan lokasimu saat ini',
+    'onboarding_emergency_title': 'Saat kamu ingin memberi tahu kondisi (Mendesak) dan lokasimu saat ini',
     'onboarding_emergency_desc':
         'Ketuk tombol ini dan pesan langsung\nsampai ke semua penjagamu',
     'onboarding_gs_switch_title': 'Jaga juga kesejahteraan keluargamu',
@@ -110,6 +110,10 @@ abstract class IdId {
     'onboarding_add_subject_title': 'Terhubung dengan orang yang kamu sayangi',
     'onboarding_add_subject_desc':
         'Masukkan kode yang diterima dan alias\nlangsung terhubung seketika',
+    'onboarding_notifications_title': 'Beginilah tampilan notifikasi kesejahteraan',
+    'onboarding_notifications_desc':
+        'Biasanya kamu akan melihat info aktivitas seperti jumlah langkah. Jika sinyal tidak masuk atau tidak ada aktivitas terdeteksi, kamu akan diberi tahu seperti di atas',
+    'onboarding_push_now': 'Sekarang',
     'onboarding_gs_enable_title': 'Aktifkan kode kesejahteraanmu sendiri',
     'onboarding_gs_enable_desc':
         'Di Pengaturan, ketuk [Terima perlindungan juga]\nagar kesejahteraanmu juga tersampaikan ke penjaga',

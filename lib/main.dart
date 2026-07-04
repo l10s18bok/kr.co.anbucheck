@@ -19,6 +19,12 @@ void main() async {
   }
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // 세로 화면 전용 — 온보딩 등 목업 레이아웃이 가로 회전 시 오버플로우가 발생하고,
+  // 이 앱의 대상 사용자(고령자 등)에게도 가로 모드는 필요하지 않다.
+  // 네이티브(AndroidManifest screenOrientation, iOS Info.plist)에서도 동일하게 고정.
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   // 첫 frame 전 launch 전이 구간에서 iOS가 UIStatusBarStyleDefault(시스템 다크모드 추종)로
   // 흰 텍스트가 표시되는 케이스 방지 — 기본 라이트 테마 기준 dark icons로 선설정.
   // 이후 app.dart의 AnnotatedRegion이 실제 테마(다크 토글 포함)를 반영해 즉시 갱신.

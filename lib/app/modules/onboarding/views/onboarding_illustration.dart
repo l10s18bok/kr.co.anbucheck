@@ -80,6 +80,21 @@ class OnboardingIllustration extends StatelessWidget {
       );
     }
 
+    // S→G+S 전환 스텝(Drawer "가족 안부도 관리하기") — 확정 디자인: 톤 배경 패널(인디고) +
+    // 슬라이드업 페이드 애니메이션. G+S 활성화 스텝과 동일한 "메뉴 행" 형태라 같은 처리를 재사용.
+    if (visual == OnboardingVisual.gsSwitch) {
+      return _slideUpFadeIn(
+        child: Container(
+          padding: EdgeInsets.all(20.w),
+          decoration: BoxDecoration(
+            color: const Color(0xFF4355B9).withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(24.r),
+          ),
+          child: mockup,
+        ),
+      );
+    }
+
     // TODO: 디자인 확인용 — 알림 미리보기 스텝. 톤 배경 패널(인디고)로 테두리를 잡고 그 안에
     // 헤더("알림" 아이콘+타이틀) + 주의 카드 + 걸음수 카드를 배치. 두 카드의 순차 슬라이드다운
     // 애니메이션은 NotificationsPreviewMockup 자체가 소유(주의 카드 먼저, 걸음수 카드가 시간차를

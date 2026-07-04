@@ -96,13 +96,17 @@ abstract class ArSa {
     'onboarding_safety_code_title': 'يتم إنشاء رمز الأمان الخاص بك تلقائيًا',
     'onboarding_safety_code_desc':
         'شارك هذا الرمز مع الحارس للاتصال —\nسيتم إرسال إشارة اطمئنانك تلقائيًا.',
-    'onboarding_emergency_title': 'عندما تريد إخبار حالتك وموقعك الحاليين',
+    'onboarding_emergency_title': 'عندما تريد إخبار حالتك (عاجل) وموقعك الحاليين',
     'onboarding_emergency_desc': 'اضغط هذا الزر وستصل الرسالة\nفورًا إلى جميع الحراس',
     'onboarding_gs_switch_title': 'اعتنِ أيضًا براحة عائلتك',
     'onboarding_gs_switch_desc':
         'اضغط [إدارة سلامة العائلة أيضًا] في القائمة\nلاستخدام دور الحارس أيضًا',
     'onboarding_add_subject_title': 'تواصل مع شخص عزيز عليك',
     'onboarding_add_subject_desc': 'أدخل الرمز الذي استلمته واسمًا مستعارًا\nللاتصال فورًا',
+    'onboarding_notifications_title': 'هكذا تظهر إشعارات الاطمئنان',
+    'onboarding_notifications_desc':
+        'في الحالة الطبيعية تظهر معلومات النشاط مثل عدد الخطوات، وإذا لم تصل الإشارة أو لم يُكتشف أي نشاط سيصلك إشعار كما في الأعلى',
+    'onboarding_push_now': 'الآن',
     'onboarding_gs_enable_title': 'فعّل رمز الاطمئنان الخاص بك',
     'onboarding_gs_enable_desc':
         'من الإعدادات اضغط [احصل على الحماية أيضاً]\nليصل اطمئنانك أيضًا إلى حراسك',

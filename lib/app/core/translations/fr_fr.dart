@@ -100,7 +100,7 @@ abstract class FrFr {
     'onboarding_safety_code_title': 'Votre code de sécurité est généré automatiquement',
     'onboarding_safety_code_desc':
         'Partagez ce code avec votre protecteur pour vous connecter —\nvotre signal de bien-être sera envoyé automatiquement.',
-    'onboarding_emergency_title': 'Pour signaler votre état et votre position actuels',
+    'onboarding_emergency_title': 'Pour signaler votre état (Urgent) et votre position actuels',
     'onboarding_emergency_desc':
         'Appuyez sur ce bouton et il est transmis\nimmédiatement à tous vos protecteurs',
     'onboarding_gs_switch_title': 'Prenez aussi soin du bien-être de votre famille',
@@ -109,6 +109,10 @@ abstract class FrFr {
     'onboarding_add_subject_title': 'Connectez-vous avec un proche',
     'onboarding_add_subject_desc':
         'Saisissez le code reçu et un surnom\npour vous connecter aussitôt',
+    'onboarding_notifications_title': 'Voici à quoi ressemblent les notifications de bien-être',
+    'onboarding_notifications_desc':
+        "En temps normal, vous voyez des infos d'activité comme le nombre de pas. Si aucun signal n'arrive ou qu'aucune activité n'est détectée, vous êtes averti comme ci-dessus",
+    'onboarding_push_now': 'Maintenant',
     'onboarding_gs_enable_title': 'Activez votre propre code de bien-être',
     'onboarding_gs_enable_desc':
         'Dans les paramètres, appuyez sur [Recevoir aussi la protection]\npour que votre bien-être soit aussi transmis à vos protecteurs',

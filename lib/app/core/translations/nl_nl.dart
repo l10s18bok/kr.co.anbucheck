@@ -99,7 +99,7 @@ abstract class NlNl {
     'onboarding_safety_code_title': 'Je veiligheidscode wordt automatisch aangemaakt',
     'onboarding_safety_code_desc':
         'Deel deze code met je beschermer om te verbinden —\nje welzijnssignaal wordt dan automatisch verzonden.',
-    'onboarding_emergency_title': 'Als je je huidige status en locatie wilt delen',
+    'onboarding_emergency_title': 'Als je je huidige status (Dringend) en locatie wilt delen',
     'onboarding_emergency_desc':
         'Tik op deze knop en het bereikt\nmeteen al je beschermers',
     'onboarding_gs_switch_title': 'Zorg ook voor het welzijn van je familie',
@@ -108,6 +108,10 @@ abstract class NlNl {
     'onboarding_add_subject_title': 'Maak contact met iemand die je dierbaar is',
     'onboarding_add_subject_desc':
         'Voer de ontvangen code en een bijnaam in\nom meteen te verbinden',
+    'onboarding_notifications_title': 'Zo zien welzijnsmeldingen eruit',
+    'onboarding_notifications_desc':
+        'Normaal zie je activiteitsinfo zoals het aantal stappen. Komt er geen signaal binnen of wordt er geen activiteit gedetecteerd, dan krijg je een melding zoals hierboven',
+    'onboarding_push_now': 'Nu',
     'onboarding_gs_enable_title': 'Activeer je eigen welzijnscode',
     'onboarding_gs_enable_desc':
         'Tik in Instellingen op [Ook welzijnsbescherming ontvangen]\nzodat jouw welzijn ook naar je beschermers gaat',

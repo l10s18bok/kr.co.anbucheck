@@ -98,7 +98,7 @@ abstract class EnUs {
     'onboarding_safety_code_title': 'Your safety code is generated automatically',
     'onboarding_safety_code_desc':
         'Share this code with your guardian to connect —\nyour wellness signal is sent automatically.',
-    'onboarding_emergency_title': 'When you want to share your status and location',
+    'onboarding_emergency_title': 'When you want to share your status (Urgent) and location',
     'onboarding_emergency_desc':
         'Tap this button and it reaches\nall your guardians instantly',
     'onboarding_gs_switch_title': "Watch over your family's wellness too",
@@ -107,6 +107,10 @@ abstract class EnUs {
     'onboarding_add_subject_title': 'Connect with someone you care about',
     'onboarding_add_subject_desc':
         'Enter the code you received and a nickname\nto connect right away',
+    'onboarding_notifications_title': "Here's how wellness notifications look",
+    'onboarding_notifications_desc':
+        "Normally you'll see activity info like step count. If a check-in doesn't arrive or no activity is detected, you'll be notified just like above",
+    'onboarding_push_now': 'Now',
     'onboarding_gs_enable_title': 'Activate your own wellness code',
     'onboarding_gs_enable_desc':
         'In Settings, tap [Get Wellness Protection Too]\nto share your wellness with your guardians',

@@ -99,13 +99,17 @@ abstract class HiIn {
     'onboarding_safety_code_title': 'आपका सुरक्षा कोड अपने आप बन जाता है',
     'onboarding_safety_code_desc':
         'यह कोड अभिभावक को भेजें और जुड़ जाएं —\nआपकी कुशलता का संकेत अपने आप भेजा जाएगा।',
-    'onboarding_emergency_title': 'जब आप अपनी मौजूदा स्थिति और जगह बताना चाहें',
+    'onboarding_emergency_title': 'जब आप अपनी मौजूदा स्थिति (अत्यावश्यक) और जगह बताना चाहें',
     'onboarding_emergency_desc': 'यह बटन दबाएं, और यह तुरंत\nसभी अभिभावकों तक पहुंच जाता है',
     'onboarding_gs_switch_title': 'परिवार की कुशलता का भी ध्यान रखें',
     'onboarding_gs_switch_desc':
         'मेनू में [परिवार की कुशलता भी देखें] दबाने से\nअभिभावक की भूमिका भी साथ में इस्तेमाल कर सकते हैं',
     'onboarding_add_subject_title': 'अपने किसी प्रिय व्यक्ति से जुड़ें',
     'onboarding_add_subject_desc': 'मिला हुआ कोड और उपनाम डालें\nऔर तुरंत जुड़ जाएं',
+    'onboarding_notifications_title': 'कुशलता अलर्ट ऐसे दिखते हैं',
+    'onboarding_notifications_desc':
+        'सामान्य स्थिति में कदमों जैसी गतिविधि की जानकारी दिखती है, और अगर संकेत न आए या गतिविधि दर्ज न हो तो ऊपर जैसा नोटिफिकेशन मिलता है',
+    'onboarding_push_now': 'अभी',
     'onboarding_gs_enable_title': 'अपना सुरक्षा कोड सक्रिय करें',
     'onboarding_gs_enable_desc':
         'सेटिंग्स में [मेरी भी सुरक्षा करें] दबाने से\nमेरी कुशलता भी अभिभावक तक पहुंचती है',

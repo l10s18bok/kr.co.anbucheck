@@ -99,7 +99,7 @@ abstract class PlPl {
     'onboarding_safety_code_title': 'Twój kod bezpieczeństwa jest tworzony automatycznie',
     'onboarding_safety_code_desc':
         'Udostępnij ten kod opiekunowi, aby się połączyć —\ntwój sygnał dobrego samopoczucia będzie wysyłany automatycznie.',
-    'onboarding_emergency_title': 'Gdy chcesz przekazać swój aktualny stan i lokalizację',
+    'onboarding_emergency_title': 'Gdy chcesz przekazać swój aktualny stan (Pilne) i lokalizację',
     'onboarding_emergency_desc':
         'Dotknij tego przycisku, a wiadomość dotrze\nnatychmiast do wszystkich Twoich opiekunów',
     'onboarding_gs_switch_title': 'Zadbaj też o dobrostan swojej rodziny',
@@ -108,6 +108,10 @@ abstract class PlPl {
     'onboarding_add_subject_title': 'Połącz się z bliską osobą',
     'onboarding_add_subject_desc':
         'Wpisz otrzymany kod i pseudonim,\naby połączyć się od razu',
+    'onboarding_notifications_title': 'Tak wyglądają powiadomienia o samopoczuciu',
+    'onboarding_notifications_desc':
+        'Zwykle widzisz informacje o aktywności, np. liczbę kroków. Gdy sygnał nie dotrze lub nie wykryto aktywności, otrzymasz powiadomienie jak powyżej',
+    'onboarding_push_now': 'Teraz',
     'onboarding_gs_enable_title': 'Aktywuj własny kod samopoczucia',
     'onboarding_gs_enable_desc':
         'W Ustawieniach dotknij [Otrzymuj też ochronę],\naby Twoje samopoczucie trafiało też do opiekunów',

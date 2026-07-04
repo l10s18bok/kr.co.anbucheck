@@ -99,7 +99,7 @@ abstract class TrTr {
     'onboarding_safety_code_title': 'Güvenlik kodun otomatik olarak oluşturulur',
     'onboarding_safety_code_desc':
         'Bu kodu koruyucunla paylaşarak bağlan —\niyilik sinyalin otomatik olarak gönderilir.',
-    'onboarding_emergency_title': 'Şu anki durumunu ve konumunu bildirmek istediğinde',
+    'onboarding_emergency_title': 'Şu anki durumunu (Acil) ve konumunu bildirmek istediğinde',
     'onboarding_emergency_desc': 'Bu düğmeye bas, mesaj hemen\ntüm koruyucularına ulaşır',
     'onboarding_gs_switch_title': 'Ailenin iyiliğini de birlikte gözetin',
     'onboarding_gs_switch_desc':
@@ -107,6 +107,10 @@ abstract class TrTr {
     'onboarding_add_subject_title': 'Sevdiğin biriyle bağlan',
     'onboarding_add_subject_desc':
         'Aldığın kodu ve bir takma ad girerek\nhemen bağlan',
+    'onboarding_notifications_title': 'İyilik bildirimleri böyle görünür',
+    'onboarding_notifications_desc':
+        'Normalde adım sayısı gibi aktivite bilgilerini görürsün. Sinyal gelmez veya aktivite algılanmazsa yukarıdaki gibi bildirim alırsın',
+    'onboarding_push_now': 'Şimdi',
     'onboarding_gs_enable_title': 'Kendi iyilik kodunu etkinleştir',
     'onboarding_gs_enable_desc':
         "Ayarlar'da [Ben de koruma al] düğmesine basarak\niyiliğini koruyucularına da ilet",

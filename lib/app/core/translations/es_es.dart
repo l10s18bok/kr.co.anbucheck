@@ -100,7 +100,7 @@ abstract class EsEs {
     'onboarding_safety_code_title': 'Tu código de seguridad se genera automáticamente',
     'onboarding_safety_code_desc':
         'Comparte este código con tu protector para conectaros —\ntu señal de bienestar se enviará automáticamente.',
-    'onboarding_emergency_title': 'Cuando quieras avisar tu estado y ubicación actuales',
+    'onboarding_emergency_title': 'Cuando quieras avisar tu estado (Urgente) y ubicación actuales',
     'onboarding_emergency_desc':
         'Toca este botón y llegará\nde inmediato a todos tus protectores',
     'onboarding_gs_switch_title': 'Cuida también el bienestar de tu familia',
@@ -109,6 +109,10 @@ abstract class EsEs {
     'onboarding_add_subject_title': 'Conéctate con alguien especial',
     'onboarding_add_subject_desc':
         'Introduce el código recibido y un apodo\npara conectaros al instante',
+    'onboarding_notifications_title': 'Así se ven las notificaciones de bienestar',
+    'onboarding_notifications_desc':
+        'Normalmente verás información de actividad como los pasos. Si no llega la señal o no se detecta actividad, se te avisará como arriba',
+    'onboarding_push_now': 'Ahora',
     'onboarding_gs_enable_title': 'Activa tu propio código de bienestar',
     'onboarding_gs_enable_desc':
         'En Ajustes, toca [Recibir protección también]\npara que tu bienestar también llegue a tus protectores',

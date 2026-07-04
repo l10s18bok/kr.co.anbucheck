@@ -91,7 +91,7 @@ abstract class JaJp {
     'onboarding_safety_code_title': '安全コードは自動的に作られます',
     'onboarding_safety_code_desc':
         'このコードを保護者に伝えると連携され、\nあなたの安否が自動で送信されます。',
-    'onboarding_emergency_title': '今の状態と居場所を知らせたいときは',
+    'onboarding_emergency_title': '今の状態（緊急）と居場所を知らせたいときは',
     'onboarding_emergency_desc': 'このボタンを押すと保護者全員に\nすぐに伝わります',
     'onboarding_gs_switch_title': '家族の安否も一緒に見守りましょう',
     'onboarding_gs_switch_desc':
@@ -99,6 +99,10 @@ abstract class JaJp {
     'onboarding_add_subject_title': '大切な人とつながりましょう',
     'onboarding_add_subject_desc':
         '受け取ったコードとニックネームを入力すると\nすぐに連携が完了します',
+    'onboarding_notifications_title': '安否通知はこのように表示されます',
+    'onboarding_notifications_desc':
+        '普段は歩数などの活動情報が表示され、安否が届かなかったり活動記録がないときは上のように通知でお知らせします',
+    'onboarding_push_now': '今',
     'onboarding_gs_enable_title': '自分の安否コードを有効化',
     'onboarding_gs_enable_desc':
         '設定で「私も安否保護を受ける」を押すと\n自分の安否も保護者に届きます',

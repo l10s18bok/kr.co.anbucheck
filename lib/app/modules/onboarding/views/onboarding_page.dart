@@ -107,34 +107,58 @@ class _OnboardingStep extends StatelessWidget {
       child: Column(
         children: [
           // 상단 일러스트 영역 (60%)
+          // 저해상도(짧은 세로 높이) 기기에서 목업(특히 알림 미리보기·대상자 추가처럼
+          // 콘텐츠가 큰 스텝)이 이 영역보다 커질 수 있다. OnboardingIllustration 내부의
+          // UnconstrainedBox는 세로 제약을 없애 Column이 찌그러지는 문제는 막아주지만
+          // 그 대신 영역보다 커진 콘텐츠가 잘리지 않고 그대로 렌더링되어 아래 텍스트 영역과
+          // 겹칠 수 있다. SingleChildScrollView로 감싸 넘치면 스크롤되게 해 겹침/잘림을 방지.
+          // 다음/시작하기 버튼은 이 Expanded 밖의 별도 고정 영역에 있어 항상 정상 노출된다.
           Expanded(
             flex: 6,
-            child: Center(
-              child: OnboardingIllustration(visual: visual),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  // minHeight를 영역 전체 높이로 강제해, 콘텐츠가 영역보다 작을 땐
+                  // 기존과 동일하게 Center가 정중앙 배치를 유지하고, 콘텐츠가 영역보다
+                  // 클 때만 스크롤이 발생하도록 한다.
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Center(
+                      child: OnboardingIllustration(visual: visual),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
 
           // 하단 텍스트 영역 (40%)
+          // 저해상도 기기나 접근성 큰글씨 설정에서 번역 문구가 길어지면 이 영역도
+          // 넘칠 수 있어 스크롤 가능하게 감싼다(원래도 top-aligned라 Center 보정 불필요).
           Expanded(
             flex: 4,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(height: AppSpacing.lg),
-                Text(
-                  title,
-                  style: AppTextTheme.headlineLarge(),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: AppSpacing.lg),
-                Text(
-                  description,
-                  style: AppTextTheme.bodyLarge(
-                    color: AppColors.textSecondary,
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(height: AppSpacing.lg),
+                  Text(
+                    title,
+                    style: AppTextTheme.headlineLarge(),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                  SizedBox(height: AppSpacing.lg),
+                  Text(
+                    description,
+                    style: AppTextTheme.bodyLarge(
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

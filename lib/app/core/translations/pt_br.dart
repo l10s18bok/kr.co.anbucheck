@@ -100,7 +100,7 @@ abstract class PtBr {
     'onboarding_safety_code_title': 'Seu código de segurança é gerado automaticamente',
     'onboarding_safety_code_desc':
         'Compartilhe este código com seu guardião para se conectarem —\nseu sinal de bem-estar será enviado automaticamente.',
-    'onboarding_emergency_title': 'Quando quiser avisar seu estado e localização atuais',
+    'onboarding_emergency_title': 'Quando quiser avisar seu estado (Urgente) e localização atuais',
     'onboarding_emergency_desc':
         'Toque neste botão e ele chega\nimediatamente a todos os seus guardiões',
     'onboarding_gs_switch_title': 'Cuide também do bem-estar da sua família',
@@ -109,6 +109,10 @@ abstract class PtBr {
     'onboarding_add_subject_title': 'Conecte-se com alguém especial',
     'onboarding_add_subject_desc':
         'Digite o código recebido e um apelido\npara se conectar na hora',
+    'onboarding_notifications_title': 'É assim que as notificações de bem-estar aparecem',
+    'onboarding_notifications_desc':
+        'Normalmente você verá informações de atividade como a contagem de passos. Se o sinal não chegar ou nenhuma atividade for detectada, você será avisado como acima',
+    'onboarding_push_now': 'Agora',
     'onboarding_gs_enable_title': 'Ative seu próprio código de bem-estar',
     'onboarding_gs_enable_desc':
         'Em Configurações, toque em [Receber proteção também]\npara que seu bem-estar também chegue aos seus guardiões',

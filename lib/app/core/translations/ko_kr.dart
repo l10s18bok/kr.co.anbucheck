@@ -92,7 +92,7 @@ abstract class KoKr {
     'onboarding_safety_code_title': '안전코드가 자동으로 생성돼요',
     'onboarding_safety_code_desc':
         '이 코드를 보호자에게 전달하면 서로 연결되어\n당신의 안부가 자동으로 보내집니다.',
-    'onboarding_emergency_title': '나의 현재 상태와 위치를 알리고 싶을 때',
+    'onboarding_emergency_title': '나의 현재 상태(긴급)와 위치를 알리고 싶을 때',
     'onboarding_emergency_desc': '이 버튼을 누르면 보호자 전원에게\n즉시 전달돼요',
     'onboarding_gs_switch_title': '가족의 안부도 함께 챙겨보세요',
     'onboarding_gs_switch_desc':
@@ -102,6 +102,7 @@ abstract class KoKr {
     'onboarding_notifications_title': '안부 알림은 이렇게 표시돼요',
     'onboarding_notifications_desc':
         '정상일 땐 걸음수 같은 활동 정보를 보여주고, 안부가 오지 않거나 활동 기록이 없을 땐 위와 같이 알려드려요',
+    'onboarding_push_now': '지금',
     'onboarding_gs_enable_title': '내 안부 코드 활성화',
     'onboarding_gs_enable_desc':
         '설정에서 [나도 안부 보호 받기]를 누르면\n내 안부도 보호자에게 전해져요',

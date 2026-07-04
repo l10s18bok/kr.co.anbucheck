@@ -97,7 +97,7 @@ abstract class SvSe {
     'onboarding_safety_code_title': 'Din säkerhetskod skapas automatiskt',
     'onboarding_safety_code_desc':
         'Dela koden med din vårdare för att ansluta —\ndin välmåendesignal skickas då automatiskt.',
-    'onboarding_emergency_title': 'När du vill berätta om ditt nuvarande tillstånd och plats',
+    'onboarding_emergency_title': 'När du vill berätta om ditt nuvarande tillstånd (Brådskande) och plats',
     'onboarding_emergency_desc':
         'Tryck på knappen så når det\nomedelbart alla dina vårdare',
     'onboarding_gs_switch_title': 'Ta hand om familjens välmående också',
@@ -106,6 +106,10 @@ abstract class SvSe {
     'onboarding_add_subject_title': 'Anslut till någon du bryr dig om',
     'onboarding_add_subject_desc':
         'Ange koden du fått och ett smeknamn\nför att ansluta direkt',
+    'onboarding_notifications_title': 'Så här ser välmåendeaviseringar ut',
+    'onboarding_notifications_desc':
+        'Vanligtvis ser du aktivitetsinfo som antal steg. Om ingen signal kommer in eller ingen aktivitet upptäcks får du en avisering som ovan',
+    'onboarding_push_now': 'Nu',
     'onboarding_gs_enable_title': 'Aktivera din egen välmåendekod',
     'onboarding_gs_enable_desc':
         'Tryck i Installningar på [Få hälsoskydd också]\nså når ditt välmående även dina vårdare',
