@@ -95,18 +95,21 @@ abstract class EnUs {
         'When your phone enters power-saving mode, wellness check signals may reach your guardian late or be missed.\n\nAfter tapping [Open Settings] below, set "Battery" → "Unrestricted". This ensures wellness checks are delivered reliably at the scheduled time every day.\n\n※ The exact wording may vary by device manufacturer.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Someone you love lives alone,\nchecking in every day is hard',
-    'onboarding_desc_1':
-        'Far away, and busy —\nis that person okay today?\nAnbu delivers the word for you.',
-    'onboarding_title_2': 'A word that arrives\nwithout being spoken',
-    'onboarding_desc_2':
-        'Your daily life is\nimportant news for those\nwho wonder how you are.',
-    'onboarding_title_3': 'Share wellness\nwith your loved ones',
-    'onboarding_desc_3':
-        'Daily check-ins add up\ninto peace of mind for both.\nReach out only when it matters.',
-    'onboarding_title_4': 'Close at heart,\nbut not every detail',
-    'onboarding_desc_4':
-        'Only one signal is delivered:\n"I\'m doing fine."',
+    'onboarding_safety_code_title': 'Your safety code is generated automatically',
+    'onboarding_safety_code_desc':
+        'Share this code with your guardian to connect —\nyour wellness signal is sent automatically.',
+    'onboarding_emergency_title': 'When you want to share your status and location',
+    'onboarding_emergency_desc':
+        'Tap this button and it reaches\nall your guardians instantly',
+    'onboarding_gs_switch_title': "Watch over your family's wellness too",
+    'onboarding_gs_switch_desc':
+        'Tap [Also manage family wellness] in the menu\nto use the guardian role as well',
+    'onboarding_add_subject_title': 'Connect with someone you care about',
+    'onboarding_add_subject_desc':
+        'Enter the code you received and a nickname\nto connect right away',
+    'onboarding_gs_enable_title': 'Activate your own wellness code',
+    'onboarding_gs_enable_desc':
+        'In Settings, tap [Get Wellness Protection Too]\nto share your wellness with your guardians',
     'onboarding_role_subject': 'Subject',
     'onboarding_role_guardian': 'Guardian',
     'onboarding_role_guardian_subject': 'Guardian & Subject',

@@ -98,18 +98,21 @@ abstract class IdId {
         'Ketika ponsel Anda masuk ke mode hemat daya, sinyal kesejahteraan yang dikirim ke pengasuh Anda dapat terlambat atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan] di bawah, atur "Baterai" → "Tidak Dibatasi". Dengan begitu, sinyal kesejahteraan akan dikirim dengan andal pada waktu yang dijadwalkan setiap hari.\n\n※ Pelafalan tepatnya dapat bervariasi tergantung pabrikan perangkat.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Seseorang yang kamu sayangi tinggal sendiri\nmenanyakan kabar tiap hari tidaklah mudah',
-    'onboarding_desc_1':
-        'Jauh, dan kamu bertanya-tanya\napakah dia baik hari ini.\nAnbu menyampaikannya untukmu.',
-    'onboarding_title_2': 'Pesan yang hadir\ntanpa perlu diucapkan',
-    'onboarding_desc_2':
-        'Keseharianmu adalah\ninformasi penting bagi\nmereka yang menanyakanmu.',
-    'onboarding_title_3': 'Bagikan kepedulian\ndengan orang tersayang',
-    'onboarding_desc_3':
-        'Kabar setiap hari menumpuk\nmenjadi ketenangan bagi keduanya.\nHubungi hanya saat benar-benar perlu.',
-    'onboarding_title_4': 'Dekat di hati, tapi\ntak harus tahu tiap detail',
-    'onboarding_desc_4':
-        'Hanya satu sinyal yang dikirim:\n"Saya baik-baik saja."',
+    'onboarding_safety_code_title': 'Kode keamananmu dibuat otomatis',
+    'onboarding_safety_code_desc':
+        'Bagikan kode ini ke penjagamu untuk terhubung —\nsinyal kesejahteraanmu akan terkirim otomatis.',
+    'onboarding_emergency_title': 'Saat kamu ingin memberi tahu kondisi dan lokasimu saat ini',
+    'onboarding_emergency_desc':
+        'Ketuk tombol ini dan pesan langsung\nsampai ke semua penjagamu',
+    'onboarding_gs_switch_title': 'Jaga juga kesejahteraan keluargamu',
+    'onboarding_gs_switch_desc':
+        'Ketuk [Kelola juga kesejahteraan keluarga] di menu\nuntuk memakai peran penjaga juga',
+    'onboarding_add_subject_title': 'Terhubung dengan orang yang kamu sayangi',
+    'onboarding_add_subject_desc':
+        'Masukkan kode yang diterima dan alias\nlangsung terhubung seketika',
+    'onboarding_gs_enable_title': 'Aktifkan kode kesejahteraanmu sendiri',
+    'onboarding_gs_enable_desc':
+        'Di Pengaturan, ketuk [Terima perlindungan juga]\nagar kesejahteraanmu juga tersampaikan ke penjaga',
     'onboarding_role_subject': 'Orang yang Dilindungi',
     'onboarding_role_guardian': 'Penjaga',
     'onboarding_role_guardian_subject': 'Penjaga dan yang dilindungi',

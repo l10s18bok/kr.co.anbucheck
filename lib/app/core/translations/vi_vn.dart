@@ -96,17 +96,19 @@ abstract class ViVn {
         'Khi dien thoai cua ban vao che do tiet kiem pin, tin hieu an toan gui den nguoi bao ho co the den muon hoac bi mat.\n\nSau khi nhan [Mo cai dat] ben duoi, hay dat "Pin" → "Khong gioi han". Khi do, tin hieu an toan se duoc gui mot cach dang tin cay vao gio da dinh moi ngay.\n\n※ Cach hien thi co the khac nhau tuy theo nha san xuat thiet bi.',
 
     // ── Gioi thieu ──
-    'onboarding_title_1': 'Người bạn yêu thương sống một mình\nhỏi thăm mỗi ngày không hề dễ',
-    'onboarding_desc_1': 'Ở xa, và bạn tự hỏi\nhôm nay họ có ổn không.\nAnbu chuyển lời thay bạn.',
-    'onboarding_title_2': 'Một lời hỏi thăm\nđến mà không cần nói',
-    'onboarding_desc_2':
-        'Cuộc sống thường ngày của bạn\nlà thông tin quan trọng\nvới những người quan tâm bạn.',
-    'onboarding_title_3': 'Chia se su quan tam\nvoi nguoi than yeu',
-    'onboarding_desc_3':
-        'Mỗi ngày dồn lại\nthành sự an tâm cho cả hai.\nChỉ liên hệ khi thật cần.',
-    'onboarding_title_4': 'Gần gũi trong lòng, nhưng\nkhông cần biết từng khoảnh khắc',
-    'onboarding_desc_4':
-        'Chi mot tin hieu duoc gui:\n"Toi van khoe."',
+    'onboarding_safety_code_title': 'Mã an toàn được tạo tự động',
+    'onboarding_safety_code_desc':
+        'Chia sẻ mã này với người bảo vệ để kết nối —\ntín hiệu an toàn của bạn sẽ được gửi tự động.',
+    'onboarding_emergency_title': 'Khi bạn muốn báo tình trạng và vị trí hiện tại',
+    'onboarding_emergency_desc': 'Nhấn nút này, tin sẽ được gửi\nngay đến tất cả người bảo vệ',
+    'onboarding_gs_switch_title': 'Hãy cùng chăm sóc sự an toàn của gia đình',
+    'onboarding_gs_switch_desc':
+        'Nhấn [Quản lý cả sự an toàn của gia đình] trong menu\nđể dùng luôn vai trò người bảo vệ',
+    'onboarding_add_subject_title': 'Kết nối với người bạn quan tâm',
+    'onboarding_add_subject_desc': 'Nhập mã đã nhận và một biệt danh\nlà kết nối xong ngay',
+    'onboarding_gs_enable_title': 'Kích hoạt mã an toàn của riêng bạn',
+    'onboarding_gs_enable_desc':
+        'Trong Cài đặt, nhấn [Nhận bảo vệ sức khỏe]\nđể an toàn của bạn cũng được gửi đến người bảo vệ',
     'onboarding_role_subject': 'Nguoi duoc bao ve',
     'onboarding_role_guardian': 'Nguoi bao ve',
     'onboarding_role_guardian_subject': 'Người giám hộ và được bảo vệ',

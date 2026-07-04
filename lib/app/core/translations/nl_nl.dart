@@ -96,18 +96,21 @@ abstract class NlNl {
         'Wanneer je telefoon in energiebesparende modus gaat, kunnen welzijnssignalen naar je verzorger te laat aankomen of gemist worden.\n\nNa op [Instellingen openen] hieronder te tikken, stel "Batterij" → "Onbeperkt" in. Zo worden welzijnssignalen elke dag betrouwbaar op de geplande tijd verzonden.\n\n※ De exacte tekst kan per fabrikant verschillen.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Iemand van wie je houdt woont alleen\nelke dag bellen is niet vanzelfsprekend',
-    'onboarding_desc_1':
-        'Ver weg, en je vraagt je af\nof het vandaag goed gaat.\nAnbu brengt het over voor jou.',
-    'onboarding_title_2': 'Een woord dat aankomt\nzonder te worden uitgesproken',
-    'onboarding_desc_2':
-        'Je dagelijks leven is\nbelangrijke informatie\nvoor wie aan je denkt.',
-    'onboarding_title_3': 'Deel welzijn\nmet uw dierbaren',
-    'onboarding_desc_3':
-        'Dagelijkse tekens worden\nrust voor allebei.\nBel alleen als het echt telt.',
-    'onboarding_title_4': 'Dichtbij in hart, maar\nniet in elk detail',
-    'onboarding_desc_4':
-        'Er wordt slechts één signaal verzonden:\n"Het gaat goed met mij."',
+    'onboarding_safety_code_title': 'Je veiligheidscode wordt automatisch aangemaakt',
+    'onboarding_safety_code_desc':
+        'Deel deze code met je beschermer om te verbinden —\nje welzijnssignaal wordt dan automatisch verzonden.',
+    'onboarding_emergency_title': 'Als je je huidige status en locatie wilt delen',
+    'onboarding_emergency_desc':
+        'Tik op deze knop en het bereikt\nmeteen al je beschermers',
+    'onboarding_gs_switch_title': 'Zorg ook voor het welzijn van je familie',
+    'onboarding_gs_switch_desc':
+        'Tik in het menu op [Ook gezinswelzijn beheren]\nom ook de beschermersrol te gebruiken',
+    'onboarding_add_subject_title': 'Maak contact met iemand die je dierbaar is',
+    'onboarding_add_subject_desc':
+        'Voer de ontvangen code en een bijnaam in\nom meteen te verbinden',
+    'onboarding_gs_enable_title': 'Activeer je eigen welzijnscode',
+    'onboarding_gs_enable_desc':
+        'Tik in Instellingen op [Ook welzijnsbescherming ontvangen]\nzodat jouw welzijn ook naar je beschermers gaat',
     'onboarding_role_subject': 'Beschermeling',
     'onboarding_role_guardian': 'Beschermer',
     'onboarding_role_guardian_subject': 'Bewaker en beschermde',

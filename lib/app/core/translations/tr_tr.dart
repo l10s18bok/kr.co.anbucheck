@@ -96,16 +96,20 @@ abstract class TrTr {
         'Telefonunuz güç tasarrufu moduna girdiğinde, bakım vereninize giden esenlik sinyalleri gecikebilir veya kaybolabilir.\n\nAşağıdaki [Ayarları Aç] düğmesine dokunduktan sonra "Pil" → "Kısıtlama yok" ayarlayın. Böylece esenlik sinyalleri her gün belirlenen saatte güvenilir bir şekilde iletilir.\n\n※ Tam ifade cihaz üreticisine göre değişebilir.',
 
     // ── Tanıtım ──
-    'onboarding_title_1': 'Sevdiğin biri yalnız yaşıyor\nher gün aramak kolay değil',
-    'onboarding_desc_1':
-        'Uzakta, ve merak edersin\nbugün iyi mi diye.\nAnbu senin adına iletir.',
-    'onboarding_title_2': 'Söylenmeden\nulaşan bir söz',
-    'onboarding_desc_2':
-        'Günlük hayatın,\nseni merak edenler için\nönemli bir bilgidir.',
-    'onboarding_title_3': 'Sevdiklerinizle\nhal hatır paylaşın',
-    'onboarding_desc_3': 'Her günkü işaretler\niki tarafa da huzur olur.\nSadece gerektiğinde ara.',
-    'onboarding_title_4': 'Kalbe yakın, ama\nher ayrıntıda değil',
-    'onboarding_desc_4': 'Yalnızca tek bir sinyal iletilir:\n"İyiyim."',
+    'onboarding_safety_code_title': 'Güvenlik kodun otomatik olarak oluşturulur',
+    'onboarding_safety_code_desc':
+        'Bu kodu koruyucunla paylaşarak bağlan —\niyilik sinyalin otomatik olarak gönderilir.',
+    'onboarding_emergency_title': 'Şu anki durumunu ve konumunu bildirmek istediğinde',
+    'onboarding_emergency_desc': 'Bu düğmeye bas, mesaj hemen\ntüm koruyucularına ulaşır',
+    'onboarding_gs_switch_title': 'Ailenin iyiliğini de birlikte gözetin',
+    'onboarding_gs_switch_desc':
+        'Menüden [Ailenin iyiliğini de takip et] düğmesine basarak\nkoruyucu rolünü de kullanabilirsin',
+    'onboarding_add_subject_title': 'Sevdiğin biriyle bağlan',
+    'onboarding_add_subject_desc':
+        'Aldığın kodu ve bir takma ad girerek\nhemen bağlan',
+    'onboarding_gs_enable_title': 'Kendi iyilik kodunu etkinleştir',
+    'onboarding_gs_enable_desc':
+        "Ayarlar'da [Ben de koruma al] düğmesine basarak\niyiliğini koruyucularına da ilet",
     'onboarding_role_subject': 'Takip Edilen',
     'onboarding_role_guardian': 'Koruyucu',
     'onboarding_role_guardian_subject': 'Koruyucu ve korunan',

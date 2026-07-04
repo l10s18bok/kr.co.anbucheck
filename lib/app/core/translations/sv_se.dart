@@ -94,15 +94,21 @@ abstract class SvSe {
         'När telefonen går in i energisparläge kan välmående-signaler till din vårdgivare komma försenade eller missas.\n\nTryck på [Öppna inställningar] nedan och ställ in "Batteri" → "Obegränsad". Då skickas välmående-signaler tillförlitligt vid den planerade tiden varje dag.\n\n※ Den exakta texten kan variera beroende på enhetstillverkare.',
 
     // ── Introduktion ──
-    'onboarding_title_1': 'Någon du älskar bor ensam\natt höra av sig varje dag är inte lätt',
-    'onboarding_desc_1': 'Långt borta, och du undrar\nom de har det bra idag.\nAnbu förmedlar det åt dig.',
-    'onboarding_title_2': 'Ett ord som når fram\nutan att uttalas',
-    'onboarding_desc_2':
-        'Din vardag är\nviktig information för\ndem som tänker på dig.',
-    'onboarding_title_3': 'Dela omtanke\nmed dina narstaende',
-    'onboarding_desc_3': 'Dagliga tecken blir\nett lugn för er båda.\nHör av dig bara när det räknas.',
-    'onboarding_title_4': 'Nära i hjärtat, men\ninte i varje detalj',
-    'onboarding_desc_4': 'Bara en signal levereras:\n"Jag mar bra."',
+    'onboarding_safety_code_title': 'Din säkerhetskod skapas automatiskt',
+    'onboarding_safety_code_desc':
+        'Dela koden med din vårdare för att ansluta —\ndin välmåendesignal skickas då automatiskt.',
+    'onboarding_emergency_title': 'När du vill berätta om ditt nuvarande tillstånd och plats',
+    'onboarding_emergency_desc':
+        'Tryck på knappen så når det\nomedelbart alla dina vårdare',
+    'onboarding_gs_switch_title': 'Ta hand om familjens välmående också',
+    'onboarding_gs_switch_desc':
+        'Tryck på [Hantera även familjens välmående] i menyn\nför att även använda vårdarrollen',
+    'onboarding_add_subject_title': 'Anslut till någon du bryr dig om',
+    'onboarding_add_subject_desc':
+        'Ange koden du fått och ett smeknamn\nför att ansluta direkt',
+    'onboarding_gs_enable_title': 'Aktivera din egen välmåendekod',
+    'onboarding_gs_enable_desc':
+        'Tryck i Installningar på [Få hälsoskydd också]\nså når ditt välmående även dina vårdare',
     'onboarding_role_subject': 'Skyddsperson',
     'onboarding_role_guardian': 'Vardare',
     'onboarding_role_guardian_subject': 'Vårdare och skyddad',

@@ -97,17 +97,21 @@ abstract class EsEs {
         'Cuando su teléfono entra en modo de ahorro de energía, las señales de bienestar enviadas a su cuidador pueden llegar tarde o perderse.\n\nDespués de tocar [Abrir ajustes] abajo, configure "Batería" → "Sin restricciones". Así, las señales de bienestar se envían de forma fiable a la hora programada cada día.\n\n※ El texto exacto puede variar según el fabricante del dispositivo.',
 
     // ── Presentación ──
-    'onboarding_title_1': 'Alguien a quien quieres vive solo\nsaber cómo está cada día no es fácil',
-    'onboarding_desc_1':
-        'Lejos, y te preguntas\nsi hoy estará bien.\nAnbu lo transmite por ti.',
-    'onboarding_title_2': 'Una palabra que llega\nsin pronunciarse',
-    'onboarding_desc_2':
-        'Tu día a día es\ninformación valiosa para\nquienes piensan en ti.',
-    'onboarding_title_3': 'Comparta el bienestar\ncon sus seres queridos',
-    'onboarding_desc_3':
-        'Cada aviso diario se suma\ny da calma a ambos.\nLlama solo cuando importa.',
-    'onboarding_title_4': 'Cerca en el corazón,\npero no en cada detalle',
-    'onboarding_desc_4': 'Solo se transmite una señal:\n«Estoy bien».',
+    'onboarding_safety_code_title': 'Tu código de seguridad se genera automáticamente',
+    'onboarding_safety_code_desc':
+        'Comparte este código con tu protector para conectaros —\ntu señal de bienestar se enviará automáticamente.',
+    'onboarding_emergency_title': 'Cuando quieras avisar tu estado y ubicación actuales',
+    'onboarding_emergency_desc':
+        'Toca este botón y llegará\nde inmediato a todos tus protectores',
+    'onboarding_gs_switch_title': 'Cuida también el bienestar de tu familia',
+    'onboarding_gs_switch_desc':
+        'Toca [Gestionar también el bienestar familiar] en el menú\npara usar también el rol de protector',
+    'onboarding_add_subject_title': 'Conéctate con alguien especial',
+    'onboarding_add_subject_desc':
+        'Introduce el código recibido y un apodo\npara conectaros al instante',
+    'onboarding_gs_enable_title': 'Activa tu propio código de bienestar',
+    'onboarding_gs_enable_desc':
+        'En Ajustes, toca [Recibir protección también]\npara que tu bienestar también llegue a tus protectores',
     'onboarding_role_subject': 'Persona protegida',
     'onboarding_role_guardian': 'Protector',
     'onboarding_role_guardian_subject': 'Guardián y protegido',

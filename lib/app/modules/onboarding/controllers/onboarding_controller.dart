@@ -12,6 +12,31 @@ import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
+/// 온보딩 스텝에서 보여줄 화면 목업 종류 — onboarding_mockups.dart의 위젯과 1:1 대응.
+enum OnboardingVisual {
+  safetyCode,
+  emergencyButton,
+  gsSwitch,
+  addSubject,
+  gsEnable,
+  notifications,
+}
+
+/// 온보딩 각 스텝의 문구·목업 키 — 실제 앱 화면(안전코드/긴급버튼/대상자연결 등)을
+/// 그대로 설명하는 콘텐츠 단위. 대상자/보호자 모드가 일부 스텝을 공유한다
+/// (보호자 3·4번째 스텝 = 대상자 1·2번째 스텝과 동일 콘텐츠 재사용).
+class OnboardingStepData {
+  final String titleKey;
+  final String descKey;
+  final OnboardingVisual visual;
+
+  const OnboardingStepData({
+    required this.titleKey,
+    required this.descKey,
+    required this.visual,
+  });
+}
+
 /// 온보딩 컨트롤러 (공통)
 /// 서비스 소개 후 사용자 등록(API) → 모드별 홈으로 이동
 class OnboardingController extends BaseController {
@@ -20,8 +45,61 @@ class OnboardingController extends BaseController {
   int get currentPage => _currentPage.value;
 
   late final String mode;
+  late final List<OnboardingStepData> steps;
 
-  static const int totalPages = 4;
+  int get totalPages => steps.length;
+
+  // 대상자: safety_home에서 자동 생성되는 안전코드를 보호자에게 공유
+  static const _safetyCode = OnboardingStepData(
+    titleKey: 'onboarding_safety_code_title',
+    descKey: 'onboarding_safety_code_desc',
+    visual: OnboardingVisual.safetyCode,
+  );
+
+  // 대상자: "도움이 필요해요" 긴급 버튼
+  static const _emergency = OnboardingStepData(
+    titleKey: 'onboarding_emergency_title',
+    descKey: 'onboarding_emergency_desc',
+    visual: OnboardingVisual.emergencyButton,
+  );
+
+  // 대상자: Drawer의 "가족 안부도 관리하기" → S+G 전환
+  static const _gsSwitch = OnboardingStepData(
+    titleKey: 'onboarding_gs_switch_title',
+    descKey: 'onboarding_gs_switch_desc',
+    visual: OnboardingVisual.gsSwitch,
+  );
+
+  // 보호자: 대상자 추가 화면 (고유 코드 + 별칭 입력)
+  static const _addSubject = OnboardingStepData(
+    titleKey: 'onboarding_add_subject_title',
+    descKey: 'onboarding_add_subject_desc',
+    visual: OnboardingVisual.addSubject,
+  );
+
+  // 보호자: 설정의 "나도 안부 보호 받기" → G+S 활성화
+  static const _gsEnable = OnboardingStepData(
+    titleKey: 'onboarding_gs_enable_title',
+    descKey: 'onboarding_gs_enable_desc',
+    visual: OnboardingVisual.gsEnable,
+  );
+
+  // 보호자: 알림 목록 화면 (주의 등급 카드 + 걸음수 활동 정보 카드)
+  static const _notifications = OnboardingStepData(
+    titleKey: 'onboarding_notifications_title',
+    descKey: 'onboarding_notifications_desc',
+    visual: OnboardingVisual.notifications,
+  );
+
+  static const _subjectSteps = [_safetyCode, _emergency, _gsSwitch];
+  static const _guardianSteps = [
+    _addSubject,
+    _notifications,
+    _gsEnable,
+    // G+S 활성화 시 대상자와 동일하게 안전코드·긴급 버튼을 쓰게 되므로 재사용
+    _safetyCode,
+    _emergency,
+  ];
 
   final _tokenDs = TokenLocalDatasource();
   final _userDs = UserRemoteDatasource();
@@ -30,6 +108,7 @@ class OnboardingController extends BaseController {
   void onInit() {
     super.onInit();
     mode = (Get.arguments as Map<String, dynamic>?)?['mode'] ?? 'subject';
+    steps = mode == 'guardian' ? _guardianSteps : _subjectSteps;
   }
 
   void onPageChanged(int page) {

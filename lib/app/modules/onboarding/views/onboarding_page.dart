@@ -24,12 +24,15 @@ class OnboardingPage extends GetWidget<OnboardingController> {
               child: PageView.builder(
                 controller: controller.pageController,
                 onPageChanged: controller.onPageChanged,
-                itemCount: OnboardingController.totalPages,
-                itemBuilder: (context, index) => _OnboardingStep(
-                  step: index,
-                  title: 'onboarding_title_${index + 1}'.tr,
-                  description: 'onboarding_desc_${index + 1}'.tr,
-                ),
+                itemCount: controller.totalPages,
+                itemBuilder: (context, index) {
+                  final step = controller.steps[index];
+                  return _OnboardingStep(
+                    visual: step.visual,
+                    title: step.titleKey.tr,
+                    description: step.descKey.tr,
+                  );
+                },
               ),
             ),
 
@@ -43,7 +46,7 @@ class OnboardingPage extends GetWidget<OnboardingController> {
                   // 페이지 인디케이터
                   Obx(() => _PageIndicator(
                         currentPage: controller.currentPage,
-                        totalPages: OnboardingController.totalPages,
+                        totalPages: controller.totalPages,
                       )),
                   SizedBox(height: AppSpacing.sp6),
 
@@ -53,7 +56,7 @@ class OnboardingPage extends GetWidget<OnboardingController> {
                     height: 56.h,
                     child: Obx(() {
                       final isLastPage = controller.currentPage ==
-                          OnboardingController.totalPages - 1;
+                          controller.totalPages - 1;
                       return ElevatedButton(
                         onPressed: controller.nextPage,
                         style: ElevatedButton.styleFrom(
@@ -87,12 +90,12 @@ class OnboardingPage extends GetWidget<OnboardingController> {
 /// 온보딩 각 스텝
 /// 상단 60%: 일러스트 / 하단 40%: 텍스트
 class _OnboardingStep extends StatelessWidget {
-  final int step;
+  final OnboardingVisual visual;
   final String title;
   final String description;
 
   const _OnboardingStep({
-    required this.step,
+    required this.visual,
     required this.title,
     required this.description,
   });
@@ -107,7 +110,7 @@ class _OnboardingStep extends StatelessWidget {
           Expanded(
             flex: 6,
             child: Center(
-              child: OnboardingIllustration(step: step),
+              child: OnboardingIllustration(visual: visual),
             ),
           ),
 

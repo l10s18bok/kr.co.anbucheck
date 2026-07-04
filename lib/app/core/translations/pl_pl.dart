@@ -96,17 +96,21 @@ abstract class PlPl {
         'Gdy telefon przechodzi w tryb oszczędzania energii, sygnały dobrostanu wysyłane do Twojego opiekuna mogą docierać z opóźnieniem lub być utracone.\n\nPo dotknięciu [Otwórz ustawienia] poniżej ustaw "Bateria" → "Bez ograniczeń". Dzięki temu sygnały dobrostanu będą codziennie niezawodnie wysyłane o zaplanowanej godzinie.\n\n※ Dokładne sformułowania mogą się różnić w zależności od producenta urządzenia.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Ktoś bliski mieszka sam\ncodzienne sprawdzanie nie jest łatwe',
-    'onboarding_desc_1':
-        'Daleko, a Ty się zastanawiasz,\nczy dziś wszystko dobrze.\nAnbu przekaże to za Ciebie.',
-    'onboarding_title_2': 'Słowo, które dociera\nbez słów',
-    'onboarding_desc_2':
-        'Twoja codzienność to\nważna wiadomość dla tych,\nktórzy o Ciebie myślą.',
-    'onboarding_title_3': 'Podziel sie troska\nz bliskimi osobami',
-    'onboarding_desc_3': 'Codzienne znaki życia\ndają spokój obu stronom.\nOdezwij się, gdy to naprawdę ważne.',
-    'onboarding_title_4': 'Blisko sercem, lecz\nnie w każdym szczególe',
-    'onboarding_desc_4':
-        'Przekazujemy tylko jeden sygnal:\n"Wszystko u mnie dobrze."',
+    'onboarding_safety_code_title': 'Twój kod bezpieczeństwa jest tworzony automatycznie',
+    'onboarding_safety_code_desc':
+        'Udostępnij ten kod opiekunowi, aby się połączyć —\ntwój sygnał dobrego samopoczucia będzie wysyłany automatycznie.',
+    'onboarding_emergency_title': 'Gdy chcesz przekazać swój aktualny stan i lokalizację',
+    'onboarding_emergency_desc':
+        'Dotknij tego przycisku, a wiadomość dotrze\nnatychmiast do wszystkich Twoich opiekunów',
+    'onboarding_gs_switch_title': 'Zadbaj też o dobrostan swojej rodziny',
+    'onboarding_gs_switch_desc':
+        'Dotknij [Zarządzaj też dobrostanem rodziny] w menu,\naby korzystać także z roli opiekuna',
+    'onboarding_add_subject_title': 'Połącz się z bliską osobą',
+    'onboarding_add_subject_desc':
+        'Wpisz otrzymany kod i pseudonim,\naby połączyć się od razu',
+    'onboarding_gs_enable_title': 'Aktywuj własny kod samopoczucia',
+    'onboarding_gs_enable_desc':
+        'W Ustawieniach dotknij [Otrzymuj też ochronę],\naby Twoje samopoczucie trafiało też do opiekunów',
     'onboarding_role_subject': 'Podopieczny',
     'onboarding_role_guardian': 'Opiekun',
     'onboarding_role_guardian_subject': 'Opiekun i podopieczny',

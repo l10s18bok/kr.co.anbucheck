@@ -89,14 +89,22 @@ abstract class KoKr {
         '폰이 절전 모드에 들어가면 보호자에게 안부 신호가 늦게 도착하거나 누락될 수 있습니다.\n\n아래 [설정 열기]를 누르신 뒤, \'배터리\' → \'제한 없음\'으로 설정해 주세요. 매일 정확한 시각에 안부가 안정적으로 전달됩니다.\n\n※ 기기 제조사에 따라 표기는 조금씩 다를 수 있습니다.',
 
     // ── 온보딩 ──
-    'onboarding_title_1': '혼자 지내는 소중한 사람,\n매일 챙기기 쉽지 않으시죠',
-    'onboarding_desc_1': '멀리 있어도, 바빠도\n오늘 그 사람은 안녕한지.\n안부가 대신 전해드립니다.',
-    'onboarding_title_2': '말하지 않아도\n안부는 전해집니다',
-    'onboarding_desc_2': '당신의 하루 일상이\n당신을 궁금해하는 분들에게는\n중요한 정보입니다.',
-    'onboarding_title_3': '소중한 사람과\n안부를 나누세요',
-    'onboarding_desc_3': '매일의 안부가 쌓여\n서로의 안심이 됩니다.\n필요한 순간에만 연락하세요.',
-    'onboarding_title_4': '마음은 곁에 있지만\n그 사람의 하루를 전부 알 수는 없죠',
-    'onboarding_desc_4': "오직 '잘 지내고 있다'는\n안부 신호 하나만 전달합니다.",
+    'onboarding_safety_code_title': '안전코드가 자동으로 생성돼요',
+    'onboarding_safety_code_desc':
+        '이 코드를 보호자에게 전달하면 서로 연결되어\n당신의 안부가 자동으로 보내집니다.',
+    'onboarding_emergency_title': '나의 현재 상태와 위치를 알리고 싶을 때',
+    'onboarding_emergency_desc': '이 버튼을 누르면 보호자 전원에게\n즉시 전달돼요',
+    'onboarding_gs_switch_title': '가족의 안부도 함께 챙겨보세요',
+    'onboarding_gs_switch_desc':
+        '메뉴의 [가족 안부도 관리하기]를 누르면\n보호자 역할도 함께 사용할 수 있어요',
+    'onboarding_add_subject_title': '소중한 사람과 연결하세요',
+    'onboarding_add_subject_desc': '전달받은 코드와 별칭을 입력하면\n연결이 바로 완료돼요',
+    'onboarding_notifications_title': '안부 알림은 이렇게 표시돼요',
+    'onboarding_notifications_desc':
+        '정상일 땐 걸음수 같은 활동 정보를 보여주고, 안부가 오지 않거나 활동 기록이 없을 땐 위와 같이 알려드려요',
+    'onboarding_gs_enable_title': '내 안부 코드 활성화',
+    'onboarding_gs_enable_desc':
+        '설정에서 [나도 안부 보호 받기]를 누르면\n내 안부도 보호자에게 전해져요',
     'onboarding_role_subject': '보호 대상자',
     'onboarding_role_guardian': '보호자',
     'onboarding_role_guardian_subject': '보호자 겸 대상자',

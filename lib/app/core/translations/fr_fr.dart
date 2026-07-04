@@ -97,17 +97,21 @@ abstract class FrFr {
         'Lorsque votre téléphone passe en mode économie d\'énergie, les signaux de bien-être envoyés à votre proche peuvent être retardés ou manqués.\n\nAprès avoir appuyé sur [Ouvrir les paramètres] ci-dessous, réglez "Batterie" → "Sans restriction". Ainsi, les signaux de bien-être sont transmis de manière fiable à l\'heure prévue chaque jour.\n\n※ Les libellés exacts peuvent varier selon le fabricant de l\'appareil.',
 
     // ── Présentation ──
-    'onboarding_title_1': 'Quelqu\'un que vous aimez vit seul\ndonner des nouvelles chaque jour n\'est pas simple',
-    'onboarding_desc_1': 'Loin, et l\'on se demande\nsi tout va bien aujourd\'hui.\nAnbu le transmet pour vous.',
-    'onboarding_title_2': 'Un mot qui arrive\nsans être prononcé',
-    'onboarding_desc_2':
-        'Votre quotidien est\nune information précieuse\npour ceux qui pensent à vous.',
-    'onboarding_title_3': 'Partagez le bien-être\navec vos proches',
-    'onboarding_desc_3':
-        'Chaque jour, les signes\ndeviennent une tranquillité partagée.\nN\'appelez que si c\'est vraiment utile.',
-    'onboarding_title_4': 'Près du cœur, mais pas\ndans chaque instant',
-    'onboarding_desc_4':
-        'Un seul signal est transmis :\n« Je vais bien. »',
+    'onboarding_safety_code_title': 'Votre code de sécurité est généré automatiquement',
+    'onboarding_safety_code_desc':
+        'Partagez ce code avec votre protecteur pour vous connecter —\nvotre signal de bien-être sera envoyé automatiquement.',
+    'onboarding_emergency_title': 'Pour signaler votre état et votre position actuels',
+    'onboarding_emergency_desc':
+        'Appuyez sur ce bouton et il est transmis\nimmédiatement à tous vos protecteurs',
+    'onboarding_gs_switch_title': 'Prenez aussi soin du bien-être de votre famille',
+    'onboarding_gs_switch_desc':
+        'Appuyez sur [Gérer aussi le bien-être familial] dans le menu\npour utiliser aussi le rôle de protecteur',
+    'onboarding_add_subject_title': 'Connectez-vous avec un proche',
+    'onboarding_add_subject_desc':
+        'Saisissez le code reçu et un surnom\npour vous connecter aussitôt',
+    'onboarding_gs_enable_title': 'Activez votre propre code de bien-être',
+    'onboarding_gs_enable_desc':
+        'Dans les paramètres, appuyez sur [Recevoir aussi la protection]\npour que votre bien-être soit aussi transmis à vos protecteurs',
     'onboarding_role_subject': 'Personne protégée',
     'onboarding_role_guardian': 'Protecteur',
     'onboarding_role_guardian_subject': 'Gardien et protégé',

@@ -98,17 +98,21 @@ abstract class ItIt {
         'Quando il telefono entra in modalità di risparmio energetico, i segnali di benessere inviati al tuo tutore possono arrivare in ritardo o andare persi.\n\nDopo aver toccato [Apri impostazioni] qui sotto, imposta "Batteria" → "Senza restrizioni". In questo modo i segnali di benessere vengono inviati in modo affidabile all\'orario previsto ogni giorno.\n\n※ La dicitura esatta può variare a seconda del produttore del dispositivo.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Qualcuno che ami vive da solo\ntenersi in contatto ogni giorno non è semplice',
-    'onboarding_desc_1': 'Lontano, e ti chiedi\nse oggi sta bene.\nAnbu lo trasmette per te.',
-    'onboarding_title_2': 'Una parola che arriva\nsenza essere pronunciata',
-    'onboarding_desc_2':
-        'La tua quotidianità è\nun\'informazione preziosa\nper chi pensa a te.',
-    'onboarding_title_3': 'Condivida il benessere\ncon i Suoi cari',
-    'onboarding_desc_3':
-        'Ogni segnale quotidiano\ndiventa serenità per entrambi.\nFatti vivo solo se conta davvero.',
-    'onboarding_title_4': 'Vicini nel cuore, ma\nnon in ogni dettaglio',
-    'onboarding_desc_4':
-        'Viene trasmesso un solo segnale:\n"Sto bene."',
+    'onboarding_safety_code_title': 'Il tuo codice di sicurezza viene generato automaticamente',
+    'onboarding_safety_code_desc':
+        'Condividi questo codice con il tuo guardiano per collegarvi —\nil tuo segnale di benessere verrà inviato automaticamente.',
+    'onboarding_emergency_title': 'Quando vuoi comunicare il tuo stato e la tua posizione attuali',
+    'onboarding_emergency_desc':
+        'Tocca questo pulsante e verrà inviato\nsubito a tutti i tuoi guardiani',
+    'onboarding_gs_switch_title': 'Prenditi cura anche del benessere della tua famiglia',
+    'onboarding_gs_switch_desc':
+        'Tocca [Gestisci anche il benessere dei familiari] nel menu\nper usare anche il ruolo di guardiano',
+    'onboarding_add_subject_title': 'Connettiti con una persona cara',
+    'onboarding_add_subject_desc':
+        'Inserisci il codice ricevuto e un soprannome\nper collegarvi subito',
+    'onboarding_gs_enable_title': 'Attiva il tuo codice di benessere',
+    'onboarding_gs_enable_desc':
+        'In Impostazioni, tocca [Ricevi anche la protezione]\nper inviare il tuo benessere anche ai tuoi guardiani',
     'onboarding_role_subject': 'Assistito',
     'onboarding_role_guardian': 'Guardiano',
     'onboarding_role_guardian_subject': 'Guardiano e protetto',

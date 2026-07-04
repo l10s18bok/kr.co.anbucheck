@@ -99,18 +99,21 @@ abstract class DeDe {
         'Wenn Ihr Telefon in den Energiesparmodus wechselt, können Wohlbefindens-Signale an Ihren Betreuer verspätet oder gar nicht ankommen.\n\nTippen Sie unten auf [Einstellungen öffnen] und stellen Sie "Akku" → "Uneingeschränkt" ein. So werden Wohlbefindens-Signale jeden Tag zuverlässig zur geplanten Zeit übermittelt.\n\n※ Die genaue Bezeichnung kann je nach Gerätehersteller variieren.',
 
     // ── Onboarding ──
-    'onboarding_title_1': 'Jemand, den du liebst, lebt allein\njeden Tag nachzufragen ist nicht leicht',
-    'onboarding_desc_1':
-        'Weit weg, und du fragst dich,\nob es heute gut geht.\nAnbu überbringt es für dich.',
-    'onboarding_title_2': 'Ein Zeichen, das ankommt,\nohne gesagt zu werden',
-    'onboarding_desc_2':
-        'Dein Alltag ist\nfür alle, die an dich denken,\neine wichtige Nachricht.',
-    'onboarding_title_3': 'Teilen Sie das Wohlbefinden\nmit Ihren Liebsten',
-    'onboarding_desc_3':
-        'Tägliche Zeichen werden\nzu Ruhe für beide Seiten.\nMeld dich nur, wenn es zählt.',
-    'onboarding_title_4': 'Nah am Herzen, aber\nnicht in jedem Detail',
-    'onboarding_desc_4':
-        'Es wird nur ein Signal übermittelt:\n„Mir geht es gut."',
+    'onboarding_safety_code_title': 'Dein Sicherheitscode wird automatisch erstellt',
+    'onboarding_safety_code_desc':
+        'Teile diesen Code mit deinem Betreuer, um euch zu verbinden —\ndein Wellness-Signal wird dann automatisch gesendet.',
+    'onboarding_emergency_title': 'Wenn du deinen Zustand und Standort mitteilen möchtest',
+    'onboarding_emergency_desc':
+        'Tippe auf diesen Button, und er erreicht\nsofort alle deine Betreuer',
+    'onboarding_gs_switch_title': 'Kümmere dich auch um das Wohl deiner Familie',
+    'onboarding_gs_switch_desc':
+        'Tippe im Menü auf [Auch Familienwohl verwalten],\num auch die Betreuer-Rolle zu nutzen',
+    'onboarding_add_subject_title': 'Verbinde dich mit einer geliebten Person',
+    'onboarding_add_subject_desc':
+        'Gib den erhaltenen Code und einen Spitznamen ein,\num sofort verbunden zu sein',
+    'onboarding_gs_enable_title': 'Aktiviere deinen eigenen Wellness-Code',
+    'onboarding_gs_enable_desc':
+        'Tippe in den Einstellungen auf [Auch Wellness-Schutz erhalten],\ndamit dein Wellness-Status auch an deine Betreuer geht',
     'onboarding_role_subject': 'Schutzperson',
     'onboarding_role_guardian': 'Betreuer',
     'onboarding_role_guardian_subject': 'Betreuer & Schützling',

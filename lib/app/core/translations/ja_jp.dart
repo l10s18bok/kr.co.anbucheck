@@ -88,14 +88,20 @@ abstract class JaJp {
         'スマートフォンが省電力モードに入ると、保護者への安否確認信号が遅れたり、届かなかったりすることがあります。\n\n下の[設定を開く]をタップした後、「バッテリー」→「制限なし」に設定してください。毎日決まった時刻に安否が安定して届きます。\n\n※ 端末メーカーによって表記が少し異なる場合があります。',
 
     // ── オンボーディング ──
-    'onboarding_title_1': '大切な人が、ひとりで暮らしている\n毎日連絡するのは、なかなか難しい',
-    'onboarding_desc_1': '遠くにいて、気になるけれど\n今日も元気だろうか。\nAnbuが代わりにお届けします。',
-    'onboarding_title_2': '声に出さなくても\n届く言葉があります',
-    'onboarding_desc_2': 'あなたの日々の暮らしは\nあなたを気にかける人にとって\n大切な情報です。',
-    'onboarding_title_3': '大切な人と\n安否を分かち合いましょう',
-    'onboarding_desc_3': '毎日の見守りが積もり\nお互いの安心になります。\n本当に必要なときだけ連絡を。',
-    'onboarding_title_4': '心はそばに、でも\n毎日すべてを知らなくていい',
-    'onboarding_desc_4': "お伝えするのは\n「元気です」という\n安否の信号だけです。",
+    'onboarding_safety_code_title': '安全コードは自動的に作られます',
+    'onboarding_safety_code_desc':
+        'このコードを保護者に伝えると連携され、\nあなたの安否が自動で送信されます。',
+    'onboarding_emergency_title': '今の状態と居場所を知らせたいときは',
+    'onboarding_emergency_desc': 'このボタンを押すと保護者全員に\nすぐに伝わります',
+    'onboarding_gs_switch_title': '家族の安否も一緒に見守りましょう',
+    'onboarding_gs_switch_desc':
+        'メニューの「家族の安否も管理する」を押すと\n保護者の役割も一緒に使えます',
+    'onboarding_add_subject_title': '大切な人とつながりましょう',
+    'onboarding_add_subject_desc':
+        '受け取ったコードとニックネームを入力すると\nすぐに連携が完了します',
+    'onboarding_gs_enable_title': '自分の安否コードを有効化',
+    'onboarding_gs_enable_desc':
+        '設定で「私も安否保護を受ける」を押すと\n自分の安否も保護者に届きます',
     'onboarding_role_subject': '見守り対象者',
     'onboarding_role_guardian': '見守り人',
     'onboarding_role_guardian_subject': '保護者兼対象者',
