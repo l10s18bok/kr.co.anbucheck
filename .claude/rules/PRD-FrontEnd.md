@@ -1184,8 +1184,8 @@ Authorization: Bearer <device_token> → 항상 유효
 - 보호자가 최초 대상자를 연결할 때 3개월 무료 체험 시작
 - 동일 device_id + 앱 재설치 → 기존 무료 체험 기간 유지 (device_id로 식별)
 - 다른 device_id → 새 무료 체험 허용 (기기 변경)
-- Android: `Settings.Secure.ANDROID_ID` (SSAID) 사용 — 앱 삭제 후에도 유지, 공장 초기화 시에만 변경
-- iOS: `identifierForVendor` + **Keychain 백업** 사용 — IDFV는 vendor 앱을 전부 삭제 후 재설치하면 변경되므로, 최초 발급값을 `flutter_secure_storage`로 Keychain에 저장해 재설치 후에도 동일 device_id를 복원. Apple 구독 시스템도 자체적으로 무료 체험 중복 관리
+- Android: `Settings.Secure.ANDROID_ID` (SSAID) 사용 — 앱 삭제 후에도 유지, 공장 초기화 시에만 변경. **`device_info_plus` 패키지로는 조회하지 않는다** — 이 패키지의 `AndroidDeviceInfo.id`는 SSAID가 아니라 `Build.ID`(펌웨어 빌드 식별자)이며, 같은 기종·같은 보안 패치 레벨의 기기는 전부 동일한 값을 반환한다. 이 오탐지로 실제로 서로 다른 물리 기기 두 대가 같은 계정으로 병합되는 사고가 발생했다(2026-07-04, `register_user`의 재설치 인식 분기가 device_token을 새 기기 것으로 덮어써 원래 소유자가 401로 잠김). 수정 후에는 `MainActivity`의 네이티브 MethodChannel(`anbucheck/device_id`)로 `Settings.Secure.ANDROID_ID`를 직접 조회한다(`TokenLocalDatasource._getHardwareDeviceId()`). 이 수정은 **신규 설치에만 적용**되며, 이미 로컬에 device_id가 캐시된 기존 사용자는 `getOrCreateDeviceId()`의 "있으면 그대로 반환" 로직 때문에 계속 기존(Build.ID 기반) 값을 쓴다 — 서버가 device_id로 계정을 식별하는 구조상, 임의로 재발급하면 서버가 신규 기기로 오인해 기존 계정(구독·연결)을 고아로 만들 수 있어 기존 설치 마이그레이션은 의도적으로 하지 않는다
+- iOS: `identifierForVendor` + **Keychain 백업** 사용 — IDFV는 vendor 앱을 전부 삭제 후 재설치하면 변경되므로, 최초 발급값을 `flutter_secure_storage`로 Keychain에 저장해 재설치 후에도 동일 device_id를 복원. Apple 구독 시스템도 자체적으로 무료 체험 중복 관리. IDFV는 Apple이 "동일 기기 + 동일 vendor"에만 발급하는 값이라 Android의 Build.ID 문제와 같은 종류의 충돌은 발생하지 않는다
 
 
 ### 3.5 앱 재설치 시 동작
@@ -1458,7 +1458,7 @@ ios/Runner/
 | `pedometer_2` | 걸음수 조회 | **primary 활동 지표**. iOS는 `queryPedometerData(from:to:)`로 kill 구간 포함 누적값 조회. Android는 Google Fit Local Recording API 사용(Samsung TYPE_STEP_COUNTER 0 발화 버그 회피, **minSdk 29 필요**). Android: ACTIVITY_RECOGNITION 권한, iOS: NSMotionUsageDescription |
 | `screen_state` (로컬 path) | Android `PowerManager.isInteractive()` 조회 | **secondary 활동 지표**. 프로젝트 내부 플러그인(`packages/screen_state/`). worker fire **순간** 화면 깨어있음 여부를 suspicious 판정 2순위로 활용 — 화면 깨어있는 상태에서 fire(true, 발화 시점 기기 사용 중)와 Doze maintenance window에서 화면 꺼진 채 자연 fire(false)를 구분. 단 이 값은 "그 순간" 1회 스냅샷이라 "하루 전체 사용 여부"와는 범위가 다름에 유의. 커스텀 MethodChannel은 `MainActivity`에 등록하면 WorkManager 백그라운드 FlutterEngine에서 동작하지 않으므로 `GeneratedPluginRegistrant`가 자동 등록하는 FlutterPlugin 형태의 pub 패키지로 분리 |
 | `shared_preferences` | 경량 로컬 저장소 | device_token, 대상자 별칭, 보류 heartbeat 1건 저장 |
-| `device_info_plus` | 기기 고유 ID + 기기 정보 | device_id (Android: SSAID, iOS: identifierForVendor), OS 타입/버전 |
+| `device_info_plus` | 기기 정보 (OS 타입/버전), iOS device_id | iOS는 `identifierForVendor` 그대로 사용. **Android device_id는 이 패키지를 쓰지 않는다** — `AndroidDeviceInfo.id`는 SSAID가 아니라 `Build.ID`(펌웨어 빌드 식별자)라 같은 기종·같은 빌드의 모든 기기가 동일한 값을 반환하는 결함이 있어(2026-07-04 발견, 두 물리 기기가 한 계정으로 병합되는 사고로 이어짐), `MainActivity`의 커스텀 MethodChannel(`anbucheck/device_id`)로 `Settings.Secure.ANDROID_ID`를 직접 조회하도록 전환. 조회 실패 시 fallback은 `Random.secure()` 기반(시각 기반 난수는 여러 기기를 동시에 설정하는 상황에서 같은 값이 나올 수 있어 금지) |
 | `connectivity_plus` | 네트워크 상태 | 오프라인 시 전송 보류 |
 | `battery_plus` | 배터리 상태 | 배터리 잔량·충전 여부 조회, 권한 불필요 |
 | `freezed_annotation` + `json_annotation` | 직렬화 | Freezed DTO + json_serializable |

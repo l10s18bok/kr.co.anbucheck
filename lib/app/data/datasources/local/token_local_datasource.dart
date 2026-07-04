@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,28 +52,47 @@ class TokenLocalDatasource {
   }
 
   /// 기기 고유 ID 조회
-  /// Android: SSAID (앱 재설치 후에도 유지, 공장 초기화 시 변경)
+  /// Android: SSAID(Settings.Secure.ANDROID_ID) 네이티브 채널로 직접 조회 — 앱 재설치 후에도
+  ///           유지, 공장 초기화 시에만 변경. device_info_plus의 AndroidDeviceInfo.id는
+  ///           Build.ID(펌웨어 빌드 식별자)라 같은 기종·같은 빌드의 모든 기기가 동일한 값을
+  ///           반환하므로 절대 사용 금지 — 서로 다른 두 기기가 같은 계정으로 합쳐지는
+  ///           계정 탈취급 버그로 이어진다.
   /// iOS: Keychain 우선 → identifierForVendor fallback
   ///       IDFV는 같은 vendor 앱을 모두 삭제 후 재설치하면 바뀌므로, 계정 복원을
   ///       위해 최초 발급값을 Keychain에 백업해두고 재설치 시 그대로 돌려준다.
+  static const _androidDeviceIdChannel = MethodChannel('anbucheck/device_id');
+
+  /// ⚠️ 반드시 포그라운드(MainActivity가 살아있는) 컨텍스트에서 호출해야 한다.
+  /// `anbucheck/device_id` 채널 핸들러는 `MainActivity`에만 등록되어 있어 WorkManager
+  /// 백그라운드 isolate에서 호출하면 예외로 실패 → fallback 랜덤 ID가 그대로 영구
+  /// 저장된다. 현재 이 함수는 `getOrCreateDeviceId()`를 통해 모드 선택·온보딩 등
+  /// 포그라운드 플로우에서만 호출되며, 이 불변조건이 깨지지 않도록 유지할 것.
   static Future<String> _getHardwareDeviceId() async {
-    final info = DeviceInfoPlugin();
     if (Platform.isAndroid) {
-      final android = await info.androidInfo;
-      return android.id;
+      try {
+        final ssaid = await _androidDeviceIdChannel.invokeMethod<String>('getAndroidId');
+        if (ssaid != null && ssaid.isNotEmpty) return ssaid;
+      } catch (_) {}
+      return _generateFallbackId();
     } else if (Platform.isIOS) {
       try {
         final keychainId = await _secureStorage.read(key: _iosKeychainDeviceIdKey);
         if (keychainId != null && keychainId.isNotEmpty) return keychainId;
       } catch (_) {}
+      final info = DeviceInfoPlugin();
       final ios = await info.iosInfo;
       return ios.identifierForVendor ?? _generateFallbackId();
     }
     return _generateFallbackId();
   }
 
+  /// SSAID/IDFV 조회 실패 시에만 쓰이는 fallback — 반드시 암호학적으로 안전한 난수를
+  /// 사용한다. DateTime 기반 난수는 짧은 시간 창(예: 여러 기기를 동시에 설정하는 상황)
+  /// 안에서 같은 값이 나올 수 있어, 지금 고치려는 device_id 충돌 버그를 fallback 안에
+  /// 그대로 재현하게 된다.
   static String _generateFallbackId() {
-    final bytes = List<int>.generate(16, (_) => DateTime.now().microsecondsSinceEpoch % 256);
+    final random = Random.secure();
+    final bytes = List<int>.generate(16, (_) => random.nextInt(256));
     bytes[6] = (bytes[6] & 0x0f) | 0x40;
     bytes[8] = (bytes[8] & 0x3f) | 0x80;
     final hex = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();

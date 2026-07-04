@@ -13,9 +13,23 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private val hibernationChannel = "anbucheck/hibernation"
+    private val deviceIdChannel = "anbucheck/device_id"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, deviceIdChannel)
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    // Settings.Secure.ANDROID_ID(SSAID) — 기기별 고유값, 공장 초기화 시에만 변경.
+                    // device_info_plus의 AndroidDeviceInfo.id는 Build.ID(펌웨어 빌드 식별자)라
+                    // 같은 기종·같은 빌드의 모든 기기가 동일한 값을 반환하므로 사용 금지.
+                    "getAndroidId" -> {
+                        val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+                        result.success(id)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, hibernationChannel)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
