@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- android:screenOrientation="portrait" 설정 시 AAPT가 자동으로
+         <uses-feature android:name="android.hardware.screen.portrait" required="true">를
+         암묵 추가해 세로 화면을 지원하지 않는 기기(차량 인포테인먼트, 일부 TV/태블릿)를
+         스토어에서 자동 제외시킨다. 이 앱은 UI 레이아웃 목적으로만 세로 고정할 뿐 기기
+         호환성 요구사항이 아니므로 명시적으로 required=false로 해제한다. -->
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false"/>
     <!-- 알림 권한 (Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- 걸음수 감지 (Android 10+) -->
