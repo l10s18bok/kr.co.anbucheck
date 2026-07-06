@@ -48,11 +48,14 @@ abstract class FrFr {
     'mode_select_subtitle':
         'Dites-nous si vous donnez de vos nouvelles ou si vous les recevez',
     'mode_subject_title': 'Je veux seulement donner de mes nouvelles',
+    'mode_subject_desc': 'Un écran très simple, réduit à l\'essentiel',
     'mode_subject_button': 'Donner de mes nouvelles →',
-    'mode_guardian_title': 'Je souhaite veiller\nsur un proche',
+    'mode_guardian_title': 'Veillez sur plusieurs personnes à la fois',
+    'mode_guardian_desc': 'Si besoin, vous pourrez aussi donner de vos nouvelles plus tard',
     'mode_guardian_button': 'Recevoir des nouvelles →',
-    'mode_recommend_badge': 'Recommandé',
-    'mode_select_notice': 'L\'interface et les notifications seront adaptées selon votre choix',
+    'mode_subject_badge': 'Sénior',
+    'mode_guardian_badge': 'Protecteur',
+    'mode_select_notice': 'L\'interface sera adaptée selon votre choix',
 
     // ── Autorisations ──
     'permission_title': 'Des autorisations sont\nnécessaires',

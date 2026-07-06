@@ -46,11 +46,14 @@ abstract class JaJp {
     'mode_select_title': 'どう始めますか',
     'mode_select_subtitle': '安否を伝える側か、受け取る側かを選んでください',
     'mode_subject_title': '自分の安否だけ伝えたい',
+    'mode_subject_desc': '必要な機能だけのとてもシンプルな画面です',
     'mode_subject_button': '安否を伝える →',
-    'mode_guardian_title': '大切な人の安全を見守りたい',
+    'mode_guardian_title': '複数の人の安否を見守れます',
+    'mode_guardian_desc': '必要になったら自分の安否も一緒に伝えられます',
     'mode_guardian_button': '安否を受け取る →',
-    'mode_recommend_badge': 'おすすめ',
-    'mode_select_notice': '選択により画面構成と通知設定が異なります',
+    'mode_subject_badge': 'シニア',
+    'mode_guardian_badge': '見守り人',
+    'mode_select_notice': '選択により画面構成が異なります',
 
     // ── 権限リクエスト ──
     'permission_title': 'アプリの利用に\n権限が必要です',

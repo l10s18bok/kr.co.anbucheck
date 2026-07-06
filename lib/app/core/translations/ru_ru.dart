@@ -47,11 +47,14 @@ abstract class RuRu {
     'mode_select_title': 'Как вы хотите начать?',
     'mode_select_subtitle': 'Скажите, вы подаёте весточку или получаете её',
     'mode_subject_title': 'Хочу только подать весточку о себе',
+    'mode_subject_desc': 'Очень простой экран — только самое необходимое',
     'mode_subject_button': 'Подать весточку →',
-    'mode_guardian_title': 'Хочу присматривать за\nблизким человеком',
+    'mode_guardian_title': 'Можно присматривать за несколькими людьми',
+    'mode_guardian_desc': 'При необходимости позже сможете сами подавать весточку',
     'mode_guardian_button': 'Получать весточки →',
-    'mode_recommend_badge': 'Рекомендуем',
-    'mode_select_notice': 'Интерфейс и уведомления будут зависеть от вашего выбора',
+    'mode_subject_badge': 'Пожилые',
+    'mode_guardian_badge': 'Опекун',
+    'mode_select_notice': 'Интерфейс будет зависеть от вашего выбора',
 
     // ── Разрешения ──
     'permission_title': 'Для работы приложения\nнеобходимы разрешения',

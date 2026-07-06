@@ -46,11 +46,14 @@ abstract class ArSa {
     'mode_select_title': 'كيف تريد أن تبدأ؟',
     'mode_select_subtitle': 'أخبرنا إن كنت سترسل الاطمئنان أم ستستقبله',
     'mode_subject_title': 'أريد فقط أن أطمئنهم عني',
+    'mode_subject_desc': 'شاشة بسيطة جداً تحتوي على الأساسيات فقط',
     'mode_subject_button': 'إرسال الاطمئنان →',
-    'mode_guardian_title': 'أريد الاطمئنان على\nشخص عزيز',
+    'mode_guardian_title': 'يمكنك الاطمئنان على عدة أشخاص',
+    'mode_guardian_desc': 'عند الحاجة يمكنك لاحقاً إرسال اطمئنانك أيضاً',
     'mode_guardian_button': 'استقبال الاطمئنان →',
-    'mode_recommend_badge': 'موصى به',
-    'mode_select_notice': 'ستختلف واجهة التطبيق والإشعارات بناءً على اختيارك',
+    'mode_subject_badge': 'كبار السن',
+    'mode_guardian_badge': 'حارس',
+    'mode_select_notice': 'ستختلف واجهة التطبيق بناءً على اختيارك',
 
     // ── الأذونات ──
     'permission_title': 'يحتاج التطبيق إلى\nأذونات للعمل',

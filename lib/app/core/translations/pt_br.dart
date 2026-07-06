@@ -46,11 +46,14 @@ abstract class PtBr {
     'mode_select_title': 'Como você quer começar?',
     'mode_select_subtitle': 'Diga se você vai dar notícias suas ou recebê-las',
     'mode_subject_title': 'Só quero dar notícias minhas',
+    'mode_subject_desc': 'Uma tela bem simples, só com o essencial',
     'mode_subject_button': 'Dar notícias →',
-    'mode_guardian_title': 'Quero cuidar de alguém\nque eu amo',
+    'mode_guardian_title': 'Cuide de várias pessoas ao mesmo tempo',
+    'mode_guardian_desc': 'Se precisar, depois você também pode dar notícias suas',
     'mode_guardian_button': 'Receber notícias →',
-    'mode_recommend_badge': 'Recomendado',
-    'mode_select_notice': 'O layout e as notificações serão diferentes de acordo com sua escolha',
+    'mode_subject_badge': 'Idoso',
+    'mode_guardian_badge': 'Guardião',
+    'mode_select_notice': 'O layout será diferente de acordo com sua escolha',
 
     // ── Permissões ──
     'permission_title': 'Permissões necessárias\npara usar o app',

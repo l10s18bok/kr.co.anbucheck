@@ -46,11 +46,14 @@ abstract class ThTh {
     'mode_select_title': 'อยากเริ่มแบบไหนดี',
     'mode_select_subtitle': 'บอกเราว่าคุณเป็นฝ่ายส่งหรือฝ่ายรับการบอกความสบายดี',
     'mode_subject_title': 'ฉันแค่อยากบอกว่าฉันสบายดี',
+    'mode_subject_desc': 'หน้าจอเรียบง่าย มีเฉพาะสิ่งที่จำเป็น',
     'mode_subject_button': 'ส่งความสบายดี →',
-    'mode_guardian_title': 'ฉันต้องการดูแล\nคนที่ห่วงใย',
+    'mode_guardian_title': 'ดูแลความเป็นอยู่ของหลายคนได้พร้อมกัน',
+    'mode_guardian_desc': 'หากต้องการ ภายหลังก็ส่งข่าวของตัวเองได้เช่นกัน',
     'mode_guardian_button': 'รับความสบายดี →',
-    'mode_recommend_badge': 'แนะนำ',
-    'mode_select_notice': 'หน้าจอและการแจ้งเตือนจะแตกต่างกันตามการเลือกของคุณ',
+    'mode_subject_badge': 'ผู้สูงอายุ',
+    'mode_guardian_badge': 'ผู้ดูแล',
+    'mode_select_notice': 'หน้าจอจะแตกต่างกันตามการเลือกของคุณ',
 
     // ── สิทธิ์ ──
     'permission_title': 'จำเป็นต้องอนุญาต\nเพื่อใช้งานแอป',

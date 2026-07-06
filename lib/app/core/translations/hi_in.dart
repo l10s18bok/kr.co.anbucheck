@@ -47,11 +47,14 @@ abstract class HiIn {
     'mode_select_title': 'आप कैसे शुरू करना चाहेंगे?',
     'mode_select_subtitle': 'हमें बताएँ कि आप अपनी ख़बर भेजेंगे या पाएँगे',
     'mode_subject_title': 'मुझे बस अपनी ख़बर पहुँचानी है',
+    'mode_subject_desc': 'बहुत ही सरल स्क्रीन, केवल ज़रूरी सुविधाएँ',
     'mode_subject_button': 'अपनी ख़बर भेजें →',
-    'mode_guardian_title': 'मैं अपने प्रिय व्यक्ति\nकी देखभाल करना चाहता/चाहती हूं',
+    'mode_guardian_title': 'कई लोगों की ख़ैरियत का ध्यान रख सकते हैं',
+    'mode_guardian_desc': 'ज़रूरत पड़ने पर बाद में अपनी ख़बर भी भेज सकते हैं',
     'mode_guardian_button': 'ख़बर पाएँ →',
-    'mode_recommend_badge': 'अनुशंसित',
-    'mode_select_notice': 'आपके चयन के अनुसार स्क्रीन लेआउट और सूचनाएं भिन्न होंगी',
+    'mode_subject_badge': 'बुज़ुर्ग',
+    'mode_guardian_badge': 'अभिभावक',
+    'mode_select_notice': 'आपके चयन के अनुसार स्क्रीन लेआउट भिन्न होगा',
 
     // ── अनुमतियां ──
     'permission_title': 'ऐप का उपयोग करने के लिए\nअनुमतियां आवश्यक हैं',

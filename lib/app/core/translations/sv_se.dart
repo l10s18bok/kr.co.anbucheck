@@ -46,11 +46,14 @@ abstract class SvSe {
     'mode_select_title': 'Hur vill du börja?',
     'mode_select_subtitle': 'Berätta om du hör av dig eller tar emot livstecken',
     'mode_subject_title': 'Jag vill bara höra av mig',
+    'mode_subject_desc': 'En mycket enkel skärm med bara det nödvändiga',
     'mode_subject_button': 'Hör av mig →',
-    'mode_guardian_title': 'Jag vill vaka over\nnagon jag bryr mig om',
+    'mode_guardian_title': 'Vaka över flera personer samtidigt',
+    'mode_guardian_desc': 'Vid behov kan du senare även höra av dig själv',
     'mode_guardian_button': 'Ta emot livstecken →',
-    'mode_recommend_badge': 'Rekommenderas',
-    'mode_select_notice': 'Skarmlayout och aviseringar anpassas efter ditt val',
+    'mode_subject_badge': 'Senior',
+    'mode_guardian_badge': 'Vårdare',
+    'mode_select_notice': 'Skärmlayouten anpassas efter ditt val',
 
     // ── Behorigheter ──
     'permission_title': 'Behorigheter kravs\nfor att anvanda appen',

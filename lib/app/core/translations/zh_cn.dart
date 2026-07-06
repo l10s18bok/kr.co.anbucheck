@@ -46,11 +46,14 @@ abstract class ZhCn {
     'mode_select_title': '想怎么开始呢',
     'mode_select_subtitle': '请告诉我们，您是传递安好的一方，还是接收的一方',
     'mode_subject_title': '我只想传递我的安好',
+    'mode_subject_desc': '界面非常简洁，只保留必要功能',
     'mode_subject_button': '传递安好 →',
-    'mode_guardian_title': '我想守护我牵挂之人的安全',
+    'mode_guardian_title': '可以管理多位亲友的安好',
+    'mode_guardian_desc': '之后如有需要，也可以传递自己的安好',
     'mode_guardian_button': '接收安好 →',
-    'mode_recommend_badge': '推荐',
-    'mode_select_notice': '界面布局和通知设置将根据您的选择有所不同',
+    'mode_subject_badge': '长辈',
+    'mode_guardian_badge': '守护者',
+    'mode_select_notice': '界面布局将根据您的选择有所不同',
 
     // ── 权限请求 ──
     'permission_title': '使用应用\n需要以下权限',

@@ -46,11 +46,14 @@ abstract class ZhTw {
     'mode_select_title': '想怎麼開始呢',
     'mode_select_subtitle': '請告訴我們，您是傳遞安好的一方，還是接收的一方',
     'mode_subject_title': '我只想傳遞我的安好',
+    'mode_subject_desc': '介面非常簡潔，只保留必要功能',
     'mode_subject_button': '傳遞安好 →',
-    'mode_guardian_title': '我想守護我牽掛之人的安全',
+    'mode_guardian_title': '可以管理多位親友的安好',
+    'mode_guardian_desc': '之後如有需要，也可以傳遞自己的安好',
     'mode_guardian_button': '接收安好 →',
-    'mode_recommend_badge': '推薦',
-    'mode_select_notice': '介面佈局和通知設定將根據您的選擇有所不同',
+    'mode_subject_badge': '長輩',
+    'mode_guardian_badge': '守護者',
+    'mode_select_notice': '介面佈局將根據您的選擇有所不同',
 
     // ── 權限請求 ──
     'permission_title': '使用應用程式\n需要以下權限',

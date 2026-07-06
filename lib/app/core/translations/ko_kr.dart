@@ -46,11 +46,14 @@ abstract class KoKr {
     'mode_select_title': '어떻게 시작할까요',
     'mode_select_subtitle': '안부를 전하는 쪽인지, 받는 쪽인지 알려주세요',
     'mode_subject_title': '내 안부만 전하고 싶어요',
+    'mode_subject_desc': '꼭 필요한 기능만 담은 아주 간단한 화면이에요',
     'mode_subject_button': '안부 전하기 →',
-    'mode_guardian_title': '관심있는 사람의 안전을 관리합니다',
+    'mode_guardian_title': '여러 사람의 안부를 관리할 수 있어요',
+    'mode_guardian_desc': '나중에 필요하면 내 안부도 함께 전할 수 있어요',
     'mode_guardian_button': '안부 받기 →',
-    'mode_recommend_badge': '추천',
-    'mode_select_notice': '위 선택에 따라 화면 구성과 알림 설정이 달라집니다',
+    'mode_subject_badge': '어르신',
+    'mode_guardian_badge': '보호자',
+    'mode_select_notice': '위 선택에 따라 화면 구성이 달라집니다',
 
     // ── 권한 요청 ──
     'permission_title': '앱 사용을 위해\n권한이 필요합니다',

@@ -47,11 +47,14 @@ abstract class ViVn {
     'mode_select_title': 'Bạn muốn bắt đầu thế nào?',
     'mode_select_subtitle': 'Cho chúng tôi biết bạn báo tin bình an hay nhận tin',
     'mode_subject_title': 'Tôi chỉ muốn báo tin bình an',
+    'mode_subject_desc': 'Màn hình rất đơn giản, chỉ gồm những gì cần thiết',
     'mode_subject_button': 'Báo tin bình an →',
-    'mode_guardian_title': 'Toi muon theo doi\nnguoi than yeu cua toi',
+    'mode_guardian_title': 'Có thể trông nom nhiều người cùng lúc',
+    'mode_guardian_desc': 'Khi cần, bạn cũng có thể báo tin bình an của mình sau',
     'mode_guardian_button': 'Nhận tin bình an →',
-    'mode_recommend_badge': 'Khuyên dùng',
-    'mode_select_notice': 'Giao dien va thong bao se khac nhau tuy theo lua chon cua ban',
+    'mode_subject_badge': 'Người cao tuổi',
+    'mode_guardian_badge': 'Người bảo vệ',
+    'mode_select_notice': 'Giao diện sẽ khác nhau tùy theo lựa chọn của bạn',
 
     // ── Quyen ──
     'permission_title': 'Can cap quyen\nde su dung ung dung',

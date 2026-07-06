@@ -46,11 +46,14 @@ abstract class EnUs {
     'mode_select_title': 'How would you like to start?',
     'mode_select_subtitle': 'Let us know whether you will share or receive check-ins',
     'mode_subject_title': 'I just want to share my check-in',
+    'mode_subject_desc': 'A very simple screen with only the essentials',
     'mode_subject_button': 'Share my check-in →',
-    'mode_guardian_title': 'I want to watch over\nsomeone I care about',
+    'mode_guardian_title': 'Watch over check-ins from several people',
+    'mode_guardian_desc': 'You can also share your own check-in later if needed',
     'mode_guardian_button': 'Receive check-ins →',
-    'mode_recommend_badge': 'Recommended',
-    'mode_select_notice': 'Screen layout and notifications will differ based on your choice',
+    'mode_subject_badge': 'Senior',
+    'mode_guardian_badge': 'Guardian',
+    'mode_select_notice': 'Screen layout will differ based on your choice',
 
     // ── Permission ──
     'permission_title': 'Permissions needed\nto use the app',

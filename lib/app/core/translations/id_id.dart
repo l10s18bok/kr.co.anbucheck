@@ -47,11 +47,14 @@ abstract class IdId {
     'mode_select_title': 'Bagaimana Anda ingin memulai?',
     'mode_select_subtitle': 'Beri tahu kami apakah Anda mengabarkan diri atau menerima kabar',
     'mode_subject_title': 'Saya hanya ingin mengabarkan diri saya',
+    'mode_subject_desc': 'Tampilan sangat sederhana, hanya yang penting saja',
     'mode_subject_button': 'Bagikan kabar →',
-    'mode_guardian_title': 'Saya ingin menjaga\norang yang saya sayangi',
+    'mode_guardian_title': 'Dapat memantau kabar beberapa orang sekaligus',
+    'mode_guardian_desc': 'Bila perlu, nanti Anda juga bisa mengabarkan diri sendiri',
     'mode_guardian_button': 'Terima kabar →',
-    'mode_recommend_badge': 'Rekomendasi',
-    'mode_select_notice': 'Tampilan layar dan notifikasi akan berbeda berdasarkan pilihan Anda',
+    'mode_subject_badge': 'Lansia',
+    'mode_guardian_badge': 'Penjaga',
+    'mode_select_notice': 'Tampilan layar akan berbeda berdasarkan pilihan Anda',
 
     // ── Izin ──
     'permission_title': 'Izin diperlukan\nuntuk menggunakan aplikasi',

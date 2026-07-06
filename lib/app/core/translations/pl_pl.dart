@@ -47,11 +47,14 @@ abstract class PlPl {
     'mode_select_title': 'Jak chcesz zacząć?',
     'mode_select_subtitle': 'Powiedz, czy dajesz znak życia, czy go odbierasz',
     'mode_subject_title': 'Chcę tylko dać znak życia',
+    'mode_subject_desc': 'Bardzo prosty ekran, tylko to, co niezbędne',
     'mode_subject_button': 'Daj znak życia →',
-    'mode_guardian_title': 'Chce czuwac nad bezpieczenstwem\nbliskiej osoby',
+    'mode_guardian_title': 'Możesz czuwać nad kilkoma osobami',
+    'mode_guardian_desc': 'W razie potrzeby później możesz też dawać znak życia',
     'mode_guardian_button': 'Odbieraj znaki →',
-    'mode_recommend_badge': 'Polecane',
-    'mode_select_notice': 'Uklad ekranu i powiadomienia beda sie roznic w zaleznosci od wyboru',
+    'mode_subject_badge': 'Senior',
+    'mode_guardian_badge': 'Opiekun',
+    'mode_select_notice': 'Układ ekranu będzie się różnić w zależności od wyboru',
 
     // ── Uprawnienia ──
     'permission_title': 'Do korzystania z aplikacji\nwymagane sa uprawnienia',

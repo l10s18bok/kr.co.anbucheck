@@ -47,11 +47,14 @@ abstract class EsEs {
     'mode_select_subtitle':
         'Dinos si vas a dar señales de vida o a recibirlas',
     'mode_subject_title': 'Solo quiero dar señales de vida',
+    'mode_subject_desc': 'Una pantalla muy sencilla, solo con lo esencial',
     'mode_subject_button': 'Dar señales de vida →',
-    'mode_guardian_title': 'Quiero cuidar\nde un ser querido',
+    'mode_guardian_title': 'Cuida de varias personas a la vez',
+    'mode_guardian_desc': 'Si lo necesitas, más adelante también podrás dar señales de vida',
     'mode_guardian_button': 'Recibir señales →',
-    'mode_recommend_badge': 'Recomendado',
-    'mode_select_notice': 'La interfaz y las notificaciones serán diferentes según su elección',
+    'mode_subject_badge': 'Sénior',
+    'mode_guardian_badge': 'Protector',
+    'mode_select_notice': 'La interfaz será diferente según su elección',
 
     // ── Permisos ──
     'permission_title': 'Se necesitan permisos\npara usar la aplicación',

@@ -46,11 +46,14 @@ abstract class NlNl {
     'mode_select_title': 'Hoe wil je beginnen?',
     'mode_select_subtitle': 'Vertel ons of je van je laat horen of het ontvangt',
     'mode_subject_title': 'Ik wil alleen van me laten horen',
+    'mode_subject_desc': 'Een heel eenvoudig scherm met alleen het nodige',
     'mode_subject_button': 'Van me laten horen →',
-    'mode_guardian_title': 'Ik wil over iemand\nwaken die ik liefheb',
+    'mode_guardian_title': 'Waak over meerdere mensen tegelijk',
+    'mode_guardian_desc': 'Indien nodig kun je later ook zelf van je laten horen',
     'mode_guardian_button': 'Berichten ontvangen →',
-    'mode_recommend_badge': 'Aanbevolen',
-    'mode_select_notice': 'De indeling en meldingen zullen verschillen op basis van uw keuze',
+    'mode_subject_badge': 'Senior',
+    'mode_guardian_badge': 'Beschermer',
+    'mode_select_notice': 'De indeling zal verschillen op basis van uw keuze',
 
     // ── Machtigingen ──
     'permission_title': 'Er zijn machtigingen nodig\nom de app te gebruiken',

@@ -47,11 +47,14 @@ abstract class TrTr {
     'mode_select_title': 'Nasıl başlamak istersiniz?',
     'mode_select_subtitle': 'İyi olduğunuzu siz mi bildiriyorsunuz yoksa siz mi alıyorsunuz, söyleyin',
     'mode_subject_title': 'Sadece iyi olduğumu bildirmek istiyorum',
+    'mode_subject_desc': 'Yalnızca gerekli özellikleri içeren çok sade bir ekran',
     'mode_subject_button': 'İyi olduğumu bildir →',
-    'mode_guardian_title': 'Sevdiğim birini\ngözetlemek istiyorum',
+    'mode_guardian_title': 'Birden fazla kişiyi gözetebilirsiniz',
+    'mode_guardian_desc': 'Gerekirse daha sonra kendi durumunuzu da bildirebilirsiniz',
     'mode_guardian_button': 'Haber al →',
-    'mode_recommend_badge': 'Önerilen',
-    'mode_select_notice': 'Ekran düzeni ve bildirimler seçiminize göre değişecektir',
+    'mode_subject_badge': 'Yaşlılar',
+    'mode_guardian_badge': 'Koruyucu',
+    'mode_select_notice': 'Ekran düzeni seçiminize göre değişecektir',
 
     // ── İzinler ──
     'permission_title': 'Uygulamanın çalışması için\nizinler gereklidir',

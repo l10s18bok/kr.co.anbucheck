@@ -36,7 +36,8 @@ abstract class ItIt {
 
     // ── Aggiornamento ──
     'update_required_title': 'Aggiornamento necessario',
-    'update_required_message': "Per continuare a usare l'app, aggiorni alla versione @version.",
+    'update_required_message':
+        "Per continuare a usare l'app, aggiorni alla versione @version.",
     'update_button': 'Aggiorna',
     'update_available_title': 'Aggiornamento disponibile',
     'update_available_message': 'La versione @version è disponibile.',
@@ -44,14 +45,18 @@ abstract class ItIt {
 
     // ── Selezione modalità ──
     'mode_select_title': 'Come vuoi iniziare?',
-    'mode_select_subtitle': 'Dicci se vuoi far sapere che stai bene o riceverne notizia',
+    'mode_select_subtitle':
+        'Dicci se vuoi far sapere che stai bene o riceverne notizia',
     'mode_subject_title': 'Voglio solo far sapere che sto bene',
+    'mode_subject_desc': 'Una schermata molto semplice, solo l\'essenziale',
     'mode_subject_button': 'Far sapere che sto bene →',
-    'mode_guardian_title': 'Desidero vegliare su\nuna persona cara',
+    'mode_guardian_title': 'Puoi vegliare su più persone',
+    'mode_guardian_desc':
+        'Se necessario, in seguito potrai inviare anche le tue notizie',
     'mode_guardian_button': 'Ricevere notizie →',
-    'mode_recommend_badge': 'Consigliato',
-    'mode_select_notice':
-        'La disposizione dello schermo e le notifiche varieranno in base alla Sua scelta',
+    'mode_subject_badge': 'Anziano',
+    'mode_guardian_badge': 'Guardiano',
+    'mode_select_notice': 'La schermata sarà diversa in base alla tua scelta',
 
     // ── Permessi ──
     'permission_title': "Per utilizzare l'app\nsono necessari dei permessi",
@@ -61,7 +66,8 @@ abstract class ItIt {
     'permission_notification_guardian_desc':
         'Necessario per ricevere le notifiche sullo stato di sicurezza dei Suoi assistiti',
     'permission_activity': 'Riconoscimento attività',
-    'permission_activity_desc': "Utilizzato per rilevare i passi e verificare l'attività",
+    'permission_activity_desc':
+        "Utilizzato per rilevare i passi e verificare l'attività",
     'permission_location': 'Posizione',
     'permission_location_desc':
         'Condivisa con i tutori solo durante una richiesta di aiuto urgente',
@@ -69,7 +75,8 @@ abstract class ItIt {
     'permission_tracking_desc': 'Usato per mostrare annunci personalizzati',
     'location_permission_warning':
         "La posizione non verrà inviata con la richiesta di emergenza. Tocca per consentire.",
-    'location_permission_settings_title': 'Autorizzazione alla posizione richiesta',
+    'location_permission_settings_title':
+        'Autorizzazione alla posizione richiesta',
     'location_permission_settings_body_ios':
         "Cerca e seleziona 'Anbu', poi in 'Posizione' scegli 'Mentre uso l'app'.",
     'location_permission_settings_body_android':
@@ -81,36 +88,44 @@ abstract class ItIt {
     'permission_notification_required_message':
         'Il permesso notifiche è necessario per il servizio di verifica del benessere.\nLo abiliti nelle Impostazioni.',
     'permission_go_to_settings': 'Vai alle Impostazioni',
-    'permission_activity_denied_title': 'Autorizzazione attività fisica richiesta',
+    'permission_activity_denied_title':
+        'Autorizzazione attività fisica richiesta',
     'permission_activity_denied_message':
         'Viene utilizzata per rilevare i passi e migliorare la precisione del controllo del benessere.\nAbilita l\'autorizzazione attività fisica nelle Impostazioni.',
     'permission_battery': 'Esclusione ottimizzazione batteria',
     'permission_battery_desc':
         'Esclude l\'app dall\'ottimizzazione della batteria affinché il controllo giornaliero del benessere non venga perso',
-    'permission_hibernation_title': 'Disattiva la rimozione automatica dei permessi',
+    'permission_hibernation_title':
+        'Disattiva la rimozione automatica dei permessi',
     'permission_hibernation_highlight': 'rimozione automatica dei permessi',
     'permission_hibernation_message':
         'Android rimuove automaticamente i permessi delle app non utilizzate da molto tempo. Anbu di solito funziona senza essere aperta, quindi questa funzione può far scomparire i permessi dopo un po\' e interrompere l\'invio del segnale di benessere.\n\nTocca [Apri impostazioni] qui sotto — verrà mostrata direttamente la schermata dell\'interruttore. Disattiva l\'interruttore.\n\n※ La dicitura esatta può variare a seconda del produttore del dispositivo.',
     'permission_hibernation_go_to_settings': 'Apri impostazioni',
-    'stability_battery_warning_short': 'È necessario disattivare la limitazione di utilizzo della batteria',
-    'stability_battery_dialog_title': 'Disattivare la limitazione di utilizzo della batteria',
+    'stability_battery_warning_short':
+        'È necessario disattivare la limitazione di utilizzo della batteria',
+    'stability_battery_dialog_title':
+        'Disattivare la limitazione di utilizzo della batteria',
     'stability_battery_dialog_message':
         'Quando il telefono entra in modalità di risparmio energetico, i segnali di benessere inviati al tuo tutore possono arrivare in ritardo o andare persi.\n\nDopo aver toccato [Apri impostazioni] qui sotto, imposta "Batteria" → "Senza restrizioni". In questo modo i segnali di benessere vengono inviati in modo affidabile all\'orario previsto ogni giorno.\n\n※ La dicitura esatta può variare a seconda del produttore del dispositivo.',
 
     // ── Onboarding ──
-    'onboarding_safety_code_title': 'Il tuo codice di sicurezza viene generato automaticamente',
+    'onboarding_safety_code_title':
+        'Il tuo codice di sicurezza viene generato automaticamente',
     'onboarding_safety_code_desc':
         'Condividi questo codice con il tuo guardiano per collegarvi —\nil tuo segnale di benessere verrà inviato automaticamente.',
-    'onboarding_emergency_title': 'Quando vuoi comunicare il tuo stato (Urgente) e la tua posizione attuali',
+    'onboarding_emergency_title':
+        'Quando vuoi comunicare il tuo stato (Urgente) e la tua posizione attuali',
     'onboarding_emergency_desc':
         'Tocca questo pulsante e verrà inviato\nsubito a tutti i tuoi guardiani',
-    'onboarding_gs_switch_title': 'Prenditi cura anche del benessere della tua famiglia',
+    'onboarding_gs_switch_title':
+        'Prenditi cura anche del benessere della tua famiglia',
     'onboarding_gs_switch_desc':
         'Tocca [Gestisci anche il benessere dei familiari] nel menu\nper usare anche il ruolo di guardiano',
     'onboarding_add_subject_title': 'Connettiti con una persona cara',
     'onboarding_add_subject_desc':
         'Inserisci il codice ricevuto e un soprannome\nper collegarvi subito',
-    'onboarding_notifications_title': 'Ecco come appaiono le notifiche di benessere',
+    'onboarding_notifications_title':
+        'Ecco come appaiono le notifiche di benessere',
     'onboarding_notifications_desc':
         "Di norma vedrai informazioni sull'attività come i passi. Se il segnale non arriva o non viene rilevata attività, riceverai una notifica come sopra",
     'onboarding_push_now': 'Ora',
@@ -147,13 +162,15 @@ abstract class ItIt {
     'subject_home_report_button': 'Segnala ora che sta bene',
     'subject_home_report_desc': 'Faccia sapere al Suo guardiano che sta bene',
     'subject_home_emergency_button': 'Ho bisogno di aiuto',
-    'subject_home_emergency_desc': "Invia un'allerta di emergenza ai tuoi tutori",
+    'subject_home_emergency_desc':
+        "Invia un'allerta di emergenza ai tuoi tutori",
     'subject_home_emergency_loading': "Invio dell'allerta di emergenza...",
     'subject_home_emergency_sent': "L'allerta di emergenza è stata inviata",
     'subject_home_emergency_failed': "Invio dell'allerta di emergenza fallito",
     'subject_home_manual_report_limit_reached':
         'Hai già inviato il rapporto di sicurezza di oggi. Riprova domani.',
-    'subject_home_manual_report_sent': 'Il tuo messaggio è stato inviato ai tuoi contatti.',
+    'subject_home_manual_report_sent':
+        'Il tuo messaggio è stato inviato ai tuoi contatti.',
     'safety_net_dialog_title': 'Verifica inviata',
     'safety_net_dialog_body':
         'La verifica di benessere di oggi è stata inviata al tuo familiare.',
@@ -162,7 +179,8 @@ abstract class ItIt {
     'subject_home_emergency_confirm_title': 'Richiesta di aiuto di emergenza',
     'subject_home_emergency_confirm_body':
         "Un'allerta di emergenza sarà inviata a tutti i tutori.\nAnche la tua posizione attuale sarà condivisa.\nVuoi davvero richiedere aiuto?",
-    'emergency_sent_with_location': 'Allerta di emergenza inviata (con posizione)',
+    'emergency_sent_with_location':
+        'Allerta di emergenza inviata (con posizione)',
     'emergency_sent_without_location': 'Allerta di emergenza inviata',
     'notifications_view_location': '🗺️ Visualizza posizione',
     'emergency_map_title': 'Posizione di emergenza',
@@ -174,7 +192,8 @@ abstract class ItIt {
     'emergency_location_permission_denied_snackbar':
         'Allerta di emergenza inviata senza autorizzazione alla posizione',
     'subject_home_emergency_confirm_send': 'Invia richiesta di emergenza',
-    'subject_home_share_text': "Collegati con me sull'app Anbu.\nCodice di collegamento: @code",
+    'subject_home_share_text':
+        "Collegati con me sull'app Anbu.\nCodice di collegamento: @code",
     'subject_home_share_subject': 'Codice di collegamento Anbu',
     'subject_home_code_copied': 'Codice copiato',
 
@@ -184,7 +203,8 @@ abstract class ItIt {
     'drawer_privacy_policy': 'Informativa sulla privacy',
     'drawer_terms': 'Termini di servizio',
     'drawer_withdraw': 'Elimina account',
-    'drawer_withdraw_message': 'Il Suo account e tutti i dati verranno eliminati.\nÈ sicuro/a?',
+    'drawer_withdraw_message':
+        'Il Suo account e tutti i dati verranno eliminati.\nÈ sicuro/a?',
 
     // ── Dashboard guardiano ──
     'guardian_status_normal': 'Sicuro',
@@ -196,10 +216,12 @@ abstract class ItIt {
     'guardian_subscription_expired_message':
         'Gli aggiornamenti quotidiani si sono fermati.\nAl prezzo di un pranzo, veglia sui tuoi cari tutto l\'anno.',
     'guardian_subscribe': 'Abbonati',
-    'guardian_payment_preparing': 'La funzione di pagamento sarà disponibile a breve.',
+    'guardian_payment_preparing':
+        'La funzione di pagamento sarà disponibile a breve.',
     'guardian_today_summary': 'Riepilogo benessere di oggi',
     'guardian_no_subjects': 'Nessun assistito connesso.',
-    'guardian_checking_subjects': 'Attualmente monitoriamo\n@count assistito/i.',
+    'guardian_checking_subjects':
+        'Attualmente monitoriamo\n@count assistito/i.',
     'guardian_subject_list': 'Lista assistiti',
     'guardian_call_now': 'Chiama ora',
     'guardian_confirm_safety': 'Conferma sicurezza',
@@ -214,31 +236,36 @@ abstract class ItIt {
     'guardian_activity_active': 'Attivo',
     'guardian_activity_needs_exercise': 'Necessita esercizio',
     'guardian_activity_collecting': 'Raccolta dati in corso',
-    'guardian_error_load_step_history': 'Impossibile caricare la cronologia dei passi',
+    'guardian_error_load_step_history':
+        'Impossibile caricare la cronologia dei passi',
     'guardian_chart_y_axis_steps': 'Passi',
     'guardian_chart_x_axis_last_7_days': 'Ultimi 7 giorni',
     'guardian_chart_x_axis_last_30_days': 'Ultimi 30 giorni',
     'guardian_chart_today': 'Oggi',
     'guardian_safety_needed': 'Verifica di sicurezza necessaria',
-    'guardian_error_load_subjects': 'Impossibile caricare la lista degli assistiti.',
+    'guardian_error_load_subjects':
+        'Impossibile caricare la lista degli assistiti.',
     'guardian_safety_confirmed': 'Sicurezza confermata.',
     'guardian_error_clear_alerts': 'Impossibile cancellare gli avvisi.',
 
     // ── Aggiunta assistito ──
     'add_subject_title': 'Collega assistito',
-    'add_subject_guide_title': "Inserisca il codice univoco dell'assistito e un soprannome.",
+    'add_subject_guide_title':
+        "Inserisca il codice univoco dell'assistito e un soprannome.",
     'add_subject_guide_subtitle':
         "Colleghi l'app dell'assistito per monitorare la sua salute e attività in tempo reale.",
     'add_subject_code_label': 'Codice univoco (7 cifre)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info': "Il codice univoco si trova nell'app dell'assistito.",
+    'add_subject_code_info':
+        "Il codice univoco si trova nell'app dell'assistito.",
     'add_subject_alias_label': "Soprannome dell'assistito",
     'add_subject_alias_hint': 'Es: Mamma, Papà',
     'add_subject_connect': 'Collega',
     'add_subject_error_login': 'Accesso necessario.',
     'add_subject_success': 'Assistito collegato con successo.',
     'add_subject_error_invalid_code': 'Codice non valido.',
-    'add_subject_error_self': 'Non puoi aggiungere il tuo codice come persona da assistere.',
+    'add_subject_error_self':
+        'Non puoi aggiungere il tuo codice come persona da assistere.',
     'add_subject_error_limit': 'Puoi registrare fino a @max persone.',
     'add_subject_error_already_connected': 'Già collegato.',
     'add_subject_error_failed': 'Collegamento non riuscito. Riprovi più tardi.',
@@ -270,7 +297,8 @@ abstract class ItIt {
     // ── Acquisti in-app (abbonamento annuale Tutore $9.99) ──
     'subscription_subscribe': 'Abbonati',
     'trial_ended_noti_title': 'Anbu',
-    'trial_ended_noti_body': 'La tua prova gratuita è terminata. Abbonati per continuare.',
+    'trial_ended_noti_body':
+        'La tua prova gratuita è terminata. Abbonati per continuare.',
     'subscription_restore': 'Ripristina acquisto',
     'subscription_store_unavailable': 'Store non disponibile',
     'subscription_product_unavailable': 'Abbonamento non disponibile',
@@ -289,7 +317,8 @@ abstract class ItIt {
     'gs_enable_dialog_title': 'Attiva protezione',
     'gs_enable_dialog_body':
         'Puoi ricevere protezione mantenendo le funzioni di guardiano.\nVerrà emesso un codice di sicurezza — condividilo con altri guardiani.',
-    'gs_enable_dialog_ios_warning_title': '⚠ Come viene inviato il tuo segnale di benessere',
+    'gs_enable_dialog_ios_warning_title':
+        '⚠ Come viene inviato il tuo segnale di benessere',
     'gs_enable_dialog_ios_warning_body':
         'Ogni giorno all\'orario programmato appare una "notifica push di benessere". Devi toccare la notifica o aprire l\'app tu stesso in quel momento affinché il tuo segnale di benessere venga inviato. Se non apri l\'app, i tuoi guardiani potrebbero ricevere un avviso di verifica mancata.',
     'gs_enable_dialog_ios_confirm': 'Ho capito, attiva',
@@ -328,9 +357,11 @@ abstract class ItIt {
     'notifications_delete_failed': 'Impossibile eliminare le notifiche.',
     'notifications_guide_title': 'Guida ai livelli di notifica',
     'notifications_level_health': 'Normale',
-    'notifications_level_health_desc': "Il benessere dell'assistito è stato confermato normalmente",
+    'notifications_level_health_desc':
+        "Il benessere dell'assistito è stato confermato normalmente",
     'notifications_level_caution': 'Attenzione',
-    'notifications_level_caution_desc': 'Nessun segnale di benessere né registro di attività',
+    'notifications_level_caution_desc':
+        'Nessun segnale di benessere né registro di attività',
     'notifications_level_warning': 'Avviso',
     'notifications_level_warning_desc':
         'Nessun segnale di benessere né registro di attività per più giorni',
@@ -349,7 +380,8 @@ abstract class ItIt {
         'Attiva o disattiva tutte le categorie di notifica contemporaneamente.',
     'notification_settings_level_section': 'Impostazioni per livello',
     'notification_settings_urgent': 'Avvisi urgenti',
-    'notification_settings_urgent_desc': 'Gli avvisi urgenti non possono essere disattivati',
+    'notification_settings_urgent_desc':
+        'Gli avvisi urgenti non possono essere disattivati',
     'notification_settings_warning': 'Avvisi di avviso',
     'notification_settings_warning_desc':
         'Avviso quando non ci sono controlli per 2 giorni consecutivi',
@@ -374,11 +406,13 @@ abstract class ItIt {
     'connection_connected_subjects': 'Assistiti connessi',
     'connection_reorder_hint': 'Tieni premuta una carta sotto per riordinare',
     'connection_empty': 'Nessuna persona protetta collegata',
-    'connection_unlink_warning': "Lo scollegamento eliminerà i dati dell'assistito.",
+    'connection_unlink_warning':
+        "Lo scollegamento eliminerà i dati dell'assistito.",
     'connection_unlink_warning_detail':
         "I dati precedenti non potranno essere recuperati dopo un nuovo collegamento. Dovrà reinserire il codice dell'assistito.",
     'connection_heartbeat_schedule': 'Ogni giorno alle @time',
-    'connection_heartbeat_report_time': "L'orario di segnalazione del benessere è ",
+    'connection_heartbeat_report_time':
+        "L'orario di segnalazione del benessere è ",
     'connection_subject_label': 'Assistito',
     'connection_change_only_in_app': "può essere modificato solo nell'app",
     'connection_edit_title': 'Modifica assistito',
@@ -398,7 +432,8 @@ abstract class ItIt {
     // ── Heartbeat ──
     'heartbeat_schedule_change': "Cambia l'orario di verifica",
     'heartbeat_schedule_title_ios': 'Orario notifica push di benessere',
-    'heartbeat_schedule_change_title_ios': 'Cambia orario notifica push di benessere',
+    'heartbeat_schedule_change_title_ios':
+        'Cambia orario notifica push di benessere',
     'heartbeat_schedule_hint_ios':
         'Una notifica push di benessere arriva ogni giorno a quest\'ora. Tocca la notifica o apri l\'app in quel momento per inviare il tuo segnale di benessere.',
     'heartbeat_daily_time': 'Ogni giorno alle @time',
@@ -409,7 +444,8 @@ abstract class ItIt {
 
     // ── Notifiche locali ──
     'local_notification_channel': 'Avvisi benessere',
-    'local_notification_channel_desc': 'Notifiche del servizio di verifica del benessere',
+    'local_notification_channel_desc':
+        'Notifiche del servizio di verifica del benessere',
 
     // ── Varie ──
     'back_press_exit': 'Prema di nuovo indietro per uscire.',
@@ -421,7 +457,8 @@ abstract class ItIt {
     'error_unauthorized': 'Autenticazione necessaria.',
 
     // ── Corpo delle notifiche ──
-    'noti_auto_report_body': 'La verifica di benessere è stata ricevuta con successo.',
+    'noti_auto_report_body':
+        'La verifica di benessere è stata ricevuta con successo.',
     'noti_manual_report_body':
         'La persona protetta ha inviato manualmente una verifica di benessere.',
     'noti_battery_low_body':
@@ -443,9 +480,11 @@ abstract class ItIt {
     'noti_steps_body': '@steps passi percorsi oggi.',
     'noti_emergency_body':
         "La persona assistita ha richiesto direttamente aiuto. Verificare immediatamente.",
-    'noti_resolved_body': 'Il controllo benessere dell\'assistito è tornato nella norma.',
+    'noti_resolved_body':
+        'Il controllo benessere dell\'assistito è tornato nella norma.',
     'noti_cleared_by_guardian_title': '✅ Verifica confermata',
-    'noti_cleared_by_guardian_body': 'Uno dei tutori ha confermato personalmente la sicurezza.',
+    'noti_cleared_by_guardian_body':
+        'Uno dei tutori ha confermato personalmente la sicurezza.',
 
     // ── Notifiche locali ──
     'local_alarm_title': '💗 Verifica di benessere necessaria',
@@ -453,7 +492,8 @@ abstract class ItIt {
     'wellbeing_check_title': '💛 Verifica di benessere',
     'wellbeing_check_body': 'Come sta? Per favore, tocca questa notifica.',
     'noti_channel_name': 'Avvisi Anbu',
-    'notification_send_failed_title': '📶 Controlla la tua connessione Internet',
+    'notification_send_failed_title':
+        '📶 Controlla la tua connessione Internet',
     'notification_send_failed_body':
         'Tocca questo messaggio per reinviare automaticamente.',
   };
