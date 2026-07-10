@@ -35,6 +35,8 @@ migrate_working_dir/
 /android/build/
 /android/app/build/
 /android/.gradle/
+/packages/screen_state/android/.gradle/
+/packages/screen_state/android/build/
 
 # Symbolication related
 app.*.symbols
