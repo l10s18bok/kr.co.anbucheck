@@ -485,6 +485,45 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
     return const Color(0xFF43A047);
   }
 
+  /// 30일 전체 차트 다이얼로그를 여는 달력 아이콘 버튼. 정상/경고 카드 공통 사용.
+  Widget _buildFullChartButton() {
+    if (widget.onOpenFullChart == null) return const SizedBox.shrink();
+    return InkWell(
+      borderRadius: BorderRadius.circular(8.r),
+      onTap: widget.onOpenFullChart,
+      child: Padding(
+        padding: EdgeInsets.all(4.w),
+        child: SizedBox(
+          width: 30.w,
+          height: 30.w,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Icon(
+                Icons.calendar_month_rounded,
+                size: 30.w,
+                color: AppColors.textSecondary,
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 5.h),
+                color: Colors.white,
+                child: Text(
+                  '30',
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textSecondary,
+                    height: 1,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -563,59 +602,26 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                     )
                   else
                     const Spacer(),
-                  if (widget.onOpenFullChart != null)
-                    InkWell(
-                      borderRadius: BorderRadius.circular(8.r),
-                      onTap: widget.onOpenFullChart,
-                      child: Padding(
-                        padding: EdgeInsets.all(4.w),
-                        child: SizedBox(
-                          width: 30.w,
-                          height: 30.w,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Icon(
-                                Icons.calendar_month_rounded,
-                                size: 30.w,
-                                color: AppColors.textSecondary,
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(top: 5.h),
-                                color: Colors.white,
-                                child: Text(
-                                  '30',
-                                  style: TextStyle(
-                                    fontSize: 10.sp,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.textSecondary,
-                                    height: 1,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                  _buildFullChartButton(),
                 ],
               ),
               Expanded(child: _StepsBarChart(steps: widget.steps, isShowing30Days: false)),
             ],
 
-            // 경고: 활동 라벨 (왼쪽 정렬, 닉네임-버튼 수직 중앙)
+            // 경고: 활동 라벨 (왼쪽 정렬, 닉네임-버튼 수직 중앙) + 달력 토글 (정상 카드와 동일 위치)
             if (widget.showActionButtons && widget.activityLabel != null) ...[
               const Spacer(),
               Row(
                 children: [
                   Icon(Icons.info_outline_rounded, size: 18.w, color: widget.statusColor),
                   SizedBox(width: 6.w),
-                  Flexible(
+                  Expanded(
                     child: Text(
                       widget.activityLabel!,
                       style: AppTextTheme.bodyLarge(color: widget.statusColor, fw: FontWeight.w700),
                     ),
                   ),
+                  _buildFullChartButton(),
                 ],
               ),
               const Spacer(),
