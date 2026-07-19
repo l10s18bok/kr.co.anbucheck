@@ -389,9 +389,9 @@ abstract class SvSe {
     'nav_settings': 'Installningar',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Andra kontrolltid',
-    'heartbeat_schedule_title_ios': 'Tid för hälso-pushavisering',
-    'heartbeat_schedule_change_title_ios': 'Ändra tid för hälso-pushavisering',
+    'heartbeat_schedule_change': 'Ändra avstämningstid',
+    'heartbeat_schedule_title_ios': 'Avstämningstid',
+    'heartbeat_schedule_change_title_ios': 'Ändra avstämningstid',
     'heartbeat_schedule_hint_ios':
         'En hälso-pushavisering kommer varje dag vid denna tid. Tryck på aviseringen eller öppna appen vid den tidpunkten för att skicka din hälsosignal.',
     'heartbeat_daily_time': 'Dagligen kl. @time',

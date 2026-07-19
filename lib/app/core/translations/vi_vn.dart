@@ -391,9 +391,9 @@ abstract class ViVn {
     'nav_settings': 'Cai dat',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Doi thoi gian kiem tra',
-    'heartbeat_schedule_title_ios': 'Thời gian thông báo đẩy an toàn',
-    'heartbeat_schedule_change_title_ios': 'Đổi thời gian thông báo đẩy an toàn',
+    'heartbeat_schedule_change': 'Đổi giờ báo bình an',
+    'heartbeat_schedule_title_ios': 'Giờ báo bình an',
+    'heartbeat_schedule_change_title_ios': 'Đổi giờ báo bình an',
     'heartbeat_schedule_hint_ios':
         'Thông báo đẩy an toàn sẽ đến vào thời điểm này mỗi ngày. Chạm vào thông báo hoặc mở ứng dụng quanh thời điểm đó để gửi tín hiệu an toàn.',
     'heartbeat_daily_time': 'Hang ngay luc @time',

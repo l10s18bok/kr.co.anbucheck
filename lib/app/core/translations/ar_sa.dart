@@ -380,9 +380,9 @@ abstract class ArSa {
     'nav_settings': 'الإعدادات',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'تغيير وقت الاطمئنان',
-    'heartbeat_schedule_title_ios': 'وقت إشعار دفع الاطمئنان',
-    'heartbeat_schedule_change_title_ios': 'تغيير وقت إشعار دفع الاطمئنان',
+    'heartbeat_schedule_change': 'تغيير موعد الاطمئنان',
+    'heartbeat_schedule_title_ios': 'موعد الاطمئنان',
+    'heartbeat_schedule_change_title_ios': 'تغيير موعد الاطمئنان',
     'heartbeat_schedule_hint_ios':
         'يصل إشعار دفع الاطمئنان في هذا الوقت يوميًا. انقر على الإشعار أو افتح التطبيق في ذلك الوقت لإرسال إشارة الاطمئنان.',
     'heartbeat_daily_time': 'يومياً في @time',

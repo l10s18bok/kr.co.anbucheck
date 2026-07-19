@@ -388,9 +388,9 @@ abstract class EnUs {
     'nav_settings': 'Settings',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Change Check Time',
-    'heartbeat_schedule_title_ios': 'Wellness Push Time',
-    'heartbeat_schedule_change_title_ios': 'Change Wellness Push Time',
+    'heartbeat_schedule_change': 'Change check-in time',
+    'heartbeat_schedule_title_ios': 'Check-in time',
+    'heartbeat_schedule_change_title_ios': 'Change check-in time',
     'heartbeat_schedule_hint_ios':
         'A wellness push notification arrives at this time every day. Tap the notification or open the app around then to send your wellness signal.',
     'heartbeat_daily_time': 'Daily at @time',

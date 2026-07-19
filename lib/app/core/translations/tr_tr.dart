@@ -390,9 +390,9 @@ abstract class TrTr {
     'nav_settings': 'Ayarlar',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Kontrol Saatini Değiştir',
-    'heartbeat_schedule_title_ios': 'İyilik Push Bildirim Saati',
-    'heartbeat_schedule_change_title_ios': 'İyilik Push Bildirim Saatini Değiştir',
+    'heartbeat_schedule_change': 'Bildirim saatini değiştir',
+    'heartbeat_schedule_title_ios': 'Bildirim saati',
+    'heartbeat_schedule_change_title_ios': 'Bildirim saatini değiştir',
     'heartbeat_schedule_hint_ios':
         'Her gün bu saatte iyilik push bildirimi gelir. Bildirime dokunun veya o sırada uygulamayı açın, böylece iyilik sinyaliniz gönderilir.',
     'heartbeat_daily_time': 'Her gün @time',

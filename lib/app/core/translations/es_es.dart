@@ -397,9 +397,9 @@ abstract class EsEs {
     'nav_settings': 'Ajustes',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Cambiar hora de verificación',
-    'heartbeat_schedule_title_ios': 'Hora de notificación push de bienestar',
-    'heartbeat_schedule_change_title_ios': 'Cambiar hora de notificación push de bienestar',
+    'heartbeat_schedule_change': 'Cambiar hora de comprobación',
+    'heartbeat_schedule_title_ios': 'Hora de comprobación',
+    'heartbeat_schedule_change_title_ios': 'Cambiar hora de comprobación',
     'heartbeat_schedule_hint_ios':
         'Una notificación push de bienestar llega cada día a esta hora. Toca la notificación o abre la aplicación en ese momento para enviar tu señal de bienestar.',
     'heartbeat_daily_time': 'Cada día a las @time',

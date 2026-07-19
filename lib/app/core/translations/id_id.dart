@@ -397,9 +397,9 @@ abstract class IdId {
     'nav_settings': 'Pengaturan',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Ubah Waktu Pemeriksaan',
-    'heartbeat_schedule_title_ios': 'Waktu Notifikasi Push Kesehatan',
-    'heartbeat_schedule_change_title_ios': 'Ubah Waktu Notifikasi Push Kesehatan',
+    'heartbeat_schedule_change': 'Ubah jadwal kabar',
+    'heartbeat_schedule_title_ios': 'Jadwal kabar',
+    'heartbeat_schedule_change_title_ios': 'Ubah jadwal kabar',
     'heartbeat_schedule_hint_ios':
         'Notifikasi push kesehatan datang setiap hari pada waktu ini. Ketuk notifikasi atau buka aplikasi di sekitar waktu itu untuk mengirim sinyal kesehatan Anda.',
     'heartbeat_daily_time': 'Setiap hari pukul @time',

@@ -385,9 +385,9 @@ abstract class ThTh {
     'nav_settings': 'ตั้งค่า',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'เปลี่ยนเวลาตรวจสอบ',
-    'heartbeat_schedule_title_ios': 'เวลาแจ้งเตือนพุชสุขภาพ',
-    'heartbeat_schedule_change_title_ios': 'เปลี่ยนเวลาแจ้งเตือนพุชสุขภาพ',
+    'heartbeat_schedule_change': 'เปลี่ยนเวลารายงาน',
+    'heartbeat_schedule_title_ios': 'เวลารายงาน',
+    'heartbeat_schedule_change_title_ios': 'เปลี่ยนเวลารายงาน',
     'heartbeat_schedule_hint_ios':
         'การแจ้งเตือนพุชสุขภาพจะมาถึงทุกวันในเวลานี้ แตะที่การแจ้งเตือนหรือเปิดแอปในช่วงเวลานั้นเพื่อส่งสัญญาณสุขภาพของคุณ',
     'heartbeat_daily_time': 'ทุกวันเวลา @time',

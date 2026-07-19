@@ -370,9 +370,9 @@ abstract class KoKr {
     'nav_settings': '설정',
 
     // ── Heartbeat 관련 ──
-    'heartbeat_schedule_change': '안부 확인 시각 변경',
-    'heartbeat_schedule_title_ios': '안부 푸시 알림 시각',
-    'heartbeat_schedule_change_title_ios': '안부 푸시 알림 시각 변경',
+    'heartbeat_schedule_change': '안부 시간 변경',
+    'heartbeat_schedule_title_ios': '안부 시간',
+    'heartbeat_schedule_change_title_ios': '안부 시간 변경',
     'heartbeat_schedule_hint_ios': '매일 이 시각에 안부 푸시 알림이 도착합니다. 알림을 탭하거나 그 전후로 앱을 열면 안부가 전송됩니다.',
     'heartbeat_daily_time': '매일 @time',
     'heartbeat_scheduled_today': '매일 @time에 보호자에게 안부가 전달됩니다.',

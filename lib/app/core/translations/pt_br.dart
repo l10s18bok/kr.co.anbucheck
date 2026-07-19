@@ -396,9 +396,9 @@ abstract class PtBr {
     'nav_settings': 'Configurações',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Alterar horário de verificação',
-    'heartbeat_schedule_title_ios': 'Horário da notificação push de bem-estar',
-    'heartbeat_schedule_change_title_ios': 'Alterar horário da notificação push de bem-estar',
+    'heartbeat_schedule_change': 'Alterar horário de confirmação',
+    'heartbeat_schedule_title_ios': 'Horário de confirmação',
+    'heartbeat_schedule_change_title_ios': 'Alterar horário de confirmação',
     'heartbeat_schedule_hint_ios':
         'Uma notificação push de bem-estar chega todos os dias neste horário. Toque na notificação ou abra o aplicativo nesse momento para enviar seu sinal de bem-estar.',
     'heartbeat_daily_time': 'Diariamente às @time',

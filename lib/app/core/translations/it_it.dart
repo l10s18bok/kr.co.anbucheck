@@ -430,10 +430,9 @@ abstract class ItIt {
     'nav_settings': 'Impostazioni',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': "Cambia l'orario di verifica",
-    'heartbeat_schedule_title_ios': 'Orario notifica push di benessere',
-    'heartbeat_schedule_change_title_ios':
-        'Cambia orario notifica push di benessere',
+    'heartbeat_schedule_change': 'Modifica orario di controllo',
+    'heartbeat_schedule_title_ios': 'Orario di controllo',
+    'heartbeat_schedule_change_title_ios': 'Modifica orario di controllo',
     'heartbeat_schedule_hint_ios':
         'Una notifica push di benessere arriva ogni giorno a quest\'ora. Tocca la notifica o apri l\'app in quel momento per inviare il tuo segnale di benessere.',
     'heartbeat_daily_time': 'Ogni giorno alle @time',

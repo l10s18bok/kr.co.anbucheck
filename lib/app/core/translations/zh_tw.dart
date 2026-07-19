@@ -361,9 +361,9 @@ abstract class ZhTw {
     'nav_settings': '設定',
 
     // ── Heartbeat 相關 ──
-    'heartbeat_schedule_change': '更改問安時間',
-    'heartbeat_schedule_title_ios': '安否推播通知時間',
-    'heartbeat_schedule_change_title_ios': '更改安否推播通知時間',
+    'heartbeat_schedule_change': '變更平安確認時間',
+    'heartbeat_schedule_title_ios': '平安確認時間',
+    'heartbeat_schedule_change_title_ios': '變更平安確認時間',
     'heartbeat_schedule_hint_ios': '每天在此時間會收到安否推播通知。點按通知或在前後開啟應用程式即可傳送安否信號。',
     'heartbeat_daily_time': '每天 @time',
     'heartbeat_scheduled_today': '每天 @time 將向守護者傳送問安。',

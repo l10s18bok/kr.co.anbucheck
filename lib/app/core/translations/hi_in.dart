@@ -389,9 +389,9 @@ abstract class HiIn {
     'nav_settings': 'सेटिंग्स',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'जांच समय बदलें',
-    'heartbeat_schedule_title_ios': 'वेलनेस पुश सूचना समय',
-    'heartbeat_schedule_change_title_ios': 'वेलनेस पुश सूचना समय बदलें',
+    'heartbeat_schedule_change': 'हालचाल का समय बदलें',
+    'heartbeat_schedule_title_ios': 'हालचाल का समय',
+    'heartbeat_schedule_change_title_ios': 'हालचाल का समय बदलें',
     'heartbeat_schedule_hint_ios':
         'हर दिन इस समय एक वेलनेस पुश सूचना आती है। अपना वेलनेस संकेत भेजने के लिए सूचना पर टैप करें या उस समय के आसपास ऐप खोलें।',
     'heartbeat_daily_time': 'रोज @time पर',

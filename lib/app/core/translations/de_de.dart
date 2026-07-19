@@ -432,9 +432,9 @@ abstract class DeDe {
     'nav_settings': 'Einstellungen',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Prüfzeit ändern',
-    'heartbeat_schedule_title_ios': 'Wellness-Push-Zeit',
-    'heartbeat_schedule_change_title_ios': 'Wellness-Push-Zeit ändern',
+    'heartbeat_schedule_change': 'Check-in-Zeit ändern',
+    'heartbeat_schedule_title_ios': 'Check-in-Zeit',
+    'heartbeat_schedule_change_title_ios': 'Check-in-Zeit ändern',
     'heartbeat_schedule_hint_ios':
         'Eine Wellness-Push-Benachrichtigung trifft täglich zu dieser Zeit ein. Tippen Sie auf die Benachrichtigung oder öffnen Sie die App um diese Zeit, um Ihr Wellness-Signal zu senden.',
     'heartbeat_daily_time': 'Täglich um @time',

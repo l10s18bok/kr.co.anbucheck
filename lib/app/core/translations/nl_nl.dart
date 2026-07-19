@@ -395,9 +395,9 @@ abstract class NlNl {
     'nav_settings': 'Instellingen',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Controletijd wijzigen',
-    'heartbeat_schedule_title_ios': 'Tijd welzijns-pushmelding',
-    'heartbeat_schedule_change_title_ios': 'Tijd welzijns-pushmelding wijzigen',
+    'heartbeat_schedule_change': 'Check-intijd wijzigen',
+    'heartbeat_schedule_title_ios': 'Check-intijd',
+    'heartbeat_schedule_change_title_ios': 'Check-intijd wijzigen',
     'heartbeat_schedule_hint_ios':
         'Een welzijns-pushmelding komt elke dag op deze tijd binnen. Tik op de melding of open de app rond dat tijdstip om uw welzijnssignaal te verzenden.',
     'heartbeat_daily_time': 'Dagelijks om @time',

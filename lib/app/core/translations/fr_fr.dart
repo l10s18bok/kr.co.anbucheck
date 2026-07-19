@@ -400,9 +400,9 @@ abstract class FrFr {
     'nav_settings': 'Paramètres',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Modifier l\'heure de vérification',
-    'heartbeat_schedule_title_ios': 'Heure de notification push de bien-être',
-    'heartbeat_schedule_change_title_ios': 'Modifier l\'heure de notification push de bien-être',
+    'heartbeat_schedule_change': 'Modifier l\'heure de confirmation',
+    'heartbeat_schedule_title_ios': 'Heure de confirmation',
+    'heartbeat_schedule_change_title_ios': 'Modifier l\'heure de confirmation',
     'heartbeat_schedule_hint_ios':
         'Une notification push de bien-être arrive chaque jour à cette heure. Appuyez sur la notification ou ouvrez l\'application à ce moment-là pour envoyer votre signal de bien-être.',
     'heartbeat_daily_time': 'Tous les jours à @time',

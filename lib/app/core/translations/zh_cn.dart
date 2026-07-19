@@ -361,9 +361,9 @@ abstract class ZhCn {
     'nav_settings': '设置',
 
     // ── Heartbeat 相关 ──
-    'heartbeat_schedule_change': '更改问安时间',
-    'heartbeat_schedule_title_ios': '安否推送通知时间',
-    'heartbeat_schedule_change_title_ios': '更改安否推送通知时间',
+    'heartbeat_schedule_change': '更改平安确认时间',
+    'heartbeat_schedule_title_ios': '平安确认时间',
+    'heartbeat_schedule_change_title_ios': '更改平安确认时间',
     'heartbeat_schedule_hint_ios': '每天在此时间会收到安否推送通知。点按通知或在前后打开应用即可发送安否信号。',
     'heartbeat_daily_time': '每天 @time',
     'heartbeat_scheduled_today': '每天 @time 将向守护者发送问安。',

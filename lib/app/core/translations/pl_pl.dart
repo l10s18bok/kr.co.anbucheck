@@ -395,9 +395,9 @@ abstract class PlPl {
     'nav_settings': 'Ustawienia',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Zmien czas sprawdzenia',
-    'heartbeat_schedule_title_ios': 'Czas powiadomienia push o pomyślności',
-    'heartbeat_schedule_change_title_ios': 'Zmień czas powiadomienia push o pomyślności',
+    'heartbeat_schedule_change': 'Zmień godzinę potwierdzenia',
+    'heartbeat_schedule_title_ios': 'Godzina potwierdzenia',
+    'heartbeat_schedule_change_title_ios': 'Zmień godzinę potwierdzenia',
     'heartbeat_schedule_hint_ios':
         'Powiadomienie push o pomyślności przychodzi codziennie o tej godzinie. Dotknij powiadomienia lub otwórz aplikację o tej porze, aby wysłać sygnał pomyślności.',
     'heartbeat_daily_time': 'Codziennie o @time',

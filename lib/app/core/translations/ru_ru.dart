@@ -397,8 +397,8 @@ abstract class RuRu {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Изменить время проверки',
-    'heartbeat_schedule_title_ios': 'Время push-уведомления о благополучии',
-    'heartbeat_schedule_change_title_ios': 'Изменить время push-уведомления о благополучии',
+    'heartbeat_schedule_title_ios': 'Время проверки',
+    'heartbeat_schedule_change_title_ios': 'Изменить время проверки',
     'heartbeat_schedule_hint_ios':
         'Push-уведомление о благополучии приходит каждый день в это время. Нажмите на уведомление или откройте приложение в это время, чтобы отправить сигнал благополучия.',
     'heartbeat_daily_time': 'Ежедневно в @time',
