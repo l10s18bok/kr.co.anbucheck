@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/subject_order_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/local/subject_phone_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
 
@@ -11,6 +12,7 @@ import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.
 class GuardianSubjectService extends GetxService {
   final _tokenDs = TokenLocalDatasource();
   final _nicknameDs = NicknameLocalDatasource();
+  final _phoneDs = SubjectPhoneLocalDatasource();
   final _orderDs = SubjectOrderLocalDatasource();
   final _subjectDs = SubjectRemoteDatasource();
 
@@ -41,6 +43,7 @@ class GuardianSubjectService extends GetxService {
     try {
       final data = await _subjectDs.getSubjects(deviceToken);
       final nicknames = await _nicknameDs.getAll();
+      final phones = await _phoneDs.getAll();
       final savedOrder = await _orderDs.getOrder();
 
       final loaded = (data['subjects'] as List<dynamic>? ?? [])
@@ -56,6 +59,7 @@ class GuardianSubjectService extends GetxService {
           userId: s['user_id'] as int,
           inviteCode: inviteCode,
           alias: nicknames[inviteCode] ?? inviteCode,
+          phone: phones[inviteCode],
           lastSeen: s['last_seen'] as String?,
           status: s['status'] as String? ?? 'normal',
           alertDaysInactive:
@@ -118,6 +122,30 @@ class GuardianSubjectService extends GetxService {
     final idx = subjects.indexWhere((s) => s.inviteCode == inviteCode);
     if (idx == -1) return;
     subjects[idx] = subjects[idx].copyWith(alias: alias);
+  }
+
+  /// 특정 대상자 연락처 로컬 업데이트 (null 허용 — 연락처 삭제).
+  /// copyWith는 `phone ?? this.phone` 패턴이라 null로 명시 초기화가 불가능해
+  /// 직접 재구성한다.
+  void updatePhone(String inviteCode, String? phone) {
+    final idx = subjects.indexWhere((s) => s.inviteCode == inviteCode);
+    if (idx == -1) return;
+    final s = subjects[idx];
+    subjects[idx] = SubjectItem(
+      guardianId: s.guardianId,
+      userId: s.userId,
+      inviteCode: s.inviteCode,
+      alias: s.alias,
+      phone: phone,
+      lastSeen: s.lastSeen,
+      status: s.status,
+      alertDaysInactive: s.alertDaysInactive,
+      deviceId: s.deviceId,
+      heartbeatHour: s.heartbeatHour,
+      heartbeatMinute: s.heartbeatMinute,
+      batteryLevel: s.batteryLevel,
+      weeklySteps: s.weeklySteps,
+    );
   }
 
   /// 보호자가 드래그 앤 드롭으로 지정한 순서를 적용 + 로컬 저장
@@ -184,6 +212,9 @@ class SubjectItem {
   final int userId;
   final String inviteCode;
   final String alias;
+  /// 보호자가 직접 입력한 연락처 (로컬 전용, 선택 입력).
+  /// null/빈 문자열이면 전화 버튼 탭 시 시스템 연락처 선택 화면으로 폴백.
+  final String? phone;
   final String? lastSeen;
   final String status;
   final int alertDaysInactive;
@@ -200,6 +231,7 @@ class SubjectItem {
     required this.userId,
     required this.inviteCode,
     required this.alias,
+    this.phone,
     this.lastSeen,
     required this.status,
     this.alertDaysInactive = 0,
@@ -214,6 +246,7 @@ class SubjectItem {
 
   SubjectItem copyWith({
     String? alias,
+    String? phone,
     String? status,
     int? heartbeatHour,
     int? heartbeatMinute,
@@ -224,6 +257,7 @@ class SubjectItem {
       userId: userId,
       inviteCode: inviteCode,
       alias: alias ?? this.alias,
+      phone: phone ?? this.phone,
       lastSeen: lastSeen,
       status: status ?? this.status,
       alertDaysInactive: alertDaysInactive,

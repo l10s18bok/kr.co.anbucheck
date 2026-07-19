@@ -4,6 +4,7 @@ import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
+import 'package:anbucheck/app/data/datasources/local/subject_phone_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
@@ -20,6 +21,7 @@ class GuardianConnectionManagementController extends BaseController {
   final _svc = Get.find<GuardianSubjectService>();
   final _tokenDs = TokenLocalDatasource();
   final _nicknameDs = NicknameLocalDatasource();
+  final _phoneDs = SubjectPhoneLocalDatasource();
   final _subjectDs = SubjectRemoteDatasource();
 
   @override
@@ -39,6 +41,7 @@ class GuardianConnectionManagementController extends BaseController {
       _subjects.value = _svc.subjects.map((s) => ConnectedSubject(
             guardianId: s.guardianId,
             alias: s.alias,
+            phone: s.phone,
             code: s.inviteCode,
             deviceId: s.deviceId,
             heartbeatHour: s.heartbeatHour,
@@ -56,15 +59,27 @@ class GuardianConnectionManagementController extends BaseController {
         ?.then((_) => _loadSubjects(force: true));
   }
 
-  Future<void> saveAlias(int index, String newAlias) async {
+  /// 별칭 + 연락처를 함께 저장 — 연락처는 선택 입력이라 비우면 삭제 처리
+  Future<void> saveSubjectEdits(int index, String newAlias, String newPhone) async {
     final subject = _subjects[index];
-    final trimmed = newAlias.trim();
-    if (trimmed.isEmpty) return;
-    await _nicknameDs.save(subject.code, trimmed);
-    _svc.updateAlias(subject.code, trimmed);
+    final trimmedAlias = newAlias.trim();
+    if (trimmedAlias.isEmpty) return;
+    await _nicknameDs.save(subject.code, trimmedAlias);
+    _svc.updateAlias(subject.code, trimmedAlias);
+
+    final trimmedPhone = newPhone.trim();
+    if (trimmedPhone.isEmpty) {
+      await _phoneDs.remove(subject.code);
+    } else {
+      await _phoneDs.save(subject.code, trimmedPhone);
+    }
+    final savedPhone = trimmedPhone.isEmpty ? null : trimmedPhone;
+    _svc.updatePhone(subject.code, savedPhone);
+
     _subjects[index] = ConnectedSubject(
       guardianId: subject.guardianId,
-      alias: trimmed,
+      alias: trimmedAlias,
+      phone: savedPhone,
       code: subject.code,
       deviceId: subject.deviceId,
       heartbeatHour: subject.heartbeatHour,
@@ -96,6 +111,7 @@ class GuardianConnectionManagementController extends BaseController {
     try {
       await _subjectDs.unlinkSubject(deviceToken, subject.guardianId);
       await _nicknameDs.remove(subject.code);
+      await _phoneDs.remove(subject.code);
       _svc.removeByGuardianId(subject.guardianId);
       _subjects.removeAt(index);
       AppSnackbar.show('common_complete'.tr, 'connection_unlink_success'.tr);
@@ -164,6 +180,7 @@ class _ConfirmUnlinkDialog extends StatelessWidget {
 class ConnectedSubject {
   final int guardianId;
   final String alias;
+  final String? phone;
   final String code;
   final String? deviceId;
   final int heartbeatHour;
@@ -172,6 +189,7 @@ class ConnectedSubject {
   const ConnectedSubject({
     required this.guardianId,
     required this.alias,
+    this.phone,
     required this.code,
     this.deviceId,
     this.heartbeatHour = 18,

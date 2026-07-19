@@ -302,6 +302,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                               showChart: isNormal,
                               showActionButtons: !isNormal,
                               isHighlighted: isHighlighted,
+                              phone: subject.phone,
                               onCall: () => controller.onCallTapped(subject.inviteCode),
                               onConfirmSafety: () =>
                                   controller.confirmSafety(subject.inviteCode, subject.alias),
@@ -410,6 +411,10 @@ class _SubjectCard extends StatefulWidget {
   final VoidCallback? onConfirmSafety;
   final int? batteryLevel;
 
+  /// 보호자가 대상자 추가 시 직접 입력한 연락처 (선택). 없으면 전화 버튼 탭 시
+  /// 시스템 연락처 선택 화면으로 폴백.
+  final String? phone;
+
   /// 차트에 표시할 걸음수 배열 (카드는 항상 7일). null=등록 전, 0=heartbeat 없음, >0=활동량.
   final List<int?> steps;
 
@@ -435,6 +440,7 @@ class _SubjectCard extends StatefulWidget {
     this.onCall,
     this.onConfirmSafety,
     this.batteryLevel,
+    this.phone,
     this.steps = const [],
     this.onOpenFullChart,
   });
@@ -642,7 +648,12 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                   GestureDetector(
                     onTap: () {
                       widget.onCall?.call();
-                      PhoneUtils.pickContactAndCall();
+                      final phone = widget.phone?.trim();
+                      if (phone != null && phone.isNotEmpty) {
+                        PhoneUtils.callDirectly(phone);
+                      } else {
+                        PhoneUtils.pickContactAndCall();
+                      }
                     },
                     child: Container(
                       height: 40.h,

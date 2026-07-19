@@ -16,150 +16,275 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.surface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.onSurface, size: 20.w),
-          onPressed: () => Get.back(),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: AppColors.surface,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: AppColors.onSurface,
+              size: 20.w,
+            ),
+            onPressed: () => Get.back(),
+          ),
+          title: Text(
+            'add_subject_title'.tr,
+            style: AppTextTheme.headlineSmall(),
+          ),
         ),
-        title: Text('add_subject_title'.tr, style: AppTextTheme.headlineSmall()),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: AppSpacing.sp6),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.horizontalMargin,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: AppSpacing.sp6),
 
-            // 안내 문구
-            Text('add_subject_guide_title'.tr, style: AppTextTheme.headlineLarge()),
-            SizedBox(height: AppSpacing.sm),
-            Text(
-              'add_subject_guide_subtitle'.tr,
-              style: AppTextTheme.bodyMedium(color: AppColors.textTertiary),
-            ),
-            SizedBox(height: AppSpacing.sp8),
+              // 안내 문구
+              Text(
+                'add_subject_guide_title'.tr,
+                style: AppTextTheme.headlineLarge(),
+              ),
+              SizedBox(height: AppSpacing.sm),
+              Text(
+                'add_subject_guide_subtitle'.tr,
+                style: AppTextTheme.bodyMedium(color: AppColors.textTertiary),
+              ),
+              SizedBox(height: AppSpacing.sp6),
 
-            // 고유 코드 입력
-            Text(
-              'add_subject_code_label'.tr,
-              style: AppTextTheme.labelMedium(color: AppColors.onSurface, fw: FontWeight.w600),
-            ),
-            SizedBox(height: AppSpacing.sm),
-            TextField(
-              controller: controller.codeController,
-              onChanged: controller.onCodeChanged,
-              style: AppTextTheme.bodyLarge(),
-              keyboardType: TextInputType.visiblePassword,
-              textCapitalization: TextCapitalization.characters,
-              autocorrect: false,
-              enableSuggestions: false,
-              autofillHints: const [],
-              inputFormatters: [
-                // invite_code는 ASCII 영숫자 + 하이픈만 — 비-ASCII(자국어 IME 조합 등)
-                // 입력 자체를 차단. (visiblePassword로 대부분 라틴 키보드가 강제되지만
-                // iOS/붙여넣기 대비 방어)
-                FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9-]')),
-                TextInputFormatter.withFunction(
-                  (old, next) => next.copyWith(text: next.text.toUpperCase()),
-                ),
-              ],
-              decoration: InputDecoration(
-                hintText: '123-4567',
-                hintStyle: AppTextTheme.bodyLarge(color: AppColors.textTertiary),
-                filled: true,
-                fillColor: AppColors.surfaceContainerLowest,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: Color(0xFF4355B9), width: 2),
+              // 고유 코드 입력
+              Text(
+                'add_subject_code_label'.tr,
+                style: AppTextTheme.labelMedium(
+                  color: AppColors.onSurface,
+                  fw: FontWeight.w600,
                 ),
               ),
-            ),
-            SizedBox(height: AppSpacing.sm),
-
-            // 코드 안내
-            Row(
-              children: [
-                Icon(Icons.info_outline_rounded, size: 14.w, color: AppColors.textTertiary),
-                SizedBox(width: 4.w),
-                Expanded(
-                  child: Text('add_subject_code_info'.tr, style: AppTextTheme.bodySmall()),
-                ),
-              ],
-            ),
-            SizedBox(height: AppSpacing.sp6),
-
-            // 대상자 별칭
-            Text(
-              'add_subject_alias_label'.tr,
-              style: AppTextTheme.labelMedium(color: AppColors.onSurface, fw: FontWeight.w600),
-            ),
-            SizedBox(height: AppSpacing.sm),
-            TextField(
-              controller: controller.aliasController,
-              onChanged: controller.onAliasChanged,
-              style: AppTextTheme.bodyLarge(),
-              decoration: InputDecoration(
-                hintText: 'add_subject_alias_hint'.tr,
-                hintStyle: AppTextTheme.bodyLarge(color: AppColors.textTertiary),
-                filled: true,
-                fillColor: AppColors.surfaceContainerLowest,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: Color(0xFF4355B9), width: 2),
-                ),
-              ),
-            ),
-            SizedBox(height: AppSpacing.sp8),
-
-            // 연결하기 버튼
-            SizedBox(
-              width: double.infinity,
-              height: 56.h,
-              child: Obx(
-                () => ElevatedButton(
-                  onPressed: controller.isFormValid ? controller.connectSubject : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4355B9),
-                    disabledBackgroundColor: const Color(0xFF4355B9).withValues(alpha: 0.3),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-                    elevation: 0,
+              SizedBox(height: AppSpacing.sm),
+              TextField(
+                controller: controller.codeController,
+                onChanged: controller.onCodeChanged,
+                style: AppTextTheme.bodyLarge(),
+                keyboardType: TextInputType.visiblePassword,
+                textCapitalization: TextCapitalization.characters,
+                autocorrect: false,
+                enableSuggestions: false,
+                autofillHints: const [],
+                inputFormatters: [
+                  // invite_code는 ASCII 영숫자 + 하이픈만 — 비-ASCII(자국어 IME 조합 등)
+                  // 입력 자체를 차단. (visiblePassword로 대부분 라틴 키보드가 강제되지만
+                  // iOS/붙여넣기 대비 방어)
+                  FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9-]')),
+                  TextInputFormatter.withFunction(
+                    (old, next) => next.copyWith(text: next.text.toUpperCase()),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.link_rounded, size: 20.w),
-                      SizedBox(width: 8.w),
-                      Flexible(child: Text('add_subject_connect'.tr, style: AppTextTheme.labelLarge(), overflow: TextOverflow.ellipsis)),
-                    ],
+                ],
+                decoration: InputDecoration(
+                  hintText: '123-4567',
+                  hintStyle: AppTextTheme.bodyLarge(
+                    color: AppColors.textTertiary,
+                  ),
+                  filled: true,
+                  fillColor: AppColors.surfaceContainerLowest,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(
+                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(
+                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF4355B9),
+                      width: 2,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: AppSpacing.sm),
+
+              // 코드 안내
+              Row(
+                children: [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    size: 14.w,
+                    color: AppColors.textTertiary,
+                  ),
+                  SizedBox(width: 4.w),
+                  Expanded(
+                    child: Text(
+                      'add_subject_code_info'.tr,
+                      style: AppTextTheme.bodySmall(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppSpacing.sp6),
+
+              // 대상자 별칭
+              Text(
+                'add_subject_alias_label'.tr,
+                style: AppTextTheme.labelMedium(
+                  color: AppColors.onSurface,
+                  fw: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: AppSpacing.sm),
+              TextField(
+                controller: controller.aliasController,
+                onChanged: controller.onAliasChanged,
+                style: AppTextTheme.bodyLarge(),
+                decoration: InputDecoration(
+                  hintText: 'add_subject_alias_hint'.tr,
+                  hintStyle: AppTextTheme.bodyLarge(
+                    color: AppColors.textTertiary,
+                  ),
+                  filled: true,
+                  fillColor: AppColors.surfaceContainerLowest,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(
+                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(
+                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF4355B9),
+                      width: 2,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: AppSpacing.sp6),
+
+              // 대상자 연락처 (선택)
+              Text(
+                'add_subject_phone_label'.tr,
+                style: AppTextTheme.labelMedium(
+                  color: AppColors.onSurface,
+                  fw: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: AppSpacing.sm),
+              TextField(
+                controller: controller.phoneController,
+                style: AppTextTheme.bodyLarge(),
+                keyboardType: TextInputType.phone,
+                autofillHints: const [],
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9+\-\s()]')),
+                ],
+                decoration: InputDecoration(
+                  hintText: 'add_subject_phone_hint'.tr,
+                  hintStyle: AppTextTheme.bodyLarge(
+                    color: AppColors.textTertiary,
+                  ),
+                  filled: true,
+                  fillColor: AppColors.surfaceContainerLowest,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(
+                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(
+                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF4355B9),
+                      width: 2,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: AppSpacing.sm),
+
+              // 연락처 안내 — 필수 입력 사항 아님
+              Row(
+                children: [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    size: 14.w,
+                    color: AppColors.textTertiary,
+                  ),
+                  SizedBox(width: 4.w),
+                  Expanded(
+                    child: Text(
+                      'add_subject_phone_info'.tr,
+                      style: AppTextTheme.bodySmall(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppSpacing.sp6),
+
+              // 연결하기 버튼
+              SizedBox(
+                width: double.infinity,
+                height: 56.h,
+                child: Obx(
+                  () => ElevatedButton(
+                    onPressed: controller.isFormValid
+                        ? controller.connectSubject
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4355B9),
+                      disabledBackgroundColor: const Color(
+                        0xFF4355B9,
+                      ).withValues(alpha: 0.3),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.link_rounded, size: 20.w),
+                        SizedBox(width: 8.w),
+                        Flexible(
+                          child: Text(
+                            'add_subject_connect'.tr,
+                            style: AppTextTheme.labelLarge(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+        bottomNavigationBar: const GuardianBottomNav(currentIndex: 1),
       ),
-      bottomNavigationBar: const GuardianBottomNav(currentIndex: 1),
     );
   }
 }

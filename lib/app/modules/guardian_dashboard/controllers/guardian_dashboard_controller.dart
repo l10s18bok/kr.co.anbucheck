@@ -329,6 +329,7 @@ class GuardianDashboardController extends BaseController
           userId: s.userId,
           inviteCode: s.inviteCode,
           alias: s.alias,
+          phone: s.phone,
           alertLevel: locked ? 'normal' : s.status,
           lastCheck: _formatLastSeen(s.lastSeen),
           daysInactive: locked ? 0 : s.alertDaysInactive,
@@ -590,6 +591,8 @@ class SubjectStatus {
   final int userId;
   final String inviteCode;
   final String alias;
+  /// 보호자가 직접 입력한 연락처 (로컬 전용, 선택 입력). 구독 만료 마스킹 대상 아님.
+  final String? phone;
   final String alertLevel; // normal, caution, warning, urgent
   final String lastCheck;
   final int daysInactive;
@@ -603,6 +606,7 @@ class SubjectStatus {
     required this.userId,
     required this.inviteCode,
     required this.alias,
+    this.phone,
     required this.alertLevel,
     required this.lastCheck,
     this.daysInactive = 0,
