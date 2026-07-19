@@ -6,7 +6,6 @@ import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
-import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 대상자 추가 컨트롤러
 /// PRD 7.7: 고유 코드 입력 → 서버 연결 → 별칭 저장(로컬)
@@ -78,7 +77,13 @@ class GuardianAddSubjectController extends BaseController {
       }
 
       AppSnackbar.show('common_complete'.tr, 'add_subject_success'.tr);
-      Get.offNamed(AppRoutes.guardianConnectionManagement);
+      // 뒤로 pop(result: true)만 한다 — Get.offNamed로 연결관리 라우트를 새로
+      // push하면, 이미 연결관리 화면에서 "+"로 진입한 경우 기존에 살아있던
+      // 연결관리 페이지(및 그 listScrollController) 위에 동일 컨트롤러를 공유하는
+      // 페이지 인스턴스가 하나 더 쌓여 전환 애니메이션 중 같은 ScrollController에
+      // ScrollPosition이 2개 붙는 크래시가 발생한다. 호출부(Dashboard/연결관리)가
+      // 각자 .then()으로 목록을 재로드하므로 단순 pop으로 충분하다.
+      Get.back(result: true);
     } catch (e) {
       final msg = e.toString().contains('404')
           ? 'add_subject_error_invalid_code'.tr

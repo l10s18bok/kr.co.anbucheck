@@ -114,32 +114,11 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
                             ],
                           ),
                         )
-                      : Scrollbar(
-                          controller: controller.listScrollController,
-                          thumbVisibility: true,
-                          child: ReorderableListView.builder(
-                            scrollController: controller.listScrollController,
-                            padding: EdgeInsets.all(AppSpacing.md),
-                            itemCount: controller.subjects.length,
-                            buildDefaultDragHandles: false,
-                            onReorder: controller.reorderSubjects,
-                            proxyDecorator: _buildDragProxy,
-                            autoScrollerVelocityScalar: 4.0,
-                            itemBuilder: (_, index) {
-                              final subject = controller.subjects[index];
-                              return _SubjectListTile(
-                                key: ValueKey(subject.code),
-                                index: index,
-                                alias: subject.alias,
-                                code: subject.code,
-                                heartbeatHour: subject.heartbeatHour,
-                                heartbeatMinute: subject.heartbeatMinute,
-                                hasDevice: subject.deviceId != null,
-                                onSaveAlias: (newAlias) => controller.saveAlias(index, newAlias),
-                                onDelete: () => controller.deleteSubject(index),
-                              );
-                            },
-                          ),
+                      : _SubjectReorderableList(
+                          subjects: controller.subjects,
+                          onReorder: controller.reorderSubjects,
+                          onSaveAlias: controller.saveAlias,
+                          onDelete: controller.deleteSubject,
                         ),
                 ),
               ),
@@ -162,6 +141,45 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
     ),
     );
   }
+}
+
+/// 대상자 리스트 스크롤 영역 — ScrollController를 State에 직접 소유한다.
+/// (GetX 컨트롤러에 두면 컨트롤러 생명주기가 위젯과 1:1이 아니라서, 라우트
+/// 전환 애니메이션 도중 같은 컨트롤러를 공유하는 위젯 인스턴스가 동시에 존재하는
+/// 순간 하나의 ScrollController에 ScrollPosition이 2개 붙어 Scrollbar
+/// thumbVisibility 어서션이 깨지는 크래시가 있었다. State 소유로 바꾸면 위젯
+/// 인스턴스마다 자기 ScrollController를 가지므로 이 충돌이 구조적으로 불가능해진다.)
+class _SubjectReorderableList extends StatefulWidget {
+  final List<ConnectedSubject> subjects;
+  final void Function(int oldIndex, int newIndex) onReorder;
+  final Future<void> Function(int index, String newAlias) onSaveAlias;
+  final void Function(int index) onDelete;
+
+  const _SubjectReorderableList({
+    required this.subjects,
+    required this.onReorder,
+    required this.onSaveAlias,
+    required this.onDelete,
+  });
+
+  @override
+  State<_SubjectReorderableList> createState() => _SubjectReorderableListState();
+}
+
+class _SubjectReorderableListState extends State<_SubjectReorderableList> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   /// long-press drag 시작 시 카드를 살짝 들어올린 듯한 효과
   /// (스케일 + soft shadow 가 점진적으로 적용)
@@ -183,6 +201,37 @@ class GuardianConnectionManagementPage extends GetWidget<GuardianConnectionManag
           ),
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+      controller: _scrollController,
+      thumbVisibility: true,
+      child: ReorderableListView.builder(
+        scrollController: _scrollController,
+        padding: EdgeInsets.all(AppSpacing.md),
+        itemCount: widget.subjects.length,
+        buildDefaultDragHandles: false,
+        onReorder: widget.onReorder,
+        proxyDecorator: _buildDragProxy,
+        autoScrollerVelocityScalar: 4.0,
+        itemBuilder: (_, index) {
+          final subject = widget.subjects[index];
+          return _SubjectListTile(
+            key: ValueKey(subject.code),
+            index: index,
+            alias: subject.alias,
+            code: subject.code,
+            heartbeatHour: subject.heartbeatHour,
+            heartbeatMinute: subject.heartbeatMinute,
+            hasDevice: subject.deviceId != null,
+            onSaveAlias: (newAlias) => widget.onSaveAlias(index, newAlias),
+            onDelete: () => widget.onDelete(index),
+          );
+        },
+      ),
     );
   }
 }
