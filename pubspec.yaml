@@ -2,7 +2,7 @@ name: anbucheck
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.2.2+33
+version: 1.2.2+34
 
 environment:
   sdk: ^3.11.3
@@ -44,7 +44,7 @@ dependencies:
   geolocator: ^13.0.0
   google_maps_flutter: ^2.9.0
   fl_chart: ^0.69.0
-  in_app_purchase: ^3.2.3
+  in_app_purchase: ^3.3.0
 
 dev_dependencies:
   flutter_test:
