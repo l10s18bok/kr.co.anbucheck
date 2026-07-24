@@ -12,6 +12,7 @@ import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
+import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/services/stability_service.dart';
 import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
@@ -134,6 +135,12 @@ abstract class SafetyHomeBaseController extends BaseController
     _autoRequestSensorPermissionIOSIfNeeded();
     Get.find<StabilityService>().refresh();
     loadStatus().then((_) => onAfterLoad());
+    // 잔존 subject_safety_net 알림 정리 (Android 전용, iOS no-op) — WorkManager
+    // 백그라운드 실행에서 이 정리가 실패했을 가능성에 대비한 포그라운드 안전망.
+    // `lastHeartbeatDate == today` 게이트 없이 무조건 시도한다: 예약시각 이전이면
+    // 남은 알림은 반드시 어제 이전 것(오늘 미수신 체크는 아직 발생 안 함)이라 안전하고,
+    // 예약시각 이후라면 이 진입 자체가 자동 재전송을 트리거하므로(2차 안전망) 역시 안전.
+    LocalAlarmService.cancelSubjectSafetyNet();
   }
 
   @override
@@ -143,6 +150,7 @@ abstract class SafetyHomeBaseController extends BaseController
     refreshLocationPermissionStatus();
     Get.find<StabilityService>().refresh();
     loadScheduleFromLocal().then((_) => onResumedRoleSpecific());
+    LocalAlarmService.cancelSubjectSafetyNet();
   }
 
   /// 배터리 사용 제한 해제 경고 위젯 탭 시 호출 — 설명 다이얼로그 표시 후

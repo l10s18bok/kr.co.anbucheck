@@ -154,6 +154,12 @@ class GuardianDashboardController extends BaseController
   Future<void> _sendAndConsumeSafetyNetDialog() async {
     await _reloadHeartbeatState();
     await _checkAndSendHeartbeat();
+    // 잔존 subject_safety_net 알림 정리 (Android 전용, iOS no-op) — WorkManager
+    // 백그라운드 실행에서 이 정리가 실패했을 가능성에 대비한 포그라운드 안전망.
+    // `_checkAndSendHeartbeat` 성공 여부와 무관하게 독립적으로 시도한다: 예약시각
+    // 이전이면 남은 알림은 반드시 어제 이전 것이라 안전하고, 예약시각 이후라면
+    // 방금 `_checkAndSendHeartbeat`가 자동 재전송을 트리거했으므로 역시 안전.
+    LocalAlarmService.cancelSubjectSafetyNet();
     await FcmService.consumeSafetyNetDialogIfPending(delivered: isReportedToday);
   }
 
