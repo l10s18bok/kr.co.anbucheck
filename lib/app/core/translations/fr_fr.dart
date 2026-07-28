@@ -116,9 +116,9 @@ abstract class FrFr {
     'onboarding_notifications_desc':
         "En temps normal, vous voyez des infos d'activité comme le nombre de pas. Si aucun signal n'arrive ou qu'aucune activité n'est détectée, vous êtes averti comme ci-dessus",
     'onboarding_push_now': 'Maintenant',
-    'onboarding_gs_enable_title': 'Activez votre propre code de bien-être',
+    'onboarding_gs_enable_title': 'Activez votre propre code de sécurité',
     'onboarding_gs_enable_desc':
-        'Dans les paramètres, appuyez sur [Recevoir aussi la protection]\npour que votre bien-être soit aussi transmis à vos protecteurs',
+        'Dans les paramètres, appuyez sur [Créer mon code de sécurité]\npour que votre bien-être soit aussi transmis à vos protecteurs',
     'onboarding_role_subject': 'Personne protégée',
     'onboarding_role_guardian': 'Protecteur',
     'onboarding_role_guardian_subject': 'Gardien et protégé',
@@ -293,17 +293,17 @@ abstract class FrFr {
     'subscription_period_annual': 'an',
 
     // ── G+S (Gardien et protégé) ──
-    'gs_enable_button': 'Recevoir aussi la protection',
+    'gs_enable_button': 'Créer mon code de sécurité',
     'gs_safety_code_button': 'Vérifier mon code de sécurité',
     'gs_safety_code_title': 'Mon code de sécurité',
-    'gs_enable_dialog_title': 'Activer la protection',
+    'gs_enable_dialog_title': 'Créer mon code de sécurité',
     'gs_enable_dialog_body':
-        'Vous pouvez recevoir une protection tout en gardant vos fonctions de gardien.\nUn code de sécurité sera émis — veuillez le partager avec d\'autres gardiens.',
+        'Un code de sécurité sera émis — veuillez le partager avec d\'autres gardiens.',
     'gs_enable_dialog_ios_warning_title': '⚠ Comment votre bilan de santé est envoyé',
     'gs_enable_dialog_ios_warning_body':
         'Une « notification push de bien-être » apparaît chaque jour à l\'heure programmée. Vous devez appuyer sur la notification ou ouvrir l\'application vous-même à ce moment-là pour que votre signal de bien-être soit envoyé. Si vous n\'ouvrez pas l\'application, vos gardiens peuvent recevoir une alerte de vérification manquée.',
     'gs_enable_dialog_ios_confirm': 'Compris, activer',
-    'gs_enable_confirm': 'Activer',
+    'gs_enable_confirm': 'Créer',
     'gs_enabled_message': 'La protection a été activée',
     'gs_enable_failed': 'Échec de l\'activation de la protection',
     'gs_disable_dialog_title': 'Désactiver la protection',

@@ -115,9 +115,9 @@ abstract class PlPl {
     'onboarding_notifications_desc':
         'Zwykle widzisz informacje o aktywności, np. liczbę kroków. Gdy sygnał nie dotrze lub nie wykryto aktywności, otrzymasz powiadomienie jak powyżej',
     'onboarding_push_now': 'Teraz',
-    'onboarding_gs_enable_title': 'Aktywuj własny kod samopoczucia',
+    'onboarding_gs_enable_title': 'Aktywuj własny kod bezpieczeństwa',
     'onboarding_gs_enable_desc':
-        'W Ustawieniach dotknij [Otrzymuj też ochronę],\naby Twoje samopoczucie trafiało też do opiekunów',
+        'W Ustawieniach dotknij [Utwórz mój kod bezpieczeństwa],\naby Twoje samopoczucie trafiało też do opiekunów',
     'onboarding_role_subject': 'Podopieczny',
     'onboarding_role_guardian': 'Opiekun',
     'onboarding_role_guardian_subject': 'Opiekun i podopieczny',
@@ -290,17 +290,17 @@ abstract class PlPl {
     'subscription_period_annual': 'rok',
 
     // ── G+S (Opiekun + Podopieczny) ──
-    'gs_enable_button': 'Otrzymuj też ochronę',
+    'gs_enable_button': 'Utwórz mój kod bezpieczeństwa',
     'gs_safety_code_button': 'Sprawdź mój kod bezpieczeństwa',
     'gs_safety_code_title': 'Mój kod bezpieczeństwa',
-    'gs_enable_dialog_title': 'Włącz ochronę',
+    'gs_enable_dialog_title': 'Utwórz mój kod bezpieczeństwa',
     'gs_enable_dialog_body':
-        'Możesz otrzymywać ochronę, zachowując funkcje opiekuna.\nZostanie wydany kod bezpieczeństwa — udostępnij go innym opiekunom.',
+        'Zostanie wydany kod bezpieczeństwa — udostępnij go innym opiekunom.',
     'gs_enable_dialog_ios_warning_title': '⚠ Jak wysyłany jest sygnał pomyślności',
     'gs_enable_dialog_ios_warning_body':
         'Codziennie o ustalonej godzinie pojawia się "powiadomienie push o pomyślności". Aby Twój sygnał pomyślności został wysłany, musisz dotknąć powiadomienia lub samodzielnie otworzyć aplikację o tej porze. Jeśli nie otworzysz aplikacji, Twoi opiekunowie mogą otrzymać alert o nieudanej kontroli.',
     'gs_enable_dialog_ios_confirm': 'Rozumiem, włącz',
-    'gs_enable_confirm': 'Włącz',
+    'gs_enable_confirm': 'Utwórz',
     'gs_enabled_message': 'Ochrona została włączona',
     'gs_enable_failed': 'Nie udało się włączyć ochrony',
     'gs_disable_dialog_title': 'Wyłącz ochronę',

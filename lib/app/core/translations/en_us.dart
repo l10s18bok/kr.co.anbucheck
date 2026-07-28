@@ -114,9 +114,9 @@ abstract class EnUs {
     'onboarding_notifications_desc':
         "Normally you'll see activity info like step count. If a check-in doesn't arrive or no activity is detected, you'll be notified just like above",
     'onboarding_push_now': 'Now',
-    'onboarding_gs_enable_title': 'Activate your own wellness code',
+    'onboarding_gs_enable_title': 'Activate your own safety code',
     'onboarding_gs_enable_desc':
-        'In Settings, tap [Get Wellness Protection Too]\nto share your wellness with your guardians',
+        'In Settings, tap [Create My Safety Code]\nto share your wellness with your guardians',
     'onboarding_role_subject': 'Subject',
     'onboarding_role_guardian': 'Guardian',
     'onboarding_role_guardian_subject': 'Guardian & Subject',
@@ -287,17 +287,17 @@ abstract class EnUs {
     'subscription_period_annual': 'year',
 
     // ── G+S (Guardian + Subject) ──
-    'gs_enable_button': 'Get Wellness Protection Too',
+    'gs_enable_button': 'Create My Safety Code',
     'gs_safety_code_button': 'Check My Safety Code',
     'gs_safety_code_title': 'My Safety Code',
-    'gs_enable_dialog_title': 'Enable Wellness Protection',
+    'gs_enable_dialog_title': 'Create My Safety Code',
     'gs_enable_dialog_body':
-        'You can receive wellness protection while keeping your guardian features.\nA safety code will be issued — please share it with other guardians.',
+        'A safety code will be issued — please share it with other guardians.',
     'gs_enable_dialog_ios_warning_title': '⚠ How your wellness check is sent',
     'gs_enable_dialog_ios_warning_body':
         'A "wellness push notification" appears every day at the scheduled time. You must tap the notification or open the app yourself around that time for your wellness signal to be sent. If you do not open the app, your guardians may receive a missed-check alert.',
     'gs_enable_dialog_ios_confirm': 'I understand, enable',
-    'gs_enable_confirm': 'Enable',
+    'gs_enable_confirm': 'Create',
     'gs_enabled_message': 'Wellness protection has been enabled',
     'gs_enable_failed': 'Failed to enable wellness protection',
     'gs_disable_dialog_title': 'Disable Wellness Protection',

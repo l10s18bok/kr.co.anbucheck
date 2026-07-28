@@ -115,7 +115,7 @@ abstract class HiIn {
     'onboarding_push_now': 'अभी',
     'onboarding_gs_enable_title': 'अपना सुरक्षा कोड सक्रिय करें',
     'onboarding_gs_enable_desc':
-        'सेटिंग्स में [मेरी भी सुरक्षा करें] दबाने से\nमेरी कुशलता भी अभिभावक तक पहुंचती है',
+        'सेटिंग्स में [मेरा सुरक्षा कोड बनाएं] दबाने से\nमेरी कुशलता भी अभिभावक तक पहुंचती है',
     'onboarding_role_subject': 'संरक्षित व्यक्ति',
     'onboarding_role_guardian': 'अभिभावक',
     'onboarding_role_guardian_subject': 'अभिभावक और संरक्षित',
@@ -287,17 +287,17 @@ abstract class HiIn {
     'subscription_period_annual': 'वर्ष',
 
     // ── G+S (अभिभावक + संरक्षित) ──
-    'gs_enable_button': 'मेरी भी सुरक्षा करें',
+    'gs_enable_button': 'मेरा सुरक्षा कोड बनाएं',
     'gs_safety_code_button': 'मेरा सुरक्षा कोड देखें',
     'gs_safety_code_title': 'मेरा सुरक्षा कोड',
-    'gs_enable_dialog_title': 'सुरक्षा सक्रिय करें',
+    'gs_enable_dialog_title': 'मेरा सुरक्षा कोड बनाएं',
     'gs_enable_dialog_body':
-        'आप अभिभावक कार्यक्षमता बनाए रखते हुए सुरक्षा प्राप्त कर सकते हैं।\nएक सुरक्षा कोड जारी किया जाएगा — कृपया इसे अन्य अभिभावकों के साथ साझा करें।',
+        'एक सुरक्षा कोड जारी किया जाएगा — कृपया इसे अन्य अभिभावकों के साथ साझा करें।',
     'gs_enable_dialog_ios_warning_title': '⚠ आपका वेलनेस संकेत कैसे भेजा जाता है',
     'gs_enable_dialog_ios_warning_body':
         'हर दिन निर्धारित समय पर एक "वेलनेस पुश सूचना" दिखाई देती है। आपका वेलनेस संकेत भेजने के लिए आपको सूचना पर टैप करना होगा या उस समय के आसपास स्वयं ऐप खोलना होगा। यदि आप ऐप नहीं खोलते हैं, तो आपके अभिभावकों को जांच छूटने का अलर्ट मिल सकता है।',
     'gs_enable_dialog_ios_confirm': 'समझ गया, सक्रिय करें',
-    'gs_enable_confirm': 'सक्रिय करें',
+    'gs_enable_confirm': 'बनाएं',
     'gs_enabled_message': 'सुरक्षा सक्रिय हो गई',
     'gs_enable_failed': 'सुरक्षा सक्रिय करने में विफल',
     'gs_disable_dialog_title': 'सुरक्षा निष्क्रिय करें',

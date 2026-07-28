@@ -1712,7 +1712,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 | --- | --- | --- | --- | --- |
 | 1 | 대상자 추가 화면 — 고유코드 입력+별칭 입력+연결하기 버튼 (`guardian_add_subject_page`와 동일 스타일) | `AddSubjectMockup` | 소중한 사람과 연결하세요 | 톤 배경 패널(indigo) + 슬라이드(오른쪽→왼쪽) 페이드 |
 | 2 (신규) | 알림 목록 화면(주의 카드+걸음수 카드) + OS 푸시 알림 배너 | `NotificationsPreviewMockup` + `PushNotificationMockup` | 안부 알림은 이렇게 표시돼요 | 톤 배경 패널(indigo) + 헤더(🔔"알림") + **주의 카드가 먼저, 걸음수 카드가 시간차를 두고 순차적으로 위→아래 슬라이드**(위젯 자체가 `AnimationController`로 소유, Interval 0~0.6 / 0.35~1.0). 실제 OS 푸시 알림 디자인(앱 아이콘+앱명+"지금", 굵은 제목, 본문, 그림자)을 재현한 배너가 패널 위에 살짝 겹쳐 떠 있는 형태로 별도 배치 |
-| 3 | 보호자 설정 "나도 안부 보호 받기" 버튼 | `GsEnableMockup` — 실제 설정 화면 헤더(⚙"설정")를 프레임으로 함께 표시 | 내 안부 코드 활성화 | 톤 배경 패널(indigo) + 슬라이드업 페이드 |
+| 3 | 보호자 설정 "내 안전 코드 생성" 버튼 | `GsEnableMockup` — 실제 설정 화면 헤더(⚙"설정")를 프레임으로 함께 표시 | 내 안전 코드 활성화 | 톤 배경 패널(indigo) + 슬라이드업 페이드 |
 | 4 | = 대상자 1번과 동일 콘텐츠 재사용 | `SafetyCodeMockup` | 안전코드가 자동으로 생성돼요 | 도형 액센트 + 스케일/페이드 |
 | 5 | = 대상자 2번과 동일 콘텐츠 재사용 | `EmergencyButtonMockup` | 나의 현재 상태(긴급)와 위치를 알리고 싶을 때 | 컬러 헤일로 + 스케일/페이드 |
 
@@ -2060,7 +2060,7 @@ iOS는 BGTaskScheduler의 불안정성 때문에 백그라운드 예약 실행�
   - 부모 `SafetyHomeBaseController._deviceData` getter로 자식 `GuardianSafetyCodeController`가 초기 상태 구성
 
 - 설정 화면에서 G+S 관련 UI:
-  - G+S 비활성: "나도 안부를 확인받고 싶어요" 카드 표시 → 탭 시 `enableSubjectFeature()`
+  - G+S 비활성: "내 안전 코드 생성"(`gs_enable_button`) 카드 표시 → 탭 시 `enableSubjectFeature()`. 활성화 후 같은 자리가 "내 안전 코드 확인"(`gs_safety_code_button`)으로 바뀌어 생성 → 확인 전이를 표현. 앱 전체 표기는 "안전 코드"(띄어쓰기)로 통일 — "안전코드" 금지
   - G+S 활성: 안전코드 카드 (invite_code + 상태 표시) + heartbeat 상태 카드 + [안전코드 보기] 버튼
 
 **대상자 heartbeat 시각 변경:**

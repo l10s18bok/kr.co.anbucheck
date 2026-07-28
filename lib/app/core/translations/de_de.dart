@@ -129,9 +129,9 @@ abstract class DeDe {
     'onboarding_notifications_desc':
         'Normalerweise siehst du Aktivitätsinfos wie die Schrittzahl. Kommt kein Signal an oder wird keine Aktivität erkannt, wirst du wie oben benachrichtigt',
     'onboarding_push_now': 'Jetzt',
-    'onboarding_gs_enable_title': 'Aktiviere deinen eigenen Wellness-Code',
+    'onboarding_gs_enable_title': 'Aktiviere deinen eigenen Sicherheitscode',
     'onboarding_gs_enable_desc':
-        'Tippe in den Einstellungen auf [Auch Wellness-Schutz erhalten],\ndamit dein Wellness-Status auch an deine Betreuer geht',
+        'Tippe in den Einstellungen auf [Meinen Sicherheitscode erstellen],\ndamit dein Wellness-Status auch an deine Betreuer geht',
     'onboarding_role_subject': 'Schutzperson',
     'onboarding_role_guardian': 'Betreuer',
     'onboarding_role_guardian_subject': 'Betreuer & Schützling',
@@ -315,18 +315,18 @@ abstract class DeDe {
     'subscription_period_annual': 'Jahr',
 
     // ── G+S (Betreuer + Schützling) ──
-    'gs_enable_button': 'Auch Wellness-Schutz erhalten',
+    'gs_enable_button': 'Meinen Sicherheitscode erstellen',
     'gs_safety_code_button': 'Meinen Sicherheitscode prüfen',
     'gs_safety_code_title': 'Mein Sicherheitscode',
-    'gs_enable_dialog_title': 'Wellness-Schutz aktivieren',
+    'gs_enable_dialog_title': 'Meinen Sicherheitscode erstellen',
     'gs_enable_dialog_body':
-        'Sie können Wellness-Schutz erhalten und gleichzeitig Ihre Betreuer-Funktionen behalten.\nBei Aktivierung wird ein Sicherheitscode ausgestellt — bitte teilen Sie ihn mit anderen Betreuern.',
+        'Bei Aktivierung wird ein Sicherheitscode ausgestellt — bitte teilen Sie ihn mit anderen Betreuern.',
     'gs_enable_dialog_ios_warning_title':
         '⚠ Wie Ihr Wellness-Check gesendet wird',
     'gs_enable_dialog_ios_warning_body':
         'Täglich zur festgelegten Zeit erscheint eine "Wellness-Push-Benachrichtigung". Sie müssen die Benachrichtigung antippen oder die App selbst um diese Zeit öffnen, damit Ihr Wellness-Signal gesendet wird. Wenn Sie die App nicht öffnen, erhalten Ihre Betreuer möglicherweise eine Warnung wegen ausbleibender Prüfung.',
     'gs_enable_dialog_ios_confirm': 'Verstanden, aktivieren',
-    'gs_enable_confirm': 'Aktivieren',
+    'gs_enable_confirm': 'Erstellen',
     'gs_enabled_message': 'Wellness-Schutz wurde aktiviert',
     'gs_enable_failed': 'Wellness-Schutz konnte nicht aktiviert werden',
     'gs_disable_dialog_title': 'Wellness-Schutz deaktivieren',

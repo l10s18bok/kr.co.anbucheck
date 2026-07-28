@@ -115,7 +115,7 @@ abstract class ViVn {
     'onboarding_push_now': 'Bây giờ',
     'onboarding_gs_enable_title': 'Kích hoạt mã an toàn của riêng bạn',
     'onboarding_gs_enable_desc':
-        'Trong Cài đặt, nhấn [Nhận bảo vệ sức khỏe]\nđể an toàn của bạn cũng được gửi đến người bảo vệ',
+        'Trong Cài đặt, nhấn [Tạo mã an toàn của tôi]\nđể an toàn của bạn cũng được gửi đến người bảo vệ',
     'onboarding_role_subject': 'Nguoi duoc bao ve',
     'onboarding_role_guardian': 'Nguoi bao ve',
     'onboarding_role_guardian_subject': 'Người giám hộ và được bảo vệ',
@@ -287,17 +287,17 @@ abstract class ViVn {
     'subscription_period_annual': 'năm',
 
     // ── G+S (Người giám hộ + Được bảo vệ) ──
-    'gs_enable_button': 'Nhận bảo vệ sức khỏe',
+    'gs_enable_button': 'Tạo mã an toàn của tôi',
     'gs_safety_code_button': 'Xem mã an toàn của tôi',
     'gs_safety_code_title': 'Mã an toàn của tôi',
-    'gs_enable_dialog_title': 'Kích hoạt bảo vệ',
+    'gs_enable_dialog_title': 'Tạo mã an toàn của tôi',
     'gs_enable_dialog_body':
-        'Bạn có thể nhận bảo vệ trong khi giữ nguyên chức năng giám hộ.\nMã an toàn sẽ được cấp — hãy chia sẻ với người giám hộ khác.',
+        'Mã an toàn sẽ được cấp — hãy chia sẻ với người giám hộ khác.',
     'gs_enable_dialog_ios_warning_title': '⚠ Cách gửi tín hiệu an toàn của bạn',
     'gs_enable_dialog_ios_warning_body':
         '"Thông báo đẩy an toàn" sẽ hiển thị mỗi ngày vào thời điểm đã định. Bạn phải chạm vào thông báo hoặc tự mở ứng dụng quanh thời điểm đó để tín hiệu an toàn được gửi đi. Nếu bạn không mở ứng dụng, người giám hộ của bạn có thể nhận được cảnh báo bỏ lỡ kiểm tra.',
     'gs_enable_dialog_ios_confirm': 'Đã hiểu, kích hoạt',
-    'gs_enable_confirm': 'Kích hoạt',
+    'gs_enable_confirm': 'Tạo',
     'gs_enabled_message': 'Bảo vệ đã được kích hoạt',
     'gs_enable_failed': 'Không thể kích hoạt bảo vệ',
     'gs_disable_dialog_title': 'Tắt bảo vệ',

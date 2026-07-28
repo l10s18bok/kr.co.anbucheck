@@ -115,9 +115,9 @@ abstract class NlNl {
     'onboarding_notifications_desc':
         'Normaal zie je activiteitsinfo zoals het aantal stappen. Komt er geen signaal binnen of wordt er geen activiteit gedetecteerd, dan krijg je een melding zoals hierboven',
     'onboarding_push_now': 'Nu',
-    'onboarding_gs_enable_title': 'Activeer je eigen welzijnscode',
+    'onboarding_gs_enable_title': 'Activeer je eigen veiligheidscode',
     'onboarding_gs_enable_desc':
-        'Tik in Instellingen op [Ook welzijnsbescherming ontvangen]\nzodat jouw welzijn ook naar je beschermers gaat',
+        'Tik in Instellingen op [Mijn veiligheidscode aanmaken]\nzodat jouw welzijn ook naar je beschermers gaat',
     'onboarding_role_subject': 'Beschermeling',
     'onboarding_role_guardian': 'Beschermer',
     'onboarding_role_guardian_subject': 'Bewaker en beschermde',
@@ -289,17 +289,17 @@ abstract class NlNl {
     'subscription_period_annual': 'jaar',
 
     // ── G+S (Bewaker en beschermde) ──
-    'gs_enable_button': 'Ook welzijnsbescherming ontvangen',
+    'gs_enable_button': 'Mijn veiligheidscode aanmaken',
     'gs_safety_code_button': 'Mijn veiligheidscode bekijken',
     'gs_safety_code_title': 'Mijn veiligheidscode',
-    'gs_enable_dialog_title': 'Welzijnsbescherming activeren',
+    'gs_enable_dialog_title': 'Mijn veiligheidscode aanmaken',
     'gs_enable_dialog_body':
-        'U kunt welzijnsbescherming ontvangen terwijl u uw bewakerfuncties behoudt.\nEr wordt een veiligheidscode uitgegeven — deel deze met andere bewakers.',
+        'Er wordt een veiligheidscode uitgegeven — deel deze met andere bewakers.',
     'gs_enable_dialog_ios_warning_title': '⚠ Hoe uw welzijnssignaal wordt verzonden',
     'gs_enable_dialog_ios_warning_body':
         'Elke dag op het ingestelde tijdstip verschijnt een "welzijns-pushmelding". U moet de melding aantikken of de app rond dat tijdstip zelf openen om uw welzijnssignaal te verzenden. Als u de app niet opent, kunnen uw bewakers een waarschuwing voor een gemiste controle ontvangen.',
     'gs_enable_dialog_ios_confirm': 'Begrepen, activeren',
-    'gs_enable_confirm': 'Activeren',
+    'gs_enable_confirm': 'Aanmaken',
     'gs_enabled_message': 'Welzijnsbescherming is geactiveerd',
     'gs_enable_failed': 'Welzijnsbescherming activeren mislukt',
     'gs_disable_dialog_title': 'Welzijnsbescherming deactiveren',

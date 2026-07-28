@@ -106,9 +106,9 @@ abstract class JaJp {
     'onboarding_notifications_desc':
         '普段は歩数などの活動情報が表示され、安否が届かなかったり活動記録がないときは上のように通知でお知らせします',
     'onboarding_push_now': '今',
-    'onboarding_gs_enable_title': '自分の安否コードを有効化',
+    'onboarding_gs_enable_title': '自分の安全コードを有効化',
     'onboarding_gs_enable_desc':
-        '設定で「私も安否保護を受ける」を押すと\n自分の安否も保護者に届きます',
+        '設定で「安全コードを作成」を押すと\n自分の安否も保護者に届きます',
     'onboarding_role_subject': '見守り対象者',
     'onboarding_role_guardian': '見守り人',
     'onboarding_role_guardian_subject': '保護者兼対象者',
@@ -273,17 +273,17 @@ abstract class JaJp {
     'subscription_period_annual': '年間',
 
     // ── G+S (保護者 + 対象者) ──
-    'gs_enable_button': '私も安否保護を受ける',
+    'gs_enable_button': '安全コードを作成',
     'gs_safety_code_button': '安全コードを確認',
     'gs_safety_code_title': '安全コード',
-    'gs_enable_dialog_title': '安否保護を有効化',
+    'gs_enable_dialog_title': '安全コードを作成',
     'gs_enable_dialog_body':
-        '保護者機能を維持したまま、自分の安否も保護してもらえます。\n有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
+        '有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
     'gs_enable_dialog_ios_warning_title': '⚠ 安否確認の送信方法について',
     'gs_enable_dialog_ios_warning_body':
         '毎日決まった時刻に「安否プッシュ通知」が表示されます。通知をタップするか、その前後にご自身でアプリを開いた場合のみ安否信号が送信されます。アプリを開かないと、保護者に未受信の警告が届く可能性があります。',
     'gs_enable_dialog_ios_confirm': '理解しました、有効化',
-    'gs_enable_confirm': '有効化',
+    'gs_enable_confirm': '作成',
     'gs_enabled_message': '安否保護が有効化されました',
     'gs_enable_failed': '安否保護の有効化に失敗しました',
     'gs_disable_dialog_title': '安否保護を無効化',

@@ -129,9 +129,9 @@ abstract class ItIt {
     'onboarding_notifications_desc':
         "Di norma vedrai informazioni sull'attività come i passi. Se il segnale non arriva o non viene rilevata attività, riceverai una notifica come sopra",
     'onboarding_push_now': 'Ora',
-    'onboarding_gs_enable_title': 'Attiva il tuo codice di benessere',
+    'onboarding_gs_enable_title': 'Attiva il tuo codice di sicurezza',
     'onboarding_gs_enable_desc':
-        'In Impostazioni, tocca [Ricevi anche la protezione]\nper inviare il tuo benessere anche ai tuoi guardiani',
+        'In Impostazioni, tocca [Crea il mio codice di sicurezza]\nper inviare il tuo benessere anche ai tuoi guardiani',
     'onboarding_role_subject': 'Assistito',
     'onboarding_role_guardian': 'Guardiano',
     'onboarding_role_guardian_subject': 'Guardiano e protetto',
@@ -316,18 +316,18 @@ abstract class ItIt {
     'subscription_period_annual': 'anno',
 
     // ── G+S (Guardiano e protetto) ──
-    'gs_enable_button': 'Ricevi anche la protezione',
+    'gs_enable_button': 'Crea il mio codice di sicurezza',
     'gs_safety_code_button': 'Verifica il mio codice di sicurezza',
     'gs_safety_code_title': 'Il mio codice di sicurezza',
-    'gs_enable_dialog_title': 'Attiva protezione',
+    'gs_enable_dialog_title': 'Crea il mio codice di sicurezza',
     'gs_enable_dialog_body':
-        'Puoi ricevere protezione mantenendo le funzioni di guardiano.\nVerrà emesso un codice di sicurezza — condividilo con altri guardiani.',
+        'Verrà emesso un codice di sicurezza — condividilo con altri guardiani.',
     'gs_enable_dialog_ios_warning_title':
         '⚠ Come viene inviato il tuo segnale di benessere',
     'gs_enable_dialog_ios_warning_body':
         'Ogni giorno all\'orario programmato appare una "notifica push di benessere". Devi toccare la notifica o aprire l\'app tu stesso in quel momento affinché il tuo segnale di benessere venga inviato. Se non apri l\'app, i tuoi guardiani potrebbero ricevere un avviso di verifica mancata.',
     'gs_enable_dialog_ios_confirm': 'Ho capito, attiva',
-    'gs_enable_confirm': 'Attiva',
+    'gs_enable_confirm': 'Crea',
     'gs_enabled_message': 'La protezione è stata attivata',
     'gs_enable_failed': 'Attivazione della protezione fallita',
     'gs_disable_dialog_title': 'Disattiva protezione',

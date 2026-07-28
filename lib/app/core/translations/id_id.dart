@@ -117,9 +117,9 @@ abstract class IdId {
     'onboarding_notifications_desc':
         'Biasanya kamu akan melihat info aktivitas seperti jumlah langkah. Jika sinyal tidak masuk atau tidak ada aktivitas terdeteksi, kamu akan diberi tahu seperti di atas',
     'onboarding_push_now': 'Sekarang',
-    'onboarding_gs_enable_title': 'Aktifkan kode kesejahteraanmu sendiri',
+    'onboarding_gs_enable_title': 'Aktifkan kode keamananmu sendiri',
     'onboarding_gs_enable_desc':
-        'Di Pengaturan, ketuk [Terima perlindungan juga]\nagar kesejahteraanmu juga tersampaikan ke penjaga',
+        'Di Pengaturan, ketuk [Buat kode keamanan saya]\nagar kesejahteraanmu juga tersampaikan ke penjaga',
     'onboarding_role_subject': 'Orang yang Dilindungi',
     'onboarding_role_guardian': 'Penjaga',
     'onboarding_role_guardian_subject': 'Penjaga dan yang dilindungi',
@@ -291,17 +291,17 @@ abstract class IdId {
     'subscription_period_annual': 'tahun',
 
     // ── G+S (Penjaga + Yang Dilindungi) ──
-    'gs_enable_button': 'Terima perlindungan juga',
+    'gs_enable_button': 'Buat kode keamanan saya',
     'gs_safety_code_button': 'Lihat kode keamanan saya',
     'gs_safety_code_title': 'Kode keamanan saya',
-    'gs_enable_dialog_title': 'Aktifkan perlindungan',
+    'gs_enable_dialog_title': 'Buat kode keamanan saya',
     'gs_enable_dialog_body':
-        'Anda dapat menerima perlindungan sambil mempertahankan fungsi penjaga.\nKode keamanan akan diterbitkan — bagikan kepada penjaga lain.',
+        'Kode keamanan akan diterbitkan — bagikan kepada penjaga lain.',
     'gs_enable_dialog_ios_warning_title': '⚠ Cara sinyal kesehatan Anda dikirim',
     'gs_enable_dialog_ios_warning_body':
         '"Notifikasi push kesehatan" muncul setiap hari pada waktu yang dijadwalkan. Anda harus mengetuk notifikasi atau membuka aplikasi sendiri di sekitar waktu itu agar sinyal kesehatan Anda dapat dikirim. Jika Anda tidak membuka aplikasi, penjaga Anda mungkin menerima peringatan pemeriksaan terlewat.',
     'gs_enable_dialog_ios_confirm': 'Saya mengerti, aktifkan',
-    'gs_enable_confirm': 'Aktifkan',
+    'gs_enable_confirm': 'Buat',
     'gs_enabled_message': 'Perlindungan telah diaktifkan',
     'gs_enable_failed': 'Gagal mengaktifkan perlindungan',
     'gs_disable_dialog_title': 'Nonaktifkan perlindungan',

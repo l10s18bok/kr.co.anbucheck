@@ -77,7 +77,7 @@ class OnboardingController extends BaseController {
     visual: OnboardingVisual.addSubject,
   );
 
-  // 보호자: 설정의 "나도 안부 보호 받기" → G+S 활성화
+  // 보호자: 설정의 "내 안전 코드 생성" → G+S 활성화
   static const _gsEnable = OnboardingStepData(
     titleKey: 'onboarding_gs_enable_title',
     descKey: 'onboarding_gs_enable_desc',

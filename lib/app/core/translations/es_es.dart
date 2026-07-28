@@ -116,9 +116,9 @@ abstract class EsEs {
     'onboarding_notifications_desc':
         'Normalmente verás información de actividad como los pasos. Si no llega la señal o no se detecta actividad, se te avisará como arriba',
     'onboarding_push_now': 'Ahora',
-    'onboarding_gs_enable_title': 'Activa tu propio código de bienestar',
+    'onboarding_gs_enable_title': 'Activa tu propio código de seguridad',
     'onboarding_gs_enable_desc':
-        'En Ajustes, toca [Recibir protección también]\npara que tu bienestar también llegue a tus protectores',
+        'En Ajustes, toca [Crear mi código de seguridad]\npara que tu bienestar también llegue a tus protectores',
     'onboarding_role_subject': 'Persona protegida',
     'onboarding_role_guardian': 'Protector',
     'onboarding_role_guardian_subject': 'Guardián y protegido',
@@ -291,17 +291,17 @@ abstract class EsEs {
     'subscription_period_annual': 'año',
 
     // ── G+S (Guardián y protegido) ──
-    'gs_enable_button': 'Recibir protección también',
+    'gs_enable_button': 'Crear mi código de seguridad',
     'gs_safety_code_button': 'Ver mi código de seguridad',
     'gs_safety_code_title': 'Mi código de seguridad',
-    'gs_enable_dialog_title': 'Activar protección',
+    'gs_enable_dialog_title': 'Crear mi código de seguridad',
     'gs_enable_dialog_body':
-        'Puedes recibir protección mientras mantienes tus funciones de guardián.\nSe emitirá un código de seguridad — compártelo con otros guardianes.',
+        'Se emitirá un código de seguridad — compártelo con otros guardianes.',
     'gs_enable_dialog_ios_warning_title': '⚠ Cómo se envía tu señal de bienestar',
     'gs_enable_dialog_ios_warning_body':
         'Cada día a la hora programada aparece una "notificación push de bienestar". Debes tocar la notificación o abrir la aplicación tú mismo en ese momento para que se envíe tu señal de bienestar. Si no abres la aplicación, tus guardianes pueden recibir una alerta de comprobación perdida.',
     'gs_enable_dialog_ios_confirm': 'Entendido, activar',
-    'gs_enable_confirm': 'Activar',
+    'gs_enable_confirm': 'Crear',
     'gs_enabled_message': 'La protección ha sido activada',
     'gs_enable_failed': 'Error al activar la protección',
     'gs_disable_dialog_title': 'Desactivar protección',

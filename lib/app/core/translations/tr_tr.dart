@@ -114,9 +114,9 @@ abstract class TrTr {
     'onboarding_notifications_desc':
         'Normalde adım sayısı gibi aktivite bilgilerini görürsün. Sinyal gelmez veya aktivite algılanmazsa yukarıdaki gibi bildirim alırsın',
     'onboarding_push_now': 'Şimdi',
-    'onboarding_gs_enable_title': 'Kendi iyilik kodunu etkinleştir',
+    'onboarding_gs_enable_title': 'Kendi güvenlik kodunu etkinleştir',
     'onboarding_gs_enable_desc':
-        "Ayarlar'da [Ben de koruma al] düğmesine basarak\niyiliğini koruyucularına da ilet",
+        "Ayarlar'da [Güvenlik kodumu oluştur] düğmesine basarak\niyiliğini koruyucularına da ilet",
     'onboarding_role_subject': 'Takip Edilen',
     'onboarding_role_guardian': 'Koruyucu',
     'onboarding_role_guardian_subject': 'Koruyucu ve korunan',
@@ -287,17 +287,17 @@ abstract class TrTr {
     'subscription_period_annual': 'yıl',
 
     // ── G+S (Koruyucu + Korunan) ──
-    'gs_enable_button': 'Ben de koruma al',
+    'gs_enable_button': 'Güvenlik kodumu oluştur',
     'gs_safety_code_button': 'Güvenlik kodumu kontrol et',
     'gs_safety_code_title': 'Güvenlik kodum',
-    'gs_enable_dialog_title': 'Korumayı etkinleştir',
+    'gs_enable_dialog_title': 'Güvenlik kodumu oluştur',
     'gs_enable_dialog_body':
-        'Koruyucu özelliklerinizi korurken koruma alabilirsiniz.\nBir güvenlik kodu verilecektir — lütfen diğer koruyucularla paylaşın.',
+        'Bir güvenlik kodu verilecektir — lütfen diğer koruyucularla paylaşın.',
     'gs_enable_dialog_ios_warning_title': '⚠ İyilik sinyaliniz nasıl gönderilir',
     'gs_enable_dialog_ios_warning_body':
         'Her gün belirlenen saatte bir "iyilik push bildirimi" görünür. İyilik sinyalinizin gönderilmesi için bildirime dokunmanız veya o sırada uygulamayı kendiniz açmanız gerekir. Uygulamayı açmazsanız koruyucularınız kaçırılan kontrol uyarısı alabilir.',
     'gs_enable_dialog_ios_confirm': 'Anladım, etkinleştir',
-    'gs_enable_confirm': 'Etkinleştir',
+    'gs_enable_confirm': 'Oluştur',
     'gs_enabled_message': 'Koruma etkinleştirildi',
     'gs_enable_failed': 'Koruma etkinleştirilemedi',
     'gs_disable_dialog_title': 'Korumayı devre dışı bırak',

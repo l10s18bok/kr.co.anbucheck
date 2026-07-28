@@ -113,9 +113,9 @@ abstract class SvSe {
     'onboarding_notifications_desc':
         'Vanligtvis ser du aktivitetsinfo som antal steg. Om ingen signal kommer in eller ingen aktivitet upptäcks får du en avisering som ovan',
     'onboarding_push_now': 'Nu',
-    'onboarding_gs_enable_title': 'Aktivera din egen välmåendekod',
+    'onboarding_gs_enable_title': 'Aktivera din egen säkerhetskod',
     'onboarding_gs_enable_desc':
-        'Tryck i Installningar på [Få hälsoskydd också]\nså når ditt välmående även dina vårdare',
+        'Tryck i Installningar på [Skapa min säkerhetskod]\nså når ditt välmående även dina vårdare',
     'onboarding_role_subject': 'Skyddsperson',
     'onboarding_role_guardian': 'Vardare',
     'onboarding_role_guardian_subject': 'Vårdare och skyddad',
@@ -285,17 +285,17 @@ abstract class SvSe {
     'subscription_period_annual': 'år',
 
     // ── G+S (Vårdare + Skyddad) ──
-    'gs_enable_button': 'Få hälsoskydd också',
+    'gs_enable_button': 'Skapa min säkerhetskod',
     'gs_safety_code_button': 'Visa min säkerhetskod',
     'gs_safety_code_title': 'Min säkerhetskod',
-    'gs_enable_dialog_title': 'Aktivera hälsoskydd',
+    'gs_enable_dialog_title': 'Skapa min säkerhetskod',
     'gs_enable_dialog_body':
-        'Du kan få hälsoskydd samtidigt som du behåller dina vårdarfunktioner.\nEn säkerhetskod utfärdas — dela den med andra vårdare.',
+        'En säkerhetskod utfärdas — dela den med andra vårdare.',
     'gs_enable_dialog_ios_warning_title': '⚠ Hur din hälsosignal skickas',
     'gs_enable_dialog_ios_warning_body':
         'En "hälso-pushavisering" visas varje dag vid den schemalagda tiden. Du måste trycka på aviseringen eller själv öppna appen vid den tidpunkten för att din hälsosignal ska skickas. Om du inte öppnar appen kan dina vårdare få en varning om missad kontroll.',
     'gs_enable_dialog_ios_confirm': 'Jag förstår, aktivera',
-    'gs_enable_confirm': 'Aktivera',
+    'gs_enable_confirm': 'Skapa',
     'gs_enabled_message': 'Hälsoskydd har aktiverats',
     'gs_enable_failed': 'Kunde inte aktivera hälsoskydd',
     'gs_disable_dialog_title': 'Inaktivera hälsoskydd',

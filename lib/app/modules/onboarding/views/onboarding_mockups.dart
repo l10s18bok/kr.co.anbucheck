@@ -397,7 +397,7 @@ class _MiniNotificationCard extends StatelessWidget {
 }
 
 /// ⑤ 보호자 설정 화면 헤더("설정" 아이콘+타이틀, guardian_settings_page의 AppBar title Row와 동일)
-/// + "나도 안부 보호 받기" 버튼 복제 (guardian_settings_page._buildGsButton).
+/// + "내 안전 코드 생성" 버튼 복제 (guardian_settings_page._buildGsButton).
 /// 버튼이 설정 화면 안에 있다는 맥락을 보여주기 위해 실제 헤더를 함께 표시한다.
 class GsEnableMockup extends StatelessWidget {
   const GsEnableMockup({super.key});

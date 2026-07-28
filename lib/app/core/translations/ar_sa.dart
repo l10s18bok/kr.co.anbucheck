@@ -110,9 +110,9 @@ abstract class ArSa {
     'onboarding_notifications_desc':
         'في الحالة الطبيعية تظهر معلومات النشاط مثل عدد الخطوات، وإذا لم تصل الإشارة أو لم يُكتشف أي نشاط سيصلك إشعار كما في الأعلى',
     'onboarding_push_now': 'الآن',
-    'onboarding_gs_enable_title': 'فعّل رمز الاطمئنان الخاص بك',
+    'onboarding_gs_enable_title': 'فعّل رمز الأمان الخاص بك',
     'onboarding_gs_enable_desc':
-        'من الإعدادات اضغط [احصل على الحماية أيضاً]\nليصل اطمئنانك أيضًا إلى حراسك',
+        'من الإعدادات اضغط [إنشاء رمز الأمان الخاص بي]\nليصل اطمئنانك أيضًا إلى حراسك',
     'onboarding_role_subject': 'متابَع',
     'onboarding_role_guardian': 'حارس',
     'onboarding_role_guardian_subject': 'وصي ومحمي',
@@ -281,17 +281,17 @@ abstract class ArSa {
     'subscription_period_annual': 'سنة',
 
     // ── G+S (وصي + محمي) ──
-    'gs_enable_button': 'احصل على الحماية أيضاً',
+    'gs_enable_button': 'إنشاء رمز الأمان الخاص بي',
     'gs_safety_code_button': 'عرض رمز الأمان الخاص بي',
     'gs_safety_code_title': 'رمز الأمان الخاص بي',
-    'gs_enable_dialog_title': 'تفعيل الحماية',
+    'gs_enable_dialog_title': 'إنشاء رمز الأمان الخاص بي',
     'gs_enable_dialog_body':
-        'يمكنك الحصول على الحماية مع الاحتفاظ بصلاحيات الوصي.\nسيتم إصدار رمز أمان — يرجى مشاركته مع الأوصياء الآخرين.',
+        'سيتم إصدار رمز أمان — يرجى مشاركته مع الأوصياء الآخرين.',
     'gs_enable_dialog_ios_warning_title': '⚠ كيفية إرسال إشارة الاطمئنان',
     'gs_enable_dialog_ios_warning_body':
         'يظهر "إشعار دفع الاطمئنان" يوميًا في الوقت المحدد. يجب النقر على الإشعار أو فتح التطبيق بنفسك في ذلك الوقت حتى يتم إرسال إشارة الاطمئنان. إذا لم تفتح التطبيق، فقد يتلقى الأوصياء تنبيهًا بعدم التحقق.',
     'gs_enable_dialog_ios_confirm': 'فهمت، تفعيل',
-    'gs_enable_confirm': 'تفعيل',
+    'gs_enable_confirm': 'إنشاء',
     'gs_enabled_message': 'تم تفعيل الحماية',
     'gs_enable_failed': 'فشل تفعيل الحماية',
     'gs_disable_dialog_title': 'إلغاء الحماية',
