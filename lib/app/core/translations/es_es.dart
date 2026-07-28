@@ -176,6 +176,7 @@ abstract class EsEs {
     'emergency_location_permission_denied_snackbar':
         'Alerta de emergencia enviada sin permiso de ubicación',
     'subject_home_emergency_confirm_send': 'Enviar solicitud de emergencia',
+    'emergency_message_hint': 'Añadir un mensaje (opcional)',
     'subject_home_share_text': 'Conéctate conmigo en la aplicación Anbu.\nCódigo de conexión: @code',
     'subject_home_share_subject': 'Código de conexión Anbu',
     'subject_home_code_copied': 'Código copiado',

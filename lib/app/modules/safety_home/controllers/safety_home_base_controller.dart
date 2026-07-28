@@ -553,7 +553,7 @@ abstract class SafetyHomeBaseController extends BaseController
   /// 긴급 도움 요청: urgent alert 즉시 생성 + 보호자 전원에게 긴급 Push 발송.
   /// 위치는 사용자 동의 기반으로 1회 수집하여 첨부하되, 권한 거부/GPS 실패/타임아웃
   /// 어떤 경우에도 긴급 API 호출 자체는 반드시 실행된다.
-  Future<void> sendEmergency() async {
+  Future<void> sendEmergency({String? message}) async {
     if (isSendingEmergency.value) return;
     isSendingEmergency.value = true;
     try {
@@ -566,7 +566,7 @@ abstract class SafetyHomeBaseController extends BaseController
           .printLog();
 
       await EmergencyRemoteDatasource(deviceToken)
-          .send(deviceId, location: location);
+          .send(deviceId, location: location, message: message);
 
       AppSnackbar.message(
         location != null

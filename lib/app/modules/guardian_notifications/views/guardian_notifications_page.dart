@@ -378,7 +378,9 @@ class _NotificationCard extends StatelessWidget {
       'steps'               => 'noti_steps_body'.trParams({
                                   'steps': '${p['steps'] ?? ''}',
                                 }),
-      'emergency'           => 'noti_emergency_body'.tr,
+      'emergency'           => (p['note'] as String?)?.trim().isNotEmpty == true
+                                  ? (p['note'] as String).trim()
+                                  : 'noti_emergency_body'.tr,
       'resolved'            => 'noti_resolved_body'.tr,
       'cleared_by_guardian' => 'noti_cleared_by_guardian_body'.tr,
       _                     => item.body,

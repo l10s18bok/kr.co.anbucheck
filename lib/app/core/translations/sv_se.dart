@@ -171,6 +171,7 @@ abstract class SvSe {
     'emergency_map_no_location': 'Ingen platsinformation',
     'emergency_location_permission_denied_snackbar': 'Nödlarm skickat utan platsåtkomst',
     'subject_home_emergency_confirm_send': 'Skicka nödbegäran',
+    'emergency_message_hint': 'Lägg till ett meddelande (valfritt)',
     'subject_home_share_text': 'Anslut till mig via Anbu-appen.\nAnslutningskod: @code',
     'subject_home_share_subject': 'Anbu-anslutningskod',
     'subject_home_code_copied': 'Koden kopierad',

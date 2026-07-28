@@ -176,6 +176,7 @@ abstract class RuRu {
     'emergency_location_permission_denied_snackbar':
         'Экстренное оповещение отправлено без разрешения на местоположение',
     'subject_home_emergency_confirm_send': 'Отправить экстренный запрос',
+    'emergency_message_hint': 'Добавить сообщение (необязательно)',
     'subject_home_share_text':
         'Свяжитесь со мной через приложение Anbu.\nКод подключения: @code',
     'subject_home_share_subject': 'Код подключения Anbu',

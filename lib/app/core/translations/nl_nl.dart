@@ -174,6 +174,7 @@ abstract class NlNl {
     'emergency_map_no_location': 'Geen locatie-informatie',
     'emergency_location_permission_denied_snackbar': 'Noodmelding verzonden zonder locatierechten',
     'subject_home_emergency_confirm_send': 'Noodverzoek verzenden',
+    'emergency_message_hint': 'Bericht toevoegen (optioneel)',
     'subject_home_share_text':
         'Maak verbinding met mij via de Anbu-app.\nVerbindingscode: @code',
     'subject_home_share_subject': 'Anbu-verbindingscode',

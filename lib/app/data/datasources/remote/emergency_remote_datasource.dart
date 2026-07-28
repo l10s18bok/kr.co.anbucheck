@@ -91,10 +91,17 @@ class EmergencyRemoteDatasource {
   EmergencyRemoteDatasource(String deviceToken)
       : _auth = {'Authorization': 'Bearer $deviceToken'};
 
-  Future<void> send(String deviceId, {EmergencyLocation? location}) async {
+  Future<void> send(
+    String deviceId, {
+    EmergencyLocation? location,
+    String? message,
+  }) async {
     final body = <String, dynamic>{'device_id': deviceId};
     if (location != null) {
       body['location'] = location.toJson();
+    }
+    if (message != null && message.trim().isNotEmpty) {
+      body['message'] = message.trim();
     }
 
     final result = await ApiClientFactory.instance.post<Map<String, dynamic>>(

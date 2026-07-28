@@ -192,6 +192,7 @@ abstract class ItIt {
     'emergency_location_permission_denied_snackbar':
         'Allerta di emergenza inviata senza autorizzazione alla posizione',
     'subject_home_emergency_confirm_send': 'Invia richiesta di emergenza',
+    'emergency_message_hint': 'Aggiungi un messaggio (facoltativo)',
     'subject_home_share_text':
         "Collegati con me sull'app Anbu.\nCodice di collegamento: @code",
     'subject_home_share_subject': 'Codice di collegamento Anbu',

@@ -191,6 +191,7 @@ abstract class DeDe {
     'emergency_location_permission_denied_snackbar':
         'Notruf ohne Standortberechtigung gesendet',
     'subject_home_emergency_confirm_send': 'Notruf senden',
+    'emergency_message_hint': 'Nachricht hinzufügen (optional)',
     'subject_home_share_text':
         'Bitte verbinden Sie sich mit mir in der Anbu-App.\nVerbindungscode: @code',
     'subject_home_share_subject': 'Anbu Verbindungscode',

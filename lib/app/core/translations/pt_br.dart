@@ -176,6 +176,7 @@ abstract class PtBr {
     'emergency_location_permission_denied_snackbar':
         'Alerta de emergência enviado sem permissão de localização',
     'subject_home_emergency_confirm_send': 'Enviar pedido de emergência',
+    'emergency_message_hint': 'Adicionar uma mensagem (opcional)',
     'subject_home_share_text': 'Conecte-se comigo no app Anbu.\nCódigo de conexão: @code',
     'subject_home_share_subject': 'Código de conexão Anbu',
     'subject_home_code_copied': 'Código copiado',

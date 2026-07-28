@@ -175,6 +175,7 @@ abstract class PlPl {
     'emergency_location_permission_denied_snackbar':
         'Alarm awaryjny wysłany bez uprawnień do lokalizacji',
     'subject_home_emergency_confirm_send': 'Wyślij prośbę awaryjną',
+    'emergency_message_hint': 'Dodaj wiadomość (opcjonalnie)',
     'subject_home_share_text':
         'Połącz się ze mną w aplikacji Anbu.\nKod połączenia: @code',
     'subject_home_share_subject': 'Kod połączenia Anbu',

@@ -48,6 +48,7 @@
 - 보호 대상자-보호자 연결은 서버가 발급한 **고유 코드(invite_code)**로 매칭
 - 보호자가 대상자를 식별하기 위한 별칭(예: "삼촌")은 **보호자 앱 로컬에만 저장**
 - **위치정보는 정기 heartbeat에서 수집하지 않음.** 대상자가 [🚨 도움이 필요해요] 버튼을 직접 누른 경우에만 사용자 동의 하에 위도/경도/정확도를 1회 수집하여 연결된 보호자에게 전달하고, 대상자 기기 타임존 자정까지만 서버에 보관 (§2 참조)
+- **긴급 요청 시 선택 메시지**: 긴급 확인 다이얼로그에서 대상자가 함께 전할 말(선택, 최대 100자)을 직접 입력한 경우에만 수집한다. 위치와 동일하게 긴급 이벤트에 종속된 휘발성 데이터로 `notification_events`에만 저장(자정 정리 시 함께 삭제)되며, 자유 입력이므로 대상자 **본인의 자발적 자기 진술**이다(서버가 능동 수집하는 개인정보 아님). 미입력 시 아무것도 저장·전송하지 않음
 - 서버 DB가 유출되어도 개인 식별 불가 (당일 긴급 요청 위치 외에는 보관 없음)
 - 앱 심사 시 개인정보 수집 항목 최소화 → 심사 통과 유리
 
@@ -1797,6 +1798,8 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
   - 활동 인식 권한 요청은 하지 않음 — 권한 화면(PermissionController)에서 일괄 처리
 - "도움이 필요해요" 긴급 버튼으로 보호자 전원에게 즉시 긴급 알림 발송 (POST /api/v1/emergency)
   - 확인 다이얼로그 표시 후 전송 (오탐 방지)
+  - **다이얼로그에 선택 메시지 입력**: 안내 문구 아래 `TextField`(선택, 최대 100자, 1~3줄, 힌트 `emergency_message_hint`)로 대상자가 함께 전할 말을 입력할 수 있다. 비워도 전송되며(기존과 동일), 입력 시 원문이 `body.message`로 서버에 전달된다. 프리셋 없이 자유 입력 단일 필드(고령자 타이핑 부담 최소화). 다이얼로그의 `TextEditingController`는 취소/전송 양쪽에서 dispose
+  - **메시지 전파 (방식 A — 대상자 육성 그대로)**: 서버가 메시지를 `notification_events.message_params.note`로 저장하고, **보호자 긴급 푸시 본문을 대상자 원문으로 치환**한다(제목 `🚨 긴급 도움 요청`은 로케일별 정형 문구 유지). 메시지 없으면 기존 정형 본문(`push_emergency_body`) 그대로. 자유 입력 원문은 번역하지 않고 대상자가 쓴 언어 그대로 전 보호자에게 전달. 보호자 알림 목록 카드도 동일하게 `note` 있으면 원문, 없으면 정형 문구(`_localizedBody`의 `emergency` 분기)
   - 기존 heartbeat 경고 에스컬레이션(suspicious_count, days_inactive)과 독립 동작
   - 버튼 색상: 배경 `#FFEBEE`, 텍스트/테두리 `#B71C1C` (긴급 등급 색상 통일)
 
@@ -2409,8 +2412,8 @@ lib/app/core/translations/
 - 기기 등록 시 서버에서 발급받은 `device_token`을 `shared_preferences`에 안전하게 저장
 - 모든 API 호출에 `Authorization: Bearer <device_token>` 사용
 - HTTPS 필수 (TLS 1.2+)
-- **개인정보 최소 수집**: 이름, 전화번호, 사용 앱 목록 일절 수집하지 않음. 위치정보는 정기 heartbeat에서 미수집이며, 대상자가 [🚨 도움이 필요해요] 버튼을 직접 누른 경우에만 사용자 동의 하에 1회 수집하여 보호자에게 전달 (최대 24시간 서버 보관, 그 외 시점 일절 수집 없음)
-- 수집 데이터 최소화: device_id, 걸음수(steps_delta), suspicious 플래그, 배터리 잔량, 앱 버전, locale, 긴급 요청 시 위도/경도/정확도
+- **개인정보 최소 수집**: 이름, 전화번호, 사용 앱 목록 일절 수집하지 않음. 위치정보는 정기 heartbeat에서 미수집이며, 대상자가 [🚨 도움이 필요해요] 버튼을 직접 누른 경우에만 사용자 동의 하에 1회 수집하여 보호자에게 전달 (최대 24시간 서버 보관, 그 외 시점 일절 수집 없음). 긴급 요청 시 대상자가 직접 입력한 선택 메시지(최대 100자)도 동일 정책으로 처리 (긴급 이벤트에 종속, 자정 정리 시 삭제, 미입력 시 없음)
+- 수집 데이터 최소화: device_id, 걸음수(steps_delta), suspicious 플래그, 배터리 잔량, 앱 버전, locale, 긴급 요청 시 위도/경도/정확도, 긴급 요청 시 대상자 선택 메시지(자유 입력, 최대 100자, 자정 삭제)
 - 인앱 결제 영수증은 서버에서 Apple/Google 서버와 직접 검증
 - 대상자 별칭은 보호자 앱 로컬에만 저장, 서버에 전송되지 않음
 
@@ -2473,7 +2476,7 @@ lib/app/core/translations/
 | `/api/v1/alerts/{id}/clear`    | PUT    | 개별 경고 클리어 (보호자가 건강 확인 후)               |
 | `/api/v1/alerts/clear-all`     | PUT    | 대상자별 모든 활성 경고 일괄 클리어 + 적응형 주기 복원 |
 | `/api/v1/devices/fcm-token`    | PUT    | FCM 토큰 갱신                                          |
-| `/api/v1/emergency`            | POST   | 긴급 도움 요청 (대상자 → 보호자 전원 긴급 Push, body.location optional: 사용자 동의 시 lat/lng/accuracy 1회 첨부) |
+| `/api/v1/emergency`            | POST   | 긴급 도움 요청 (대상자 → 보호자 전원 긴급 Push, body.location optional: 사용자 동의 시 lat/lng/accuracy 1회 첨부, body.message optional: 대상자 선택 메시지 최대 100자 — 있으면 푸시 본문을 원문으로 치환) |
 | `/api/v1/app/version-check`    | GET    | 앱 버전 체크 (강제 업데이트 판정)                      |
 
 > API 상세 스펙은 [PRD-BackEnd.md](PRD-BackEnd.md) 참조

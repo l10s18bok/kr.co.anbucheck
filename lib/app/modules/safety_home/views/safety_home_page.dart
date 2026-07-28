@@ -287,41 +287,12 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
   // ── 다이얼로그 (공통) ──────────────────────────────────────────────
 
   void _showEmergencyConfirm() {
+    // 컨트롤러 소유를 StatefulWidget에 위임한다. State.dispose는 위젯이 트리에서
+    // 완전히 제거된 뒤(닫힘 애니메이션 종료 후)에만 호출되므로 "used after disposed"가
+    // 발생하지 않는다. (핸들러/Future 완료 시점 dispose는 애니메이션 프레임과 race라 실패)
     Get.dialog(
-      AlertDialog(
-        title: Text(
-          'subject_home_emergency_confirm_title'.tr,
-          style: AppTextTheme.headlineSmall(
-            fw: FontWeight.w700,
-            color: const Color(0xFFB71C1C),
-          ),
-        ),
-        content: Text(
-          'subject_home_emergency_confirm_body'.tr,
-          style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'common_cancel'.tr,
-              style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              controller.sendEmergency();
-            },
-            child: Text(
-              'subject_home_emergency_confirm_send'.tr,
-              style: AppTextTheme.bodyMedium(
-                color: const Color(0xFFB71C1C),
-                fw: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
+      _EmergencyConfirmDialog(
+        onSend: (message) => controller.sendEmergency(message: message),
       ),
     );
   }
@@ -594,6 +565,95 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// 긴급 도움 요청 확인 다이얼로그.
+///
+/// `TextEditingController`를 State가 소유하여 위젯이 트리에서 제거된 뒤
+/// (닫힘 애니메이션 종료 후) `dispose`되도록 한다 — 핸들러/Future 완료 시점의
+/// 즉시 dispose는 닫힘 애니메이션 프레임과 race라 "used after disposed"가 발생한다.
+class _EmergencyConfirmDialog extends StatefulWidget {
+  final void Function(String message) onSend;
+
+  const _EmergencyConfirmDialog({required this.onSend});
+
+  @override
+  State<_EmergencyConfirmDialog> createState() =>
+      _EmergencyConfirmDialogState();
+}
+
+class _EmergencyConfirmDialogState extends State<_EmergencyConfirmDialog> {
+  final _msgController = TextEditingController();
+
+  @override
+  void dispose() {
+    _msgController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'subject_home_emergency_confirm_title'.tr,
+        style: AppTextTheme.headlineSmall(
+          fw: FontWeight.w700,
+          color: const Color(0xFFB71C1C),
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'subject_home_emergency_confirm_body'.tr,
+              style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+            ),
+            SizedBox(height: AppSpacing.vmd),
+            TextField(
+              controller: _msgController,
+              maxLength: 100,
+              maxLines: 3,
+              minLines: 1,
+              textInputAction: TextInputAction.newline,
+              style: AppTextTheme.bodyMedium(),
+              decoration: InputDecoration(
+                hintText: 'emergency_message_hint'.tr,
+                hintStyle:
+                    AppTextTheme.bodyMedium(color: const Color(0xFF6F7978)),
+                isDense: true,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Get.back(),
+          child: Text(
+            'common_cancel'.tr,
+            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            final message = _msgController.text;
+            Get.back();
+            widget.onSend(message);
+          },
+          child: Text(
+            'subject_home_emergency_confirm_send'.tr,
+            style: AppTextTheme.bodyMedium(
+              color: const Color(0xFFB71C1C),
+              fw: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

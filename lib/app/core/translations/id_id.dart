@@ -176,6 +176,7 @@ abstract class IdId {
     'emergency_map_no_location': 'Tidak ada informasi lokasi',
     'emergency_location_permission_denied_snackbar': 'Peringatan darurat dikirim tanpa izin lokasi',
     'subject_home_emergency_confirm_send': 'Kirim permintaan darurat',
+    'emergency_message_hint': 'Tambahkan pesan (opsional)',
     'subject_home_share_text':
         'Terhubung dengan saya di aplikasi Anbu.\nKode koneksi: @code',
     'subject_home_share_subject': 'Kode Koneksi Anbu',

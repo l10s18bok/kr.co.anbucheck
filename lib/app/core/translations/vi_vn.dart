@@ -173,6 +173,7 @@ abstract class ViVn {
     'emergency_location_permission_denied_snackbar':
         'Đã gửi cảnh báo khẩn cấp mà không có quyền vị trí',
     'subject_home_emergency_confirm_send': 'Gửi yêu cầu khẩn cấp',
+    'emergency_message_hint': 'Thêm lời nhắn (tùy chọn)',
     'subject_home_share_text': 'Hay ket noi voi toi tren ung dung Anbu.\nMa ket noi: @code',
     'subject_home_share_subject': 'Ma ket noi Anbu',
     'subject_home_code_copied': 'Da sao chep ma',

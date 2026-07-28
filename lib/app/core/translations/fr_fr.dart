@@ -176,6 +176,7 @@ abstract class FrFr {
     'emergency_location_permission_denied_snackbar':
         "Alerte d'urgence envoyée sans autorisation de localisation",
     'subject_home_emergency_confirm_send': "Envoyer la demande d'urgence",
+    'emergency_message_hint': 'Ajouter un message (facultatif)',
     'subject_home_share_text':
         'Connectez-vous avec moi sur l\'application Anbu.\nCode de connexion : @code',
     'subject_home_share_subject': 'Code de connexion Anbu',
