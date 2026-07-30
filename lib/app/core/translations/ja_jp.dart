@@ -276,6 +276,8 @@ abstract class JaJp {
     // ── G+S (保護者 + 対象者) ──
     'gs_enable_button': '安全コードを作成',
     'gs_safety_code_button': '安全コードを確認',
+    'gs_enable_button_desc': '自分の安否も家族が確認できます',
+    'gs_safety_code_button_desc': 'コード共有・安否報告・緊急要請',
     'gs_safety_code_title': '安全コード',
     'gs_enable_dialog_title': '安全コードを作成',
     'gs_enable_dialog_body':

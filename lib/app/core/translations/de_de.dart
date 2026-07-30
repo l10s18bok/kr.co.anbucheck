@@ -318,6 +318,8 @@ abstract class DeDe {
     // ── G+S (Betreuer + Schützling) ──
     'gs_enable_button': 'Meinen Sicherheitscode erstellen',
     'gs_safety_code_button': 'Meinen Sicherheitscode prüfen',
+    'gs_enable_button_desc': 'Ihre Familie kann auch nach Ihnen sehen',
+    'gs_safety_code_button_desc': 'Code teilen · Melden · Notruf',
     'gs_safety_code_title': 'Mein Sicherheitscode',
     'gs_enable_dialog_title': 'Meinen Sicherheitscode erstellen',
     'gs_enable_dialog_body':

@@ -7,6 +7,7 @@ import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/emergency_button.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/invite_code_share_card.dart';
+import 'package:anbucheck/app/modules/safety_home/widgets/solid_action_button.dart';
 
 /// 온보딩 목업 위젯 모음.
 /// 실제 화면(safety_home / guardian_add_subject / guardian_settings / drawer)의
@@ -416,26 +417,30 @@ class GsEnableMockup extends StatelessWidget {
           ],
         ),
         SizedBox(height: AppSpacing.lg),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(AppSpacing.lg),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.shield_rounded, size: 22.w, color: AppColors.onSurfaceVariant),
-              SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: Text('gs_enable_button'.tr,
-                    style: AppTextTheme.bodyLarge(fw: FontWeight.w600)),
-              ),
-              Icon(Icons.chevron_right_rounded, size: 22.w, color: AppColors.onSurfaceVariant),
-            ],
-          ),
-        ),
+        // 설정 화면의 실제 버튼과 동일한 솔리드 액션 버튼(Teal 톤).
+        // 설정 쪽 스타일이 바뀌면 이 목업도 함께 바꿔야 온보딩이 존재하지 않는
+        // 화면을 보여주지 않는다.
+        IgnorePointer(child: _buildButton()),
       ],
+    );
+  }
+
+  Widget _buildButton() {
+    final isDark = Get.find<ThemeService>().isDarkMode.value;
+    final fill = SolidActionButton.tonalFill(isDark);
+    final accent = SolidActionButton.tonalAccent(isDark);
+    return SolidActionButton(
+      icon: Icons.shield_rounded,
+      label: 'gs_enable_button'.tr,
+      description: 'gs_enable_button_desc'.tr,
+      gradient: [fill, fill],
+      borderColor: accent.withValues(alpha: 0.45),
+      foregroundColor: accent,
+      iconBackgroundColor: SolidActionButton.tonalBadge(isDark),
+      iconColor: accent,
+      isBusy: false,
+      enabled: true,
+      onPressed: _noop,
     );
   }
 }

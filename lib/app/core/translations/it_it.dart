@@ -319,6 +319,8 @@ abstract class ItIt {
     // ── G+S (Guardiano e protetto) ──
     'gs_enable_button': 'Crea il mio codice di sicurezza',
     'gs_safety_code_button': 'Verifica il mio codice di sicurezza',
+    'gs_enable_button_desc': 'Anche la tua famiglia può controllarti',
+    'gs_safety_code_button_desc': 'Condividi · Segnala · Emergenza',
     'gs_safety_code_title': 'Il mio codice di sicurezza',
     'gs_enable_dialog_title': 'Crea il mio codice di sicurezza',
     'gs_enable_dialog_body':

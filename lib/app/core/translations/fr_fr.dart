@@ -296,6 +296,8 @@ abstract class FrFr {
     // ── G+S (Gardien et protégé) ──
     'gs_enable_button': 'Créer mon code de sécurité',
     'gs_safety_code_button': 'Vérifier mon code de sécurité',
+    'gs_enable_button_desc': 'Vos proches peuvent aussi veiller sur vous',
+    'gs_safety_code_button_desc': 'Partager · Signaler · Urgence',
     'gs_safety_code_title': 'Mon code de sécurité',
     'gs_enable_dialog_title': 'Créer mon code de sécurité',
     'gs_enable_dialog_body':

@@ -288,6 +288,8 @@ abstract class SvSe {
     // ── G+S (Vårdare + Skyddad) ──
     'gs_enable_button': 'Skapa min säkerhetskod',
     'gs_safety_code_button': 'Visa min säkerhetskod',
+    'gs_enable_button_desc': 'Din familj kan också se till dig',
+    'gs_safety_code_button_desc': 'Dela kod · Rapport · Nödläge',
     'gs_safety_code_title': 'Min säkerhetskod',
     'gs_enable_dialog_title': 'Skapa min säkerhetskod',
     'gs_enable_dialog_body':

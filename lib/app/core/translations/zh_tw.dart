@@ -269,6 +269,8 @@ abstract class ZhTw {
     // ── G+S (守護者 + 被守護者) ──
     'gs_enable_button': '產生我的安全碼',
     'gs_safety_code_button': '查看我的安全碼',
+    'gs_enable_button_desc': '讓家人也能確認您的平安',
+    'gs_safety_code_button_desc': '分享代碼 · 平安回報 · 緊急求助',
     'gs_safety_code_title': '我的安全碼',
     'gs_enable_dialog_title': '產生我的安全碼',
     'gs_enable_dialog_body': '啟用後將發放安全碼，請將您的「安全碼」告知其他守護者。',

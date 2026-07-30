@@ -290,6 +290,8 @@ abstract class EnUs {
     // ── G+S (Guardian + Subject) ──
     'gs_enable_button': 'Create My Safety Code',
     'gs_safety_code_button': 'Check My Safety Code',
+    'gs_enable_button_desc': 'Let your family check on you too',
+    'gs_safety_code_button_desc': 'Share code · Report · Emergency',
     'gs_safety_code_title': 'My Safety Code',
     'gs_enable_dialog_title': 'Create My Safety Code',
     'gs_enable_dialog_body':

@@ -27,9 +27,9 @@ class GuardianSettingsController extends BaseController {
   final _tokenDs = TokenLocalDatasource();
   final _userDs = UserRemoteDatasource();
 
-  /// Obx에서 직접 추적 가능하도록 서비스의 observable 노출
-  RxList<SubjectItem> get subjects => _svc.subjects;
-  RxInt get maxSubjects => _svc.maxSubjects;
+  // subjects/maxSubjects getter 제거 — 유일한 소비자였던 설정 화면의 "연결 관리 카드"가
+  // 삭제됐다(대상자 수·한도는 연결 탭이 [+] 추가 버튼과 함께 더 완전하게 보여준다).
+  // _svc 자체는 공유 캐시 워밍(onInit의 load)과 탈퇴 시 clearCache에 계속 쓰인다.
 
   final appVersion = ''.obs;
   final osVersion = ''.obs;

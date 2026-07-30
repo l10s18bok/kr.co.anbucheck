@@ -293,6 +293,8 @@ abstract class PlPl {
     // ── G+S (Opiekun + Podopieczny) ──
     'gs_enable_button': 'Utwórz mój kod bezpieczeństwa',
     'gs_safety_code_button': 'Sprawdź mój kod bezpieczeństwa',
+    'gs_enable_button_desc': 'Bliscy też mogą sprawdzić, jak się masz',
+    'gs_safety_code_button_desc': 'Kod · Zgłoszenie · Alarm',
     'gs_safety_code_title': 'Mój kod bezpieczeństwa',
     'gs_enable_dialog_title': 'Utwórz mój kod bezpieczeństwa',
     'gs_enable_dialog_body':

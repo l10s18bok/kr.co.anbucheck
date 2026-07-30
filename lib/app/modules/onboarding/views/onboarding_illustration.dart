@@ -81,7 +81,8 @@ class OnboardingIllustration extends StatelessWidget {
     }
 
     // S→G+S 전환 스텝(Drawer "가족 안부도 관리하기") — 확정 디자인: 톤 배경 패널(인디고) +
-    // 슬라이드업 페이드 애니메이션. G+S 활성화 스텝과 동일한 "메뉴 행" 형태라 같은 처리를 재사용.
+    // 슬라이드업 페이드 애니메이션. G+S 활성화 스텝과 같은 "설정/메뉴 화면 프레임" 구성이라
+    // 같은 처리를 재사용한다(활성화 스텝의 버튼 자체는 솔리드 액션 버튼으로 바뀌었다).
     if (visual == OnboardingVisual.gsSwitch) {
       return _slideUpFadeIn(
         child: Container(

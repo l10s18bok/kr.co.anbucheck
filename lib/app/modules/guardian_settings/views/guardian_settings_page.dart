@@ -14,6 +14,7 @@ import 'package:anbucheck/app/core/services/iap_service.dart';
 import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/modules/guardian_settings/controllers/guardian_settings_controller.dart';
+import 'package:anbucheck/app/modules/safety_home/widgets/solid_action_button.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 설정 페이지 — v2: G+S 통합 카드 포함
@@ -66,59 +67,18 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
           ),
           body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
-            child: Obx(
-              () => Column(
+            // ⚠️ 이 Column은 Obx로 감싸지 않는다 — 연결 관리 카드(삭제됨)의
+            // `subjects`/`maxSubjects`가 유일한 관찰 대상이었고, 관찰 대상이 하나도 없는
+            // Obx는 런타임에 ObxError를 던진다(analyze로는 안 잡힘).
+            // 반응형 영역(구독 카드·G+S 버튼·앱 버전)은 각자 Obx를 갖고 있다.
+            child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: AppSpacing.lg),
 
-                  // 연결 관리 카드
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(AppSpacing.lg),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerLowest,
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.people_alt_rounded,
-                              size: 22.w,
-                              color: AppColors.onSurfaceVariant,
-                            ),
-                            SizedBox(width: AppSpacing.md),
-                            Text(
-                              'settings_connection_management'.tr,
-                              style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: AppSpacing.md),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'settings_managed_subjects'.tr,
-                              style: AppTextTheme.bodyMedium(color: AppColors.textSecondary),
-                            ),
-                            Text(
-                              'settings_managed_subjects_count'.trParams({
-                                'current': controller.subjects.length.toString(),
-                                'max': controller.maxSubjects.value.toString(),
-                              }),
-                              style: AppTextTheme.headlineSmall(
-                                color: const Color(0xFF4355B9),
-                                fw: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  // G+S 버튼: 비활성 → 활성화 / 활성 → 안전 코드 확인 페이지 이동
+                  // 화면 최상단(구 연결 관리 카드 자리)으로 올려 첫 화면에서 바로 보이게 한다.
+                  _buildGsButton(),
                   SizedBox(height: AppSpacing.sp6),
 
                   // 구독 및 서비스 섹션
@@ -133,10 +93,6 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
 
                   // 구독 카드
                   _buildSubscriptionCard(),
-                  SizedBox(height: AppSpacing.lg),
-
-                  // G+S 버튼: 비활성 → 활성화 / 활성 → 안전 코드 확인 페이지 이동
-                  _buildGsButton(),
                   SizedBox(height: AppSpacing.lg),
 
                   // 알림 설정
@@ -353,7 +309,6 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
                   SizedBox(height: AppSpacing.sp6),
                 ],
               ),
-            ),
           ),
           bottomNavigationBar: const GuardianBottomNav(currentIndex: 3),
         );
@@ -361,47 +316,42 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
     );
   }
 
-  // ── G+S 버튼 (알림 설정과 동일한 스타일) ──
+  // ── G+S 버튼 (안전 홈과 동일한 솔리드 액션 버튼 언어) ──
 
+  /// 설정 화면에서 유일하게 "누르는 것"으로 읽혀야 하는 요소라, 조용한 흰 카드 행
+  /// 대신 안전 홈의 [SolidActionButton]을 그대로 쓴다 — 톤 채움 + 테두리 + 아이콘
+  /// 배지 + 설명 한 줄.
+  ///
+  /// 색은 **Teal 톤**이다. 바로 위 구독 카드가 인디고/회색 그라데이션이라 여기에
+  /// 또 그라데이션을 얹으면 둘 다 CTA로 읽히지 않고, 이 버튼이 데려가는 곳이
+  /// 보호자(Indigo) 기능이 아니라 대상자(Teal) 기능인 안전 홈이기 때문이다.
+  /// 안전 홈의 안전 보고·시간 변경 버튼과 같은 `tonal*` 팔레트를 공유한다.
+  ///
+  /// 아래 [알림 설정] 행은 조용한 흰 카드로 남겨 둔다 — 둘 다 강조하면 대비가
+  /// 사라져 이 버튼이 눈에 띄지 않는다.
   Widget _buildGsButton() {
     final dashboard = Get.find<GuardianDashboardController>();
     return Obx(() {
       final isGS = dashboard.isAlsoSubject.value;
       final enabling = dashboard.isEnabling.value;
-      return GestureDetector(
-        onTap: enabling
-            ? null
-            : isGS
-            ? dashboard.goToSafetyCode
-            : () => _showEnableConfirm(),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(AppSpacing.lg),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Row(
-            children: [
-              if (enabling)
-                SizedBox(
-                  width: 22.w,
-                  height: 22.w,
-                  child: const CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF4355B9)),
-                )
-              else
-                Icon(Icons.shield_rounded, size: 22.w, color: AppColors.onSurfaceVariant),
-              SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: Text(
-                  isGS ? 'gs_safety_code_button'.tr : 'gs_enable_button'.tr,
-                  style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
-                ),
-              ),
-              Icon(Icons.chevron_right_rounded, size: 22.w, color: AppColors.onSurfaceVariant),
-            ],
-          ),
-        ),
+      final isDark = Get.find<ThemeService>().isDarkMode.value;
+      final fill = SolidActionButton.tonalFill(isDark);
+      final accent = SolidActionButton.tonalAccent(isDark);
+
+      return SolidActionButton(
+        icon: Icons.shield_rounded,
+        label: isGS ? 'gs_safety_code_button'.tr : 'gs_enable_button'.tr,
+        description: isGS ? 'gs_safety_code_button_desc'.tr : 'gs_enable_button_desc'.tr,
+        gradient: [fill, fill],
+        borderColor: accent.withValues(alpha: 0.45),
+        foregroundColor: accent,
+        iconBackgroundColor: SolidActionButton.tonalBadge(isDark),
+        iconColor: accent,
+        // 활성화 진행 중에는 isBusy가 탭을 막고 스피너로 바꾼다(회색 톤으로 떨어지는
+        // 것은 안전 홈 안전 보고 버튼과 동일한 동작).
+        isBusy: enabling,
+        enabled: true,
+        onPressed: isGS ? dashboard.goToSafetyCode : () => _showEnableConfirm(),
       );
     });
   }

@@ -290,6 +290,8 @@ abstract class HiIn {
     // ── G+S (अभिभावक + संरक्षित) ──
     'gs_enable_button': 'मेरा सुरक्षा कोड बनाएं',
     'gs_safety_code_button': 'मेरा सुरक्षा कोड देखें',
+    'gs_enable_button_desc': 'आपका परिवार भी आपका हाल जान सकता है',
+    'gs_safety_code_button_desc': 'कोड साझा · रिपोर्ट · आपातकाल',
     'gs_safety_code_title': 'मेरा सुरक्षा कोड',
     'gs_enable_dialog_title': 'मेरा सुरक्षा कोड बनाएं',
     'gs_enable_dialog_body':

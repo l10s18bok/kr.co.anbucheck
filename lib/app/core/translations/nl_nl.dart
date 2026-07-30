@@ -292,6 +292,8 @@ abstract class NlNl {
     // ── G+S (Bewaker en beschermde) ──
     'gs_enable_button': 'Mijn veiligheidscode aanmaken',
     'gs_safety_code_button': 'Mijn veiligheidscode bekijken',
+    'gs_enable_button_desc': 'Uw familie kan ook naar u omkijken',
+    'gs_safety_code_button_desc': 'Code delen · Melden · Noodgeval',
     'gs_safety_code_title': 'Mijn veiligheidscode',
     'gs_enable_dialog_title': 'Mijn veiligheidscode aanmaken',
     'gs_enable_dialog_body':

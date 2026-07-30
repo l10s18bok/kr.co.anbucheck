@@ -294,6 +294,8 @@ abstract class IdId {
     // ── G+S (Penjaga + Yang Dilindungi) ──
     'gs_enable_button': 'Buat kode keamanan saya',
     'gs_safety_code_button': 'Lihat kode keamanan saya',
+    'gs_enable_button_desc': 'Keluarga Anda juga bisa memantau Anda',
+    'gs_safety_code_button_desc': 'Bagikan kode · Lapor · Darurat',
     'gs_safety_code_title': 'Kode keamanan saya',
     'gs_enable_dialog_title': 'Buat kode keamanan saya',
     'gs_enable_dialog_body':

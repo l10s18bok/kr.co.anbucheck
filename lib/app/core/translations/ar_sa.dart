@@ -284,6 +284,8 @@ abstract class ArSa {
     // ── G+S (وصي + محمي) ──
     'gs_enable_button': 'إنشاء رمز الأمان الخاص بي',
     'gs_safety_code_button': 'عرض رمز الأمان الخاص بي',
+    'gs_enable_button_desc': 'يمكن لعائلتك الاطمئنان عليك أيضًا',
+    'gs_safety_code_button_desc': 'مشاركة الرمز · إبلاغ · طوارئ',
     'gs_safety_code_title': 'رمز الأمان الخاص بي',
     'gs_enable_dialog_title': 'إنشاء رمز الأمان الخاص بي',
     'gs_enable_dialog_body':

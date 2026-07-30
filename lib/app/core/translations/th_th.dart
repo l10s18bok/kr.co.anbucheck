@@ -287,6 +287,8 @@ abstract class ThTh {
     // ── G+S (ผู้ดูแล + ผู้ได้รับการดูแล) ──
     'gs_enable_button': 'สร้างรหัสความปลอดภัยของฉัน',
     'gs_safety_code_button': 'ตรวจสอบรหัสความปลอดภัย',
+    'gs_enable_button_desc': 'ให้ครอบครัวดูแลคุณได้เช่นกัน',
+    'gs_safety_code_button_desc': 'แชร์รหัส · รายงาน · ฉุกเฉิน',
     'gs_safety_code_title': 'รหัสความปลอดภัยของฉัน',
     'gs_enable_dialog_title': 'สร้างรหัสความปลอดภัยของฉัน',
     'gs_enable_dialog_body':

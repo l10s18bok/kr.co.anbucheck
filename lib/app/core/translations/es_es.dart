@@ -294,6 +294,8 @@ abstract class EsEs {
     // ── G+S (Guardián y protegido) ──
     'gs_enable_button': 'Crear mi código de seguridad',
     'gs_safety_code_button': 'Ver mi código de seguridad',
+    'gs_enable_button_desc': 'Tu familia también puede cuidar de ti',
+    'gs_safety_code_button_desc': 'Compartir · Reportar · Emergencia',
     'gs_safety_code_title': 'Mi código de seguridad',
     'gs_enable_dialog_title': 'Crear mi código de seguridad',
     'gs_enable_dialog_body':

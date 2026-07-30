@@ -277,6 +277,8 @@ abstract class KoKr {
     // ── G+S (보호자 겸 대상자) ──
     'gs_enable_button': '내 안전 코드 생성',
     'gs_safety_code_button': '내 안전 코드 확인',
+    'gs_enable_button_desc': '내 안부도 가족이 확인할 수 있어요',
+    'gs_safety_code_button_desc': '코드 공유 · 안부 보고 · 긴급 요청',
     'gs_safety_code_title': '내 안전 코드',
     'gs_enable_dialog_title': '내 안전 코드 생성',
     'gs_enable_dialog_body':

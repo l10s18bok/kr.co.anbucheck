@@ -269,6 +269,8 @@ abstract class ZhCn {
     // ── G+S (守护者 + 被守护者) ──
     'gs_enable_button': '生成我的安全码',
     'gs_safety_code_button': '查看我的安全码',
+    'gs_enable_button_desc': '让家人也能确认您的安好',
+    'gs_safety_code_button_desc': '共享代码 · 安好报告 · 紧急求助',
     'gs_safety_code_title': '我的安全码',
     'gs_enable_dialog_title': '生成我的安全码',
     'gs_enable_dialog_body': '启用后将发放安全码，请将您的"安全码"告知其他监护人。',

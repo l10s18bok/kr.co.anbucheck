@@ -293,6 +293,8 @@ abstract class PtBr {
     // ── G+S (Guardião e protegido) ──
     'gs_enable_button': 'Criar meu código de segurança',
     'gs_safety_code_button': 'Ver meu código de segurança',
+    'gs_enable_button_desc': 'Sua família também pode cuidar de você',
+    'gs_safety_code_button_desc': 'Compartilhar · Reportar · Emergência',
     'gs_safety_code_title': 'Meu código de segurança',
     'gs_enable_dialog_title': 'Criar meu código de segurança',
     'gs_enable_dialog_body':

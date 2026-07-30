@@ -294,6 +294,8 @@ abstract class RuRu {
     // ── G+S (Опекун + Подопечный) ──
     'gs_enable_button': 'Создать мой код безопасности',
     'gs_safety_code_button': 'Проверить мой код безопасности',
+    'gs_enable_button_desc': 'Родные тоже смогут проверить, как вы',
+    'gs_safety_code_button_desc': 'Код · Отчёт · SOS',
     'gs_safety_code_title': 'Мой код безопасности',
     'gs_enable_dialog_title': 'Создать мой код безопасности',
     'gs_enable_dialog_body':

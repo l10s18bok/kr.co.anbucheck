@@ -290,6 +290,8 @@ abstract class ViVn {
     // ── G+S (Người giám hộ + Được bảo vệ) ──
     'gs_enable_button': 'Tạo mã an toàn của tôi',
     'gs_safety_code_button': 'Xem mã an toàn của tôi',
+    'gs_enable_button_desc': 'Gia đình cũng có thể kiểm tra bạn',
+    'gs_safety_code_button_desc': 'Chia sẻ mã · Báo cáo · Khẩn cấp',
     'gs_safety_code_title': 'Mã an toàn của tôi',
     'gs_enable_dialog_title': 'Tạo mã an toàn của tôi',
     'gs_enable_dialog_body':

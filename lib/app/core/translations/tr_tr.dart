@@ -290,6 +290,8 @@ abstract class TrTr {
     // ── G+S (Koruyucu + Korunan) ──
     'gs_enable_button': 'Güvenlik kodumu oluştur',
     'gs_safety_code_button': 'Güvenlik kodumu kontrol et',
+    'gs_enable_button_desc': 'Aileniz de sizi kontrol edebilir',
+    'gs_safety_code_button_desc': 'Kod paylaş · Bildir · Acil',
     'gs_safety_code_title': 'Güvenlik kodum',
     'gs_enable_dialog_title': 'Güvenlik kodumu oluştur',
     'gs_enable_dialog_body':
