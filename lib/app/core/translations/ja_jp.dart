@@ -19,6 +19,7 @@ abstract class JaJp {
     'common_unlink': '解除',
     'common_am': '午前',
     'common_pm': '午後',
+    'common_time_style': 'pre12',
     'common_normal': '正常',
     'common_connected': '接続済み',
     'common_disconnected': '未接続',

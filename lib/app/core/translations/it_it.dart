@@ -19,6 +19,7 @@ abstract class ItIt {
     'common_unlink': 'Scollega',
     'common_am': 'AM',
     'common_pm': 'PM',
+    'common_time_style': 'h24',
     'common_normal': 'Normale',
     'common_connected': 'Connesso',
     'common_disconnected': 'Non connesso',

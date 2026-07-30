@@ -247,7 +247,7 @@ class FcmService extends GetxService {
         title: Text('safety_net_dialog_title'.tr),
         content: Text(showAlready
             ? 'safety_net_dialog_already_body'
-                .trParams({'time': formatTo12Hour(pendingReportedTime)})
+                .trParams({'time': formatHhmmToDisplay(pendingReportedTime)})
             : 'safety_net_dialog_body'.tr),
         actions: [
           TextButton(

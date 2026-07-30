@@ -227,7 +227,7 @@ abstract class SafetyHomeBaseController extends BaseController
       case 'reported':
         final raw =
             lastHeartbeatTime.isNotEmpty ? lastHeartbeatTime : heartbeatTime.value;
-        final displayTime = formatTo12Hour(raw);
+        final displayTime = formatHhmmToDisplay(raw);
         return 'subject_home_check_body_reported'
             .trParams({'time': displayTime});
       case 'pending':

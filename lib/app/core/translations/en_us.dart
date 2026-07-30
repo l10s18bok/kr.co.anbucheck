@@ -19,6 +19,7 @@ abstract class EnUs {
     'common_unlink': 'Unlink',
     'common_am': 'AM',
     'common_pm': 'PM',
+    'common_time_style': 'post12',
     'common_normal': 'Normal',
     'common_connected': 'Connected',
     'common_disconnected': 'Disconnected',

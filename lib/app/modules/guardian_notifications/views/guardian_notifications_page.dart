@@ -6,6 +6,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
@@ -352,12 +353,7 @@ class _NotificationCard extends StatelessWidget {
     );
   }
 
-  String _formatTime(DateTime dt) {
-    final period = dt.hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
-    final h = dt.hour == 0 ? 12 : (dt.hour > 12 ? dt.hour - 12 : dt.hour);
-    final m = dt.minute.toString().padLeft(2, '0');
-    return '$period $h:$m';
-  }
+  String _formatTime(DateTime dt) => formatTimeOfDay(dt.hour, dt.minute);
 
   /// message_key 기반 로컬 번역 본문 (없으면 서버 제공 body 사용)
   String get _localizedBody {

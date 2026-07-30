@@ -19,6 +19,7 @@ abstract class EsEs {
     'common_unlink': 'Desvincular',
     'common_am': 'AM',
     'common_pm': 'PM',
+    'common_time_style': 'h24',
     'common_normal': 'Normal',
     'common_connected': 'Conectado',
     'common_disconnected': 'Sin conexión',

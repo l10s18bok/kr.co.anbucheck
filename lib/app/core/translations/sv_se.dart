@@ -19,6 +19,7 @@ abstract class SvSe {
     'common_unlink': 'Koppla fran',
     'common_am': 'fm',
     'common_pm': 'em',
+    'common_time_style': 'h24',
     'common_normal': 'Normal',
     'common_connected': 'Ansluten',
     'common_disconnected': 'Ej ansluten',

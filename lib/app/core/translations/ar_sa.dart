@@ -19,6 +19,7 @@ abstract class ArSa {
     'common_unlink': 'إلغاء الربط',
     'common_am': 'ص',
     'common_pm': 'م',
+    'common_time_style': 'post12',
     'common_normal': 'طبيعي',
     'common_connected': 'متصل',
     'common_disconnected': 'غير متصل',

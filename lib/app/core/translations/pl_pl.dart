@@ -19,6 +19,7 @@ abstract class PlPl {
     'common_unlink': 'Odlacz',
     'common_am': 'rano',
     'common_pm': 'po poludniu',
+    'common_time_style': 'h24',
     'common_normal': 'Normalny',
     'common_connected': 'Polaczono',
     'common_disconnected': 'Brak polaczenia',

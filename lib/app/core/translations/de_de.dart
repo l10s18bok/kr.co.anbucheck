@@ -19,6 +19,7 @@ abstract class DeDe {
     'common_unlink': 'Trennen',
     'common_am': 'AM',
     'common_pm': 'PM',
+    'common_time_style': 'h24',
     'common_normal': 'Normal',
     'common_connected': 'Verbunden',
     'common_disconnected': 'Nicht verbunden',

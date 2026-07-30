@@ -19,6 +19,7 @@ abstract class IdId {
     'common_unlink': 'Putuskan',
     'common_am': 'pagi',
     'common_pm': 'sore',
+    'common_time_style': 'h24',
     'common_normal': 'Normal',
     'common_connected': 'Terhubung',
     'common_disconnected': 'Tidak terhubung',

@@ -19,6 +19,7 @@ abstract class HiIn {
     'common_unlink': 'अनलिंक करें',
     'common_am': 'सुबह',
     'common_pm': 'शाम',
+    'common_time_style': 'h24',
     'common_normal': 'सामान्य',
     'common_connected': 'जुड़ा हुआ',
     'common_disconnected': 'कनेक्शन नहीं',

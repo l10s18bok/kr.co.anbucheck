@@ -19,6 +19,7 @@ abstract class TrTr {
     'common_unlink': 'Bağlantıyı kes',
     'common_am': 'ÖÖ',
     'common_pm': 'ÖS',
+    'common_time_style': 'h24',
     'common_normal': 'Normal',
     'common_connected': 'Bağlı',
     'common_disconnected': 'Bağlantı yok',

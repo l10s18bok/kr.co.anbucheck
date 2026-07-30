@@ -7,6 +7,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
 import 'package:anbucheck/app/modules/guardian_connection_management/controllers/guardian_connection_management_controller.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 
 /// 보호자 연결 관리 페이지 — 시안 _4 기준
@@ -298,13 +299,8 @@ class _SubjectListTile extends StatelessWidget {
   });
 
   String get _timeLabel {
-    final period = heartbeatHour < 12 ? 'common_am'.tr : 'common_pm'.tr;
-    final h = heartbeatHour == 0
-        ? 12
-        : (heartbeatHour > 12 ? heartbeatHour - 12 : heartbeatHour);
-    final m = heartbeatMinute.toString().padLeft(2, '0');
     return 'connection_heartbeat_schedule'.trParams({
-      'time': '$period ${h.toString().padLeft(2, '0')}:$m',
+      'time': formatTimeOfDay(heartbeatHour, heartbeatMinute),
     });
   }
 

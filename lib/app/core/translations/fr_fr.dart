@@ -19,6 +19,7 @@ abstract class FrFr {
     'common_unlink': 'Dissocier',
     'common_am': 'AM',
     'common_pm': 'PM',
+    'common_time_style': 'h24',
     'common_normal': 'Normal',
     'common_connected': 'Connecté',
     'common_disconnected': 'Déconnecté',

@@ -17,16 +17,53 @@ Future<SharedPreferences> getReloadedPrefs() async {
   return prefs;
 }
 
-/// "HH:mm" (24시간제) → "오전/오후 H:mm" (12시간제) 변환
-String formatTo12Hour(String hhmm) {
+/// 로케일별 시각 표기 방식. 번역 파일의 `common_time_style` 값으로 결정된다.
+enum TimeStyle {
+  /// 12시간제 + 구분자를 **앞**에 — 한국어/일본어/중국어 ("오후 3:12")
+  pre12,
+
+  /// 12시간제 + 구분자를 **뒤**에 — 영어/아랍어 ("3:12 PM")
+  post12,
+
+  /// 24시간제 — 그 외 14개 언어 ("15:12")
+  h24,
+}
+
+/// ⚠️ 로케일별 시각 표기는 **반드시 이 함수들만** 사용한다.
+///
+/// 과거에는 각 화면이 `'$period $hour:$minute'`를 직접 조립해, 한국어 어순이
+/// 20개 언어 전부에 적용됐다. 프랑스어에서 `PM 06:00`처럼 뜻이 통하지 않는
+/// 표기가 나온 원인이다(24시간제 문화권 + 어순 반대 + AM/PM 미사용).
+///
+/// 표시 문자열을 다시 파싱해 시·분을 얻는 코드도 두지 않는다 — 표기 방식이
+/// 로케일마다 다른 순간 그 파서는 반드시 깨진다. 시·분은 항상 int로 들고
+/// 다니고, 이 함수는 **표시 직전 단방향 변환**에만 쓴다.
+TimeStyle get timeStyle => switch ('common_time_style'.tr) {
+      'pre12' => TimeStyle.pre12,
+      'post12' => TimeStyle.post12,
+      // 키 누락/오타 시 24시간제로 폴백 — 어느 언어에서도 뜻이 왜곡되지 않는
+      // 유일한 표기이므로 가장 안전한 기본값이다.
+      _ => TimeStyle.h24,
+    };
+
+/// (hour, minute) → 로케일 표기 문자열
+String formatTimeOfDay(int hour, int minute) {
+  final m = minute.toString().padLeft(2, '0');
+  final style = timeStyle;
+  if (style == TimeStyle.h24) {
+    return '${hour.toString().padLeft(2, '0')}:$m';
+  }
+  final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
+  final h12 = hour % 12 == 0 ? 12 : hour % 12;
+  return style == TimeStyle.pre12 ? '$period $h12:$m' : '$h12:$m $period';
+}
+
+/// "HH:mm" (24시간제 저장/전송 포맷) → 로케일 표기 문자열
+String formatHhmmToDisplay(String hhmm) {
   final parts = hhmm.split(':');
   if (parts.length != 2) return hhmm;
-
   final hour = int.tryParse(parts[0]);
-  final minute = parts[1];
-  if (hour == null) return hhmm;
-
-  final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
-  final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-  return '$period $displayHour:$minute';
+  final minute = int.tryParse(parts[1]);
+  if (hour == null || minute == null) return hhmm;
+  return formatTimeOfDay(hour, minute);
 }

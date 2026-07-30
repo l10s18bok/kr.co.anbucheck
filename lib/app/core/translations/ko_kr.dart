@@ -19,6 +19,7 @@ abstract class KoKr {
     'common_unlink': '해제',
     'common_am': '오전',
     'common_pm': '오후',
+    'common_time_style': 'pre12',
     'common_normal': '정상',
     'common_connected': '연결됨',
     'common_disconnected': '연결 없음',

@@ -19,6 +19,7 @@ abstract class RuRu {
     'common_unlink': 'Отвязать',
     'common_am': 'ДП',
     'common_pm': 'ПП',
+    'common_time_style': 'h24',
     'common_normal': 'Норма',
     'common_connected': 'Подключено',
     'common_disconnected': 'Нет связи',

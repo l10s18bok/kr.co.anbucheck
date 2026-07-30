@@ -19,6 +19,7 @@ abstract class NlNl {
     'common_unlink': 'Ontkoppelen',
     'common_am': 'AM',
     'common_pm': 'PM',
+    'common_time_style': 'h24',
     'common_normal': 'Normaal',
     'common_connected': 'Verbonden',
     'common_disconnected': 'Niet verbonden',

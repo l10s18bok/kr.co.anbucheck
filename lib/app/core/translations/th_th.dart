@@ -19,6 +19,7 @@ abstract class ThTh {
     'common_unlink': 'ยกเลิกการเชื่อมต่อ',
     'common_am': 'เช้า',
     'common_pm': 'บ่าย',
+    'common_time_style': 'h24',
     'common_normal': 'ปกติ',
     'common_connected': 'เชื่อมต่อแล้ว',
     'common_disconnected': 'ไม่ได้เชื่อมต่อ',

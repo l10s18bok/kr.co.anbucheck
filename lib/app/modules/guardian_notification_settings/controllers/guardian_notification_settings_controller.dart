@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
+import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/notification_settings_remote_datasource.dart';
 
@@ -22,8 +23,19 @@ class GuardianNotificationSettingsController extends BaseController {
   final dndEnabled = false.obs;
 
   // 방해금지모드 시간 (기본: 22:00 ~ 07:00)
-  late final dndStartTime = 'notification_settings_dnd_start_default'.tr.obs;
-  late final dndEndTime = 'notification_settings_dnd_end_default'.tr.obs;
+  //
+  // 시·분을 int로 들고 표시 문자열은 파생시킨다. 과거에는 표시 문자열만 보관하고
+  // 서버 전송 시 되파싱했는데(`_displayToHhmm24`), 표기가 로케일마다 다르면
+  // 반드시 깨진다 — 실제로 힌디어 기본값 'रात 10:00'은 common_pm('शाम')과
+  // 토큰이 달라 int.parse에서 FormatException이 났다.
+  final dndStartHour = 22.obs;
+  final dndStartMinute = 0.obs;
+  final dndEndHour = 7.obs;
+  final dndEndMinute = 0.obs;
+
+  /// 표시 전용 파생값 — UI는 이 값을, 서버 전송은 위 int를 쓴다.
+  String get dndStartTime => formatTimeOfDay(dndStartHour.value, dndStartMinute.value);
+  String get dndEndTime => formatTimeOfDay(dndEndHour.value, dndEndMinute.value);
 
   /// 서버에서 로드한 초기 설정값 (변경 감지용)
   Map<String, dynamic>? _initialSettings;
@@ -56,8 +68,8 @@ class GuardianNotificationSettingsController extends BaseController {
       dndEnabled.value = data['dnd_enabled'] as bool? ?? false;
       final start = data['dnd_start'] as String?;
       final end = data['dnd_end'] as String?;
-      if (start != null) dndStartTime.value = _hhmm24ToDisplay(start);
-      if (end != null) dndEndTime.value = _hhmm24ToDisplay(end);
+      _applyHhmm(start, dndStartHour, dndStartMinute);
+      _applyHhmm(end, dndEndHour, dndEndMinute);
 
       // "전체 알림 받기" 초기 동기화: 개별 스위치 하나라도 OFF면 OFF
       _syncAllSwitch();
@@ -78,9 +90,25 @@ class GuardianNotificationSettingsController extends BaseController {
     'caution_enabled': cautionEnabled.value,
     'info_enabled': infoEnabled.value,
     'dnd_enabled': dndEnabled.value,
-    'dnd_start': dndEnabled.value ? _displayToHhmm24(dndStartTime.value) : null,
-    'dnd_end': dndEnabled.value ? _displayToHhmm24(dndEndTime.value) : null,
+    // 서버 전송 포맷은 로케일과 무관하게 항상 "HH:mm" 24시간제다.
+    'dnd_start': dndEnabled.value
+        ? formatHm(dndStartHour.value, dndStartMinute.value)
+        : null,
+    'dnd_end':
+        dndEnabled.value ? formatHm(dndEndHour.value, dndEndMinute.value) : null,
   };
+
+  /// 서버가 준 "HH:mm"을 시·분 Rx에 반영. 값이 없거나 형식이 깨졌으면 기본값 유지.
+  void _applyHhmm(String? hhmm, RxInt hourRx, RxInt minuteRx) {
+    if (hhmm == null) return;
+    final parts = hhmm.split(':');
+    if (parts.length != 2) return;
+    final h = int.tryParse(parts[0]);
+    final m = int.tryParse(parts[1]);
+    if (h == null || m == null) return;
+    hourRx.value = h;
+    minuteRx.value = m;
+  }
 
   /// 초기 설정과 현재 설정을 비교하여 변경 시에만 저장
   Future<void> _saveIfChanged() async {
@@ -104,28 +132,6 @@ class GuardianNotificationSettingsController extends BaseController {
     } catch (_) {
       // 네트워크 실패 시 무시
     }
-  }
-
-  /// "오후 10:00" → "22:00"
-  String _displayToHhmm24(String display) {
-    final isPm = display.contains('common_pm'.tr);
-    final timePart = display.replaceAll('common_am'.tr, '').replaceAll('common_pm'.tr, '').trim();
-    final parts = timePart.split(':');
-    var hour = int.parse(parts[0]);
-    final minute = int.parse(parts[1]);
-    if (isPm && hour != 12) hour += 12;
-    if (!isPm && hour == 12) hour = 0;
-    return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-  }
-
-  /// "22:00" → "오후 10:00"
-  String _hhmm24ToDisplay(String hhmm) {
-    final parts = hhmm.split(':');
-    final hour = int.parse(parts[0]);
-    final minute = int.parse(parts[1]);
-    final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
-    final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-    return '$period ${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 
   /// 개별 스위치 상태에서 "전체 알림 받기" 자동 계산
@@ -167,53 +173,42 @@ class GuardianNotificationSettingsController extends BaseController {
   }
 
   Future<void> showDndStartPicker() async {
-    await _showTimePicker(dndStartTime);
+    await _showTimePicker(dndStartHour, dndStartMinute);
   }
 
   Future<void> showDndEndPicker() async {
-    await _showTimePicker(dndEndTime);
+    await _showTimePicker(dndEndHour, dndEndMinute);
   }
 
-  Future<void> _showTimePicker(RxString target) async {
+  /// 시·분 Rx를 직접 받아 갱신한다 — 표시 문자열은 getter로 파생되므로
+  /// 되파싱이 필요 없다.
+  Future<void> _showTimePicker(RxInt hourRx, RxInt minuteRx) async {
     if (Platform.isIOS) {
-      await _showCupertinoPicker(target);
+      await _showCupertinoPicker(hourRx, minuteRx);
     } else {
-      await _showMaterialPicker(target);
+      await _showMaterialPicker(hourRx, minuteRx);
     }
   }
 
-  (int, int) _parseTimeString(String text) {
-    final isPm = text.contains('common_pm'.tr);
-    final timePart = text.replaceAll('common_am'.tr, '').replaceAll('common_pm'.tr, '').trim();
-    final parts = timePart.split(':');
-    var hour = int.parse(parts[0]);
-    final minute = int.parse(parts[1]);
-    if (isPm && hour != 12) hour += 12;
-    if (!isPm && hour == 12) hour = 0;
-    return (hour, minute);
-  }
-
-  String _formatTime(int hour, int minute) {
-    final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
-    final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-    final m = minute.toString().padLeft(2, '0');
-    return '$period ${displayHour.toString().padLeft(2, '0')}:$m';
-  }
-
-  Future<void> _showMaterialPicker(RxString target) async {
-    final (hour, minute) = _parseTimeString(target.value);
+  Future<void> _showMaterialPicker(RxInt hourRx, RxInt minuteRx) async {
     final picked = await showTimePicker(
       context: Get.context!,
-      initialTime: TimeOfDay(hour: hour, minute: minute),
+      initialTime: TimeOfDay(hour: hourRx.value, minute: minuteRx.value),
+      // 피커 자체도 화면 표기와 같은 제도를 쓰도록 맞춘다.
+      builder: (ctx, child) => MediaQuery(
+        data: MediaQuery.of(ctx)
+            .copyWith(alwaysUse24HourFormat: timeStyle == TimeStyle.h24),
+        child: child!,
+      ),
     );
     if (picked != null) {
-      target.value = _formatTime(picked.hour, picked.minute);
+      hourRx.value = picked.hour;
+      minuteRx.value = picked.minute;
     }
   }
 
-  Future<void> _showCupertinoPicker(RxString target) async {
-    final (hour, minute) = _parseTimeString(target.value);
-    final initialDate = DateTime(2026, 1, 1, hour, minute);
+  Future<void> _showCupertinoPicker(RxInt hourRx, RxInt minuteRx) async {
+    final initialDate = DateTime(2026, 1, 1, hourRx.value, minuteRx.value);
     var selectedTime = initialDate;
 
     await showCupertinoModalPopup(
@@ -241,7 +236,8 @@ class GuardianNotificationSettingsController extends BaseController {
                       style: TextStyle(color: Theme.of(context).colorScheme.primary),
                     ),
                     onPressed: () {
-                      target.value = _formatTime(selectedTime.hour, selectedTime.minute);
+                      hourRx.value = selectedTime.hour;
+                      minuteRx.value = selectedTime.minute;
                       Navigator.pop(context);
                     },
                   ),
@@ -251,6 +247,7 @@ class GuardianNotificationSettingsController extends BaseController {
             Expanded(
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.time,
+                use24hFormat: timeStyle == TimeStyle.h24,
                 initialDateTime: initialDate,
                 onDateTimeChanged: (dt) => selectedTime = dt,
               ),

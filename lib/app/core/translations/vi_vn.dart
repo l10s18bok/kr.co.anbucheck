@@ -19,6 +19,7 @@ abstract class ViVn {
     'common_unlink': 'Ngat ket noi',
     'common_am': 'SA',
     'common_pm': 'CH',
+    'common_time_style': 'h24',
     'common_normal': 'Binh thuong',
     'common_connected': 'Da ket noi',
     'common_disconnected': 'Mat ket noi',

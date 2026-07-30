@@ -13,7 +13,11 @@ import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.d
 /// Heartbeat 시각 변경 기능 Mixin
 /// 대상자/보호자 컨트롤러에서 공통으로 사용
 mixin HeartbeatScheduleMixin on GetxController {
-  late final heartbeatTime = '${'common_pm'.tr} 06:00'.obs;
+  /// 표시 전용 문자열 — 로케일 표기로 포맷된 값이다.
+  /// **이 값을 다시 파싱해 시·분을 얻지 말 것.** 시·분은 아래 두 Rx가 정답이다.
+  late final heartbeatTime = formatTimeOfDay(18, 0).obs;
+
+  /// 시·분의 단일 진실 소스. `applySchedule`이 모든 경로에서 함께 갱신한다.
   final heartbeatHour = 18.obs;
   final heartbeatMinute = 0.obs;
 
@@ -41,29 +45,28 @@ mixin HeartbeatScheduleMixin on GetxController {
     }
   }
 
-  (int hour, int minute) _parseTime() {
-    final text = heartbeatTime.value;
-    final isPm = text.contains('common_pm'.tr);
-    final timePart = text.replaceAll(RegExp('(${'common_am'.tr}|${'common_pm'.tr}|\\s)'), '');
-    final parts = timePart.split(':');
-    var hour = int.parse(parts[0]);
-    final minute = int.parse(parts[1]);
-    if (isPm && hour != 12) hour += 12;
-    if (!isPm && hour == 12) hour = 0;
-    return (hour, minute);
-  }
+  /// 피커 초기값 — 표시 문자열을 되파싱하지 않고 int Rx를 그대로 읽는다.
+  /// (되파싱은 로케일마다 표기가 달라지는 순간 반드시 깨진다)
+  (int hour, int minute) _currentTime() =>
+      (heartbeatHour.value, heartbeatMinute.value);
 
   Future<void> _showMaterialTimePicker() async {
-    final (hour, minute) = _parseTime();
+    final (hour, minute) = _currentTime();
     final picked = await showTimePicker(
       context: Get.context!,
       initialTime: TimeOfDay(hour: hour, minute: minute),
+      // 피커 자체도 화면 표기와 같은 제도를 쓰도록 맞춘다.
+      builder: (ctx, child) => MediaQuery(
+        data: MediaQuery.of(ctx)
+            .copyWith(alwaysUse24HourFormat: timeStyle == TimeStyle.h24),
+        child: child!,
+      ),
     );
     if (picked != null) await _updateTime(picked.hour, picked.minute);
   }
 
   Future<void> _showCupertinoTimePicker() async {
-    final (hour, minute) = _parseTime();
+    final (hour, minute) = _currentTime();
     final initialDate = DateTime(2026, 1, 1, hour, minute);
     var selectedTime = initialDate;
 
@@ -93,6 +96,7 @@ mixin HeartbeatScheduleMixin on GetxController {
             Expanded(
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.time,
+                use24hFormat: timeStyle == TimeStyle.h24,
                 initialDateTime: initialDate,
                 onDateTimeChanged: (dateTime) {
                   selectedTime = dateTime;
@@ -106,10 +110,7 @@ mixin HeartbeatScheduleMixin on GetxController {
   }
 
   void _applyToHeartbeatTime(int hour, int minute) {
-    final period = hour < 12 ? 'common_am'.tr : 'common_pm'.tr;
-    final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-    final m = minute.toString().padLeft(2, '0');
-    heartbeatTime.value = '$period ${displayHour.toString().padLeft(2, '0')}:$m';
+    heartbeatTime.value = formatTimeOfDay(hour, minute);
   }
 
   Future<void> _updateTime(int hour, int minute) async {

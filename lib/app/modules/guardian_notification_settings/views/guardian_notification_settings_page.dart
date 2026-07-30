@@ -155,12 +155,12 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                         Expanded(
                           child: Obx(
                             () => HeartbeatScheduleTile(
-                              heartbeatTime: controller.dndStartTime.value,
+                              heartbeatTime: controller.dndStartTime,
                               onTap: controller.showDndStartPicker,
                               color: const Color(0xFF4355B9),
                               backgroundColor: const Color(0xFFE8EAF6),
                               label: 'notification_settings_dnd_start'.tr,
-                              subLabel: controller.dndStartTime.value,
+                              subLabel: controller.dndStartTime,
                             ),
                           ),
                         ),
@@ -168,12 +168,12 @@ class GuardianNotificationSettingsPage extends GetWidget<GuardianNotificationSet
                         Expanded(
                           child: Obx(
                             () => HeartbeatScheduleTile(
-                              heartbeatTime: controller.dndEndTime.value,
+                              heartbeatTime: controller.dndEndTime,
                               onTap: controller.showDndEndPicker,
                               color: const Color(0xFF4355B9),
                               backgroundColor: const Color(0xFFE8EAF6),
                               label: 'notification_settings_dnd_end'.tr,
-                              subLabel: controller.dndEndTime.value,
+                              subLabel: controller.dndEndTime,
                             ),
                           ),
                         ),
