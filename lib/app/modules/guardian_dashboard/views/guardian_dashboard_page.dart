@@ -30,6 +30,10 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: false,
+          // centerTitle 기본값은 플랫폼마다 다르다(iOS 중앙 / Android 좌측). 이 화면의
+          // title은 아이콘 없는 순수 Text라 그 차이가 그대로 드러나므로 명시적으로 고정한다.
+          // (다른 보호자 화면들은 title이 Row = 폭을 꽉 채워 정렬 차이가 보이지 않는다.)
+          centerTitle: true,
           // 우측 최악등급 배지는 제거됨 — 본문 "오늘의 안부 요약" 아래 등급별 카운터가
           // 최악 등급을 포함한 전체 분포를 더 정확히 알려주므로 중복이었다.
           title: Text('Anbu Guardian', style: AppTextTheme.headlineSmall()),
