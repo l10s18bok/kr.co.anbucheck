@@ -122,6 +122,19 @@ lib/
 | 긴급 위치      | `lib/app/modules/guardian_emergency_map/`                                                         | 대상자 긴급 도움 요청 시 첨부된 위치를 보호자가 Google Maps로 확인하는 페이지. **진입 경로는 알림 목록의 [🗺️ 위치 보기] 버튼 단 하나**. FCM 탭은 `alert_emergency` 포함 모든 `alert_*` type을 알림 목록으로 라우팅하며 (`_routeToNotifications` 자동 새로고침), 사용자가 목록에서 해당 emergency 카드의 버튼을 탭해 지도로 진입 — 단일 진입점 유지로 뒤로가기 스택/새로고침 일관성 확보                                                                                                                                                                                                             |
 | 긴급 위치 획득 | `lib/app/data/datasources/remote/emergency_remote_datasource.dart` — `captureEmergencyLocation()` | S 홈 / G+S SafetyCode 긴급 버튼이 공통 사용하는 top-level 헬퍼. 2단계 폴백: (1) `getLastKnownPosition` (수 ms 내 반환) → (2) `getCurrentPosition` medium 정확도 + 10초 타임아웃. high는 GPS only라 실내/콜드 스타트에서 timeout 빈발, medium은 GPS+Wi-Fi+셀룰러 병용해 실내에서도 fix 가능. 권한 거부·GPS 실패·타임아웃 어떤 예외에서도 null 반환하고 throw하지 않는다 — 긴급 API 호출 자체는 위치 유무와 독립                                                                                                                                                                                     |
 
+## 알림 트레이 정리 (포그라운드 진입 시)
+
+> 상세는 PRD-FrontEnd §2.5.2.
+
+앱이 포그라운드로 진입하면(콜드 스타트 / 백그라운드 복귀) 트레이에 쌓인 **표시 중인 알림 전부**를 제거한다 — FCM 푸시·로컬 알림 구분 없이. 사용자가 알림 하나만 탭해도 나머지가 남지 않게 하는 것이 목적이며, 보호자 경고는 서버 기반 in-app 알림 목록(`GET /notifications`)에 당일 내내 남으므로 정보 손실이 없다.
+
+- 진입점: `FcmService.init()` 말미 1회(콜드 스타트) + `AppLifecycleListener(onResume:)`(복귀). **kill 런치 payload(`getInitialMessage`/`getNotificationAppLaunchDetails`)를 읽어 캐시한 *뒤*에 호출**해야 라우팅·안내 다이얼로그 플래그가 살아남는다.
+- 구현: `LocalAlarmService.clearDeliveredNotifications()` → Android는 `screen_state` 채널의 `clearDeliveredNotifications`(`NotificationManager.cancelAll()`, posted 전용), iOS는 AppDelegate `kr.co.anbucheck/notifications` 채널의 `clearDelivered`(`removeAllDeliveredNotifications()` + 배지 0). screen_state는 Android 전용 플러그인이라 iOS는 AppDelegate `didInitializeImplicitFlutterEngine`에서 `applicationRegistrar.messenger()`로 채널 등록(`getFlutterVC()`는 scene 기반 앱에서 런치 직후 nil일 수 있음).
+- ⚠️ **불변 규칙 — 예약(pending)은 절대 건드리지 말 것**: `FlutterLocalNotificationsPlugin.cancelAll()`(표시+예약 동시 제거)과 iOS `removeAllPendingNotificationRequests` 사용 금지. iOS 일일 안전망 알림(`gs_deadman`, `matchDateTimeComponents.time`)은 pending 반복 요청으로 살아 있어야 매일 발화하며 **iOS G+S의 PRIMARY heartbeat 트리거**다 — 지우면 iOS 안부 전송이 조용히 죽는다. `trial_ended` 단발 예약도 동일.
+- `cancelSubjectSafetyNet()`/`cancelSendFailed()`는 **대체되지 않는다** — WorkManager 백그라운드 isolate(앱 미포그라운드)에서 `_onHeartbeatSent`가 호출하는 별개 경로다.
+- 부작용(수용): `send_failed`는 `onlyAlertOnce`로 반복 실패 시 무음 갱신되는데, 트레이를 비운 뒤 다음 실패는 소리와 함께 새로 표시된다.
+- **앱이 이미 포그라운드일 때 도착한 알림은 정리 대상이 아니다(의도)**: `_handleForegroundMessage`가 앱이 열린 상태에서도 트레이 알림을 표시하고 iOS `willPresent`도 `.list`를 반환하지만, resume 전환이 없어 다음 백그라운드→포그라운드 사이클까지 남는다. 즉시 제거하면 방금 띄운 헤드업 알림을 사용자가 읽기 전에 지우게 되므로 **현행 유지**로 결정(2026-07-30). 지연 제거·표시 억제로 "수정"하지 말 것.
+
 ## 위치 수집 범위
 
 정기 heartbeat에는 위치를 일절 포함하지 않는다. 대상자가 [🚨 도움이 필요해요] 버튼을 누른 경우에 한해 사용자 동의 하에 1회 수집하여 보호자 전원에게 전달하고, 서버는 `notification_events` 테이블에만 저장한다(최대 24시간 보관, 자정 정리 스케줄러가 일괄 삭제). 백그라운드 위치는 절대 사용하지 않는다 (`ACCESS_BACKGROUND_LOCATION` / `Always` / `Background Modes: location` 모두 금지).

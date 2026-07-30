@@ -93,7 +93,40 @@ import GoogleMaps
     super.userNotificationCenter(center, didReceive: response, withCompletionHandler: completionHandler)
   }
 
+  /// 표시 중인 알림 정리 채널 — 엔진 수명 동안 유지해야 하므로 프로퍼티로 보관.
+  private var notificationChannel: FlutterMethodChannel?
+
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+
+    // 앱 포그라운드 진입 시 트레이에 쌓인 알림을 일괄 정리하는 채널.
+    // getFlutterVC()는 scene 기반 앱에서 런치 직후 nil일 수 있으므로,
+    // 엔진 초기화 시점의 applicationRegistrar.messenger()로 등록한다.
+    //
+    // ⚠️ **removeAllDeliveredNotifications만 호출한다.**
+    //   removeAllPendingNotificationRequests를 절대 함께 부르지 말 것 —
+    //   iOS 일일 안전망 알림(gs_deadman, matchDateTimeComponents.time)은
+    //   pending 반복 요청으로 남아 있어야 매일 발화하며, 이것이 iOS G+S의
+    //   PRIMARY heartbeat 트리거다. pending을 지우면 iOS 안부 전송이 조용히 죽는다.
+    //   (무료체험 종료 trial_ended 단발 예약도 동일하게 pending으로 살아있어야 한다.)
+    let channel = FlutterMethodChannel(
+      name: "kr.co.anbucheck/notifications",
+      binaryMessenger: engineBridge.applicationRegistrar.messenger()
+    )
+    channel.setMethodCallHandler { call, result in
+      guard call.method == "clearDelivered" else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      let center = UNUserNotificationCenter.current()
+      center.removeAllDeliveredNotifications()
+      if #available(iOS 16.0, *) {
+        center.setBadgeCount(0)
+      } else {
+        UIApplication.shared.applicationIconBadgeNumber = 0
+      }
+      result(nil)
+    }
+    notificationChannel = channel
   }
 }

@@ -431,6 +431,22 @@ class FcmService extends GetxService {
       }
     } catch (_) {}
 
+    // 포그라운드 진입 시 트레이에 쌓인 알림(FCM 푸시 + 로컬 알림)을 일괄 정리한다.
+    // 사용자가 알림 하나만 탭해도 나머지가 남지 않도록 하는 것이 목적 —
+    // 보호자 경고는 서버 기반 in-app 알림 목록에 당일 내내 남으므로 정보 손실이 없다.
+    //
+    // 호출 시점이 여기인 이유: kill 상태 런치 payload(getInitialMessage /
+    // getNotificationAppLaunchDetails)는 바로 위에서 이미 읽어 캐시했으므로,
+    // 이후 트레이를 비워도 라우팅·안내 다이얼로그 플래그에 영향이 없다.
+    // 표시 중인 알림만 제거하며 예약(pending)은 건드리지 않는다 —
+    // 상세 불변 규칙은 LocalAlarmService.clearDeliveredNotifications 참조.
+    // AppLifecycleListener는 생성 시 WidgetsBinding에 옵저버로 자기 등록되므로
+    // 참조를 보관하지 않아도 유지된다. FcmService는 앱 수명 내내 살아있어 해제 불필요.
+    AppLifecycleListener(
+      onResume: LocalAlarmService.clearDeliveredNotifications,
+    );
+    await LocalAlarmService.clearDeliveredNotifications();
+
     return this;
   }
 

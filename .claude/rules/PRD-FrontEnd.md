@@ -655,6 +655,35 @@ Future<void> sendHeartbeat({
 ```
 
 
+### 2.5.2 포그라운드 진입 시 알림 트레이 일괄 정리
+
+앱이 포그라운드로 진입하면(콜드 스타트 / 백그라운드 복귀) 트레이에 **표시 중인 알림 전부**를 제거한다 — FCM 푸시·로컬 알림 구분 없이, 사용자가 어떤 알림을 탭했는지와도 무관하다. 알림 하나를 탭해도 나머지가 트레이에 남아 쌓이던 문제를 없애는 것이 목적이며, 보호자 경고는 서버 기반 in-app 알림 목록(`GET /api/v1/notifications`, 당일 유지)에서 그대로 확인 가능하므로 정보 손실이 없다.
+
+**진입점** — `LocalAlarmService.clearDeliveredNotifications()`를 두 곳에서 호출:
+1. `FcmService.init()` 말미 (콜드 스타트). **kill 런치 payload(`getInitialMessage` / `getNotificationAppLaunchDetails`)를 읽어 캐시한 *뒤*에 호출해야 한다** — 순서가 바뀌면 알림 탭 라우팅과 `pendingSafetyNetDialog` 플래그가 소실된다.
+2. `AppLifecycleListener(onResume:)` (백그라운드 복귀). 콜드 스타트에서는 1·2가 둘 다 발화하지만 두 번째는 `active=0`이라 무해하며, 어느 한쪽만 남기면 특정 경로가 누락되므로 둘 다 유지한다.
+
+**플랫폼별 구현** — 양쪽 모두 네이티브 호출이며 **표시된(delivered/posted) 알림만** 대상으로 한다:
+
+| 플랫폼 | 채널 | 네이티브 호출 |
+|---|---|---|
+| Android | `kr.co.anbucheck/screen_state` → `clearDeliveredNotifications` | `NotificationManager.cancelAll()` (posted 전용, AlarmManager 예약분 무관) |
+| iOS | `kr.co.anbucheck/notifications` → `clearDelivered` | `removeAllDeliveredNotifications()` + 배지 0 (`setBadgeCount(0)`, iOS 16 미만은 `applicationIconBadgeNumber`) |
+
+`screen_state`는 Android 전용 플러그인이라 iOS는 별도 채널을 쓴다. iOS 채널은 `AppDelegate.didInitializeImplicitFlutterEngine`에서 `applicationRegistrar.messenger()`로 등록한다 — `getFlutterVC()`는 scene 기반 앱에서 런치 직후 `nil`일 수 있어 등록 시점으로 부적합하다.
+
+> ⚠️ **불변 규칙 — 예약(pending)은 절대 건드리지 않는다.**
+> `FlutterLocalNotificationsPlugin.cancelAll()`(표시 + 예약을 **함께** 제거)과 iOS `removeAllPendingNotificationRequests`를 사용 금지한다. iOS 일일 안전망 알림(`gs_deadman`, `matchDateTimeComponents.time`)은 pending 반복 요청으로 살아 있어야 매일 발화하며 **iOS G+S의 PRIMARY heartbeat 트리거**다 — 지우면 iOS 안부 전송이 조용히 중단된다. 무료체험 종료(`trial_ended`) 단발 예약도 동일. 순수 Dart 우회로(`getActiveNotifications()` + `cancel(id)`)도 금지 — iOS `cancel(id)`는 delivered와 pending을 함께 제거하며, FCM 알림 식별자는 정수가 아니라 round-trip되지 않는다.
+
+**대체하지 않는 것**: `LocalAlarmService.cancelSubjectSafetyNet()` / `cancelSendFailed()`는 그대로 유지된다 — 이들은 `HeartbeatService._onHeartbeatSent`가 WorkManager 백그라운드 isolate(앱이 포그라운드가 **아닌** 상태)에서 호출하는 별개 경로라 이 정리 로직으로 커버되지 않는다.
+
+**수용된 부작용 2가지 (의도 — "수정"하지 말 것):**
+- `send_failed`는 `onlyAlertOnce`로 반복 실패 시 무음 갱신되는데, 트레이를 비운 뒤 다음 실패는 소리와 함께 새로 표시된다. 오프라인 상태에서 앱을 열면 15분마다 알림음이 다시 울릴 수 있다.
+- **앱이 이미 포그라운드일 때 도착한 알림은 정리 대상이 아니다.** `_handleForegroundMessage`가 앱이 열린 상태에서도 트레이 알림을 표시하고 iOS `willPresent`도 `.list`를 반환하지만, resume 전환이 없어 다음 백그라운드→포그라운드 사이클까지 남는다. 즉시 제거하면 방금 띄운 헤드업 알림을 사용자가 읽기 전에 지우게 되므로 **현행 유지**로 결정(2026-07-30).
+
+**iOS 검증 완료 (2026-07-30, 시뮬레이터)**: 콜드 스타트 시 `active=1 → 0`, `pending=[gs_deadman, trial_ended]`가 정리 전후 동일하게 유지됨. 직후 `_scheduleHeartbeatIfGS`의 iOS 알람 재단언도 pending 중복 없이 정상 동작. (Android는 미검증 — pending에 `trial_ended`만 있고 `cancelAll()`이 posted 전용이라 위험도 낮음)
+
+
 ### 2.6 경고 발생 흐름
 
 ```
@@ -1318,6 +1347,7 @@ lib/
     │   │   ├── heartbeat_service.dart  # heartbeat 1회 실행 (센서→판정→전송)
     │   │   ├── heartbeat_worker_service.dart  # WorkManager 백그라운드 예약
     │   │   ├── local_alarm_service.dart  # 오늘의 안부 확인 메시지 로컬 알림
+    │   │   │                             # + 포그라운드 진입 시 트레이 정리(§2.5.2)
     │   │   ├── guardian_subject_service.dart  # G+S 모드 서비스
     │   │   ├── iap_service.dart        # 인앱 결제 (anbu_yearly) — purchaseStream 4상태 분기, 서버 verify 성공 후에만 completePurchase, Splash에서 permanent 등록
     │   │   ├── ad_service.dart         # AdMob UMP 동의 흐름 + 배너 관리

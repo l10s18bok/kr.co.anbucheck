@@ -49,6 +49,16 @@ class ScreenStatePlugin : FlutterPlugin, MethodCallHandler {
                 }
                 result.success(matchedCount)
             }
+            "clearDeliveredNotifications" -> {
+                // 앱 포그라운드 진입 시 트레이에 쌓인 알림 일괄 정리.
+                // NotificationManager.cancelAll()은 **이미 표시된(posted) 알림만** 제거한다.
+                // flutter_local_notifications의 zonedSchedule 예약분은 AlarmManager
+                // PendingIntent라 아직 post되지 않았으므로 영향받지 않는다
+                // (trial_ended 단발 예약 등이 살아남아야 한다).
+                val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                nm.cancelAll()
+                result.success(null)
+            }
             else -> result.notImplemented()
         }
     }

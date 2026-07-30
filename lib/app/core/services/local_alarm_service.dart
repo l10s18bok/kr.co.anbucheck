@@ -278,6 +278,42 @@ class LocalAlarmService {
     }
   }
 
+  /// iOS 표시 중인 알림 정리 채널 (AppDelegate에서 등록).
+  static const _iosNotificationChannel =
+      MethodChannel('kr.co.anbucheck/notifications');
+
+  /// **표시 중인(delivered) 알림만** 트레이에서 일괄 제거한다.
+  /// 앱이 포그라운드로 진입할 때(콜드 스타트 / 백그라운드 복귀) 호출 —
+  /// 사용자가 알림 하나만 탭해도 나머지 푸시·로컬 알림이 쌓여 있지 않게 한다.
+  /// 보호자 경고는 서버 기반 in-app 알림 목록(`GET /notifications`)에 당일 내내
+  /// 남으므로 트레이를 비워도 정보 손실이 없다.
+  ///
+  /// ⚠️ **불변 규칙 — 예약(pending)은 절대 건드리지 않는다.**
+  ///   - `FlutterLocalNotificationsPlugin.cancelAll()`을 쓰지 말 것.
+  ///     이 API는 표시 중인 알림과 **예약된 알림을 함께** 제거한다.
+  ///   - iOS 일일 안전망 알림([schedule], `matchDateTimeComponents.time`)은
+  ///     pending 반복 요청으로 살아 있어야 매일 발화하며 iOS G+S의 PRIMARY
+  ///     heartbeat 트리거다. 이를 지우면 iOS 안부 전송이 조용히 중단된다.
+  ///   - 무료체험 종료 알림([scheduleTrialEnded])도 pending 단발 예약이라 동일.
+  ///   따라서 Android는 `NotificationManager.cancelAll()`(posted 전용),
+  ///   iOS는 `removeAllDeliveredNotifications()`만 네이티브로 호출한다.
+  ///
+  /// [cancelSubjectSafetyNet]/[cancelSendFailed]를 대체하지 않는다 —
+  /// 그쪽은 WorkManager 백그라운드 isolate(앱 미포그라운드)에서 호출되는 경로다.
+  static Future<void> clearDeliveredNotifications() async {
+    try {
+      if (Platform.isAndroid) {
+        await _screenStateChannel
+            .invokeMethod<void>('clearDeliveredNotifications');
+      } else {
+        await _iosNotificationChannel.invokeMethod<void>('clearDelivered');
+      }
+      debugPrint('[LocalAlarm] 표시 중인 알림 일괄 제거');
+    } catch (e) {
+      debugPrint('[LocalAlarm] clearDeliveredNotifications 실패: $e');
+    }
+  }
+
   /// 내부 취소 (schedule 내에서도 호출)
   static Future<void> _cancelInternal() async {
     await _ensureInitialized();
