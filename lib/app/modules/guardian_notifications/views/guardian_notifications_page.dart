@@ -36,33 +36,33 @@ class GuardianNotificationsPage
           ],
         ),
         actions: [
-          Obx(() => IconButton(
-            icon: Icon(Icons.refresh_rounded,
-                color: controller.isLoading
-                    ? const Color(0xFF4355B9).withValues(alpha: 0.4)
-                    : const Color(0xFF4355B9),
-                size: 24.w),
-            onPressed: controller.isLoading ? null : controller.load,
-          )),
           // 전체 삭제 — 지울 알림이 있을 때만 노출한다.
           // 숨길 때도 Visibility(maintainSize)로 자리를 남겨, 알림이 들어오거나
-          // 전부 지워질 때 옆의 새로고침 아이콘이 좌우로 튀지 않게 한다.
+          // 전부 지워질 때 우측 새로고침 아이콘이 좌우로 튀지 않게 한다.
+          Obx(() => Visibility(
+            visible: controller.notifications.isNotEmpty,
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            child: IconButton(
+              icon: Icon(Icons.delete_outline_rounded,
+                  size: 24.w,
+                  color: controller.isLoading
+                      ? const Color(0xFFE53935).withValues(alpha: 0.4)
+                      : const Color(0xFFE53935)),
+              onPressed:
+                  controller.isLoading ? null : () => _confirmDeleteAll(context),
+            ),
+          )),
           Padding(
             padding: EdgeInsets.only(right: AppSpacing.horizontalMargin - 12.w),
-            child: Obx(() => Visibility(
-              visible: controller.notifications.isNotEmpty,
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              child: IconButton(
-                icon: Icon(Icons.delete_outline_rounded,
-                    size: 24.w,
-                    color: controller.isLoading
-                        ? const Color(0xFFE53935).withValues(alpha: 0.4)
-                        : const Color(0xFFE53935)),
-                onPressed:
-                    controller.isLoading ? null : () => _confirmDeleteAll(context),
-              ),
+            child: Obx(() => IconButton(
+              icon: Icon(Icons.refresh_rounded,
+                  color: controller.isLoading
+                      ? const Color(0xFF4355B9).withValues(alpha: 0.4)
+                      : const Color(0xFF4355B9),
+                  size: 24.w),
+              onPressed: controller.isLoading ? null : controller.load,
             )),
           ),
         ],
