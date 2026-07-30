@@ -226,15 +226,6 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
                   )),
               SizedBox(height: AppSpacing.vlg),
 
-              // 안전 보고 버튼 — 연결된 보호자가 있을 때만 활성 (구독 무관)
-              Obx(() => ManualReportButton(
-                    isReporting: controller.isReporting.value,
-                    enabled: _isReportEnabled,
-                    isDark: Get.find<ThemeService>().isDarkMode.value,
-                    onPressed: controller.reportNow,
-                  )),
-              SizedBox(height: AppSpacing.vlg),
-
               // 안부 확인 시각 변경 — 연결된 보호자가 1명 이상일 때만 활성
               // (S/G+S 공통, 구독 무관. 연결이 없을 때만 비활성)
               Obx(
@@ -245,6 +236,15 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
                   onTap: controller.showTimePickerDialog,
                 ),
               ),
+              SizedBox(height: AppSpacing.vlg),
+
+              // 안전 보고 버튼 — 연결된 보호자가 있을 때만 활성 (구독 무관)
+              Obx(() => ManualReportButton(
+                    isReporting: controller.isReporting.value,
+                    enabled: _isReportEnabled,
+                    isDark: Get.find<ThemeService>().isDarkMode.value,
+                    onPressed: controller.reportNow,
+                  )),
               SizedBox(height: AppSpacing.vlg),
 
               // 긴급 도움 요청 버튼 — enabled 조건 동일

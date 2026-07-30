@@ -32,6 +32,7 @@ class CheckStateCard extends StatelessWidget {
       'waiting' => Icons.hourglass_top_rounded,
       _ => Icons.schedule_rounded,
     };
+    // 좌측 바·본문 텍스트 — 상태별 색으로 구분한다.
     final accent = switch (state) {
       'reported' =>
         isDark ? const Color(0xFF4DB6AC) : const Color(0xFF00685E),
@@ -39,6 +40,11 @@ class CheckStateCard extends StatelessWidget {
         isDark ? const Color(0xFFFFB74D) : const Color(0xFFE65100),
       _ => AppColors.textSecondary,
     };
+    // 아이콘과 그 배지만 별도 색 — 상태와 무관하게 항상 무채색.
+    // (좌측 바가 상태를 알려주므로 아이콘까지 상태별로 나눌 필요가 없다)
+    // 순수 검정(#000000)은 디자인 시스템에서 금지 — onSurface(#1A1C1C)를 쓰며
+    // 다크모드에서는 자동으로 밝은 색으로 뒤집힌다.
+    final iconAccent = AppColors.onSurface;
     final radius = BorderRadius.circular(12.r);
 
     return ClipRRect(
@@ -58,13 +64,21 @@ class CheckStateCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Container(
-                        width: 48.w,
-                        height: 48.w,
+                        // 액션 버튼의 **아이콘**(24)만 한 지름 — 버튼 배지(40)와
+                        // 같은 크기로 두면 정보 카드가 액션과 같은 무게로 읽힌다.
+                        // 카드 높이는 텍스트 2줄(≈44)이 정하므로 이 값과 무관.
+                        width: 28.w,
+                        height: 28.w,
                         decoration: BoxDecoration(
-                          color: accent.withValues(alpha: isDark ? 0.24 : 0.12),
+                          // 핑크보다 한 단계 옅은 블러시 — 아이콘(무채색)과 대비는
+                          // 유지하면서 카드 안에서 튀지 않는 수준.
+                          // 테두리는 두지 않는다(버튼 전용 표식).
+                          color: isDark
+                              ? const Color(0xFFB71C1C).withValues(alpha: 0.22)
+                              : const Color(0xFFFDECEC),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(iconData, size: 26.w, color: accent),
+                        child: Icon(iconData, size: 16.w, color: iconAccent),
                       ),
                       SizedBox(width: AppSpacing.lg),
                       Expanded(

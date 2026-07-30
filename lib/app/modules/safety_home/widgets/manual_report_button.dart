@@ -34,6 +34,9 @@ class ManualReportButton extends StatelessWidget {
       description: 'subject_home_report_desc'.tr,
       gradient: [fill, fill],
       borderColor: accent.withValues(alpha: 0.45),
+      // 설명은 2줄까지 — 긴 번역문이 단어 중간에서 끊기지 않게 한다.
+      // 짧은 언어(한국어 등)는 1줄에 들어와 높이가 그대로다.
+      descriptionMaxLines: 2,
       foregroundColor: accent,
       iconBackgroundColor: SolidActionButton.tonalBadge(isDark),
       iconColor: accent,

@@ -44,6 +44,16 @@ class SolidActionButton extends StatelessWidget {
   /// 아이콘·스피너 색 — 기본은 흰색.
   final Color? iconColor;
 
+  /// 라벨 최대 줄 수 — 기본 2줄.
+  ///
+  /// 번역문 길이는 언어마다 4배까지 차이 난다(한국어 13자 vs 프랑스어 33자).
+  /// 1줄로 묶으면 프랑스어 `Modifier l'heure de c…`처럼 목적어가 통째로 잘려
+  /// 무엇을 하는 버튼인지 알 수 없게 된다. 짧은 언어는 어차피 1줄이라 무영향.
+  final int labelMaxLines;
+
+  /// 설명 문구 최대 줄 수 — 기본 2줄. 위와 같은 이유.
+  final int descriptionMaxLines;
+
   /// 진행 중 — 아이콘 자리에 스피너 표시 + 탭 차단
   final bool isBusy;
   final bool enabled;
@@ -54,7 +64,14 @@ class SolidActionButton extends StatelessWidget {
   static double get minHeight => 68.h;
 
   /// 아이콘 배지 지름 — 위와 같은 이유로 공유한다.
-  static double get badgeSize => 44.w;
+  ///
+  /// 행 높이는 배지가 아니라 텍스트 2줄(18sp + 12sp ≈ 44)이 결정하므로, 이 값을
+  /// 그보다 작게 줄여도 3개 버튼 높이는 그대로 유지된다.
+  static double get badgeSize => 40.w;
+
+  /// 아이콘 좌우 여백 — 버튼 안쪽 가로 패딩과 배지~텍스트 간격에 함께 쓴다.
+  /// 좁힐수록 텍스트 가용 폭이 늘어 긴 번역문의 말줄임이 줄어든다.
+  static double get iconGap => AppSpacing.md;
 
   /// 버튼 라벨 스타일 — 3개 버튼이 동일한 크기·굵기를 쓰도록 한 곳에서 정의한다.
   static TextStyle labelStyle(Color color) =>
@@ -90,6 +107,8 @@ class SolidActionButton extends StatelessWidget {
     this.foregroundColor,
     this.iconBackgroundColor,
     this.iconColor,
+    this.labelMaxLines = 2,
+    this.descriptionMaxLines = 2,
     required this.isBusy,
     required this.enabled,
     required this.onPressed,
@@ -138,7 +157,7 @@ class SolidActionButton extends StatelessWidget {
             constraints: BoxConstraints(minHeight: minHeight),
             padding: EdgeInsets.symmetric(
               vertical: 14.h,
-              horizontal: AppSpacing.lg,
+              horizontal: iconGap,
             ),
             child: Row(
               children: [
@@ -159,7 +178,7 @@ class SolidActionButton extends StatelessWidget {
                         )
                       : Icon(icon, size: 24.w, color: badgeForeground),
                 ),
-                SizedBox(width: AppSpacing.lg),
+                SizedBox(width: iconGap),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -168,7 +187,7 @@ class SolidActionButton extends StatelessWidget {
                       Text(
                         label,
                         style: labelStyle(foreground),
-                        maxLines: 1,
+                        maxLines: labelMaxLines,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 2.h),
@@ -177,7 +196,7 @@ class SolidActionButton extends StatelessWidget {
                         style: descriptionStyle(
                           foreground.withValues(alpha: 0.85),
                         ),
-                        maxLines: 1,
+                        maxLines: descriptionMaxLines,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],

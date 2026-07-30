@@ -12,11 +12,16 @@ class EmergencyButton extends StatelessWidget {
   final bool enabled;
   final VoidCallback onPressed;
 
+  /// 설명 최대 줄 수 — 기본 2줄.
+  /// 긴 번역문이 단어 중간에서 끊기지 않도록 안전 홈·온보딩 모두 2줄을 쓴다.
+  final int descriptionMaxLines;
+
   const EmergencyButton({
     super.key,
     required this.isSending,
     required this.enabled,
     required this.onPressed,
+    this.descriptionMaxLines = 2,
   });
 
   @override
@@ -41,6 +46,7 @@ class EmergencyButton extends StatelessWidget {
       // (라벨은 붉은 배경 위 붉은 글씨가 되어 읽히지 않으므로 흰색 유지)
       iconBackgroundColor: Colors.white,
       iconColor: const Color(0xFF8F3030),
+      descriptionMaxLines: descriptionMaxLines,
       isBusy: isSending,
       enabled: enabled,
       onPressed: onPressed,

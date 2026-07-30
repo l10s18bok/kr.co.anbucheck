@@ -70,7 +70,7 @@ class ScheduleRowButton extends StatelessWidget {
             ),
             padding: EdgeInsets.symmetric(
               vertical: 14.h,
-              horizontal: AppSpacing.lg,
+              horizontal: SolidActionButton.iconGap,
             ),
             child: Row(
               children: [
@@ -78,7 +78,11 @@ class ScheduleRowButton extends StatelessWidget {
                   width: SolidActionButton.badgeSize,
                   height: SolidActionButton.badgeSize,
                   decoration: BoxDecoration(
-                    color: SolidActionButton.tonalBadge(isDark),
+                    // 비활성일 때는 배지도 함께 죽인다 — 흰 원만 남으면 회색으로
+                    // 내려앉은 나머지 요소 사이에서 그것만 도드라져 보인다.
+                    color: enabled
+                        ? SolidActionButton.tonalBadge(isDark)
+                        : Colors.transparent,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -87,7 +91,7 @@ class ScheduleRowButton extends StatelessWidget {
                     color: accent,
                   ),
                 ),
-                SizedBox(width: AppSpacing.lg),
+                SizedBox(width: SolidActionButton.iconGap),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -96,7 +100,9 @@ class ScheduleRowButton extends StatelessWidget {
                       Text(
                         _label,
                         style: SolidActionButton.labelStyle(accent),
-                        maxLines: 1,
+                        // 라벨 2줄 — 프랑스어 `Modifier l'heure de confirmation`처럼
+                        // 목적어가 잘려 무슨 시간인지 알 수 없게 되는 것을 막는다.
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 2.h),

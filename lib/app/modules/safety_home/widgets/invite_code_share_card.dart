@@ -62,10 +62,12 @@ class InviteCodeShareCard extends StatelessWidget {
               child: _accentCircle(118.w, 0.05),
             ),
             Padding(
+              // 좌우 여백은 반드시 같은 값을 쓴다 — 우측만 좁히면 아이콘 버튼은
+              // 여유로워지지만 그 아래 큰 코드 텍스트가 카드 모서리에 붙어 보인다.
               padding: EdgeInsets.fromLTRB(
                 AppSpacing.sp4,
                 AppSpacing.lg,
-                AppSpacing.md,
+                AppSpacing.sp4,
                 AppSpacing.xl,
               ),
               child: Column(
