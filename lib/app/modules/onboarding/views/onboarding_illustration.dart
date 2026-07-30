@@ -36,8 +36,8 @@ class OnboardingIllustration extends StatelessWidget {
                 borderRadius: BorderRadius.circular(110.r),
                 gradient: RadialGradient(
                   colors: [
-                    const Color(0xFFB71C1C).withValues(alpha: 0.32),
-                    const Color(0xFFB71C1C).withValues(alpha: 0.14),
+                    const Color(0xFF8E3A3A).withValues(alpha: 0.28),
+                    const Color(0xFF8E3A3A).withValues(alpha: 0.12),
                     Colors.transparent,
                   ],
                 ),
@@ -234,7 +234,7 @@ class _AccentDot extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFF00685E).withValues(alpha: alpha),
+        color: const Color(0xFF1D6FA5).withValues(alpha: alpha),
       ),
     );
   }
@@ -255,7 +255,7 @@ class _AccentDiamond extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2.r),
-          color: const Color(0xFF00685E).withValues(alpha: alpha),
+          color: const Color(0xFF1D6FA5).withValues(alpha: alpha),
         ),
       ),
     );

@@ -1,74 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:anbucheck/app/core/theme/app_text_theme.dart';
+import 'package:anbucheck/app/modules/safety_home/widgets/solid_action_button.dart';
 
 /// 지금 바로 안전 보고하기 버튼 (수동 heartbeat 전송)
+///
+/// 아래 "안부 시간 변경" 행과 **같은 Teal 톤 채움**을 쓴다 —
+/// 색·강조색·아이콘 배지 모두 [SolidActionButton]의 tonal* 헬퍼에서 가져오므로
+/// 한쪽만 바뀌어 어긋나는 일이 없다.
 class ManualReportButton extends StatelessWidget {
   final bool isReporting;
   final bool enabled;
+  final bool isDark;
   final VoidCallback onPressed;
 
   const ManualReportButton({
     super.key,
     required this.isReporting,
     required this.enabled,
+    required this.isDark,
     required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    final disabled = !enabled || isReporting;
-    return GestureDetector(
-      onTap: disabled ? null : onPressed,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: disabled
-                ? [const Color(0xFF4A7C78), const Color(0xFF4A7C78)]
-                : [const Color(0xFF00685E), const Color(0xFF008377)],
-          ),
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (isReporting)
-                  SizedBox(
-                    width: 24.w,
-                    height: 24.w,
-                    child: const CircularProgressIndicator(
-                        strokeWidth: 2.5, color: Colors.white),
-                  )
-                else
-                  Icon(Icons.verified_user_rounded,
-                      size: 24.w, color: Colors.white),
-                SizedBox(width: 8.w),
-                Flexible(
-                  child: Text(
-                    isReporting
-                        ? 'subject_home_report_loading'.tr
-                        : 'subject_home_report_button'.tr,
-                    style: AppTextTheme.headlineSmall(
-                        color: Colors.white, fw: FontWeight.w700),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              'subject_home_report_desc'.tr,
-              style: AppTextTheme.bodySmall(
-                  color: Colors.white.withValues(alpha: 0.8)),
-            ),
-          ],
-        ),
-      ),
+    final fill = SolidActionButton.tonalFill(isDark);
+    final accent = SolidActionButton.tonalAccent(isDark);
+
+    return SolidActionButton(
+      icon: Icons.verified_user_rounded,
+      label: isReporting
+          ? 'subject_home_report_loading'.tr
+          : 'subject_home_report_button'.tr,
+      description: 'subject_home_report_desc'.tr,
+      gradient: [fill, fill],
+      borderColor: accent.withValues(alpha: 0.45),
+      foregroundColor: accent,
+      iconBackgroundColor: SolidActionButton.tonalBadge(isDark),
+      iconColor: accent,
+      isBusy: isReporting,
+      enabled: enabled,
+      onPressed: onPressed,
     );
   }
 }

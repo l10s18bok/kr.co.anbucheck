@@ -12,7 +12,6 @@ import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/utils/constants.dart';
 import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
-import 'package:anbucheck/app/core/widgets/heartbeat_schedule_tile.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_base_controller.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/subject_home_controller.dart';
@@ -23,6 +22,7 @@ import 'package:anbucheck/app/modules/safety_home/widgets/emergency_button.dart'
 import 'package:anbucheck/app/modules/safety_home/widgets/invite_code_share_card.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/location_permission_warning.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/manual_report_button.dart';
+import 'package:anbucheck/app/modules/safety_home/widgets/schedule_row_button.dart';
 
 /// 안전 홈 페이지 — S 모드와 G+S 모드 통합 페이지
 ///
@@ -230,28 +230,19 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
               Obx(() => ManualReportButton(
                     isReporting: controller.isReporting.value,
                     enabled: _isReportEnabled,
+                    isDark: Get.find<ThemeService>().isDarkMode.value,
                     onPressed: controller.reportNow,
                   )),
               SizedBox(height: AppSpacing.vlg),
 
-              // 안부 확인 시각 변경 타일
+              // 안부 확인 시각 변경 — 연결된 보호자가 1명 이상일 때만 활성
+              // (S/G+S 공통, 구독 무관. 연결이 없을 때만 비활성)
               Obx(
-                () => HeartbeatScheduleTile(
+                () => ScheduleRowButton(
                   heartbeatTime: controller.heartbeatTime.value,
-                  // 연결된 보호자가 1명 이상일 때만 활성 — S/G+S 공통, 구독 무관.
-                  // (연결이 없을 때만 비활성, 있으면 구독 만료여도 변경 가능)
-                  onTap: controller.guardianCount.value > 0
-                      ? controller.showTimePickerDialog
-                      : () {},
-                  color: Get.find<ThemeService>().isDarkMode.value
-                      ? const Color(0xFF80CBC4)
-                      : const Color(0xFF00685E),
-                  timeColor: Get.find<ThemeService>().isDarkMode.value
-                      ? Colors.white
-                      : null,
-                  backgroundColor: Get.find<ThemeService>().isDarkMode.value
-                      ? const Color(0xFF0A3A2A)
-                      : const Color(0xFFE0F2F1),
+                  enabled: _isReportEnabled,
+                  isDark: Get.find<ThemeService>().isDarkMode.value,
+                  onTap: controller.showTimePickerDialog,
                 ),
               ),
               SizedBox(height: AppSpacing.vlg),
