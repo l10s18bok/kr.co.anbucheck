@@ -125,7 +125,9 @@ class GuardianConnectionManagementPage
                     // 대상자 리스트 (남은 공간 채움, 내부 스크롤)
                     Expanded(
                       child: Container(
-                        color: AppColors.surfaceContainerLow,
+                        // 리스트 영역을 별도 패널로 띄우지 않고 바탕화면과 같은 색으로 둔다
+                        // — 카드(surfaceContainerLowest = 흰색)만 떠 보이게 하려는 의도.
+                        color: AppColors.surface,
                         child: controller.subjects.isEmpty
                             ? Center(
                                 child: Column(
@@ -247,7 +249,10 @@ class _SubjectReorderableListState extends State<_SubjectReorderableList> {
       thumbVisibility: true,
       child: ReorderableListView.builder(
         scrollController: _scrollController,
-        padding: EdgeInsets.all(AppSpacing.md),
+        // 우측만 여백 — thumbVisibility 스크롤바가 카드 우측 끝에 겹쳐 그려지는 것을 피한다
+        // (Material 스크롤바 두께 8 + 여유 4). 상하·좌측은 0이라 카드가 리스트 영역을
+        // 꽉 채우고, 카드 사이 간격은 _SubjectListTile이 각자 bottom 여백으로 갖는다.
+        padding: EdgeInsets.only(right: AppSpacing.md),
         itemCount: widget.subjects.length,
         buildDefaultDragHandles: false,
         onReorder: widget.onReorder,
