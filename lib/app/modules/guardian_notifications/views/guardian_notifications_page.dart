@@ -44,14 +44,26 @@ class GuardianNotificationsPage
                 size: 24.w),
             onPressed: controller.isLoading ? null : controller.load,
           )),
+          // 전체 삭제 — 지울 알림이 있을 때만 노출한다.
+          // 숨길 때도 Visibility(maintainSize)로 자리를 남겨, 알림이 들어오거나
+          // 전부 지워질 때 옆의 새로고침 아이콘이 좌우로 튀지 않게 한다.
           Padding(
             padding: EdgeInsets.only(right: AppSpacing.horizontalMargin - 12.w),
-            child: IconButton(
-              icon: Icon(Icons.help_outline_rounded,
-                  size: 24.w,
-                  color: AppColors.textTertiary),
-              onPressed: () => _showAlertLevelGuide(Get.context!),
-            ),
+            child: Obx(() => Visibility(
+              visible: controller.notifications.isNotEmpty,
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              child: IconButton(
+                icon: Icon(Icons.delete_outline_rounded,
+                    size: 24.w,
+                    color: controller.isLoading
+                        ? const Color(0xFFE53935).withValues(alpha: 0.4)
+                        : const Color(0xFFE53935)),
+                onPressed:
+                    controller.isLoading ? null : () => _confirmDeleteAll(context),
+              ),
+            )),
           ),
         ],
       ),
@@ -60,28 +72,33 @@ class GuardianNotificationsPage
         // 아래 빈 상태(_EmptyState)가 표시된다.
         final items = controller.notifications;
 
-        if (items.isEmpty && !controller.isLoading) {
-          return const _EmptyState();
-        }
-
+        // 헤더("오늘 받은 알림" + 자정 삭제 안내 + 등급 안내 [?])는 알림 유무와
+        // 무관하게 항상 표시한다 — 알림이 없을 때도 "왜 비어 있는지"(자정 자동 삭제)와
+        // 등급 안내 진입점이 사라지지 않아야 한다.
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+              // 우측 마진을 IconButton 내부 여백(12)만큼 당겨, 48dp 터치 영역을 주면서도
+              // 아이콘이 좌측 텍스트와 같은 수평 마진에 맞춰 보이도록 한다(AppBar 액션과 동일 패턴).
+              padding: EdgeInsets.only(
+                left: AppSpacing.horizontalMargin,
+                right: AppSpacing.horizontalMargin - 12.w,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('notifications_today'.tr,
                       style: AppTextTheme.labelMedium(
                           color: const Color(0xFF4355B9), fw: FontWeight.w600)),
-                  GestureDetector(
-                    onTap: controller.isLoading ? null : () => _confirmDeleteAll(context),
-                    child: Icon(Icons.delete_outline_rounded,
+                  IconButton(
+                    icon: Icon(Icons.help_outline_rounded,
                         size: 24.w,
-                        color: controller.isLoading
-                            ? const Color(0xFFE53935).withValues(alpha: 0.4)
-                            : const Color(0xFFE53935)),
+                        color: AppColors.textTertiary),
+                    onPressed: () => _showAlertLevelGuide(context),
+                    // 디자인 시스템 최소 터치 영역 48×48dp 확보
+                    constraints: BoxConstraints(minWidth: 48.w, minHeight: 48.w),
+                    padding: EdgeInsets.zero,
                   ),
                 ],
               ),
@@ -97,27 +114,30 @@ class GuardianNotificationsPage
             ),
             SizedBox(height: AppSpacing.md),
             Expanded(
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              child: items.isEmpty && !controller.isLoading
+                  ? const _EmptyState()
+                  : Stack(
                       children: [
-                        ...items.map((item) => _NotificationCard(item: item)),
-                        SizedBox(height: AppSpacing.sp6),
+                        SingleChildScrollView(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.horizontalMargin),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...items.map((item) => _NotificationCard(item: item)),
+                              SizedBox(height: AppSpacing.sp6),
+                            ],
+                          ),
+                        ),
+                        if (controller.isLoading)
+                          Container(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            child: const Center(
+                              child: CircularProgressIndicator(color: Color(0xFF4355B9)),
+                            ),
+                          ),
                       ],
                     ),
-                  ),
-                  if (controller.isLoading)
-                    Container(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      child: const Center(
-                        child: CircularProgressIndicator(color: Color(0xFF4355B9)),
-                      ),
-                    ),
-                ],
-              ),
             ),
           ],
         );
@@ -256,97 +276,114 @@ class _NotificationCard extends StatelessWidget {
       padding: EdgeInsets.only(bottom: AppSpacing.md),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(AppSpacing.lg),
+        // 1단(아이콘 행)은 36 아이콘 배지가 높이를 잡아 이미 두툼하므로 위쪽 여백만
+        // 한 단계 줄인다(lg 16 → md 12). 좌우·아래는 본문 기준이라 lg 유지.
+        padding: EdgeInsets.only(
+          left: AppSpacing.lg,
+          right: AppSpacing.lg,
+          top: AppSpacing.md,
+          bottom: AppSpacing.lg,
+        ),
         decoration: BoxDecoration(
           color: _backgroundColor,
           borderRadius: BorderRadius.circular(16.r),
         ),
-        child: Row(
+        // 2단 구조 — 1단: 아이콘 · 등급 라벨 · 시각(같은 라인, 상하 중앙 정렬)
+        //            2단: 알림 본문(카드 좌우 패딩에 그대로 맞춰 전체 폭 사용)
+        //
+        // 이전에는 아이콘이 좌측에 서고 라벨·시각·본문이 그 오른쪽 열에 들어가서,
+        // (a) 아이콘이 카드 상단에 붙어 보이고 (b) 본문의 좌측 시작점이 아이콘 폭만큼
+        // 밀려 카드 좌측 패딩과 어긋나 보였다. 등급별로 다른 건 색·아이콘·라벨뿐이므로
+        // 이 구조는 모든 알림 카드(정상/정보/주의/경고/긴급)에 동일하게 적용된다.
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 36.w,
-              height: 36.w,
-              decoration: BoxDecoration(
-                color: _iconColor.withValues(alpha: 0.15),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(_icon, size: 20.w, color: _iconColor),
+            Row(
+              children: [
+                Container(
+                  width: 36.w,
+                  height: 36.w,
+                  decoration: BoxDecoration(
+                    color: _iconColor.withValues(alpha: 0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(_icon, size: 20.w, color: _iconColor),
+                ),
+                SizedBox(width: AppSpacing.md),
+                Expanded(
+                  // 등급 라벨은 1단의 주인공 — labelSmall(11sp)로는 아이콘 옆에서
+                  // 너무 작게 읽혀 labelMedium(14sp) + w900(최대 굵기)으로 올린다.
+                  child: Text(
+                    _levelLabel,
+                    style: AppTextTheme.labelMedium(
+                        color: _iconColor, fw: FontWeight.w900),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (item.messageKey != 'steps')
+                  // 시각은 보조 정보 — 크기는 라벨과 맞추되 굵기를 낮춰 위계를 유지한다.
+                  Text(
+                    _formatTime(item.receivedAt),
+                    style: AppTextTheme.labelMedium(
+                        color: const Color(0xFF4355B9), fw: FontWeight.w500),
+                  ),
+              ],
             ),
-            SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            // 1단 아래 여백은 sm(8) — 구분선 위쪽을 좁혀 1단을 더 조이고,
+            // 선 아래는 md(12)로 두어 본문이 선에 붙지 않게 한다(의도적 비대칭).
+            SizedBox(height: AppSpacing.sm),
+            // 1단/2단 구분선 — 중립 회색 대신 **등급 색을 옅게** 깐다.
+            // 카드 배경이 이미 등급 계열 톤이라 회색 실선은 이물감이 크고,
+            // 아이콘 배지(alpha 0.15)와 같은 계열을 쓰면 카드 안에 자연스럽게 녹는다.
+            // 높이는 screenutil로 스케일하지 않는다 — 헤어라인은 기기가 커져도
+            // 굵어지면 안 된다.
+            Container(height: 1, color: _iconColor.withValues(alpha: 0.2)),
+            SizedBox(height: AppSpacing.md),
+            RichText(
+              text: TextSpan(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        _levelLabel,
-                        style: AppTextTheme.labelSmall(
-                            color: _iconColor, fw: FontWeight.w700),
-                      ),
-                      if (item.messageKey != 'steps')
-                        Text(
-                          _formatTime(item.receivedAt),
-                          style: AppTextTheme.labelSmall(
-                              color: const Color(0xFF4355B9),
-                              fw: FontWeight.w500),
-                        ),
-                    ],
+                  TextSpan(
+                    text: '${item.displayName} - ',
+                    style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
                   ),
-                  SizedBox(height: 4.h),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '${item.displayName} - ',
-                          style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
-                        ),
-                        TextSpan(
-                          text: _localizedBody,
-                          style: AppTextTheme.bodyMedium(),
-                        ),
-                      ],
-                    ),
+                  TextSpan(
+                    text: _localizedBody,
+                    style: AppTextTheme.bodyMedium(),
                   ),
-                  if (item.messageKey == 'emergency' && item.hasLocation) ...[
-                    SizedBox(height: 8.h),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                        onPressed: () {
-                          Get.toNamed(
-                            AppRoutes.guardianEmergencyMap,
-                            arguments: {
-                              'lat': item.locationLat,
-                              'lng': item.locationLng,
-                              'accuracy': item.locationAccuracy,
-                              'capturedAt': item.locationCapturedAt ??
-                                  item.receivedAt,
-                              'subjectNickname': item.nickname ?? '',
-                              'inviteCode': item.inviteCode ?? '',
-                            },
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12.w,
-                            vertical: 6.h,
-                          ),
-                          minimumSize: Size.zero,
-                          tapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          foregroundColor: const Color(0xFF4355B9),
-                        ),
-                        icon: const Icon(Icons.map_outlined, size: 18),
-                        label: Text('notifications_view_location'.tr),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
+            if (item.messageKey == 'emergency' && item.hasLocation) ...[
+              SizedBox(height: 8.h),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: () {
+                    Get.toNamed(
+                      AppRoutes.guardianEmergencyMap,
+                      arguments: {
+                        'lat': item.locationLat,
+                        'lng': item.locationLng,
+                        'accuracy': item.locationAccuracy,
+                        'capturedAt': item.locationCapturedAt ?? item.receivedAt,
+                        'subjectNickname': item.nickname ?? '',
+                        'inviteCode': item.inviteCode ?? '',
+                      },
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    // 좌측 패딩 0 — 본문 텍스트와 좌측 시작점을 맞춘다.
+                    padding: EdgeInsets.only(right: 12.w, top: 6.h, bottom: 6.h),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    foregroundColor: const Color(0xFF4355B9),
+                  ),
+                  icon: const Icon(Icons.map_outlined, size: 18),
+                  label: Text('notifications_view_location'.tr),
+                ),
+              ),
+            ],
           ],
         ),
       ),
