@@ -30,55 +30,9 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: false,
+          // 우측 최악등급 배지는 제거됨 — 본문 "오늘의 안부 요약" 아래 등급별 카운터가
+          // 최악 등급을 포함한 전체 분포를 더 정확히 알려주므로 중복이었다.
           title: Text('Anbu Guardian', style: AppTextTheme.headlineSmall()),
-          actions: [
-            Obx(() {
-              if (controller.subjects.isEmpty) return const SizedBox.shrink();
-              final level = controller.highestAlertLevel;
-              final color = switch (level) {
-                'caution' => const Color(0xFFF59E0B),
-                'warning' => const Color(0xFFE65100),
-                'urgent' => const Color(0xFFE53935),
-                _ => const Color(0xFF00685E),
-              };
-              final bgColor = switch (level) {
-                'caution' => const Color(0xFFFFFDE7),
-                'warning' => const Color(0xFFFFF3E0),
-                'urgent' => const Color(0xFFFFEBEE),
-                _ => const Color(0xFFE8F5E9),
-              };
-              final label = switch (level) {
-                'caution' => 'guardian_status_caution'.tr,
-                'warning' => 'guardian_status_warning'.tr,
-                'urgent' => 'guardian_status_urgent'.tr,
-                _ => 'guardian_status_normal'.tr,
-              };
-              return Padding(
-                padding: EdgeInsets.only(right: 16.w),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: bgColor,
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.warning_amber_rounded, size: 14.w, color: color),
-                      SizedBox(width: 3.w),
-                      Flexible(
-                        child: Text(
-                          label,
-                          style: AppTextTheme.labelSmall(color: color, fw: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
-          ],
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
@@ -162,13 +116,6 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 );
               }),
 
-              // 상단 레이블
-              Text(
-                'guardian_today_summary'.tr,
-                style: AppTextTheme.labelMedium(color: AppColors.textTertiary, fw: FontWeight.w500),
-              ),
-              SizedBox(height: 6.h),
-
               // 요약 텍스트
               Obx(() {
                 final count = controller.subjects.length;
@@ -177,44 +124,61 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                     : 'guardian_checking_subjects'.trParams({'count': count.toString()});
                 return Text(text, style: AppTextTheme.headlineMedium(fw: FontWeight.w700));
               }),
-              SizedBox(height: AppSpacing.sp6),
 
-              // 대상자 리스트 헤더
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'guardian_subject_list'.tr,
-                    style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
-                  ),
-                  Flexible(
-                    child: Obx(() {
-                      final subjects = controller.subjects;
-                      final counts = {
-                        'normal': subjects
-                            .where((s) => s.alertLevel == 'normal' || s.alertLevel == 'info')
-                            .length,
-                        'caution': subjects.where((s) => s.alertLevel == 'caution').length,
-                        'warning': subjects.where((s) => s.alertLevel == 'warning').length,
-                        'urgent': subjects.where((s) => s.alertLevel == 'urgent').length,
-                      };
-                      const colors = {
-                        'normal': Color(0xFF00685E),
-                        'caution': Color(0xFFF59E0B),
-                        'warning': Color(0xFFE65100),
-                        'urgent': Color(0xFFE53935),
-                      };
-                      final labels = {
-                        'normal': 'guardian_status_normal'.tr,
-                        'caution': 'guardian_status_caution'.tr,
-                        'warning': 'guardian_status_warning'.tr,
-                        'urgent': 'guardian_status_urgent'.tr,
-                      };
-                      final items = counts.entries.where((e) => e.value > 0).toList();
-                      if (items.isEmpty) return const SizedBox.shrink();
-                      return Wrap(
-                        alignment: WrapAlignment.end,
-                        spacing: 6.w,
+              // "오늘의 안부 요약" 라벨 + 등급별 인원 카운터
+              //
+              // 라벨을 헤드라인 위 eyebrow로 두지 않고 **카운터 바로 위**에 붙인다 —
+              // 헤드라인("현재 N명의 안부를 확인 중입니다")은 연결된 대상자 수라 오늘과
+              // 무관해서 "오늘의 요약"이라는 라벨과 맞지 않았다. 등급 분포 위에 놓이면
+              // 라벨이 실제 내용과 일치한다.
+              //
+              // 카운터는 전체 폭을 쓰는 독립 행이다. 등급 개수(1~4) × 언어 조합으로 폭이
+              // 크게 변해(러시아어 4등급이면 가용 폭의 약 2배) 어떤 행에 얹어도 한 줄
+              // 보장이 불가능하므로, Wrap으로 두 줄까지 자연스럽게 접히게 둔다.
+              // (FittedBox 축소는 쓰지 않는다 — 장식인 라벨을 지키려고 정보인 카운터를
+              //  같이 줄이게 되고, OS 글자 크기 설정도 무력화한다.)
+              //
+              // 표시할 등급이 없으면(대상자 0명) 라벨까지 함께 숨긴다 — 라벨만 덩그러니
+              // 남으면 아래에 아무것도 없는 빈 제목이 된다.
+              Obx(() {
+                final subjects = controller.subjects;
+                final counts = {
+                  'normal': subjects
+                      .where((s) => s.alertLevel == 'normal' || s.alertLevel == 'info')
+                      .length,
+                  'caution': subjects.where((s) => s.alertLevel == 'caution').length,
+                  'warning': subjects.where((s) => s.alertLevel == 'warning').length,
+                  'urgent': subjects.where((s) => s.alertLevel == 'urgent').length,
+                };
+                const colors = {
+                  'normal': Color(0xFF00685E),
+                  'caution': Color(0xFFF59E0B),
+                  'warning': Color(0xFFE65100),
+                  'urgent': Color(0xFFE53935),
+                };
+                final labels = {
+                  'normal': 'guardian_status_normal'.tr,
+                  'caution': 'guardian_status_caution'.tr,
+                  'warning': 'guardian_status_warning'.tr,
+                  'urgent': 'guardian_status_urgent'.tr,
+                };
+                final items = counts.entries.where((e) => e.value > 0).toList();
+                if (items.isEmpty) return const SizedBox.shrink();
+                return Padding(
+                  padding: EdgeInsets.only(top: AppSpacing.lg),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'guardian_today_summary'.tr,
+                        style: AppTextTheme.labelMedium(
+                          color: AppColors.textTertiary,
+                          fw: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.sm),
+                      Wrap(
+                        spacing: 10.w,
                         runSpacing: 4.h,
                         children: items
                             .map(
@@ -224,10 +188,19 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                               ),
                             )
                             .toList(),
-                      );
-                    }),
+                      ),
+                    ],
                   ),
-                ],
+                );
+              }),
+              SizedBox(height: AppSpacing.sp6),
+
+              // 대상자 리스트 헤더 — 우측에 있던 등급별 카운터는 위 "오늘의 안부 요약"
+              // 블록으로 옮겼다. 헤더와 한 줄을 공유하던 탓에 등급이 3종 이상 섞이면
+              // Wrap이 두 줄로 늘어 헤더 높이가 흔들렸기 때문이다.
+              Text(
+                'guardian_subject_list'.tr,
+                style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
               ),
               SizedBox(height: AppSpacing.md),
 
@@ -939,6 +912,10 @@ class _StepsChartDialog extends StatelessWidget {
   }
 }
 
+
+/// 등급별 인원 카운터의 항목 하나 — 색 점 + "등급: N".
+///
+/// 색만으로 의미를 전달하지 않도록 등급명을 글자로 함께 적는다(색각 이상 대응).
 class _LegendDot extends StatelessWidget {
   final Color color;
   final String label;
@@ -955,13 +932,10 @@ class _LegendDot extends StatelessWidget {
           height: 6.w,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        SizedBox(width: 3.w),
-        Flexible(
-          child: Text(
-            label,
-            style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
-            overflow: TextOverflow.ellipsis,
-          ),
+        SizedBox(width: 4.w),
+        Text(
+          label,
+          style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
         ),
       ],
     );

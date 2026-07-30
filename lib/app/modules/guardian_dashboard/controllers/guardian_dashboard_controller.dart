@@ -389,16 +389,8 @@ class GuardianDashboardController extends BaseController
     return 'guardian_last_check_days'.trParams({'days': diff.inDays.toString()});
   }
 
-  /// 대상자 목록에서 가장 높은 알림 등급 반환
-  String get highestAlertLevel {
-    if (subjects.isEmpty) return 'normal';
-    return subjects
-        .map((s) => s.alertLevel)
-        .reduce((a, b) {
-          const order = ['normal', 'info', 'caution', 'warning', 'urgent'];
-          return order.indexOf(a) >= order.indexOf(b) ? a : b;
-        });
-  }
+  // highestAlertLevel getter 제거 — 유일한 소비자였던 AppBar 우측 최악등급 배지가
+  // 삭제됐다(상단 요약 블록의 등급별 카운터가 전체 분포를 더 정확히 전달).
 
   /// 안전확인 완료 처리 — 서버 경고 클리어 후 로컬 상태 갱신
   Future<void> confirmSafety(String inviteCode, String nickname) async {
