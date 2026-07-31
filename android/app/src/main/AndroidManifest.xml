@@ -25,6 +25,15 @@
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules">
+        <!-- Android 16(targetSdk 36)은 sw≥600dp 대형 화면(펼친 폴더블·태블릿)에서
+             screenOrientation="portrait"를 무시해 가로 진입을 허용한다. 이 앱의 세로 고정은
+             PRD-FrontEnd §6에 기록된 의도적 결정이므로 opt-out으로 기존 동작을 유지한다.
+             ⚠️ 이 property는 targetSdk 37에서 완전히 제거된다. build.gradle.kts가
+             targetSdk를 핀하지 않고 flutter.targetSdkVersion을 따라가므로, Flutter 업그레이드로
+             targetSdk가 37이 되는 순간 경고 없이 무효화된다(그때는 반응형 대응 또는 targetSdk 핀). -->
+        <property
+            android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY"
+            android:value="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

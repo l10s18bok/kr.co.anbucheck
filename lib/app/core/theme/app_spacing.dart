@@ -34,4 +34,9 @@ abstract class AppSpacing {
   static double get vmd => 12.h;
   static double get vlg => 16.h;
   static double get vxl => 20.h;
+
+  /// spacing.6의 수직 버전 (.h 기반) — 주요 요소 간 기본 세로 간격.
+  /// 펼친 폴더블·태블릿처럼 폭 스케일이 높이 스케일보다 훨씬 큰 화면에서
+  /// sp6(=32.w)를 세로에 쓰면 간격만 2배로 부풀어 콘텐츠 영역을 잠식한다.
+  static double get vsp6 => 32.h;
 }

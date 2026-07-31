@@ -48,7 +48,7 @@ class OnboardingPage extends GetWidget<OnboardingController> {
                         currentPage: controller.currentPage,
                         totalPages: controller.totalPages,
                       )),
-                  SizedBox(height: AppSpacing.sp6),
+                  SizedBox(height: AppSpacing.vsp6),
 
                   // 메인 버튼
                   SizedBox(
@@ -76,7 +76,7 @@ class OnboardingPage extends GetWidget<OnboardingController> {
                       );
                     }),
                   ),
-                  SizedBox(height: AppSpacing.lg),
+                  SizedBox(height: AppSpacing.vlg),
                 ],
               ),
             ),
@@ -143,13 +143,13 @@ class _OnboardingStep extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: AppSpacing.lg),
+                  SizedBox(height: AppSpacing.vlg),
                   Text(
                     title,
                     style: AppTextTheme.headlineLarge(),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: AppSpacing.lg),
+                  SizedBox(height: AppSpacing.vlg),
                   Text(
                     description,
                     style: AppTextTheme.bodyLarge(
