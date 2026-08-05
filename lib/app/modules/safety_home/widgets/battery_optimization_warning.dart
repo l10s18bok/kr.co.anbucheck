@@ -6,7 +6,10 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 
 /// 배터리 사용 제한 해제 권장 위젯
 /// 제한 없음 상태면 [SizedBox.shrink]로 공간을 차지하지 않는다.
-/// 탭 시 OS 앱 정보 설정으로 직행 (상세 다이얼로그 없음).
+/// 탭 시 [SafetyHomeBaseController.openBatteryOptimizationSettings]가
+/// 안내 다이얼로그(`stability_battery_dialog_*`)를 먼저 띄우고,
+/// [설정 열기]를 고른 경우에만 OS 앱 정보 페이지로 진입한다 —
+/// 사용자가 "배터리 → 제한 없음" 경로를 모를 수 있어 사전 안내가 필요하다.
 ///
 /// 활동/위치 권한 경고가 빨간색(에러)인 반면 배터리는 작동 자체는 되지만
 /// 지연이 발생하는 권장 사항이므로 노란/주황 계열 톤을 사용한다.
