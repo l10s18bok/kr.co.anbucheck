@@ -164,6 +164,13 @@ class SubjectHomeController extends SafetyHomeBaseController {
 
   /// 앱이 auto-revoke whitelist에 등록되어 있으면 안내 생략.
   /// 등록되지 않은 경우에만 앱 실행 때마다 계속 안내한다.
+  ///
+  /// **S 전용 — G+S에는 의도적으로 두지 않는다.** G+S 보호자는 자신이 지켜보는
+  /// 대상자의 푸시 알림을 확인하려고 앱을 자주 여는 사용자이므로 "오랫동안 앱을
+  /// 열지 않아 권한이 자동 해제되는" 상황 자체에 잘 빠지지 않는다. 또한 순수 S
+  /// 사용자(주로 고령)에 비해 평소 폰 사용이 많은 층이라, 매 실행마다
+  /// `barrierDismissible: false` 다이얼로그를 띄우는 비용이 얻는 것보다 크다.
+  /// G+S로 옮기거나 부모 컨트롤러로 올리지 말 것.
   Future<void> _checkHibernationSetting() async {
     if (!Platform.isAndroid) return;
 

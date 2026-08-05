@@ -155,11 +155,14 @@ Google Play 비공개 테스트 안내와 마케팅용 소개는 **별도 저장
 | --- | --- | --- |
 | `averic-lab/test/index.html` | **averic.co.kr/test/** | 비공개 테스터(전문 외주 업체)용 — 절차 중심 단순 가이드 |
 | `averic-lab/preview/index.html` | **averic.co.kr/preview/** | 마케팅 / 인플루언서용 — 앱 동작·핵심기능 상세 |
+| `averic-lab/{lang}/faq.html` | **averic.co.kr/{lang}/faq.html** | 사용자 FAQ 20개 언어 — 권한 안내 4종. 명세는 `averic-lab/_faq-build/PRD-FAQ.md` |
+
+⚠️ **FAQ는 이 저장소의 번역 파일을 읽어 만들어진다.** `lib/app/core/translations/*.dart`에서 권한 경고·휴면 다이얼로그 관련 키(`stability_battery_warning_short`, `gs_activity_permission_denied_warning`, `location_permission_warning`, `permission_hibernation_*` 등 18개)를 **이름 변경·삭제하면 FAQ 빌드가 실패**한다. 문구만 바꾸는 것은 안전하며, averic-lab에서 `extract_strings.py`를 재실행하면 20개 언어에 반영된다.
 
 - 둘 다 **자기완결형 단일 HTML**(CSS/JS 인라인 + 스크린샷 base64 내장), `noindex`로 검색 비노출(URL 아는 사람만 접근).
 - **`index.html` 직접 수정 금지** — `averic-lab/_beta-test-build/`의 `build_test.py` / `build_preview.py`를 고쳐 재빌드(`python3 build_test.py`)한다. 스크린샷 원본은 `~/Desktop/안부 언어별 스크린샷/한국어/`.
 - 배포는 **averic-lab repo에서 `git push`**(GitHub Pages 자동 게시). 상세는 `averic-lab/CLAUDE.md` 참조.
-- ⚠️ **현재 미배포 상태** — `averic-lab`의 `CLAUDE.md`·`test/`·`preview/`·`_beta-test-build/`가 모두 untracked(커밋 대기)다. 사용자가 배포를 요청하면 averic-lab repo에서 커밋·push해야 averic.co.kr에 반영된다.
+- `test/`·`preview/`·`_beta-test-build/`는 커밋 `dd6987d`로 **이미 배포 완료**. 이후 변경은 averic-lab repo에서 커밋·push해야 averic.co.kr에 반영된다.
 
 ## 규칙
 1. 모든 응답·주석·커밋 메시지 **한글** 작성
