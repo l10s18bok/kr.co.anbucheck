@@ -156,8 +156,14 @@ Google Play 비공개 테스트 안내와 마케팅용 소개는 **별도 저장
 | `averic-lab/test/index.html` | **averic.co.kr/test/** | 비공개 테스터(전문 외주 업체)용 — 절차 중심 단순 가이드 |
 | `averic-lab/preview/index.html` | **averic.co.kr/preview/** | 마케팅 / 인플루언서용 — 앱 동작·핵심기능 상세 |
 | `averic-lab/{lang}/faq.html` | **averic.co.kr/{lang}/faq.html** | 사용자 FAQ 20개 언어 — 권한 안내 4종. 명세는 `averic-lab/_faq-build/PRD-FAQ.md` |
+| `averic-lab/{lang}/guide.html` | **averic.co.kr/{lang}/guide.html** | 사용설명 — 안전 코드 생성 → 공유 → 가족이 연결까지를 앱 화면 애니메이션으로. 현재 한국어만 |
 
-⚠️ **FAQ는 이 저장소의 번역 파일을 읽어 만들어진다.** `lib/app/core/translations/*.dart`에서 권한 경고·휴면 다이얼로그 관련 키(`stability_battery_warning_short`, `gs_activity_permission_denied_warning`, `location_permission_warning`, `permission_hibernation_*` 등 18개)를 **이름 변경·삭제하면 FAQ 빌드가 실패**한다. 문구만 바꾸는 것은 안전하며, averic-lab에서 `extract_strings.py`를 재실행하면 20개 언어에 반영된다.
+⚠️ **FAQ·사용설명 두 페이지는 이 저장소의 번역 파일을 읽어 만들어진다.** `lib/app/core/translations/*.dart`의 **78개 키**를 **이름 변경·삭제하면 페이지 빌드가 실패**한다(`extract_strings.py`가 exit 1). 문구만 바꾸는 것은 안전하며, averic-lab에서 `extract_strings.py`를 재실행하면 20개 언어에 반영된다.
+
+- FAQ가 쓰는 것(권한 경고·휴면 다이얼로그): `stability_battery_*`, `gs_activity_permission_*`, `location_permission_*`, `permission_hibernation_*`, `subject_home_*`, `noti_caution_missing_body` 등
+- 사용설명이 추가로 쓰는 것(설정·연결·대시보드 화면): `settings_*`, `gs_enable_*`, `subscription_*`, `add_subject_*`, `guardian_*`(상태·버튼·차트 축), `nav_*`, `subject_home_code_copied`
+- 정확한 목록은 `averic-lab/_faq-build/extract_strings.py`의 `KEYS`가 유일한 권위다.
+- ⚠️ 이 키들의 값에 **`@`로 시작하는 자리표시자를 새로 넣지 말 것** — 페이지가 채우지 못해 사용자에게 `@days` 같은 문자열이 그대로 보인다. `extract_strings.py`가 이를 검사해 실패시킨다.
 
 - 둘 다 **자기완결형 단일 HTML**(CSS/JS 인라인 + 스크린샷 base64 내장), `noindex`로 검색 비노출(URL 아는 사람만 접근).
 - **`index.html` 직접 수정 금지** — `averic-lab/_beta-test-build/`의 `build_test.py` / `build_preview.py`를 고쳐 재빌드(`python3 build_test.py`)한다. 스크린샷 원본은 `~/Desktop/안부 언어별 스크린샷/한국어/`.
