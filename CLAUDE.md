@@ -158,10 +158,11 @@ Google Play 비공개 테스트 안내와 마케팅용 소개는 **별도 저장
 | `averic-lab/{lang}/faq.html` | **averic.co.kr/{lang}/faq.html** | 사용자 FAQ 20개 언어 — 권한 안내 4종. 명세는 `averic-lab/_faq-build/PRD-FAQ.md` |
 | `averic-lab/{lang}/guide.html` | **averic.co.kr/{lang}/guide.html** | 사용설명 — 안전 코드 생성 → 공유 → 가족이 연결까지를 앱 화면 애니메이션으로. 현재 한국어만 |
 
-⚠️ **FAQ·사용설명·홈(히어로 폰 목업) 세 곳이 이 저장소의 번역 파일을 읽어 만들어진다.** `lib/app/core/translations/*.dart`의 **88개 키**를 **이름 변경·삭제하면 페이지 빌드가 실패**한다(`extract_strings.py`가 exit 1). 문구만 바꾸는 것은 안전하며, averic-lab에서 `extract_strings.py`를 재실행하면 20개 언어에 반영된다.
+⚠️ **FAQ·사용설명·홈(히어로 폰 목업) 세 곳이 이 저장소의 번역 파일을 읽어 만들어진다.** `lib/app/core/translations/*.dart`의 **97개 키**를 **이름 변경·삭제하면 페이지 빌드가 실패**한다(`extract_strings.py`가 exit 1). 문구만 바꾸는 것은 안전하며, averic-lab에서 `extract_strings.py`를 재실행하면 20개 언어에 반영된다.
 
 - FAQ가 쓰는 것(권한 경고·휴면 다이얼로그): `stability_battery_*`, `gs_activity_permission_*`, `location_permission_*`, `permission_hibernation_*`, `subject_home_*`, `noti_caution_missing_body` 등
 - 사용설명이 추가로 쓰는 것(설정·연결·대시보드 화면): `settings_*`, `gs_enable_*`, `subscription_*`, `add_subject_*`, `guardian_*`(상태·버튼·차트 축), `nav_*`, `subject_home_code_copied`
+- **홈 「도움이 필요해요」 긴급 흐름 목업**이 쓰는 것: `subject_home_emergency_confirm_title/_body/_send`, `emergency_message_hint`, `noti_emergency_body`, `emergency_map_title/_subject_label/_accuracy_label/_open_external`
 - **홈 「단계별 신호」 알림 목업**이 쓰는 것: `notifications_title`, `notifications_level_health/_info/_warning/_urgent`, `noti_auto_report_body`, `noti_warning_body`, `noti_urgent_body`(@days), `noti_steps_body`(@steps)
 - **홈 히어로 폰 목업**(2026-08-07 추가)이 쓰는 것: 보호자 대시보드 문구 `guardian_checking_subjects`·`guardian_today_summary`·`guardian_status_normal`·`guardian_status_caution`·`guardian_status_confirmed`·`guardian_subject_list`·`guardian_safety_needed`·`guardian_call_now`·`guardian_confirm_safety`·`guardian_activity_*`·`guardian_last_check_hours`·`guardian_chart_*`, `add_subject_button`, `nav_*`, 푸시 예시 `notifications_level_caution`·`noti_caution_missing_body`, `app_name` — 대부분 사용설명과 겹치고 `guardian_status_normal` 하나만 이때 새로 추가됐다
 - 정확한 목록은 `averic-lab/_faq-build/extract_strings.py`의 `KEYS`가 유일한 권위다.
