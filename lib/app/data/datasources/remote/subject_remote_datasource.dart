@@ -33,6 +33,24 @@ class SubjectRemoteDatasource {
     return Map<String, dynamic>.from(result.body as Map);
   }
 
+  /// PUT /api/v1/subjects/aliases — 대상자 별칭 동기화 (invite_code → 별칭)
+  ///
+  /// 보호자 Push 제목에 "누구의 알림인지"를 표시하기 위해 서버가 별칭을 알아야 한다.
+  /// 개별 저장(1건)과 앱 업데이트 후 백필(전체)이 같은 경로를 쓰며 멱등하다.
+  Future<void> syncAliases(
+    String deviceToken,
+    Map<String, String> aliases,
+  ) async {
+    final result = await ApiClientFactory.instance.put<dynamic>(
+      ApiEndpoints.subjectAliases,
+      {'aliases': aliases},
+      headers: _auth(deviceToken),
+    );
+    if (!result.isOk) {
+      throw Exception('별칭 동기화 실패 (${result.statusCode})');
+    }
+  }
+
   /// DELETE /api/v1/subjects/{guardian_id}/unlink — 대상자 연결 해제
   Future<void> unlinkSubject(String deviceToken, int guardianId) async {
     final result = await ApiClientFactory.instance.delete<dynamic>(

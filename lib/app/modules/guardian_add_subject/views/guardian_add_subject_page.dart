@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
-    show TextInputFormatter, FilteringTextInputFormatter;
+    show
+        TextInputFormatter,
+        FilteringTextInputFormatter,
+        LengthLimitingTextInputFormatter;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
@@ -146,6 +149,9 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
               TextField(
                 controller: controller.aliasController,
                 onChanged: controller.onAliasChanged,
+                // 서버가 20자에서 절단하므로(Push 제목에 실리는 값) 입력도 맞춘다.
+                // maxLength 대신 formatter를 쓰는 이유: 글자수 카운터를 노출하지 않기 위함.
+                inputFormatters: [LengthLimitingTextInputFormatter(20)],
                 style: AppTextTheme.bodyLarge(),
                 decoration: InputDecoration(
                   hintText: 'add_subject_alias_hint'.tr,

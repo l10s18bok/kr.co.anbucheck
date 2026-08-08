@@ -46,7 +46,7 @@
 ### 1.6 개인정보 보호 원칙
 - 서버에 **이름, 전화번호 등 개인정보를 일절 저장하지 않음**
 - 보호 대상자-보호자 연결은 서버가 발급한 **고유 코드(invite_code)**로 매칭
-- 보호자가 대상자를 식별하기 위한 별칭(예: "삼촌")은 **보호자 앱 로컬에만 저장**
+- 보호자가 대상자를 식별하기 위한 별칭(예: "삼촌")은 **보호자 앱 로컬이 원본**이며, 서버에는 **Push 제목 렌더링용 사본**만 보관한다(`guardians.alias`, `PUT /api/v1/subjects/aliases`). 알림 트레이에 "⚠ 주의 · 삼촌"처럼 누구의 알림인지 표시하려면 앱이 꺼져 있어도 OS가 그리는 제목에 이름이 들어가야 하고, 그 제목은 서버만 만들 수 있기 때문이다. 이는 보호자가 스스로 붙인 호칭이지 대상자의 실명이 아니며, 해당 보호자에게만 되돌려 보내진다. 스토어 데이터 안전성 공시에는 "사용자 생성 콘텐츠"로 표기한다
 - **위치정보는 정기 heartbeat에서 수집하지 않음.** 대상자가 [🚨 도움이 필요해요] 버튼을 직접 누른 경우에만 사용자 동의 하에 위도/경도/정확도를 1회 수집하여 연결된 보호자에게 전달하고, 대상자 기기 타임존 자정까지만 서버에 보관 (§2 참조)
 - **긴급 요청 시 선택 메시지**: 긴급 확인 다이얼로그에서 대상자가 함께 전할 말(선택, 최대 100자)을 직접 입력한 경우에만 수집한다. 위치와 동일하게 긴급 이벤트에 종속된 휘발성 데이터로 `notification_events`에만 저장(자정 정리 시 함께 삭제)되며, 자유 입력이므로 대상자 **본인의 자발적 자기 진술**이다(서버가 능동 수집하는 개인정보 아님). 미입력 시 아무것도 저장·전송하지 않음
 - 서버 DB가 유출되어도 개인 식별 불가 (당일 긴급 요청 위치 외에는 보관 없음)
@@ -1159,7 +1159,7 @@ suspicious = true 판정 시 서버가 suspicious_count 기반으로 보호자 �
 [대상자 추가] (설치 후 언제든 가능)
 대시보드 → [+ 대상자 추가]
   · 고유 코드 입력: "K7M-4PXR"
-  · 별칭 입력 (선택): "삼촌"   ← 보호자 앱 로컬에만 저장, 서버 미전송
+  · 별칭 입력 (필수): "삼촌"   ← 로컬이 원본, 서버에는 Push 제목용 사본 동기화
   · [연결하기] → 서버에서 코드 확인 → 연결 완료
 ```
 
@@ -1173,7 +1173,7 @@ suspicious = true 판정 시 서버가 suspicious_count 기반으로 보호자 �
 
 [보호자 앱 로컬]
 대상자 목록:
-  · { invite_code: "K7M-4PXR", nickname: "삼촌" }  ← 로컬 저장
+  · { invite_code: "K7M-4PXR", nickname: "삼촌" }  ← 로컬이 원본 (서버에는 Push 제목용 사본 동기화, §9.6.1)
 ```
 
 
@@ -1265,7 +1265,7 @@ Authorization: Bearer <device_token> → 항상 유효
 - `GuardianSubjectService` 인메모리 캐시에서 제거
 
 **서버 처리:**
-- `guardians` 레코드 삭제
+- `guardians` 레코드 삭제 — Push 제목용 별칭 사본(`guardians.alias`)도 이 행에 있으므로 함께 사라진다(별도 정리 불필요)
 - `notification_events`는 삭제하지 않음 (대상자 중심 데이터 — 다른 보호자에게도 유효)
 - `alerts`는 삭제하지 않음 (대상자 기준 공유 데이터 — 다른 보호자에게도 유효)
 
@@ -1488,7 +1488,7 @@ ios/Runner/
 | `flutter_local_notifications` | 로컬 알림 예약/취소 | 일일 로컬 안부 확인 안전망 알림 (iOS 정시 — Android 일일 안전망은 서버 푸시 `subject_safety_net`로 이관, 잔존 알림 정리만) + Android retry 실패 안내 알림(`send_failed`) + 무료체험 종료 알림(`trial_ended`) + 배터리/네트워크 안내 알림 |
 | `pedometer_2` | 걸음수 조회 | **primary 활동 지표**. iOS는 `queryPedometerData(from:to:)`로 kill 구간 포함 누적값 조회. Android는 Google Fit Local Recording API 사용(Samsung TYPE_STEP_COUNTER 0 발화 버그 회피, **minSdk 29 필요**). Android: ACTIVITY_RECOGNITION 권한, iOS: NSMotionUsageDescription |
 | `screen_state` (로컬 path) | Android `PowerManager.isInteractive()` 조회 | **secondary 활동 지표**. 프로젝트 내부 플러그인(`packages/screen_state/`). worker fire **순간** 화면 깨어있음 여부를 suspicious 판정 2순위로 활용 — 화면 깨어있는 상태에서 fire(true, 발화 시점 기기 사용 중)와 Doze maintenance window에서 화면 꺼진 채 자연 fire(false)를 구분. 단 이 값은 "그 순간" 1회 스냅샷이라 "하루 전체 사용 여부"와는 범위가 다름에 유의. 커스텀 MethodChannel은 `MainActivity`에 등록하면 WorkManager 백그라운드 FlutterEngine에서 동작하지 않으므로 `GeneratedPluginRegistrant`가 자동 등록하는 FlutterPlugin 형태의 pub 패키지로 분리 |
-| `shared_preferences` | 경량 로컬 저장소 | device_token, 대상자 별칭, 보류 heartbeat 1건 저장 |
+| `shared_preferences` | 경량 로컬 저장소 | device_token, 대상자 별칭(`nicknames` + 서버 동기화 스냅샷 `nicknames_synced`), 보류 heartbeat 1건 저장 |
 | `device_info_plus` | 기기 정보 (OS 타입/버전), iOS device_id | iOS는 `identifierForVendor` 그대로 사용. **Android device_id는 이 패키지를 쓰지 않는다** — `AndroidDeviceInfo.id`는 SSAID가 아니라 `Build.ID`(펌웨어 빌드 식별자)라 같은 기종·같은 빌드의 모든 기기가 동일한 값을 반환하는 결함이 있어(2026-07-04 발견, 두 물리 기기가 한 계정으로 병합되는 사고로 이어짐), `MainActivity`의 커스텀 MethodChannel(`anbucheck/device_id`)로 `Settings.Secure.ANDROID_ID`를 직접 조회하도록 전환. 조회 실패 시 fallback은 `Random.secure()` 기반(시각 기반 난수는 여러 기기를 동시에 설정하는 상황에서 같은 값이 나올 수 있어 금지) |
 | `connectivity_plus` | 네트워크 상태 | 오프라인 시 전송 보류 |
 | `battery_plus` | 배터리 상태 | 배터리 잔량·충전 여부 조회, 권한 불필요 |
@@ -1938,7 +1938,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 │  고유 코드 입력 (8자리)      │
 │  [________________]          │
 │                             │
-│  별칭 입력 (선택):           │
+│  별칭 입력 (필수, 20자):     │
 │  [________________]          │
 │  예: 삼촌, 아버지           │
 │                             │
@@ -1948,9 +1948,21 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 └─────────────────────────────┘
 ```
 
-- 별칭은 **보호자 앱 로컬에만 저장** (NicknameLocalDatasource, 서버 미전송)
-- 별칭 미입력 시 고유 코드로 표시
+- **별칭은 필수 입력이다** — `isFormValid = _isCodeValid && _isAliasValid`이고 `_isAliasValid`는 `trim().isNotEmpty`라 비우면 [연결하기]가 비활성화된다(커밋 `209b95f`, 2026-04-06부터). 연결된 대상자에는 반드시 별칭이 있다는 뜻이라, 서버 동기화 백필의 커버리지가 사실상 100%가 된다
+- 입력은 **20자로 제한**(`LengthLimitingTextInputFormatter(20)`, 연결관리의 별칭 수정 다이얼로그도 동일). 서버가 저장 시 20자에서 절단하므로 입력단을 맞춰 사용자가 잘림을 나중에 발견하지 않게 한다. 글자수 카운터를 노출하지 않으려고 `maxLength` 대신 formatter를 쓴다
+- **저장 위치**: 로컬(`NicknameLocalDatasource`)이 원본이고, 서버에는 Push 제목 렌더링용 사본이 동기화된다(§9.6.1)
 - 연결 완료 시 result=true 반환 → 대시보드에서 목록 즉시 갱신
+
+#### 9.6.1 별칭 서버 동기화 (Push 제목의 "누구의 알림인지")
+
+보호자 Push 알림 제목에 대상자 별칭을 붙이려면(`"⚠ 주의 · 삼촌"`) 앱이 꺼져 있어도 OS가 그리는 제목에 이름이 들어가야 하고, 그 제목은 서버만 만들 수 있다. 따라서 로컬 별칭 맵을 서버에 동기화한다.
+
+- **API**: `PUT /api/v1/subjects/aliases` — `SubjectRemoteDatasource.syncAliases(token, map)`
+- **트리거는 스냅샷 비교 하나** (`GuardianSubjectService.syncAliasesIfChanged`): 현재 로컬 맵이 마지막 동기화 스냅샷(`nicknames_synced`)과 다를 때만 전송하고, 성공 시에만 스냅샷을 갱신한다. **이 방식 하나로 (1) 앱 업데이트 후 백필, (2) 신규 추가·별칭 수정, (3) 이전 전송 실패의 재시도가 전부 처리된다** — 일회성 `alias_synced` 플래그를 쓰면 실패가 영구화되므로 쓰지 말 것
+- **호출 지점 2곳**: ① `GuardianSubjectService.load()` 성공 직후 `unawaited`로 — 보호자 화면 진입 시마다 자동 백필·재시도. ② 연결관리의 별칭 수정(`saveSubjectEdits`) 직후 — 이 경로는 서버 재조회를 하지 않고 로컬 캐시만 갱신하므로 직접 호출해야 즉시 반영된다. (대상자 추가 경로는 호출부가 `_loadSubjects(force: true)`를 부르므로 ①이 자동으로 커버)
+- **fire-and-forget, 절대 throw하지 않는다** — 별칭이 없으면 Push가 기존 정형 문구로 나갈 뿐이므로, 동기화 실패가 연결·저장·화면 어느 것도 막아서는 안 된다
+- 이미 연결이 해제된 `invite_code`가 로컬 맵에 남아 있어도 서버가 조용히 무시하므로 백필이 통째로 실패하지 않는다
+- **로컬 맵이 비면 서버에 아무것도 보내지 않는다(의도)** — 보호자 앱 재설치 직후가 이 상태다(로컬 별칭 소멸, §3.5). 이때 빈 맵을 올려 서버 별칭을 지우면 **재설치와 별칭 재입력 사이 구간의 Push에서 이름이 사라진다.** 서버의 이전 별칭을 그대로 두면 그 구간에도 정상적으로 이름이 붙고, 보호자가 별칭을 다시 입력하는 순간 덮어써진다. 서버 별칭을 로컬과 "정합"시키려고 빈 맵 업로드나 삭제 API를 추가하지 말 것 — 연결이 끊기면 `guardians` 행과 함께 자동으로 사라진다(§3.7)
 
 **연결 사전 검증 (API 호출 전 차단, `GuardianAddSubjectController.connectSubject`):**
 
@@ -2319,6 +2331,10 @@ String _localeString() {
 
 **선택 근거:** 앱이 완전히 종료된 상태에서도 Push 알림이 번역되어야 하므로, 서버 측에서 locale별 메시지를 생성하여 발송한다. (data-only push 방식은 앱 종료 시 기본 언어로만 표시되는 문제)
 
+**제목에 붙는 대상자 별칭:** 서버가 `push_service.decorate_title`로 제목 **뒤에** 별칭을 덧붙인다 — `"⚠ 주의" → "⚠ 주의 · 삼촌"`. 앞이 아니라 뒤인 이유는 제목이 짧은 등급 라벨이라 안드로이드 트레이에서 한 줄로 잘려도 **등급이 먼저 읽혀야** 하기 때문이다. 별칭이 없으면(미동기화·구버전 앱) 기존 정형 문구 그대로 나가므로 하위호환이 유지된다. 별칭 자체는 사용자 자유 입력이라 번역하지 않고 원문 그대로 표시한다.
+
+> ⚠️ 같은 이유로 **data-only push로 바꿔 클라이언트가 제목을 조립하는 방식은 채택하지 않았다** — §2.2가 명시적으로 기각한 방식이고(앱 강제 종료 시 FCM 미전달 + OEM의 Silent Push 차단), 실패 모드가 "일반 문구로 표시"가 아니라 **경고 알림 자체가 안 뜨는 것**이다.
+
 
 ### 12.4 보호자 알림 목록 (message_key 기반 클라이언트 번역)
 
@@ -2446,7 +2462,7 @@ lib/app/core/translations/
 - **개인정보 최소 수집**: 이름, 전화번호, 사용 앱 목록 일절 수집하지 않음. 위치정보는 정기 heartbeat에서 미수집이며, 대상자가 [🚨 도움이 필요해요] 버튼을 직접 누른 경우에만 사용자 동의 하에 1회 수집하여 보호자에게 전달 (최대 24시간 서버 보관, 그 외 시점 일절 수집 없음). 긴급 요청 시 대상자가 직접 입력한 선택 메시지(최대 100자)도 동일 정책으로 처리 (긴급 이벤트에 종속, 자정 정리 시 삭제, 미입력 시 없음)
 - 수집 데이터 최소화: device_id, 걸음수(steps_delta), suspicious 플래그, 배터리 잔량, 앱 버전, locale, 긴급 요청 시 위도/경도/정확도, 긴급 요청 시 대상자 선택 메시지(자유 입력, 최대 100자, 자정 삭제)
 - 인앱 결제 영수증은 서버에서 Apple/Google 서버와 직접 검증
-- 대상자 별칭은 보호자 앱 로컬에만 저장, 서버에 전송되지 않음
+- 대상자 별칭은 보호자 앱 로컬이 원본이며, 서버에는 Push 제목 렌더링용 사본만 보관(`guardians.alias`) — 해당 보호자에게만 되돌려 보내지고, 대상자 실명이 아니라 보호자가 붙인 호칭이다
 
 
 ---
@@ -2499,6 +2515,7 @@ lib/app/core/translations/
 | `/api/v1/heartbeat`            | POST   | 안부 확인 heartbeat 전송                                |
 | `/api/v1/subjects/link`        | POST   | 고유 코드로 대상자 연결 (보호자용)                     |
 | `/api/v1/subjects`             | GET    | 연결된 대상자 목록 조회 (보호자용)                     |
+| `/api/v1/subjects/aliases`     | PUT    | 대상자 별칭 동기화 (Push 제목의 "누구의 알림인지" 표시용) |
 | `/api/v1/subjects/{id}/unlink` | DELETE | 대상자 연결 해제 (보호자용)                            |
 | `/api/v1/subscription`         | GET    | 구독 상태 확인                                         |
 | `/api/v1/subscription/verify`  | POST   | 인앱 결제 영수증 검증                                  |

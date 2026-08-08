@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/subscription_service.dart';
 import 'package:anbucheck/app/data/datasources/local/nickname_local_datasource.dart';
@@ -104,11 +106,48 @@ class GuardianSubjectService extends GetxService {
       }
 
       _lastFetched = DateTime.now();
+
+      // 별칭 서버 동기화 — 응답을 기다리지 않는다(실패해도 화면·기능 영향 없음).
+      // 앱 업데이트 후 첫 진입의 백필과, 이전 전송 실패의 재시도가 여기서 처리된다.
+      unawaited(syncAliasesIfChanged());
     } catch (_) {
       // 호출부에서 에러 처리
     } finally {
       isLoading.value = false;
     }
+  }
+
+  /// 로컬 별칭 맵이 마지막 동기화 스냅샷과 다르면 서버에 올린다.
+  ///
+  /// 서버는 이 값을 보호자 Push 제목에 "누구의 알림인지"를 붙이는 데만 쓰며,
+  /// 없으면 기존 정형 문구로 나간다 — 따라서 이 호출은 **절대 예외를 던지지
+  /// 않고**(fire-and-forget) 실패 시 스냅샷을 갱신하지 않아 다음 기회에 자동
+  /// 재시도된다. 스냅샷 비교 하나로 백필·개별 저장·재시도가 모두 커버된다.
+  Future<void> syncAliasesIfChanged() async {
+    try {
+      final current = await _nicknameDs.getAll();
+      final synced = await _nicknameDs.getSyncedSnapshot();
+      if (synced != null && _sameAliases(current, synced)) return;
+      if (current.isEmpty) {
+        // 올릴 게 없으면 전송 없이 스냅샷만 맞춰 매 로드마다 재시도하지 않게 한다.
+        await _nicknameDs.saveSyncedSnapshot(current);
+        return;
+      }
+      final deviceToken = await _tokenDs.getDeviceToken();
+      if (deviceToken == null) return;
+      await _subjectDs.syncAliases(deviceToken, current);
+      await _nicknameDs.saveSyncedSnapshot(current);
+    } catch (_) {
+      // 무시 — 스냅샷 미갱신 상태로 남아 다음 load()에서 재시도된다.
+    }
+  }
+
+  bool _sameAliases(Map<String, String> a, Map<String, String> b) {
+    if (a.length != b.length) return false;
+    for (final e in a.entries) {
+      if (b[e.key] != e.value) return false;
+    }
+    return true;
   }
 
   /// 캐시 무효화 후 강제 갱신

@@ -60,6 +60,13 @@ class ApiEndpoints {
   /// ※ 대상자 앱에서는 호출하지 않음
   static const String subjects = '/api/v1/subjects';
 
+  /// PUT /api/v1/subjects/aliases  { aliases: { "K7M-4PXR": "삼촌" } }
+  /// - 보호자가 붙인 대상자 별칭을 서버에 동기화 (Push 제목에 "누구의 알림인지" 표시용)
+  /// - 개별 저장(1개짜리 맵)과 앱 업데이트 후 백필(맵 전체)이 같은 경로를 씀 → 멱등
+  /// - 실패해도 Push는 기존 정형 문구로 나가므로 앱 기능에 영향 없음 (fire-and-forget)
+  /// ※ 대상자 앱에서는 호출하지 않음
+  static const String subjectAliases = '/api/v1/subjects/aliases';
+
   /// DELETE /api/v1/subjects/{guardianId}/unlink
   /// - 보호자가 특정 대상자와의 연결을 해제
   /// - guardianId: 보호자 본인의 user_id (경로 파라미터)
