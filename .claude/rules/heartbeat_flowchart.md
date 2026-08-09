@@ -309,7 +309,7 @@ flowchart TD
 
     SaveNoti --> FindGuardians[연결된 보호자 전원 조회<br/>guardians + devices JOIN]
 
-    FindGuardians --> Push[보호자 전원에게 긴급 Push 발송<br/>FCM data에 lat/lng/accuracy 포함 가능<br/>message 있으면 푸시 본문을 대상자 원문으로 치환<br/>asyncio.gather 병렬, DND 무시, 구독 만료 무관]
+    FindGuardians --> Push[보호자 전원에게 긴급 Push 발송<br/>FCM data에 lat/lng/accuracy 포함 가능<br/>message 있으면 푸시 본문을 대상자 원문으로 치환<br/>본문 앞 별칭 프리픽스는 그대로 적용<br/>asyncio.gather 병렬, DND 무시, 구독 만료 무관]
 
     Push --> Response([200 OK 응답<br/>클라: 위치 포함 여부에 따라 스낵바 분기])
 
@@ -329,7 +329,7 @@ flowchart TD
 | 반복 발송 | 없음 (1회 즉시 발송) |
 | 클라이언트 | 확인 다이얼로그로 오탐 방지 |
 | 위치 | optional — 사용자 동의 + 서비스 ON일 때 2단계 폴백으로 획득: (1) `getLastKnownPosition` 캐시 위치 선행 (수 ms) → (2) `getCurrentPosition` medium 정확도 + 10초 타임아웃. 거부/실패 어떤 경우에도 긴급 API 호출 자체는 항상 실행. S 모드 홈과 G+S 안전코드 페이지 양쪽 긴급 버튼이 공통 `captureEmergencyLocation()` 헬퍼를 공유 |
-| 메시지 | optional — 긴급 확인 다이얼로그의 선택 입력(`emergency_message_hint`, 최대 100자). 있으면 `body.message`로 전송 → 서버가 `notification_events.message_params.note` 저장 + **보호자 푸시 본문을 대상자 원문으로 치환**(방식 A, 제목은 로케일별 정형 유지). 미입력 시 정형 본문(`push_emergency_body`). 위치와 동일한 휘발성 데이터로 자정 정리 시 삭제 |
+| 메시지 | optional — 긴급 확인 다이얼로그의 선택 입력(`emergency_message_hint`, 최대 100자). 있으면 `body.message`로 전송 → 서버가 `notification_events.message_params.note` 저장 + **보호자 푸시 본문을 대상자 원문으로 치환**(방식 A, 제목은 로케일별 정형 유지). 별칭 프리픽스는 치환 *후* 본문에 붙으므로 `삼촌 · 도와주세요` 형태가 된다 — 원문은 보존되고 앞에 별칭만 더해진다. 미입력 시 정형 본문(`push_emergency_body`). 위치와 동일한 휘발성 데이터로 자정 정리 시 삭제 |
 
 
 ## 8. Heartbeat 예약 실행 계층 (WorkManager + 로컬 알림 안전망)

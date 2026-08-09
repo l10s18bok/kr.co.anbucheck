@@ -517,7 +517,7 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
             SizedBox(height: AppSpacing.sm),
             TextField(
               controller: _aliasController,
-              // 서버가 20자에서 절단하므로(Push 제목에 실리는 값) 입력도 맞춘다.
+              // 서버가 20자에서 절단하므로(Push 본문에 실리는 값) 입력도 맞춘다.
               inputFormatters: [LengthLimitingTextInputFormatter(20)],
               cursorColor: const Color(0xFF212121),
               decoration: InputDecoration(

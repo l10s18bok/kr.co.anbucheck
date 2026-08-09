@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// 대상자 별칭 로컬 저장소 — invite_code → nickname 매핑
 ///
-/// 로컬이 원본(source of truth)이다. 서버에는 보호자 Push 제목에 "누구의
+/// 로컬이 원본(source of truth)이다. 서버에는 보호자 Push 본문에 "누구의
 /// 알림인지"를 표시하기 위한 사본만 올라간다 (PUT /api/v1/subjects/aliases).
 /// [getSyncedSnapshot] / [saveSyncedSnapshot]은 마지막으로 서버 동기화에
 /// 성공한 맵을 기록해, 현재 맵과 다를 때만 재전송하도록 한다 — 이 스냅샷

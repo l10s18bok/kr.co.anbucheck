@@ -149,7 +149,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
               TextField(
                 controller: controller.aliasController,
                 onChanged: controller.onAliasChanged,
-                // 서버가 20자에서 절단하므로(Push 제목에 실리는 값) 입력도 맞춘다.
+                // 서버가 20자에서 절단하므로(Push 본문에 실리는 값) 입력도 맞춘다.
                 // maxLength 대신 formatter를 쓰는 이유: 글자수 카운터를 노출하지 않기 위함.
                 inputFormatters: [LengthLimitingTextInputFormatter(20)],
                 style: AppTextTheme.bodyLarge(),

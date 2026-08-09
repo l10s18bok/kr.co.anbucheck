@@ -35,7 +35,7 @@ class SubjectRemoteDatasource {
 
   /// PUT /api/v1/subjects/aliases — 대상자 별칭 동기화 (invite_code → 별칭)
   ///
-  /// 보호자 Push 제목에 "누구의 알림인지"를 표시하기 위해 서버가 별칭을 알아야 한다.
+  /// 보호자 Push 본문에 "누구의 알림인지"를 표시하기 위해 서버가 별칭을 알아야 한다.
   /// 개별 저장(1건)과 앱 업데이트 후 백필(전체)이 같은 경로를 쓰며 멱등하다.
   Future<void> syncAliases(
     String deviceToken,

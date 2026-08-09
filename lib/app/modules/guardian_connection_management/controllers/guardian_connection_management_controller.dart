@@ -68,7 +68,7 @@ class GuardianConnectionManagementController extends BaseController {
     if (trimmedAlias.isEmpty) return;
     await _nicknameDs.save(subject.code, trimmedAlias);
     _svc.updateAlias(subject.code, trimmedAlias);
-    // 서버에도 반영 — Push 제목의 "누구의 알림인지" 표시에 쓰인다.
+    // 서버에도 반영 — Push 본문의 "누구의 알림인지" 표시에 쓰인다.
     // 이 경로는 서버 재조회를 하지 않으므로(로컬 캐시만 갱신) 직접 호출한다.
     // 실패해도 무시되며 다음 목록 로드에서 자동 재시도된다.
     unawaited(_svc.syncAliasesIfChanged());
