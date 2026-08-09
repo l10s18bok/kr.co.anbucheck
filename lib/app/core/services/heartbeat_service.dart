@@ -27,6 +27,43 @@ import 'package:anbucheck/app/data/models/heartbeat_request.dart';
 /// 앱이 포그라운드에 있다는 것 자체가 interactive 상태의 증거이므로 true를
 /// 명시 전달한다. null이 들어오는 경로는 기본적으로 존재하지 않아야 하며,
 /// 만약 null이 전달되면 걸음수 단독 판정으로 fallback된다.
+/// 보류 큐 payload가 **오늘 것인가** — `_sendPendingInternal`의 마커 갱신 기준.
+///
+/// ⚠️ **키 문자열 전체가 아니라 날짜만 비교한다.** `scheduled_key`에는 예약시각이 함께
+/// 들어 있는데(`<날짜>_HH:mm`), 예약시각은 사용자 변경뿐 아니라 `_syncScheduleFromServer`
+/// (포그라운드 진입마다 실행)로도 바뀐다. 전체 문자열을 비교하면 18:00에 큐에 담긴 **오늘**
+/// payload가 예약시각이 20:00로 바뀐 뒤 "지난 기록"으로 오분류되고, 뒤이은 정시 전송과 함께
+/// 서버에 **오늘 날짜 기록 2건**이 도착해 "오늘 안부 확인 완료" Push가 중복된다.
+/// 서버 판정(`anbucheck-server/services/heartbeat_keys.py`의 `intended_date`)도 날짜만
+/// 보므로 양쪽 기준을 반드시 일치시켜야 한다.
+///
+/// 날짜 출처 우선순위:
+///   1. `scheduled_key`의 앞 10자 — 자동 전송
+///   2. `timestamp`의 기기 로컬 날짜 — 수동 보고(키가 null)
+///   3. 둘 다 해석 불가 → **오늘로 간주**(기존 동작 유지). 여기서 "지난 것"으로 판단하면
+///      같은 날 heartbeat가 두 번 나갈 수 있어 보수적으로 처리한다.
+///
+/// 회복 전송(`recovery_<날짜>`)은 애초에 보류 큐를 쓰지 않지만, 들어오더라도 정시 슬롯을
+/// 소비해서는 안 되므로 명시적으로 제외한다.
+bool heartbeatPayloadIsFromToday(Map<String, dynamic> payload, DateTime now) {
+  final key = payload['scheduled_key'] as String?;
+  if (key != null && key.startsWith('recovery_')) return false;
+
+  if (key != null && key.length >= 10) {
+    final datePart = key.substring(0, 10);
+    if (DateTime.tryParse(datePart) != null) {
+      return datePart == formatYmd(now);
+    }
+  }
+
+  final ts = payload['timestamp'] as String?;
+  if (ts != null) {
+    final parsed = DateTime.tryParse(ts);
+    if (parsed != null) return formatYmd(parsed.toLocal()) == formatYmd(now);
+  }
+  return true;
+}
+
 class HeartbeatService {
   /// 동일 isolate 내 중복 실행 방지 (execute + sendPending 공유)
   static bool _busy = false;
@@ -262,14 +299,39 @@ class HeartbeatService {
       await _heartbeatDs.clearPending();
 
       final now = DateTime.now();
-      await _tokenDs.saveLastHeartbeatDate(formatYmd(now));
-      await _tokenDs.saveLastHeartbeatTime(formatHm(now.hour, now.minute));
+      final isTodaysReport = heartbeatPayloadIsFromToday(payload, now);
 
-      // 오늘의 scheduledKey도 갱신해 _executeInternal 중복 전송 가드가 작동하도록 함
-      final scheduledKey = '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}';
-      await _tokenDs.saveLastScheduledKey(scheduledKey);
-
-      await _onHeartbeatSent(schedHour, schedMinute);
+      // 보류 큐의 payload가 **오늘 것인지 지난 날 것인지**로 갈린다.
+      //
+      //  · 오늘 것 (18:00 전송 실패 → 18:15 periodic이 큐를 비움)
+      //    → 이게 곧 오늘의 정시 전송이므로 마커를 찍어 당일 재전송을 막는다.
+      //
+      //  · 지난 날 것 (n일 실패 → n+1일에 뒤늦게 전송)
+      //    → **마커를 찍지 않는다.** 어제 기록을 보냈다고 오늘 것까지 보낸 걸로
+      //      처리하면, 뒤이어 실행되는 _executeInternal이 lastScheduledKey 일치로
+      //      스킵되어 그날 걸음수가 통째로 누락된다(막대 0). 마커를 비워두면
+      //      _executeInternal이 정상 진행해 오늘 heartbeat를 따로 보낸다.
+      //      서버는 payload의 scheduled_key 날짜로 두 기록을 각자의 날짜에 귀속시키고,
+      //      지난 기록에는 "오늘 안부 확인 완료"/"오늘 N보" 알림을 보내지 않는다.
+      //      재예약(_onHeartbeatSent)도 여기서 하지 않는다 — 뒤따르는 오늘 전송의
+      //      성공 경로가 담당한다.
+      if (isTodaysReport) {
+        await _tokenDs.saveLastHeartbeatDate(formatYmd(now));
+        await _tokenDs.saveLastHeartbeatTime(formatHm(now.hour, now.minute));
+        await _tokenDs.saveLastScheduledKey(
+          '${formatYmd(now)}_${formatHm(schedHour, schedMinute)}',
+        );
+        await _onHeartbeatSent(schedHour, schedMinute);
+      } else {
+        debugPrint(
+          '[HeartbeatService] 지난 기록 전송 완료 '
+          '(key=${payload['scheduled_key']}, ts=${payload['timestamp']}) — '
+          '오늘 마커 미갱신, 정시 전송은 그대로 수행',
+        );
+        // 통신 복구가 입증됐으므로 잔존 안내 알림만 정리한다.
+        await LocalAlarmService.cancelSendFailed();
+        await LocalAlarmService.cancelSubjectSafetyNet();
+      }
     } catch (_) {
       // pending 전송 자체는 실패 — 큐는 그대로 남겨 다음 fire에서 재시도.
       // 단 schedule은 반드시 재등록 — oneOff fire-and-not-rescheduled 차단.

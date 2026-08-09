@@ -242,9 +242,25 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 |------|------|-----------|------|
 | 1차 (정확) | WorkManager `registerOneOffTask` (Android) | 예약 시각 정각 도래 | 정확한 발화. **전송 성공 후** `HeartbeatService._onHeartbeatSent`가 `HeartbeatWorkerService.schedule()` 호출 → one-off + periodic 둘 다 cancel + 내일자 register(periodic 재워 배터리 절약). **전송 실패 시에는** `_rescheduleNextDay(success: false)` → `rescheduleOneOffOnly()`로 **one-off만 내일자 재무장, periodic 15분 폴링은 유지**(살아있는 periodic이 같은 날 통신 복구를 잡음 — 실패가 풀 schedule()을 부르면 그날 안전망 해체, Defect 1). iOS는 사용하지 않음 |
 | 1차 (폴링 안전망) | WorkManager `registerPeriodicTask(frequency: 15분)` (Android) | 매 15분 | one-off가 OEM 배터리 절약/Doze로 지연·미실행되어도 최대 15분 내 백업 발화 + 화면 켜짐 Doze 해제 piggyback. periodic 첫 fire 오프셋은 예약시각 +3분(one-off과 동시 fire race를 정상 조건에서 물리적으로 회피). 전송 성공 시 함께 cancel + 내일자 재등록되며 `_periodicStartOffset`(3분)으로 다음 날 예약시각 + 3분에 첫 fire. 당일 중복 전송은 `lastScheduledKey`(성공 마커) + `HeartbeatLockDatasource`(SQLite UNIQUE CAS, TTL 30초)로 차단. 콜백 시각 가드는 `예약시각 -15분`을 경계로 한다 — `-15분` 이후 fire는 정상 정시 전송, `-15분` 이전 fire는 평소 스킵(periodic +3분 offset의 실제 발화가 Doze maintenance window에 종속돼 예측 불가한 변동성을 흡수하는 가드) |
-| 1차 (worker 회복 전송) | WorkManager 콜백 — `HeartbeatService.execute(isInteractiveAtTrigger: true)` (Android) | 예약시각 `-15분` 이전 fire + `lastHeartbeatDate`가 오늘도 어제도 아닌 2일 이상 미전송 갭 | 예약시각 이전 구간에서 2일 이상 미전송 갭이 감지되면 예약시각을 기다리지 않고 **당일 정시 슬롯을 즉시 소비**한다. 기기가 네트워크에 연결된 채 WorkManager가 발화했다는 것 자체가 활동 증거이므로 `isInteractiveAtTrigger=true` → `suspicious=false`. `scheduled_key=<날짜>_HH:mm`(정시 키)을 써서 `_executeInternal` → `_onHeartbeatSent` 호출 → WorkManager를 내일자로 재등록해 정상 사이클을 즉시 복구한다. 서버 `(device_id, scheduled_key)` dedup이 예약시각에 fire되는 one-off의 중복 전송을 차단하므로 one-off는 `isReportedToday=true`로 자연 스킵. iOS는 worker가 없어 미적용(Android 전용) |
-| 2차 | 앱 시작 / 백그라운드→포그라운드 자동 전송 | 예약 시각 경과 + 당일 미전송 | 자정 전까지 무조건 전송. 가드는 `isReportedToday`(이미 전송) + Android의 `isScheduleInFuture`(예약시각 이전) 두 개로 단순화 — 자정이 유일한 의미 경계. 1차 2계층 모두 실패하거나 retry 3회 실패 후 사용자가 send_failed 알림을 탭해 진입한 경우의 최종 안전망. `isScheduleInFuture`(예약시각 이전)에 막혀 정시 전송이 보류되더라도 `_isRecoveryPending`(`lastHeartbeatDate`가 오늘도 어제도 아닌 미전송 갭)이면 **포그라운드 회복 전송**(`HeartbeatService().execute(recovery: true)` → `_executeRecovery`)을 보낸다 — 포그라운드 진입 자체가 살아있음 증거이며, worker 회복 전송과 달리 **정시 슬롯을 소비하지 않는다**(별도 키 `recovery_<날짜>`·마커 `lastRecoveryDate`로 `lastHeartbeatDate`/`lastScheduledKey` 미갱신) → 예약시각 정시 전송은 그대로 수행된다. 늦은 전송 성공 시 `_onHeartbeatSent`가 WorkManager를 즉시 내일자로 재등록해 정시 사이클 정상화 |
+| 1차 (worker 회복 전송) | WorkManager 콜백 — `HeartbeatService.execute(recovery: true)` (Android) | 예약시각 `-15분` 이전 fire + `lastHeartbeatDate`가 오늘도 어제도 아닌 2일 이상 미전송 갭 | 예약시각 이전 구간에서 2일 이상 미전송 갭이 감지되면 예약시각을 기다리지 않고 **살아있음 신호**를 보낸다 — 포그라운드 회복 전송과 **완전히 동일한** `_executeRecovery` 경로다. 기기가 네트워크에 연결된 채 WorkManager가 발화했다는 것 자체가 활동 증거라 `suspicious=false`이며, 전용 키 `recovery_<날짜>` + 마커 `lastRecoveryDate`(1일 1회)를 쓰고 `steps_delta`는 싣지 않는다. **정시 슬롯을 소비하지 않으므로 예약시각 정시 전송이 그대로 수행되어 그날 걸음수가 온전히 기록된다.** ⚠️ 과거에는 정시 키로 전송해 슬롯을 소비했고, 그 탓에 정시 전송이 콜백 상단 `lastHeartbeatDate == 오늘` 가드에 걸려 **그날 걸음수가 폰을 켠 시각까지만**(이른 아침이면 사실상 0) 기록됐다 — 포그라운드 경로와 다시 갈라놓지 말 것. `_onHeartbeatSent`를 부르지 않으므로 재예약은 **`inputData['source'] == 'one-off'`일 때만** `rescheduleOneOffOnly()`(이 분기는 항상 예약시각 이전이라 오늘 예약시각으로 계산됨) — 지난 날짜용 one-off이 네트워크 제약에 묶였다가 이 구간에서 뒤늦게 발화하면 소비되어 오늘 정시 트리거가 사라지기 때문. periodic fire에는 재무장하지 않는다(one-off 미소비 + 15분마다 cancel/register 반복 방지). iOS는 worker가 없어 미적용(Android 전용) |
+| 2차 | 앱 시작 / 백그라운드→포그라운드 자동 전송 | 예약 시각 경과 + 당일 미전송 | 자정 전까지 무조건 전송. 가드는 `isReportedToday`(이미 전송) + Android의 `isScheduleInFuture`(예약시각 이전) 두 개로 단순화 — 자정이 유일한 의미 경계. 1차 2계층 모두 실패하거나 retry 3회 실패 후 사용자가 send_failed 알림을 탭해 진입한 경우의 최종 안전망. `isScheduleInFuture`(예약시각 이전)에 막혀 정시 전송이 보류되더라도 `_isRecoveryPending`(`lastHeartbeatDate`가 오늘도 어제도 아닌 미전송 갭)이면 **포그라운드 회복 전송**(`HeartbeatService().execute(recovery: true)` → `_executeRecovery`)을 보낸다 — 포그라운드 진입 자체가 살아있음 증거이며, worker 회복 전송과 **동일한 경로**로 **정시 슬롯을 소비하지 않는다**(별도 키 `recovery_<날짜>`·마커 `lastRecoveryDate`로 `lastHeartbeatDate`/`lastScheduledKey` 미갱신) → 예약시각 정시 전송은 그대로 수행된다. 늦은 전송 성공 시 `_onHeartbeatSent`가 WorkManager를 즉시 내일자로 재등록해 정시 사이클 정상화 |
 | 3차 (안전망) | **iOS**: 일일 로컬 안부 확인 안전망 알림 (`LocalAlarmService`) / **Android**: 서버 FCM 푸시 `subject_safety_net` | **iOS**: heartbeat 시각 정시 (매일 반복, daily repeat via `matchDateTimeComponents.time`) / **Android**: 서버 미수신 체크 = heartbeat 예약시각 + 2시간 (미수신일마다 1회 → 무시 시 매일 반복) | **iOS**: BGTask 미사용이므로 사실상 PRIMARY 트리거 — 사용자가 알림을 탭하면 앱이 열리며 `onInit`/`onResumed`에서 자동 전송. heartbeat 성공 후 iOS 알람 미처리 — `matchDateTimeComponents.time`으로 OS가 매일 자동 반복. `_onHeartbeatSent`는 iOS 알람을 건드리지 않는다. **Android**: WorkManager one-off + periodic 15분 + 앱 열기(2차) 모두 실패해 worker 자체가 OEM/사용자에 의해 cancel된 시나리오까지 메우는 LAST-RESORT 사용자 유도 알림 — 서버 발송이라 보호자 유무·구독 만료와 무관하게 도달(서버 미수신 체크에서 보호자/구독 게이팅 **앞**에서 대상자 본인 Android 기기로 발송). 과거 Android 일일 로컬 안전망 알림(+3h, `LocalAlarmService`)은 폐지(`matchDateTimeComponents.time`이 forceNextDay에도 "그 시각의 다음 발생=오늘"로 당겨 정상 전송한 날에도 매일 오발화하던 결함) — `LocalAlarmService.schedule()`은 Android에서 잔존 알림 cancel 후 즉시 return. 푸시 탭 라우팅: iOS `gs_deadman` / Android `subject_safety_net`·(잔존 `safety_net`)·`send_failed` 모두 **safety_home으로 이동**(`_routeToSafetyHome`, 역할 인식; kill 런치는 splash) |
+
+**보류 큐 재전송의 날짜 귀속 (걸음수 이틀 손실 방지):**
+
+보류 큐(`HeartbeatLocalDatasource`, **1건만 보관**)의 payload는 자기가 원래 어느 날 것인지를 `scheduled_key`에 갖고 있다. `_sendPendingInternal`은 그 **날짜가 오늘인지**로 마커 갱신 여부를 가른다(`heartbeatPayloadIsFromToday`). ⚠️ 키 문자열 전체가 아니라 **날짜만** 비교한다 — 예약시각은 `_syncScheduleFromServer`(포그라운드 진입마다)로도 바뀌므로, 전체 비교하면 오늘 payload가 지난 기록으로 오분류돼 같은 날 기록 2건이 서버에 도착하고 `auto_report` Push가 중복된다. 서버 판정(`intended_date`)도 날짜만 보므로 기준을 일치시켜야 한다. 수동 보고는 키가 없어 `timestamp`의 로컬 날짜로 폴백한다.
+
+| 보류 payload의 키 | 처리 |
+|---|---|
+| **날짜가 오늘** (18:00 전송 실패 → 18:15 periodic이 큐를 비움) | 이게 곧 오늘의 정시 전송 → `lastHeartbeatDate`/`lastScheduledKey` 갱신 + `_onHeartbeatSent` |
+| **날짜가 지난 날** (n일 실패 → n+1일에 뒤늦게 전송) | **마커 미갱신.** 큐 비우기 + `cancelSendFailed`/`cancelSubjectSafetyNet`만. 재예약도 생략 |
+
+⚠️ 지난 날짜 payload로 오늘 마커를 찍으면, 같은 `execute()` 안에서 뒤이어 실행되는 `_executeInternal`이 `lastScheduledKey` 일치로 스킵되어 **그날 heartbeat가 아예 나가지 않고 걸음수 막대가 0이 된다.** 마커를 비워두면 두 건이 각각 전송되고, 서버가 `scheduled_key` 날짜로 각자의 날에 귀속시킨다. 재예약을 생략하는 이유도 같다 — 뒤따르는 오늘 전송의 성공 경로가 담당한다.
+
+⚠️ **서버 측 짝 규칙 (선행 배포 필수)**: 서버는 `scheduled_key` 날짜가 도착일보다 **엄격히 과거**일 때만(`<`) "지난 기록 보정"으로 분류해 **이력 적재 + 활성 경고 해소**(+활동 증명 시 `suspicious_count` 리셋)만 하고 `auto_report`·`오늘 N보`·suspicious 에스컬레이션·배터리 부족 Push를 생략한다. `!=`가 아니라 `<`인 이유: 도착일은 `devices.timezone`으로 계산하므로 기기 이동·시계 오차 시 키 날짜가 앞설 수 있고, 그때 오분류하면 정상 당일 heartbeat의 알림이 조용히 사라진다. `battery_level`은 **저장은 하되 알림만 생략**한다 — 이 필드는 미수신 스케줄러가 '배터리 방전 추정' 분기에 읽는 값이라 계약이 "마지막으로 수신한 heartbeat의 배터리"이고, 저장을 건너뛰면 더 오래된 값이 남는다. 걸음수 차트(`get_step_history`)도 `server_ts`가 아니라 `scheduled_key` 날짜로 버킷팅한다(읽기 시점 재분류라 저장된 30일치가 소급 교정됨). 이 클라 변경은 **그 서버 규칙이 배포된 뒤에만 안전하다** — 서버가 구버전이면 저녁에 두 건이 도착하면서 "오늘 안부 확인 완료" 중복 Push와 "오늘 N보" 알림 소실이 발생한다. 구현: `anbucheck-server/services/heartbeat_keys.py`.
+
+**알려진 한계**: 보류 큐는 1건만 보관하고 새 실패가 덮어쓰므로, n일·n+1일이 연속 실패하면 n일 payload가 사라져 n일 막대는 0으로 남는다(마지막 실패일만 복구). 안전에는 영향 없음 — 보호자 미수신 경고는 서버 스케줄러가 클라 큐와 무관하게 발송·해소한다.
+
 
 ```
 [1차: WorkManager/BGTaskScheduler — 백그라운드 실행]
@@ -286,11 +302,13 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
     │   ├─ 예약시각 -15분 이전이면 평소 스킵 (Android periodic 폴링이 예약시각 전에
     │   │  fire될 때. -15분 창은 periodic +3분 offset의 Doze 발화 변동성 흡수 가드)
     │   │  · 예외 — worker 회복 전송: -15분 이전이라도 lastHeartbeatDate가 오늘도
-    │   │    어제도 아닌 2일 이상 미전송 갭이면 당일 정시 슬롯을 즉시 소비.
-    │   │    HeartbeatService.execute(isInteractiveAtTrigger: true) →
-    │   │    scheduled_key=<날짜>_HH:mm, suspicious=false.
-    │   │    _onHeartbeatSent 호출 → WorkManager 내일 재등록. 서버 dedup이
-    │   │    예약시각 one-off 중복 전송 차단. Android 전용
+    │   │    어제도 아닌 2일 이상 미전송 갭이면 살아있음 신호 전송(슬롯 미소비).
+    │   │    HeartbeatService.execute(recovery: true) → _executeRecovery
+    │   │    scheduled_key=recovery_<날짜>, steps_delta=null, suspicious=false
+    │   │    정시 슬롯 미소비 → 예약시각 정시 전송이 그대로 수행되어
+    │   │    그날 걸음수가 온전히 기록됨(_onHeartbeatSent 미호출)
+    │   │    재무장은 source=one-off일 때만 rescheduleOneOffOnly(오늘 예약시각)
+    │   │    Android 전용
     │   ├─ 미전송 시 → heartbeat 전송 (센서 + API)
     │   └─ 전송 성공 → _onHeartbeatSent가 housekeeping 일괄 처리:
     │      · iOS: 알람 미처리 — matchDateTimeComponents.time으로 OS가 매일 자동 반복
@@ -318,7 +336,7 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
     ├─ 현재 시각 ≥ 예약 시각 AND 당일 미전송 → heartbeat 즉시 전송
     ├─ isScheduleInFuture에 막힌 경우라도 _isRecoveryPending(lastHeartbeatDate가
     │  오늘도 어제도 아닌 미전송 갭)이면 **포그라운드 회복 전송**(execute(recovery: true)
-    │  → _executeRecovery). worker 회복 전송과 달리 **정시 슬롯을 소비하지 않는다**
+    │  → _executeRecovery). worker 회복 전송과 동일 경로 — **정시 슬롯 미소비**
     │  (별도 키 recovery_<날짜>·마커 lastRecoveryDate로 lastHeartbeatDate/
     │  lastScheduledKey 미갱신) → 예약시각 정시 전송은 그대로 수행
     └─ 전송 성공 → _onHeartbeatSent가 WorkManager/BGTask 재예약 + 알림 housekeeping
@@ -2204,11 +2222,13 @@ iOS는 BGTaskScheduler의 불안정성 때문에 백그라운드 예약 실행�
     ├─ 예약시각 -15분 이전이면 평소 스킵 (periodic 폴링이 예약시각 전에 fire되는 경우.
     │  -15분 창은 periodic +3분 offset의 Doze 발화 변동성 흡수 가드)
     │   · 예외 — worker 회복 전송: -15분 이전이라도 lastHeartbeatDate가 오늘도 어제도
-    │     아닌 2일 이상 미전송 갭이면 당일 정시 슬롯을 즉시 소비.
-    │     HeartbeatService.execute(isInteractiveAtTrigger: true) →
-    │     _executeInternal: scheduled_key=<날짜>_HH:mm, suspicious=false.
-    │     _onHeartbeatSent 호출 → WorkManager 내일 재등록. 서버 dedup이
-    │     예약시각 one-off 중복 전송 차단. Android 전용
+    │     아닌 2일 이상 미전송 갭이면 살아있음 신호 전송(슬롯 미소비).
+    │     HeartbeatService.execute(recovery: true) → _executeRecovery
+    │     scheduled_key=recovery_<날짜>, steps_delta=null, suspicious=false
+    │     정시 슬롯 미소비 → 예약시각 정시 전송이 그대로 수행되어
+    │     그날 걸음수가 온전히 기록됨(_onHeartbeatSent 미호출)
+    │     재무장은 source=one-off일 때만 rescheduleOneOffOnly(오늘 예약시각)
+    │     Android 전용
     ├─ HeartbeatService._executeInternal:
     │    · lastScheduledKey(성공 마커) 검사 — 이미 성공한 스케줄이면 스킵
     │    · HeartbeatLockDatasource.tryAcquire(scheduledKey)
@@ -2260,7 +2280,7 @@ iOS는 BGTaskScheduler의 불안정성 때문에 백그라운드 예약 실행�
     ├─ 현재 시각 ≥ 예약 시각 AND 당일 미전송 → heartbeat 즉시 전송
     ├─ 예약시각 이전(isScheduleInFuture)에 막혀도 _isRecoveryPending(lastHeartbeatDate가
     │  오늘도 어제도 아닌 미전송 갭)이면 **포그라운드 회복 전송**(execute(recovery: true)
-    │  → _executeRecovery) — worker 회복 전송과 달리 정시 슬롯 미소비(별도 키
+    │  → _executeRecovery) — worker 회복 전송과 동일 경로, 정시 슬롯 미소비(별도 키
     │  recovery_<날짜>·마커 lastRecoveryDate), 예약시각 정시 전송은 그대로 수행
     ├─ WorkManager/BGTask 재예약 + 로컬 알림 재예약
     ├─ 로컬 큐의 미전송 건 일괄 전송
