@@ -1960,6 +1960,12 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 │  [________________]          │
 │  예: 삼촌, 아버지           │
 │                             │
+│  연락처 (선택)               │
+│  [________________]          │
+│  ⓘ 입력하면 전화 버튼으로     │
+│    바로 걸 수 있고, 비워 두면 │
+│    연락처 목록에서 직접 골라야 │
+│                             │
 │        [연결하기]           │
 │                             │
 │  [홈] [연결] [알림] [설정]   │
@@ -1969,6 +1975,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 - **별칭은 필수 입력이다** — `isFormValid = _isCodeValid && _isAliasValid`이고 `_isAliasValid`는 `trim().isNotEmpty`라 비우면 [연결하기]가 비활성화된다(커밋 `209b95f`, 2026-04-06부터). 연결된 대상자에는 반드시 별칭이 있다는 뜻이라, 서버 동기화 백필의 커버리지가 사실상 100%가 된다
 - 입력은 **20자로 제한**(`LengthLimitingTextInputFormatter(20)`, 연결관리의 별칭 수정 다이얼로그도 동일). 서버가 저장 시 20자에서 절단하므로 입력단을 맞춰 사용자가 잘림을 나중에 발견하지 않게 한다. 글자수 카운터를 노출하지 않으려고 `maxLength` 대신 formatter를 쓴다
 - **저장 위치**: 로컬(`NicknameLocalDatasource`)이 원본이고, 서버에는 Push 본문 렌더링용 사본이 동기화된다(§9.6.1)
+- **연락처는 선택 입력이며 로컬 전용**(`SubjectPhoneLocalDatasource`, 서버에 올리지 않는다). 대시보드 주의 카드의 [전화] 버튼이 이 값을 쓴다 — 저장돼 있으면 `PhoneUtils.callDirectly`로 바로 걸고, **비어 있으면 `pickContactAndCall`로 시스템 연락처 선택 화면이 뜬다**(권한 불필요). 안내 문구(`add_subject_phone_info`)가 이 두 갈래를 그대로 설명하므로, 폴백 동작을 바꾸면 20개 언어 문구도 같이 고쳐야 한다. 라벨(`add_subject_phone_label`)이 "(선택)"을 달고 있으므로 안내 문구에 "선택 사항"을 다시 쓰지 말 것(중복)
 - 연결 완료 시 result=true 반환 → 대시보드에서 목록 즉시 갱신
 
 #### 9.6.1 별칭 서버 동기화 (Push의 "누구의 알림인지")
