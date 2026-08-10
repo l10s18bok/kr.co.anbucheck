@@ -130,7 +130,7 @@ flowchart TD
     AlertActive{기존 경고 활성 중?}
     AlertActive -->|YES| SuspiciousFirst{suspicious?}
 
-    SuspiciousFirst -->|false| Resolve[경고 완전 해소<br/>보호자 Push 알림<br/>✅ 대상자의 안부 확인이<br/>정상 복귀되었습니다]
+    SuspiciousFirst -->|false| Resolve[경고 완전 해소<br/>보호자 Push 알림<br/>✅ 정상 복귀<br/>보호 대상자의 안부가<br/>정상적으로 확인되었습니다]
     SuspiciousFirst -->|true| Downgrade[경고 등급 하향<br/>warning / urgent → caution<br/>정상 복귀 알림 없음<br/>안부 신호만 수신, 활동 기록 없음]
 
     AlertActive -->|NO| CheckSuspicious{suspicious?}

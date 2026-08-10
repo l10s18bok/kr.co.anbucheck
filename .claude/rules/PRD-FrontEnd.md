@@ -574,7 +574,7 @@ Future<void> sendHeartbeat({
 // 일반 Push - 정상 복귀 알림 (보호자 기기에 표시)
 {
   "aps": {
-    "alert": { "title": "안부 확인", "body": "보호 대상자의 안부 확인이 정상 복귀되었습니다." },
+    "alert": { "title": "✅ 정상 복귀", "body": "보호 대상자의 안부가 정상적으로 확인되었습니다." },
     "sound": "default"
   },
   "type": "alert_resolved"
