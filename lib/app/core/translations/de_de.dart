@@ -451,6 +451,10 @@ abstract class DeDe {
     'heartbeat_change_failed_title': 'Zeitänderung fehlgeschlagen',
     'heartbeat_change_failed_message':
         'Konnte nicht auf dem Server aktualisiert werden.',
+    'heartbeat_picker_help': 'Wählen Sie eine Zeit vor @limit',
+    'heartbeat_range_limit_title': 'Uhrzeit nicht verfügbar',
+    'heartbeat_range_limit_message':
+        'Die Uhrzeit für die Wohlbefindens-Prüfung muss vor @limit liegen.',
 
     // ── Lokale Benachrichtigungen ──
     'local_notification_channel': 'Wohlbefindens-Meldungen',

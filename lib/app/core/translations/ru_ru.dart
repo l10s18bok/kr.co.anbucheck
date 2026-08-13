@@ -414,6 +414,10 @@ abstract class RuRu {
         'Ваш сигнал благополучия будет отправляться опекунам каждый день в @time.',
     'heartbeat_change_failed_title': 'Ошибка изменения времени',
     'heartbeat_change_failed_message': 'Не удалось сохранить изменения на сервере.',
+    'heartbeat_picker_help': 'Выберите время до @limit',
+    'heartbeat_range_limit_title': 'Недоступное время',
+    'heartbeat_range_limit_message':
+        'Время проверки должно быть раньше @limit.',
 
     // ── Локальные уведомления ──
     'local_notification_channel': 'Уведомления о самочувствии',

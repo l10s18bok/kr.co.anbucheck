@@ -413,6 +413,10 @@ abstract class PlPl {
         'Twój sygnał pomyślności będzie codziennie wysyłany do Twoich opiekunów o @time.',
     'heartbeat_change_failed_title': 'Zmiana czasu nie powiodla sie',
     'heartbeat_change_failed_message': 'Nie udalo sie zaktualizowac na serwerze.',
+    'heartbeat_picker_help': 'Wybierz godzinę przed @limit',
+    'heartbeat_range_limit_title': 'Niedostępna godzina',
+    'heartbeat_range_limit_message':
+        'Godzina sprawdzenia musi być wcześniejsza niż @limit.',
 
     // ── Powiadomienia lokalne ──
     'local_notification_channel': 'Alerty samopoczucia',

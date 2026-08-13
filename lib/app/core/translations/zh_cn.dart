@@ -377,6 +377,10 @@ abstract class ZhCn {
     'heartbeat_scheduled_today': '每天 @time 将向守护者发送问安。',
     'heartbeat_change_failed_title': '更改时间失败',
     'heartbeat_change_failed_message': '未能同步到服务器。',
+    'heartbeat_picker_help': '请选择 @limit 之前的时间',
+    'heartbeat_range_limit_title': '无法设置的时间',
+    'heartbeat_range_limit_message':
+        '平安确认时间只能设置在 @limit 之前。',
 
     // ── 本地通知 ──
     'local_notification_channel': '问安通知',

@@ -415,6 +415,10 @@ abstract class IdId {
         'Sinyal kesejahteraan Anda akan dikirim ke penjaga Anda setiap hari pukul @time.',
     'heartbeat_change_failed_title': 'Perubahan Waktu Gagal',
     'heartbeat_change_failed_message': 'Tidak dapat memperbarui di server.',
+    'heartbeat_picker_help': 'Pilih waktu sebelum @limit',
+    'heartbeat_range_limit_title': 'Waktu tidak tersedia',
+    'heartbeat_range_limit_message':
+        'Waktu pemeriksaan harus sebelum @limit.',
 
     // ── Notifikasi Lokal ──
     'local_notification_channel': 'Peringatan Kesejahteraan',

@@ -415,6 +415,10 @@ abstract class EsEs {
         'Tu señal de bienestar se enviará a tus protectores cada día a las @time.',
     'heartbeat_change_failed_title': 'Error al cambiar la hora',
     'heartbeat_change_failed_message': 'No se pudo guardar en el servidor.',
+    'heartbeat_picker_help': 'Elige una hora anterior a @limit',
+    'heartbeat_range_limit_title': 'Hora no disponible',
+    'heartbeat_range_limit_message':
+        'La hora de comprobación debe ser anterior a @limit.',
 
     // ── Notificaciones locales ──
     'local_notification_channel': 'Alertas de bienestar',

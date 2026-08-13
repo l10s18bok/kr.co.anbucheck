@@ -397,6 +397,10 @@ abstract class ArSa {
     'heartbeat_scheduled_today': 'سيتم إرسال إشارة الاطمئنان إلى الحراس يومياً في @time.',
     'heartbeat_change_failed_title': 'فشل تغيير الوقت',
     'heartbeat_change_failed_message': 'تعذر التحديث على الخادم.',
+    'heartbeat_picker_help': 'اختر وقتًا قبل @limit',
+    'heartbeat_range_limit_title': 'وقت غير متاح',
+    'heartbeat_range_limit_message':
+        'يجب ضبط وقت التحقق قبل @limit.',
 
     // ── الإشعارات المحلية ──
     'local_notification_channel': 'إشعارات الاطمئنان',

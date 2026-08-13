@@ -408,6 +408,10 @@ abstract class TrTr {
         'İyilik sinyaliniz her gün @time saatinde koruyucularınıza iletilecek.',
     'heartbeat_change_failed_title': 'Saat Değişikliği Başarısız',
     'heartbeat_change_failed_message': 'Sunucuda güncellenemedi.',
+    'heartbeat_picker_help': '@limit saatinden önce bir saat seçin',
+    'heartbeat_range_limit_title': 'Kullanılamayan saat',
+    'heartbeat_range_limit_message':
+        'Kontrol saati @limit saatinden önce olmalıdır.',
 
     // ── Yerel Bildirimler ──
     'local_notification_channel': 'Hal Hatır Bildirimleri',

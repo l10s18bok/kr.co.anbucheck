@@ -402,6 +402,10 @@ abstract class ThTh {
     'heartbeat_scheduled_today': 'สัญญาณความปลอดภัยของคุณจะถูกส่งถึงผู้ดูแลทุกวันเวลา @time',
     'heartbeat_change_failed_title': 'เปลี่ยนเวลาไม่สำเร็จ',
     'heartbeat_change_failed_message': 'ไม่สามารถอัปเดตบนเซิร์ฟเวอร์ได้',
+    'heartbeat_picker_help': 'เลือกเวลาก่อน @limit',
+    'heartbeat_range_limit_title': 'เวลาที่ไม่สามารถตั้งได้',
+    'heartbeat_range_limit_message':
+        'เวลาตรวจสอบต้องอยู่ก่อน @limit',
 
     // ── การแจ้งเตือนในเครื่อง ──
     'local_notification_channel': 'การแจ้งเตือนความเป็นอยู่',

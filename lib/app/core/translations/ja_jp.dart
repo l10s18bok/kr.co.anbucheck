@@ -385,6 +385,10 @@ abstract class JaJp {
     'heartbeat_scheduled_today': '毎日@timeに見守り人へ安否をお届けします。',
     'heartbeat_change_failed_title': '時刻の変更に失敗しました',
     'heartbeat_change_failed_message': 'サーバーに反映されませんでした。',
+    'heartbeat_picker_help': '@limit より前の時刻を選んでください',
+    'heartbeat_range_limit_title': '設定できない時刻',
+    'heartbeat_range_limit_message':
+        '安否確認の時刻は @limit より前に設定してください。',
 
     // ── ローカル通知 ──
     'local_notification_channel': '安否確認の通知',

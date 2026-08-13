@@ -407,6 +407,10 @@ abstract class SvSe {
         'Din valmaendesignal skickas till dina vardare varje dag kl. @time.',
     'heartbeat_change_failed_title': 'Tidandring misslyckades',
     'heartbeat_change_failed_message': 'Kunde inte uppdatera pa servern.',
+    'heartbeat_picker_help': 'Välj en tid före @limit',
+    'heartbeat_range_limit_title': 'Tiden är inte tillgänglig',
+    'heartbeat_range_limit_message':
+        'Tiden för välmåendekontrollen måste vara före @limit.',
 
     // ── Lokala aviseringar ──
     'local_notification_channel': 'Valmaendeaviseringar',

@@ -377,6 +377,10 @@ abstract class ZhTw {
     'heartbeat_scheduled_today': '每天 @time 將向守護者傳送問安。',
     'heartbeat_change_failed_title': '更改時間失敗',
     'heartbeat_change_failed_message': '未能同步至伺服器。',
+    'heartbeat_picker_help': '請選擇 @limit 之前的時間',
+    'heartbeat_range_limit_title': '無法設定的時間',
+    'heartbeat_range_limit_message':
+        '平安確認時間只能設定在 @limit 之前。',
 
     // ── 本地通知 ──
     'local_notification_channel': '問安通知',

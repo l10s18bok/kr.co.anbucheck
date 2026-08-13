@@ -414,6 +414,10 @@ abstract class PtBr {
         'Seu sinal de bem-estar será enviado aos seus guardiões todos os dias às @time.',
     'heartbeat_change_failed_title': 'Falha ao alterar horário',
     'heartbeat_change_failed_message': 'Não foi possível atualizar no servidor.',
+    'heartbeat_picker_help': 'Escolha um horário antes de @limit',
+    'heartbeat_range_limit_title': 'Horário indisponível',
+    'heartbeat_range_limit_message':
+        'O horário da verificação deve ser antes de @limit.',
 
     // ── Notificações locais ──
     'local_notification_channel': 'Alertas de bem-estar',

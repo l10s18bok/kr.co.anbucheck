@@ -386,6 +386,10 @@ abstract class KoKr {
     'heartbeat_scheduled_today': '매일 @time에 보호자에게 안부가 전달됩니다.',
     'heartbeat_change_failed_title': '시각 변경 실패',
     'heartbeat_change_failed_message': '서버에 반영되지 않았습니다.',
+    'heartbeat_picker_help': '@limit 이전 시각을 선택해 주세요',
+    'heartbeat_range_limit_title': '설정할 수 없는 시각',
+    'heartbeat_range_limit_message':
+        '안부 시각은 @limit 이전으로만 설정할 수 있습니다.',
 
     // ── 로컬 알림 ──
     'local_notification_channel': '안부 알림',

@@ -409,6 +409,10 @@ abstract class ViVn {
         'Tin hieu an toan cua ban se duoc gui den nguoi bao ve moi ngay luc @time.',
     'heartbeat_change_failed_title': 'Doi thoi gian that bai',
     'heartbeat_change_failed_message': 'Khong the cap nhat tren may chu.',
+    'heartbeat_picker_help': 'Chọn thời gian trước @limit',
+    'heartbeat_range_limit_title': 'Thời gian không khả dụng',
+    'heartbeat_range_limit_message':
+        'Thời gian kiểm tra phải trước @limit.',
 
     // ── Thong bao cuc bo ──
     'local_notification_channel': 'Canh bao suc khoe',

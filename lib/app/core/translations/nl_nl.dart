@@ -413,6 +413,10 @@ abstract class NlNl {
         'Uw welzijnssignaal wordt elke dag om @time naar uw beschermers gestuurd.',
     'heartbeat_change_failed_title': 'Tijdswijziging mislukt',
     'heartbeat_change_failed_message': 'Kan niet bijwerken op de server.',
+    'heartbeat_picker_help': 'Kies een tijd vóór @limit',
+    'heartbeat_range_limit_title': 'Tijd niet beschikbaar',
+    'heartbeat_range_limit_message':
+        'De tijd voor de welzijnscontrole moet vóór @limit liggen.',
 
     // ── Lokale meldingen ──
     'local_notification_channel': 'Welzijnsmeldingen',

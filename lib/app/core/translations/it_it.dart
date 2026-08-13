@@ -448,6 +448,10 @@ abstract class ItIt {
         'Il tuo segnale di benessere sarà inviato ai tuoi guardiani ogni giorno alle @time.',
     'heartbeat_change_failed_title': "Modifica dell'orario non riuscita",
     'heartbeat_change_failed_message': 'Impossibile aggiornare sul server.',
+    'heartbeat_picker_help': 'Scegli un orario prima delle @limit',
+    'heartbeat_range_limit_title': 'Orario non disponibile',
+    'heartbeat_range_limit_message':
+        'Il controllo di benessere deve essere impostato prima delle @limit.',
 
     // ── Notifiche locali ──
     'local_notification_channel': 'Avvisi benessere',

@@ -419,6 +419,10 @@ abstract class FrFr {
     'heartbeat_change_failed_title': 'Échec du changement d\'heure',
     'heartbeat_change_failed_message':
         'La modification n\'a pas pu être enregistrée sur le serveur.',
+    'heartbeat_picker_help': 'Choisissez une heure avant @limit',
+    'heartbeat_range_limit_title': 'Heure non disponible',
+    'heartbeat_range_limit_message':
+        'Veuillez choisir une heure antérieure à @limit.',
 
     // ── Notifications locales ──
     'local_notification_channel': 'Alertes de bien-être',

@@ -226,12 +226,18 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
                   )),
               SizedBox(height: AppSpacing.vlg),
 
-              // 안부 확인 시각 변경 — 연결된 보호자가 1명 이상일 때만 활성
-              // (S/G+S 공통, 구독 무관. 연결이 없을 때만 비활성)
+              // 안부 확인 시각 변경 — **항상 활성**(보고/긴급과 달리 게이팅하지 않는다).
+              // 이건 누군가에게 무엇을 보내는 동작이 아니라 설정이라, 보호자가 0명이어도
+              // 오해를 만들 여지가 없다. 게다가 이 스케줄은 보호자 유무와 무관하게 이미
+              // 동작 중이다(WorkManager 발화 → heartbeat 전송 → 걸음수 이력 적재) —
+              // 이미 적용 중인 값을 못 바꾸게 막는 게 오히려 앞뒤가 안 맞는다.
+              // ⚠️ 되돌리지 말 것: 막아두면 "연결부터 하고 설정은 나중에"를 강제하게 되고,
+              // 야간 노동자가 기본값 18:00인 채로 보호자를 연결하면 그 시각엔 자고 있어
+              // steps=0 + 화면 꺼짐 → suspicious=true → **보호자의 첫 알림이 거짓 경고**가 된다.
               Obx(
                 () => ScheduleRowButton(
                   heartbeatTime: controller.heartbeatTime.value,
-                  enabled: _isReportEnabled,
+                  enabled: true,
                   isDark: Get.find<ThemeService>().isDarkMode.value,
                   onTap: controller.showTimePickerDialog,
                 ),
@@ -270,9 +276,14 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
     );
   }
 
-  /// 보고/긴급/시각변경 활성화 조건 — S/G+S 공통: 연결된 보호자가 1명 이상일 때만.
+  /// **보고/긴급** 활성화 조건 — S/G+S 공통: 연결된 보호자가 1명 이상일 때만.
   /// 구독 만료와 무관(연결만 있으면 동작). 연결된 보호자가 없을 때만 비활성.
   /// 화면 자체와 새로고침(pull-to-refresh)은 이 조건과 무관하게 항상 동작한다.
+  ///
+  /// 두 버튼을 막는 이유는 **거짓 안심 차단**이다 — 받을 보호자가 없는데 긴급 요청이
+  /// 나갔다고 믿게 하거나 "보호자에게 전했습니다"라고 안내하면 안 된다.
+  /// ⚠️ **시각 변경은 여기에 포함되지 않는다**(항상 활성) — 전달 동작이 아니라 설정이라
+  /// 같은 위험이 없다. 세 버튼을 다시 하나로 묶지 말 것.
   bool get _isReportEnabled => controller.guardianCount.value > 0;
 
   // ── 다이얼로그 (공통) ──────────────────────────────────────────────

@@ -406,6 +406,10 @@ abstract class HiIn {
     'heartbeat_scheduled_today': 'आपका कुशलता संकेत हर दिन @time पर आपके अभिभावकों को भेजा जाएगा।',
     'heartbeat_change_failed_title': 'समय बदलना विफल',
     'heartbeat_change_failed_message': 'सर्वर पर अपडेट नहीं हो सका।',
+    'heartbeat_picker_help': '@limit से पहले का समय चुनें',
+    'heartbeat_range_limit_title': 'समय उपलब्ध नहीं',
+    'heartbeat_range_limit_message':
+        'कुशलता जांच का समय @limit से पहले होना चाहिए।',
 
     // ── स्थानीय सूचनाएं ──
     'local_notification_channel': 'कुशलता अलर्ट',

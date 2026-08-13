@@ -406,6 +406,10 @@ abstract class EnUs {
         'Your wellness check will be delivered to your guardians every day at @time.',
     'heartbeat_change_failed_title': 'Time Change Failed',
     'heartbeat_change_failed_message': 'Could not update on server.',
+    'heartbeat_picker_help': 'Choose a time before @limit',
+    'heartbeat_range_limit_title': 'Time Not Available',
+    'heartbeat_range_limit_message':
+        'The wellness check time must be before @limit.',
 
     // ── Local Notifications ──
     'local_notification_channel': 'Wellness Alerts',
