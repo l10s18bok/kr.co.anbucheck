@@ -181,21 +181,13 @@ flowchart TD
     CautionSave --> NextDay0([다음 날 재확인])
 
     MissCount -->|2회 이상| Warning[⚠ 경고 등급 판정]
-    Warning --> NightCheck1{현재 시각<br/>22:00~09:00?}
-
-    NightCheck1 -->|NO 주간| WarningNoti[보호자 Push 알림 경고 등급<br/>⚠ 안부 확인<br/>안부 확인이 없습니다<br/>통신 불가 상태일 수 있습니다]
-    NightCheck1 -->|YES 야간| Delay1([DB에 기록 후<br/>다음 날 09:00에 발송 예약])
-    Delay1 --> WarningNoti
+    Warning --> WarningNoti[보호자 Push 알림 경고 등급<br/>⚠ 안부 확인<br/>안부 확인이 없습니다<br/>통신 불가 상태일 수 있습니다<br/>※ 보호자 DND 구간이면 푸시만 생략<br/>알림 기록은 남아 in-app 목록에 표시]
 
     WarningNoti --> WarningSave[guardian_notifications DB 저장<br/>alert_level: warning, is_push_sent: true]
     WarningSave --> WarningRepeat{경고 횟수?}
     WarningRepeat -->|2회 이하| NextDay1([다음 날 같은 시각에 재발송])
     WarningRepeat -->|3회 이상| UpgradeUrgent[🚨 긴급 등급으로 상향]
-    UpgradeUrgent --> NightCheck2{현재 시각<br/>22:00~09:00?}
-
-    NightCheck2 -->|NO 주간| UrgentNoti[보호자 Push 알림 긴급 등급<br/>🚨 긴급: 대상자 확인 필요<br/>즉시 확인이 필요합니다]
-    NightCheck2 -->|YES 야간| Delay2([DB에 기록 후<br/>다음 날 09:00에 발송 예약])
-    Delay2 --> UrgentNoti
+    UpgradeUrgent --> UrgentNoti[보호자 Push 알림 긴급 등급<br/>🚨 긴급: 대상자 확인 필요<br/>즉시 확인이 필요합니다<br/>※ 긴급은 DND 무관 항상 발송 — 지연 없음]
 
     UrgentNoti --> UrgentSave[guardian_notifications DB 저장<br/>alert_level: urgent, is_push_sent: true]
     UrgentSave --> DailyRepeat([매일 같은 시각에 반복<br/>보호자 확인까지 종료 없음])
@@ -263,10 +255,15 @@ flowchart TD
         I1[🔋 배터리 < 20%<br/>마지막 heartbeat 수신 시 포함된 값 기준]
     end
 
-    subgraph 야간발송제한[⏰ 야간 발송 제한 — 경고/긴급 공통]
-        N1[22:00~09:00 사이 판정된 경고<br/>→ 다음 날 09:00에 발송]
+    subgraph 방해금지[🔕 방해금지 DND — 보호자별 설정, 기본 OFF]
+        N1[보호자가 지정한 구간에는 Push 생략<br/>보호자 로컬 타임존 기준, 자정 넘김 지원<br/>긴급urgent은 DND 무관 항상 발송<br/>생략돼도 알림 기록은 남아 in-app 목록에 표시]
     end
 ```
+
+> ⚠️ **서버 전역 "야간 발송 제한(22:00~09:00 → 익일 09:00 지연)"은 존재하지 않는다. 다시 넣지 말 것.**
+> 최초 커밋부터 스펙에만 있었고 한 번도 구현되지 않았으며(상수 `QUIET_HOUR_START/END`는 참조 0회로 제거됨),
+> 구현했다면 **긴급 경고까지 최대 11시간 지연**시켜 이 서비스의 목적과 충돌했을 것이다.
+> 야간 억제는 보호자별 DND 하나로만 한다. 상세는 PRD-BackEnd "경고 판정 및 발송" 절.
 
 
 ## 7. 대상자 긴급 도움 요청 플로우
