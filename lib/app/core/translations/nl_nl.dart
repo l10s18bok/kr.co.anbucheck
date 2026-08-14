@@ -14,6 +14,7 @@ abstract class NlNl {
     'common_later': 'Later',
     'common_loading': 'Laden...',
     'common_error': 'Fout',
+    'common_session_expired': 'Uw accountgegevens zijn verlopen. Registreer u opnieuw.',
     'common_complete': 'Gereed',
     'common_notice': 'Melding',
     'common_unlink': 'Ontkoppelen',
@@ -44,13 +45,13 @@ abstract class NlNl {
     'update_later_button': 'Later',
 
     // ── Modusselectie ──
-    'mode_select_title': 'Hoe wil je beginnen?',
-    'mode_select_subtitle': 'Vertel ons of je van je laat horen of het ontvangt',
-    'mode_subject_title': 'Ik wil alleen van me laten horen',
+    'mode_select_title': 'Hoe wilt u beginnen?',
+    'mode_select_subtitle': 'Vertel ons of u van u laat horen of het ontvangt',
+    'mode_subject_title': 'Ik wil alleen van mij laten horen',
     'mode_subject_desc': 'Een heel eenvoudig scherm met alleen het nodige',
     'mode_subject_button': 'Van me laten horen →',
     'mode_guardian_title': 'Waak over meerdere mensen tegelijk',
-    'mode_guardian_desc': 'Indien nodig kun je later ook zelf van je laten horen',
+    'mode_guardian_desc': 'Indien nodig kunt u later ook zelf van u laten horen',
     'mode_guardian_button': 'Berichten ontvangen →',
     'mode_subject_badge': 'Senior',
     'mode_guardian_badge': 'Beschermer',
@@ -92,36 +93,36 @@ abstract class NlNl {
     'permission_hibernation_title': 'Schakel automatische verwijdering van rechten uit',
     'permission_hibernation_highlight': 'automatische verwijdering van rechten',
     'permission_hibernation_message':
-        'Android verwijdert automatisch rechten van apps die je lange tijd niet hebt gebruikt. Anbu draait meestal zonder geopend te worden, dus deze functie kan ervoor zorgen dat rechten na verloop van tijd verdwijnen en het welzijnssignaal stopt.\n\nTik hieronder op [Instellingen openen] — het scherm met de schakelaar verschijnt direct. Schakel de schakelaar uit.\n\n※ De exacte tekst kan per fabrikant verschillen.',
+        'Android verwijdert automatisch rechten van apps die u lange tijd niet hebt gebruikt. Anbu draait meestal zonder geopend te worden, dus deze functie kan ervoor zorgen dat rechten na verloop van tijd verdwijnen en het welzijnssignaal stopt.\n\nTik hieronder op [Instellingen openen] — het scherm met de schakelaar verschijnt direct. Schakel de schakelaar uit.\n\n※ De exacte tekst kan per fabrikant verschillen.',
     'permission_hibernation_go_to_settings': 'Instellingen openen',
     'stability_battery_warning_short': 'Batterijgebruiksbeperking moet worden uitgeschakeld',
     'stability_battery_dialog_title': 'Batterijgebruiksbeperking uitschakelen',
     'stability_battery_dialog_message':
-        'Wanneer je telefoon in energiebesparende modus gaat, kunnen welzijnssignalen naar je verzorger te laat aankomen of gemist worden.\n\nNa op [Instellingen openen] hieronder te tikken, stel "Batterij" → "Onbeperkt" in. Zo worden welzijnssignalen elke dag betrouwbaar op de geplande tijd verzonden.\n\n※ De exacte tekst kan per fabrikant verschillen.',
+        'Wanneer uw telefoon in energiebesparende modus gaat, kunnen welzijnssignalen naar uw beschermer te laat aankomen of gemist worden.\n\nNa op [Instellingen openen] hieronder te tikken, stelt u "Batterij" → "Onbeperkt" in. Zo worden welzijnssignalen elke dag betrouwbaar op de geplande tijd verzonden.\n\n※ De exacte tekst kan per fabrikant verschillen.',
 
     // ── Onboarding ──
-    'onboarding_safety_code_title': 'Je veiligheidscode wordt automatisch aangemaakt',
+    'onboarding_safety_code_title': 'Uw veiligheidscode wordt automatisch aangemaakt',
     'onboarding_safety_code_desc':
-        'Deel deze code met je beschermer om te verbinden —\nje welzijnssignaal wordt dan automatisch verzonden.',
-    'onboarding_emergency_title': 'Als je je huidige status (Dringend) en locatie wilt delen',
+        'Deel deze code met uw beschermer om te verbinden —\nuw welzijnssignaal wordt dan automatisch verzonden.',
+    'onboarding_emergency_title': 'Als u uw huidige status (Dringend) en locatie wilt delen',
     'onboarding_emergency_desc':
-        'Tik op deze knop en het bereikt\nmeteen al je beschermers',
-    'onboarding_gs_switch_title': 'Zorg ook voor het welzijn van je familie',
+        'Tik op deze knop en het bereikt\nmeteen al uw beschermers',
+    'onboarding_gs_switch_title': 'Zorg ook voor het welzijn van uw familie',
     'onboarding_gs_switch_desc':
         'Tik in het menu op [Ook gezinswelzijn beheren]\nom ook de beschermersrol te gebruiken',
-    'onboarding_add_subject_title': 'Maak contact met iemand die je dierbaar is',
+    'onboarding_add_subject_title': 'Maak contact met iemand die u dierbaar is',
     'onboarding_add_subject_desc':
         'Voer de ontvangen code en een bijnaam in\nom meteen te verbinden',
     'onboarding_notifications_title': 'Zo zien welzijnsmeldingen eruit',
     'onboarding_notifications_desc':
-        'Normaal zie je activiteitsinfo zoals het aantal stappen. Komt er geen signaal binnen of wordt er geen activiteit gedetecteerd, dan krijg je een melding zoals hierboven',
+        'Normaal ziet u activiteitsinfo zoals het aantal stappen. Komt er geen signaal binnen of wordt er geen activiteit gedetecteerd, dan krijgt u een melding zoals hierboven',
     'onboarding_push_now': 'Nu',
-    'onboarding_gs_enable_title': 'Activeer je eigen veiligheidscode',
+    'onboarding_gs_enable_title': 'Activeer uw eigen veiligheidscode',
     'onboarding_gs_enable_desc':
-        'Tik in Instellingen op [Mijn veiligheidscode aanmaken]\nzodat jouw welzijn ook naar je beschermers gaat',
+        'Tik in Instellingen op [Mijn veiligheidscode aanmaken]\nzodat uw welzijn ook naar uw beschermers gaat',
     'onboarding_role_subject': 'Beschermeling',
     'onboarding_role_guardian': 'Beschermer',
-    'onboarding_role_guardian_subject': 'Bewaker en beschermde',
+    'onboarding_role_guardian_subject': 'Beschermer en beschermeling',
     'onboarding_already_registered_title': 'Apparaat al geregistreerd',
     'onboarding_already_registered_message':
         'Dit apparaat is al geregistreerd in "@roleLabel"-modus.\nDoorgaan als "@roleLabel"?\n\nOf wisselen naar "@newRoleLabel"-modus?\nBij het wisselen worden alle bestaande gegevens verwijderd.',
@@ -155,20 +156,20 @@ abstract class NlNl {
     'subject_home_emergency_failed': 'Noodmelding kon niet worden verzonden',
     'subject_home_manual_report_limit_reached':
         'U heeft het veiligheidsrapport van vandaag al verzonden. Probeer het morgen opnieuw.',
-    'subject_home_manual_report_sent': 'Uw bericht is verzonden naar uw contacten.',
-    'safety_net_dialog_title': 'Welzijnscheck verzonden',
+    'subject_home_manual_report_sent': 'Uw welzijnssignaal is naar uw beschermers verzonden.',
+    'safety_net_dialog_title': 'Welzijnscontrole verzonden',
     'safety_net_dialog_body':
-        'De welzijnscheck van vandaag is naar uw begeleider verzonden.',
+        'De welzijnscontrole van vandaag is naar uw beschermers verzonden.',
     'safety_net_dialog_already_body':
-        'De welzijnscheck van vandaag is al om @time naar uw begeleider verzonden.',
+        'De welzijnscontrole van vandaag is al om @time naar uw beschermers verzonden.',
     'subject_home_emergency_confirm_title': 'Noodhulpverzoek',
     'subject_home_emergency_confirm_body':
-        'Een noodmelding wordt naar alle voogden verzonden.\nOok uw huidige locatie wordt gedeeld.\nWilt u echt om hulp vragen?',
+        'Een noodmelding wordt naar al uw beschermers verzonden.\nOok uw huidige locatie wordt gedeeld.\nWilt u echt om hulp vragen?',
     'emergency_sent_with_location': 'Noodmelding verzonden (met locatie)',
     'emergency_sent_without_location': 'Noodmelding verzonden',
     'notifications_view_location': '🗺️ Locatie bekijken',
     'emergency_map_title': 'Noodlocatie',
-    'emergency_map_subject_label': 'Hulpbehoevende',
+    'emergency_map_subject_label': 'Beschermeling',
     'emergency_map_captured_at_label': 'Vastgelegd op',
     'emergency_map_accuracy_label': 'Nauwkeurigheid',
     'emergency_map_open_external': 'Open in externe kaart-app',
@@ -206,7 +207,7 @@ abstract class NlNl {
     'guardian_subject_list': 'Lijst beschermelingen',
     'guardian_call_now': 'Nu bellen',
     'phone_call_failed': 'Bellen is niet gelukt.',
-    'guardian_confirm_safety': 'Veiligheid bevestigen',
+    'guardian_confirm_safety': 'Bevestigen',
     'guardian_no_check_history': 'Geen controlegeschiedenis',
     'guardian_last_check_now': 'Laatste controle: zojuist',
     'guardian_last_check_minutes': 'Laatste controle: @minutes min geleden',
@@ -239,14 +240,14 @@ abstract class NlNl {
     'add_subject_alias_label': 'Bijnaam beschermeling',
     'add_subject_alias_hint': 'Bijv. Mama, Papa',
     'add_subject_phone_label': 'Telefoonnummer (optioneel)',
-    'add_subject_phone_info': 'Indien ingevuld, belt de belknop direct dit nummer. Laat je het leeg, dan moet je het contact zelf uit je contactenlijst kiezen.',
+    'add_subject_phone_info': 'Indien ingevuld, belt de belknop direct dit nummer. Laat u het leeg, dan moet u het contact zelf uit uw contactenlijst kiezen.',
     'add_subject_phone_hint': '0612345678',
     'add_subject_connect': 'Verbinden',
     'add_subject_error_login': 'Inloggen vereist.',
     'add_subject_success': 'Beschermeling succesvol verbonden.',
     'add_subject_error_invalid_code': 'Ongeldige code.',
-    'add_subject_error_self': 'Je kunt je eigen code niet toevoegen als zorgontvanger.',
-    'add_subject_error_limit': 'Je kunt maximaal @max personen registreren.',
+    'add_subject_error_self': 'U kunt uw eigen code niet als beschermeling toevoegen.',
+    'add_subject_error_limit': 'U kunt maximaal @max personen registreren.',
     'add_subject_error_already_connected': 'Al verbonden.',
     'add_subject_error_failed': 'Verbinding mislukt. Probeer het later opnieuw.',
     'add_subject_button': 'Nieuwe beschermeling toevoegen',
@@ -277,7 +278,7 @@ abstract class NlNl {
     // ── In-app aankopen (jaarlijks $9.99 verzorger-abonnement) ──
     'subscription_subscribe': 'Abonneren',
     'trial_ended_noti_title': 'Anbu',
-    'trial_ended_noti_body': 'Je gratis proefperiode is afgelopen. Abonneer je om door te gaan.',
+    'trial_ended_noti_body': 'Uw gratis proefperiode is afgelopen. Abonneer u om door te gaan.',
     'subscription_restore': 'Aankoop herstellen',
     'subscription_store_unavailable': 'Store niet beschikbaar',
     'subscription_product_unavailable': 'Abonnement niet beschikbaar',
@@ -289,7 +290,7 @@ abstract class NlNl {
     'subscription_purchase_success': 'Abonnement gestart',
     'subscription_period_annual': 'jaar',
 
-    // ── G+S (Bewaker en beschermde) ──
+    // ── G+S (Beschermer en beschermeling) ──
     'gs_enable_button': 'Mijn veiligheidscode aanmaken',
     'gs_safety_code_button': 'Mijn veiligheidscode bekijken',
     'gs_enable_button_desc': 'Uw familie kan ook naar u omkijken',
@@ -297,17 +298,17 @@ abstract class NlNl {
     'gs_safety_code_title': 'Mijn veiligheidscode',
     'gs_enable_dialog_title': 'Mijn veiligheidscode aanmaken',
     'gs_enable_dialog_body':
-        'Er wordt een veiligheidscode uitgegeven — deel deze met andere bewakers.',
+        'Er wordt een veiligheidscode uitgegeven — deel deze met uw andere beschermers.',
     'gs_enable_dialog_ios_warning_title': '⚠ Hoe uw welzijnssignaal wordt verzonden',
     'gs_enable_dialog_ios_warning_body':
-        'Elke dag op het ingestelde tijdstip verschijnt een "welzijns-pushmelding". U moet de melding aantikken of de app rond dat tijdstip zelf openen om uw welzijnssignaal te verzenden. Als u de app niet opent, kunnen uw bewakers een waarschuwing voor een gemiste controle ontvangen.',
+        'Elke dag op het ingestelde tijdstip verschijnt een "welzijns-pushmelding". U moet de melding aantikken of de app rond dat tijdstip zelf openen om uw welzijnssignaal te verzenden. Als u de app niet opent, kunnen uw beschermers een waarschuwing voor een gemiste controle ontvangen.',
     'gs_enable_dialog_ios_confirm': 'Begrepen, activeren',
     'gs_enable_confirm': 'Aanmaken',
     'gs_enabled_message': 'Welzijnsbescherming is geactiveerd',
     'gs_enable_failed': 'Welzijnsbescherming activeren mislukt',
     'gs_disable_dialog_title': 'Welzijnsbescherming deactiveren',
     'gs_disable_dialog_body':
-        'Bij deactivering wordt uw veiligheidscode verwijderd en worden welzijnscontroles aan verbonden bewakers gestopt.',
+        'Bij deactivering wordt uw veiligheidscode verwijderd en worden welzijnscontroles aan verbonden beschermers gestopt.',
     'gs_disable_confirm': 'Deactiveren',
     'gs_disabled_message': 'Welzijnsbescherming is gedeactiveerd',
     'gs_disable_failed': 'Welzijnsbescherming deactiveren mislukt',
@@ -322,7 +323,7 @@ abstract class NlNl {
     'drawer_enable_guardian': 'Ook gezinswelzijn beheren',
     's_to_gs_dialog_title': 'Beschermer-functie toevoegen',
     's_to_gs_dialog_body':
-        'Voeg de beschermer-functie toe om ook het welzijn van familie of dierbaren te volgen.\n(Let op: de beschermer-functie is 3 maanden gratis en wordt daarna een betaald abonnement.)\n\nJe eigen veiligheidscode en de huidige verzending van welzijnssignalen blijven ongewijzigd en blijven gratis te gebruiken.',
+        'Voeg de beschermer-functie toe om ook het welzijn van familie of dierbaren te volgen.\n(Let op: de beschermer-functie is 3 maanden gratis en wordt daarna een betaald abonnement.)\n\nUw eigen veiligheidscode en de huidige verzending van welzijnssignalen blijven ongewijzigd en blijven gratis te gebruiken.',
     's_to_gs_dialog_confirm': 'Doorgaan',
     's_to_gs_switch_failed': 'Inschakelen van de beschermer-functie mislukt',
 
@@ -370,8 +371,6 @@ abstract class NlNl {
     'notification_settings_dnd_end': 'Eindtijd',
     'notification_settings_dnd_note':
         '※ Dringende meldingen worden ook tijdens Niet storen bezorgd',
-    'notification_settings_dnd_start_default': '22:00',
-    'notification_settings_dnd_end_default': '07:00',
 
     // ── Verbindingsbeheer beschermer ──
     'connection_title': 'Verbindingsbeheer',
@@ -379,7 +378,7 @@ abstract class NlNl {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Verbonden beschermelingen',
     'connection_reorder_hint': 'Houd een kaart hieronder ingedrukt om de volgorde te wijzigen',
-    'connection_empty': 'Geen verbonden beschermden',
+    'connection_empty': 'Geen verbonden beschermelingen',
     'connection_unlink_warning':
         'Bij ontkoppeling worden de gegevens van de beschermeling verwijderd.',
     'connection_unlink_warning_detail':
@@ -463,7 +462,7 @@ abstract class NlNl {
     'wellbeing_check_title': '💛 Welzijnscontrole',
     'wellbeing_check_body': 'Gaat het goed met u? Tik op deze melding.',
     'noti_channel_name': 'Anbu-meldingen',
-    'notification_send_failed_title': '📶 Controleer je internetverbinding',
+    'notification_send_failed_title': '📶 Controleer uw internetverbinding',
     'notification_send_failed_body': 'Tik op dit bericht om automatisch opnieuw te verzenden.',
   };
 }

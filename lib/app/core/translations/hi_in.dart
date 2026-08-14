@@ -14,12 +14,13 @@ abstract class HiIn {
     'common_later': 'बाद में',
     'common_loading': 'लोड हो रहा है...',
     'common_error': 'त्रुटि',
+    'common_session_expired': 'आपके खाते की जानकारी की अवधि समाप्त हो गई है। कृपया दोबारा पंजीकरण करें।',
     'common_complete': 'पूर्ण',
     'common_notice': 'सूचना',
     'common_unlink': 'अनलिंक करें',
-    'common_am': 'सुबह',
-    'common_pm': 'शाम',
-    'common_time_style': 'h24',
+    'common_am': 'AM',
+    'common_pm': 'PM',
+    'common_time_style': 'post12',
     'common_normal': 'सामान्य',
     'common_connected': 'जुड़ा हुआ',
     'common_disconnected': 'कनेक्शन नहीं',
@@ -27,13 +28,13 @@ abstract class HiIn {
     // ── ऐप ब्रांड ──
     'app_name': 'Anbu',
     'app_brand': 'Anbu',
-    'app_tagline': 'आपकी कुशलता की जांच।',
-    'app_service_desc': 'स्वचालित कुशलता जांच सेवा',
+    'app_tagline': 'आपकी खैरियत की जांच।',
+    'app_service_desc': 'खैरियत की स्वचालित जांच सेवा',
     'app_guardian_title': 'Anbu अभिभावक',
     'app_copyright': '© 2026 Averic Lab',
 
     // ── स्प्लैश ──
-    'splash_loading': 'कुशलता जांच हो रही है...',
+    'splash_loading': 'खैरियत की जांच हो रही है...',
 
     // ── अपडेट ──
     'update_required_title': 'अपडेट आवश्यक',
@@ -60,7 +61,7 @@ abstract class HiIn {
     // ── अनुमतियां ──
     'permission_title': 'ऐप का उपयोग करने के लिए\nअनुमतियां आवश्यक हैं',
     'permission_notification': 'सूचना अनुमति',
-    'permission_notification_subject_desc': 'कुशलता जांच सूचनाएं प्राप्त करने के लिए आवश्यक',
+    'permission_notification_subject_desc': 'खैरियत की जांच से जुड़ी सूचनाएं पाने के लिए आवश्यक',
     'permission_notification_guardian_desc':
         'आपके संरक्षित व्यक्तियों की सुरक्षा सूचनाएं प्राप्त करने के लिए आवश्यक',
     'permission_activity': 'गतिविधि पहचान',
@@ -81,14 +82,14 @@ abstract class HiIn {
         'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है।\nकृपया अगली स्क्रीन पर "अनुमति दें" दबाएं।',
     'permission_notification_required_title': 'सूचना अनुमति आवश्यक',
     'permission_notification_required_message':
-        'कुशलता जांच सेवा के लिए सूचना अनुमति आवश्यक है।\nकृपया सेटिंग्स में इसे सक्षम करें।',
+        'खैरियत की जांच सेवा के लिए सूचना अनुमति आवश्यक है।\nकृपया सेटिंग्स में इसे सक्षम करें।',
     'permission_go_to_settings': 'सेटिंग्स पर जाएं',
     'permission_activity_denied_title': 'शारीरिक गतिविधि अनुमति आवश्यक',
     'permission_activity_denied_message':
         'आपके कदमों का पता लगाने और आपकी सुरक्षा सत्यापित करने के लिए शारीरिक गतिविधि अनुमति आवश्यक है।\n\nइस अनुमति के बिना, कदम की जानकारी अभिभावकों को नहीं भेजी जाएगी।\n\nकृपया ऐप सेटिंग्स में "शारीरिक गतिविधि" अनुमति सक्षम करें।',
     'permission_battery': 'बैटरी अनुकूलन अपवाद',
     'permission_battery_desc':
-        'निर्धारित समय पर दैनिक कुशलता जांच छूट न जाए, इसके लिए ऐप को बैटरी अनुकूलन से बाहर रखता है',
+        'निर्धारित समय पर रोज़ाना खैरियत की जांच छूट न जाए, इसके लिए ऐप को बैटरी अनुकूलन से बाहर रखता है',
     'permission_hibernation_title': 'स्वचालित अनुमति हटाना बंद करें',
     'permission_hibernation_highlight': 'स्वचालित अनुमति हटाना',
     'permission_hibernation_message':
@@ -97,26 +98,26 @@ abstract class HiIn {
     'stability_battery_warning_short': 'बैटरी उपयोग प्रतिबंध हटाना आवश्यक है',
     'stability_battery_dialog_title': 'बैटरी उपयोग प्रतिबंध हटाना',
     'stability_battery_dialog_message':
-        'जब आपका फ़ोन पावर-सेविंग मोड में जाता है, तो आपके अभिभावक को सलामती संकेत देर से पहुँच सकते हैं या छूट सकते हैं।\n\nनीचे [सेटिंग्स खोलें] पर टैप करने के बाद, "बैटरी" → "बिना प्रतिबंध" सेट करें। इस तरह सलामती संकेत हर दिन निर्धारित समय पर विश्वसनीय रूप से पहुँचेंगे।\n\n※ सटीक शब्द डिवाइस निर्माता के अनुसार भिन्न हो सकते हैं।',
+        'जब आपका फ़ोन पावर-सेविंग मोड में जाता है, तो आपके अभिभावक को खैरियत के संकेत देर से पहुँच सकते हैं या छूट सकते हैं।\n\nनीचे [सेटिंग्स खोलें] पर टैप करने के बाद, "बैटरी" → "बिना प्रतिबंध" सेट करें। इस तरह खैरियत के संकेत हर दिन निर्धारित समय पर विश्वसनीय रूप से पहुँचेंगे।\n\n※ सटीक शब्द डिवाइस निर्माता के अनुसार भिन्न हो सकते हैं।',
 
     // ── ऑनबोर्डिंग ──
     'onboarding_safety_code_title': 'आपका सुरक्षा कोड अपने आप बन जाता है',
     'onboarding_safety_code_desc':
-        'यह कोड अभिभावक को भेजें और जुड़ जाएं —\nआपकी कुशलता का संकेत अपने आप भेजा जाएगा।',
+        'यह कोड अभिभावक को भेजें और जुड़ जाएं —\nआपकी खैरियत का संकेत अपने आप भेजा जाएगा।',
     'onboarding_emergency_title': 'जब आप अपनी मौजूदा स्थिति (अत्यावश्यक) और जगह बताना चाहें',
     'onboarding_emergency_desc': 'यह बटन दबाएं, और यह तुरंत\nसभी अभिभावकों तक पहुंच जाता है',
-    'onboarding_gs_switch_title': 'परिवार की कुशलता का भी ध्यान रखें',
+    'onboarding_gs_switch_title': 'परिवार की खैरियत का भी ध्यान रखें',
     'onboarding_gs_switch_desc':
-        'मेनू में [परिवार की कुशलता भी देखें] दबाने से\nअभिभावक की भूमिका भी साथ में इस्तेमाल कर सकते हैं',
+        'मेनू में [परिवार की खैरियत भी देखें] दबाने से\nअभिभावक की भूमिका भी साथ में इस्तेमाल कर सकते हैं',
     'onboarding_add_subject_title': 'अपने किसी प्रिय व्यक्ति से जुड़ें',
     'onboarding_add_subject_desc': 'मिला हुआ कोड और उपनाम डालें\nऔर तुरंत जुड़ जाएं',
-    'onboarding_notifications_title': 'कुशलता अलर्ट ऐसे दिखते हैं',
+    'onboarding_notifications_title': 'खैरियत के अलर्ट ऐसे दिखते हैं',
     'onboarding_notifications_desc':
         'सामान्य स्थिति में कदमों जैसी गतिविधि की जानकारी दिखती है, और अगर संकेत न आए या गतिविधि दर्ज न हो तो ऊपर जैसा नोटिफिकेशन मिलता है',
     'onboarding_push_now': 'अभी',
     'onboarding_gs_enable_title': 'अपना सुरक्षा कोड सक्रिय करें',
     'onboarding_gs_enable_desc':
-        'सेटिंग्स में [मेरा सुरक्षा कोड बनाएं] दबाने से\nमेरी कुशलता भी अभिभावक तक पहुंचती है',
+        'सेटिंग्स में [मेरा सुरक्षा कोड बनाएं] दबाने से\nमेरी खैरियत भी अभिभावक तक पहुंचती है',
     'onboarding_role_subject': 'संरक्षित व्यक्ति',
     'onboarding_role_guardian': 'अभिभावक',
     'onboarding_role_guardian_subject': 'अभिभावक और संरक्षित',
@@ -132,9 +133,9 @@ abstract class HiIn {
     // ── संरक्षित व्यक्ति होम ──
     'subject_home_share_title': 'अपना सुरक्षा कोड साझा करें',
     'subject_home_guardian_count': 'जुड़े अभिभावक: @count',
-    'subject_home_check_title_last': 'अंतिम कुशलता जांच',
+    'subject_home_check_title_last': 'खैरियत की अंतिम जांच',
     'subject_home_check_title_scheduled': 'निर्धारित जांच समय',
-    'subject_home_check_title_checking': 'कुशलता जांच हो रही है',
+    'subject_home_check_title_checking': 'खैरियत की जांच हो रही है',
     'subject_home_check_body_reported': '@time पर रिपोर्ट किया गया',
     'subject_home_check_body_scheduled': '@time पर निर्धारित',
     'subject_home_check_body_waiting': '@time से प्रतीक्षा में',
@@ -153,12 +154,12 @@ abstract class HiIn {
     'subject_home_emergency_failed': 'आपातकालीन अलर्ट भेजने में विफल',
     'subject_home_manual_report_limit_reached':
         'आपने आज की सुरक्षा रिपोर्ट पहले ही भेज दी है। कृपया कल पुनः प्रयास करें।',
-    'subject_home_manual_report_sent': 'आपका संदेश आपके अभिभावकों को भेज दिया गया है।',
-    'safety_net_dialog_title': 'कुशल-क्षेम भेजा गया',
+    'subject_home_manual_report_sent': 'आपकी खैरियत का संकेत आपके अभिभावकों को भेज दिया गया है।',
+    'safety_net_dialog_title': 'खैरियत का संदेश भेजा गया',
     'safety_net_dialog_body':
-        'आज का कुशल-क्षेम संदेश आपके अभिभावक को भेज दिया गया है।',
+        'आज खैरियत का संदेश आपके अभिभावकों को भेज दिया गया है।',
     'safety_net_dialog_already_body':
-        'आज का कुशल-क्षेम संदेश पहले ही @time बजे आपके अभिभावक को भेज दिया गया था।',
+        'आज खैरियत का संदेश पहले ही @time बजे आपके अभिभावकों को भेज दिया गया था।',
     'subject_home_emergency_confirm_title': 'आपातकालीन सहायता अनुरोध',
     'subject_home_emergency_confirm_body':
         'सभी अभिभावकों को आपातकालीन अलर्ट भेजा जाएगा।\nआपकी वर्तमान स्थिति भी साझा की जाएगी।\nक्या आप वास्तव में सहायता का अनुरोध करना चाहते हैं?',
@@ -166,7 +167,7 @@ abstract class HiIn {
     'emergency_sent_without_location': 'आपातकालीन अलर्ट भेज दिया गया',
     'notifications_view_location': '🗺️ स्थान देखें',
     'emergency_map_title': 'आपातकालीन स्थान',
-    'emergency_map_subject_label': 'देखभाल प्राप्तकर्ता',
+    'emergency_map_subject_label': 'संरक्षित व्यक्ति',
     'emergency_map_captured_at_label': 'प्राप्त समय',
     'emergency_map_accuracy_label': 'सटीकता',
     'emergency_map_open_external': 'बाहरी मानचित्र ऐप में खोलें',
@@ -195,10 +196,10 @@ abstract class HiIn {
     'guardian_status_confirmed': '✅ सुरक्षित',
     'guardian_subscription_expired': 'सदस्यता आवश्यक है',
     'guardian_subscription_expired_message':
-        'हर दिन आने वाली कुशल-क्षेम की खबरें अब रुक गई हैं।\nएक दोपहर के भोजन की कीमत में, पूरे साल अपनों का ख्याल रखें।',
+        'हर दिन आने वाली खैरियत की खबरें अब रुक गई हैं।\nएक दोपहर के भोजन की कीमत में, पूरे साल अपनों का ख्याल रखें।',
     'guardian_subscribe': 'सदस्यता लें',
     'guardian_payment_preparing': 'भुगतान सुविधा जल्द आ रही है।',
-    'guardian_today_summary': 'आज की कुशलता सारांश',
+    'guardian_today_summary': 'आज की खैरियत का सारांश',
     'guardian_no_subjects': 'कोई संरक्षित व्यक्ति जुड़ा नहीं है।',
     'guardian_checking_subjects': 'वर्तमान में @count संरक्षित व्यक्ति(यों)\nकी जांच हो रही है।',
     'guardian_subject_list': 'संरक्षित व्यक्ति सूची',
@@ -216,7 +217,7 @@ abstract class HiIn {
     'guardian_activity_active': 'सक्रिय',
     'guardian_activity_needs_exercise': 'व्यायाम आवश्यक',
     'guardian_activity_collecting': 'डेटा एकत्र हो रहा है',
-    'guardian_error_load_step_history': 'चरण इतिहास लोड नहीं हो सका',
+    'guardian_error_load_step_history': 'कदम इतिहास लोड नहीं हो सका',
     'guardian_chart_y_axis_steps': 'कदम',
     'guardian_chart_x_axis_last_7_days': 'पिछले 7 दिन',
     'guardian_chart_x_axis_last_30_days': 'पिछले 30 दिन',
@@ -243,7 +244,7 @@ abstract class HiIn {
     'add_subject_error_login': 'लॉगिन आवश्यक।',
     'add_subject_success': 'संरक्षित व्यक्ति सफलतापूर्वक जुड़ गया।',
     'add_subject_error_invalid_code': 'अमान्य कोड।',
-    'add_subject_error_self': 'आप अपना खुद का कोड देखभाल प्राप्तकर्ता के रूप में नहीं जोड़ सकते।',
+    'add_subject_error_self': 'आप अपना खुद का कोड संरक्षित व्यक्ति के रूप में नहीं जोड़ सकते।',
     'add_subject_error_limit': 'आप अधिकतम @max लोगों को पंजीकृत कर सकते हैं।',
     'add_subject_error_already_connected': 'पहले से जुड़ा हुआ।',
     'add_subject_error_failed': 'कनेक्शन विफल। कृपया पुनः प्रयास करें।',
@@ -296,9 +297,9 @@ abstract class HiIn {
     'gs_enable_dialog_title': 'मेरा सुरक्षा कोड बनाएं',
     'gs_enable_dialog_body':
         'एक सुरक्षा कोड जारी किया जाएगा — कृपया इसे अन्य अभिभावकों के साथ साझा करें।',
-    'gs_enable_dialog_ios_warning_title': '⚠ आपका वेलनेस संकेत कैसे भेजा जाता है',
+    'gs_enable_dialog_ios_warning_title': '⚠ आपकी खैरियत का संकेत कैसे भेजा जाता है',
     'gs_enable_dialog_ios_warning_body':
-        'हर दिन निर्धारित समय पर एक "वेलनेस पुश सूचना" दिखाई देती है। आपका वेलनेस संकेत भेजने के लिए आपको सूचना पर टैप करना होगा या उस समय के आसपास स्वयं ऐप खोलना होगा। यदि आप ऐप नहीं खोलते हैं, तो आपके अभिभावकों को जांच छूटने का अलर्ट मिल सकता है।',
+        'हर दिन निर्धारित समय पर एक "खैरियत की सूचना" दिखाई देती है। आपकी खैरियत का संकेत भेजने के लिए आपको सूचना पर टैप करना होगा या उस समय के आसपास स्वयं ऐप खोलना होगा। यदि आप ऐप नहीं खोलते हैं, तो आपके अभिभावकों को जांच छूटने का अलर्ट मिल सकता है।',
     'gs_enable_dialog_ios_confirm': 'समझ गया, सक्रिय करें',
     'gs_enable_confirm': 'बनाएं',
     'gs_enabled_message': 'सुरक्षा सक्रिय हो गई',
@@ -317,10 +318,10 @@ abstract class HiIn {
     'gs_activity_permission_settings_go': 'सेटिंग्स पर जाएं',
 
     // ── अभिभावक मोड → G+S स्विच (Drawer/डायलॉग) ──
-    'drawer_enable_guardian': 'परिवार की कुशलता भी देखें',
+    'drawer_enable_guardian': 'परिवार की खैरियत भी देखें',
     's_to_gs_dialog_title': 'अभिभावक सुविधा जोड़ें',
     's_to_gs_dialog_body':
-        'परिवार या प्रियजनों की कुशलता पर भी नज़र रखने के लिए अभिभावक सुविधा जोड़ें।\n(ध्यान दें: अभिभावक सुविधा 3 महीने के लिए निःशुल्क है, उसके बाद सशुल्क सदस्यता में बदल जाती है।)\n\nआपका स्वयं का सुरक्षा कोड और वर्तमान में उपयोग की जा रही कुशलता सूचना भेजना जैसा है वैसा ही रहेगा और निःशुल्क उपलब्ध रहेगा।',
+        'परिवार या प्रियजनों की खैरियत पर भी नज़र रखने के लिए अभिभावक सुविधा जोड़ें।\n(ध्यान दें: अभिभावक सुविधा 3 महीने के लिए निःशुल्क है, उसके बाद सशुल्क सदस्यता में बदल जाती है।)\n\nआपका स्वयं का सुरक्षा कोड और वर्तमान में उपयोग की जा रही खैरियत की सूचना भेजना जैसा है वैसा ही रहेगा और निःशुल्क उपलब्ध रहेगा।',
     's_to_gs_dialog_confirm': 'जारी रखें',
     's_to_gs_switch_failed': 'अभिभावक सुविधा सक्षम नहीं हो सकी',
 
@@ -335,17 +336,17 @@ abstract class HiIn {
     'notifications_delete_failed': 'सूचनाएं हटाने में विफल।',
     'notifications_guide_title': 'सूचना स्तर मार्गदर्शिका',
     'notifications_level_health': 'सामान्य',
-    'notifications_level_health_desc': 'संरक्षित व्यक्ति की कुशलता सामान्य रूप से पुष्ट',
+    'notifications_level_health_desc': 'संरक्षित व्यक्ति की खैरियत सामान्य रूप से पुष्ट',
     'notifications_level_caution': 'सावधानी',
-    'notifications_level_caution_desc': 'अभी तक कोई कुशल संकेत या गतिविधि रिकॉर्ड नहीं मिला',
+    'notifications_level_caution_desc': 'अभी तक खैरियत का कोई संकेत या गतिविधि रिकॉर्ड नहीं मिला',
     'notifications_level_warning': 'चेतावनी',
-    'notifications_level_warning_desc': 'कई दिनों से कोई कुशल संकेत या गतिविधि रिकॉर्ड नहीं मिला',
+    'notifications_level_warning_desc': 'कई दिनों से खैरियत का कोई संकेत या गतिविधि रिकॉर्ड नहीं मिला',
     'notifications_level_urgent': 'अत्यावश्यक',
     'notifications_level_urgent_desc': 'अभी तुरंत जाँच आवश्यक',
     'notifications_level_info': 'जानकारी',
     'notifications_level_info_desc': 'कदम, बैटरी कम और अन्य सूचनाएँ',
     'notifications_activity_note':
-        '※ कदम की गिनती आधी रात से सुरक्षा संकेत भेजे जाने के समय तक के संचित कदम हैं।',
+        '※ कदम की गिनती आधी रात से खैरियत का संकेत भेजे जाने के समय तक के संचित कदम हैं।',
 
     // ── अभिभावक सूचना सेटिंग्स ──
     'notification_settings_title': 'सूचना सेटिंग्स',
@@ -365,8 +366,6 @@ abstract class HiIn {
     'notification_settings_dnd_start': 'शुरू का समय',
     'notification_settings_dnd_end': 'समाप्ति का समय',
     'notification_settings_dnd_note': '※ अत्यावश्यक अलर्ट परेशान न करें मोड में भी आते हैं',
-    'notification_settings_dnd_start_default': 'रात 10:00',
-    'notification_settings_dnd_end_default': 'सुबह 7:00',
 
     // ── अभिभावक कनेक्शन प्रबंधन ──
     'connection_title': 'कनेक्शन प्रबंधन',
@@ -379,7 +378,7 @@ abstract class HiIn {
     'connection_unlink_warning_detail':
         'पुनः जोड़ने के बाद पिछले रिकॉर्ड पुनर्प्राप्त नहीं किए जा सकते। आपको संरक्षित व्यक्ति का कोड फिर से दर्ज करना होगा।',
     'connection_heartbeat_schedule': 'रोज @time पर',
-    'connection_heartbeat_report_time': 'कुशलता रिपोर्ट समय: ',
+    'connection_heartbeat_report_time': 'खैरियत भेजने का समय: ',
     'connection_subject_label': 'संरक्षित व्यक्ति',
     'connection_change_only_in_app': 'केवल ऐप में बदला जा सकता है',
     'connection_edit_title': 'संरक्षित व्यक्ति संपादित करें',
@@ -403,17 +402,17 @@ abstract class HiIn {
     'heartbeat_schedule_hint_ios':
         'हर दिन इस समय एक वेलनेस पुश सूचना आती है। अपना वेलनेस संकेत भेजने के लिए सूचना पर टैप करें या उस समय के आसपास ऐप खोलें।',
     'heartbeat_daily_time': 'रोज @time पर',
-    'heartbeat_scheduled_today': 'आपका कुशलता संकेत हर दिन @time पर आपके अभिभावकों को भेजा जाएगा।',
+    'heartbeat_scheduled_today': 'आपकी खैरियत का संकेत हर दिन @time पर आपके अभिभावकों को भेजा जाएगा।',
     'heartbeat_change_failed_title': 'समय बदलना विफल',
     'heartbeat_change_failed_message': 'सर्वर पर अपडेट नहीं हो सका।',
     'heartbeat_picker_help': '@limit से पहले का समय चुनें',
     'heartbeat_range_limit_title': 'समय उपलब्ध नहीं',
     'heartbeat_range_limit_message':
-        'कुशलता जांच का समय @limit से पहले होना चाहिए।',
+        'खैरियत की जांच का समय @limit से पहले होना चाहिए।',
 
     // ── स्थानीय सूचनाएं ──
-    'local_notification_channel': 'कुशलता अलर्ट',
-    'local_notification_channel_desc': 'कुशलता जांच सेवा सूचनाएं',
+    'local_notification_channel': 'खैरियत की सूचनाएं',
+    'local_notification_channel_desc': 'खैरियत की जांच सेवा से जुड़ी सूचनाएं',
 
     // ── अन्य ──
     'back_press_exit': 'बाहर निकलने के लिए फिर से दबाएं।',
@@ -425,21 +424,21 @@ abstract class HiIn {
     'error_unauthorized': 'प्रमाणीकरण आवश्यक है।',
 
     // ── सूचना सामग्री ──
-    'noti_auto_report_body': 'कुशलता जांच सफलतापूर्वक प्राप्त हुई।',
-    'noti_manual_report_body': 'संरक्षित व्यक्ति ने मैन्युअल रूप से कुशलता जांच भेजी।',
+    'noti_auto_report_body': 'खैरियत की जांच सफलतापूर्वक प्राप्त हुई।',
+    'noti_manual_report_body': 'संरक्षित व्यक्ति ने मैन्युअल रूप से खैरियत की जांच भेजी।',
     'noti_battery_low_body': 'फोन की बैटरी 20% से कम है। चार्जिंग की आवश्यकता हो सकती है।',
     'noti_battery_dead_body':
         'फोन बैटरी खत्म होने से बंद हो गया लगता है। अंतिम बैटरी स्तर: @battery_level%। चार्ज करने के बाद स्वतः ठीक हो जाएगा।',
     'noti_caution_suspicious_body':
-        'कुशलता संकेत प्राप्त हुआ, लेकिन आज कोई गतिविधि रिकॉर्ड नहीं मिला। कृपया व्यक्तिगत रूप से जांचें।',
+        'खैरियत का संकेत प्राप्त हुआ, लेकिन आज कोई गतिविधि रिकॉर्ड नहीं मिला। कृपया व्यक्तिगत रूप से जांचें।',
     'noti_caution_missing_body':
-        'आज की निर्धारित कुशलता जांच अभी तक प्राप्त नहीं हुई है। कृपया व्यक्तिगत रूप से जांचें।',
-    'noti_warning_body': 'कुशलता जांच लगातार छूट रही है। कृपया व्यक्तिगत रूप से सत्यापित करें।',
+        'आज खैरियत की निर्धारित जांच अभी तक प्राप्त नहीं हुई है। कृपया व्यक्तिगत रूप से जांचें।',
+    'noti_warning_body': 'खैरियत की जांच लगातार छूट रही है। कृपया व्यक्तिगत रूप से सत्यापित करें।',
     'noti_warning_suspicious_body':
         'लगातार गतिविधि रिकॉर्ड नहीं मिला। व्यक्तिगत सत्यापन आवश्यक है।',
-    'noti_urgent_body': '@days दिनों से कुशलता जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
+    'noti_urgent_body': '@days दिन से खैरियत की जांच नहीं हुई। तत्काल सत्यापन आवश्यक है।',
     'noti_urgent_suspicious_body':
-        '@days दिनों से कोई गतिविधि रिकॉर्ड नहीं मिला। तत्काल सत्यापन आवश्यक है।',
+        '@days दिन से गतिविधि रिकॉर्ड नहीं मिला। तत्काल सत्यापन आवश्यक है।',
     'noti_steps_body': 'आज @steps कदम चले।',
     'noti_emergency_body': 'संरक्षित व्यक्ति ने सीधे मदद का अनुरोध किया है। कृपया तुरंत जांचें।',
     'noti_resolved_body': 'संरक्षित व्यक्ति की स्वास्थ्य जाँच सामान्य हो गई है।',
@@ -447,9 +446,9 @@ abstract class HiIn {
     'noti_cleared_by_guardian_body': 'एक अभिभावक ने व्यक्तिगत रूप से सुरक्षा की पुष्टि की है।',
 
     // ── स्थानीय सूचनाएँ ──
-    'local_alarm_title': '💗 कुशलता जांच आवश्यक है',
+    'local_alarm_title': '💗 खैरियत की जांच ज़रूरी है',
     'local_alarm_body': 'कृपया इस सूचना पर टैप करें।',
-    'wellbeing_check_title': '💛 कुशलता जांच',
+    'wellbeing_check_title': '💛 खैरियत की जांच',
     'wellbeing_check_body': 'क्या आप ठीक हैं? कृपया इस सूचना पर टैप करें।',
     'noti_channel_name': 'Anbu सूचनाएँ',
     'notification_send_failed_title': '📶 कृपया अपना इंटरनेट कनेक्शन जांचें',

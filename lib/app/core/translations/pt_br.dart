@@ -14,6 +14,7 @@ abstract class PtBr {
     'common_later': 'Depois',
     'common_loading': 'Carregando...',
     'common_error': 'Erro',
+    'common_session_expired': 'As informações da sua conta expiraram. Cadastre-se novamente.',
     'common_complete': 'Concluído',
     'common_notice': 'Aviso',
     'common_unlink': 'Desvincular',
@@ -67,7 +68,7 @@ abstract class PtBr {
     'permission_activity_desc': 'Usado para detectar passos e confirmar atividade',
     'permission_location': 'Localização',
     'permission_location_desc':
-        'Compartilhada com os protetores apenas em pedidos de ajuda de emergência',
+        'Compartilhada com os guardiões apenas em pedidos de ajuda de emergência',
     'permission_tracking': 'Rastreamento de anúncios',
     'permission_tracking_desc': 'Usado para exibir anúncios personalizados',
     'location_permission_warning':
@@ -98,7 +99,7 @@ abstract class PtBr {
     'stability_battery_warning_short': 'É necessário desativar a restrição de uso de bateria',
     'stability_battery_dialog_title': 'Desativar a restrição de uso de bateria',
     'stability_battery_dialog_message':
-        'Quando seu telefone entra no modo de economia de energia, os sinais de bem-estar enviados ao seu cuidador podem chegar atrasados ou serem perdidos.\n\nApós tocar em [Abrir configurações] abaixo, defina "Bateria" → "Sem restrições". Assim, os sinais de bem-estar são enviados de forma confiável no horário programado todos os dias.\n\n※ O texto exato pode variar conforme o fabricante do dispositivo.',
+        'Quando seu telefone entra no modo de economia de energia, os sinais de bem-estar enviados ao seu guardião podem chegar atrasados ou serem perdidos.\n\nApós tocar em [Abrir configurações] abaixo, defina "Bateria" → "Sem restrições". Assim, os sinais de bem-estar são enviados de forma confiável no horário programado todos os dias.\n\n※ O texto exato pode variar conforme o fabricante do dispositivo.',
 
     // ── Onboarding ──
     'onboarding_safety_code_title': 'Seu código de segurança é gerado automaticamente',
@@ -156,12 +157,12 @@ abstract class PtBr {
     'subject_home_emergency_failed': 'Falha ao enviar alerta de emergência',
     'subject_home_manual_report_limit_reached':
         'Você já enviou o relatório de segurança de hoje. Tente novamente amanhã.',
-    'subject_home_manual_report_sent': 'Sua mensagem foi enviada aos seus contatos.',
+    'subject_home_manual_report_sent': 'Seu sinal de bem-estar foi enviado aos seus guardiões.',
     'safety_net_dialog_title': 'Verificação enviada',
     'safety_net_dialog_body':
-        'A verificação de bem-estar de hoje foi enviada ao seu responsável.',
+        'A verificação de bem-estar de hoje foi enviada aos seus guardiões.',
     'safety_net_dialog_already_body':
-        'A verificação de bem-estar de hoje já foi enviada ao seu responsável às @time.',
+        'A verificação de bem-estar de hoje já foi enviada aos seus guardiões às @time.',
     'subject_home_emergency_confirm_title': 'Pedido de ajuda de emergência',
     'subject_home_emergency_confirm_body':
         'Um alerta de emergência será enviado a todos os guardiões.\nSua localização atual também será compartilhada.\nTem certeza de que deseja pedir ajuda?',
@@ -207,7 +208,7 @@ abstract class PtBr {
     'guardian_subject_list': 'Lista de protegidos',
     'guardian_call_now': 'Ligar agora',
     'phone_call_failed': 'Não foi possível fazer a ligação.',
-    'guardian_confirm_safety': 'Confirmar segurança',
+    'guardian_confirm_safety': 'Confirmar',
     'guardian_no_check_history': 'Sem histórico de verificação',
     'guardian_last_check_now': 'Última verificação: agora',
     'guardian_last_check_minutes': 'Última verificação: @minutes min atrás',
@@ -224,7 +225,7 @@ abstract class PtBr {
     'guardian_chart_x_axis_last_7_days': 'Últimos 7 dias',
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 dias',
     'guardian_chart_today': 'Hoje',
-    'guardian_safety_needed': 'Verificação de segurança necessária',
+    'guardian_safety_needed': 'Verificação necessária',
     'guardian_error_load_subjects': 'Não foi possível carregar a lista de protegidos.',
     'guardian_safety_confirmed': 'Segurança confirmada.',
     'guardian_error_clear_alerts': 'Não foi possível limpar os alertas.',
@@ -246,7 +247,7 @@ abstract class PtBr {
     'add_subject_error_login': 'Login necessário.',
     'add_subject_success': 'Protegido conectado com sucesso.',
     'add_subject_error_invalid_code': 'Código inválido.',
-    'add_subject_error_self': 'Você não pode adicionar seu próprio código como pessoa monitorada.',
+    'add_subject_error_self': 'Você não pode adicionar seu próprio código como pessoa protegida.',
     'add_subject_error_limit': 'Você pode registrar até @max pessoas.',
     'add_subject_error_already_connected': 'Já conectado.',
     'add_subject_error_failed': 'Conexão falhou. Tente novamente mais tarde.',
@@ -360,7 +361,7 @@ abstract class PtBr {
     'notification_settings_level_section': 'Configurações por nível',
     'notification_settings_urgent': 'Alertas urgentes',
     'notification_settings_urgent_desc': 'Alertas urgentes não podem ser desativados',
-    'notification_settings_warning': 'Alertas de aviso',
+    'notification_settings_warning': 'Alertas de risco',
     'notification_settings_warning_desc':
         'Alerta quando não há verificação por 2 dias consecutivos',
     'notification_settings_caution': 'Alertas de atenção',
@@ -372,8 +373,6 @@ abstract class PtBr {
     'notification_settings_dnd_end': 'Hora de término',
     'notification_settings_dnd_note':
         '※ Alertas urgentes são entregues mesmo durante o modo Não perturbe',
-    'notification_settings_dnd_start_default': '22:00',
-    'notification_settings_dnd_end_default': '07:00',
 
     // ── Gerenciamento de conexões do guardião ──
     'connection_title': 'Gerenciamento de conexões',
@@ -381,7 +380,7 @@ abstract class PtBr {
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Protegidos conectados',
     'connection_reorder_hint': 'Pressione e segure um cartão abaixo para reordenar',
-    'connection_empty': 'Nenhuma pessoa protegida conectada',
+    'connection_empty': 'Nenhum protegido conectado',
     'connection_unlink_warning': 'A desvinculação excluirá os dados do protegido.',
     'connection_unlink_warning_detail':
         'Os dados anteriores não poderão ser recuperados após uma nova vinculação. Você precisará inserir o código do protegido novamente.',
@@ -404,9 +403,9 @@ abstract class PtBr {
     'nav_settings': 'Configurações',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Alterar horário de confirmação',
-    'heartbeat_schedule_title_ios': 'Horário de confirmação',
-    'heartbeat_schedule_change_title_ios': 'Alterar horário de confirmação',
+    'heartbeat_schedule_change': 'Alterar horário de verificação',
+    'heartbeat_schedule_title_ios': 'Horário de verificação',
+    'heartbeat_schedule_change_title_ios': 'Alterar horário de verificação',
     'heartbeat_schedule_hint_ios':
         'Uma notificação push de bem-estar chega todos os dias neste horário. Toque na notificação ou abra o aplicativo nesse momento para enviar seu sinal de bem-estar.',
     'heartbeat_daily_time': 'Diariamente às @time',
@@ -456,7 +455,7 @@ abstract class PtBr {
     'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
     'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',
     'noti_cleared_by_guardian_title': '✅ Verificação confirmada',
-    'noti_cleared_by_guardian_body': 'Um dos protetores confirmou pessoalmente a segurança.',
+    'noti_cleared_by_guardian_body': 'Um dos guardiões confirmou pessoalmente a segurança.',
 
     // ── Notificações locais ──
     'local_alarm_title': '💗 Verificação de bem-estar necessária',

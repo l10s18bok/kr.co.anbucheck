@@ -14,6 +14,7 @@ abstract class KoKr {
     'common_later': '나중에',
     'common_loading': '로딩중...',
     'common_error': '오류',
+    'common_session_expired': '계정 정보가 만료되었습니다. 다시 등록해 주세요.',
     'common_complete': '완료',
     'common_notice': '안내',
     'common_unlink': '해제',
@@ -347,8 +348,6 @@ abstract class KoKr {
     'notification_settings_dnd_start': '시작 시각',
     'notification_settings_dnd_end': '종료 시각',
     'notification_settings_dnd_note': '※ 긴급 알림은 방해금지모드 중에도 수신됩니다',
-    'notification_settings_dnd_start_default': '오후 10:00',
-    'notification_settings_dnd_end_default': '오전 07:00',
 
     // ── 보호자 연결 관리 ──
     'connection_title': '연결관리',

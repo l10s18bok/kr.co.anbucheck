@@ -14,6 +14,7 @@ abstract class EnUs {
     'common_later': 'Later',
     'common_loading': 'Loading...',
     'common_error': 'Error',
+    'common_session_expired': 'Your account information has expired. Please register again.',
     'common_complete': 'Done',
     'common_notice': 'Notice',
     'common_unlink': 'Unlink',
@@ -364,8 +365,6 @@ abstract class EnUs {
     'notification_settings_dnd_start': 'Start Time',
     'notification_settings_dnd_end': 'End Time',
     'notification_settings_dnd_note': '※ Urgent alerts are delivered even during DND',
-    'notification_settings_dnd_start_default': '10:00 PM',
-    'notification_settings_dnd_end_default': '7:00 AM',
 
     // ── Guardian Connection Management ──
     'connection_title': 'Connection Management',

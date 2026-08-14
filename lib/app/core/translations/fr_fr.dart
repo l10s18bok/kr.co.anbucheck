@@ -14,6 +14,7 @@ abstract class FrFr {
     'common_later': 'Plus tard',
     'common_loading': 'Chargement...',
     'common_error': 'Erreur',
+    'common_session_expired': 'Les informations de votre compte ont expiré. Veuillez vous réinscrire.',
     'common_complete': 'Terminé',
     'common_notice': 'Information',
     'common_unlink': 'Dissocier',
@@ -54,7 +55,7 @@ abstract class FrFr {
     'mode_guardian_title': 'Veillez sur plusieurs personnes à la fois',
     'mode_guardian_desc': 'Si besoin, vous pourrez aussi donner de vos nouvelles plus tard',
     'mode_guardian_button': 'Recevoir des nouvelles →',
-    'mode_subject_badge': 'Sénior',
+    'mode_subject_badge': 'Senior',
     'mode_guardian_badge': 'Protecteur',
     'mode_select_notice': 'L\'interface sera adaptée selon votre choix',
 
@@ -63,11 +64,11 @@ abstract class FrFr {
     'permission_notification': 'Notifications',
     'permission_notification_subject_desc': 'Nécessaire pour recevoir les alertes de bien-être',
     'permission_notification_guardian_desc':
-        'Nécessaire pour recevoir les alertes sur la sécurité de vos proches',
+        'Nécessaire pour recevoir les alertes sur la sécurité des personnes protégées',
     'permission_activity': 'Reconnaissance d\'activité',
     'permission_activity_desc': 'Utilisée pour détecter les pas et confirmer l\'activité',
     'permission_location': 'Localisation',
-    'permission_location_desc': 'Partagée avec vos proches uniquement lors d\'un appel d\'urgence',
+    'permission_location_desc': "Partagée avec vos protecteurs uniquement lors d'un appel d'urgence",
     'permission_tracking': 'Suivi publicitaire',
     'permission_tracking_desc': 'Utilisé pour afficher des publicités personnalisées',
     'location_permission_warning':
@@ -98,7 +99,7 @@ abstract class FrFr {
     'stability_battery_warning_short': 'La restriction d\'utilisation de la batterie doit être désactivée',
     'stability_battery_dialog_title': 'Désactiver la restriction d\'utilisation de la batterie',
     'stability_battery_dialog_message':
-        'Lorsque votre téléphone passe en mode économie d\'énergie, les signaux de bien-être envoyés à votre proche peuvent être retardés ou manqués.\n\nAprès avoir appuyé sur [Ouvrir les paramètres] ci-dessous, réglez "Batterie" → "Sans restriction". Ainsi, les signaux de bien-être sont transmis de manière fiable à l\'heure prévue chaque jour.\n\n※ Les libellés exacts peuvent varier selon le fabricant de l\'appareil.',
+        'Lorsque votre téléphone passe en mode économie d\'énergie, les signaux de bien-être envoyés à votre protecteur peuvent être retardés ou manqués.\n\nAprès avoir appuyé sur [Ouvrir les paramètres] ci-dessous, réglez "Batterie" → "Sans restriction". Ainsi, les signaux de bien-être sont transmis de manière fiable à l\'heure prévue chaque jour.\n\n※ Les libellés exacts peuvent varier selon le fabricant de l\'appareil.',
 
     // ── Présentation ──
     'onboarding_safety_code_title': 'Votre code de sécurité est généré automatiquement',
@@ -122,7 +123,7 @@ abstract class FrFr {
         'Dans les paramètres, appuyez sur [Créer mon code de sécurité]\npour que votre bien-être soit aussi transmis à vos protecteurs',
     'onboarding_role_subject': 'Personne protégée',
     'onboarding_role_guardian': 'Protecteur',
-    'onboarding_role_guardian_subject': 'Gardien et protégé',
+    'onboarding_role_guardian_subject': 'Protecteur et personne protégée',
     'onboarding_already_registered_title': 'Appareil déjà enregistré',
     'onboarding_already_registered_message':
         'Cet appareil est déjà enregistré en mode "@roleLabel".\nSouhaitez-vous continuer en "@roleLabel" ?\n\nOu passer en mode "@newRoleLabel" ?\nLe changement supprimera toutes les données existantes.',
@@ -156,20 +157,20 @@ abstract class FrFr {
     'subject_home_emergency_failed': "Échec de l'envoi de l'alerte d'urgence",
     'subject_home_manual_report_limit_reached':
         "Vous avez déjà envoyé le rapport de sécurité d'aujourd'hui. Veuillez réessayer demain.",
-    'subject_home_manual_report_sent': 'Votre message a été envoyé à vos proches.',
+    'subject_home_manual_report_sent': 'Votre signal de bien-être a été envoyé à vos protecteurs.',
     'safety_net_dialog_title': 'Vérification envoyée',
     'safety_net_dialog_body':
-        "La vérification de bien-être d'aujourd'hui a été envoyée à votre proche.",
+        "La vérification de bien-être d'aujourd'hui a été envoyée à vos protecteurs.",
     'safety_net_dialog_already_body':
-        "La vérification de bien-être d'aujourd'hui a déjà été envoyée à votre proche à @time.",
+        "La vérification de bien-être d'aujourd'hui a déjà été envoyée à vos protecteurs à @time.",
     'subject_home_emergency_confirm_title': "Demande d'aide d'urgence",
     'subject_home_emergency_confirm_body':
-        "Une alerte d'urgence sera envoyée à tous les gardiens.\nVotre position actuelle sera également partagée.\nVoulez-vous vraiment demander de l'aide ?",
+        "Une alerte d'urgence sera envoyée à tous vos protecteurs.\nVotre position actuelle sera également partagée.\nVoulez-vous vraiment demander de l'aide ?",
     'emergency_sent_with_location': "Alerte d'urgence envoyée (avec position)",
     'emergency_sent_without_location': "Alerte d'urgence envoyée",
     'notifications_view_location': '🗺️ Voir la position',
     'emergency_map_title': "Position d'urgence",
-    'emergency_map_subject_label': 'Personne surveillée',
+    'emergency_map_subject_label': 'Personne protégée',
     'emergency_map_captured_at_label': 'Horodatage',
     'emergency_map_accuracy_label': 'Précision',
     'emergency_map_open_external': "Ouvrir dans l'application de cartes externe",
@@ -193,23 +194,23 @@ abstract class FrFr {
         'Votre compte et toutes vos données seront supprimés.\nÊtes-vous sûr(e) ?',
 
     // ── Tableau de bord (Protecteur) ──
-    'guardian_status_normal': 'Sûr',
+    'guardian_status_normal': 'Normal',
     'guardian_status_caution': 'Attention',
     'guardian_status_warning': 'Alerte',
     'guardian_status_urgent': 'Urgent',
-    'guardian_status_confirmed': '✅ Sûr',
+    'guardian_status_confirmed': '✅ Normal',
     'guardian_subscription_expired': 'Abonnement requis',
     'guardian_subscription_expired_message':
         'Les nouvelles quotidiennes se sont arrêtées.\nPour le prix d\'un déjeuner, veillez sur votre proche toute l\'année.',
     'guardian_subscribe': 'S\'abonner',
     'guardian_payment_preparing': 'La fonctionnalité de paiement sera bientôt disponible.',
-    'guardian_today_summary': 'Résumé du jour',
+    'guardian_today_summary': 'Résumé du bien-être du jour',
     'guardian_no_subjects': 'Aucune personne protégée connectée.',
     'guardian_checking_subjects': 'Suivi en cours pour\n@count personne(s).',
     'guardian_subject_list': 'Liste des personnes protégées',
     'guardian_call_now': 'Appeler maintenant',
     'phone_call_failed': 'Impossible de passer l\'appel.',
-    'guardian_confirm_safety': 'Confirmer la sécurité',
+    'guardian_confirm_safety': 'Confirmer',
     'guardian_no_check_history': 'Aucun historique',
     'guardian_last_check_now': 'Dernière vérif. : à l\'instant',
     'guardian_last_check_minutes': 'Dernière vérif. : il y a @minutes min',
@@ -225,8 +226,8 @@ abstract class FrFr {
     'guardian_chart_y_axis_steps': 'Pas',
     'guardian_chart_x_axis_last_7_days': '7 derniers jours',
     'guardian_chart_x_axis_last_30_days': '30 derniers jours',
-    'guardian_chart_today': 'Today',
-    'guardian_safety_needed': 'Vérification de sécurité nécessaire',
+    'guardian_chart_today': "Aujourd'hui",
+    'guardian_safety_needed': 'Vérification nécessaire',
     'guardian_error_load_subjects': 'Impossible de charger la liste des personnes protégées.',
     'guardian_safety_confirmed': 'Sécurité confirmée.',
     'guardian_error_clear_alerts': 'Impossible de lever les alertes.',
@@ -249,7 +250,7 @@ abstract class FrFr {
     'add_subject_error_login': 'Connexion requise.',
     'add_subject_success': 'Personne protégée associée avec succès.',
     'add_subject_error_invalid_code': 'Code non valide.',
-    'add_subject_error_self': 'Vous ne pouvez pas ajouter votre propre code comme personne à suivre.',
+    'add_subject_error_self': 'Vous ne pouvez pas ajouter votre propre code comme personne protégée.',
     'add_subject_error_limit': 'Vous pouvez enregistrer jusqu\'à @max personnes.',
     'add_subject_error_already_connected': 'Déjà associé(e).',
     'add_subject_error_failed': 'Échec de l\'association. Veuillez réessayer.',
@@ -301,17 +302,17 @@ abstract class FrFr {
     'gs_safety_code_title': 'Mon code de sécurité',
     'gs_enable_dialog_title': 'Créer mon code de sécurité',
     'gs_enable_dialog_body':
-        'Un code de sécurité sera émis — veuillez le partager avec d\'autres gardiens.',
-    'gs_enable_dialog_ios_warning_title': '⚠ Comment votre bilan de santé est envoyé',
+        'Un code de sécurité sera émis — veuillez le partager avec vos autres protecteurs.',
+    'gs_enable_dialog_ios_warning_title': '⚠ Comment votre signal de bien-être est envoyé',
     'gs_enable_dialog_ios_warning_body':
-        'Une « notification push de bien-être » apparaît chaque jour à l\'heure programmée. Vous devez appuyer sur la notification ou ouvrir l\'application vous-même à ce moment-là pour que votre signal de bien-être soit envoyé. Si vous n\'ouvrez pas l\'application, vos gardiens peuvent recevoir une alerte de vérification manquée.',
+        "Une « notification push de bien-être » apparaît chaque jour à l'heure programmée. Vous devez appuyer sur la notification ou ouvrir l'application vous-même à ce moment-là pour que votre signal de bien-être soit envoyé. Si vous n'ouvrez pas l'application, vos protecteurs peuvent recevoir une alerte de vérification manquée.",
     'gs_enable_dialog_ios_confirm': 'Compris, activer',
     'gs_enable_confirm': 'Créer',
     'gs_enabled_message': 'La protection a été activée',
     'gs_enable_failed': 'Échec de l\'activation de la protection',
     'gs_disable_dialog_title': 'Désactiver la protection',
     'gs_disable_dialog_body':
-        'La désactivation supprimera votre code de sécurité et arrêtera l\'envoi des vérifications aux gardiens connectés.',
+        "La désactivation supprimera votre code de sécurité et arrêtera l'envoi des vérifications à vos protecteurs connectés.",
     'gs_disable_confirm': 'Désactiver',
     'gs_disabled_message': 'La protection a été désactivée',
     'gs_disable_failed': 'Échec de la désactivation de la protection',
@@ -364,7 +365,7 @@ abstract class FrFr {
     'notification_settings_level_section': 'Réglages par niveau',
     'notification_settings_urgent': 'Alertes urgentes',
     'notification_settings_urgent_desc': 'Les alertes urgentes ne peuvent pas être désactivées',
-    'notification_settings_warning': 'Alertes d\'alerte',
+    'notification_settings_warning': 'Alertes de vigilance',
     'notification_settings_warning_desc': 'Alerte après 2 jours consécutifs sans vérification',
     'notification_settings_caution': 'Alertes d\'attention',
     'notification_settings_caution_desc': 'Alerte en cas de vérification manquante aujourd\'hui',
@@ -376,8 +377,6 @@ abstract class FrFr {
     'notification_settings_dnd_end': 'Heure de fin',
     'notification_settings_dnd_note':
         '※ Les alertes urgentes sont transmises même en mode « Ne pas déranger »',
-    'notification_settings_dnd_start_default': '22:00',
-    'notification_settings_dnd_end_default': '07:00',
 
     // ── Gestion des connexions ──
     'connection_title': 'Gestion des connexions',
@@ -408,9 +407,9 @@ abstract class FrFr {
     'nav_settings': 'Paramètres',
 
     // ── Heartbeat ──
-    'heartbeat_schedule_change': 'Modifier l\'heure de confirmation',
-    'heartbeat_schedule_title_ios': 'Heure de confirmation',
-    'heartbeat_schedule_change_title_ios': 'Modifier l\'heure de confirmation',
+    'heartbeat_schedule_change': "Modifier l'heure de vérification",
+    'heartbeat_schedule_title_ios': 'Heure de vérification',
+    'heartbeat_schedule_change_title_ios': "Modifier l'heure de vérification",
     'heartbeat_schedule_hint_ios':
         'Une notification push de bien-être arrive chaque jour à cette heure. Appuyez sur la notification ou ouvrez l\'application à ce moment-là pour envoyer votre signal de bien-être.',
     'heartbeat_daily_time': 'Tous les jours à @time',
@@ -460,7 +459,7 @@ abstract class FrFr {
     'noti_steps_body': "@steps pas effectués aujourd'hui.",
     'noti_emergency_body':
         "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
-    'noti_resolved_body': 'Le bilan de santé du protégé est revenu à la normale.',
+    'noti_resolved_body': 'La vérification de bien-être de la personne protégée est revenue à la normale.',
     'noti_cleared_by_guardian_title': '✅ Vérification confirmée',
     'noti_cleared_by_guardian_body': "Un des protecteurs a personnellement confirmé la sécurité.",
 

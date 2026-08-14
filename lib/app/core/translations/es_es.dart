@@ -14,6 +14,7 @@ abstract class EsEs {
     'common_later': 'Más tarde',
     'common_loading': 'Cargando...',
     'common_error': 'Error',
+    'common_session_expired': 'La información de su cuenta ha caducado. Vuelva a registrarse.',
     'common_complete': 'Listo',
     'common_notice': 'Aviso',
     'common_unlink': 'Desvincular',
@@ -44,14 +45,14 @@ abstract class EsEs {
     'update_later_button': 'Más tarde',
 
     // ── Selección de modo ──
-    'mode_select_title': '¿Cómo quieres empezar?',
+    'mode_select_title': '¿Cómo quiere empezar?',
     'mode_select_subtitle':
-        'Dinos si vas a dar señales de vida o a recibirlas',
+        'Díganos si va a dar señales de vida o a recibirlas',
     'mode_subject_title': 'Solo quiero dar señales de vida',
     'mode_subject_desc': 'Una pantalla muy sencilla, solo con lo esencial',
     'mode_subject_button': 'Dar señales de vida →',
-    'mode_guardian_title': 'Cuida de varias personas a la vez',
-    'mode_guardian_desc': 'Si lo necesitas, más adelante también podrás dar señales de vida',
+    'mode_guardian_title': 'Cuide de varias personas a la vez',
+    'mode_guardian_desc': 'Si lo necesita, más adelante también podrá dar señales de vida',
     'mode_guardian_button': 'Recibir señales →',
     'mode_subject_badge': 'Sénior',
     'mode_guardian_badge': 'Protector',
@@ -71,12 +72,12 @@ abstract class EsEs {
     'permission_tracking': 'Seguimiento de anuncios',
     'permission_tracking_desc': 'Se usa para mostrar anuncios personalizados',
     'location_permission_warning':
-        'No se enviará la ubicación en las solicitudes de emergencia. Toca para permitir.',
+        'No se enviará la ubicación en las solicitudes de emergencia. Toque para permitir.',
     'location_permission_settings_title': 'Permiso de ubicación requerido',
     'location_permission_settings_body_ios':
-        "Busca y selecciona 'Anbu', luego en 'Ubicación' elige 'Al usar la app'.",
+        'Busque y seleccione "Anbu", luego en "Ubicación" elija "Al usar la app".',
     'location_permission_settings_body_android':
-        "Selecciona 'Permisos' → 'Ubicación', luego elige 'Permitir solo mientras uso la app'.",
+        'Seleccione "Permisos" → "Ubicación", luego elija "Permitir solo mientras uso la app".',
     'permission_activity_dialog_title': 'Información sobre el permiso de actividad',
     'permission_activity_dialog_message':
         'Se utiliza para detectar pasos y confirmar la actividad.\nPulse "Permitir" en la siguiente pantalla.',
@@ -98,31 +99,31 @@ abstract class EsEs {
     'stability_battery_warning_short': 'Es necesario desactivar la restricción de uso de batería',
     'stability_battery_dialog_title': 'Desactivar la restricción de uso de batería',
     'stability_battery_dialog_message':
-        'Cuando su teléfono entra en modo de ahorro de energía, las señales de bienestar enviadas a su cuidador pueden llegar tarde o perderse.\n\nDespués de tocar [Abrir ajustes] abajo, configure "Batería" → "Sin restricciones". Así, las señales de bienestar se envían de forma fiable a la hora programada cada día.\n\n※ El texto exacto puede variar según el fabricante del dispositivo.',
+        'Cuando su teléfono entra en modo de ahorro de energía, las señales de bienestar enviadas a su protector pueden llegar tarde o perderse.\n\nDespués de tocar [Abrir ajustes] abajo, configure "Batería" → "Sin restricciones". Así, las señales de bienestar se envían de forma fiable a la hora programada cada día.\n\n※ El texto exacto puede variar según el fabricante del dispositivo.',
 
     // ── Presentación ──
-    'onboarding_safety_code_title': 'Tu código de seguridad se genera automáticamente',
+    'onboarding_safety_code_title': 'Su código de seguridad se genera automáticamente',
     'onboarding_safety_code_desc':
-        'Comparte este código con tu protector para conectaros —\ntu señal de bienestar se enviará automáticamente.',
-    'onboarding_emergency_title': 'Cuando quieras avisar tu estado (Urgente) y ubicación actuales',
+        'Comparta este código con su protector para conectarse —\nsu señal de bienestar se enviará automáticamente.',
+    'onboarding_emergency_title': 'Cuando quiera avisar su estado (Urgente) y ubicación actuales',
     'onboarding_emergency_desc':
-        'Toca este botón y llegará\nde inmediato a todos tus protectores',
-    'onboarding_gs_switch_title': 'Cuida también el bienestar de tu familia',
+        'Toque este botón y llegará\nde inmediato a todos sus protectores',
+    'onboarding_gs_switch_title': 'Cuide también el bienestar de su familia',
     'onboarding_gs_switch_desc':
-        'Toca [Gestionar también el bienestar familiar] en el menú\npara usar también el rol de protector',
-    'onboarding_add_subject_title': 'Conéctate con alguien especial',
+        'Toque [Gestionar también el bienestar familiar] en el menú\npara usar también el rol de protector',
+    'onboarding_add_subject_title': 'Conéctese con alguien especial',
     'onboarding_add_subject_desc':
-        'Introduce el código recibido y un apodo\npara conectaros al instante',
+        'Introduzca el código recibido y un apodo\npara conectarse al instante',
     'onboarding_notifications_title': 'Así se ven las notificaciones de bienestar',
     'onboarding_notifications_desc':
-        'Normalmente verás información de actividad como los pasos. Si no llega la señal o no se detecta actividad, se te avisará como arriba',
+        'Normalmente verá información de actividad como los pasos. Si no llega la señal o no se detecta actividad, se le avisará como arriba',
     'onboarding_push_now': 'Ahora',
-    'onboarding_gs_enable_title': 'Activa tu propio código de seguridad',
+    'onboarding_gs_enable_title': 'Active su propio código de seguridad',
     'onboarding_gs_enable_desc':
-        'En Ajustes, toca [Crear mi código de seguridad]\npara que tu bienestar también llegue a tus protectores',
+        'En Ajustes, toque [Crear mi código de seguridad]\npara que su bienestar también llegue a sus protectores',
     'onboarding_role_subject': 'Persona protegida',
     'onboarding_role_guardian': 'Protector',
-    'onboarding_role_guardian_subject': 'Guardián y protegido',
+    'onboarding_role_guardian_subject': 'Protector y persona protegida',
     'onboarding_already_registered_title': 'Dispositivo ya registrado',
     'onboarding_already_registered_message':
         'Este dispositivo ya está registrado en modo "@roleLabel".\n¿Desea continuar como "@roleLabel"?\n\n¿O cambiar al modo "@newRoleLabel"?\nAl cambiar se eliminarán todos los datos existentes.',
@@ -150,21 +151,21 @@ abstract class EsEs {
     'subject_home_report_button': 'Reportar bienestar ahora',
     'subject_home_report_desc': 'Haga saber a su protector que se encuentra bien',
     'subject_home_emergency_button': 'Necesito ayuda',
-    'subject_home_emergency_desc': 'Envía una alerta de emergencia a sus guardianes',
+    'subject_home_emergency_desc': 'Envía una alerta de emergencia a sus protectores',
     'subject_home_emergency_loading': 'Enviando alerta de emergencia...',
     'subject_home_emergency_sent': 'La alerta de emergencia ha sido enviada',
     'subject_home_emergency_failed': 'Error al enviar la alerta de emergencia',
     'subject_home_manual_report_limit_reached':
-        'Ya has enviado el informe de seguridad de hoy. Por favor, inténtalo de nuevo mañana.',
-    'subject_home_manual_report_sent': 'Tu mensaje ha sido enviado a tus contactos.',
+        'Ya ha enviado el informe de seguridad de hoy. Por favor, inténtelo de nuevo mañana.',
+    'subject_home_manual_report_sent': 'Su señal de bienestar se ha enviado a sus protectores.',
     'safety_net_dialog_title': 'Comprobación enviada',
     'safety_net_dialog_body':
-        'La comprobación de bienestar de hoy ha sido enviada a tu cuidador.',
+        'La comprobación de bienestar de hoy se ha enviado a sus protectores.',
     'safety_net_dialog_already_body':
-        'La comprobación de bienestar de hoy ya se envió a tu cuidador a las @time.',
+        'La comprobación de bienestar de hoy ya se envió a sus protectores a las @time.',
     'subject_home_emergency_confirm_title': 'Solicitud de ayuda de emergencia',
     'subject_home_emergency_confirm_body':
-        'Se enviará una alerta de emergencia a todos los cuidadores.\nTambién se compartirá tu ubicación actual.\n¿Realmente quieres solicitar ayuda?',
+        'Se enviará una alerta de emergencia a todos sus protectores.\nTambién se compartirá su ubicación actual.\n¿Realmente desea solicitar ayuda?',
     'emergency_sent_with_location': 'Alerta de emergencia enviada (con ubicación)',
     'emergency_sent_without_location': 'Alerta de emergencia enviada',
     'notifications_view_location': '🗺️ Ver ubicación',
@@ -207,7 +208,7 @@ abstract class EsEs {
     'guardian_subject_list': 'Lista de personas protegidas',
     'guardian_call_now': 'Llamar ahora',
     'phone_call_failed': 'No se pudo realizar la llamada.',
-    'guardian_confirm_safety': 'Confirmar seguridad',
+    'guardian_confirm_safety': 'Confirmar',
     'guardian_no_check_history': 'Sin historial',
     'guardian_last_check_now': 'Última verif.: hace un momento',
     'guardian_last_check_minutes': 'Última verif.: hace @minutes min',
@@ -224,7 +225,7 @@ abstract class EsEs {
     'guardian_chart_x_axis_last_7_days': 'Últimos 7 días',
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 días',
     'guardian_chart_today': 'Hoy',
-    'guardian_safety_needed': 'Se necesita verificación de seguridad',
+    'guardian_safety_needed': 'Verificación necesaria',
     'guardian_error_load_subjects': 'No se pudo cargar la lista de personas protegidas.',
     'guardian_safety_confirmed': 'Seguridad confirmada.',
     'guardian_error_clear_alerts': 'No se pudieron eliminar las alertas.',
@@ -241,14 +242,14 @@ abstract class EsEs {
     'add_subject_alias_label': 'Apodo',
     'add_subject_alias_hint': 'ej.: Mamá, Papá',
     'add_subject_phone_label': 'Número de teléfono (opcional)',
-    'add_subject_phone_info': 'Si lo indicas, el botón de llamada marcará este número directamente. Si lo dejas vacío, tendrás que elegir el contacto en tu lista.',
+    'add_subject_phone_info': 'Si lo indica, el botón de llamada marcará este número directamente. Si lo deja vacío, tendrá que elegir el contacto en su lista.',
     'add_subject_phone_hint': '612345678',
     'add_subject_connect': 'Vincular',
     'add_subject_error_login': 'Inicio de sesión necesario.',
     'add_subject_success': 'Persona protegida vinculada correctamente.',
     'add_subject_error_invalid_code': 'Código no válido.',
-    'add_subject_error_self': 'No puedes añadir tu propio código como persona a cuidar.',
-    'add_subject_error_limit': 'Puedes registrar hasta @max personas.',
+    'add_subject_error_self': 'No puede añadir su propio código como persona protegida.',
+    'add_subject_error_limit': 'Puede registrar hasta @max personas.',
     'add_subject_error_already_connected': 'Ya está vinculado/a.',
     'add_subject_error_failed': 'Error de vinculación. Inténtelo de nuevo.',
     'add_subject_button': 'Agregar nueva persona protegida',
@@ -279,7 +280,7 @@ abstract class EsEs {
     // ── Compras en la app (suscripción anual del cuidador $9.99) ──
     'subscription_subscribe': 'Suscribirse',
     'trial_ended_noti_title': 'Anbu',
-    'trial_ended_noti_body': 'Tu prueba gratuita ha finalizado. Suscríbete para continuar.',
+    'trial_ended_noti_body': 'Su prueba gratuita ha finalizado. Suscríbase para continuar.',
     'subscription_restore': 'Restaurar compra',
     'subscription_store_unavailable': 'Tienda no disponible',
     'subscription_product_unavailable': 'Suscripción no disponible',
@@ -294,22 +295,22 @@ abstract class EsEs {
     // ── G+S (Guardián y protegido) ──
     'gs_enable_button': 'Crear mi código de seguridad',
     'gs_safety_code_button': 'Ver mi código de seguridad',
-    'gs_enable_button_desc': 'Tu familia también puede cuidar de ti',
+    'gs_enable_button_desc': 'Su familia también puede cuidar de usted',
     'gs_safety_code_button_desc': 'Compartir · Reportar · Emergencia',
     'gs_safety_code_title': 'Mi código de seguridad',
     'gs_enable_dialog_title': 'Crear mi código de seguridad',
     'gs_enable_dialog_body':
-        'Se emitirá un código de seguridad — compártelo con otros guardianes.',
-    'gs_enable_dialog_ios_warning_title': '⚠ Cómo se envía tu señal de bienestar',
+        'Se emitirá un código de seguridad — compártalo con sus otros protectores.',
+    'gs_enable_dialog_ios_warning_title': '⚠ Cómo se envía su señal de bienestar',
     'gs_enable_dialog_ios_warning_body':
-        'Cada día a la hora programada aparece una "notificación push de bienestar". Debes tocar la notificación o abrir la aplicación tú mismo en ese momento para que se envíe tu señal de bienestar. Si no abres la aplicación, tus guardianes pueden recibir una alerta de comprobación perdida.',
+        'Cada día a la hora programada aparece una "notificación push de bienestar". Debe tocar la notificación o abrir la aplicación usted mismo en ese momento para que se envíe su señal de bienestar. Si no abre la aplicación, sus protectores pueden recibir una alerta de comprobación perdida.',
     'gs_enable_dialog_ios_confirm': 'Entendido, activar',
     'gs_enable_confirm': 'Crear',
     'gs_enabled_message': 'La protección ha sido activada',
     'gs_enable_failed': 'Error al activar la protección',
     'gs_disable_dialog_title': 'Desactivar protección',
     'gs_disable_dialog_body':
-        'Al desactivar se eliminará tu código de seguridad y se dejará de enviar verificaciones a los guardianes conectados.',
+        'Al desactivar se eliminará su código de seguridad y se dejará de enviar verificaciones a sus protectores conectados.',
     'gs_disable_confirm': 'Desactivar',
     'gs_disabled_message': 'La protección ha sido desactivada',
     'gs_disable_failed': 'Error al desactivar la protección',
@@ -324,7 +325,7 @@ abstract class EsEs {
     'drawer_enable_guardian': 'Gestionar también el bienestar familiar',
     's_to_gs_dialog_title': 'Añadir función de Protector',
     's_to_gs_dialog_body':
-        'Añade la función de Protector para también velar por el bienestar de tu familia o seres queridos.\n(Nota: la función de Protector es gratuita durante 3 meses y luego pasa a ser una suscripción de pago.)\n\nTu propio código de seguridad y el envío de señales de bienestar actuales se mantienen sin cambios y seguirán siendo gratuitos.',
+        'Añada la función de Protector para también velar por el bienestar de su familia o seres queridos.\n(Nota: la función de Protector es gratuita durante 3 meses y luego pasa a ser una suscripción de pago.)\n\nSu propio código de seguridad y el envío de señales de bienestar actuales se mantienen sin cambios y seguirán siendo gratuitos.',
     's_to_gs_dialog_confirm': 'Continuar',
     's_to_gs_switch_failed': 'No se pudo activar la función de Protector',
 
@@ -361,7 +362,7 @@ abstract class EsEs {
     'notification_settings_level_section': 'Ajustes por nivel',
     'notification_settings_urgent': 'Alertas urgentes',
     'notification_settings_urgent_desc': 'Las alertas urgentes no se pueden desactivar',
-    'notification_settings_warning': 'Alertas de alerta',
+    'notification_settings_warning': 'Alertas de nivel Alerta',
     'notification_settings_warning_desc':
         'Alerta cuando no hay verificación durante 2 días consecutivos',
     'notification_settings_caution': 'Alertas de precaución',
@@ -373,15 +374,13 @@ abstract class EsEs {
     'notification_settings_dnd_end': 'Hora de fin',
     'notification_settings_dnd_note':
         '※ Las alertas urgentes se envían incluso en modo «No molestar»',
-    'notification_settings_dnd_start_default': '22:00',
-    'notification_settings_dnd_end_default': '07:00',
 
     // ── Gestión de conexiones ──
     'connection_title': 'Gestión de conexiones',
     'connection_managed_count': 'Personas protegidas gestionadas ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Personas protegidas conectadas',
-    'connection_reorder_hint': 'Mantén pulsada una tarjeta abajo para reordenar',
+    'connection_reorder_hint': 'Mantenga pulsada una tarjeta abajo para reordenar',
     'connection_empty': 'No hay personas protegidas conectadas',
     'connection_unlink_warning': 'Al desvincular se eliminarán los datos de esta persona.',
     'connection_unlink_warning_detail':
@@ -409,13 +408,13 @@ abstract class EsEs {
     'heartbeat_schedule_title_ios': 'Hora de comprobación',
     'heartbeat_schedule_change_title_ios': 'Cambiar hora de comprobación',
     'heartbeat_schedule_hint_ios':
-        'Una notificación push de bienestar llega cada día a esta hora. Toca la notificación o abre la aplicación en ese momento para enviar tu señal de bienestar.',
+        'Una notificación push de bienestar llega cada día a esta hora. Toque la notificación o abra la aplicación en ese momento para enviar su señal de bienestar.',
     'heartbeat_daily_time': 'Cada día a las @time',
     'heartbeat_scheduled_today':
-        'Tu señal de bienestar se enviará a tus protectores cada día a las @time.',
+        'Su señal de bienestar se enviará a sus protectores cada día a las @time.',
     'heartbeat_change_failed_title': 'Error al cambiar la hora',
     'heartbeat_change_failed_message': 'No se pudo guardar en el servidor.',
-    'heartbeat_picker_help': 'Elige una hora anterior a @limit',
+    'heartbeat_picker_help': 'Elija una hora anterior a @limit',
     'heartbeat_range_limit_title': 'Hora no disponible',
     'heartbeat_range_limit_message':
         'La hora de comprobación debe ser anterior a @limit.',

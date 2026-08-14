@@ -14,6 +14,7 @@ abstract class JaJp {
     'common_later': 'あとで',
     'common_loading': '読み込み中...',
     'common_error': 'エラー',
+    'common_session_expired': 'アカウント情報の有効期限が切れました。もう一度登録してください。',
     'common_complete': '完了',
     'common_notice': 'お知らせ',
     'common_unlink': '解除',
@@ -64,7 +65,7 @@ abstract class JaJp {
     'permission_activity': '身体活動の権限',
     'permission_activity_desc': '歩数を検出して活動状況を確認するために使用されます',
     'permission_location': '位置情報',
-    'permission_location_desc': '緊急ヘルプ要請の時にのみ、現在地を保護者に送信します',
+    'permission_location_desc': '緊急ヘルプ要請の時にのみ、現在地を見守り人に送信します',
     'permission_tracking': '広告トラッキング',
     'permission_tracking_desc': 'パーソナライズ広告を表示するために広告識別子にアクセスします',
     'location_permission_warning': '緊急要請時に位置情報が送信されません。タップして許可してください。',
@@ -89,17 +90,17 @@ abstract class JaJp {
     'stability_battery_warning_short': 'バッテリー使用制限の解除が必要です',
     'stability_battery_dialog_title': 'バッテリー使用制限の解除',
     'stability_battery_dialog_message':
-        'スマートフォンが省電力モードに入ると、保護者への安否確認信号が遅れたり、届かなかったりすることがあります。\n\n下の[設定を開く]をタップした後、「バッテリー」→「制限なし」に設定してください。毎日決まった時刻に安否が安定して届きます。\n\n※ 端末メーカーによって表記が少し異なる場合があります。',
+        'スマートフォンが省電力モードに入ると、見守り人への安否確認信号が遅れたり、届かなかったりすることがあります。\n\n下の[設定を開く]をタップした後、「バッテリー」→「制限なし」に設定してください。毎日決まった時刻に安否が安定して届きます。\n\n※ 端末メーカーによって表記が少し異なる場合があります。',
 
     // ── オンボーディング ──
     'onboarding_safety_code_title': '安全コードは自動的に作られます',
     'onboarding_safety_code_desc':
-        'このコードを保護者に伝えると連携され、\nあなたの安否が自動で送信されます。',
+        'このコードを見守り人に伝えると連携され、\nあなたの安否が自動で送信されます。',
     'onboarding_emergency_title': '今の状態（緊急）と居場所を知らせたいときは',
-    'onboarding_emergency_desc': 'このボタンを押すと保護者全員に\nすぐに伝わります',
+    'onboarding_emergency_desc': 'このボタンを押すと見守り人全員に\nすぐに伝わります',
     'onboarding_gs_switch_title': '家族の安否も一緒に見守りましょう',
     'onboarding_gs_switch_desc':
-        'メニューの「家族の安否も管理する」を押すと\n保護者の役割も一緒に使えます',
+        'メニューの「家族の安否も管理する」を押すと\n見守り人の役割も一緒に使えます',
     'onboarding_add_subject_title': '大切な人とつながりましょう',
     'onboarding_add_subject_desc':
         '受け取ったコードとニックネームを入力すると\nすぐに連携が完了します',
@@ -109,15 +110,15 @@ abstract class JaJp {
     'onboarding_push_now': '今',
     'onboarding_gs_enable_title': '自分の安全コードを有効化',
     'onboarding_gs_enable_desc':
-        '設定で「安全コードを作成」を押すと\n自分の安否も保護者に届きます',
+        '設定で「安全コードを作成」を押すと\n自分の安否も見守り人に届きます',
     'onboarding_role_subject': '見守り対象者',
     'onboarding_role_guardian': '見守り人',
-    'onboarding_role_guardian_subject': '保護者兼対象者',
+    'onboarding_role_guardian_subject': '見守り人兼対象者',
     'onboarding_already_registered_title': 'すでに登録済みの端末です',
     'onboarding_already_registered_message':
         'この端末はすでに"@roleLabel"モードで登録されています。\n"@roleLabel"モードのまま続けますか？\n\nまたは"@newRoleLabel"モードに変更しますか？\n変更すると既存のデータはすべて削除されます。',
     'onboarding_already_registered_message_gs':
-        'このデバイスは既に「@roleLabel」モードで登録されています。\n「@newRoleLabel」モードに変更すると、保護者と対象者の両方のデータが削除されます。',
+        'この端末はすでに「@roleLabel」モードで登録されています。\n「@newRoleLabel」モードに変更すると、見守り人と対象者の両方のデータが削除されます。',
     'onboarding_registration_failed_title': '登録に失敗しました',
     'onboarding_registration_failed_message': 'サーバーに接続できません。しばらくしてからもう一度お試しください。',
 
@@ -127,9 +128,9 @@ abstract class JaJp {
     'subject_home_check_title_last': '最終安否確認',
     'subject_home_check_title_scheduled': '安否報告の予定時刻',
     'subject_home_check_title_checking': '安否確認中',
-    'subject_home_check_body_reported': '@time 正常に報告済み',
+    'subject_home_check_body_reported': '@timeに正常に報告済み',
     'subject_home_check_body_scheduled': '@time に報告予定',
-    'subject_home_check_body_waiting': '@time 報告待ち',
+    'subject_home_check_body_waiting': '@timeから報告待ち',
     'subject_home_battery_status': 'バッテリー状態',
     'subject_home_battery_charging': '充電中',
     'subject_home_battery_full': '満充電',
@@ -139,7 +140,7 @@ abstract class JaJp {
     'subject_home_report_button': '今すぐ安全を報告する',
     'subject_home_report_desc': '見守り人に元気であることを伝えましょう',
     'subject_home_emergency_button': '助けが必要です',
-    'subject_home_emergency_desc': '保護者に緊急事態を知らせます',
+    'subject_home_emergency_desc': '見守り人に緊急事態を知らせます',
     'subject_home_emergency_loading': '緊急通知を送信中...',
     'subject_home_emergency_sent': '緊急通知が送信されました',
     'subject_home_emergency_failed': '緊急通知の送信に失敗しました',
@@ -149,8 +150,8 @@ abstract class JaJp {
     'safety_net_dialog_body': '今日の安否確認が見守り人に送信されました。',
     'safety_net_dialog_already_body':
         '今日の安否確認は @time にすでに見守り人へ送信されています。',
-    'subject_home_emergency_confirm_title': '緊急ヘルプリクエスト',
-    'subject_home_emergency_confirm_body': 'すべての保護者に緊急通知が送信されます。\n現在地も共有されます。\n本当に助けを求めますか？',
+    'subject_home_emergency_confirm_title': '緊急ヘルプ要請',
+    'subject_home_emergency_confirm_body': 'すべての見守り人に緊急通知が送信されます。\n現在地も共有されます。\n本当に助けを求めますか？',
     'emergency_sent_with_location': '緊急通知を送信しました（位置情報つき）',
     'emergency_sent_without_location': '緊急通知を送信しました',
     'notifications_view_location': '🗺️ 位置を表示',
@@ -183,7 +184,7 @@ abstract class JaJp {
     'guardian_status_confirmed': '✅ 安全',
     'guardian_subscription_expired': 'サブスクリプションが必要です',
     'guardian_subscription_expired_message': '毎日届いていた安否が、今は止まっています。\nランチ一食分の値段で、一年中大切な人を見守りましょう。',
-    'guardian_subscribe': 'サブスクリプション登録',
+    'guardian_subscribe': '登録する',
     'guardian_payment_preparing': '決済機能は準備中です。',
     'guardian_today_summary': '今日の安否まとめ',
     'guardian_no_subjects': '見守り対象者が登録されていません。',
@@ -258,22 +259,22 @@ abstract class JaJp {
     'settings_ad_consent': '広告同意設定',
     'settings_app_version': 'アプリバージョン：v@version',
 
-    // ── アプリ内課金(保護者の年間 $9.99 サブスクリプション) ──
+    // ── アプリ内課金(見守り人の年間 $9.99 サブスクリプション) ──
     'subscription_subscribe': '登録する',
     'trial_ended_noti_title': 'Anbu',
-    'trial_ended_noti_body': '無料体験が終了しました。引き続きご利用いただくには定期購入してください。',
+    'trial_ended_noti_body': '無料体験が終了しました。引き続きご利用いただくにはサブスクリプションにご登録ください。',
     'subscription_restore': '購入を復元',
     'subscription_store_unavailable': 'ストアに接続できません',
     'subscription_product_unavailable': '商品情報を取得できません',
     'subscription_purchase_failed': '購入に失敗しました',
-    'subscription_verify_failed': '購読の認証に失敗しました',
+    'subscription_verify_failed': 'サブスクリプションの認証に失敗しました',
     'subscription_restore_failed': '復元に失敗しました',
-    'subscription_restore_nothing': '復元する購読がありません',
-    'subscription_restore_success': '購読を復元しました',
-    'subscription_purchase_success': '購読を開始しました',
+    'subscription_restore_nothing': '復元するサブスクリプションがありません',
+    'subscription_restore_success': 'サブスクリプションを復元しました',
+    'subscription_purchase_success': 'サブスクリプションを開始しました',
     'subscription_period_annual': '年間',
 
-    // ── G+S (保護者 + 対象者) ──
+    // ── G+S (見守り人 + 対象者) ──
     'gs_enable_button': '安全コードを作成',
     'gs_safety_code_button': '安全コードを確認',
     'gs_enable_button_desc': '自分の安否も家族が確認できます',
@@ -281,16 +282,16 @@ abstract class JaJp {
     'gs_safety_code_title': '安全コード',
     'gs_enable_dialog_title': '安全コードを作成',
     'gs_enable_dialog_body':
-        '有効化すると安全コードが発行されます。他の保護者に「安全コード」を伝えてください。',
+        '有効化すると安全コードが発行されます。他の見守り人に「安全コード」を伝えてください。',
     'gs_enable_dialog_ios_warning_title': '⚠ 安否確認の送信方法について',
     'gs_enable_dialog_ios_warning_body':
-        '毎日決まった時刻に「安否プッシュ通知」が表示されます。通知をタップするか、その前後にご自身でアプリを開いた場合のみ安否信号が送信されます。アプリを開かないと、保護者に未受信の警告が届く可能性があります。',
-    'gs_enable_dialog_ios_confirm': '理解しました、有効化',
+        '毎日決まった時刻に「安否プッシュ通知」が表示されます。通知をタップするか、その前後にご自身でアプリを開いた場合のみ安否信号が送信されます。アプリを開かないと、見守り人に未受信の警告が届く可能性があります。',
+    'gs_enable_dialog_ios_confirm': '同意して有効化',
     'gs_enable_confirm': '作成',
     'gs_enabled_message': '安否保護が有効化されました',
     'gs_enable_failed': '安否保護の有効化に失敗しました',
     'gs_disable_dialog_title': '安否保護を無効化',
-    'gs_disable_dialog_body': '安否保護を無効化すると、安全コードが削除され、接続された保護者への安否確認の送信が停止されます。',
+    'gs_disable_dialog_body': '安否保護を無効化すると、安全コードが削除され、接続された見守り人への安否確認の送信が停止されます。',
     'gs_disable_confirm': '無効化',
     'gs_disabled_message': '安否保護が無効化されました',
     'gs_disable_failed': '安否保護の無効化に失敗しました',
@@ -299,13 +300,13 @@ abstract class JaJp {
     'gs_activity_permission_settings_body': 'アプリ設定で身体活動（モーションとフィットネス）の権限を許可してください。',
     'gs_activity_permission_settings_go': '設定へ移動',
 
-    // ── 保護者モードでG+S切り替え (Drawer/ダイアログ) ──
+    // ── 見守り人モードでG+S切り替え (Drawer/ダイアログ) ──
     'drawer_enable_guardian': '家族の安否も管理する',
-    's_to_gs_dialog_title': '保護者機能を追加',
+    's_to_gs_dialog_title': '見守り人機能を追加',
     's_to_gs_dialog_body':
-        '家族や大切な方の安否を管理できる保護者機能を追加します。\n（ご注意：保護者機能は3ヶ月間の無料期間後、有料プランに切り替わります。）\n\n現在ご利用中の安全コードと安否送信はそのまま維持され、引き続き無料でご利用いただけます。',
+        '家族や大切な方の安否を管理できる見守り人機能を追加します。\n（ご注意：見守り人機能は3ヶ月間の無料期間後、有料プランに切り替わります。）\n\n現在ご利用中の安全コードと安否送信はそのまま維持され、引き続き無料でご利用いただけます。',
     's_to_gs_dialog_confirm': '続ける',
-    's_to_gs_switch_failed': '保護者機能の有効化に失敗しました',
+    's_to_gs_switch_failed': '見守り人機能の有効化に失敗しました',
 
     // ── 見守り通知 ──
     'notifications_title': '通知',
@@ -346,8 +347,6 @@ abstract class JaJp {
     'notification_settings_dnd_start': '開始時刻',
     'notification_settings_dnd_end': '終了時刻',
     'notification_settings_dnd_note': '※ 緊急通知はおやすみモード中でも届きます',
-    'notification_settings_dnd_start_default': '午後 10:00',
-    'notification_settings_dnd_end_default': '午前 07:00',
 
     // ── 見守り接続管理 ──
     'connection_title': '接続管理',
@@ -414,11 +413,11 @@ abstract class JaJp {
     'noti_warning_suspicious_body': '活動記録が連続して検出されていません。直接のご確認が必要です。',
     'noti_urgent_body': '@days日間安否確認がありません。直ちに確認が必要です。',
     'noti_urgent_suspicious_body': '@days日連続で活動記録が検出されていません。直ちにご確認が必要です。',
-    'noti_steps_body': '本日@steps歩歩きました。',
+    'noti_steps_body': '本日の歩数は@steps歩です。',
     'noti_emergency_body': '対象者が直接助けを求めました。すぐに確認してください。',
-    'noti_resolved_body': '正常に復帰しました。見守り対象者の安否が正常に確認されました。',
+    'noti_resolved_body': '見守り対象者の安否が正常に確認されました。',
     'noti_cleared_by_guardian_title': '✅ 安否確認完了',
-    'noti_cleared_by_guardian_body': '保護者の一人が対象者の安全を直接確認しました。',
+    'noti_cleared_by_guardian_body': '見守り人の一人が対象者の安全を直接確認しました。',
 
     // ── ローカル通知 ──
     'local_alarm_title': '💗 安否確認が必要です',

@@ -14,6 +14,7 @@ abstract class ArSa {
     'common_later': 'لاحقاً',
     'common_loading': 'جارٍ التحميل...',
     'common_error': 'خطأ',
+    'common_session_expired': 'انتهت صلاحية بيانات حسابك. يرجى التسجيل من جديد.',
     'common_complete': 'تم',
     'common_notice': 'إشعار',
     'common_unlink': 'إلغاء الربط',
@@ -29,7 +30,7 @@ abstract class ArSa {
     'app_brand': 'Anbu',
     'app_tagline': 'نطمئن على سلامتكم.',
     'app_service_desc': 'خدمة الاطمئنان التلقائي على السلامة',
-    'app_guardian_title': 'حارس Anbu',
+    'app_guardian_title': 'مُرافِق Anbu',
     'app_copyright': '© Averic Lab',
 
     // ── شاشة البداية ──
@@ -53,18 +54,18 @@ abstract class ArSa {
     'mode_guardian_desc': 'عند الحاجة يمكنك لاحقاً إرسال اطمئنانك أيضاً',
     'mode_guardian_button': 'استقبال الاطمئنان →',
     'mode_subject_badge': 'كبار السن',
-    'mode_guardian_badge': 'حارس',
+    'mode_guardian_badge': 'مُرافِق',
     'mode_select_notice': 'ستختلف واجهة التطبيق بناءً على اختيارك',
 
     // ── الأذونات ──
     'permission_title': 'يحتاج التطبيق إلى\nأذونات للعمل',
     'permission_notification': 'إذن الإشعارات',
     'permission_notification_subject_desc': 'مطلوب لتلقي إشعارات الاطمئنان على السلامة',
-    'permission_notification_guardian_desc': 'مطلوب لتلقي إشعارات حالة سلامة المتابَعين',
+    'permission_notification_guardian_desc': 'مطلوب لتلقي إشعارات حالة سلامة الأشخاص المحميين',
     'permission_activity': 'التعرف على النشاط',
     'permission_activity_desc': 'يُستخدم لاكتشاف الخطوات والتأكد من النشاط',
     'permission_location': 'الموقع',
-    'permission_location_desc': 'تتم مشاركته مع الأوصياء فقط عند إرسال طلب مساعدة طارئ',
+    'permission_location_desc': 'يُرسل إلى المُرافِقين فقط عند طلب مساعدة طارئة',
     'permission_tracking': 'تتبع الإعلانات',
     'permission_tracking_desc': 'يُستخدم لعرض إعلانات مخصصة',
     'location_permission_warning': 'لن يتم إرسال الموقع مع طلب الطوارئ. اضغط للسماح.',
@@ -99,12 +100,12 @@ abstract class ArSa {
     // ── التهيئة الأولية ──
     'onboarding_safety_code_title': 'يتم إنشاء رمز الأمان الخاص بك تلقائيًا',
     'onboarding_safety_code_desc':
-        'شارك هذا الرمز مع الحارس للاتصال —\nسيتم إرسال إشارة اطمئنانك تلقائيًا.',
+        'شارك هذا الرمز مع المُرافِق للاتصال —\nسيتم إرسال إشارة اطمئنانك تلقائيًا.',
     'onboarding_emergency_title': 'عندما تريد إخبار حالتك (عاجل) وموقعك الحاليين',
     'onboarding_emergency_desc': 'اضغط هذا الزر وستصل الرسالة\nفورًا إلى جميع الحراس',
     'onboarding_gs_switch_title': 'اعتنِ أيضًا براحة عائلتك',
     'onboarding_gs_switch_desc':
-        'اضغط [إدارة سلامة العائلة أيضًا] في القائمة\nلاستخدام دور الحارس أيضًا',
+        'اضغط [إدارة سلامة العائلة أيضًا] في القائمة\nلاستخدام دور المُرافِق أيضًا',
     'onboarding_add_subject_title': 'تواصل مع شخص عزيز عليك',
     'onboarding_add_subject_desc': 'أدخل الرمز الذي استلمته واسمًا مستعارًا\nللاتصال فورًا',
     'onboarding_notifications_title': 'هكذا تظهر إشعارات الاطمئنان',
@@ -114,9 +115,9 @@ abstract class ArSa {
     'onboarding_gs_enable_title': 'فعّل رمز الأمان الخاص بك',
     'onboarding_gs_enable_desc':
         'من الإعدادات اضغط [إنشاء رمز الأمان الخاص بي]\nليصل اطمئنانك أيضًا إلى حراسك',
-    'onboarding_role_subject': 'متابَع',
-    'onboarding_role_guardian': 'حارس',
-    'onboarding_role_guardian_subject': 'وصي ومحمي',
+    'onboarding_role_subject': 'الشخص المحمي',
+    'onboarding_role_guardian': 'مُرافِق',
+    'onboarding_role_guardian_subject': 'مُرافِق وشخص محمي',
     'onboarding_already_registered_title': 'الجهاز مسجل بالفعل',
     'onboarding_already_registered_message':
         'هذا الجهاز مسجل بالفعل في وضع "@roleLabel".\nهل تريد المتابعة كـ "@roleLabel"؟\n\nأم التبديل إلى وضع "@newRoleLabel"؟\nسيؤدي التبديل إلى حذف جميع البيانات.',
@@ -125,9 +126,9 @@ abstract class ArSa {
     'onboarding_registration_failed_title': 'فشل التسجيل',
     'onboarding_registration_failed_message': 'تعذر الاتصال بالخادم. يرجى المحاولة لاحقاً.',
 
-    // ── الصفحة الرئيسية للمتابَع ──
+    // ── الصفحة الرئيسية للشخص المحمي ──
     'subject_home_share_title': 'شارك رمز السلامة الخاص بك',
-    'subject_home_guardian_count': 'الحراس المتصلون: @count',
+    'subject_home_guardian_count': 'المُرافِقون المتصلون: @count',
     'subject_home_check_title_last': 'آخر اطمئنان',
     'subject_home_check_title_scheduled': 'وقت الاطمئنان المقرر',
     'subject_home_check_title_checking': 'جارٍ الاطمئنان',
@@ -141,28 +142,28 @@ abstract class ArSa {
     'subject_home_connectivity_status': 'حالة الاتصال',
     'subject_home_report_loading': 'جارٍ الإبلاغ...',
     'subject_home_report_button': 'أبلغ عن سلامتك الآن',
-    'subject_home_report_desc': 'أخبر حارسك أنك بخير',
+    'subject_home_report_desc': 'أخبر مُرافِقك أنك بخير',
     'subject_home_emergency_button': 'أحتاج مساعدة',
-    'subject_home_emergency_desc': 'يرسل تنبيه طوارئ إلى الأوصياء',
+    'subject_home_emergency_desc': 'يرسل تنبيه طوارئ إلى المُرافِقين',
     'subject_home_emergency_loading': 'جاري إرسال تنبيه الطوارئ...',
     'subject_home_emergency_sent': 'تم إرسال تنبيه الطوارئ',
     'subject_home_emergency_failed': 'فشل إرسال تنبيه الطوارئ',
     'subject_home_manual_report_limit_reached':
         'لقد قمت بالفعل بإرسال تقرير السلامة لهذا اليوم. يرجى المحاولة غدًا.',
-    'subject_home_manual_report_sent': 'تم إرسال رسالة سلامتك إلى جهات الاتصال.',
-    'safety_net_dialog_title': 'تم إرسال تقرير السلامة',
+    'subject_home_manual_report_sent': 'تم إرسال رسالة اطمئنانك إلى المُرافِقين.',
+    'safety_net_dialog_title': 'تم إرسال تقرير الاطمئنان',
     'safety_net_dialog_body':
-        'تم إرسال تقرير السلامة لهذا اليوم إلى مقدم الرعاية.',
+        'تم إرسال تقرير الاطمئنان لهذا اليوم إلى المُرافِقين.',
     'safety_net_dialog_already_body':
-        'تم بالفعل إرسال تقرير سلامة اليوم إلى مقدم الرعاية في الساعة @time.',
+        'تم بالفعل إرسال تقرير اطمئنان اليوم إلى المُرافِقين في الساعة @time.',
     'subject_home_emergency_confirm_title': 'طلب مساعدة طارئة',
     'subject_home_emergency_confirm_body':
-        'سيتم إرسال تنبيه طارئ إلى جميع الأوصياء.\nسيتم أيضًا مشاركة موقعك الحالي.\nهل ترغب حقًا في طلب المساعدة؟',
+        'سيتم إرسال تنبيه طارئ إلى جميع المُرافِقين.\nسيتم أيضًا مشاركة موقعك الحالي.\nهل ترغب حقًا في طلب المساعدة؟',
     'emergency_sent_with_location': 'تم إرسال تنبيه الطوارئ (مع الموقع)',
     'emergency_sent_without_location': 'تم إرسال تنبيه الطوارئ',
     'notifications_view_location': '🗺️ عرض الموقع',
     'emergency_map_title': 'موقع الطوارئ',
-    'emergency_map_subject_label': 'الشخص المستفيد',
+    'emergency_map_subject_label': 'الشخص المحمي',
     'emergency_map_captured_at_label': 'وقت الحصول',
     'emergency_map_accuracy_label': 'الدقة',
     'emergency_map_open_external': 'افتح في تطبيق خرائط خارجي',
@@ -174,7 +175,7 @@ abstract class ArSa {
     'subject_home_share_subject': 'رمز اتصال Anbu',
     'subject_home_code_copied': 'تم نسخ الرمز',
 
-    // ── القائمة الجانبية للمتابَع ──
+    // ── القائمة الجانبية للشخص المحمي ──
     'drawer_light_mode': 'الوضع الفاتح',
     'drawer_dark_mode': 'الوضع الداكن',
     'drawer_privacy_policy': 'سياسة الخصوصية',
@@ -182,7 +183,7 @@ abstract class ArSa {
     'drawer_withdraw': 'حذف الحساب',
     'drawer_withdraw_message': 'سيتم حذف حسابك وجميع بياناتك.\nهل أنت متأكد؟',
 
-    // ── لوحة الحارس ──
+    // ── لوحة المُرافِق ──
     'guardian_status_normal': 'آمن',
     'guardian_status_caution': 'تنبيه',
     'guardian_status_warning': 'تحذير',
@@ -193,10 +194,10 @@ abstract class ArSa {
         'توقفت رسائل الاطمئنان اليومية.\nبثمن وجبة غداء، اطمئن على من تحب طوال العام.',
     'guardian_subscribe': 'اشترك',
     'guardian_payment_preparing': 'ميزة الدفع قيد الإعداد.',
-    'guardian_today_summary': 'ملخص اليوم',
-    'guardian_no_subjects': 'لا يوجد متابَعون متصلون.',
-    'guardian_checking_subjects': 'يتم حالياً متابعة\n@count شخص/أشخاص.',
-    'guardian_subject_list': 'قائمة المتابَعين',
+    'guardian_today_summary': 'ملخص اطمئنان اليوم',
+    'guardian_no_subjects': 'لا يوجد أشخاص محميون متصلون.',
+    'guardian_checking_subjects': 'قيد المتابعة حالياً\nالأشخاص المحميون: @count',
+    'guardian_subject_list': 'قائمة الأشخاص المحميين',
     'guardian_call_now': 'اتصل الآن',
     'phone_call_failed': 'تعذر إجراء الاتصال.',
     'guardian_confirm_safety': 'تأكيد السلامة',
@@ -217,38 +218,38 @@ abstract class ArSa {
     'guardian_chart_x_axis_last_30_days': 'آخر 30 يومًا',
     'guardian_chart_today': 'اليوم',
     'guardian_safety_needed': 'مطلوب التحقق من السلامة',
-    'guardian_error_load_subjects': 'تعذر تحميل قائمة المتابَعين.',
+    'guardian_error_load_subjects': 'تعذر تحميل قائمة الأشخاص المحميين.',
     'guardian_safety_confirmed': 'تم تأكيد السلامة.',
     'guardian_error_clear_alerts': 'تعذر مسح التنبيهات.',
 
-    // ── إضافة متابَع ──
-    'add_subject_title': 'ربط متابَع',
-    'add_subject_guide_title': 'أدخل الرمز الفريد للمتابَع وحدد اسماً له.',
-    'add_subject_guide_subtitle': 'اربط تطبيق المتابَع لمراقبة حالته الصحية ونشاطه.',
+    // ── إضافة شخص محمي ──
+    'add_subject_title': 'ربط شخص محمي',
+    'add_subject_guide_title': 'أدخل الرمز الفريد للشخص المحمي وحدد اسماً له.',
+    'add_subject_guide_subtitle': 'اربط تطبيق الشخص المحمي لمراقبة حالته ونشاطه.',
     'add_subject_code_label': 'الرمز الفريد (7 أحرف)',
     'add_subject_code_hint': '123-4567',
-    'add_subject_code_info': 'يمكن العثور على الرمز الفريد في تطبيق المتابَع.',
-    'add_subject_alias_label': 'اسم المتابَع',
+    'add_subject_code_info': 'يمكن العثور على الرمز الفريد في تطبيق الشخص المحمي.',
+    'add_subject_alias_label': 'اسم الشخص المحمي',
     'add_subject_alias_hint': 'مثال: أمي، أبي',
     'add_subject_phone_label': 'رقم الهاتف (اختياري)',
     'add_subject_phone_info': 'في حال إدخاله، سيتصل زر الاتصال بهذا الرقم مباشرة. وإذا تركته فارغًا، فسيتعين عليك اختيار جهة الاتصال من القائمة بنفسك.',
     'add_subject_phone_hint': '0501234567',
     'add_subject_connect': 'ربط',
     'add_subject_error_login': 'تسجيل الدخول مطلوب.',
-    'add_subject_success': 'تم ربط المتابَع بنجاح.',
+    'add_subject_success': 'تم ربط الشخص المحمي بنجاح.',
     'add_subject_error_invalid_code': 'رمز غير صالح.',
-    'add_subject_error_self': 'لا يمكنك إضافة رمزك الخاص كشخص مشمول بالرعاية.',
+    'add_subject_error_self': 'لا يمكنك إضافة رمزك الخاص كشخص محمي.',
     'add_subject_error_limit': 'يمكنك تسجيل ما يصل إلى @max أشخاص.',
     'add_subject_error_already_connected': 'مرتبط بالفعل.',
     'add_subject_error_failed': 'فشل الربط. يرجى المحاولة لاحقاً.',
-    'add_subject_button': 'إضافة متابَع جديد',
+    'add_subject_button': 'إضافة شخص محمي جديد',
 
-    // ── إعدادات الحارس ──
+    // ── إعدادات المُرافِق ──
     'settings_title': 'الإعدادات',
     'settings_light_mode': 'الوضع الفاتح',
     'settings_dark_mode': 'الوضع الداكن',
     'settings_connection_management': 'إدارة الاتصالات',
-    'settings_managed_subjects': 'عدد المتابَعين',
+    'settings_managed_subjects': 'عدد الأشخاص المحميين',
     'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'الاشتراك والخدمة',
     'settings_current_membership': 'العضوية الحالية',
@@ -289,7 +290,7 @@ abstract class ArSa {
     'gs_safety_code_title': 'رمز الأمان الخاص بي',
     'gs_enable_dialog_title': 'إنشاء رمز الأمان الخاص بي',
     'gs_enable_dialog_body':
-        'سيتم إصدار رمز أمان — يرجى مشاركته مع الأوصياء الآخرين.',
+        'سيتم إصدار رمز أمان — يرجى مشاركته مع المُرافِقين الآخرين.',
     'gs_enable_dialog_ios_warning_title': '⚠ كيفية إرسال إشارة الاطمئنان',
     'gs_enable_dialog_ios_warning_body':
         'يظهر "إشعار دفع الاطمئنان" يوميًا في الوقت المحدد. يجب النقر على الإشعار أو فتح التطبيق بنفسك في ذلك الوقت حتى يتم إرسال إشارة الاطمئنان. إذا لم تفتح التطبيق، فقد يتلقى الأوصياء تنبيهًا بعدم التحقق.',
@@ -309,15 +310,15 @@ abstract class ArSa {
         'يرجى السماح بإذن النشاط البدني (الحركة واللياقة) في إعدادات التطبيق.',
     'gs_activity_permission_settings_go': 'الانتقال إلى الإعدادات',
 
-    // ── تبديل وضع الحارس إلى G+S (القائمة/الحوار) ──
+    // ── تبديل وضع المُرافِق إلى G+S (القائمة/الحوار) ──
     'drawer_enable_guardian': 'إدارة سلامة العائلة أيضًا',
-    's_to_gs_dialog_title': 'إضافة ميزة الحارس',
+    's_to_gs_dialog_title': 'إضافة ميزة المُرافِق',
     's_to_gs_dialog_body':
-        'أضف ميزة الحارس لتتمكن أيضًا من متابعة سلامة أفراد عائلتك أو أحبائك.\n(ملاحظة: ميزة الحارس مجانية لمدة 3 أشهر، ثم تتحول إلى اشتراك مدفوع.)\n\nرمز الأمان الخاص بك وإرسال إشارات السلامة المستخدمة حاليًا ستبقى كما هي ومجانية الاستخدام.',
+        'أضف ميزة المُرافِق لتتمكن أيضًا من متابعة سلامة أفراد عائلتك أو أحبائك.\n(ملاحظة: ميزة المُرافِق مجانية لمدة 3 أشهر، ثم تتحول إلى اشتراك مدفوع.)\n\nرمز الأمان الخاص بك وإرسال إشارات السلامة المستخدمة حاليًا ستبقى كما هي ومجانية الاستخدام.',
     's_to_gs_dialog_confirm': 'متابعة',
-    's_to_gs_switch_failed': 'فشل تفعيل ميزة الحارس',
+    's_to_gs_switch_failed': 'فشل تفعيل ميزة المُرافِق',
 
-    // ── إشعارات الحارس ──
+    // ── إشعارات المُرافِق ──
     'notifications_title': 'الإشعارات',
     'notifications_today': 'إشعارات اليوم',
     'notifications_empty': 'لا توجد إشعارات اليوم',
@@ -327,7 +328,7 @@ abstract class ArSa {
     'notifications_delete_failed': 'تعذر حذف الإشعارات.',
     'notifications_guide_title': 'دليل مستويات الإشعارات',
     'notifications_level_health': 'طبيعي',
-    'notifications_level_health_desc': 'تم التأكد من سلامة المتابَع بشكل طبيعي',
+    'notifications_level_health_desc': 'تم التأكد من سلامة الشخص المحمي بشكل طبيعي',
     'notifications_level_caution': 'تنبيه',
     'notifications_level_caution_desc': 'لا توجد إشارة اطمئنان أو سجل نشاط بعد',
     'notifications_level_warning': 'تحذير',
@@ -338,7 +339,7 @@ abstract class ArSa {
     'notifications_level_info_desc': 'الخطوات وانخفاض البطارية وتنبيهات أخرى',
     'notifications_activity_note': '※ عدد الخطوات هو مجموع الخطوات المتراكمة من منتصف الليل حتى وقت إرسال إشارة السلامة.',
 
-    // ── إعدادات إشعارات الحارس ──
+    // ── إعدادات إشعارات المُرافِق ──
     'notification_settings_title': 'إعدادات الإشعارات',
     'notification_settings_push': 'الإشعارات الفورية',
     'notification_settings_all': 'جميع الإشعارات',
@@ -356,24 +357,22 @@ abstract class ArSa {
     'notification_settings_dnd_start': 'وقت البداية',
     'notification_settings_dnd_end': 'وقت النهاية',
     'notification_settings_dnd_note': '※ التنبيهات العاجلة تصل حتى أثناء وضع عدم الإزعاج',
-    'notification_settings_dnd_start_default': '10:00 م',
-    'notification_settings_dnd_end_default': '7:00 ص',
 
-    // ── إدارة اتصالات الحارس ──
+    // ── إدارة اتصالات المُرافِق ──
     'connection_title': 'إدارة الاتصالات',
-    'connection_managed_count': 'عدد المتابَعين ',
+    'connection_managed_count': 'عدد الأشخاص المحميين ',
     'connection_managed_count_value': '@current / @max',
-    'connection_connected_subjects': 'المتابَعون المتصلون',
+    'connection_connected_subjects': 'الأشخاص المحميون المتصلون',
     'connection_reorder_hint': 'اضغط مطولاً على البطاقة أدناه لإعادة الترتيب',
     'connection_empty': 'لا يوجد أشخاص محميون متصلون',
-    'connection_unlink_warning': 'سيؤدي إلغاء الربط إلى حذف بيانات المتابَع.',
+    'connection_unlink_warning': 'سيؤدي إلغاء الربط إلى حذف بيانات الشخص المحمي.',
     'connection_unlink_warning_detail':
-        'لا يمكن استعادة السجلات السابقة بعد إعادة الربط. سيتعين عليك إدخال رمز المتابَع مرة أخرى.',
+        'لا يمكن استعادة السجلات السابقة بعد إعادة الربط. سيتعين عليك إدخال رمز الشخص المحمي مرة أخرى.',
     'connection_heartbeat_schedule': 'يومياً في @time',
     'connection_heartbeat_report_time': 'وقت تقرير الاطمئنان هو ',
-    'connection_subject_label': 'متابَع',
+    'connection_subject_label': 'الشخص المحمي',
     'connection_change_only_in_app': 'يمكن تغييره فقط من التطبيق',
-    'connection_edit_title': 'تعديل المتابَع',
+    'connection_edit_title': 'تعديل الشخص المحمي',
     'connection_alias_label': 'الاسم',
     'connection_unlink_title': 'إلغاء الربط',
     'connection_unlink_confirm': 'إلغاء ربط @alias؟',
@@ -435,7 +434,7 @@ abstract class ArSa {
     'noti_emergency_body': 'طلب الشخص المحمي المساعدة مباشرة. يرجى التحقق فوراً.',
     'noti_resolved_body': 'عاد فحص سلامة الشخص المحمي إلى الوضع الطبيعي.',
     'noti_cleared_by_guardian_title': '✅ تم تأكيد السلامة',
-    'noti_cleared_by_guardian_body': 'أحد الأوصياء تحقق شخصياً من سلامة الشخص المحمي.',
+    'noti_cleared_by_guardian_body': 'أكد أحد المُرافِقين سلامة الشخص المحمي بنفسه.',
 
     // ── الإشعارات المحلية ──
     'local_alarm_title': '💗 يلزم التحقق من السلامة',

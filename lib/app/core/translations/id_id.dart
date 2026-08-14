@@ -14,11 +14,12 @@ abstract class IdId {
     'common_later': 'Nanti',
     'common_loading': 'Memuat...',
     'common_error': 'Kesalahan',
+    'common_session_expired': 'Informasi akun Anda telah kedaluwarsa. Silakan daftar ulang.',
     'common_complete': 'Selesai',
     'common_notice': 'Pemberitahuan',
     'common_unlink': 'Putuskan',
-    'common_am': 'pagi',
-    'common_pm': 'sore',
+    'common_am': 'AM',
+    'common_pm': 'PM',
     'common_time_style': 'h24',
     'common_normal': 'Normal',
     'common_connected': 'Terhubung',
@@ -29,7 +30,7 @@ abstract class IdId {
     'app_brand': 'Anbu',
     'app_tagline': 'Memantau kesejahteraan Anda.',
     'app_service_desc': 'Layanan pemeriksaan kesejahteraan otomatis',
-    'app_guardian_title': 'Penjaga Anbu',
+    'app_guardian_title': 'Pelindung Anbu',
     'app_copyright': '© 2026 Averic Lab',
 
     // ── Splash ──
@@ -54,7 +55,7 @@ abstract class IdId {
     'mode_guardian_desc': 'Bila perlu, nanti Anda juga bisa mengabarkan diri sendiri',
     'mode_guardian_button': 'Terima kabar →',
     'mode_subject_badge': 'Lansia',
-    'mode_guardian_badge': 'Penjaga',
+    'mode_guardian_badge': 'Pelindung',
     'mode_select_notice': 'Tampilan layar akan berbeda berdasarkan pilihan Anda',
 
     // ── Izin ──
@@ -94,12 +95,12 @@ abstract class IdId {
     'permission_hibernation_title': 'Matikan penghapusan izin otomatis',
     'permission_hibernation_highlight': 'penghapusan izin otomatis',
     'permission_hibernation_message':
-        'Android secara otomatis menghapus izin aplikasi yang sudah lama tidak Anda gunakan. Anbu biasanya berjalan tanpa dibuka, sehingga fitur ini dapat membuat izin hilang setelah beberapa waktu dan menghentikan pengiriman sinyal kesejahteraan.\n\nKetuk [Buka Pengaturan] di bawah — layar sakelar yang sesuai akan muncul langsung. Matikan sakelar.\n\n※ Pelafalan tepatnya dapat bervariasi tergantung pabrikan perangkat.',
+        'Android secara otomatis menghapus izin aplikasi yang sudah lama tidak Anda gunakan. Anbu biasanya berjalan tanpa dibuka, sehingga fitur ini dapat membuat izin hilang setelah beberapa waktu dan menghentikan pengiriman sinyal kesejahteraan.\n\nKetuk [Buka Pengaturan] di bawah — layar sakelar yang sesuai akan muncul langsung. Matikan sakelar.\n\n※ Istilah yang tepat dapat bervariasi tergantung pabrikan perangkat.',
     'permission_hibernation_go_to_settings': 'Buka Pengaturan',
     'stability_battery_warning_short': 'Perlu menonaktifkan pembatasan penggunaan baterai',
     'stability_battery_dialog_title': 'Nonaktifkan pembatasan penggunaan baterai',
     'stability_battery_dialog_message':
-        'Ketika ponsel Anda masuk ke mode hemat daya, sinyal kesejahteraan yang dikirim ke pengasuh Anda dapat terlambat atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan] di bawah, atur "Baterai" → "Tidak Dibatasi". Dengan begitu, sinyal kesejahteraan akan dikirim dengan andal pada waktu yang dijadwalkan setiap hari.\n\n※ Pelafalan tepatnya dapat bervariasi tergantung pabrikan perangkat.',
+        'Ketika ponsel Anda masuk ke mode hemat daya, sinyal kesejahteraan yang dikirim ke pelindung Anda dapat terlambat atau terlewat.\n\nSetelah mengetuk [Buka Pengaturan] di bawah, atur "Baterai" → "Tidak Dibatasi". Dengan begitu, sinyal kesejahteraan akan dikirim dengan andal pada waktu yang dijadwalkan setiap hari.\n\n※ Istilah yang tepat dapat bervariasi tergantung pabrikan perangkat.',
 
     // ── Onboarding ──
     'onboarding_safety_code_title': 'Kode keamananmu dibuat otomatis',
@@ -122,8 +123,8 @@ abstract class IdId {
     'onboarding_gs_enable_desc':
         'Di Pengaturan, ketuk [Buat kode keamanan saya]\nagar kesejahteraanmu juga tersampaikan ke penjaga',
     'onboarding_role_subject': 'Orang yang Dilindungi',
-    'onboarding_role_guardian': 'Penjaga',
-    'onboarding_role_guardian_subject': 'Penjaga dan yang dilindungi',
+    'onboarding_role_guardian': 'Pelindung',
+    'onboarding_role_guardian_subject': 'Pelindung dan yang dilindungi',
     'onboarding_already_registered_title': 'Perangkat Sudah Terdaftar',
     'onboarding_already_registered_message':
         'Perangkat ini sudah terdaftar dalam mode "@roleLabel".\nLanjutkan sebagai "@roleLabel"?\n\nAtau beralih ke mode "@newRoleLabel"?\nBeralih akan menghapus semua data yang ada.',
@@ -135,7 +136,7 @@ abstract class IdId {
 
     // ── Beranda Orang yang Dilindungi ──
     'subject_home_share_title': 'Bagikan kode keselamatan Anda',
-    'subject_home_guardian_count': 'Penjaga terhubung: @count',
+    'subject_home_guardian_count': 'Pelindung terhubung: @count',
     'subject_home_check_title_last': 'Pemeriksaan terakhir',
     'subject_home_check_title_scheduled': 'Waktu pemeriksaan terjadwal',
     'subject_home_check_title_checking': 'Memeriksa kesejahteraan',
@@ -149,20 +150,20 @@ abstract class IdId {
     'subject_home_connectivity_status': 'Konektivitas',
     'subject_home_report_loading': 'Melaporkan...',
     'subject_home_report_button': 'Laporkan Keselamatan Sekarang',
-    'subject_home_report_desc': 'Beritahu penjaga Anda bahwa Anda baik-baik saja',
+    'subject_home_report_desc': 'Beritahu pelindung Anda bahwa Anda baik-baik saja',
     'subject_home_emergency_button': 'Saya butuh bantuan',
-    'subject_home_emergency_desc': 'Mengirim peringatan darurat ke wali Anda',
+    'subject_home_emergency_desc': 'Mengirim peringatan darurat ke pelindung Anda',
     'subject_home_emergency_loading': 'Mengirim peringatan darurat...',
     'subject_home_emergency_sent': 'Peringatan darurat telah dikirim',
     'subject_home_emergency_failed': 'Gagal mengirim peringatan darurat',
     'subject_home_manual_report_limit_reached':
         'Anda sudah mengirim laporan keamanan hari ini. Silakan coba lagi besok.',
-    'subject_home_manual_report_sent': 'Pesan keamanan Anda telah dikirim ke kontak Anda.',
-    'safety_net_dialog_title': 'Laporan keamanan terkirim',
+    'subject_home_manual_report_sent': 'Sinyal kesejahteraan Anda telah dikirim ke pelindung Anda.',
+    'safety_net_dialog_title': 'Laporan kesejahteraan terkirim',
     'safety_net_dialog_body':
-        'Laporan keamanan hari ini telah dikirim ke pengasuh Anda.',
+        'Laporan kesejahteraan hari ini telah dikirim ke pelindung Anda.',
     'safety_net_dialog_already_body':
-        'Laporan keamanan hari ini sudah dikirim ke pengasuh Anda pada pukul @time.',
+        'Laporan kesejahteraan hari ini sudah dikirim ke pelindung Anda pada @time.',
     'subject_home_emergency_confirm_title': 'Permintaan bantuan darurat',
     'subject_home_emergency_confirm_body':
         'Peringatan darurat akan dikirim ke semua wali.\nLokasi Anda saat ini juga akan dibagikan.\nYakin ingin meminta bantuan?',
@@ -191,7 +192,7 @@ abstract class IdId {
     'drawer_withdraw': 'Hapus Akun',
     'drawer_withdraw_message': 'Akun dan semua data Anda akan dihapus.\nApakah Anda yakin?',
 
-    // ── Dashboard Penjaga ──
+    // ── Dashboard Pelindung ──
     'guardian_status_normal': 'Aman',
     'guardian_status_caution': 'Perhatian',
     'guardian_status_warning': 'Peringatan',
@@ -208,7 +209,7 @@ abstract class IdId {
     'guardian_subject_list': 'Daftar Orang yang Dilindungi',
     'guardian_call_now': 'Telepon Sekarang',
     'phone_call_failed': 'Tidak dapat melakukan panggilan.',
-    'guardian_confirm_safety': 'Konfirmasi Keselamatan',
+    'guardian_confirm_safety': 'Konfirmasi',
     'guardian_no_check_history': 'Tidak ada riwayat pemeriksaan',
     'guardian_last_check_now': 'Pemeriksaan terakhir: baru saja',
     'guardian_last_check_minutes': 'Pemeriksaan terakhir: @minutes menit lalu',
@@ -225,12 +226,12 @@ abstract class IdId {
     'guardian_chart_x_axis_last_7_days': '7 hari terakhir',
     'guardian_chart_x_axis_last_30_days': '30 hari terakhir',
     'guardian_chart_today': 'Today',
-    'guardian_safety_needed': 'Pemeriksaan keselamatan diperlukan',
+    'guardian_safety_needed': 'Perlu diperiksa',
     'guardian_error_load_subjects': 'Gagal memuat daftar orang yang dilindungi.',
     'guardian_safety_confirmed': 'Keamanan dikonfirmasi.',
     'guardian_error_clear_alerts': 'Gagal menghapus peringatan.',
 
-    // ── Penjaga Tambah Orang yang Dilindungi ──
+    // ── Pelindung Tambah Orang yang Dilindungi ──
     'add_subject_title': 'Hubungkan Orang yang Dilindungi',
     'add_subject_guide_title': 'Masukkan kode unik orang yang dilindungi dan alias.',
     'add_subject_guide_subtitle':
@@ -247,13 +248,13 @@ abstract class IdId {
     'add_subject_error_login': 'Login diperlukan.',
     'add_subject_success': 'Orang yang dilindungi berhasil terhubung.',
     'add_subject_error_invalid_code': 'Kode tidak valid.',
-    'add_subject_error_self': 'Anda tidak dapat menambahkan kode Anda sendiri sebagai orang yang dipantau.',
+    'add_subject_error_self': 'Anda tidak dapat menambahkan kode Anda sendiri sebagai orang yang dilindungi.',
     'add_subject_error_limit': 'Anda dapat mendaftarkan hingga @max orang.',
     'add_subject_error_already_connected': 'Sudah terhubung.',
     'add_subject_error_failed': 'Koneksi gagal. Silakan coba lagi.',
     'add_subject_button': 'Tambah Orang yang Dilindungi Baru',
 
-    // ── Pengaturan Penjaga ──
+    // ── Pengaturan Pelindung ──
     'settings_title': 'Pengaturan',
     'settings_light_mode': 'Mode Terang',
     'settings_dark_mode': 'Mode Gelap',
@@ -291,7 +292,7 @@ abstract class IdId {
     'subscription_purchase_success': 'Langganan dimulai',
     'subscription_period_annual': 'tahun',
 
-    // ── G+S (Penjaga + Yang Dilindungi) ──
+    // ── G+S (Pelindung + Yang Dilindungi) ──
     'gs_enable_button': 'Buat kode keamanan saya',
     'gs_safety_code_button': 'Lihat kode keamanan saya',
     'gs_enable_button_desc': 'Keluarga Anda juga bisa memantau Anda',
@@ -299,7 +300,7 @@ abstract class IdId {
     'gs_safety_code_title': 'Kode keamanan saya',
     'gs_enable_dialog_title': 'Buat kode keamanan saya',
     'gs_enable_dialog_body':
-        'Kode keamanan akan diterbitkan — bagikan kepada penjaga lain.',
+        'Kode keamanan akan diterbitkan — bagikan kepada pelindung lain.',
     'gs_enable_dialog_ios_warning_title': '⚠ Cara sinyal kesehatan Anda dikirim',
     'gs_enable_dialog_ios_warning_body':
         '"Notifikasi push kesehatan" muncul setiap hari pada waktu yang dijadwalkan. Anda harus mengetuk notifikasi atau membuka aplikasi sendiri di sekitar waktu itu agar sinyal kesehatan Anda dapat dikirim. Jika Anda tidak membuka aplikasi, penjaga Anda mungkin menerima peringatan pemeriksaan terlewat.',
@@ -320,15 +321,15 @@ abstract class IdId {
         'Harap izinkan izin Aktivitas Fisik (Gerakan & Kebugaran) di pengaturan aplikasi.',
     'gs_activity_permission_settings_go': 'Buka Pengaturan',
 
-    // ── Mode Penjaga → G+S (Drawer/Dialog) ──
+    // ── Mode Pelindung → G+S (Drawer/Dialog) ──
     'drawer_enable_guardian': 'Kelola juga kesejahteraan keluarga',
-    's_to_gs_dialog_title': 'Tambahkan Fitur Penjaga',
+    's_to_gs_dialog_title': 'Tambahkan Fitur Pelindung',
     's_to_gs_dialog_body':
-        'Tambahkan fitur Penjaga agar Anda juga dapat memantau kesejahteraan keluarga atau orang terkasih.\n(Catatan: fitur Penjaga gratis selama 3 bulan, setelah itu beralih ke langganan berbayar.)\n\nKode keamanan Anda dan pengiriman sinyal kesejahteraan yang sedang digunakan akan tetap sama dan terus gratis digunakan.',
+        'Tambahkan fitur Pelindung agar Anda juga dapat memantau kesejahteraan keluarga atau orang terkasih.\n(Catatan: fitur Pelindung gratis selama 3 bulan, setelah itu beralih ke langganan berbayar.)\n\nKode keamanan Anda dan pengiriman sinyal kesejahteraan yang sedang digunakan akan tetap sama dan terus gratis digunakan.',
     's_to_gs_dialog_confirm': 'Lanjutkan',
-    's_to_gs_switch_failed': 'Gagal mengaktifkan fitur Penjaga',
+    's_to_gs_switch_failed': 'Gagal mengaktifkan fitur Pelindung',
 
-    // ── Notifikasi Penjaga ──
+    // ── Notifikasi Pelindung ──
     'notifications_title': 'Notifikasi',
     'notifications_today': 'Notifikasi Hari Ini',
     'notifications_empty': 'Tidak ada notifikasi hari ini',
@@ -352,7 +353,7 @@ abstract class IdId {
     'notifications_activity_note':
         '※ Jumlah langkah mencerminkan langkah yang terkumpul dari tengah malam hingga waktu pengiriman sinyal keselamatan.',
 
-    // ── Pengaturan Notifikasi Penjaga ──
+    // ── Pengaturan Notifikasi Pelindung ──
     'notification_settings_title': 'Pengaturan Notifikasi',
     'notification_settings_push': 'Notifikasi Push',
     'notification_settings_all': 'Semua Notifikasi',
@@ -361,7 +362,7 @@ abstract class IdId {
     'notification_settings_level_section': 'Pengaturan Tingkat',
     'notification_settings_urgent': 'Peringatan Mendesak',
     'notification_settings_urgent_desc': 'Peringatan mendesak tidak dapat dinonaktifkan',
-    'notification_settings_warning': 'Peringatan Waspada',
+    'notification_settings_warning': 'Peringatan Siaga',
     'notification_settings_warning_desc':
         'Peringatan saat tidak ada pemeriksaan 2 hari berturut-turut',
     'notification_settings_caution': 'Peringatan Perhatian',
@@ -373,10 +374,8 @@ abstract class IdId {
     'notification_settings_dnd_end': 'Waktu Selesai',
     'notification_settings_dnd_note':
         '※ Peringatan mendesak tetap terkirim saat Jangan Ganggu aktif',
-    'notification_settings_dnd_start_default': '22:00',
-    'notification_settings_dnd_end_default': '07:00',
 
-    // ── Manajemen Koneksi Penjaga ──
+    // ── Manajemen Koneksi Pelindung ──
     'connection_title': 'Manajemen Koneksi',
     'connection_managed_count': 'Orang yang Dilindungi ',
     'connection_managed_count_value': '@current / @max',
@@ -398,7 +397,7 @@ abstract class IdId {
     'connection_unlink_failed': 'Gagal memutuskan.',
     'connection_load_failed': 'Gagal memuat daftar.',
 
-    // ── Navigasi Bawah Penjaga ──
+    // ── Navigasi Bawah Pelindung ──
     'nav_home': 'Beranda',
     'nav_connection': 'Koneksi',
     'nav_notification': 'Peringatan',
