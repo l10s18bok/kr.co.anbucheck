@@ -195,7 +195,9 @@ Future<void> _handleUnauthorized() async {
     await HeartbeatWorkerService.cancel();
     await LocalAlarmService.cancel();
     Get.offAllNamed(AppRoutes.modeSelect);
-    AppSnackbar.show('', '계정 정보가 만료되었습니다. 다시 등록해 주세요.',
+    // ⚠️ 하드코딩 금지 — 과거 한국어 리터럴이라 20개 언어 전부에서 한글이
+    // 그대로 노출됐다. 사용자에게 보이는 문자열은 예외 없이 `.tr`을 쓴다.
+    AppSnackbar.show('', 'common_session_expired'.tr,
         position: SnackPosition.TOP);
   } finally {
     _handlingUnauthorized = false;
