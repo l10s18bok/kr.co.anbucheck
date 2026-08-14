@@ -621,7 +621,7 @@ locale=el_GR  device24h=true   style=post12  18:00->18:00    07:00->07:00    00:
 | ~~힌디어 `कुशलता`(안부)~~ | **2026-08-14 검색으로 확인 후 수정 완료** — 아래 별도 절 참조 |
 | ~~Android 알림 채널명 하드코딩~~ | **2026-08-14 수정 완료** — 아래 별도 절 참조. 처음에 "`.tr`이 동작하지 않고 삭제 후 재생성이 필요하다"고 적었으나 **둘 다 사실이 아니었다** |
 | `api_error.dart`의 한글-키 사용 | `printLog()` 경로 전용으로 확인됨 — 사용자에게 보이지 않음 |
-| 미사용 키 35개 | 미구현 기능(G+S 해제 다이얼로그, iOS heartbeat 라벨 등)의 흔적. 기능 구현 시 사용될 수 있어 삭제하지 않음. **단 "미구현 기능의 흔적"이 아니라 "라이브 키와 중복된 죽은 키"는 삭제한다** — `local_notification_channel`이 그 경우로, `noti_channel_name`과 같은 개념인데 아무도 쓰지 않아 제거했다(아래 절 참조). `local_notification_channel_desc`는 반대로 이번에 배선되어 라이브가 됐다 |
+| 미사용 키 **37개** | 미구현 기능(G+S 해제 다이얼로그, 권한 다이얼로그, 다크모드 라벨 등)의 흔적. 기능 구현 시 사용될 수 있어 삭제하지 않음. **단 "미구현 기능의 흔적"이 아니라 "라이브 키와 중복된 죽은 키"는 삭제한다** — `local_notification_channel`이 그 경우로, `noti_channel_name`과 같은 개념인데 아무도 쓰지 않아 제거했다. `local_notification_channel_desc`는 반대로 이번에 배선되어 라이브가 됐다. 판정 방법은 아래 절 참조 |
 | 복수형 `Tag(en)`/`व्यक्ति(यों)` 괄호 표기 | GetX는 복수형 분기를 미지원하고, 해당 키들은 averic-lab 계약 키라 자리표시자 추가가 금지됨 |
 
 ---
@@ -705,8 +705,8 @@ locale=el_GR  device24h=true   style=post12  18:00->18:00    07:00->07:00    00:
 (채널이 이미 존재하므로 게이트에서 걸림). 설명이 지워지는 일도 없었다.
 
 ⚠️ 중간 조사에서 "핑퐁이 일어나고 설명이 지워진다"고 적었던 것은 **플러그인 소스를 읽지 않고
-추론한 오진**이다. 같은 오류를 세 번(힌디어 용어, 복합어 위치, 이 건) 반복했다 — 확인 가능한
-것을 확인하지 않고 단정한 것이 공통 원인이다.
+추론한 오진**이다. `canCreateNotificationChannel`은 `~/.pub-cache`에서 30초면 읽을 수 있었다 —
+채널 동작을 다시 판단할 일이 있으면 추론하지 말고 그 함수를 먼저 열 것.
 
 ## 수정
 
@@ -736,3 +736,50 @@ locale=el_GR  device24h=true   style=post12  18:00->18:00    07:00->07:00    00:
 `.tr`이 키 문자열(`noti_channel_name`)을 그대로 반환하지 않은 것도 함께 확인됐다.
 
 검증: 키 파리티 362 × 20, `flutter analyze` 통과, `extract_strings.py` exit 0.
+
+---
+
+# 미사용 키 판정 방법 (이 절을 읽고 나서 삭제할 것)
+
+## ⚠️ 이름 기반 grep이 유효한 이유 — 그리고 유효하지 않을 뻔한 이유
+
+`'키이름'`을 소스에서 찾는 방식은 **키를 문자열로 조합하는 곳이 있으면 무효**다.
+실제로 `.tr`을 변수로 호출하는 곳이 3군데 있다.
+
+| 위치 | 호출 형태 | 그 변수가 취하는 값 |
+|---|---|---|
+| `guardian_settings_page.dart:604` | `daysLabelKey.trParams(...)` | `settings_days_until_renewal` / `settings_days_until_trial_end` |
+| `onboarding_page.dart:32-33` | `step.titleKey.tr` / `step.descKey.tr` | `OnboardingStepData` 6종의 `onboarding_*_title` / `_desc` |
+| `onboarding_mockups.dart:383` | `labelKey.tr` | `notifications_level_caution` / `notifications_level_info` |
+
+**세 곳 모두 대입되는 값이 소스에 리터럴로 존재**하므로(`'settings_days_until_renewal'` 등),
+이름 기반 grep이 그대로 잡아낸다. 즉 이 코드베이스에서는 유효하다.
+
+⚠️ **`'noti_${type}_body'` 같은 진짜 동적 조합이 새로 생기면 이 전제가 깨진다.**
+그런 코드를 추가하는 순간 이 절을 갱신하지 않으면, 다음 사람이 살아있는 키를 죽은 키로
+오판해 삭제하고 그 화면이 키 문자열을 그대로 표시하게 된다(GetX는 키가 없으면 입력을
+그대로 반환한다 — 예외도 로그도 없다).
+
+## 미사용 37개의 성격
+
+| 묶음 | 개수 | 비고 |
+|---|---|---|
+| `error_unknown`/`error_timeout`/`error_network`/`error_unauthorized` | 4 | 아래 `api_error.dart` 항목과 동일 사안 |
+| `heartbeat_schedule_title_ios` / `_hint_ios` | 2 | PRD가 "쓰인다"고 적었으나 실제로는 `heartbeat_schedule_change_title_ios`만 사용. PRD 쪽을 정정함 |
+| 미구현 기능 (G+S 해제 다이얼로그, 권한 다이얼로그, 다크모드 라벨, 구독 준비 중 등) | 31 | 기능 구현 시 사용 예정 — 삭제하지 않음 |
+
+## `api_error.dart` — 고쳐야 하는 결함이 아니다 (근거)
+
+`'알수없는 에러'.tr` 형태로 **한국어 문자열을 번역 키처럼** 쓰고 있고, 그 키는 존재하지
+않으므로 `.tr`은 입력을 그대로 돌려준다 → 어느 언어에서도 항상 한국어다. 그런데도
+사용자 영향이 없다:
+
+- 이 값들은 `ApiErrors` 생성자의 `log(message, name:)`(`dart:developer`)로만 나간다
+- `.message` / `.name`을 읽는 코드가 **전 소스에 없다**
+- 화면에 뜨는 에러는 컨트롤러들이 각자 별도 키(`guardian_error_load_subjects` 등)로 표시한다
+
+**잠재적 함정**이긴 하다 — 나중에 누가 `.message`를 화면에 노출하면 그 순간 19개 언어에
+한국어가 나간다. 배선용 `error_*` 키 4개가 20개 언어에 이미 준비돼 있으므로 고치려면
+4줄이면 된다. 다만 `ApiErrors`에는 살아있는 특이점이 있어(**베이스 생성자의
+`log(message, …)`가 서브클래스 getter로 디스패치**되고, `ServerResError`만 `message`를
+필드로 오버라이드한다) 다른 변경에 묻어가지 말고 독립 커밋으로 다룰 것.
