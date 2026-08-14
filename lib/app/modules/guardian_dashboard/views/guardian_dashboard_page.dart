@@ -36,7 +36,9 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
           centerTitle: true,
           // 우측 최악등급 배지는 제거됨 — 본문 "오늘의 안부 요약" 아래 등급별 카운터가
           // 최악 등급을 포함한 전체 분포를 더 정확히 알려주므로 중복이었다.
-          title: Text('Anbu Guardian', style: AppTextTheme.headlineSmall()),
+          // ⚠️ 하드코딩 금지 — 과거 'Anbu Guardian' 리터럴이라 20개 언어 전부에서
+          // 영어가 그대로 노출됐다(번역 키는 있는데 아무도 쓰지 않는 상태였다).
+          title: Text('app_guardian_title'.tr, style: AppTextTheme.headlineSmall()),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
@@ -599,8 +601,13 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                   Icon(Icons.info_outline_rounded, size: 18.w, color: widget.statusColor),
                   SizedBox(width: 6.w),
                   Expanded(
+                    // ⚠️ 카드 높이가 200.h 고정이라 이 라벨이 3줄이 되면 세로 오버플로가 난다.
+                    // 번역문 길이는 언어마다 크게 달라(한국어 "안전 확인이 필요합니다" 대비
+                    // 태국어는 2.5배) 문구 단축만으로는 재발을 막을 수 없어 2줄로 제한한다.
                     child: Text(
                       widget.activityLabel!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: AppTextTheme.bodyLarge(color: widget.statusColor, fw: FontWeight.w700),
                     ),
                   ),
@@ -643,11 +650,15 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                         children: [
                           Icon(Icons.phone_rounded, size: 15.w, color: Colors.white),
                           SizedBox(width: 4.w),
-                          Text(
-                            'guardian_call_now'.tr,
-                            style: AppTextTheme.labelSmall(
-                              color: Colors.white,
-                              fw: FontWeight.w600,
+                          Flexible(
+                            child: Text(
+                              'guardian_call_now'.tr,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextTheme.labelSmall(
+                                color: Colors.white,
+                                fw: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ],
@@ -667,6 +678,8 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                       child: Center(
                         child: Text(
                           'guardian_confirm_safety'.tr,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: AppTextTheme.labelSmall(
                             color: widget.statusColor,
                             fw: FontWeight.w600,
