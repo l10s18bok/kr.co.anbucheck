@@ -424,7 +424,6 @@ abstract class FrFr {
         'Veuillez choisir une heure antérieure à @limit.',
 
     // ── Notifications locales ──
-    'local_notification_channel': 'Alertes de bien-être',
     'local_notification_channel_desc': 'Notifications du service de bien-être',
 
     // ── Divers ──

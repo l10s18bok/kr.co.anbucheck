@@ -411,7 +411,6 @@ abstract class EnUs {
         'The wellness check time must be before @limit.',
 
     // ── Local Notifications ──
-    'local_notification_channel': 'Wellness Alerts',
     'local_notification_channel_desc': 'Wellness check service notifications',
 
     // ── Misc ──

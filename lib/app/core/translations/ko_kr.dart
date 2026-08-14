@@ -391,7 +391,6 @@ abstract class KoKr {
         '안부 시각은 @limit 이전으로만 설정할 수 있습니다.',
 
     // ── 로컬 알림 ──
-    'local_notification_channel': '안부 알림',
     'local_notification_channel_desc': '안부 확인 서비스 알림',
 
     // ── 기타 ──

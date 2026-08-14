@@ -420,7 +420,6 @@ abstract class EsEs {
         'La hora de comprobación debe ser anterior a @limit.',
 
     // ── Notificaciones locales ──
-    'local_notification_channel': 'Alertas de bienestar',
     'local_notification_channel_desc': 'Notificaciones del servicio de bienestar',
 
     // ── Otros ──

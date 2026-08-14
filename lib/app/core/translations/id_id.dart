@@ -420,7 +420,6 @@ abstract class IdId {
         'Waktu pemeriksaan harus sebelum @limit.',
 
     // ── Notifikasi Lokal ──
-    'local_notification_channel': 'Peringatan Kesejahteraan',
     'local_notification_channel_desc': 'Notifikasi layanan pemeriksaan kesejahteraan',
 
     // ── Lain-lain ──

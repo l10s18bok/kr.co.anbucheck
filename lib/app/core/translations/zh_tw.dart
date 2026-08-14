@@ -382,7 +382,6 @@ abstract class ZhTw {
         '平安確認時間只能設定在 @limit 之前。',
 
     // ── 本地通知 ──
-    'local_notification_channel': '問安通知',
     'local_notification_channel_desc': '問安服務通知',
 
     // ── 其他 ──

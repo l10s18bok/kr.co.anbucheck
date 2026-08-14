@@ -418,7 +418,6 @@ abstract class NlNl {
         'De tijd voor de welzijnscontrole moet vóór @limit liggen.',
 
     // ── Lokale meldingen ──
-    'local_notification_channel': 'Welzijnsmeldingen',
     'local_notification_channel_desc': 'Meldingen van de welzijnscontroleservice',
 
     // ── Overig ──

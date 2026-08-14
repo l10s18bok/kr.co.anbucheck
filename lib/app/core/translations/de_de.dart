@@ -456,7 +456,6 @@ abstract class DeDe {
         'Die Uhrzeit für die Wohlbefindens-Meldung muss vor @limit liegen.',
 
     // ── Lokale Benachrichtigungen ──
-    'local_notification_channel': 'Wohlbefindens-Meldungen',
     'local_notification_channel_desc':
         'Benachrichtigungen des Wohlbefindens-Dienstes',
 

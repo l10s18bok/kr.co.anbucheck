@@ -419,7 +419,6 @@ abstract class RuRu {
         'Время проверки должно быть раньше @limit.',
 
     // ── Локальные уведомления ──
-    'local_notification_channel': 'Уведомления о самочувствии',
     'local_notification_channel_desc': 'Уведомления сервиса проверки самочувствия',
 
     // ── Разное ──

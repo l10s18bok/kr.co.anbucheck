@@ -407,7 +407,6 @@ abstract class ThTh {
         'เวลาตรวจสอบต้องอยู่ก่อน @limit',
 
     // ── การแจ้งเตือนในเครื่อง ──
-    'local_notification_channel': 'การแจ้งเตือนความเป็นอยู่',
     'local_notification_channel_desc': 'การแจ้งเตือนบริการตรวจสอบความเป็นอยู่',
 
     // ── อื่นๆ ──

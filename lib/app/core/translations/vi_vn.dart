@@ -414,7 +414,6 @@ abstract class ViVn {
         'Thời gian kiểm tra phải trước @limit.',
 
     // ── Thong bao cuc bo ──
-    'local_notification_channel': 'Cảnh báo bình an',
     'local_notification_channel_desc': 'Thông báo dịch vụ kiểm tra bình an',
 
     // ── Khac ──

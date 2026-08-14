@@ -262,14 +262,34 @@ class FcmService extends GetxService {
 
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
-  /// Android 알림 채널
-  // TODO: i18n — 채널명은 앱 초기화 시점에 생성되므로 .tr이 동작하지 않을 수 있음
-  static const _androidChannel = AndroidNotificationChannel(
-    'anbu_alerts',
-    '안부 알림', // local_notification_channel
-    description: '안부 확인 서비스 알림', // local_notification_channel_desc
-    importance: Importance.high,
-  );
+  /// Android 알림 채널 (시스템 설정 > 앱 > 알림에 이 이름/설명이 그대로 노출된다)
+  ///
+  /// ⚠️ **const로 되돌리지 말 것.** 과거 `static const`에 한국어 리터럴이 박혀 있어
+  /// 20개 언어 사용자 전원이 시스템 알림 설정에서 `안부 알림`을 봤다. const는 컴파일
+  /// 시점에 값이 정해져야 하므로 `.tr`을 쓸 수 없다 — 그래서 getter여야 한다.
+  ///
+  /// `.tr`이 여기서 동작하는 이유: 이 채널을 만드는 `_setupLocalNotifications`는
+  /// `FcmService().init()`을 거쳐 `SplashController`에서 호출되고, Splash는 이미
+  /// GetMaterialApp 하위 라우트라 번역이 로드된 상태다.
+  ///
+  /// **기존 설치도 고쳐진다**: `AndroidFlutterLocalNotificationsPlugin
+  /// .createNotificationChannel()`은 플러그인의 `canCreateNotificationChannel`
+  /// 게이트를 거치지 않고 `setupNotificationChannel`을 무조건 실행하며, Android는
+  /// 기존 채널의 **이름과 설명 갱신을 허용**한다(로케일 변경에 대응하라고 열어 둔 경로).
+  /// 앱을 켤 때마다 현재 언어로 다시 써지므로 기기 언어를 바꿔도 따라온다.
+  /// (importance·소리·진동은 생성 후 사용자 소유라 갱신되지 않는다 — 의도된 동작)
+  ///
+  /// 이름은 `LocalAlarmService`와 **같은 키(`noti_channel_name`)** 를 쓴다. 그쪽은
+  /// `AndroidNotificationDetails`에 채널명을 넘기지만 플러그인이 "채널 없을 때만
+  /// 생성"이라 기존 채널에는 영향이 없다. 그래도 키가 갈리면 최초 생성 주체가
+  /// 누구냐에 따라 이름이 달라지므로 하나로 맞춘다.
+  static AndroidNotificationChannel get _androidChannel =>
+      AndroidNotificationChannel(
+        'anbu_alerts',
+        'noti_channel_name'.tr,
+        description: 'local_notification_channel_desc'.tr,
+        importance: Importance.high,
+      );
 
   /// FCM 토큰
   final _token = Rxn<String>();
@@ -537,15 +557,17 @@ class FcmService extends GetxService {
     // payload는 type + 부가 데이터(lat/lng 등)를 JSON 문자열로 저장해,
     // 탭 시 onDidReceiveNotificationResponse에서 파싱 후 라우팅 분기에 사용
     final payloadJson = jsonEncode(Map<String, dynamic>.from(message.data));
+    // _androidChannel은 getter라 접근할 때마다 객체를 새로 만든다 — 한 번만 읽는다
+    final channel = _androidChannel;
     _localNotifications.show(
       message.hashCode,
       notification.title ?? 'app_name'.tr,
       notification.body ?? '',
       NotificationDetails(
         android: AndroidNotificationDetails(
-          _androidChannel.id,
-          _androidChannel.name,
-          channelDescription: _androidChannel.description,
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
           importance: Importance.high,
           priority: Priority.high,
           icon: '@mipmap/ic_launcher',

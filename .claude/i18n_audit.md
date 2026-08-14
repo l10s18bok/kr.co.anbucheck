@@ -619,9 +619,9 @@ locale=el_GR  device24h=true   style=post12  18:00->18:00    07:00->07:00    00:
 | 항목 | 왜 지금 손대지 않는가 |
 |---|---|
 | ~~힌디어 `कुशलता`(안부)~~ | **2026-08-14 검색으로 확인 후 수정 완료** — 아래 별도 절 참조 |
-| Android 알림 채널명 하드코딩 (`fcm_service.dart:265`) | 채널은 앱 초기화 시점에 생성돼 `.tr`이 동작하지 않는다. 채널명 변경은 삭제 후 재생성이 필요해 별도 설계 필요 |
+| ~~Android 알림 채널명 하드코딩~~ | **2026-08-14 수정 완료** — 아래 별도 절 참조. 처음에 "`.tr`이 동작하지 않고 삭제 후 재생성이 필요하다"고 적었으나 **둘 다 사실이 아니었다** |
 | `api_error.dart`의 한글-키 사용 | `printLog()` 경로 전용으로 확인됨 — 사용자에게 보이지 않음 |
-| 미사용 키 37개 | 미구현 기능(G+S 해제 다이얼로그, iOS heartbeat 라벨 등)의 흔적. 기능 구현 시 사용될 수 있어 삭제하지 않음 |
+| 미사용 키 35개 | 미구현 기능(G+S 해제 다이얼로그, iOS heartbeat 라벨 등)의 흔적. 기능 구현 시 사용될 수 있어 삭제하지 않음. **단 "미구현 기능의 흔적"이 아니라 "라이브 키와 중복된 죽은 키"는 삭제한다** — `local_notification_channel`이 그 경우로, `noti_channel_name`과 같은 개념인데 아무도 쓰지 않아 제거했다(아래 절 참조). `local_notification_channel_desc`는 반대로 이번에 배선되어 라이브가 됐다 |
 | 복수형 `Tag(en)`/`व्यक्ति(यों)` 괄호 표기 | GetX는 복수형 분기를 미지원하고, 해당 키들은 averic-lab 계약 키라 자리표시자 추가가 금지됨 |
 
 ---
@@ -672,3 +672,67 @@ locale=el_GR  device24h=true   style=post12  18:00->18:00    07:00->07:00    00:
 - 서버 `i18n/messages.py` 힌디 **3건** 동기화 — 안 하면 푸시는 `कुशलता`, 인앱은 `खैरियत`로 갈라진다
 - 키 파리티 363 × 20 ✅ / 자리표시자 일치 ✅ / `permission_hibernation_highlight` 부분문자열 관계 유지 ✅
 - `flutter analyze` 통과, `extract_strings.py` `exit 0`
+
+---
+
+# Android 알림 채널명 국제화 (2026-08-14)
+
+## 처음 판단이 왜 틀렸나
+
+"채널은 앱 초기화 시점에 생성돼 `.tr`이 안 되고, 이름 변경은 삭제 후 재생성이 필요하다"고
+남겼는데 **둘 다 확인하지 않고 쓴 것이었고 둘 다 틀렸다.**
+
+1. **`.tr`은 동작한다.** 채널 생성은 `FcmService().init()` → `SplashController:164`에서 일어나고,
+   Splash는 이미 GetMaterialApp 하위 라우트라 번역이 로드돼 있다. 같은 컨트롤러 176행의
+   `NotificationTextCache.cacheAll()`이 `.tr`을 정상적으로 쓰고 있는 것이 증거였다.
+2. **삭제·재생성이 필요 없다.** Android는 기존 채널의 **이름과 설명 갱신을 허용**하며,
+   공식 문서가 그 용도를 명시한다 — "로케일이 바뀔 수 있고 새 로케일 번역이 있을 수 있으므로".
+   (importance·소리·진동은 생성 후 사용자 소유라 갱신되지 않는다.)
+
+## 실제 동작 (플러그인 소스 확인)
+
+`flutter_local_notifications` 9.9.1의 `canCreateNotificationChannel`은
+**채널이 없을 때만** true를 반환한다(`channelAction` 기본값 `createIfNotExists`).
+
+| 경로 | 게이트 | 결과 |
+|---|---|---|
+| `LocalAlarmService` → `AndroidNotificationDetails(id, name)` | `canCreateNotificationChannel` **거침** | 채널이 이미 있으면 **아무 일도 안 함** |
+| `FcmService` → `AndroidFlutterLocalNotificationsPlugin.createNotificationChannel()` | 게이트 **안 거침** | `setupNotificationChannel` **무조건** 실행 |
+
+따라서 실제 증상은 "핑퐁"이 아니라 **채널명이 항상 한국어로 고정**이었다 —
+앱을 켤 때마다 `FcmService.init()`이 하드코딩 `안부 알림`으로 덮어썼고,
+`LocalAlarmService`가 넘기던 번역된 `noti_channel_name`은 **한 번도 적용된 적이 없다**
+(채널이 이미 존재하므로 게이트에서 걸림). 설명이 지워지는 일도 없었다.
+
+⚠️ 중간 조사에서 "핑퐁이 일어나고 설명이 지워진다"고 적었던 것은 **플러그인 소스를 읽지 않고
+추론한 오진**이다. 같은 오류를 세 번(힌디어 용어, 복합어 위치, 이 건) 반복했다 — 확인 가능한
+것을 확인하지 않고 단정한 것이 공통 원인이다.
+
+## 수정
+
+- `FcmService._androidChannel`을 `static const` → **getter**로 전환하고 `.tr` 사용.
+  const는 컴파일 시점에 값이 정해져야 하므로 `.tr`을 쓸 수 없다 — getter여야 하는 이유다.
+- 이름은 `noti_channel_name`(`LocalAlarmService`와 **같은 키**), 설명은 그동안 미사용이던
+  `local_notification_channel_desc`. 최초 생성 주체가 누구든 같은 이름이 되도록 통일.
+- 중복 죽은 키 `local_notification_channel` 삭제(참조 0회, `noti_channel_name`과 같은 개념).
+  계약 밖 키임을 `extract_strings.py`로 확인.
+- 포그라운드 FCM 표시 경로는 getter를 3번 읽어 객체를 3번 만들던 것을 지역 변수로 1회로.
+
+**기존 설치도 고쳐진다** — `FcmService`의 호출은 게이트를 거치지 않아 앱 실행마다 현재 언어로
+다시 써지고, 기기 언어를 바꿔도 다음 실행에 따라온다. 한국어 사용자는 두 키 값이 동일해
+표시 변화가 없고, 나머지 19개 언어만 한국어 → 자기 언어로 바뀐다.
+
+## 실기기 검증 (Android 폴더블 에뮬레이터 API 36, `dumpsys notification`)
+
+**추론으로 끝내지 않고 실제로 관측했다** — "기존 설치도 고쳐진다"는 코드 주석의 주장이
+근거 없는 단정이 되지 않도록. 앱을 **덮어 설치**(데이터·채널 유지)해 확인했다.
+
+| 단계 | `NotificationChannel.mName` |
+|---|---|
+| 구 빌드, 기기 로케일 en-US | `안부 알림` ← 버그 재현 |
+| 수정 빌드 덮어 설치 후 실행 | `Anbu Alerts` ← **기존 채널 개명 확인** |
+| 앱 언어를 독일어로 변경 후 실행 | `Anbu-Benachrichtigungen` ← **언어 변경 추종 확인** |
+
+`.tr`이 키 문자열(`noti_channel_name`)을 그대로 반환하지 않은 것도 함께 확인됐다.
+
+검증: 키 파리티 362 × 20, `flutter analyze` 통과, `extract_strings.py` exit 0.

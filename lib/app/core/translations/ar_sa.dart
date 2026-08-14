@@ -402,7 +402,6 @@ abstract class ArSa {
         'يجب ضبط وقت التحقق قبل @limit.',
 
     // ── الإشعارات المحلية ──
-    'local_notification_channel': 'إشعارات الاطمئنان',
     'local_notification_channel_desc': 'إشعارات خدمة الاطمئنان على السلامة',
 
     // ── متنوع ──

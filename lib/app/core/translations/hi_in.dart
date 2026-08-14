@@ -411,7 +411,6 @@ abstract class HiIn {
         'खैरियत की जांच का समय @limit से पहले होना चाहिए।',
 
     // ── स्थानीय सूचनाएं ──
-    'local_notification_channel': 'खैरियत की सूचनाएं',
     'local_notification_channel_desc': 'खैरियत की जांच सेवा से जुड़ी सूचनाएं',
 
     // ── अन्य ──

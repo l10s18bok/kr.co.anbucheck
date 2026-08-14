@@ -412,7 +412,6 @@ abstract class SvSe {
         'Tiden för välmåendekontrollen måste vara före @limit.',
 
     // ── Lokala aviseringar ──
-    'local_notification_channel': 'Välmåendeaviseringar',
     'local_notification_channel_desc': 'Aviseringar för välmåendetjänsten',
 
     // ── Ovrigt ──

@@ -418,7 +418,6 @@ abstract class PlPl {
         'Godzina sprawdzenia musi być wcześniejsza niż @limit.',
 
     // ── Powiadomienia lokalne ──
-    'local_notification_channel': 'Alerty samopoczucia',
     'local_notification_channel_desc': 'Powiadomienia usługi sprawdzania samopoczucia',
 
     // ── Inne ──

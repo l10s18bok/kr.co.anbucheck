@@ -419,7 +419,6 @@ abstract class PtBr {
         'O horário da verificação deve ser antes de @limit.',
 
     // ── Notificações locais ──
-    'local_notification_channel': 'Alertas de bem-estar',
     'local_notification_channel_desc': 'Notificações do serviço de verificação de bem-estar',
 
     // ── Diversos ──

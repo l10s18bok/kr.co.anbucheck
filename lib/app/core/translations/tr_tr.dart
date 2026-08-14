@@ -413,7 +413,6 @@ abstract class TrTr {
         'Kontrol saati @limit saatinden önce olmalıdır.',
 
     // ── Yerel Bildirimler ──
-    'local_notification_channel': 'Hal Hatır Bildirimleri',
     'local_notification_channel_desc': 'Hal hatır sorgulama hizmeti bildirimleri',
 
     // ── Diğer ──

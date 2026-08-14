@@ -453,7 +453,6 @@ abstract class ItIt {
         'Il controllo di benessere deve essere impostato prima delle @limit.',
 
     // ── Notifiche locali ──
-    'local_notification_channel': 'Avvisi benessere',
     'local_notification_channel_desc':
         'Notifiche del servizio di verifica del benessere',
 

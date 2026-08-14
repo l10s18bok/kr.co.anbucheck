@@ -390,7 +390,6 @@ abstract class JaJp {
         '安否確認の時刻は @limit より前に設定してください。',
 
     // ── ローカル通知 ──
-    'local_notification_channel': '安否確認の通知',
     'local_notification_channel_desc': '安否確認サービスの通知',
 
     // ── その他 ──

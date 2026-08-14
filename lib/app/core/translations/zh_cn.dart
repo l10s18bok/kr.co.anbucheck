@@ -382,7 +382,6 @@ abstract class ZhCn {
         '平安确认时间只能设置在 @limit 之前。',
 
     // ── 本地通知 ──
-    'local_notification_channel': '问安通知',
     'local_notification_channel_desc': '问安服务通知',
 
     // ── 其他 ──
