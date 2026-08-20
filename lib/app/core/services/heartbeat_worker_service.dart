@@ -31,13 +31,37 @@ void heartbeatWorkerCallback() {
       ApiClientFactory.init(type: HttpClientType.dio);
       await getReloadedPrefs();
 
+      // 등록 함수들이 "취소 대상 == 나 자신"을 판별할 수 있도록 가장 먼저 심는다.
+      //
+      // ⚠️ 업데이트 직후 **첫 발화는 구버전이 등록한 work**이라 inputData에 `unique`가
+      // 없다. 그대로 null로 두면 자기 자신을 못 알아보고 레거시 이름을 취소해버려,
+      // 바로 이 커밋이 없애려던 self-cancel이 업그레이드 시점에 한 번 더 발생한다.
+      // `source`로 레거시 이름을 역산해 그 구멍을 막는다.
+      HeartbeatWorkerService.runningUniqueName =
+          inputData?['unique'] as String? ??
+              HeartbeatWorkerService.legacyUniqueNameFor(
+                  inputData?['source'] as String?);
+
       final tokenDs = TokenLocalDatasource();
       final role = await tokenDs.getUserRole();
       final isAlsoSubject = await tokenDs.getIsAlsoSubject();
-      debugPrint('[HeartbeatWorker] task=$taskName role=$role, isAlsoSubject=$isAlsoSubject');
+      debugPrint('[HeartbeatWorker] task=$taskName role=$role, '
+          'isAlsoSubject=$isAlsoSubject, unique=${HeartbeatWorkerService.runningUniqueName}');
       if (role != 'subject' && !isAlsoSubject) return true;
 
       final (hour, minute) = await tokenDs.getHeartbeatSchedule();
+
+      // ★ 재무장을 **네트워크보다 먼저** 한다.
+      //
+      // Doze 유지보수 창은 30초~1분이고, 창이 만료되면 워커는 `onStopJob → stopEngine()`
+      // 으로 즉시 죽는다. 재무장이 전송 뒤에 있으면 그 죽음에 걸릴 때마다 다음 날 트리거가
+      // 사라진다. 앞으로 옮기면 진입 후 수십 ms만 살아 있어도 트리거가 보존된다.
+      //
+      // 아래 모든 분기(오늘 전송 완료 스킵 / 예약시각 이전 스킵 / 회복 전송 / 정시 전송)에
+      // 공통 적용되며, 성공 경로의 `_onHeartbeatSent → schedule()`이 나중에 같은 값으로
+      // 다시 등록해도 dated 이름이라 idempotent다.
+      await HeartbeatWorkerService.rescheduleOneOffOnly(hour, minute);
+
       final now = DateTime.now();
       final today = formatYmd(now);
       final lastDate = await tokenDs.getLastHeartbeatDate();
@@ -65,7 +89,8 @@ void heartbeatWorkerCallback() {
       //
       // 예외 — 회복 전송: 2일 이상(어제 포함 미전송) heartbeat 갭이 있을 때
       // 예약시각을 기다리지 않고 "살아있음" 신호를 보낸다.
-      // 기기가 온라인 상태(NetworkType.connected 충족)라는 것 자체가 활동 증거다.
+      // (전송이 **성공**했다는 것 자체가 기기가 살아 온라인이라는 증거다. 망 제약을
+      //  제거한 뒤로는 발화 사실만으로는 온라인을 단정할 수 없으므로 성공을 근거로 삼는다.)
       //
       // **정시 슬롯을 소비하지 않는다**(`recovery: true`) — 포그라운드 진입 회복 전송과
       // 동일한 경로다. 과거에는 여기서 정시 키로 전송해 lastHeartbeatDate를 오늘로
@@ -74,7 +99,7 @@ void heartbeatWorkerCallback() {
       // 이르면 사실상 0). 회복 전송은 걸음수를 싣지 않는 생존 신호로 두고, 하루치
       // 걸음수는 예약시각 정시 전송이 온전히 담당하게 한다.
       // (`recovery: true` 경로는 _onHeartbeatSent를 호출하지 않으므로 재예약도 하지
-      //  않는다 — 아래 source 기반 one-off 재무장이 그 자리를 대신한다.)
+      //  않는다 — 콜백 진입부의 `rescheduleOneOffOnly`가 그 자리를 이미 담당한다.)
       final earliestAllowed = scheduled.subtract(const Duration(minutes: 15));
       if (now.isBefore(earliestAllowed)) {
         final yesterday = formatYmd(now.subtract(const Duration(days: 1)));
@@ -89,19 +114,7 @@ void heartbeatWorkerCallback() {
           debugPrint('[HeartbeatWorker] 예약시각 -15분 이전 → 스킵 '
               '(isRecovery=$isRecovery, isInteractive=$wasInteractive)');
         }
-        // one-off이 예약시각보다 이르게 fire된 경우에만 재무장한다.
-        //
-        // 이 분기에 one-off이 들어오는 경로는 "어제(또는 그 이전) 예약시각용으로 등록된
-        // one-off이 네트워크 제약에 묶여 있다가 오늘 이른 시각에 뒤늦게 발화"한 경우다.
-        // one-off은 1회성이라 여기서 소비되며, 재무장하지 않으면 오늘 예약시각에
-        // 정시 트리거가 없어진다(periodic 폴링만 남음). 이 분기는 항상 예약시각
-        // 이전이므로 _computeNextDelay가 오늘 예약시각을 계산한다.
-        //
-        // periodic fire에는 재무장하지 않는다 — one-off을 소비하지 않았고, 미전송 갭이
-        // 이어지는 동안 15분마다 cancel+register를 반복해 WorkManager DB를 흔들게 된다.
-        if (inputData?['source'] == 'one-off') {
-          await HeartbeatWorkerService.rescheduleOneOffOnly(hour, minute);
-        }
+        // 재무장은 콜백 진입부에서 이미 완료됐다(네트워크보다 먼저). 여기서 다시 하지 않는다.
         return true;
       }
       debugPrint('[HeartbeatWorker] schedule=$hour:$minute, lastHeartbeatDate=$lastDate → 통과');
@@ -160,7 +173,37 @@ void heartbeatWorkerCallback() {
 class HeartbeatWorkerService {
   static const _taskName = 'heartbeat_task';
   static const _periodicName = 'heartbeat_periodic';
-  static const _oneOffName = 'heartbeat_scheduled';
+
+  /// dated 이름 도입 **이전**에 쓰던 고정 one-off 이름. 업그레이드 기기에 남아 있으므로
+  /// 새 이름으로 등록할 때 한 번 정리한다(자기 자신이면 건너뜀 — [_cancelLegacyOneOff]).
+  static const _legacyOneOffName = 'heartbeat_scheduled';
+
+  /// one-off unique name — **대상 발화 날짜를 이름에 넣는다.**
+  ///
+  /// ⚠️ 이 앱에서 실측으로 확인된 가장 치명적인 결함을 막기 위한 장치다.
+  /// 고정 이름을 쓰면 `_registerOneOff`의 `cancelByUniqueName`이 **실행 중인 자기 자신**을
+  /// 취소하고, `BackgroundWorker.onStopped() → stopEngine()`이 FlutterEngine을 파괴해
+  /// 바로 다음 줄의 `registerOneOffTask`가 실행되지 못한다. 그러면 one-off이 영구 유실되고
+  /// 예약시각 트리거가 사라진다(2026-08-18 02:16 실측: `Work [...] was cancelled` 직후
+  /// 재등록 로그 없음 → 그날 18:00 트리거 소멸).
+  ///
+  /// 재무장은 항상 **다른 날짜**를 향하므로 이름이 겹치지 않고, 취소 대상이 자기 자신이 될
+  /// 수 없다. 발화가 끝난 dated work는 WorkManager가 자동으로 prune한다.
+  static String _oneOffNameFor(DateTime target) =>
+      'heartbeat_scheduled_${formatYmd(target)}';
+
+  /// 이 isolate에서 실행 중인 WorkManager unique work 이름 (`inputData['unique']`).
+  /// 등록 함수들이 "취소 대상 == 나 자신"을 판별하는 유일한 근거다.
+  /// 포그라운드 호출에서는 null이라 어떤 취소도 자기 취소가 될 수 없다.
+  static String? runningUniqueName;
+
+  /// 구버전이 등록한 work의 unique 이름 역산 — `inputData['unique']`가 없을 때만 사용.
+  /// 업데이트 직후 첫 발화가 여기 해당한다([runningUniqueName] 참조).
+  static String? legacyUniqueNameFor(String? source) => switch (source) {
+        'periodic' => _periodicName,
+        'one-off' => _legacyOneOffName,
+        _ => null,
+      };
 
   /// periodic 폴링 간격. Android WorkManager의 minimum 제약(15분)과 동일.
   static const _pollFrequency = Duration(minutes: 15);
@@ -213,8 +256,10 @@ class HeartbeatWorkerService {
   ///
   /// one-off은 이미 fire되어 소비됐으므로 내일자로 재무장만 한다(periodic이 당일을
   /// 커버하고, 성공 시 schedule()이 one-off도 내일자로 재확정한다).
+  /// **worker 콜백 진입 시(네트워크보다 먼저)와 전송 실패 경로**에서 호출된다.
+  /// one-off은 dated 이름이라 몇 번을 불러도 같은 대상 1건으로 수렴한다(idempotent).
   static Future<void> rescheduleOneOffOnly(int hour, int minute) async {
-    await _retryRegister('one-off(실패 재무장)', () => _registerOneOff(hour, minute));
+    await _retryRegister('one-off 재무장', () => _registerOneOff(hour, minute));
   }
 
   /// 단일 등록 연산을 일시적 WorkManager DB 오류 대비 최대 2회 시도.
@@ -235,26 +280,63 @@ class HeartbeatWorkerService {
     );
   }
 
-  /// one-off: 정확히 예약시각에 1회 fire
+  /// one-off: 정확히 예약시각에 1회 fire.
+  ///
+  /// **취소를 하지 않는다.** 이름에 대상 날짜가 들어가므로 등록 대상은 실행 중인 work과
+  /// 항상 다른 이름이고, 따라서 self-cancel이 원리적으로 불가능하다([_oneOffNameFor] 참조).
   static Future<void> _registerOneOff(int hour, int minute) async {
-    final delay = _computeNextDelay(hour, minute);
-    await Workmanager().cancelByUniqueName(_oneOffName);
+    final next = _computeNextFire(hour, minute);
+    final name = _oneOffNameFor(next);
+    if (name == runningUniqueName) {
+      // 같은 날짜로 재등록하려는데 그게 곧 지금 실행 중인 나 자신인 경우.
+      // 취소하면 엔진이 죽어 이 뒤가 전부 유실되므로 조용히 건너뛴다.
+      debugPrint('[HeartbeatWorker] one-off 재등록 스킵 — 자기 자신 ($name)');
+      return;
+    }
+    final delay = next.difference(DateTime.now());
     await Workmanager().registerOneOffTask(
-      _oneOffName,
+      name,
       _taskName,
-      initialDelay: delay,
+      initialDelay: delay.isNegative ? Duration.zero : delay,
       existingWorkPolicy: ExistingWorkPolicy.replace,
-      inputData: {'source': 'one-off'},
-      constraints: Constraints(networkType: NetworkType.connected),
+      inputData: {'source': 'one-off', 'unique': name},
+      constraints: Constraints(networkType: NetworkType.notRequired),
     );
     debugPrint(
-      '[HeartbeatWorker] one-off 등록: ${_hhmm(hour, minute)} '
-      '(${delay.inHours}h ${delay.inMinutes % 60}m 후)',
+      '[HeartbeatWorker] one-off 등록: $name (${delay.inHours}h ${delay.inMinutes % 60}m 후)',
     );
+    await _cancelLegacyOneOff();
+  }
+
+  /// 업그레이드 기기에 남아 있는 고정 이름 one-off 정리 (1회성, 이후 no-op).
+  /// 자기 자신이면 건너뛴다 — 업데이트 직후 첫 발화는 레거시 이름으로 실행되므로
+  /// 여기서 취소하면 그게 바로 우리가 없애려던 self-cancel이 된다.
+  static Future<void> _cancelLegacyOneOff() async {
+    if (runningUniqueName == _legacyOneOffName) {
+      debugPrint('[HeartbeatWorker] 레거시 one-off 정리 보류 — 자기 자신');
+      return;
+    }
+    try {
+      await Workmanager().cancelByUniqueName(_legacyOneOffName);
+    } catch (_) {}
   }
 
   /// periodic 15분: 안전망 폴링. 예약시각 +3분부터 첫 fire → 이후 15분마다.
   static Future<void> _registerPeriodic(int hour, int minute) async {
+    // ★ 실행 중인 periodic worker 자신은 재등록하지 않는다.
+    //
+    // periodic은 단일 이름이라 dated one-off처럼 이름으로 갈라낼 수 없다. 그래서
+    // "자기 자신이면 아예 건드리지 않는" 방식으로 self-cancel을 막는다. 이 경우 periodic은
+    // 재워지지 않고 15분 주기를 유지하지만(세션 예산 소모), **취소했다가 재등록에 실패해
+    // 영구 유실되는 것보다 훨씬 낫다.** 다음에 one-off worker나 포그라운드가 `schedule()`을
+    // 부를 때 정상적으로 재워진다.
+    //
+    // one-off이 정상 동작하는 한 이 분기는 드물다 — 평소엔 예약시각 one-off이 먼저 성공해
+    // `_onHeartbeatSent`를 호출하고, 그때 runningUniqueName은 dated one-off 이름이다.
+    if (runningUniqueName == _periodicName) {
+      debugPrint('[HeartbeatWorker] periodic 재등록 스킵 — 자기 자신');
+      return;
+    }
     final delay = _computeNextDelay(hour, minute);
     // 음수 오프셋으로 `delay + offset`이 음수가 되면 Android가 거부하므로
     // `Duration.zero`로 clamp (즉시 첫 fire → 대부분 Doze에 의해 다음
@@ -269,8 +351,8 @@ class HeartbeatWorkerService {
       frequency: _pollFrequency,
       initialDelay: periodicDelay,
       existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
-      inputData: {'source': 'periodic'},
-      constraints: Constraints(networkType: NetworkType.connected),
+      inputData: {'source': 'periodic', 'unique': _periodicName},
+      constraints: Constraints(networkType: NetworkType.notRequired),
     );
     debugPrint(
       '[HeartbeatWorker] periodic 등록: ${_hhmm(hour, minute)} '
@@ -282,19 +364,30 @@ class HeartbeatWorkerService {
   static String _hhmm(int hour, int minute) =>
       '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 
-  /// 다음 예약시각까지의 delay 계산 (이미 지났으면 내일)
-  static Duration _computeNextDelay(int hour, int minute) {
+  /// 다음 예약시각 발화 시점 (이미 지났으면 내일)
+  static DateTime _computeNextFire(int hour, int minute) {
     final now = DateTime.now();
     var next = DateTime(now.year, now.month, now.day, hour, minute);
     if (!next.isAfter(now)) {
       next = next.add(const Duration(days: 1));
     }
-    return next.difference(now);
+    return next;
   }
 
-  /// 예약 취소 (one-off + periodic 모두)
+  /// 다음 예약시각까지의 delay 계산 (이미 지났으면 내일)
+  static Duration _computeNextDelay(int hour, int minute) =>
+      _computeNextFire(hour, minute).difference(DateTime.now());
+
+  /// 예약 취소 (one-off + periodic 모두).
+  ///
+  /// one-off은 dated 이름이라 존재할 수 있는 것이 "오늘분"과 "내일분" 둘뿐이다
+  /// (재무장은 항상 다음 발화 1건만 등록한다). 레거시 고정 이름도 함께 정리한다.
   static Future<void> cancel() async {
-    await Workmanager().cancelByUniqueName(_oneOffName);
+    final now = DateTime.now();
+    for (final d in [now, now.add(const Duration(days: 1))]) {
+      await Workmanager().cancelByUniqueName(_oneOffNameFor(d));
+    }
+    await Workmanager().cancelByUniqueName(_legacyOneOffName);
     await Workmanager().cancelByUniqueName(_periodicName);
   }
 }

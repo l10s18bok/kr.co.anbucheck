@@ -68,6 +68,14 @@ class HeartbeatService {
   /// 동일 isolate 내 중복 실행 방지 (execute + sendPending 공유)
   static bool _busy = false;
 
+  /// 전송 1회 실행의 전체 예산.
+  ///
+  /// Doze 유지보수 창은 `min_deep_maintenance_time=30s`이고 이 앱 테스트 기기 실측은
+  /// 약 64초였다. 창이 만료되면 워커가 `onStopJob`으로 즉시 종료되므로, 전송이 창을
+  /// 넘기면 **그 뒤의 재예약·마커 저장이 통째로 유실**된다. 재시도 횟수나 개별 타임아웃을
+  /// 조율하는 대신 전체 상한 하나로 창 예산과 직접 대응시킨다.
+  static const _sendDeadline = Duration(seconds: 20);
+
   /// Google Fit Local Recording API 구독 선점 (Android 전용).
   ///
   /// Android 재설치 후 getStepCount가 최초 호출되는 시점에 구독이 생성된다.
@@ -99,21 +107,32 @@ class HeartbeatService {
   ///   (별도 키 `recovery_<날짜>` + 마커 lastRecoveryDate 사용), 걸음수는 싣지 않는다.
   /// [isInteractiveAtTrigger] worker fire 시점의 PowerManager.isInteractive() 값.
   ///   Android worker 콜백에서만 실제 값을 전달하며, 포그라운드 호출부는 true를 명시 전달.
-  Future<void> execute({
+  ///
+  /// **반환값 = "서버에 실제로 도달했는가".** 아래 경우 모두 `false`다:
+  ///   - `_busy`로 스킵 (다른 전송이 진행 중)
+  ///   - device_id/token 없음
+  ///   - 당일 이미 전송됨(`lastScheduledKey` 일치) 또는 SQLite 락 획득 실패
+  ///   - 전송 시도했으나 실패 (보류 큐 저장)
+  ///
+  /// ⚠️ 이 반환값이 필요한 이유: 과거에는 `void`라 호출자가 스킵/실패를 구분할 수 없었고,
+  /// 그 탓에 [SafetyHomeBaseController.reportNow]가 **아무것도 보내지 않고도**
+  /// "보호자에게 안부를 전했습니다" 스낵바를 띄우고 하루 1회 수동 보고 제한까지
+  /// 소모했다. 새 호출부를 추가할 때 반환값을 무시하려면 그 경로가 사용자에게
+  /// 성공을 주장하지 않는지 반드시 확인할 것.
+  Future<bool> execute({
     bool manual = false,
     bool recovery = false,
     bool? isInteractiveAtTrigger,
   }) async {
-    if (_busy) return;
+    if (_busy) return false;
     _busy = true;
     try {
       final deviceId    = await _tokenDs.getDeviceId();
       final deviceToken = await _tokenDs.getDeviceToken();
-      if (deviceId == null || deviceToken == null) return;
+      if (deviceId == null || deviceToken == null) return false;
 
       if (recovery) {
-        await _executeRecovery(deviceId, deviceToken);
-        return;
+        return await _executeRecovery(deviceId, deviceToken);
       }
 
       // 보류 큐가 있으면 먼저 전송
@@ -122,7 +141,7 @@ class HeartbeatService {
         await _sendPendingInternal(deviceToken);
       }
 
-      await _executeInternal(
+      return await _executeInternal(
         deviceId: deviceId,
         deviceToken: deviceToken,
         manual: manual,
@@ -133,7 +152,8 @@ class HeartbeatService {
     }
   }
 
-  Future<void> _executeInternal({
+  /// 반환값 = 서버 도달 여부 ([execute] 문서 참조).
+  Future<bool> _executeInternal({
     required String deviceId,
     required String deviceToken,
     bool manual = false,
@@ -160,14 +180,14 @@ class HeartbeatService {
       final lastKey = await _tokenDs.getLastScheduledKey();
       if (lastKey == scheduledKey) {
         debugPrint('[HeartbeatService] 이미 전송 완료 — 스킵 ($scheduledKey)');
-        return;
+        return false;
       }
 
       // SQLite UNIQUE INSERT로 락 획득. 다른 isolate가 이미 잡고 있으면 false 반환.
       // TTL 30초 초과한 stale 락은 tryAcquire 내부에서 일괄 삭제되므로 crashed
       // isolate가 남긴 락도 새 진입자가 이어받을 수 있다.
       lockAcquired = await _lockDs.tryAcquire(scheduledKey);
-      if (!lockAcquired) return;
+      if (!lockAcquired) return false;
     }
 
     try {
@@ -208,7 +228,8 @@ class HeartbeatService {
         scheduledKey: manual ? null : scheduledKey,
       );
 
-      await _sendOrSavePending(request, deviceToken, schedHour, schedMinute);
+      return await _sendOrSavePending(
+          request, deviceToken, schedHour, schedMinute);
     } finally {
       if (lockAcquired) {
         await _lockDs.release(scheduledKey);
@@ -230,7 +251,7 @@ class HeartbeatService {
   ///   - 실패 시 pending 큐에 넣지 않는다 — pending 경로가 lastScheduledKey를 저장해
   ///     슬롯을 소비하기 때문. 다음 periodic fire 또는 정시 전송이 자연 회복한다.
   ///   - 당일 1회 제한 마커는 lastRecoveryDate(별도) — 오전 periodic 반복 발사 차단.
-  Future<void> _executeRecovery(String deviceId, String deviceToken) async {
+  Future<bool> _executeRecovery(String deviceId, String deviceToken) async {
     await getReloadedPrefs();
     final now = DateTime.now();
     final today = formatYmd(now);
@@ -238,12 +259,12 @@ class HeartbeatService {
     // 당일 회복 전송 이미 완료 → 스킵
     if (await _tokenDs.getLastRecoveryDate() == today) {
       debugPrint('[HeartbeatService] 회복 전송 이미 완료 — 스킵 ($today)');
-      return;
+      return false;
     }
 
     // cross-isolate 원자 락 (회복 전용 키). 동시 발화한 두 isolate 중 하나만 통과.
     final recoveryKey = 'recovery_$today';
-    if (!await _lockDs.tryAcquire(recoveryKey)) return;
+    if (!await _lockDs.tryAcquire(recoveryKey)) return false;
 
     try {
       final batteryLevel = await _getBatteryLevel();
@@ -258,6 +279,10 @@ class HeartbeatService {
       );
 
       final remote = HeartbeatRemoteDatasource(deviceToken);
+      // 정시 전송과 동일한 창 예산을 적용한다. 망 제약(NetworkType.connected)을 제거한 뒤로
+      // 이 경로는 **오프라인에서도 발화**하므로, 상한이 없으면 백오프·타임아웃으로 Doze 창을
+      // 넘겨 워커가 죽는다(그 뒤 재무장·마커가 유실).
+      final deadline = DateTime.now().add(_sendDeadline);
       for (var attempt = 1; attempt <= 3; attempt++) {
         try {
           await remote.send(request);
@@ -267,13 +292,18 @@ class HeartbeatService {
           // _onHeartbeatSent는 호출하지 않음(정시 슬롯 미소비 불변식 유지).
           await LocalAlarmService.cancelSendFailed();
           await LocalAlarmService.cancelSubjectSafetyNet();
-          return;
+          return true;
         } catch (e) {
           debugPrint('[HeartbeatService] 회복 전송 실패 (시도 $attempt): $e');
-          if (attempt == 3) return; // pending 큐 미사용 — 다음 fire/정시 전송이 회복
-          await Future.delayed(Duration(seconds: attempt * 5));
+          // pending 큐 미사용 — 다음 fire/정시 전송이 회복한다.
+          if (attempt == 3 || !DateTime.now().isBefore(deadline)) return false;
+          // 연결 자체가 안 되면 백오프가 무의미하다 — 창 예산만 태운다.
+          if (!(e is HeartbeatSendException && e.isUnreachable)) {
+            await Future.delayed(Duration(seconds: attempt * 5));
+          }
         }
       }
+      return false;
     } finally {
       await _lockDs.release(recoveryKey);
     }
@@ -296,7 +326,10 @@ class HeartbeatService {
     final (schedHour, schedMinute) = await _tokenDs.getHeartbeatSchedule();
     try {
       await HeartbeatRemoteDatasource(deviceToken).send(_fromJson(payload));
-      await _heartbeatDs.clearPending();
+      // **내가 읽어서 보낸 그 payload일 때만** 삭제한다. 이 함수는 SQLite 락을 잡지 않으므로,
+      // 전송하는 사이 다른 isolate가 오늘 메모를 새로 저장했을 수 있다. 무조건 지우면
+      // 그 오늘 메모가 사라지고, 그쪽 전송까지 실패하면 그날 걸음수가 통째로 유실된다.
+      await _heartbeatDs.clearPendingIfMatches(payload);
 
       final now = DateTime.now();
       final isTodaysReport = heartbeatPayloadIsFromToday(payload, now);
@@ -344,19 +377,32 @@ class HeartbeatService {
 
   // ── private ──────────────────────────────────────────────
 
-  Future<void> _sendOrSavePending(
+  /// 반환값 = 서버 도달 여부 ([execute] 문서 참조).
+  Future<bool> _sendOrSavePending(
     HeartbeatRequest request,
     String deviceToken,
     int schedHour,
     int schedMinute,
   ) async {
-    // WorkManager가 NetworkType.connected constraint를 만족시킨 상태에서 호출되므로
-    // connectivity_plus 사전 체크 없이 Dio 3회 retry로 바로 전송 시도한다.
-    // Doze 상태에서 connectivity_plus가 "오프라인"으로 오판하는 케이스가 확인되어
-    // 사전 체크를 제거했다 — 실제 전송은 WorkManager가 보장한 네트워크 위에서 수행.
+    // connectivity_plus 사전 체크는 두지 않는다 — Doze 상태에서 "오프라인"으로 오판하는
+    // 케이스가 확인되어 제거됐다(커밋 56f38e8). 실제 도달 가능 여부는 전송 시도로 판정한다.
+    //
+    // ★ **전송 "전에" 메모를 남긴다.** Doze 유지보수 창은 30초~1분이고(실측 약 64초),
+    //   창이 만료되면 워커는 `onStopJob` → `stopEngine()`으로 **즉시** 죽는다. 과거처럼
+    //   전송이 끝난 뒤에 저장하면, 그 죽음에 걸린 날은 걸음수가 통째로 사라진다.
+    //   먼저 저장해 두면 어느 시점에 죽어도 그날 기록이 남고, 다음 전송에서 복구된다.
+    //   성공 시에는 `clearPendingIfMatches`로 **내가 저장한 것일 때만** 지운다.
+    //   저장 성공 후 죽어 중복 전송이 되더라도 서버가 `(device_id, scheduled_key)`로
+    //   dedup하므로(heartbeat_service.py) 이력·Push 모두 중복되지 않는다.
+    final payload = request.toJson();
+    await _heartbeatDs.savePending(payload);
+
     final remote = HeartbeatRemoteDatasource(deviceToken);
     // manual=true 요청은 reqKey가 null이라 race 재검사를 건너뛴다 (수동 보고는 무조건 전송).
     final reqKey = request.scheduledKey;
+    // 전송 전체 예산 — Doze 창(30~60초) 안에 들어가도록 상한을 둔다. 시도 횟수·타임아웃을
+    // 개별로 조율하는 것보다 창 예산과 직접 대응돼 예측 가능하다.
+    final deadline = DateTime.now().add(_sendDeadline);
     for (var attempt = 1; attempt <= 3; attempt++) {
       // retry 진행 중 다른 isolate가 같은 scheduledKey로 성공했으면 즉시 중단.
       // 락 TTL(30초) < retry 최대 시간(75~105초, attempt 3 timeout 30초 포함)이라
@@ -366,7 +412,9 @@ class HeartbeatService {
       if (reqKey != null) {
         await getReloadedPrefs();
         if (await _tokenDs.getLastScheduledKey() == reqKey) {
-          return;
+          // 다른 isolate가 같은 슬롯을 이미 성공시켰다 — 내 메모는 불필요.
+          await _heartbeatDs.clearPendingIfMatches(payload);
+          return false;
         }
       }
       try {
@@ -375,17 +423,21 @@ class HeartbeatService {
         break;
       } catch (e) {
         debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
-        if (attempt == 3) {
-          // 실패 분기 진입 직전 마지막 재검사 — attempt 3 자체가 30초 timeout일 수
-          // 있어 그 사이에도 다른 isolate가 성공했을 수 있다. 이미 성공이면
-          // savePending과 알림 모두 스킵해 misleading 안내를 막는다.
+        // 연결 자체가 안 되면 백오프가 무의미하다(수 ms 내 즉시 실패). 창 예산만 태운다.
+        final unreachable =
+            e is HeartbeatSendException && e.isUnreachable;
+        final outOfBudget = !DateTime.now().isBefore(deadline);
+        if (attempt == 3 || outOfBudget) {
+          // 실패 확정 직전 마지막 재검사 — 타임아웃 대기 중 다른 isolate가 성공했을 수
+          // 있다. 이미 성공이면 알림·재예약을 모두 스킵해 misleading 안내를 막는다.
           if (reqKey != null) {
             await getReloadedPrefs();
             if (await _tokenDs.getLastScheduledKey() == reqKey) {
-              return;
+              await _heartbeatDs.clearPendingIfMatches(payload);
+              return false;
             }
           }
-          await _heartbeatDs.savePending(request.toJson());
+          // 메모는 전송 **전에** 이미 저장돼 있으므로 여기서 다시 저장하지 않는다.
           if (!request.manual) await LocalAlarmService.notifySendFailed();
           // oneOff fire-and-not-rescheduled 차단 — pending 큐가 다음 fire에서 회복할 수
           // 있도록 one-off을 내일자로 재무장한다. 단 **실패 경로이므로 periodic은 살려둬
@@ -393,14 +445,17 @@ class HeartbeatService {
           // notifySendFailed 알림은 유지(다음 성공 시 _onHeartbeatSent의 cancelSendFailed가
           // 정리). 재발화는 onlyAlertOnce로 조용히 갱신돼 15분마다 재알람되지 않는다.
           await _rescheduleNextDay(schedHour, schedMinute, success: false);
-          return;
+          return false;
         }
-        await Future.delayed(Duration(seconds: attempt * 5));
+        if (!unreachable) {
+          await Future.delayed(Duration(seconds: attempt * 5));
+        }
       }
     }
 
-    // 전송 성공 — 이후 작업 실패가 pending 큐를 오염시키지 않도록 분리
-    await _heartbeatDs.clearPending();
+    // 전송 성공 — 이후 작업 실패가 pending 큐를 오염시키지 않도록 분리.
+    // **내가 저장한 메모일 때만** 지운다(남의 메모 삭제 방지 — clearPendingIfMatches 참조).
+    await _heartbeatDs.clearPendingIfMatches(payload);
 
     final now = DateTime.now();
     final today = formatYmd(now);
@@ -412,6 +467,7 @@ class HeartbeatService {
     await _tokenDs.saveLastScheduledKey(scheduledKey);
 
     await _onHeartbeatSent(schedHour, schedMinute);
+    return true;
   }
 
   /// 다음 정시 재예약 — **모든 종료 경로 공통** (전송 성공 / retry 3회 실패 / pending 실패).

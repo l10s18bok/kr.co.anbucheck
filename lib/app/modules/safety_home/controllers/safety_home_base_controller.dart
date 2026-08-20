@@ -536,8 +536,24 @@ abstract class SafetyHomeBaseController extends BaseController
 
     isReporting.value = true;
     try {
-      await HeartbeatService()
+      final delivered = await HeartbeatService()
           .execute(manual: true, isInteractiveAtTrigger: true);
+
+      // ⚠️ 서버 도달 실패 시 성공을 주장하지 않는다.
+      //
+      // `execute()`는 ① 다른 전송이 진행 중이면(`_busy`) 조용히 스킵하고,
+      // ② 3회 재시도가 모두 실패하면 보류 큐에 저장만 하고 돌아온다. 과거에는 반환값이
+      // 없어 두 경우 모두 "보호자에게 안부를 전했습니다"를 띄우고 **하루 1회 수동 보고
+      // 제한까지 소모**했다 — 아무것도 보내지 않은 채로. 특히 ①은 포그라운드 일괄
+      // 재전송이 들어오면 창이 수십 초로 넓어져 재현이 쉬워진다.
+      //
+      // 실패 시 `lastManualReportDate`를 저장하지 않으므로 사용자는 곧바로 다시 시도할 수
+      // 있다. 보류 큐에는 이미 담겨 있어 통신 복구 시 자동 전송된다.
+      if (!delivered) {
+        AppSnackbar.message('onboarding_registration_failed_message'.tr);
+        return;
+      }
+
       await tokenDs.saveLastManualReportDate(today);
       // hook은 try/catch로 감싸 swallow — heartbeat 자체는 성공했으므로
       // reload 실패가 사용자에게 misleading "전송 실패" 안내를 만들지 않도록 한다.
