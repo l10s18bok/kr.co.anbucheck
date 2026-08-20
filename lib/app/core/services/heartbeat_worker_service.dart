@@ -208,10 +208,28 @@ class HeartbeatWorkerService {
   /// periodic 폴링 간격. Android WorkManager의 minimum 제약(15분)과 동일.
   static const _pollFrequency = Duration(minutes: 15);
 
+  /// periodic의 flex 창 — **주기 전체**(= [_pollFrequency])로 명시 지정한다.
+  ///
+  /// ⚠️ 이 값을 넘기지 않으면 플러그인 기본값 `MIN_PERIODIC_FLEX_MILLIS`(5분)가 적용된다
+  /// (`workmanager_android`의 `DEFAULT_FLEX_INTERVAL_SECONDS`). WorkManager는 periodic을
+  /// `주기 - flex` 시점부터 주기 끝까지만 실행 가능하게 하므로, flex 5분이면 15분 주기의
+  /// **마지막 5분 창에서만** 실행 가능해진다. 실행 기회가 1/3로 깎이는데, 그 창이 하필
+  /// Doze 유지보수 창(하룻밤 1~5회, 약 64초)과 겹쳐야 하므로 적중률이 곱으로 낮아진다.
+  /// 부작용으로 첫 fire도 코드상 오프셋(+3분)이 아니라 `+3분 + (15분 - 5분)` = **+13분**이
+  /// 된다(2026-08-16 실측).
+  ///
+  /// flex = 주기로 두면 창 전체가 실행 가능 구간이 되어 Doze 창과 만날 확률이 회복된다.
+  /// 폴링 자체를 약화시키는 변경이 아니라 **의도한 15분 폴링을 실제로 15분으로 되돌리는**
+  /// 수정이다(PRD-FrontEnd §2.2 폴링 불변 규칙과 같은 방향).
+  static const _periodicFlex = _pollFrequency;
+
   /// periodic 첫 fire 오프셋.
   /// +3분: one-off(예약시각 정각)가 먼저 fire → 전송 성공 → schedule()로
   /// periodic을 first fire 전에 cancel. 정상(non-Doze) 조건에서 race 자체를 제거.
-  /// Doze 배치로 동시 fire되는 경우에는 SQLite CAS + double-schedule로 처리.
+  ///
+  /// ⚠️ **동시 발화 회피라는 이 오프셋의 목적은 Doze에서는 달성되지 않는다** — 둘 다 밀려
+  /// 있다가 같은 유지보수 창에서 함께 방출되기 때문(2026-08-18 02:16·15:22 실측 모두
+  /// 동시 발화). Doze 배치 동시 fire는 SQLite CAS + `lastScheduledKey`가 막는다.
   static const _periodicStartOffset = Duration(minutes: 3);
 
   /// Workmanager 초기화 (main()에서 1회 호출, Android에서만)
@@ -349,6 +367,7 @@ class HeartbeatWorkerService {
       _periodicName,
       _taskName,
       frequency: _pollFrequency,
+      flexInterval: _periodicFlex,
       initialDelay: periodicDelay,
       existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
       inputData: {'source': 'periodic', 'unique': _periodicName},
@@ -357,7 +376,7 @@ class HeartbeatWorkerService {
     debugPrint(
       '[HeartbeatWorker] periodic 등록: ${_hhmm(hour, minute)} '
       '(첫 fire ${periodicDelay.inHours}h ${periodicDelay.inMinutes % 60}m 후 '
-      '→ ${_pollFrequency.inMinutes}분 간격)',
+      '→ ${_pollFrequency.inMinutes}분 간격, flex ${_periodicFlex.inMinutes}분)',
     );
   }
 
