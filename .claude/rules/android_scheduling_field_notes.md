@@ -190,6 +190,33 @@ one-off 이름이 `heartbeat_scheduled_<yyyy-MM-dd>`라, **이름만 보고 상�
 
 ---
 
+### periodic flex 실측 — `flexInterval` 누락의 서명 (2026-08-20)
+
+`registerPeriodicTask`에 `flexInterval`을 넘기지 않으면 플러그인 기본값 5분
+(`DEFAULT_FLEX_INTERVAL_SECONDS = MIN_PERIODIC_FLEX_MILLIS`)이 적용된다.
+같은 기기에서 **앱 실행 1회를 사이에 두고** 찍은 before/after:
+
+| | flex 미지정 (구버전) | `flexInterval: 15분` (수정 후) |
+|---|---|---|
+| one-off (`heartbeat_scheduled_<날짜>`) | 15:00:58 | 15:00:06 |
+| periodic 첫 fire (`heartbeat_periodic`) | **15:13:58** | **15:03:06** |
+| 코드상 오프셋(+3분) 대비 | **+10분 초과** | 일치 |
+
+`13분 = 3분(코드 오프셋) + 10분(주기 15분 − flex 5분)`이 초 단위까지 맞는다.
+WorkManager가 flex를 "첫 실행을 `interval − flex`만큼 더 미루는" 방식으로 흉내내기 때문이며,
+`flex == interval`이면 이 보정이 사라진다. 실행 가능 구간도 주기의 **마지막 5분**에서
+**주기 전체**로 넓어진다 — Doze 유지보수 창(하룻밤 1~5회, 약 64초)이 열렸을 때 job이
+ready 상태일 확률이 곱으로 회복된다.
+
+⚠️ **dumpsys에 `Period:`/`flex=` 줄은 나오지 않는다.** WorkManager가 flex를 JobScheduler에
+넘기지 않고 자체 처리하므로 두 job 모두 `Minimum latency`로 잡힌다. 확인 지표는 문자열이
+아니라 **one-off과 periodic의 간격(13분 → 3분)**이다.
+
+```bash
+# 두 job의 발화 예정 시각을 절대시각으로 환산
+adb shell dumpsys jobscheduler | grep -A45 "JOB #u0a1227" | grep "Run time:"
+```
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
