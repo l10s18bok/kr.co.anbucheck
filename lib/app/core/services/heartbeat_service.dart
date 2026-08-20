@@ -132,6 +132,24 @@ class HeartbeatService {
       if (deviceId == null || deviceToken == null) return false;
 
       if (recovery) {
+        // ★ 회복 전송 **전에 지난 날짜 보류 메모를 먼저 비운다.**
+        //
+        // 회복 전송은 "살아있음"만 알리고 걸음수를 싣지 않는다. 그래서 과거에는 n일
+        // 오프라인으로 큐에 남은 n일 걸음수가, n+1일 아침 회복 전송이 성공한 뒤에도
+        // **그날 정시 전송(오후)까지 큐에서 대기**했다(2026-08-20 실측: 09:19 회복
+        // 성공 → 8/19분 81보는 15:35 정시 전송에야 도착. 6시간 지연).
+        // 회복 전송이 성공했다는 것은 이미 망이 열렸다는 뜻이므로, 같은 창에서
+        // 지난 기록을 함께 부치는 것이 자연스럽다.
+        //
+        // ⚠️ **오늘 날짜 메모는 여기서 보내지 않는다.** `_sendPendingInternal`이
+        // 오늘 payload에는 `lastScheduledKey` 마커를 찍어 정시 슬롯을 소비하므로,
+        // 예약시각 정시 전송이 통째로 스킵되어 그날 걸음수가 0이 된다. 오늘 메모는
+        // 정시 경로(`execute()`의 아래 분기)가 처리한다.
+        final stale = await _heartbeatDs.getPending();
+        if (stale != null &&
+            !heartbeatPayloadIsFromToday(stale, DateTime.now())) {
+          await _sendPendingInternal(deviceToken);
+        }
         return await _executeRecovery(deviceId, deviceToken);
       }
 
