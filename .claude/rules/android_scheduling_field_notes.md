@@ -86,8 +86,35 @@ qc_timing_session_coalescing_duration_ms = 5000   # 5초 내 시작한 job은 1�
 **병목은 실행시간(10분)이 아니라 세션 수다.** RARE 버킷이면 **하루 3번**만 깨어날 수 있다.
 "periodic 15분 폴링 = 하루 96회"라는 설계 전제는 RARE에서 성립하지 않는다.
 
-- 잔량 확인: `dumpsys jobscheduler | grep -A1 "from u0a1227"` → `RARE, within regular quota, 591463ms remaining`
 - 5초 이내 동시 시작한 one-off + periodic은 **1세션**으로 합쳐진다(실측: 02:16:38.446 / .854).
+
+**2026-08-21 09:27 실측 — 세션 병목이 가설이 아니라 사실임이 확인됐다.**
+
+```
+Standby bucket = 40 (RARE)          # adb shell am get-standby-bucket <pkg>
+RARE: sessionCountLimit=3           # 상한
+      sessionCountInWindow=7        # 현재 — 2배 이상 초과
+      executionTimeInWindow=17812   # 10분 예산 중 17.8초 (0.3%)
+      inQuotaTime=11733369973       # 회복 시각(elapsed) → 이 시점 기준 +4h06m
+→ "#u0a1227/184 from u0a1227: RARE, not within quota, 582188ms remaining in quota"
+```
+
+`remaining`이 582초나 남았는데도 `not within quota`다 — **실행시간은 남고 세션만 소진된 상태.**
+"쿼터가 남았다"는 표현에 속지 말 것. 반드시 `sessionCountInWindow` vs `sessionCountLimit`을 볼 것.
+
+⚠️ **상위 버킷에서 쓴 세션이 나중에 RARE 상한에 걸린다.** 창(24h)은 버킷과 무관하게 굴러가고
+평가만 현재 버킷 기준으로 하므로, ACTIVE일 때(앱을 열어본 직후) 실행한 job이 몇 시간 뒤
+RARE로 내려앉은 시점의 예산을 갉아먹는다. **"잠깐 앱만 열어 확인"과 진단 브로드캐스트는 공짜가 아니다.**
+
+```bash
+# 잔량 요약(부정확 — 실행시간만 보여줌)
+adb shell dumpsys jobscheduler | grep -A1 "from u0a1227"
+
+# ★ 정확한 세션 카운트 — 패키지별 ExecutionStats
+adb shell dumpsys jobscheduler | grep -A8 "<0>kr.co.anbucheck.live" | grep "RARE:"
+adb shell am get-standby-bucket kr.co.anbucheck.live    # 10 ACTIVE / 20 WORKING_SET
+                                                        # 30 FREQUENT / 40 RARE / 45 RESTRICTED
+```
 
 ### ③ JobScheduler 배칭 — 가장 놓치기 쉬움
 
@@ -113,7 +140,7 @@ max_non_active_job_batch_delay_ms = 1860000  ( = 31분 )
 | 08-16 18:08:43 | 사용자가 **화면 켬** | 예약 18:00 → **8분 43초 지연** 후 발화, 전송 성공 |
 | 08-17 종일 | 핫스팟 OFF | **0회 발화.** 망 제약(`NetworkType.connected`)으로 worker 시작조차 안 됨 |
 | 08-17 20:13:30 | **FCM 푸시 도착** | `CONNECTIVITY`가 52초간 충족됐으나 `readyNotDozing=false` → **미발화** |
-| 08-17 20:16:06 | **adb 접속** | 필수 제약 전부 충족 **26.5초**, 그래도 배칭으로 **미발화** |
+| 08-17 20:16:06 | **USB 케이블 연결**(adb) | 충전 시작 → Doze 해제 → 필수 제약 전부 충족 **26.5초**, 그래도 배칭으로 **미발화** |
 | 08-18 02:16:34 | **Doze 유지보수 창**(약 64초) | one-off + periodic **동시 발화**(0.4초 차) |
 | 08-18 02:31~06:49 | — | periodic이 **4시간 18분 초과**하도록 미발화 (딥 Doze) |
 | 08-18 15:07:52 | 사용자가 **화면 켬**(15:05) | 2분 50초 뒤 발화 → **0.73초 만에 lmkd 킬** |
@@ -124,7 +151,8 @@ max_non_active_job_batch_delay_ms = 1860000  ( = 31분 )
 - "폰 화면을 켜면 뜬다"는 **반만 맞다.** Doze는 풀리지만 배칭 지연이 그 뒤에 또 붙는다(실측 2.5분~8분).
 - **다른 앱 실행이 오히려 효과적인 트리거**다. 그쪽 job이 `min_ready_non_active_jobs_count=5`를 채워 우리 job까지 방출시킨다.
 - FCM 푸시 도착은 **망만 잠깐 열 뿐** Doze를 풀지 않는다 → job 발화 트리거가 되지 못한다.
-- adb 접속은 Doze를 깨운다 → **관측이 관측 대상을 바꾼다.** 스냅샷은 짧게 찍고 바로 끊을 것.
+- ⚠️ **Doze를 깨는 것은 adb가 아니라 USB 충전이다** (2026-08-21 정정). 이전 판에는 "adb 접속은 Doze를 깨운다"라고 적혀 있었으나 상관을 인과로 오해한 것이다. Doze 진입 조건은 **화면 꺼짐 + 비충전 + 정지**이고 adb 프로토콜은 어디에도 없다. 위 08-17 20:16 관측도 USB 케이블의 **충전** 때문이었다.
+- **무선 adb는 Doze를 깨지 않는다 — 실측 확인.** 무선으로 붙은 채 `dumpsys`를 반복 호출하는 동안에도 `mState=IDLE`이 유지됐다(2026-08-21 09:27). 부분 wakelock도 Doze 진입을 막지 못한다(wakelock을 무시하는 것이 Doze의 본질). **관측은 §4의 무선 adb로 하면 대상을 바꾸지 않는다.**
 
 ---
 
@@ -146,6 +174,44 @@ max_non_active_job_batch_delay_ms = 1860000  ( = 31분 )
 ## 4. 진단 도구 (릴리스 빌드에서도 동작)
 
 릴리스는 `main()`과 worker 콜백에서 `debugPrint`를 무력화하므로 **Dart 로그는 안 나온다.** 대신 아래를 쓴다.
+
+### 4.0 기기 접속 — **반드시 무선 adb로 한다**
+
+⚠️ **USB 케이블로 붙으면 충전이 시작되어 Doze가 아예 진입하지 않는다.** 그 상태에서 찍은
+`dumpsys`는 Doze 관측으로서 무효다. 무선 adb는 충전을 하지 않으므로 **Doze가 정상 진행되는
+기기를 그대로 들여다볼 수 있다**(2026-08-21 실측: 무선으로 붙어 `dumpsys`를 반복 호출하는
+동안 `mState=IDLE` 유지).
+
+```bash
+ADB=~/Library/Android/sdk/platform-tools/adb
+
+# 1) 기기 찾기 — ★ IP를 외우지 말 것. DHCP/핫스팟 재접속으로 서브넷째로 바뀐다.
+#    (2026-08-21: 저장돼 있던 10.160.142.227 → 실제 10.208.23.227)
+$ADB mdns services
+#   → adb-RF9T2020HHZ   _adb._tcp.   10.208.23.227:5555
+
+# 2) 연결
+$ADB connect 10.208.23.227:5555
+$ADB devices -l          # "device"로 뜨면 성공 (model:SM_A325N)
+
+# 3) 이후 모든 명령에 -s 로 지정
+SER=10.208.23.227:5555
+$ADB -s "$SER" shell dumpsys deviceidle | grep -E "mState=|mCharging=|mNextAlarmTime|mNextIdleDelay"
+```
+
+- **`-s` 인자는 반드시 따로 넘긴다.** `D="-s $SER"` 처럼 한 변수에 묶어 쓰면 zsh가 한 단어로
+  전달해 `adb: -s requires an argument`로 죽는다.
+- **`adb connect`는 죽은 IP를 향하면 오래 블로킹된다.** 스크립트에서는 `timeout 15`로 감쌀 것.
+  IP 추측 대신 항상 `adb mdns services`로 먼저 찾는 편이 빠르다.
+- 포트 스캔(`nc -z <subnet> 5555`)은 병렬로 254개를 띄우면 놓치는 경우가 있다. mdns가 정답이다.
+- `adb devices`에 아무것도 없거나 mdns가 비어 있으면 **tcpip 모드가 풀린 것**이다(재부팅 시 해제).
+  USB로 1회 연결해 `$ADB -s <serial> tcpip 5555` 후 케이블을 뽑고 다시 connect한다.
+  이때 잠깐 붙은 USB가 Doze를 깨므로, **관측은 케이블을 뽑고 최소 35분**
+  (`inactive_to 15분 + idle_after_inactive_to 20분`) 지난 뒤부터 유효하다.
+- 무선 연결이 유휴 상태에서 끊기는 경우가 있다(Wi-Fi 절전). 끊기면 1)부터 다시 하면 되고,
+  **재연결 자체는 Doze를 깨지 않는다.**
+- 관측 목적이면 **`adb logcat`을 계속 물고 있지 말 것** — 필요할 때 `logcat -d`로 덤프만 뜬다.
+
 
 ```bash
 # 0) 로그 버퍼 확대 — 이 기기 상한은 5MB(약 38시간 커버)
@@ -221,7 +287,7 @@ adb shell dumpsys jobscheduler | grep -A45 "JOB #u0a1227" | grep "Run time:"
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
 - **스와이프 킬은 job을 지우지 않는다**(실측 확인). 삼성에서도 프로세스 종료일 뿐이다. 반면 **설정 → 앱 → 강제 중지는 job을 전부 삭제**한다. 테스트 중 금지.
-- **USB 충전 중에는 Doze에 진입하지 않는다.** 관측 전 최소 2시간은 뽑아둘 것.
+- **USB 충전 중에는 Doze에 진입하지 않는다.** 케이블을 꽂은 채로는 어떤 Doze 관측도 성립하지 않는다. → **관측은 §4의 무선 adb로 한다**(케이블 없이 붙으므로 Doze가 정상 진행된다). 부득이 USB를 써야 하면 `adb shell dumpsys battery unplug`로 프레임워크에 비충전 상태를 시뮬레이션하고, 끝나면 **반드시 `adb shell dumpsys battery reset`** (안 하면 재부팅 전까지 가짜 상태가 유지돼 다음 테스트가 오염된다).
 - **앱을 열면 standby 버킷이 ACTIVE로 리셋**된다(배칭 비대상 + 세션 75). 수십 분 내 WORKING_SET으로 내려가고, 장기 미사용 시 RARE가 된다. 앱을 연 직후의 테스트는 **평상시보다 유리한 조건**이라는 것을 명시할 것.
 - **앱 진입(`_syncScheduleFromServer`)만으로 `HeartbeatWorkerService.schedule()`이 포그라운드에서 실행**된다. 포그라운드에는 실행 중인 worker가 없어 self-cancel이 원리적으로 불가능하므로, unique name 마이그레이션 같은 위험한 정리는 이 경로가 가장 안전하다.
 

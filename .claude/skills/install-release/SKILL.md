@@ -17,7 +17,16 @@ description: Android 실기기 release 설치(기기 설치/설치해줘/실기�
 
 ## QA 기기 무선 IP 목록
 
-DHCP라 IP가 바뀔 수 있다. 연결 실패가 반복되면 USB로 1회 연결해 `"$HOME/Library/Android/sdk/platform-tools/adb" -s <serial> shell ip addr show wlan0`(Xiaomi는 `wlan1`)로 새 IP를 확인하고 아래 목록을 갱신한다.
+DHCP라 IP가 바뀐다 — **서브넷째로 바뀌는 경우도 있다**(2026-08-21: 저장돼 있던 `10.160.142.227` → 실제 `10.208.23.227`). 아래 목록은 캐시일 뿐이고, **연결이 안 되면 IP를 추측하지 말고 mDNS로 찾는다**:
+
+```bash
+"$HOME/Library/Android/sdk/platform-tools/adb" mdns services
+#   → adb-RF9T2020HHZ   _adb._tcp.   10.208.23.227:5555
+```
+
+시리얼(`RF9T2020HHZ` = 삼성 A32)로 어느 기기인지 바로 알 수 있다. 찾은 IP로 아래 목록을 갱신한다. mDNS에도 안 뜨면 tcpip 모드가 풀린 것이므로(재부팅 시 해제) USB로 1회 연결해 `-s <serial> tcpip 5555`를 실행한 뒤 다시 connect한다.
+
+⚠️ 죽은 IP로 `adb connect`하면 오래 블로킹되므로 스크립트에서는 `timeout 15`로 감쌀 것. 포트 스캔(`nc -z ... 5555`)은 병렬로 띄우면 놓치는 경우가 있어 mDNS가 더 확실하다.
 
 | 별칭 | 모델 | 무선 주소 |
 | --- | --- | --- |
