@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -7,6 +8,7 @@ import 'package:timezone/timezone.dart' as tzlib;
 import 'package:workmanager/workmanager.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
+import 'package:anbucheck/app/core/services/doze_alarm_probe.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 
@@ -257,6 +259,11 @@ class HeartbeatWorkerService {
   /// 실패해도 다른 쪽이 stranded되지 않으며, 가장 중요한 periodic이 우선 자리잡는다.
   /// "둘 다 영구 유실"은 두 독립 연산이 각각 2회씩 실패해야 발생해 확률이 크게 낮다.
   static Future<void> schedule(int hour, int minute) async {
+    // [실험] Doze 관통 알람 프로브를 **heartbeat와 같은 시각**으로 무장한다.
+    // 같은 순간을 두 메커니즘이 겨루게 해야 비교가 성립한다 —
+    // WorkManager one-off은 창을 기다리고(실측 +2.5~3h), 알람은 안 기다린다(기대 +2~15m).
+    // 포그라운드에서만 성공하며 실패해도 무해하다(리시버가 매일 자가 재무장).
+    unawaited(DozeAlarmProbe.arm(hour, minute));
     // periodic(안전망) 우선 — one-off 등록이 실패해도 15분 폴링은 살아남는다.
     await _retryRegister('periodic', () => _registerPeriodic(hour, minute));
     await _retryRegister('one-off', () => _registerOneOff(hour, minute));
