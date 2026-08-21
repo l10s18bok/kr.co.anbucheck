@@ -347,6 +347,40 @@ FCM 전환(서버 스케줄러 변경 + 백그라운드 핸들러 + PRD §2.2 �
 `11227-standby-deny` + `App idle state: true`가 찍혀 APP_STANDBY 방화벽이 추가로
 닫힌다. RARE 강제와 네트워크 차단은 함께 온다는 것을 감안해 해석할 것.
 
+### expedited job은 딥 Doze의 **방화벽을 연다** (2026-08-22 07:07)
+
+알람 발화와 동시에 `OneTimeWorkRequest.setExpedited(RUN_AS_NON_EXPEDITED_WORK_REQUEST)`를
+enqueue한 실측. 기기는 **딥 Doze(`idle=true`), 앱은 RARE(40)** — 어제 종일 JobScheduler가
+한 번도 못 뛴 바로 그 상태다.
+
+```
+07:07:18.771  FIRED (idle=true bucket=40)          ← 알람 재현 n=2, 예약 07:00 대비 +7분
+07:07:18.784  EXPEDITED enqueued
+07:07:18.885  ★ 11227-dozable-allow + 11227-standby-default   ← 방화벽 열림
+07:07:19.385  DozeAlarmProbeWorker 시작            ← enqueue 후 622ms 만에 실행
+07:07:19.948  ★ 11227-dozable-default + standby-deny          ← 닫힘 (약 1.06초)
+07:07:25.098  BackgroundWorker(heartbeat) 종료     ← 창이 닫힌 뒤에도 5초 더 실행
+```
+
+| 관측 | 결과 |
+|---|---|
+| 딥 Doze + RARE에서 job 실행 | ✅ **된다** — enqueue 622ms 후. 일반 job은 이 상태에서 불가 |
+| 네트워크 방화벽 | ✅ **열린다** — `dozable-allow` + `standby-default` |
+| 알람 단독(2026-08-21 19:37) | ❌ 방화벽 변경 **전혀 없음** — 문을 연 것은 **expedited enqueue**다 |
+
+⚠️ **창 길이는 expedited job의 수명과 같다.** 위 실측에서 프로브가 2ms 만에 끝나 창이
+1.06초만 열렸고, **같은 순간 실행 중이던 `BackgroundWorker`(실제 heartbeat)는 창이 닫힌
+뒤에도 5초를 더 돌았다.** 즉 **전송을 별도 worker에 맡기면 창이 먼저 닫힌다.**
+→ **설계 제약: heartbeat 전송은 expedited job "안에서" 수행해야 한다.**
+
+⚠️ **이날 네트워크 측정은 무효다** — 핫스팟이 거리로 이탈해 07:08:13에야 BSS를 재선택했다
+(`wpa_supplicant: selected ... ssid=`). 프로브 실패는 Doze가 아니라 망 부재 탓이다.
+**방화벽이 열렸다는 사실만 유효**하며, 데이터가 실제로 흐르는지는 재측정이 필요하다.
+
+⚠️ **`wpa_supplicant: Heartbeat NNN`을 연결 지표로 쓰지 말 것.** 연결이 끊긴 상태에서도
+계속 찍힌다(이 날 확인). association 판정은 `NetworkController.WifiSignalController`의
+`connected=`, `WIFI_CONNECTIVITY_ACTION`, BSS 재선택 로그로 한다.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
