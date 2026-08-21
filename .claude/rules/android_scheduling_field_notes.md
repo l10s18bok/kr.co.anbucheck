@@ -283,6 +283,53 @@ ready 상태일 확률이 곱으로 회복된다.
 adb shell dumpsys jobscheduler | grep -A45 "JOB #u0a1227" | grep "Run time:"
 ```
 
+### setAndAllowWhileIdle 실측 — 발화는 되고 **네트워크는 안 된다** (2026-08-21)
+
+`kr.co.anbucheck.live` 자체 알람으로 측정. 19:05 예약 → **19:37:17 발화**(+32분,
+문서상 "API 31+는 1시간 이내"와 일치). 이때 기기는 **딥 Doze(`idle=true`)**, 앱은
+**RARE 버킷(40)**, 유지보수 창 밖(직전 창 없음, 다음 창 19:49).
+
+| 관측 | 결과 |
+|---|---|
+| 딥 Doze + RARE에서 발화 | ✅ **된다** — JobScheduler로는 불가능한 시점에 떴다 |
+| 재무장이 네트워크보다 먼저 | ✅ `ARMED(refire)` 로그가 `FIRED`보다 앞섬 |
+| T+0s / T+9s / T+15s 네트워크 | ❌ **3회 모두 즉시 실패** (`UnknownHostException`, 6~11ms) |
+
+**실패 원인은 Wi-Fi도 DNS 서버도 아니다.** 같은 시각 `wpa_supplicant Heartbeat`가
+계속 찍혔고(연결 유지), 기기가 IDLE인 상태에서 **shell UID(2000)로는 같은 호스트가
+정상 resolve + ping 응답**했다. 앱만 막힌 것이다:
+
+```
+dumpsys netpolicy:
+  UID=11227 blocked_state={blocked=DOZE|APP_STANDBY, allowed=NONE, effective=DOZE|APP_STANDBY}
+```
+
+⚠️ **결정적 — 알람은 temp power-save allowlist를 받지 못한다.** 알람 등록 시
+`dumpsys alarm`의 `idle-options`에 `temporaryAppAllowlistDuration=10000`이 분명히
+붙어 있는데도, `dumpsys netpolicy`의 `temp-power-save whitelist for 11227` 이력에
+**19:37 항목이 아예 없다.** 반면 같은 날 다른 두 경로는 실제로 부여받았다:
+
+```
+17:00:00.553 → true   reason=PUSH_MESSAGING <broadcast:u0a222:...RECEIVE, reason:high-prio FCM>
+17:00:20.640 → false                                            (20초)
+17:05:50.254 → true   reason=PACKAGE_REPLACED
+17:06:10.269 → false
+```
+
+**즉 고우선순위 FCM은 20초짜리 네트워크 창을 실제로 열어주고, allow-while-idle
+알람은 열어주지 않는다.** 이 대비가 설계의 분기점이다.
+
+**따라서 "알람으로 heartbeat를 전송한다"는 설계는 이 기기에서 성립하지 않는다.**
+알람이 할 수 있는 것은 **앱을 깨워 로컬 작업(걸음수 수집·보류 큐 저장)을 하는 것까지**다.
+전송에는 (a) 유지보수 창 또는 (b) 고우선순위 FCM이 필요하다.
+
+⚠️ 표본은 SM-A325N 1대다. 삼성 커스터마이징일 가능성을 배제하지 못하나, 설계는
+최악을 가정한다.
+
+⚠️ **관측 시 주의**: `am set-standby-bucket ... rare`를 실행하면 곧바로
+`11227-standby-deny` + `App idle state: true`가 찍혀 APP_STANDBY 방화벽이 추가로
+닫힌다. RARE 강제와 네트워크 차단은 함께 온다는 것을 감안해 해석할 것.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
