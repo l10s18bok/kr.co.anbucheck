@@ -9,6 +9,11 @@ import android.os.Build
 import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Log
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkManager
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -62,6 +67,15 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
 
         val t0 = SystemClock.elapsedRealtime()
         Log.d(TAG, "FIRED at=${now()} idle=${isDeviceIdle(context)} bucket=${bucket(context)}")
+
+        // ★ 2026-08-21 실측 후속 — expedited job이 망을 받는지 함께 잰다.
+        //
+        // 알람 자체는 temp power-save allowlist를 못 받아 DNS가 즉시 거부됐다
+        // (blocked=DOZE|APP_STANDBY, allowed=NONE). 그런데 expedited job이 앱을
+        // foreground급 proc state로 올리면 allowed=FOREGROUND가 그 둘을 상쇄할
+        // 가능성이 남아 있다. 아래 직접 프로브(T+0/9/15s)와 **같은 발화에서 동시에**
+        // 재야 조건이 동일해 비교가 성립한다.
+        enqueueExpeditedProbe(context, t0)
 
         val pending = goAsync()
         val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
@@ -139,6 +153,7 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
         const val TAG = "DozeAlarmProbe"
         private const val REQUEST_CODE = 90001
         private const val ACTION = "kr.co.anbucheck.live.DOZE_ALARM_PROBE"
+        private const val EXPEDITED_NAME = "doze_alarm_expedited_probe"
 
         /** 프로브 대상 — 인증 불필요한 GET. 실제 운영 서버라 경로 특성이 heartbeat와 같다. */
         private const val PROBE_URL =
@@ -204,6 +219,40 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
                 TAG,
                 "ARMED (in ${minutes}m) for=${SimpleDateFormat("MM-dd HH:mm:ss", Locale.US).format(Date(at))}",
             )
+        }
+
+        /**
+         * expedited one-time work 등록.
+         *
+         * `RUN_AS_NON_EXPEDITED_WORK_REQUEST`: expedited 쿼터가 소진됐으면 예외를 던지는
+         * 대신 **일반 job으로 강등**된다. 강등되면 유지보수 창까지 밀리므로 로그 시각으로
+         * 구분된다(발화 직후면 expedited, 한참 뒤면 강등). 던지는 정책을 쓰면 쿼터 소진이
+         * 크래시가 되어 측정 자체가 날아간다.
+         *
+         * API 31 미만에서 expedited는 foreground service를 요구하는데 우리는 FGS를 쓰지
+         * 않으므로(제품 결정) 그 아래에서는 등록하지 않는다. minSdk가 29라 실기기에서
+         * 발생 가능한 분기다.
+         */
+        private fun enqueueExpeditedProbe(context: Context, t0: Long) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                Log.d(TAG, "EXPEDITED skipped — API ${Build.VERSION.SDK_INT} < 31 (FGS 필요)")
+                return
+            }
+            try {
+                val req = OneTimeWorkRequest.Builder(DozeAlarmProbeWorker::class.java)
+                    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                    .setInputData(
+                        Data.Builder()
+                            .putLong(DozeAlarmProbeWorker.KEY_ENQUEUED_AT, t0)
+                            .build(),
+                    )
+                    .build()
+                WorkManager.getInstance(context)
+                    .enqueueUniqueWork(EXPEDITED_NAME, ExistingWorkPolicy.REPLACE, req)
+                Log.d(TAG, "EXPEDITED enqueued ($EXPEDITED_NAME)")
+            } catch (e: Throwable) {
+                Log.d(TAG, "EXPEDITED enqueue 실패: ${e.javaClass.simpleName}: ${e.message}")
+            }
         }
 
         fun cancel(context: Context) {
