@@ -323,8 +323,25 @@ dumpsys netpolicy:
 알람이 할 수 있는 것은 **앱을 깨워 로컬 작업(걸음수 수집·보류 큐 저장)을 하는 것까지**다.
 전송에는 (a) 유지보수 창 또는 (b) 고우선순위 FCM이 필요하다.
 
-⚠️ 표본은 SM-A325N 1대다. 삼성 커스터마이징일 가능성을 배제하지 못하나, 설계는
-최악을 가정한다.
+**미부여의 유력한 메커니즘 — 그리고 이게 삼성 문제가 아닌 이유**: 같은 알람 덤프에
+`temporaryAppAllowlistReasonCode=-1`, `temporaryAppAllowlistReason=`(빈 문자열)이 함께
+찍혀 있다. `-1`은 `REASON_UNKNOWN`이다. AOSP가 알 수 없는 reason code의
+`setTemporaryAppAllowlist`를 거부한다면 이는 **플랫폼 공통 동작**이지 OEM 커스터마이징이
+아니다. 대비되는 성공 사례가 이유를 명시하고 있다는 점이 방증이다 —
+`reason=PUSH_MESSAGING <..., reason:high-prio FCM>`.
+
+⚠️ 그러므로 **"픽셀이나 샤오미에서 다시 해보자"에 하루를 쓰지 말 것.** 표본은
+SM-A325N 1대지만 원인이 reason code라면 기기를 바꿔도 결과가 같다. 설계는 최악을 가정한다.
+
+**아직 검증 안 된 구조 경로 하나** — 알람이 앱을 깨운 뒤 **expedited WorkManager job**을
+enqueue하면 망이 열릴 가능성이 있다. 같은 덤프의 uid `10222` 줄이
+`blocked=DOZE, allowed=FOREGROUND|POWER_SAVE_ALLOWLIST|…, effective=NONE`인데,
+expedited job이 앱을 foreground급 proc state로 올리면 `FOREGROUND` 허용이
+`DOZE|APP_STANDBY`를 상쇄한다. **판별 질문: expedited job 실행 중 uid 11227의
+`blocked_state`가 `effective=NONE`으로 바뀌는가.** RARE 버킷의 expedited 쿼터가
+0에 가깝거나 `OutOfQuotaPolicy`로 일반 job으로 강등되면 실패한다.
+비용은 리시버에 ~10줄이고 기존 Dart 경로를 통째로 재사용하므로,
+FCM 전환(서버 스케줄러 변경 + 백그라운드 핸들러 + PRD §2.2 결정 번복)보다 **먼저** 시험한다.
 
 ⚠️ **관측 시 주의**: `am set-standby-bucket ... rare`를 실행하면 곧바로
 `11227-standby-deny` + `App idle state: true`가 찍혀 APP_STANDBY 방화벽이 추가로
