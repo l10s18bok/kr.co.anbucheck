@@ -83,6 +83,10 @@ final class NotificationService: UNNotificationServiceExtension {
             let ms = Int(Date().timeIntervalSince(started) * 1000)
             body.title = "NSE ran \(ms)ms\(suffix)"
             body.body = "\(netResult)\n\(pendResult)\n\(stepResult)\nnonce=\(nonce)"
+            // 실기기는 화면 캡처가 안 되므로 같은 결과를 시스템 로그에도 남긴다.
+            // 맥에서 `log stream --device` 로 읽는다 (안드로이드 프로브의 logcat 자리).
+            NSLog("[PROBE-NSE] %dms%@ | %@ | %@ | %@ | nonce=%@",
+                  ms, suffix, netResult, pendResult, stepResult, nonce)
             handler(body)
         }
 
