@@ -14,24 +14,15 @@ import Foundation
 /// 명시적 시점에 복사하는 다리**를 놓는다 — 기존 Dart 저장 경로는 전혀 건드리지 않는다.
 enum SharedStore {
 
-  /// ⚠️ 앱·확장 양쪽 타겟의 App Group entitlement와 **정확히 일치**해야 한다.
-  static let appGroupId = "group.kr.co.anbucheck.live"
+  /// 확장이 성공 시 보여줄 문구 + 오프라인 폴백 문구.
+  /// 확장은 GetX 번역을 쓸 수 없으므로, 앱이 포그라운드에서 캐시해 둔 값을 넘긴다
+  /// (NotificationTextCache가 `flutter.noti_text_<키>`에 저장한다).
+  private static let textKeys = [
+    "nse_delivered_title", "nse_delivered_body",
+    "offline_alarm_title", "offline_alarm_body",
+  ]
 
-  // 앱 → 확장 (확장이 heartbeat를 보내는 데 필요한 것)
-  static let kDeviceToken = "hb_device_token"
-  static let kDeviceId    = "hb_device_id"
-  static let kApiBase     = "hb_api_base"
-  static let kHour        = "hb_hour"
-  static let kMinute      = "hb_minute"
-  static let kLastDate    = "hb_last_date"     // 앱이 아는 마지막 전송일(yyyy-MM-dd)
-
-  // 확장 → 앱 (확장이 보냈다는 사실)
-  static let kNseSentDate = "nse_sent_date"
-  static let kNseSentTime = "nse_sent_time"    // HH:mm
-  static let kNseSentKey  = "nse_sent_key"     // scheduled_key
-  static let kNseLastLog  = "nse_last_log"     // 진단용 마지막 실행 요약
-
-  static var group: UserDefaults? { UserDefaults(suiteName: appGroupId) }
+  private static var group: UserDefaults? { HeartbeatStore.group }
 
   /// shared_preferences가 쓰는 실제 키 이름
   private static func std(_ key: String) -> String { "flutter." + key }
@@ -48,14 +39,20 @@ enum SharedStore {
     guard let g = group else { return }
     let d = UserDefaults.standard
 
-    g.set(d.string(forKey: std("device_token")), forKey: kDeviceToken)
-    g.set(d.string(forKey: std("device_id")), forKey: kDeviceId)
-    g.set(d.string(forKey: std("api_base_url")) ?? apiBaseFallback, forKey: kApiBase)
-    g.set(d.string(forKey: std("last_heartbeat_date")), forKey: kLastDate)
+    g.set(d.string(forKey: std("device_token")), forKey: HeartbeatStore.K.deviceToken)
+    g.set(d.string(forKey: std("device_id")), forKey: HeartbeatStore.K.deviceId)
+    g.set(d.string(forKey: std("api_base_url")) ?? apiBaseFallback, forKey: HeartbeatStore.K.apiBase)
+    g.set(d.string(forKey: std("last_heartbeat_date")), forKey: HeartbeatStore.K.lastDate)
 
     // shared_preferences의 setInt는 NSNumber로 저장된다
-    if let h = d.object(forKey: std("heartbeat_hour")) as? NSNumber { g.set(h.intValue, forKey: kHour) }
-    if let m = d.object(forKey: std("heartbeat_minute")) as? NSNumber { g.set(m.intValue, forKey: kMinute) }
+    if let h = d.object(forKey: std("heartbeat_hour")) as? NSNumber { g.set(h.intValue, forKey: HeartbeatStore.K.hour) }
+    if let m = d.object(forKey: std("heartbeat_minute")) as? NSNumber { g.set(m.intValue, forKey: HeartbeatStore.K.minute) }
+
+    for key in textKeys {
+      if let v = d.string(forKey: std("noti_text_" + key)) {
+        g.set(v, forKey: HeartbeatStore.K.textPrefix + key)
+      }
+    }
   }
 
   // MARK: - 확장 → 앱
@@ -69,7 +66,7 @@ enum SharedStore {
   /// 마커는 지우지 않는다 — 비교 기반이라 여러 번 흡수해도 결과가 같다(멱등).
   @discardableResult
   static func importFromExtension() -> Bool {
-    guard let g = group, let sentDate = g.string(forKey: kNseSentDate), !sentDate.isEmpty else {
+    guard let g = group, let sentDate = g.string(forKey: HeartbeatStore.K.sentDate), !sentDate.isEmpty else {
       return false
     }
     let d = UserDefaults.standard
@@ -77,8 +74,8 @@ enum SharedStore {
     guard sentDate > known else { return false }
 
     d.set(sentDate, forKey: std("last_heartbeat_date"))
-    if let t = g.string(forKey: kNseSentTime) { d.set(t, forKey: std("last_heartbeat_time")) }
-    if let k = g.string(forKey: kNseSentKey) { d.set(k, forKey: std("last_scheduled_key")) }
+    if let t = g.string(forKey: HeartbeatStore.K.sentTime) { d.set(t, forKey: std("last_heartbeat_time")) }
+    if let k = g.string(forKey: HeartbeatStore.K.sentKey) { d.set(k, forKey: std("last_scheduled_key")) }
 
     NSLog("[SharedStore] 확장 전송 마커 흡수: %@ (이전 %@)", sentDate, known.isEmpty ? "없음" : known)
     return true
