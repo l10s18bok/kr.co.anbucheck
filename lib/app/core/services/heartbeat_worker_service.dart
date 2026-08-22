@@ -409,6 +409,14 @@ class HeartbeatWorkerService {
   /// one-off은 dated 이름이라 존재할 수 있는 것이 "오늘분"과 "내일분" 둘뿐이다
   /// (재무장은 항상 다음 발화 1건만 등록한다). 레거시 고정 이름도 함께 정리한다.
   static Future<void> cancel() async {
+    // [실험] Doze 관통 알람도 함께 해제한다. 이게 없으면 heartbeat 책임이 사라진 뒤에도
+    // (401로 계정 삭제·G+S 비활성화·탈퇴·모드 전환) 알람이 매일 발화해 앱을 깨우고
+    // 엔진을 띄운 뒤 Dart가 role 체크로 빠져나오는 낭비가 반복된다.
+    //
+    // ⚠️ 채널이 MainActivity에 있어 **포그라운드에서만 실제로 취소된다.** G+S 비활성화·
+    // 탈퇴·모드 전환은 전부 포그라운드라 문제없고, 백그라운드 isolate에서 오는 401 경로는
+    // 취소가 스킵되지만 그때도 Dart의 role 가드가 매 발화를 무해하게 만든다.
+    unawaited(DozeAlarmProbe.cancel());
     final now = DateTime.now();
     for (final d in [now, now.add(const Duration(days: 1))]) {
       await Workmanager().cancelByUniqueName(_oneOffNameFor(d));

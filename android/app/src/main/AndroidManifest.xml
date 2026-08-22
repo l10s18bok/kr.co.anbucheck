@@ -115,6 +115,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <!-- Play 자동 업데이트는 앱을 열지 않아도 일어나고 그때 알람이 유실된다.
+                     이게 없으면 업데이트된 기기는 사용자가 앱을 다시 열 때까지 알람이 없다. -->
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>
         </receiver>
     </application>

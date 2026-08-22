@@ -48,10 +48,18 @@ import java.util.Locale
 class DozeAlarmProbeReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        // 재무장이 필요한 시스템 이벤트.
+        //
+        // ⚠️ `MY_PACKAGE_REPLACED`가 핵심이다 — **Play 자동 업데이트는 사용자가 앱을 열지
+        // 않아도 일어나고, 그때 앱의 알람은 유실된다.** 이걸 처리하지 않으면 업데이트된
+        // 기기는 사용자가 앱을 다시 열 때까지 알람이 없는 상태로 지낸다. 개발 중에는 매번
+        // 설치 후 앱을 열어봐서 드러나지 않던 구멍이다.
+        // 재부팅도 마찬가지로 알람을 지운다.
         if (intent.action == Intent.ACTION_BOOT_COMPLETED ||
+            intent.action == Intent.ACTION_MY_PACKAGE_REPLACED ||
             intent.action == "android.intent.action.QUICKBOOT_POWERON"
         ) {
-            armNextDaily(context, reason = "boot")
+            armNextDaily(context, reason = "system:${intent.action}")
             return
         }
 
@@ -228,7 +236,15 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
             armNextDaily(context, reason = "arm($hour:$minute)")
         }
 
+        /**
+         * 서버 IP를 미리 해석해 저장 — **[MEASURE_ONLY] 모드에서만 쓴다.**
+         *
+         * 측정 모드의 raw TCP 프로브가 DNS를 타지 않기 위한 값이다. 프로덕션 경로에서는
+         * 쓰이지 않으므로, 앱 진입마다(=`schedule()`마다) 스레드를 띄워 DNS를 치는 낭비를
+         * 하지 않도록 여기서 잘라낸다.
+         */
         private fun resolveAndCacheIp(context: Context) {
+            if (!MEASURE_ONLY) return
             Thread {
                 try {
                     val ip = InetAddress.getByName(PROBE_HOST).hostAddress ?: return@Thread
