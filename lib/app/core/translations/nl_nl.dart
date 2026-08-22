@@ -458,6 +458,11 @@ abstract class NlNl {
     // ── Lokale meldingen ──
     'local_alarm_title': '💗 Welzijnscontrole nodig',
     'local_alarm_body': 'Tik op deze melding.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ Welzijnsbericht verzonden',
+    'nse_delivered_body': 'Het welzijnsbericht van vandaag is naar je mantelzorger gestuurd.',
+    'offline_alarm_title': '📶 Controleer je internetverbinding',
+    'offline_alarm_body': 'Tik op deze melding zodra je weer online bent.\nAnders wordt het bericht van vandaag niet verzonden.',
     'wellbeing_check_title': '💛 Welzijnscontrole',
     'wellbeing_check_body': 'Gaat het goed met u? Tik op deze melding.',
     'noti_channel_name': 'Anbu-meldingen',

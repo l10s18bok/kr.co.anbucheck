@@ -438,6 +438,11 @@ abstract class ArSa {
     // ── الإشعارات المحلية ──
     'local_alarm_title': '💗 يلزم التحقق من السلامة',
     'local_alarm_body': 'يرجى الضغط على هذا الإشعار.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ تم إرسال اطمئنان اليوم',
+    'nse_delivered_body': 'تم إرسال اطمئنان اليوم إلى مقدّم الرعاية.',
+    'offline_alarm_title': '📶 تحقّق من اتصال الإنترنت',
+    'offline_alarm_body': 'اضغط على هذا الإشعار بمجرد عودة الاتصال.\nوإلا فلن يُرسل اطمئنان اليوم.',
     'wellbeing_check_title': '💛 التحقق من السلامة',
     'wellbeing_check_body': 'هل أنت بخير؟ يرجى الضغط على هذا الإشعار.',
     'noti_channel_name': 'تنبيهات Anbu',

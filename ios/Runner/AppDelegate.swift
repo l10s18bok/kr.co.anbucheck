@@ -125,15 +125,27 @@ import GoogleMaps
     //
     // ⚠️ **removeAllDeliveredNotifications만 호출한다.**
     //   removeAllPendingNotificationRequests를 절대 함께 부르지 말 것 —
-    //   iOS 일일 안전망 알림(gs_deadman, matchDateTimeComponents.time)은
-    //   pending 반복 요청으로 남아 있어야 매일 발화하며, 이것이 iOS G+S의
-    //   PRIMARY heartbeat 트리거다. pending을 지우면 iOS 안부 전송이 조용히 죽는다.
+    //   iOS 오프라인 폴백 알림(anbu_offline_<날짜>)은 pending으로 살아 있어야
+    //   **망이 없는 날** 발화한다 — 그날 사용자에게 안부 전송을 알릴 유일한 수단이다
+    //   (푸시는 망이 있어야 도착하므로 그 역할을 대신할 수 없다).
     //   (무료체험 종료 trial_ended 단발 예약도 동일하게 pending으로 살아있어야 한다.)
     let channel = FlutterMethodChannel(
       name: "kr.co.anbucheck/notifications",
       binaryMessenger: engineBridge.applicationRegistrar.messenger()
     )
     channel.setMethodCallHandler { call, result in
+      // 오프라인 폴백 알림 롤링 재무장 — Dart LocalAlarmService.schedule()이 호출한다.
+      // 구현은 앱·확장이 공유하는 HeartbeatStore에 있다(확장도 전송 성공 시 같은 함수를
+      // 부른다 — 두 벌로 나누면 규칙이 어긋난다).
+      if call.method == "armOfflineFallback" {
+        let args = call.arguments as? [String: Any]
+        let hour = args?["hour"] as? Int ?? 18
+        let minute = args?["minute"] as? Int ?? 0
+        HeartbeatStore.rearmOfflineFallback(hour: hour, minute: minute)
+        result(nil)
+        return
+      }
+
       guard call.method == "clearDelivered" else {
         result(FlutterMethodNotImplemented)
         return

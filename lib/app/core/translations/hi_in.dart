@@ -447,6 +447,11 @@ abstract class HiIn {
     // ── स्थानीय सूचनाएँ ──
     'local_alarm_title': '💗 खैरियत की जांच ज़रूरी है',
     'local_alarm_body': 'कृपया इस सूचना पर टैप करें।',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ कुशल-क्षेम भेज दिया गया',
+    'nse_delivered_body': 'आज का कुशल-क्षेम आपके देखभालकर्ता को भेज दिया गया है।',
+    'offline_alarm_title': '📶 इंटरनेट कनेक्शन जाँचें',
+    'offline_alarm_body': 'इंटरनेट वापस आने पर इस सूचना पर टैप करें।\nअन्यथा आज का कुशल-क्षेम नहीं भेजा जाएगा।',
     'wellbeing_check_title': '💛 खैरियत की जांच',
     'wellbeing_check_body': 'क्या आप ठीक हैं? कृपया इस सूचना पर टैप करें।',
     'noti_channel_name': 'Anbu सूचनाएँ',

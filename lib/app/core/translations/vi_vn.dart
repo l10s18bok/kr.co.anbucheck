@@ -451,6 +451,11 @@ abstract class ViVn {
     // ── Thông báo cục bộ ──
     'local_alarm_title': '💗 Cần kiểm tra bình an',
     'local_alarm_body': 'Vui lòng chạm vào thông báo này.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ Đã gửi thông tin an toàn',
+    'nse_delivered_body': 'Thông tin an toàn hôm nay đã được gửi đến người thân của bạn.',
+    'offline_alarm_title': '📶 Kiểm tra kết nối Internet',
+    'offline_alarm_body': 'Hãy chạm vào thông báo này khi có mạng trở lại.\nNếu không, thông tin hôm nay sẽ không được gửi.',
     'wellbeing_check_title': '💛 Kiểm tra bình an',
     'wellbeing_check_body': 'Bạn có khỏe không? Vui lòng chạm vào thông báo này.',
     'noti_channel_name': 'Cảnh báo Anbu',

@@ -413,6 +413,11 @@ abstract class ZhCn {
     // ── 本地通知 ──
     'local_alarm_title': '💗 需要确认平安',
     'local_alarm_body': '请点击此通知。',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ 平安信息已送达',
+    'nse_delivered_body': '今天的平安信息已发送给您的监护人。',
+    'offline_alarm_title': '📶 请检查网络连接',
+    'offline_alarm_body': '网络恢复后请点击此通知。\n否则今天的平安信息将无法发送。',
     'wellbeing_check_title': '💛 平安确认',
     'wellbeing_check_body': '您还好吗？请点击此通知。',
     'noti_channel_name': 'Anbu提醒',

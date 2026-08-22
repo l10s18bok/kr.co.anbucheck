@@ -459,6 +459,11 @@ abstract class PtBr {
     // ── Notificações locais ──
     'local_alarm_title': '💗 Verificação de bem-estar necessária',
     'local_alarm_body': 'Por favor, toque nesta notificação.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ Aviso de bem-estar enviado',
+    'nse_delivered_body': 'O aviso de bem-estar de hoje foi entregue ao seu cuidador.',
+    'offline_alarm_title': '📶 Verifique sua conexão com a internet',
+    'offline_alarm_body': 'Toque nesta notificação assim que voltar a ficar online.\nCaso contrário, o aviso de hoje não será enviado.',
     'wellbeing_check_title': '💛 Verificação de bem-estar',
     'wellbeing_check_body': 'Está tudo bem? Por favor, toque nesta notificação.',
     'noti_channel_name': 'Alertas Anbu',

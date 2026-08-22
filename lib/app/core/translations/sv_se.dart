@@ -449,6 +449,11 @@ abstract class SvSe {
     // ── Lokala aviseringar ──
     'local_alarm_title': '💗 Välmåendekontroll behövs',
     'local_alarm_body': 'Vänligen tryck på denna avisering.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ Trygghetssignal skickad',
+    'nse_delivered_body': 'Dagens trygghetssignal har skickats till din anhörigkontakt.',
+    'offline_alarm_title': '📶 Kontrollera din internetanslutning',
+    'offline_alarm_body': 'Tryck på den här aviseringen när du är online igen.\nAnnars skickas inte dagens signal.',
     'wellbeing_check_title': '💛 Välmåendekontroll',
     'wellbeing_check_body': 'Mår du bra? Vänligen tryck på denna avisering.',
     'noti_channel_name': 'Anbu-aviseringar',
