@@ -472,6 +472,57 @@ allow-while-idle 알람   → 앱을 깨운다 (방화벽은 못 연다)
 
 ⚠️ **전송을 별도 worker에 맡기면 안 된다.** 2026-08-22 07:07 실측에서 창이 376ms 만에
 닫힌 뒤에도 `BackgroundWorker`(실제 heartbeat)가 5초를 더 돌았다 — 그 5초는 차단 상태였다.
+### ⚠️ 2c 종단 실패 — 창은 열렸는데 전송이 창 밖으로 밀렸다 (2026-08-23 06:07)
+
+**조건은 완벽했다.** 마지막 움직임 00:04, 직전 유지보수 창 03:48, 다음 창 07:48 →
+06:07은 딥 Doze 한복판. 알람도 `idle=true bucket=40`으로 정확히 그 상태에서 발화했다.
+
+```
+06:07:18.856  ★ 방화벽 열림 (dozable-allow + standby-default)
+06:07:18.87   BackgroundWorker #1 시작
+06:07:19.10   BackgroundWorker #2 시작
+06:07:19.13   BackgroundWorker #3 시작      ← 엔진 3개가 동시에 부팅
+06:07:29.88   Worker SUCCESS
+06:07:29.90   Worker SUCCESS
+06:07:29.92   getStepCount 호출            ← Dart가 이제야 heartbeat 로직 진입(엔진 부팅 11초)
+06:07:29.97   ★ 방화벽 닫힘 — 열린 시간 11.1초
+06:08:03.08   걸음수 결과 도착             ← ★ 조회에만 33.1초
+              → 이후 POST는 차단 상태에서 나감 → 3회 실패 → send_failed 알림
+```
+
+### 지연의 두 축
+
+| 구간 | 소요 | 원인 |
+|---|---|---|
+| 알람 → Dart 진입 | **11초** | 워커 3개가 각자 FlutterEngine을 띄움. 콜드 프로세스 + Doze 스로틀 |
+| `getStepCount` | **33.1초** | Google Fit `LocalRecordingClient`가 딥 Doze에서 극단적으로 느림 |
+
+`localRecordingClient:`(06:07:29.942) → `addOnSuccessListener:`(06:08:03.083)로 33초가
+로그에 그대로 찍힌다. **평소 포그라운드에서는 수십 ms짜리 호출이다.**
+
+### 핵심 결함 — 창을 여는 주체와 전송하는 주체가 다르다
+
+창은 **expedited job의 수명**을 따라간다. 그런데 알람이 깨운 프로세스에서
+WorkManager의 `ForceStopRunnable`이 밀려 있던 one-off·periodic까지 함께 방출해
+**워커가 3개** 뜨고, 그중 SQLite 락을 잡아 실제로 전송하는 워커가 **expedited가 아닐 수
+있다.** 이번이 정확히 그 경우다 — expedited job은 락 경쟁에서 져 11초 만에 스킵으로
+끝났고, 창은 그때 닫혔으며, 전송은 창 밖에서 이뤄졌다.
+
+### 수정 방향 — expedited job을 "창 유지자"로 분리
+
+전송을 expedited job **안에서** 하려는 시도(2c)는 락 경쟁 때문에 보장되지 않는다.
+대신 expedited job의 역할을 **방화벽을 열어둔 채 기다리는 것**으로 한정한다:
+
+```
+알람 → expedited "창 유지자" worker (Kotlin)
+        · flutter.last_heartbeat_date 를 폴링하며 오늘이 될 때까지 대기
+        · 최대 ~90초 (엔진 11초 + 걸음수 33초 + 전송 여유를 덮는 값)
+        · 그 사이 방화벽이 계속 열려 있으므로 **어느 워커가 전송하든 창 안**
+     → 별도로 기존 heartbeat 경로가 평소대로 전송
+```
+
+이미 확인된 사실 두 개가 이 설계를 뒷받침한다 — **창 길이 = job 수명**(08-22 11:04),
+**41초까지 `onStopped()` 없음**(같은 날). 90초가 가능한지는 재측정이 필요하다.
 
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
