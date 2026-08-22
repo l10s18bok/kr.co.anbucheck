@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
+import androidx.work.ListenableWorker
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import java.net.InetAddress
@@ -62,7 +63,7 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
         Log.d(TAG, "FIRED at=${now()} ${context(context)}")
 
         // 네트워크를 건드리는 첫 동작이 expedited worker여야 한다(위 클래스 주석 참조).
-        enqueueExpedited(context, t0)
+        if (MEASURE_ONLY) enqueueMeasurementProbe(context, t0) else enqueueHeartbeat(context)
     }
 
     private fun now(): String = SimpleDateFormat("HH:mm:ss.SSS", Locale.US).format(Date())
@@ -91,6 +92,23 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
         private const val ACTION = "kr.co.anbucheck.live.DOZE_ALARM_PROBE"
         private const val EXPEDITED_NAME = "doze_alarm_expedited_probe"
 
+        /**
+         * `true`면 실제 heartbeat 대신 [DozeAlarmProbeWorker]로 **창만 다시 측정**한다.
+         * 평소에는 `false`. 창 특성이 의심될 때 이 한 줄만 뒤집으면 측정 모드로 돌아간다.
+         */
+        private const val MEASURE_ONLY = false
+
+        private const val HEARTBEAT_WORK_NAME = "heartbeat_alarm"
+        private const val WM_BACKGROUND_WORKER = "dev.fluttercommunity.workmanager.BackgroundWorker"
+        private const val WM_DART_TASK_KEY = "dev.fluttercommunity.workmanager.DART_TASK"
+
+        /**
+         * `HeartbeatWorkerService._taskName`과 같은 값이어야 한다(Dart/Kotlin이 상수를
+         * 공유할 수 없어 수동 동기화). 다만 우리 Dart 콜백은 `taskName`으로 분기하지 않고
+         * `inputData`만 읽으므로, 어긋나도 동작에는 영향이 없고 로그만 달라진다.
+         */
+        private const val DART_TASK_NAME = "heartbeat_task"
+
         private const val PREFS = "doze_alarm_probe"
         private const val KEY_HOUR = "hour"
         private const val KEY_MINUTE = "minute"
@@ -114,7 +132,7 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
          * API 31 미만은 expedited가 foreground service를 요구하는데 FGS는 제품 결정상
          * 쓰지 않으므로 등록하지 않는다(minSdk 29라 실기기에서 발생 가능한 분기).
          */
-        private fun enqueueExpedited(context: Context, t0: Long) {
+        private fun enqueueMeasurementProbe(context: Context, t0: Long) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
                 Log.d(TAG, "EXP skipped — API ${Build.VERSION.SDK_INT} < 31 (FGS 필요)")
                 return
@@ -136,6 +154,57 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
                 Log.d(TAG, "EXP enqueued ip=$ip")
             } catch (e: Throwable) {
                 Log.d(TAG, "EXP enqueue 실패: ${e.javaClass.simpleName}: ${e.message}")
+            }
+        }
+
+        /**
+         * ★ **실제 heartbeat를 expedited job으로 실행한다** — Phase 2의 본체.
+         *
+         * 2026-08-22 11:04 실측으로 확정된 구조를 그대로 따른다:
+         *   알람이 앱을 깨우고 → expedited job이 방화벽을 열고(`allowed=FOREGROUND`)
+         *   → **창이 job 수명을 따라가므로 전송을 그 job 안에서** 한다.
+         * 전송을 별도 worker에 맡기면 창이 먼저 닫힌다(07:07 실측: 창 376ms 뒤 종료,
+         * 그 뒤로도 `BackgroundWorker`가 5초를 차단 상태로 실행).
+         *
+         * 새 Dart 경로를 만들지 않고 **workmanager 플러그인의 `BackgroundWorker`를 그대로
+         * expedited로 enqueue**한다. 콜백 핸들은 플러그인이 이미 SharedPreferences에
+         * 저장해 둔 것을 그 worker가 읽으므로 우리가 관여하지 않는다.
+         *
+         * `Class.forName`을 쓰는 이유: 플러그인 Gradle 모듈에 컴파일 의존을 걸지 않기
+         * 위함이다. 플러그인 구조가 바뀌면 컴파일 실패 대신 런타임 예외가 나고, 그때는
+         * 이 경로만 조용히 죽고 기존 3계층은 그대로 산다.
+         *
+         * ⚠️ **중복 전송은 기존 방어선이 막는다** — `lastScheduledKey`(성공 마커) +
+         * `HeartbeatLockDatasource`(SQLite UNIQUE CAS). 알람 경로와 정시 one-off/periodic이
+         * 겹쳐도 하나만 전송된다. 여기에 새 가드를 추가하지 말 것.
+         *
+         * `payload_unique`를 넘기는 이유: Dart 콜백이 이 값으로 `runningUniqueName`을
+         * 정하고, 그걸로 "재등록 대상이 자기 자신인가"를 판별해 self-cancel을 막는다.
+         * 알람 경로는 one-off·periodic 어느 쪽도 아니므로 고유한 이름을 준다.
+         */
+        @Suppress("UNCHECKED_CAST")
+        private fun enqueueHeartbeat(context: Context) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                Log.d(TAG, "HB skipped — API ${Build.VERSION.SDK_INT} < 31 (expedited가 FGS 요구)")
+                return
+            }
+            try {
+                val cls = Class.forName(WM_BACKGROUND_WORKER) as Class<out ListenableWorker>
+                val req = OneTimeWorkRequest.Builder(cls)
+                    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                    .setInputData(
+                        Data.Builder()
+                            .putString(WM_DART_TASK_KEY, DART_TASK_NAME)
+                            .putString("payload_source", "alarm")
+                            .putString("payload_unique", HEARTBEAT_WORK_NAME)
+                            .build(),
+                    )
+                    .build()
+                WorkManager.getInstance(context)
+                    .enqueueUniqueWork(HEARTBEAT_WORK_NAME, ExistingWorkPolicy.REPLACE, req)
+                Log.d(TAG, "HB expedited enqueued ($HEARTBEAT_WORK_NAME)")
+            } catch (e: Throwable) {
+                Log.d(TAG, "HB enqueue 실패: ${e.javaClass.simpleName}: ${e.message}")
             }
         }
 
