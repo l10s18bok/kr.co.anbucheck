@@ -9,22 +9,22 @@
 /* Begin PBXBuildFile section */
 		0FB242B00FB292C8DE6D43B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8674CB9B56CC527B6211F696 /* InfoPlist.strings */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		243CBAA3B29BC8D9AFE07002 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CEB0F6A8FABD03A5523EA3 /* NotificationService.swift */; };
+		1F6C4DB7549A18C1A4C3A4D8 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30BAB9F099FB70C1481289E7 /* NotificationService.swift */; };
 		277A48C2EBF055DC8BF4AF89 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB8C8198ECF8B8046350E56C /* Pods_Runner.framework */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		58CBFD70C40301FE13E3A0B8 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD70B817D1352FA0B61C525 /* Pods_RunnerTests.framework */; };
-		5DB920D343AA709D91065B05 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0A4A7DE3CFDFD3FD10DFB6 /* NotificationService.swift */; };
+		71E11E69647804D81C6AFA0D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C66103455551A73A5B8FCF2C /* Foundation.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		7884E8682EC3CC0700C636F2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */; };
-		7A50D8595B73732BCC26C980 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C66103455551A73A5B8FCF2C /* Foundation.framework */; };
-		7B003E434DAEA7A2D6205907 /* ProbeNSE.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D37D8F2AA5847713647F70C2 /* ProbeNSE.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		92E97A56F7447544BFC0675D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC48EEC5BCA63D2582E270E2 /* GoogleService-Info.plist */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		98736626AC66641E32DFD97B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C66103455551A73A5B8FCF2C /* Foundation.framework */; };
 		9A452AE12FC1BC75007E5FF8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A452AE02FC1BC75007E5FF8 /* StoreKit.framework */; };
+		D498E824B9D0316C7C3F02DF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C66103455551A73A5B8FCF2C /* Foundation.framework */; };
+		DABA0898367B8C0C7FB80B19 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438278142E9A0AC7420CF817 /* NotificationService.swift */; };
+		F546B8C6DB69A0FBBF2D1A6B /* ProbeNSE.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F2A5C1353DE1180CFA98CE7F /* ProbeNSE.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,11 +35,11 @@
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
 		};
-		4297CA0EA18847E75B149E33 /* PBXContainerItemProxy */ = {
+		9AAC4F055286B7FF0D269E7D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A2A4120EAD8B548D19191AB3;
+			remoteGlobalIDString = 1D69913D0C7B9543C79B90E4;
 			remoteInfo = ProbeNSE;
 		};
 /* End PBXContainerItemProxy section */
@@ -51,7 +51,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7B003E434DAEA7A2D6205907 /* ProbeNSE.appex in Embed App Extensions */,
+				F546B8C6DB69A0FBBF2D1A6B /* ProbeNSE.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,16 +74,17 @@
 		14A21DCDBFBB2737601BE98D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1E82210F8E7529EF626ABC85 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2B7256ED43E78B92EBDBAFEC /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		30BAB9F099FB70C1481289E7 /* NotificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		337871B2ABF27BF18D94C587 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A9D433D865B748F5BD4FF90 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3BD70B817D1352FA0B61C525 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA2DEBD0236D190A09418AC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		524F374169741BF5AE7ECD1C /* ProbeNSE.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ProbeNSE.xcconfig; sourceTree = "<group>"; };
+		438278142E9A0AC7420CF817 /* NotificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		54B9C6F624351F674E6B6E94 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		6193189B51BB2EA5FA5B68BE /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		62123451AF925DFDED5C6AAA /* ProbeNSE.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ProbeNSE.xcconfig; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75B429CE64B270E3F4CAD812 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -92,7 +93,7 @@
 		8607F683D2ECA8A03078AB5B /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8A68A1640E1896FE10DE98FD /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		8C3CB4F30D4C69DEF063555F /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		90CEB0F6A8FABD03A5523EA3 /* NotificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		9123E8C2D7EB1BA138474C32 /* ProbeNSE.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ProbeNSE.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,45 +103,47 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A452AE02FC1BC75007E5FF8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		9A6B2C9C2F89D7FF0077725F /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
-		9F0A4A7DE3CFDFD3FD10DFB6 /* NotificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		A0317E0305792E9DAC39E667 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A18DEB5D1A64DA9DEB7086C5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A34B5C7CAED024FCFF6C0EB9 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2386ACC445BE7EF2E1BC1DB /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB8C8198ECF8B8046350E56C /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC48EEC5BCA63D2582E270E2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BDC3FAC4F55344D256D0255A /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		C04111075F9283273C72FC24 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C66103455551A73A5B8FCF2C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		C9C4EA5D3EF4A61B3F5DBE6C /* ProbeNSE.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ProbeNSE.xcconfig; sourceTree = "<group>"; };
 		CED833746D06133EB6698A3E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D37D8F2AA5847713647F70C2 /* ProbeNSE.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ProbeNSE.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7F6894C463F2489A94BC3D3 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D8723C7136CBC13C3E0A6E12 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		D9368F2690A995B4F5DC959D /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		DADCCC0E73467FE59C9801D5 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		DB8D65B31254AB8013E6B94A /* ProbeNSE.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ProbeNSE.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD6C7D06E790DEE994ADE86D /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E01306551F26BEDCB22823B6 /* ProbeNSE.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ProbeNSE.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E09C813B87DBC4B69E625713 /* ProbeNSE.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ProbeNSE.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF5E6BD13314EAD4EA6497C6 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F139F3281C9EC9DF1439590B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F2A5C1353DE1180CFA98CE7F /* ProbeNSE.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ProbeNSE.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6BAC9A6D1299170532B396F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FC46A26698F66AE546547E03 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1B9ABBAEEA02937594F05303 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71E11E69647804D81C6AFA0D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97C146EB1CF9000F007C117D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				277A48C2EBF055DC8BF4AF89 /* Pods_Runner.framework in Frameworks */,
 				9A452AE12FC1BC75007E5FF8 /* StoreKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E2621CA55092E0BDD0F19787 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				98736626AC66641E32DFD97B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,7 +198,7 @@
 				BC48EEC5BCA63D2582E270E2 /* GoogleService-Info.plist */,
 				C3EAB48138E7BA254FB8C832 /* Pods */,
 				283D0AA8107739A120DFD9B5 /* Frameworks */,
-				AAC105C59DFDFF6D381FE2E0 /* ProbeNSE */,
+				F87A2065612D47C07274CAEB /* ProbeNSE */,
 			);
 			sourceTree = "<group>";
 		};
@@ -206,6 +209,9 @@
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
 				E01306551F26BEDCB22823B6 /* ProbeNSE.appex */,
 				D37D8F2AA5847713647F70C2 /* ProbeNSE.appex */,
+				DB8D65B31254AB8013E6B94A /* ProbeNSE.appex */,
+				E09C813B87DBC4B69E625713 /* ProbeNSE.appex */,
+				F2A5C1353DE1180CFA98CE7F /* ProbeNSE.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -226,17 +232,6 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
-			sourceTree = "<group>";
-		};
-		AAC105C59DFDFF6D381FE2E0 /* ProbeNSE */ = {
-			isa = PBXGroup;
-			children = (
-				9F0A4A7DE3CFDFD3FD10DFB6 /* NotificationService.swift */,
-				A34B5C7CAED024FCFF6C0EB9 /* Info.plist */,
-				62123451AF925DFDED5C6AAA /* ProbeNSE.xcconfig */,
-			);
-			name = ProbeNSE;
-			path = ProbeNSE;
 			sourceTree = "<group>";
 		};
 		C3EAB48138E7BA254FB8C832 /* Pods */ = {
@@ -260,9 +255,37 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		F87A2065612D47C07274CAEB /* ProbeNSE */ = {
+			isa = PBXGroup;
+			children = (
+				438278142E9A0AC7420CF817 /* NotificationService.swift */,
+				337871B2ABF27BF18D94C587 /* Info.plist */,
+				9123E8C2D7EB1BA138474C32 /* ProbeNSE.xcconfig */,
+			);
+			name = ProbeNSE;
+			path = ProbeNSE;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1D69913D0C7B9543C79B90E4 /* ProbeNSE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E719A586DF3A6CFB62EB019C /* Build configuration list for PBXNativeTarget "ProbeNSE" */;
+			buildPhases = (
+				DCA0630D1C65615F2FA0FA5F /* Sources */,
+				1B9ABBAEEA02937594F05303 /* Frameworks */,
+				4C9F6DFDA48CD502F5D0DE7B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ProbeNSE;
+			productName = ProbeNSE;
+			productReference = F2A5C1353DE1180CFA98CE7F /* ProbeNSE.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		331C8080294A63A400263BE5 /* RunnerTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */;
@@ -300,29 +323,12 @@
 			buildRules = (
 			);
 			dependencies = (
-				866E377E1CE58AAF96C9176F /* PBXTargetDependency */,
+				AAAA5D880A19937A16B08A46 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
-		};
-		A2A4120EAD8B548D19191AB3 /* ProbeNSE */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 48FF9721533A1DA086B91968 /* Build configuration list for PBXNativeTarget "ProbeNSE" */;
-			buildPhases = (
-				00033679D9F8737DB23A1B0C /* Sources */,
-				E2621CA55092E0BDD0F19787 /* Frameworks */,
-				2AA234D3BC126E1990E9BD41 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ProbeNSE;
-			productName = ProbeNSE;
-			productReference = D37D8F2AA5847713647F70C2 /* ProbeNSE.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -378,20 +384,20 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
-				A2A4120EAD8B548D19191AB3 /* ProbeNSE */,
+				1D69913D0C7B9543C79B90E4 /* ProbeNSE */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2AA234D3BC126E1990E9BD41 /* Resources */ = {
+		331C807F294A63A400263BE5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		331C807F294A63A400263BE5 /* Resources */ = {
+		4C9F6DFDA48CD502F5D0DE7B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -526,14 +532,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		00033679D9F8737DB23A1B0C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5DB920D343AA709D91065B05 /* NotificationService.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		331C807D294A63A400263BE5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -552,6 +550,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DCA0630D1C65615F2FA0FA5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DABA0898367B8C0C7FB80B19 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -560,11 +566,11 @@
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
 		};
-		866E377E1CE58AAF96C9176F /* PBXTargetDependency */ = {
+		AAAA5D880A19937A16B08A46 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ProbeNSE;
-			target = A2A4120EAD8B548D19191AB3 /* ProbeNSE */;
-			targetProxy = 4297CA0EA18847E75B149E33 /* PBXContainerItemProxy */;
+			target = 1D69913D0C7B9543C79B90E4 /* ProbeNSE */;
+			targetProxy = 9AAC4F055286B7FF0D269E7D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -615,33 +621,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		1A7372C939AB1F25100F23FE /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 524F374169741BF5AE7ECD1C /* ProbeNSE.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2F3GNTJRBK;
-				ENABLE_BITCODE = NO;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ProbeNSE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live.ProbeNSE;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		249021D3217E4FDB00AE95B9 /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -709,8 +688,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe;
+				PRODUCT_NAME = Runner;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -721,6 +700,33 @@
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
+		};
+		292BD3EB7B1800719D43BF97 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9C4EA5D3EF4A61B3F5DBE6C /* ProbeNSE.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2F3GNTJRBK;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ProbeNSE/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe.ProbeNSE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
 		};
 		331C8088294A63A400263BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -772,9 +778,9 @@
 			};
 			name = Profile;
 		};
-		6696AB98D013E390AD9F5469 /* Debug */ = {
+		46ED5690785B235CB716F89F /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 524F374169741BF5AE7ECD1C /* ProbeNSE.xcconfig */;
+			baseConfigurationReference = 9123E8C2D7EB1BA138474C32 /* ProbeNSE.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -789,33 +795,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live.ProbeNSE;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		8198B8F2E0E49241002C51AF /* Profile */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 62123451AF925DFDED5C6AAA /* ProbeNSE.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2F3GNTJRBK;
-				ENABLE_BITCODE = NO;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ProbeNSE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live.ProbeNSE;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe.ProbeNSE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -824,6 +804,112 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Profile;
+		};
+		4B0D2B4F1D6A57E9EBC4C7D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9C4EA5D3EF4A61B3F5DBE6C /* ProbeNSE.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2F3GNTJRBK;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ProbeNSE/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe.ProbeNSE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		56263195040AFC18259E3E44 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9C4EA5D3EF4A61B3F5DBE6C /* ProbeNSE.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2F3GNTJRBK;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ProbeNSE/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe.ProbeNSE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Profile;
+		};
+		568B7F97D8794BA19B10B78D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9123E8C2D7EB1BA138474C32 /* ProbeNSE.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2F3GNTJRBK;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ProbeNSE/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe.ProbeNSE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		62979E140E16CD20E2125B90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9123E8C2D7EB1BA138474C32 /* ProbeNSE.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2F3GNTJRBK;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ProbeNSE/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe.ProbeNSE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
 		};
 		97C147031CF9000F007C117D /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -951,8 +1037,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe;
+				PRODUCT_NAME = Runner;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -980,8 +1066,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.probe;
+				PRODUCT_NAME = Runner;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -993,86 +1079,6 @@
 			};
 			name = Release;
 		};
-		B21C5D30C191522D8F493DBF /* Profile */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 524F374169741BF5AE7ECD1C /* ProbeNSE.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2F3GNTJRBK;
-				ENABLE_BITCODE = NO;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ProbeNSE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live.ProbeNSE;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Profile;
-		};
-		CAF3B91F2028DF782233912B /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 62123451AF925DFDED5C6AAA /* ProbeNSE.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2F3GNTJRBK;
-				ENABLE_BITCODE = NO;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ProbeNSE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live.ProbeNSE;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		F29DFBFE52998407F74C4F73 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 62123451AF925DFDED5C6AAA /* ProbeNSE.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2F3GNTJRBK;
-				ENABLE_BITCODE = NO;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ProbeNSE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.anbucheck.live.ProbeNSE;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1082,16 +1088,6 @@
 				331C8088294A63A400263BE5 /* Debug */,
 				331C8089294A63A400263BE5 /* Release */,
 				331C808A294A63A400263BE5 /* Profile */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		48FF9721533A1DA086B91968 /* Build configuration list for PBXNativeTarget "ProbeNSE" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CAF3B91F2028DF782233912B /* Release */,
-				F29DFBFE52998407F74C4F73 /* Debug */,
-				8198B8F2E0E49241002C51AF /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1112,6 +1108,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E719A586DF3A6CFB62EB019C /* Build configuration list for PBXNativeTarget "ProbeNSE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				62979E140E16CD20E2125B90 /* Release */,
+				568B7F97D8794BA19B10B78D /* Debug */,
+				46ED5690785B235CB716F89F /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

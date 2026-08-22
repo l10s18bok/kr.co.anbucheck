@@ -4,7 +4,12 @@ require 'xcodeproj'
 
 PROJ = File.expand_path('Runner.xcodeproj', __dir__)
 NAME = 'ProbeNSE'
-BUNDLE = 'kr.co.anbucheck.live.ProbeNSE'
+# ⚠️ 프로브는 **운영 번들 ID를 쓰지 않는다**(kr.co.anbucheck.live).
+# 같은 번들 ID로 개발 빌드를 설치하면 테스트폰의 TestFlight 안부앱을 대체하면서
+# 데이터 컨테이너가 삭제되고, device_id가 새로 발급되면 그 폰의 보호자 계정이
+# 서버에서 고아가 된다(안드로이드 SSAID 사고와 같은 종류 — project_ssaid_signing_scope).
+APP_BUNDLE = 'kr.co.anbucheck.probe'
+BUNDLE = "#{APP_BUNDLE}.ProbeNSE"
 TEAM = '2F3GNTJRBK'
 
 project = Xcodeproj::Project.open(PROJ)
@@ -72,7 +77,16 @@ embed.files.select { |f| f.display_name == "#{NAME}.appex" }.each(&:remove_from_
 build_file = embed.add_file_reference(ext.product_reference)
 build_file.settings = { 'ATTRIBUTES' => ['RemoveHeadersOnCopy'] }
 
+# ── Runner 자체도 프로브 번들 ID로 (TestFlight 앱과 공존) ─────
+runner.build_configurations.each do |c|
+  c.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = APP_BUNDLE
+  # ⚠️ PRODUCT_NAME은 Runner를 유지한다 — Flutter 툴링이 Runner.app 이름을 전제하는
+  # 경로가 있어 바꾸면 깨진다. 홈 화면 구분은 CFBundleDisplayName으로 한다.
+  c.build_settings['PRODUCT_NAME'] = 'Runner'
+end
+
 project.save
 puts "OK: #{NAME} 타겟 생성"
+puts "app bundle: #{APP_BUNDLE}"
 puts "configurations: #{ext.build_configurations.map(&:name).join(', ')}"
 puts "embed phase files: #{embed.files.map(&:display_name).join(', ')}"

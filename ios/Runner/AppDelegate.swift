@@ -2,6 +2,7 @@ import Flutter
 import UIKit
 import UserNotifications
 import GoogleMaps
+import CoreMotion  // [probe/ios-nse] 모션 권한 유발용
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -38,8 +39,26 @@ import GoogleMaps
       NSLog("[PROBE] notification auth: %@", ok ? "granted" : "denied")
     }
     armProbeOfflineNotification()
+    probeRequestMotionPermission()
 
     return result
+  }
+
+  /// [probe/ios-nse] 모션 권한 시스템 팝업을 유발한다.
+  /// G 모드는 모션 권한을 요청하지 않으므로, 이대로면 확장의 Q3 결과가
+  /// authorizationStatus=notDetermined로 나와 "확장에서 원천 불가"인지
+  /// "권한이 없어서"인지 구분만 되고 답이 나오지 않는다.
+  /// iOS는 request API가 아니라 **실제 조회 시점**에 팝업을 띄우므로 쿼리를 날린다.
+  private let probePedometer = CMPedometer()
+  private func probeRequestMotionPermission() {
+    probePedometer.queryPedometerData(
+      from: Calendar.current.startOfDay(for: Date()), to: Date()
+    ) { data, err in
+      NSLog("[PROBE] app motion query: steps=%@ auth=%d err=%@",
+            data?.numberOfSteps.stringValue ?? "nil",
+            CMPedometer.authorizationStatus().rawValue,
+            err?.localizedDescription ?? "-")
+    }
   }
 
   /// [probe/ios-nse] 15분 뒤 발화하는 오프라인 폴백 알림을 심는다.
