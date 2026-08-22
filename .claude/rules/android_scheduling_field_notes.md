@@ -381,6 +381,51 @@ enqueue한 실측. 기기는 **딥 Doze(`idle=true`), 앱은 RARE(40)** — 어�
 계속 찍힌다(이 날 확인). association 판정은 `NetworkController.WifiSignalController`의
 `connected=`, `WIFI_CONNECTIVITY_ACTION`, BSS 재선택 로그로 한다.
 
+### 프로브가 자기 측정을 오염시킨 사례 — DNS 음성 캐시 (2026-08-22 09:37)
+
+같은 발화에서 직접 프로브(T+0s)와 expedited 프로브를 함께 돌렸는데, **직접 프로브가
+expedited 프로브를 망가뜨렸다.**
+
+```
+09:37:17.616  DNS Requested by 11227   ← T+0s. 이때 blocked=DOZE|APP_STANDBY
+09:37:17.617  PROBE T+0s FAIL          ← 방화벽 닫힌 상태의 실패가 음성 캐시에 적재
+09:37:17.678  ★ dozable-allow + standby-default        ← 방화벽 열림
+09:37:17.717  EXPEDITED_WORKER started (lag 130ms)
+09:37:17.720  EXPEDITED_PROBE FAIL 1ms  ← 열린 창 안인데 실패
+09:37:18.054  ★ dozable-default + standby-deny         ← 닫힘 (376ms)
+```
+
+**증거**: netd의 DNS 요청 로그가 그 발화에서 **정확히 3건**(`17.616`/`26.597`/`32.598`)
+= 직접 프로브 3회뿐이다. **expedited 프로브는 DNS를 조회조차 하지 않았다** — 100ms 전
+실패가 음성 캐시에 남아 즉시 실패했다.
+
+**교훈 — 다음 프로브 설계의 불변 규칙:**
+1. **방화벽이 닫힌 구간에서 같은 호스트를 조회하지 말 것.** 그 실패가 캐시에 남아
+   이후 열린 구간의 측정을 오염시킨다. 측정 대상보다 **먼저** 도는 프로브를 두지 않는다.
+2. `java.security.Security.setProperty("networkaddress.cache.negative.ttl", "0")`으로
+   음성 캐시를 끈다.
+3. **DNS와 TCP를 분리해 측정한다** — 호스트명 조회와 IP 직결 연결을 각각 재면
+   "DNS만 막힌 것"과 "통신 자체가 막힌 것"을 구분할 수 있다. 전자라면 IP를 미리
+   캐시해 두는 우회로가 생긴다.
+
+### 창 길이는 job 수명을 따라간다 (2026-08-22 확증)
+
+| 발화 | worker 작업 시간 | 방화벽 열린 시간 |
+|---|---|---|
+| 08-22 07:07 | 프로브 2ms | **1.06초** |
+| 08-22 09:37 | 프로브 1ms | **376ms** |
+
+worker가 즉시 반환하면 proc state가 곧바로 떨어져 창이 닫힌다. **아직 모르는 것:
+job을 오래 살려두면 창도 그만큼 열려 있는가, 아니면 상한이 있는가.**
+heartbeat POST가 0.5~2초 걸리므로 이 상한이 설계를 좌우한다.
+
+### 두 번 날린 교란 — 관측에 반드시 넣을 것
+
+08-22 07:07 측정은 **핫스팟 이탈**로 무효였고, 그 사실을 사후에 logcat을 뒤져서야
+알았다. 프로브가 **매 시도마다 Wi-Fi association 상태(supplicant state·RSSI)를 직접
+로그로 남기면** 이 판정이 그 자리에서 끝난다. `WifiManager.getConnectionInfo()`는
+앱의 네트워크 차단과 무관하게 시스템 서비스 조회라 Doze에서도 읽힌다.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
