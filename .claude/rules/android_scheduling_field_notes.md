@@ -426,6 +426,53 @@ heartbeat POST가 0.5~2초 걸리므로 이 상한이 설계를 좌우한다.
 로그로 남기면** 이 판정이 그 자리에서 끝난다. `WifiManager.getConnectionInfo()`는
 앱의 네트워크 차단과 무관하게 시스템 서비스 조회라 Doze에서도 읽힌다.
 
+### ★ 결론 — expedited job은 딥 Doze에서 **실제로 통신한다** (2026-08-22 11:04)
+
+딥 Doze + RARE(40) 상태에서 allow-while-idle 알람이 발화하고, 그 알람이 enqueue한
+expedited job 안에서 **41초 동안 8회 측정한 결과 전부 성공**했다.
+
+```
+11:04:13.924  FIRED  bucket=40
+11:04:14.021  ★ 11227-dozable-allow + 11227-standby-default      ← 방화벽 열림(발화 +97ms)
+11:04:14.062  EXP started lag=139ms
+11:04:15  t+0s   tcp=OK(112ms)  https=422(1039ms)  idle=false imp=230 net=validated
+11:04:29  t+15s  tcp=OK(202ms)  https=422(822ms)   idle=true  imp=230 net=validated
+11:04:34  t+20s  tcp=OK(115ms)  ...                idle=true
+11:04:44  t+30s  tcp=OK(154ms)  ...                idle=true
+11:04:54  t+40s  tcp=OK(185ms)  ...                idle=true
+11:04:54.938  EXP done total=41015ms      ← onStopped() 미발생
+11:04:54.958  ★ 11227-dozable-default + standby-deny             ← 닫힘(worker 종료 +20ms)
+```
+
+`netpolicy`가 그 사이 모든 샘플에서 **`allowed=FOREGROUND, effective=NONE`** — 즉
+`DOZE|APP_STANDBY`가 걸려 있는데도 **실효 차단이 없다.** proc importance는 230
+(PERCEPTIBLE)으로 승격돼 있었다.
+
+| 질문 | 답 |
+|---|---|
+| 열린 방화벽으로 데이터가 흐르는가 | ✅ **흐른다** — TCP 112~216ms, HTTPS 왕복 535~1148ms |
+| 창이 몇 초까지 열리는가 | ✅ **job 수명과 동일** — 창 40.937초 vs worker 41.015초 |
+| expedited 실행시간 상한 | ✅ 41초까지 `onStopped()` 없음 |
+| DNS도 되는가 | ✅ 호스트명 HTTPS가 왕복 성공 |
+
+⚠️ 로그의 `https=FileNotFoundException`은 **네트워크 실패가 아니다.** 이 엔드포인트가
+`HTTP 422`를 반환해 `getInputStream()`이 던진 것이다(별도 curl로 422 확인). 4xx일 때
+`errorStream`을 읽지 않은 프로브 쪽 처리 누락이며, **왕복이 성공했다는 사실이 요점**이다.
+
+⚠️ `idle=false`가 t+10s까지 찍힌 구간이 있으나, **t+15s 이후 `idle=true`에서도 tcp가
+전부 성공**했으므로 딥 Doze 판정에는 영향이 없다.
+
+## 이로써 확정된 설계
+
+```
+allow-while-idle 알람   → 앱을 깨운다 (방화벽은 못 연다)
+  └ expedited job enqueue → 방화벽을 연다 (allowed=FOREGROUND)
+      └ 창 = job 수명   → **heartbeat 전송을 이 job 안에서 해야 한다**
+```
+
+⚠️ **전송을 별도 worker에 맡기면 안 된다.** 2026-08-22 07:07 실측에서 창이 376ms 만에
+닫힌 뒤에도 `BackgroundWorker`(실제 heartbeat)가 5초를 더 돌았다 — 그 5초는 차단 상태였다.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
