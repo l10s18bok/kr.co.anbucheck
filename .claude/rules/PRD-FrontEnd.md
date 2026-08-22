@@ -175,6 +175,66 @@ Splash → 버전 체크 → 플랫폼 분기
 | 앱 포그라운드 진입 시 | 예약 시각 경과 + 당일 미전송 시 heartbeat 즉시 전송                                                                | 예약 시각 경과 + 당일 미전송 시 heartbeat 즉시 전송                                                |
 
 
+#### 2.2.1 iOS heartbeat 전송 경로 (2026-08-22 변경 — 이 절이 iOS에 관한 한 위 표보다 우선한다)
+
+**바뀐 것 한 줄**: iOS 안부 전송이 "알림을 **탭해야** 나간다"에서 "**뜨는 순간 이미 나가 있다**"로 바뀌었다.
+
+**왜 가능해졌나.** iOS는 앱이 강제 종료되면 어떤 스케줄러도 돌지 않는다. 킬 상태에서도
+실행되는 유일한 경로가 **표시형 푸시가 띄우는 Notification Service Extension**이고,
+그 확장이 heartbeat를 직접 전송한다. 실측으로 확인했다(`.claude/rules/ios_nse_field_notes.md`,
+iPhone XS/iOS 17.4.1): **강제 종료 + 화면 잠금** 상태에서 확장이 실행됐고 HTTPS 왕복 200
+(1220ms/1613ms), 걸음수 조회(`steps=34`), 다른 프로세스가 심어둔 pending 알림 제거까지 성공했다.
+
+```
+예약시각 정각 → 서버 푸시 heartbeat_push (services/scheduler.py: job_ios_heartbeat_trigger)
+  ├ 망 있음 → 확장 실행 → POST /api/v1/heartbeat
+  │            ├ App Group에 전송 마커 → 앱이 다음 진입 때 흡수 (중복 전송 차단)
+  │            ├ 오늘치 오프라인 폴백 제거 + 7일 롤링 재무장
+  │            └ 문구 "전달 완료" + 무음 + .passive(iOS15+) → 배너도 소리도 없음
+  ├ 확장 미실행(자원 부족)·전송 실패 → 원본 문구(탭 유도) → 탭하면 기존 안전망이 처리
+  └ 망 없음 → 푸시 자체가 안 옴 → 오프라인 폴백이 +15분에 "인터넷 연결 확인"으로 발화
+```
+
+**불변 규칙 4가지 — 되돌리지 말 것**
+
+1. **확장은 `type == 'heartbeat_push'`일 때만 개입한다.** 그 외 타입은 `didReceive` 진입
+   즉시 원본을 통과시킨다. 서버 `push_service.send_push`가 **모든 푸시에 `mutable_content`를
+   붙이므로**, 이 가드가 없으면 보호자 경고·긴급까지 확장을 거쳐 **문구가 훼손되고
+   네트워크 대기만큼 지연된다**. 긴급 경고가 10초 늦게 뜨는 것은 이 서비스에서 허용되지 않는다.
+2. **서버 발송은 `devices.supports_push_heartbeat` 게이팅이 전제조건이다.** 확장이 없는
+   구버전 iOS 앱은 잔존 `gs_deadman`을 그대로 갖고 있어, 푸시까지 받으면 같은 시각에
+   **알림이 2개** 뜬다. 대상이 고령 사용자라 그 혼란은 이 앱이 없애려는 문제 그 자체다.
+   구버전은 플래그를 올리지 않아 자동 제외되고 **변화가 0**이다.
+3. **오프라인 폴백은 단발 + 7일 롤링이다.** iOS 로컬 알림은 "망이 없을 때만 뜨게" 만들 수
+   없다 — 앱이 죽어 있어 조건을 판단할 주체가 없다. 그래서 조건을 뒤집어 무조건 심어두고
+   **푸시가 도착하면(=망이 있으면) 확장이 지운다.** 반복 요청이면 "그날치만" 제거가 불가능하고
+   (지우면 이후가 전부 사라진다), 단발+매일 재무장은 한 번의 실패로 최후 보루가 조용히
+   죽는다(안드로이드 one-off 유실과 같은 위험). 롤링은 타협 대상이 아니다.
+4. **확장 전송은 `suspicious=false` 고정이다.** 지금까지 iOS heartbeat는 전부 포그라운드에서
+   나가 `isInteractiveAtTrigger: true`가 하드코딩됐고, 그래서 **iOS는 "활동 기록 없음" 경고를
+   한 번도 낸 적이 없다**. 확장에는 화면 상태 신호가 없어(확장은 `UIApplication` 접근 불가)
+   걸음수만으로 판정하면 **안드로이드보다 더 엄격해진다**(안드로이드는 화면 켜짐이라는 구제
+   조건이 하나 더 있다). 없던 경고 종류를 "탭 없이 전달"이라는 핵심 변경과 같은 릴리스에 넣지
+   않기로 했다. 걸음수는 계속 실어 보내므로 실제 분포가 쌓이고, 나중에 켜는 것은 쉽다.
+
+**앱↔확장 상태 공유** (`ios/Shared/HeartbeatStore.swift`, `ios/Runner/SharedStore.swift`)
+
+확장은 별도 프로세스라 앱 컨테이너를 볼 수 없고, 중복 방지 장치인 `HeartbeatLockDatasource`
+(SQLite)도 접근할 수 없다. 그래서 App Group(`group.kr.co.anbucheck.live`)으로 다리를 놓는다.
+
+- **앱 → 확장**: `device_token`·`device_id`·서버주소·예약시각·마지막 전송일·번역 문구
+- **확장 → 앱**: 전송 마커(`nse_sent_date/time/key`)
+- ⚠️ 흡수는 `super.application(...)`(= Flutter 엔진 시작)**보다 먼저** 수행한다. 늦으면 Dart가
+  첫 조회에서 옛 값을 읽어 **중복 전송**한다.
+- `shared_preferences`가 쓰는 `flutter.` 접두어 키에 직접 읽고 쓴다 → **Dart 저장 경로 무변경**.
+  플러그인을 App Group suite로 통째 전환하는 안은 기존 사용자 데이터 마이그레이션이 필요해
+  위험 대비 이득이 없어 채택하지 않았다.
+- 확장은 GetX 번역을 쓸 수 없어, 앱이 `NotificationTextCache`로 캐시한 문구를 브리지가 넘긴다
+  (안드로이드 백그라운드 isolate와 같은 패턴).
+
+**미수신 체크(+2h)의 `subject_safety_net`은 Android 한정을 유지한다** — iOS는 정각 트리거가
+실패해도 폴백 문구가 이미 표시돼 있어, +2h에 또 보내면 같은 날 알림이 2개가 된다.
+
 #### Heartbeat 시각 설정
 
 **기본값:** 오후 18:00 (기기 로컬 시간대 기준, 모든 국가 공통)
@@ -244,7 +304,7 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 | 1차 (폴링 안전망) | WorkManager `registerPeriodicTask(frequency: 15분)` (Android) | 매 15분(명목) | one-off가 OEM 배터리 절약/Doze로 지연·미실행되어도 백업 발화 + 화면 켜짐 Doze 해제 piggyback. ⚠️ **실효 cadence는 15분이 아니다** — 딥 Doze에서 하룻밤 1~5회이며 RARE 버킷은 24시간 3세션이 상한이다. ⚠️ **`flexInterval: 15분`(= 주기 전체)을 반드시 명시해야 한다** — 넘기지 않으면 플러그인 기본 flex 5분(`DEFAULT_FLEX_INTERVAL_SECONDS = MIN_PERIODIC_FLEX_MILLIS`)이 적용되어 periodic이 15분 주기의 **마지막 5분 창에서만** 실행 가능해지고(실행 기회 1/3), 그 좁은 창이 Doze 유지보수 창(하룻밤 1~5회, 약 64초)과 겹쳐야 하므로 적중률이 곱으로 떨어진다. 부작용으로 첫 fire도 코드상 +3분이 아니라 `+3분 + (15분 − 5분)` = **+13분**이 됐다(2026-08-16 실측). 이 명시는 폴링 약화가 아니라 **의도한 15분 폴링을 실제로 15분으로 되돌리는** 수정이다. ⚠️ 또한 **동시 발화 회피라는 offset의 목적은 실측상 달성되지 않는다** — 둘 다 밀려 있다가 같은 Doze 창에서 함께 방출되므로(02:16·15:22 두 번 다 동시 발화) offset은 아무 역할도 못 한다. 당일 중복 전송은 `lastScheduledKey`(성공 마커) + `HeartbeatLockDatasource`(SQLite UNIQUE CAS, TTL 30초)로 차단. 콜백 시각 가드는 `예약시각 -15분`을 경계로 한다 — `-15분` 이후 fire는 정상 정시 전송, `-15분` 이전 fire는 평소 스킵. ⚠️ 이 가드의 근거를 "조기 발화 흡수"로 적지 말 것: 실측상 **job은 일찍 뛰지 않고 늦게만 뛴다.** 실제 역할은 **지난 날짜용으로 등록됐다 뒤늦게 발화한 job을 오늘 정시 전송으로 오인하지 않는 것**이다 |
 | 1차 (worker 회복 전송) | WorkManager 콜백 — `HeartbeatService.execute(recovery: true)` (Android) | 예약시각 `-15분` 이전 fire + `lastHeartbeatDate`가 오늘도 어제도 아닌 2일 이상 미전송 갭 | 예약시각 이전 구간에서 2일 이상 미전송 갭이 감지되면 예약시각을 기다리지 않고 **살아있음 신호**를 보낸다 — 포그라운드 회복 전송과 **완전히 동일한** `_executeRecovery` 경로다. 기기가 네트워크에 연결된 채 WorkManager가 발화했다는 것 자체가 활동 증거라 `suspicious=false`이며, 전용 키 `recovery_<날짜>` + 마커 `lastRecoveryDate`(1일 1회)를 쓰고 `steps_delta`는 싣지 않는다. **정시 슬롯을 소비하지 않으므로 예약시각 정시 전송이 그대로 수행되어 그날 걸음수가 온전히 기록된다.** ⚠️ 과거에는 정시 키로 전송해 슬롯을 소비했고, 그 탓에 정시 전송이 콜백 상단 `lastHeartbeatDate == 오늘` 가드에 걸려 **그날 걸음수가 폰을 켠 시각까지만**(이른 아침이면 사실상 0) 기록됐다 — 포그라운드 경로와 다시 갈라놓지 말 것. `_onHeartbeatSent`를 부르지 않지만 재무장은 **콜백 진입부에서 이미 완료**돼 있다(네트워크보다 먼저, 모든 분기 공통). iOS는 worker가 없어 미적용(Android 전용) |
 | 2차 | 앱 시작 / 백그라운드→포그라운드 자동 전송 | 예약 시각 경과 + 당일 미전송 | 자정 전까지 무조건 전송. 가드는 `isReportedToday`(이미 전송) + Android의 `isScheduleInFuture`(예약시각 이전) 두 개로 단순화 — 자정이 유일한 의미 경계. 1차 2계층 모두 실패하거나 retry 3회 실패 후 사용자가 send_failed 알림을 탭해 진입한 경우의 최종 안전망. `isScheduleInFuture`(예약시각 이전)에 막혀 정시 전송이 보류되더라도 `_isRecoveryPending`(`lastHeartbeatDate`가 오늘도 어제도 아닌 미전송 갭)이면 **포그라운드 회복 전송**(`HeartbeatService().execute(recovery: true)` → `_executeRecovery`)을 보낸다 — 포그라운드 진입 자체가 살아있음 증거이며, worker 회복 전송과 **동일한 경로**로 **정시 슬롯을 소비하지 않는다**(별도 키 `recovery_<날짜>`·마커 `lastRecoveryDate`로 `lastHeartbeatDate`/`lastScheduledKey` 미갱신) → 예약시각 정시 전송은 그대로 수행된다. 늦은 전송 성공 시 `_onHeartbeatSent`가 WorkManager를 즉시 내일자로 재등록해 정시 사이클 정상화 |
-| 3차 (안전망) | **iOS**: 일일 로컬 안부 확인 안전망 알림 (`LocalAlarmService`) / **Android**: 서버 FCM 푸시 `subject_safety_net` | **iOS**: heartbeat 시각 정시 (매일 반복, daily repeat via `matchDateTimeComponents.time`) / **Android**: 서버 미수신 체크 = heartbeat 예약시각 + 2시간 (미수신일마다 1회 → 무시 시 매일 반복) | **iOS**: BGTask 미사용이므로 사실상 PRIMARY 트리거 — 사용자가 알림을 탭하면 앱이 열리며 `onInit`/`onResumed`에서 자동 전송. heartbeat 성공 후 iOS 알람 미처리 — `matchDateTimeComponents.time`으로 OS가 매일 자동 반복. `_onHeartbeatSent`는 iOS 알람을 건드리지 않는다. **Android**: WorkManager one-off + periodic 15분 + 앱 열기(2차) 모두 실패해 worker 자체가 OEM/사용자에 의해 cancel된 시나리오까지 메우는 LAST-RESORT 사용자 유도 알림 — 서버 발송이라 보호자 유무·구독 만료와 무관하게 도달(서버 미수신 체크에서 보호자/구독 게이팅 **앞**에서 대상자 본인 Android 기기로 발송). 과거 Android 일일 로컬 안전망 알림(+3h, `LocalAlarmService`)은 폐지(`matchDateTimeComponents.time`이 forceNextDay에도 "그 시각의 다음 발생=오늘"로 당겨 정상 전송한 날에도 매일 오발화하던 결함) — `LocalAlarmService.schedule()`은 Android에서 잔존 알림 cancel 후 즉시 return. 푸시 탭 라우팅: iOS `gs_deadman` / Android `subject_safety_net`·(잔존 `safety_net`)·`send_failed` 모두 **safety_home으로 이동**(`_routeToSafetyHome`, 역할 인식; kill 런치는 splash) |
+| 3차 (안전망) | **iOS**: 일일 로컬 안부 확인 안전망 알림 (`LocalAlarmService`) / **Android**: 서버 FCM 푸시 `subject_safety_net` | **iOS**: heartbeat 시각 정시 (매일 반복, daily repeat via `matchDateTimeComponents.time`) / **Android**: 서버 미수신 체크 = heartbeat 예약시각 + 2시간 (미수신일마다 1회 → 무시 시 매일 반복) | **iOS**: ⚠️ **더 이상 안전망이 아니라 오프라인 전용 폴백이다(2026-08-22 변경, §2.2.1).** PRIMARY 트리거는 서버 푸시 `heartbeat_push` + 확장이며 탭 없이 전송된다. 로컬 알림은 `anbu_offline_<날짜>`(예약시각 +15분, 7일 롤링 단발)로만 남아, 망이 있으면 확장이 그날치를 지우고 망이 없으면 그대로 발화한다. `gs_deadman`은 신규 예약하지 않으며 탭 라우팅만 잔존 기기용으로 유지. **Android**: WorkManager one-off + periodic 15분 + 앱 열기(2차) 모두 실패해 worker 자체가 OEM/사용자에 의해 cancel된 시나리오까지 메우는 LAST-RESORT 사용자 유도 알림 — 서버 발송이라 보호자 유무·구독 만료와 무관하게 도달(서버 미수신 체크에서 보호자/구독 게이팅 **앞**에서 대상자 본인 Android 기기로 발송). 과거 Android 일일 로컬 안전망 알림(+3h, `LocalAlarmService`)은 폐지(`matchDateTimeComponents.time`이 forceNextDay에도 "그 시각의 다음 발생=오늘"로 당겨 정상 전송한 날에도 매일 오발화하던 결함) — `LocalAlarmService.schedule()`은 Android에서 잔존 알림 cancel 후 즉시 return. 푸시 탭 라우팅: iOS `gs_deadman` / Android `subject_safety_net`·(잔존 `safety_net`)·`send_failed` 모두 **safety_home으로 이동**(`_routeToSafetyHome`, 역할 인식; kill 런치는 splash) |
 
 **보류 큐 재전송의 날짜 귀속 (걸음수 이틀 손실 방지):**
 
@@ -640,6 +700,8 @@ Future<void> sendHeartbeat({
 | `auto_report` | 알림 목록 | 자동 안부 확인 완료 |
 | `manual_report` | 알림 목록 | 수동 안부 확인 |
 | `heartbeat` | 무시 (라우팅 없음) | 대상자 전용 |
+| `heartbeat_push` | safety_home (`subject_safety_net`과 동일 경로) | **iOS 예약시각 트리거 푸시.** 정상 경로에서는 이 탭이 일어나지 않는다 — 확장이 이미 전송을 끝내고 문구를 "전달 완료"로 바꿔 무음으로 내리기 때문이다. 여기로 오는 것은 **확장 미실행·전송 실패**뿐이며, 그때는 원본 문구(탭 유도)가 그대로 표시되므로 기존 안전망과 동일하게 처리한다 |
+| `offline_fallback` | safety_home (동일 경로) | 망이 없어 푸시가 도착하지 못한 날 발화하는 로컬 알림(`anbu_offline_<날짜>`). 통신 복구 후 탭하면 그날 안부가 전송된다 |
 | `subject_safety_net` | safety_home (`_routeToSafetyHome`, `safety_net`과 동일 경로) | Android 대상자 안전망 — 서버 미수신 체크(예약시각 +2h)에서 보호자/구독 게이팅 앞에서 대상자 본인 Android 기기로 발송. kill 런치는 splash(G+S) 동일 라우팅 |
 | `subscription_expired` | 보호자 설정 화면 (`_routeToGuardianSettings`) | 즉시 [구독하기]/[구독 관리]. kill 런치는 대시보드 유지(만료 배너 노출) |
 | `subscription_grace_period` | 보호자 설정 화면 | 결제 재시도 안내 — 위와 동일 |
