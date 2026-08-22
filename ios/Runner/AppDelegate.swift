@@ -141,6 +141,10 @@ import GoogleMaps
         let args = call.arguments as? [String: Any]
         let hour = args?["hour"] as? Int ?? 18
         let minute = args?["minute"] as? Int ?? 0
+        // ⚠️ 폴백 재무장 **직전에** 최신값을 확장으로 밀어 넣는다.
+        // 이 채널은 예약시각이 바뀐 순간에도 호출되는데, export를 다음 백그라운드
+        // 진입까지 미루면 그 사이 확장이 **옛 예약시각으로 scheduled_key**를 만든다.
+        SharedStore.exportToExtension()
         HeartbeatStore.rearmOfflineFallback(hour: hour, minute: minute)
         result(nil)
         return
