@@ -18,8 +18,15 @@ import GoogleMaps
       GMSServices.provideAPIKey(key)
     }
 
+    // ⚠️ 확장이 남긴 전송 마커를 **Flutter 엔진 시작보다 먼저** 흡수한다.
+    // 늦으면 Dart가 첫 조회에서 옛 값을 읽어 "오늘 미전송"으로 판단하고 중복 전송한다.
+    SharedStore.importFromExtension()
+
     // Flutter 엔진 + Firebase + 플러그인 초기화
     let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+
+    // 확장이 쓸 값(device_token·예약시각 등)을 App Group으로 내보낸다
+    SharedStore.exportToExtension()
 
     // 포그라운드 알림 배너 표시를 위해 delegate 설정
     UNUserNotificationCenter.current().delegate = self
@@ -28,6 +35,19 @@ import GoogleMaps
     application.registerForRemoteNotifications()
 
     return result
+  }
+
+  /// 백그라운드 진입 시 최신값을 확장에 넘긴다.
+  /// 확장은 앱이 없는 동안 실행되므로, 이 시점의 값이 확장이 보게 될 값이다.
+  override func applicationDidEnterBackground(_ application: UIApplication) {
+    SharedStore.exportToExtension()
+    super.applicationDidEnterBackground(application)
+  }
+
+  /// 포그라운드 복귀 시 확장이 보낸 사실을 먼저 흡수한다(Dart의 onResumed보다 앞선다).
+  override func applicationWillEnterForeground(_ application: UIApplication) {
+    SharedStore.importFromExtension()
+    super.applicationWillEnterForeground(application)
   }
 
   /// SceneDelegate 환경에서 FlutterViewController 조회

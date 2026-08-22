@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:anbucheck/app/core/config/api_config.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
@@ -30,6 +32,14 @@ void main() async {
   // 이후 app.dart의 AnnotatedRegion이 실제 테마(다크 토글 포함)를 반영해 즉시 갱신.
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   await HeartbeatWorkerService.init();
+  // iOS Notification Service Extension이 heartbeat를 직접 전송할 때 쓸 서버 주소를
+  // prefs에 남긴다. 확장은 별도 프로세스라 Dart 상수(ApiConfig.baseUrl)를 볼 수 없고,
+  // Swift에 값을 복제해 두면 조용히 어긋난다 — 여기서 한 번 써 두면 드리프트가 없다.
+  // (네이티브 SharedStore가 이 값을 App Group으로 내보낸다.)
+  if (Platform.isIOS) {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('api_base_url', ApiConfig.baseUrl);
+  }
   Get.put(ThemeService());
   Get.put(StabilityService());
   // AdMob 초기화 — Android 전용.
