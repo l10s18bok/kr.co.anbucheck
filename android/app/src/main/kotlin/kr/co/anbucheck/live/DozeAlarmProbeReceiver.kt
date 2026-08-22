@@ -71,7 +71,18 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
         Log.d(TAG, "FIRED at=${now()} ${context(context)}")
 
         // 네트워크를 건드리는 첫 동작이 expedited worker여야 한다(위 클래스 주석 참조).
-        if (MEASURE_ONLY) enqueueMeasurementProbe(context, t0) else enqueueHeartbeat(context)
+        if (MEASURE_ONLY) {
+            enqueueMeasurementProbe(context, t0)
+        } else {
+            // ★ 역할 분리 (2026-08-23 06:07 실패에서 나온 설계)
+            //   (1) expedited "창 유지자" — 방화벽을 열어둔 채 버틴다
+            //   (2) 일반 heartbeat worker — 실제 전송을 한다
+            // 전송을 expedited job "안에서" 하려던 앞선 시도는 실패했다. 알람이 깨운
+            // 프로세스에서 워커가 3개 뜨고, SQLite 락을 잡아 전송하는 워커가 expedited가
+            // 아닐 수 있어 **창이 전송보다 먼저 닫혔다**(11.1초).
+            enqueueWindowHolder(context)
+            enqueueHeartbeat(context)
+        }
     }
 
     private fun now(): String = SimpleDateFormat("HH:mm:ss.SSS", Locale.US).format(Date())
@@ -107,6 +118,7 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
         private const val MEASURE_ONLY = false
 
         private const val HEARTBEAT_WORK_NAME = "heartbeat_alarm"
+        private const val HOLDER_WORK_NAME = "doze_window_holder"
         private const val WM_BACKGROUND_WORKER = "dev.fluttercommunity.workmanager.BackgroundWorker"
         private const val WM_DART_TASK_KEY = "dev.fluttercommunity.workmanager.DART_TASK"
 
@@ -190,6 +202,25 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
          * 정하고, 그걸로 "재등록 대상이 자기 자신인가"를 판별해 self-cancel을 막는다.
          * 알람 경로는 one-off·periodic 어느 쪽도 아니므로 고유한 이름을 준다.
          */
+        /**
+         * 방화벽을 열어둘 [DozeWindowHolderWorker]를 **expedited로** 등록한다.
+         * 이 worker가 방화벽을 여는 유일한 주체이며, heartbeat worker는 일반 우선순위로
+         * 따로 돌면서 그 창 안에서 전송을 끝낸다.
+         */
+        private fun enqueueWindowHolder(context: Context) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
+            try {
+                val req = OneTimeWorkRequest.Builder(DozeWindowHolderWorker::class.java)
+                    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                    .build()
+                WorkManager.getInstance(context)
+                    .enqueueUniqueWork(HOLDER_WORK_NAME, ExistingWorkPolicy.REPLACE, req)
+                Log.d(TAG, "HOLD enqueued ($HOLDER_WORK_NAME)")
+            } catch (e: Throwable) {
+                Log.d(TAG, "HOLD enqueue 실패: ${e.javaClass.simpleName}: ${e.message}")
+            }
+        }
+
         @Suppress("UNCHECKED_CAST")
         private fun enqueueHeartbeat(context: Context) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
@@ -198,8 +229,10 @@ class DozeAlarmProbeReceiver : BroadcastReceiver() {
             }
             try {
                 val cls = Class.forName(WM_BACKGROUND_WORKER) as Class<out ListenableWorker>
+                // ⚠️ **expedited를 쓰지 않는다.** 창은 [DozeWindowHolderWorker]가 담당한다.
+                // 둘 다 expedited면 쿼터를 두 배로 쓰면서, 먼저 끝나는 쪽이 창을 닫아
+                // 08-23의 실패가 재현된다.
                 val req = OneTimeWorkRequest.Builder(cls)
-                    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                     .setInputData(
                         Data.Builder()
                             .putString(WM_DART_TASK_KEY, DART_TASK_NAME)
