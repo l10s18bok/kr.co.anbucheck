@@ -119,8 +119,14 @@ struct HeartbeatStore {
     /// 무조건 심어두고, **푸시가 도착하면(=망이 있으면) 확장이 지운다.**
     /// 망이 없으면 푸시가 안 오고 확장도 안 돌아 알림이 그대로 발화한다.
     static func clearTodayOfflineFallback() {
-        UNUserNotificationCenter.current()
-            .removePendingNotificationRequests(withIdentifiers: [offlineIdPrefix + today()])
+        let center = UNUserNotificationCenter.current()
+        let id = offlineIdPrefix + today()
+        center.removePendingNotificationRequests(withIdentifiers: [id])
+        // ⚠️ **표시된 것도 함께 지운다.** pending만 지우면, 폴백이 **이미 발화한 뒤**
+        // 늦게 안부가 전달된 경우(재시도 성공·통신 복구 등) "누르지 않으면 오늘의 안부가
+        // 전달되지 않습니다"가 트레이에 그대로 남아 **사실과 다른 안내**를 하게 된다.
+        // 2026-08-23 실측: 06:15 폴백 발화 → 06:49 전송 성공 → 알림이 계속 남아 있었다.
+        center.removeDeliveredNotifications(withIdentifiers: [id])
     }
 
     /// 앞으로 N일치 오프라인 폴백을 단발로 채운다(이미 있는 날은 같은 ID로 덮어씀).
