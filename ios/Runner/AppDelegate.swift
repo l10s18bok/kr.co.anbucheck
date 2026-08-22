@@ -27,7 +27,35 @@ import GoogleMaps
     // Firebase 초기화 완료 후 APNs 등록
     application.registerForRemoteNotifications()
 
+    // ── [probe/ios-nse] 오프라인 폴백 알림 사전 무장 (프로브 전용) ──────
+    // Q2 검증용: **앱 프로세스가** 심어둔 pending 요청을 나중에 **확장 프로세스가**
+    // 지울 수 있는지 본다. 같은 호출에서 심고 지우면 아무것도 증명하지 못한다.
+    // 본 구현에서는 "예약시각 +15분 오프라인 알림"이 이 자리에 온다.
+    // [probe/ios-nse] 알림 권한을 런치 즉시 요청한다.
+    // 시뮬레이터는 simctl로 알림 권한을 미리 줄 수 없고, 권한이 없으면 푸시가
+    // 폐기되어 확장 자체가 실행되지 않는다 → 검증이 성립하지 않는다.
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { ok, _ in
+      NSLog("[PROBE] notification auth: %@", ok ? "granted" : "denied")
+    }
+    armProbeOfflineNotification()
+
     return result
+  }
+
+  /// [probe/ios-nse] 15분 뒤 발화하는 오프라인 폴백 알림을 심는다.
+  /// 확장이 이걸 pending에서 제거하지 못하면 화면에 그대로 뜬다 = Q2 실패.
+  private func armProbeOfflineNotification() {
+    let content = UNMutableNotificationContent()
+    content.title = "PROBE-OFFLINE (앱이 심음)"
+    content.body = "확장이 지우지 못하면 이 알림이 그대로 발화한다."
+    let req = UNNotificationRequest(
+      identifier: "probe-offline",
+      content: content,
+      trigger: UNTimeIntervalNotificationTrigger(timeInterval: 900, repeats: false)
+    )
+    UNUserNotificationCenter.current().add(req) { err in
+      NSLog("[PROBE] arm probe-offline: %@", err == nil ? "ok" : err!.localizedDescription)
+    }
   }
 
   /// SceneDelegate 환경에서 FlutterViewController 조회

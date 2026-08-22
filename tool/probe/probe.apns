@@ -1,0 +1,12 @@
+{
+  "Simulator Target Bundle": "kr.co.anbucheck.live",
+  "aps": {
+    "alert": {
+      "title": "PROBE-ORIGINAL",
+      "body": "PROBE-ORIGINAL — 이 문구가 보이면 확장이 실행되지 않은 것이다."
+    },
+    "mutable-content": 1,
+    "sound": "default"
+  },
+  "probe": "sim-002"
+}
