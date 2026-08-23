@@ -565,6 +565,71 @@ WorkManager의 `ForceStopRunnable`이 밀려 있던 one-off·periodic까지 함�
 이미 확인된 사실 두 개가 이 설계를 뒷받침한다 — **창 길이 = job 수명**(08-22 11:04),
 **41초까지 `onStopped()` 없음**(같은 날). 90초가 가능한지는 재측정이 필요하다.
 
+### ★ 종단 성공 — 딥 Doze + RARE에서 heartbeat가 전송됐다 (2026-08-24 07:07, SM-A325N)
+
+창 유지자(`DozeWindowHolderWorker`)를 도입한 뒤 첫 시도에서 성공했다.
+
+```
+07:07:17.752  FIRED  idle=true bucket=40(RARE)      ← 예약 07:00 대비 +7분 17초
+07:07:17.773  HOLD enqueued
+07:07:43.420  ★ 방화벽 열림
+07:07:43.50~74  워커 4개 시작 (BackgroundWorker ×3 + 창 유지자)
+07:07:54.662  걸음수 result: 61  (조회 0.17초)
+07:07:55.210  DNS 요청 = POST 시작                  ← ★ 창 안에서
+07:07:56.312  HOLD ended held=12572ms reason=heartbeat-done
+07:07:56.347  방화벽 닫힘 — 열린 시간 12.9초
+```
+
+**전날 실패와의 유일한 차이가 창 길이다.**
+
+| | 08-23 (실패) | 08-24 (성공) |
+|---|---|---|
+| 방화벽 열린 시간 | 11.1초 (expedited job이 먼저 끝남) | **12.9초** (유지자가 붙잡음) |
+| POST 시점 | 창이 닫힌 뒤 33초 | **창 안** |
+| 결과 | `send_failed` | **전송 성공** |
+
+**성능**: 예약 07:00 → 전송 완료 07:07:56 = **+7분 56초**.
+WorkManager 단독 실측(+1h27m ~ +2h52m, 상한 없음) 대비 **10~20배 개선**이며 상한 60분이 보장된다.
+
+부수 확인:
+- **중복 전송 없음** — `BackgroundWorker` 3개가 동시 실행됐는데도 `lastScheduledKey` + SQLite 락이 정상 차단
+- `reason=heartbeat-done`이 나왔다 = **Kotlin이 `flutter.last_heartbeat_date`를 읽을 수 있다**(전날 08-23 10:07에 5ms 조기 종료로 먼저 검증)
+- 걸음수 조회가 **0.17초** — 08-23의 33초는 재현되지 않았다. Doze 고유 특성이 아니라 그때의 GMS 콜드 스타트/경합이었을 가능성이 크다(n=2로 갈렸으므로 원인 미확정)
+
+### ⚠️ 샤오미(MIUI)에서만 관측된 것 — **표본 1대, 일반화 금지**
+
+아래는 **Redmi 23021RAA2Y / Android 15 / MIUI 1대에서만** 본 현상이다. 다른 제조사·기기에서
+같은 일이 일어난다는 근거는 없다. 삼성(SM-A325N)에서는 관측되지 않았다.
+
+같은 빌드로 같은 날 06:30 예약, **딥 Doze가 아닌 상태**(`idle=false`, 충전·핫스팟 소스):
+
+```
+06:32:00.233  FIRED  idle=false bucket=10           ← 알람은 오히려 더 정확(+2분)
+06:32:06      걸음수 result: 9 (0.2초)
+06:32:59      ★ send_failed 알림 게시 — 첫 전송 시도 실패
+06:35:08.375  HOLD ended held=187763ms reason=timeout   ← 예산 90초인데 187초
+06:35:08.382  HOLD onStopped                            ← 시스템이 job 중단
+06:41:26.086  HOLD ended held=377622ms reason=timeout   ← 재시도, 377초
+06:41:26      SmartPower: kr.co.anbucheck.live idle->background(374713ms)
+06:46:38      ActivityManager: Killing 15140:kr.co.anbucheck.live (adj 965): empty
+06:49         전송 성공 (이후 워커가 수행) — 예약 대비 **+19분**
+```
+
+**이 기기에서 관측된 것 세 가지:**
+
+1. **프로세스 동결.** `held`가 예산의 2~4배로 늘었다. `Thread.sleep(500)` 루프가 정상이면
+   90초에 끝나야 한다. MIUI `SmartPower`가 같은 시각 `idle->background(374713ms)`,
+   즉 **374초 동안 idle 상태**였다고 찍었다. 창 유지자는 딥 Doze의 방화벽을 여는 장치이지
+   이런 동결을 막지는 못한다.
+2. **프로세스 강제 종료.** `Killing ... (adj 965): empty` — 워커가 끝난 뒤 곧바로 죽였다.
+3. **`onStopped()` 첫 관측.** 약 188초 만에 시스템이 expedited job을 중단시켰다. 지금까지
+   삼성에서는 41초까지 중단이 없었다. **expedited 실행시간 상한이 존재한다는 첫 증거지만,
+   그 값이 AOSP 공통인지 MIUI 고유인지는 이 표본으로 알 수 없다.**
+
+⚠️ **이 관측을 "안드로이드는 이렇다"로 확장하지 말 것.** 딥 Doze 상태도 아니었으므로
+방화벽·창과는 다른 현상이다. 삼성 결과(위 절)와 뒤섞어 해석하면 둘 다 틀리게 된다.
+MIUI 대응이 필요한지는 **딥 Doze 상태의 샤오미**에서 다시 재본 뒤에 판단한다.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
