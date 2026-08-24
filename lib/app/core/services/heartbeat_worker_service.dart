@@ -8,7 +8,7 @@ import 'package:timezone/timezone.dart' as tzlib;
 import 'package:workmanager/workmanager.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
-import 'package:anbucheck/app/core/services/doze_alarm_probe.dart';
+import 'package:anbucheck/app/core/services/heartbeat_alarm.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 
@@ -263,7 +263,7 @@ class HeartbeatWorkerService {
     // 같은 순간을 두 메커니즘이 겨루게 해야 비교가 성립한다 —
     // WorkManager one-off은 창을 기다리고(실측 +2.5~3h), 알람은 안 기다린다(기대 +2~15m).
     // 포그라운드에서만 성공하며 실패해도 무해하다(리시버가 매일 자가 재무장).
-    unawaited(DozeAlarmProbe.arm(hour, minute));
+    unawaited(HeartbeatAlarm.arm(hour, minute));
     // periodic(안전망) 우선 — one-off 등록이 실패해도 15분 폴링은 살아남는다.
     await _retryRegister('periodic', () => _registerPeriodic(hour, minute));
     await _retryRegister('one-off', () => _registerOneOff(hour, minute));
@@ -416,7 +416,7 @@ class HeartbeatWorkerService {
     // ⚠️ 채널이 MainActivity에 있어 **포그라운드에서만 실제로 취소된다.** G+S 비활성화·
     // 탈퇴·모드 전환은 전부 포그라운드라 문제없고, 백그라운드 isolate에서 오는 401 경로는
     // 취소가 스킵되지만 그때도 Dart의 role 가드가 매 발화를 무해하게 만든다.
-    unawaited(DozeAlarmProbe.cancel());
+    unawaited(HeartbeatAlarm.cancel());
     final now = DateTime.now();
     for (final d in [now, now.add(const Duration(days: 1))]) {
       await Workmanager().cancelByUniqueName(_oneOffNameFor(d));

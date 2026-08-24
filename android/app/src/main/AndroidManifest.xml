@@ -109,7 +109,7 @@
              exported=false: 외부에서 부를 필요가 없다. adb로 강제 발화시킬 일이 있으면
              `am broadcast`가 아니라 앱을 열어 armInMinutes로 무장한다. -->
         <receiver
-            android:name=".DozeAlarmProbeReceiver"
+            android:name=".HeartbeatAlarmReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

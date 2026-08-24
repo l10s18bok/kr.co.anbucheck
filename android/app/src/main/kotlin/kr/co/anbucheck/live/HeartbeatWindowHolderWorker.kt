@@ -42,7 +42,7 @@ import java.util.Locale
  * (엔진 11초 + 걸음수 조회 + 전송 여유), 시스템이 중단시키면 `onStopped()` 로그로
  * 그 상한이 어디인지 드러난다.
  */
-class DozeWindowHolderWorker(private val ctx: Context, params: WorkerParameters) :
+class HeartbeatWindowHolderWorker(private val ctx: Context, params: WorkerParameters) :
     Worker(ctx, params) {
 
     @Volatile private var stopped = false
@@ -89,7 +89,7 @@ class DozeWindowHolderWorker(private val ctx: Context, params: WorkerParameters)
     private fun now(): String = SimpleDateFormat("HH:mm:ss.SSS", Locale.US).format(Date())
 
     companion object {
-        private val TAG = DozeAlarmProbeReceiver.TAG
+        private val TAG = HeartbeatAlarmReceiver.TAG
 
         /**
          * 창을 유지할 최대 시간.

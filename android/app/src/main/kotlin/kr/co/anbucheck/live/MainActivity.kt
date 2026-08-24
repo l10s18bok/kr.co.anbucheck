@@ -17,7 +17,7 @@ class MainActivity : FlutterActivity() {
 
     // Doze 관통 알람 실측 프로브 (Phase 1). 포그라운드 전용 채널이면 충분하다 —
     // 리시버가 발화 때마다 스스로 다음 날로 재무장하므로 1회만 무장하면 된다.
-    private val dozeAlarmChannel = "anbucheck/doze_alarm_probe"
+    private val heartbeatAlarmChannel = "anbucheck/heartbeat_alarm"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -34,24 +34,17 @@ class MainActivity : FlutterActivity() {
                     else -> result.notImplemented()
                 }
             }
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, dozeAlarmChannel)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, heartbeatAlarmChannel)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
                     "arm" -> {
                         val hour = call.argument<Int>("hour") ?: 18
                         val minute = call.argument<Int>("minute") ?: 0
-                        DozeAlarmProbeReceiver.arm(applicationContext, hour, minute)
-                        result.success(true)
-                    }
-                    "armInMinutes" -> {
-                        DozeAlarmProbeReceiver.armInMinutes(
-                            applicationContext,
-                            call.argument<Int>("minutes") ?: 30,
-                        )
+                        HeartbeatAlarmReceiver.arm(applicationContext, hour, minute)
                         result.success(true)
                     }
                     "cancel" -> {
-                        DozeAlarmProbeReceiver.cancel(applicationContext)
+                        HeartbeatAlarmReceiver.cancel(applicationContext)
                         result.success(true)
                     }
                     else -> result.notImplemented()
