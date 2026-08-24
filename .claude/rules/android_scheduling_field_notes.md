@@ -648,12 +648,22 @@ MIUI 대응이 필요한지는 **딥 Doze 상태의 샤오미**에서 다시 재
 Android 15, **표본 1대**). 앱 업데이트는 막고 재부팅은 통과시킨다:
 
 ```
-08-24 08:53:22  W/BroadcastQueueInjector: Unable to launch app kr.co.anbucheck.live
+08-24 09:03:51  D/DozeAlarmProbe: ARMED (system:BOOT_COMPLETED)   ← 통과
+08-24 09:03:51  D/WM-RescheduleReceiver: Received intent ... BOOT_COMPLETED  ← 통과
+08-24 09:56:33  W/BroadcastQueueInjector: Unable to launch app kr.co.anbucheck.live/10521
                 for broadcast { act=android.intent.action.MY_PACKAGE_REPLACED }:
-                ★ process is not permitted to auto start        ← 차단 (08-22에도 동일)
-08-24 09:03:51  D/DozeAlarmProbe: ARMED (system:android.intent.action.BOOT_COMPLETED)
-                                                                 ← 통과
+                ★ process is not permitted to auto start         ← 차단 (08-22에도 동일)
 ```
+
+**같은 기기·같은 날·53분 간격의 통제 대조다.** 자동시작 설정이 그 사이에 바뀌지 않았으므로
+"자동시작이 꺼져 있어 모든 브로드캐스트가 막힌다"로는 설명되지 않는다 — **브로드캐스트별
+차이**다. (인터넷 검색으로는 확증을 못 찾았다. 블로그·포럼은 "OEM이 BOOT_COMPLETED를 막는다"
+수준의 일반론뿐이고 이 조합을 다룬 1차 자료가 없다. **근거는 위 실측 하나이며 표본 1대다.**)
+
+⚠️ **차단되는 것은 "브로드캐스트 수신"이 아니라 "그 브로드캐스트를 위한 프로세스 콜드
+스타트"다**(`Unable to launch app`). 알람 발화와 JobScheduler job은 같은 기기에서 정상적으로
+프로세스를 띄운다(08-24 06:32 샤오미 알람 발화 + 워커 실행). 그래서 **`Application.onCreate`
+재무장이 MIUI에서도 동작한다** — WorkManager가 한 번 뛰면 그때 프로세스가 뜨고 알람이 살아난다.
 
 이 기기에서 업데이트 후 알람이 살아남은 것은 **우리 재무장 코드가 돈 결과가 아니라
 MIUI가 알람을 지우지 않은 덕**이다(삼성은 지운다). 우연에 기대는 상태이므로,
@@ -693,6 +703,31 @@ Kotlin에서 `getInt`로 읽으면 `ClassCastException`이 나고, catch가 없�
 
 ⚠️ 이 경로는 **앱을 열지 않은 채로** 검증해야 한다. 설치 후 앱을 한 번이라도 열면
 포그라운드 무장이 덮어써서 무엇이 통과했는지 알 수 없게 된다.
+
+### 알람 무장 진입점 — **`Application.onCreate`가 본진**이다 (2026-08-24)
+
+무장 경로가 원래 셋뿐이었고 셋 다 구멍이 있었다:
+
+| 경로 | 구멍 |
+|---|---|
+| MethodChannel `anbucheck/heartbeat_alarm` | **`MainActivity.configureFlutterEngine`에만 등록**돼 있다 → WorkManager가 띄우는 백그라운드 FlutterEngine에는 없다. 워커의 `_onHeartbeatSent → schedule()`은 `MissingPluginException`을 삼키고 지나간다. **즉 포그라운드에서만 무장된다** |
+| `MY_PACKAGE_REPLACED` | MIUI 차단(위 절) |
+| `BOOT_COMPLETED` | 재부팅 전까지 무장 안 됨 |
+
+그래서 `AnbuApplication.onCreate`에서 `armNextDaily`를 부른다. **프로세스가 뜨는 이유를
+가리지 않는다** — 포그라운드 실행·WorkManager 워커·FCM 수신·알람 브로드캐스트 전부.
+
+- `armNextDaily`는 저장 시각의 "다음 발생"으로 **같은 PendingIntent를 덮어쓰므로 idempotent**다.
+- 예약시각 키가 없는 기기(순수 보호자)는 무장하지 않고 돌아온다.
+- 비용은 prefs 1회 읽기 + `setAndAllowWhileIdle` 1회. 콜드 스타트 경로라 예외는 전부 삼킨다.
+- `android:name`이 Flutter 기본값 `${applicationName}`에서 `.AnbuApplication`으로 바뀌었다.
+  `-Pbase-application-name` 오버라이드는 minSdk 29(네이티브 multidex)라 쓰이지 않는다.
+  ⚠️ **XML 주석을 `<application>` 시작 태그 *안*에 넣지 말 것** — 속성 목록 사이의 주석은
+  파싱 에러다. 검증은 `python3 -c "import xml.dom.minidom; xml.dom.minidom.parse(...)"` +
+  병합 매니페스트(`build/app/intermediates/merged_manifests/release/.../AndroidManifest.xml`)에서
+  `android:name="kr.co.anbucheck.live.AnbuApplication"` 확인.
+- ⚠️ Gradle은 **Java 17+**가 필요하다. Android Studio 번들 JDK가 11로 잡히면
+  `export JAVA_HOME=/Users/macmini/Library/Java/JavaVirtualMachines/openjdk-19.0.2/Contents/Home`.
 
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
