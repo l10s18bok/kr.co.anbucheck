@@ -831,6 +831,59 @@ adb -s "$SER" shell "dumpsys jobscheduler | grep -c 'kr.co.anbucheck.live/androi
 adb -s "$SER" shell "dumpsys alarm | grep -o 'anbucheck.live[^ ]*' | sort -u"
 ```
 
+### ★★ MIUI `power_pending` — allow-while-idle 알람을 **정확히 +3일** 미룬다 (2026-08-25)
+
+**0차 알람 계층이 이 MIUI 기기에서는 사실상 동작하지 않는다.** 배터리 설정은 **기본(최적화)**
+상태였다 — 사용자가 무엇을 잘못 만진 결과가 아니다.
+
+```
+tag=*walarm*:kr.co.anbucheck.live.HEARTBEAT_ALARM
+origWhen=2026-08-26 06:30:00.000
+policyWhenElapsed: requester=+21h42m6s698ms ... power_pending=+3d21h42m6s698ms
+whenElapsed=+3d21h42m6s698ms        ← ★ 실제 배달 예정
+```
+
+`whenElapsed`(실제 배달 시각)는 정책들의 **최댓값**이다. `power_pending`이 요청 시각에
+**정확히 72시간**을 더하고 그게 최댓값이 되어, 알람이 예약일이 아니라 **3일 뒤**에 배달된다.
+전날 덤프에서도 동일했다(`requester=+18h47m33s139ms` → `power_pending=+3d18h47m33s139ms`).
+
+**경험적 확증**: 08-24 12:06에 08-25 06:30으로 무장 → **06:30에 발화하지 않았다.**
+그날 06:34에 뛴 것은 WorkManager 단독이었고(`Start proc ... for service {SystemJobService}
+caller=android` — 알람 브로드캐스트가 아님), 창 유지자가 없어 방화벽이 닫힌 채 전송을 시도해
+프로세스 시작 **6.6초** 만에 `send_failed`가 게시됐다(즉시 unreachable → 백오프 생략 경로).
+
+**삼성과의 정책 대비 — `power_pending`/`ssru`는 AOSP에 없다:**
+
+| | SM-A325N (삼성) | 23021RAA2Y (MIUI) |
+|---|---|---|
+| 정책 목록 | requester / app_standby / device_idle / battery_saver / **tare** / **gms_manager** | requester / app_standby / device_idle / battery_saver / **ssru** / **power_pending** |
+| 같은 날 실제 발화 | 예약 **+29분 17초** (딥 Doze·RARE) | **미발화** (+3일로 밀림) |
+
+**앱별로 다르게 적용된다** — 그 시점 알람 223개 중 `power_pending=+`는 **32개**뿐이고
+나머지 191개는 `power_pending=--`(미적용)였다.
+
+- 적용됨: Facebook 계열, Toss, Play Store, MIUI 추천, **kr.co.anbucheck.live**
+- 미적용: 카카오톡, GMS, 기본 시계, MIUI 알림
+
+즉 "모든 앱을 3일 미루는" 전역 정책이 아니라 **선별 정책**이다. 선별 기준은 미확인.
+⚠️ **인터넷에 1차 자료가 없다.** `power_pending`·`ssru`는 MIUI 비공개 구현이고 검색으로는
+`dumpsys alarm` 일반 설명만 나온다. 근거는 위 실측뿐이며 **표본 1대**다.
+
+**영향 범위 — 회귀는 아니다.** 알람이 안 떠도 1~3차는 그대로 돌았다(WorkManager가 06:34,
+예약 +4분에 발화). MIUI에서는 0차의 정시성 이득만 사라지고 최악이 기존 동작이라는 설계
+전제가 여기서도 유지된다. 다만 **"상한 60분 보장"은 MIUI에서 주장하면 안 된다.**
+
+⚠️ **판정 시 `origWhen`을 보지 말 것.** `origWhen`은 요청 시각이라 정상으로 보인다.
+반드시 `whenElapsed`와 `policyWhenElapsed`를 함께 읽어야 밀린 것이 보인다:
+```bash
+adb -s "$SER" shell "dumpsys alarm | grep -A4 'anbucheck.live.HEARTBEAT_ALARM'"
+```
+
+⚠️ **`dumpsys jobscheduler`의 "job 2개가 내일자"를 성공 서명으로 읽지 말 것.** 앱을 열면
+`_syncScheduleFromServer → schedule()`이 같은 모양을 만든다. 2026-08-25에 이 오독으로
+"샤오미 전송 성공"이라 판단했다가 `send_failed` 알림(ID `0x53466169`) 게시 로그로 뒤집혔다.
+전송 성공/실패의 신뢰할 수 있는 지표는 **`notification_enqueue`의 알림 ID**와 서버 도착 기록이다.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
