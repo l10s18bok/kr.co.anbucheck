@@ -114,9 +114,22 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
          */
         private const val DART_TASK_NAME = "heartbeat_task"
 
-        private const val PREFS = "heartbeat_alarm"
-        private const val KEY_HOUR = "hour"
-        private const val KEY_MINUTE = "minute"
+        /**
+         * 예약시각은 **Dart가 쓰는 prefs를 직접 읽는다.** 알람이 자체 복사본을 갖지 않는 이유:
+         *
+         *  - 복사본은 **포그라운드에서만** 채워진다. 그러면 업데이트·재부팅 후 사용자가 앱을
+         *    열기 전까지 알람이 무장되지 않는다. 이 앱의 주 대상은 **앱을 열지 않는 사용자**라
+         *    혜택을 가장 받아야 할 사람이 못 받는 구조가 된다.
+         *  - 단일 출처가 되어 Dart의 예약시각과 알람이 어긋날 여지가 없다.
+         *  - prefs 이름이 바뀌어도 마이그레이션이 필요 없다.
+         *
+         * ⚠️ `shared_preferences`는 Dart `int`를 **`putLong`으로 저장**한다
+         * (`MethodCallHandlerImpl`의 `putLong(key, number.longValue())`). `getInt`로 읽으면
+         * `ClassCastException`이 난다 — 반드시 `getLong`을 쓰고, 구버전 대비 `getInt` 폴백을 둔다.
+         */
+        private const val FLUTTER_PREFS = "FlutterSharedPreferences"
+        private const val KEY_HOUR = "flutter.heartbeat_hour"
+        private const val KEY_MINUTE = "flutter.heartbeat_minute"
         private fun pendingIntent(context: Context) = android.app.PendingIntent.getBroadcast(
             context,
             REQUEST_CODE,
@@ -185,20 +198,34 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
          *    "allow-while-idle이 안 되는구나"로 오독하게 만든다.
          */
         fun arm(context: Context, hour: Int, minute: Int) {
-            context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
-                .putInt(KEY_HOUR, hour).putInt(KEY_MINUTE, minute).apply()
-            armNextDaily(context, reason = "arm($hour:$minute)")
+            // Dart가 `saveHeartbeatSchedule`로 prefs를 먼저 쓴 뒤 이 경로를 부르므로
+            // 값은 이미 저장돼 있다. 여기서는 전달받은 값을 그대로 써서 prefs 읽기에
+            // 의존하지 않는다(포그라운드 경로는 정확한 값을 이미 갖고 있다).
+            armAt(context, hour, minute, reason = "arm($hour:$minute)")
         }
 
         /** 저장된 시각의 "다음 발생"으로 무장. 이미 지났으면 내일. */
         fun armNextDaily(context: Context, reason: String) {
-            val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            val hour = prefs.getInt(KEY_HOUR, -1)
-            val minute = prefs.getInt(KEY_MINUTE, -1)
+            val prefs = context.getSharedPreferences(FLUTTER_PREFS, Context.MODE_PRIVATE)
+            val hour = readScheduleInt(prefs, KEY_HOUR)
+            val minute = readScheduleInt(prefs, KEY_MINUTE)
             if (hour < 0 || minute < 0) {
-                Log.d(TAG, "ARM skipped ($reason) — 저장된 시각 없음")
+                // 대상자/G+S가 아니거나 아직 한 번도 스케줄을 받지 않은 기기 — 무장하지 않는다.
+                Log.d(TAG, "ARM skipped ($reason) — 예약시각 없음 (h=$hour m=$minute)")
                 return
             }
+            armAt(context, hour, minute, reason)
+        }
+
+        /** `shared_preferences`의 Long 저장을 읽되, 구버전이 Int로 넣었을 가능성에 대비한다. */
+        private fun readScheduleInt(prefs: android.content.SharedPreferences, key: String): Int =
+            try {
+                prefs.getLong(key, -1L).toInt()
+            } catch (_: ClassCastException) {
+                try { prefs.getInt(key, -1) } catch (_: Throwable) { -1 }
+            } catch (_: Throwable) { -1 }
+
+        private fun armAt(context: Context, hour: Int, minute: Int, reason: String) {
             val cal = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, hour)
                 set(Calendar.MINUTE, minute)
