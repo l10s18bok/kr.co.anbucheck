@@ -24,9 +24,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
+<!-- ⚠️ android:name은 Flutter 기본값 ${applicationName}(= android.app.Application) 대신 자체 클래스다.
+     프로세스가 뜨는 모든 경로에서 heartbeat 알람을 재무장하기 위함 — 상세 사유는 AnbuApplication 주석.
+     Flutter tool의 -Pbase-application-name 오버라이드는 minSdk 29(네이티브 multidex)라 쓰이지 않는다. -->
 <application
         android:label="@string/app_name"
-        android:name="${applicationName}"
+        android:name=".AnbuApplication"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
         android:fullBackupContent="false"
