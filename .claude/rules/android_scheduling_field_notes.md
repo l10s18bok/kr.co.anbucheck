@@ -636,12 +636,34 @@ MIUI 대응이 필요한지는 **딥 Doze 상태의 샤오미**에서 다시 재
 아래가 검증된 뒤에 한다** — 컴포넌트명이 바뀌면 기존 알람 `PendingIntent`가 무효화되므로,
 재무장 경로가 실제로 도는지 먼저 알아야 한다.
 
-| 경로 | 상태 | 확인 방법 |
-|---|---|---|
-| **앱 업데이트 후 재무장** (`MY_PACKAGE_REPLACED`) | ❌ 미검증 | 설치 후 **앱을 열지 말고** `dumpsys alarm`에 `DOZE_ALARM_PROBE`가 있는지, logcat에 `ARMED (system:...MY_PACKAGE_REPLACED)`가 찍히는지 |
-| **재부팅 후 재무장** (`BOOT_COMPLETED`) | ❌ 미검증 | 재부팅 후 같은 확인. ⚠️ 재부팅은 진행 중인 재현 테스트를 날리므로 표본을 확보한 뒤에 한다 |
-| 딥 Doze 상태의 샤오미 | ❌ 미검증 | 지금까지 샤오미는 충전·핫스팟 소스라 Doze에 안 들어갔다 |
-| 알람 종단 성공 재현 | ⚠️ **n=1** (2026-08-24) | 같은 빌드로 며칠 반복 |
+| 경로 | SM-A325N | Redmi(MIUI) | 확인 방법 |
+|---|---|---|---|
+| **앱 업데이트 후 재무장**(`MY_PACKAGE_REPLACED`) | ✅ 08-24 08:53 | ❌ **차단** | 설치 후 **앱을 열지 말고** `dumpsys alarm` + `ARMED (system:...)` 로그 |
+| **재부팅 후 재무장**(`BOOT_COMPLETED`) | ✅ 08-24 09:07 | ✅ 09:03 | 재부팅 후 **5분 이상** 기다린 뒤 같은 확인 |
+| WorkManager 복원 | ✅ | ✅ | `WM-RescheduleReceiver: Received intent ... BOOT_COMPLETED` |
+| 딥 Doze 상태의 샤오미 | — | ❌ 미검증 | 샤오미는 충전·핫스팟 소스라 Doze에 안 들어갔다 |
+| 알람 종단 성공 재현 | ⚠️ **n=1** (08-24) | — | 같은 빌드로 며칠 반복 |
+
+**⚠️ MIUI는 브로드캐스트별로 자동 시작 제한을 다르게 적용한다** (Redmi 23021RAA2Y /
+Android 15, **표본 1대**). 앱 업데이트는 막고 재부팅은 통과시킨다:
+
+```
+08-24 08:53:22  W/BroadcastQueueInjector: Unable to launch app kr.co.anbucheck.live
+                for broadcast { act=android.intent.action.MY_PACKAGE_REPLACED }:
+                ★ process is not permitted to auto start        ← 차단 (08-22에도 동일)
+08-24 09:03:51  D/DozeAlarmProbe: ARMED (system:android.intent.action.BOOT_COMPLETED)
+                                                                 ← 통과
+```
+
+이 기기에서 업데이트 후 알람이 살아남은 것은 **우리 재무장 코드가 돈 결과가 아니라
+MIUI가 알람을 지우지 않은 덕**이다(삼성은 지운다). 우연에 기대는 상태이므로,
+MIUI 대응이 필요하면 이 구분을 근거로 삼는다. 다른 OEM에 일반화하지 말 것.
+
+⚠️ **`BOOT_COMPLETED`는 부팅 직후가 아니라 2~4분 뒤에 온다**(삼성 +2m19s, 샤오미 +3m22s).
+부팅 1~2분 시점에 "재무장 안 됐다"고 판정하면 오진이다.
+
+⚠️ **재부팅은 무선 adb(`adb tcpip 5555`)와 `logcat -G` 설정을 모두 날린다.**
+순서: 재부팅 → USB 연결 → `tcpip 5555` + `logcat -G` → **5분 대기 후 확인** → 케이블 제거.
 
 업데이트가 알람을 지운다는 것 자체는 실측됐다 — 2026-08-22 16:11 로그에
 `Force stopping kr.co.anbucheck.live: installPackageLI` / `pkg removed`가 찍혔다.
