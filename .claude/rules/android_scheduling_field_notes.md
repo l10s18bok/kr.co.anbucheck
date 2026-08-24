@@ -638,7 +638,7 @@ MIUI 대응이 필요한지는 **딥 Doze 상태의 샤오미**에서 다시 재
 
 | 경로 | SM-A325N | Redmi(MIUI) | 확인 방법 |
 |---|---|---|---|
-| **앱 업데이트 후 재무장**(`MY_PACKAGE_REPLACED`) | ✅ 08-24 08:53 | ❌ **차단** | 설치 후 **앱을 열지 말고** `dumpsys alarm` + `ARMED (system:...)` 로그 |
+| **앱 업데이트 후 재무장**(`MY_PACKAGE_REPLACED`) | ⚠️ 브로드캐스트 도달 ✅ / **무장은 실패**(아래 참조) | ❌ **차단** | 설치 후 **앱을 열지 말고** `ARMED (system:...) for=`에 **실제 시각**이 찍히는지 확인. `ARM skipped`면 실패 |
 | **재부팅 후 재무장**(`BOOT_COMPLETED`) | ✅ 08-24 09:07 | ✅ 09:03 | 재부팅 후 **5분 이상** 기다린 뒤 같은 확인 |
 | WorkManager 복원 | ✅ | ✅ | `WM-RescheduleReceiver: Received intent ... BOOT_COMPLETED` |
 | 딥 Doze 상태의 샤오미 | — | ❌ 미검증 | 샤오미는 충전·핫스팟 소스라 Doze에 안 들어갔다 |
@@ -669,6 +669,30 @@ MIUI 대응이 필요하면 이 구분을 근거로 삼는다. 다른 OEM에 일
 `Force stopping kr.co.anbucheck.live: installPackageLI` / `pkg removed`가 찍혔다.
 지금까지 테스트에서 드러나지 않은 이유는 **설치할 때마다 앱을 열어 재무장했기 때문**이다.
 실사용자는 Play 자동 업데이트 뒤에 앱을 열지 않는다.
+
+### ⚠️ 예약시각은 **Dart의 prefs를 직접 읽는다** — 복사본을 두면 조용히 죽는다 (2026-08-24)
+
+알람은 한때 자체 prefs(`heartbeat_alarm`)에 예약시각 복사본을 두었다. 그 복사본은
+**포그라운드에서만** 채워진다(`HeartbeatWorkerService.schedule` → `HeartbeatAlarm.arm`).
+그래서 업데이트·재부팅으로 재무장 브로드캐스트가 와도 값이 비어 있으면 무장을 건너뛴다:
+
+```
+08-24 09:56:37  D/HeartbeatAlarm: ARM skipped (system:...MY_PACKAGE_REPLACED) — 저장된 시각 없음
+                ← 1.2.7+49 설치 후 앱을 열지 않은 삼성. 재무장 코드는 돌았으나 값이 없어 무의미
+```
+
+**이 앱의 주 대상은 앱을 열지 않는 사용자다.** "업데이트 후 앱을 한 번 열어 주세요"는
+요구할 수 없으므로, 알람은 복사본을 갖지 않고 `FlutterSharedPreferences`의
+`flutter.heartbeat_hour` / `flutter.heartbeat_minute`를 직접 읽는다. 단일 출처가 되어
+Dart 예약시각과 알람이 어긋날 여지도 사라진다. **복사본 방식으로 되돌리지 말 것.**
+
+⚠️ **`shared_preferences`는 Dart `int`를 `putLong`으로 저장한다**
+(`shared_preferences_android`의 `MethodCallHandlerImpl`: `putLong(key, number.longValue())`).
+Kotlin에서 `getInt`로 읽으면 `ClassCastException`이 나고, catch가 없으면 리시버가 통째로
+죽는다. `getLong` + `getInt` 폴백으로 읽는다.
+
+⚠️ 이 경로는 **앱을 열지 않은 채로** 검증해야 한다. 설치 후 앱을 한 번이라도 열면
+포그라운드 무장이 덮어써서 무엇이 통과했는지 알 수 없게 된다.
 
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
