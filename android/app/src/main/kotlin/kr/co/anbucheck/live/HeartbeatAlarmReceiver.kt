@@ -130,6 +130,21 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
         private const val FLUTTER_PREFS = "FlutterSharedPreferences"
         private const val KEY_HOUR = "flutter.heartbeat_hour"
         private const val KEY_MINUTE = "flutter.heartbeat_minute"
+
+        /**
+         * 역할 가드용 키. Dart 워커 콜백의 `if (role != 'subject' && !isAlsoSubject) return`과
+         * **같은 기준**이다.
+         *
+         * ⚠️ 예약시각만 보고 무장하면 안 된다. `disableSubjectFeature`(G+S 끄기)는
+         * `is_also_subject=false`만 저장하고 **예약시각은 남겨 둔다**(재활성화 시 설정 보존).
+         * 그 상태에서 프로세스가 뜨면 `Application.onCreate`가 남은 시각으로 알람을 다시
+         * 무장하고, `onReceive`가 스스로 재무장하므로 **매일 기기를 깨우는 낭비가 영구히
+         * 반복된다.** 발화해도 Dart의 role 가드에 걸려 아무 일도 하지 않지만, 깨우는 비용은
+         * 그대로 든다. 백그라운드 isolate의 401 계정 삭제 경로는 `HeartbeatAlarm.cancel()`이
+         * 채널 부재로 스킵되므로 더 확실히 걸린다.
+         */
+        private const val KEY_ROLE = "flutter.user_role"
+        private const val KEY_IS_ALSO_SUBJECT = "flutter.is_also_subject"
         private fun pendingIntent(context: Context) = android.app.PendingIntent.getBroadcast(
             context,
             REQUEST_CODE,
@@ -207,6 +222,10 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
         /** 저장된 시각의 "다음 발생"으로 무장. 이미 지났으면 내일. */
         fun armNextDaily(context: Context, reason: String) {
             val prefs = context.getSharedPreferences(FLUTTER_PREFS, Context.MODE_PRIVATE)
+            if (!isSubjectEnabled(prefs)) {
+                Log.d(TAG, "ARM skipped ($reason) — 대상자 기능 꺼짐")
+                return
+            }
             val hour = readScheduleInt(prefs, KEY_HOUR)
             val minute = readScheduleInt(prefs, KEY_MINUTE)
             if (hour < 0 || minute < 0) {
@@ -215,6 +234,17 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
                 return
             }
             armAt(context, hour, minute, reason)
+        }
+
+        /** Dart 워커 콜백과 같은 기준: `role == 'subject' || isAlsoSubject`. */
+        private fun isSubjectEnabled(prefs: android.content.SharedPreferences): Boolean = try {
+            val role = prefs.getString(KEY_ROLE, null)
+            val alsoSubject = try { prefs.getBoolean(KEY_IS_ALSO_SUBJECT, false) } catch (_: Throwable) { false }
+            role == "subject" || alsoSubject
+        } catch (_: Throwable) {
+            // 읽기 실패 시 무장하지 않는다 — 잘못 무장해 매일 기기를 깨우는 쪽이
+            // 무장하지 않는 쪽(= 기존 1~3차 동작)보다 나쁘다.
+            false
         }
 
         /** `shared_preferences`의 Long 저장을 읽되, 구버전이 Int로 넣었을 가능성에 대비한다. */
