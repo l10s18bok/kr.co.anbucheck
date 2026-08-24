@@ -791,9 +791,45 @@ adb -s "$SER" shell am start -n \
 | 경로 | 자동시작 OFF 기본 상태 |
 |---|---|
 | 재부팅 | ✅ 복구 (실측) |
-| **Play 자동 업데이트** | ❌ **앱이 잠든다** — 유일한 구멍 |
-| FCM 푸시 도착 | ❓ 미검증 |
+| **Play 자동 업데이트** | ❌ 앱이 잠든다 — 단, 아래 FCM이 되살린다 |
+| **FCM 푸시 도착** | ✅ **복구 (실측, 아래)** |
 | 사용자가 앱 열기 | ✅ |
+
+#### ★ FCM 푸시가 잠든 MIUI 앱을 되살린다 — 종단 확인 (2026-08-24 12:06)
+
+업데이트로 job 0건·알람 0건이 된 샤오미에, 다른 기기(삼성)의 **수동 안부 보고**로
+`manual_report` 푸시를 보냈다. 탭하지 않았다 — **도착만으로** 복구됐다.
+
+```
+12:06:00.389  ActivityManager: Start proc 10045:kr.co.anbucheck.live for broadcast
+              {.../FlutterFirebaseMessagingReceiver} caller=com.google.android.gms
+                                                    ← 자동시작 차단 로그 없음
+12:06:00.566  WM-WrkMgrInitializer: Initializing WorkManager
+12:06:00.587  WM-ForceStopRunnable: Performing cleanup operations      ← job 재등록
+12:06:00.617  ★ HeartbeatAlarm: ARMED (app-process-start) for=08-25 06:30:00
+```
+
+| | 푸시 전 | 푸시 후 |
+|---|---|---|
+| `HEARTBEAT_ALARM` | 없음 | 08-25 06:30 무장 |
+| WorkManager job | 0건 | **2건** (`TIME=+18h22m` / `+18h25m`) |
+
+**두 가지가 동시에 확인됐다.**
+
+1. **GMS는 MIUI 자동시작 제한을 받지 않는다.** 브로드캐스트 큐가 아니라 GMS가 직접
+   프로세스를 띄우므로(`caller=com.google.android.gms`) `BroadcastQueueInjector`의
+   차단 경로를 타지 않는다.
+2. **알람을 살린 것은 `Application.onCreate`다** — `reason=app-process-start`이고
+   우리 리시버에는 아무 브로드캐스트도 오지 않았다. 이 경로가 없었다면 FCM이
+   WorkManager는 복원해도 **알람은 못 살렸다**(MethodChannel은 `MainActivity` 전용이라
+   백그라운드 엔진에 없다). 설계 의도가 정확히 그 시나리오에서 실증됐다.
+
+⚠️ **MIUI에서 job/알람을 셀 때 `JOB #u0aNNN`으로 grep하면 0으로 나온다.** HyperOS는
+`JOB androidx.work.systemjobscheduler:u0a521/300` 형식을 쓴다. 패키지 경로로 세라:
+```bash
+adb -s "$SER" shell "dumpsys jobscheduler | grep -c 'kr.co.anbucheck.live/androidx.work.impl.background.systemjob'"
+adb -s "$SER" shell "dumpsys alarm | grep -o 'anbucheck.live[^ ]*' | sort -u"
+```
 
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
