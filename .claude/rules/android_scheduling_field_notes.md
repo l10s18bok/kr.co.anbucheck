@@ -761,6 +761,40 @@ MIUI에서 남은 복구 경로는 셋뿐이다: **FCM 푸시**(서버 미수신
 (`RUN_ANY_IN_BACKGROUND: allow`는 별개 항목이다) MIUI 전용 서비스에만 있다. 설정 상태를
 알려면 기기에서 직접 봐야 한다.
 
+#### ★ 자동시작 설정을 확인했다 — **OFF인데도 `BOOT_COMPLETED`는 통과한다** (2026-08-24)
+
+HyperOS 2.0 / V816 / Android 15. 설정 위치는 앱 상세가 아니라 **보안 앱 → 권한 →
+백그라운드 자동시작**이다(구버전 MIUI의 "앱 관리 → 자동 시작"이 아니다).
+adb로 바로 열 수 있다:
+
+```bash
+adb -s "$SER" shell am start -n \
+  com.miui.securitycenter/com.miui.permcenter.autostart.AutoStartManagementActivity
+```
+
+**이 기기의 `kr.co.anbucheck.live`는 OFF**(기본값 = 실사용자 조건)였다. 그 상태에서:
+
+```
+09:03:51.558  D/DozeAlarmProbe: ARMED (system:BOOT_COMPLETED)                     ← 통과
+09:03:51.568  D/WM-RescheduleReceiver: Received ... cmp=kr.co.anbucheck.live/...  ← 프로세스 시작
+09:56:33 / 11:32:38  Unable to launch app kr.co.anbucheck ... MY_PACKAGE_REPLACED  ← 차단 (4건)
+```
+
+같은 로그 버퍼에서 `Unable to launch app`은 **오직 `MY_PACKAGE_REPLACED`에만** 찍힌다.
+즉 **자동시작 OFF는 부팅 복구를 막지 않는다** — 브로드캐스트별로 정책이 다르다.
+
+⚠️ **dontkillmyapp.com 등은 "샤오미가 `BOOT_COMPLETED`를 막는다"고 적고 있으나 이 기기에서는
+사실이 아니다.** 일반론을 그대로 옮기지 말 것.
+
+**따라서 MIUI에서 실제 구멍은 하나뿐이다 — Play 자동 업데이트.**
+
+| 경로 | 자동시작 OFF 기본 상태 |
+|---|---|
+| 재부팅 | ✅ 복구 (실측) |
+| **Play 자동 업데이트** | ❌ **앱이 잠든다** — 유일한 구멍 |
+| FCM 푸시 도착 | ❓ 미검증 |
+| 사용자가 앱 열기 | ✅ |
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
