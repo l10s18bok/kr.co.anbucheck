@@ -729,6 +729,38 @@ Kotlin에서 `getInt`로 읽으면 `ClassCastException`이 나고, catch가 없�
 - ⚠️ Gradle은 **Java 17+**가 필요하다. Android Studio 번들 JDK가 11로 잡히면
   `export JAVA_HOME=/Users/macmini/Library/Java/JavaVirtualMachines/openjdk-19.0.2/Contents/Home`.
 
+#### 실측 — 1.2.7+50 설치 직후, **앱을 열지 않은 상태** (2026-08-24 11:32)
+
+| | SM-A325N (삼성) | 23021RAA2Y (MIUI) |
+|---|---|---|
+| `MY_PACKAGE_REPLACED` | 통과 | ❌ 차단 (**n=3**: 08-22, 09:56, 11:32) |
+| 프로세스 시작 | ✅ | ❌ 시작 안 됨 |
+| `ARMED (app-process-start)` | ✅ 11:32:22.459 → 08-25 07:00 | ❌ 로그 없음 |
+| `ARMED (system:MY_PACKAGE_REPLACED)` | ✅ 11:32:22.544 (85ms 뒤 같은 값) | ❌ |
+| 새 알람 `HEARTBEAT_ALARM` | ✅ 무장됨 | ❌ 없음 |
+| WorkManager job | ✅ 2건 복원 | ❌ **0건** |
+
+**삼성은 두 경로가 모두 통했고, 85ms 간격으로 같은 값을 덮어써 idempotent임이 확인됐다.**
+
+⚠️ **MIUI는 업데이트 직후 앱이 통째로 잠든다 — 알람도 job도 0이다.**
+```
+11:32:37.068  Force stopping kr.co.anbucheck.live ... installPackageLI   ← job·알람 전부 취소
+11:32:38.237  Unable to launch app ... MY_PACKAGE_REPLACED:
+              process is not permitted to auto start                    ← 복구 브로드캐스트 차단
+              (프로세스가 안 뜨므로 Application.onCreate도 실행되지 않는다)
+```
+**이건 알람 계층 때문에 생긴 회귀가 아니다** — 같은 업데이트가 예전에도 WorkManager job을
+똑같이 지웠고, 앱을 열기 전까지 복구되지 않았다. 이번에 계측이 붙어 **보이게 됐을 뿐**이다.
+
+MIUI에서 남은 복구 경로는 셋뿐이다: **FCM 푸시**(서버 미수신 체크 = 예약시각 +2h),
+**재부팅**, **사용자가 앱 열기**. 첫 번째가 실제로 프로세스를 깨우는지는 **미검증**이며,
+확인 방법은 공짜다 — 업데이트 다음 날 서버 안전망 푸시가 나간 뒤 기기가 살아나는지 본다.
+(비용: 그날 하루 미전송 + 보호자에게 거짓 미수신 경고 1건.)
+
+⚠️ MIUI 자동시작 설정은 **adb로 못 읽는다.** `cmd appops`에도 `dumpsys`에도 노출되지 않고
+(`RUN_ANY_IN_BACKGROUND: allow`는 별개 항목이다) MIUI 전용 서비스에만 있다. 설정 상태를
+알려면 기기에서 직접 봐야 한다.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
