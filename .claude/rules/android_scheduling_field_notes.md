@@ -884,6 +884,54 @@ adb -s "$SER" shell "dumpsys alarm | grep -A4 'anbucheck.live.HEARTBEAT_ALARM'"
 "샤오미 전송 성공"이라 판단했다가 `send_failed` 알림(ID `0x53466169`) 게시 로그로 뒤집혔다.
 전송 성공/실패의 신뢰할 수 있는 지표는 **`notification_enqueue`의 알림 ID**와 서버 도착 기록이다.
 
+### ★ 망 없는 밤의 실패 경로 종단 관측 — 알람 n=2 + FCM이 Doze를 뚫는다 (2026-08-25, SM-A325N)
+
+핫스팟이 자리를 비워 **밤새 망이 없던** 날. 우연히 실패 경로 전체가 관측됐다.
+
+```
+07:29:17.860  ARMED (app-process-start) for=08-26 07:00   ← 재무장이 발화보다 먼저
+07:29:17.866  ARMED (refire)
+07:29:17.881  FIRED idle=true bucket=40                   ← 예약 07:00 대비 +29분 17초
+07:29:18.628  HOLD started budget=90000ms
+07:29:29.394  걸음수 result: 0
+07:29:24      WifiSignalController: connected=false        ← 망 없음
+07:30:49.018  HOLD ended held=90389ms reason=timeout      ← 안전한 방향으로 실패
+  ~07:30      send_failed 알림 게시
+08:20:54      Wi-Fi 재연결 (핫스팟 복귀)
+09:00:00.598  Start proc — FCM subject_safety_net 도착
+09:00:00.773  ARMED (app-process-start)
+09:00:00.867  안전망 알림 표시 (tag=anbu_safety_net)
+09:00:01.033  BackgroundWorker 시작                       ← ★ 딥 Doze에 막혀 있던 periodic이 풀림
+09:00:01.428  DNS Requested by 11227 → 전송 성공
+09:00:02.498  notification_cancel 1397121385 (send_failed)
+09:00:02.536  notification_cancel tag=anbu_safety_net
+```
+
+**얻은 것 다섯 가지**
+
+1. **알람 재현 n=2.** 딥 Doze + RARE에서 **+29분 17초**(상한 60분 이내). 08-24의 +7분 56초와 함께 2회.
+2. **실패 경로가 설계대로다.** `dumpsys jobscheduler` 판독이 결정적이었다 —
+   one-off `Minimum latency: +23h30m`(내일), **periodic `+14m59s` + `Unsatisfied constraints:` 비어 있음 + `earliest=-46m`**.
+   즉 **전송 실패가 periodic 폴링을 해체하지 않았다**(Defect 1 수정 확인).
+3. **⚠️ 망이 돌아와도 딥 Doze면 periodic은 못 뛴다.** 08:20에 Wi-Fi가 붙었는데 09:00까지 40분간
+   `readyNotDozing: false`로 대기했다. 다음 유지보수 창은 **+5h23m**(약 14:14)이었다.
+   "망만 복구되면 15분 안에 잡는다"는 기대는 **Doze 밖에서만 참이다.**
+4. **★ FCM 도착이 그 Doze 벽을 뚫는다.** 푸시 도착 **435ms** 만에 막혀 있던 워커가 실행됐고,
+   유지보수 창을 5시간 넘게 앞당겼다. 서버 미수신 체크(+2h)가 **알림 유도만이 아니라
+   전송 자체의 트리거로도 기능한다** — 문서에 없던 성질이다.
+5. **보류 큐가 그날 걸음수를 살렸다.** 09:00 전송에 걸음수 조회 로그가 없다 = 새로 수집한 게
+   아니라 **07:29에 저장해 둔 payload를 보냈다**. "전송보다 저장이 먼저"가 실증됐다.
+
+**부수 관측**
+- 알림 정리 2건이 백그라운드 isolate에서 정상 동작 — `cancelSendFailed` + `cancelSubjectSafetyNet`.
+  서버 안전망 알림은 뜬 지 **1.7초** 만에 사라졌다(전송이 곧바로 성공했으므로 정상).
+- 전송 성공 뒤에도 periodic이 `+14m59s`로 남았다. 실행 중인 워커가 periodic 자신이라
+  `schedule()`이 **자기 재등록을 건너뛴** 결과다(self-cancel 방지 설계). 그날 밤 폴링이
+  한 번 더 살아 있게 되지만 의도된 동작이다.
+- **이른 `send_failed` 알림의 실제 표시 시간 = 약 1시간 31분**(07:30경 → 09:00:02, 자동 소멸).
+  이 케이스에서 그 알림은 **정확했다**(진짜 통신 두절). 알림 억제 정책을 논의할 때
+  "억제하면 안 되는 쪽"의 사례로 이 건을 쓸 것.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
