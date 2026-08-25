@@ -88,6 +88,44 @@ qc_timing_session_coalescing_duration_ms = 5000   # 5초 내 시작한 job은 1�
 
 - 5초 이내 동시 시작한 one-off + periodic은 **1세션**으로 합쳐진다(실측: 02:16:38.446 / .854).
 
+### ★ 세션 쿼터가 실제로 heartbeat job을 막았다 — 그리고 **알람은 세션을 안 썼다** (2026-08-26 07:23)
+
+예약 07:00이 지났는데 job 두 개가 `Unsatisfied constraints: WITHIN_QUOTA`로 막혀 있었다.
+
+```
+RARE: sessionCountLimit=3, sessionCountInWindow=3     ← 상한 도달
+      executionTimeInWindow=3667ms                     ← 10분 예산 중 3.7초(0.6%)만 사용
+→ "RARE, not within quota, 581797ms remaining in quota"
+```
+
+`Timer<REG>` saved events를 벽시계로 환산한 결과(계산법은 아래):
+
+| # | 시각 | 지속 | 정체 |
+|---|---|---|---|
+| ① | 08-25 09:00:00→09:00:02 | 1729ms | FCM이 깨운 회복 전송 |
+| ② | 08-25 14:14:18→14:14:19 | 784ms | Doze 유지보수 창 |
+| ③ | 08-25 20:15:44→20:15:45 | 1154ms | Doze 유지보수 창 |
+
+`inQuotaTime` → 회복은 **08-26 09:00:02**(첫 세션 종료 +24h).
+
+**★ 08-25 07:29 알람 발화로 워커 3~4개가 돌았는데 그 세션이 목록에 없다.** 즉 **알람 계층은
+REG 세션을 소비하지 않았다.** `Timer<EJ>`(expedited 전용 쿼터)가 따로 존재하고, 알람이 깨운
+워커는 승격된 proc state로 실행된다 — 둘 중 무엇이 이유인지는 **미확정**이지만 결과는 실측이다.
+"알람이 쿼터를 태워 현상보다 나빠질 수 있다"던 우려는 이 관측으로 **반증됐다.**
+
+**쿼터를 태운 것은 어제 밤 통신 두절의 후폭풍이다.** 전송 실패로 periodic 폴링이 살아남았고
+(Defect 1 수정의 의도된 동작) 그 폴링이 14:14·20:15에 세션을 썼다. 정상적인 날이면 전송 성공
+시 `_onHeartbeatSent`가 periodic을 내일로 재워 이 세션들이 생기지 않는다. **즉 "실패한 날은
+다음 날 쿼터가 빠듯해진다"**는 연쇄가 있다 — 설계상 수용 가능하나 알아둘 것.
+
+```bash
+# 세션 시각을 벽시계로 환산 (nowELAPSED과 date를 함께 읽어 오프셋 계산)
+adb -s "$SER" shell "dumpsys alarm | grep -m1 -oE 'nowELAPSED=[0-9]+'"
+adb -s "$SER" shell date +%s
+adb -s "$SER" shell "dumpsys jobscheduler | grep -A10 '<0>kr.co.anbucheck.live'"   # Saved events
+adb -s "$SER" shell "dumpsys jobscheduler | grep -A16 '<0>kr.co.anbucheck.live' | grep 'RARE:'"
+```
+
 **2026-08-21 09:27 실측 — 세션 병목이 가설이 아니라 사실임이 확인됐다.**
 
 ```
