@@ -59,6 +59,23 @@ class ScreenStatePlugin : FlutterPlugin, MethodCallHandler {
                 nm.cancelAll()
                 result.success(null)
             }
+            "nativeLog" -> {
+                // ⚠️ **릴리스에서 Dart 로그는 안 나온다.** `main()`과 worker 콜백이
+                // `kReleaseMode`에서 `debugPrint`를 빈 함수로 덮어쓰기 때문이다.
+                // 그래서 Play 내부 테스트 빌드(=릴리스)로 현장을 진단하려면 Dart가
+                // **네이티브 `Log.d`를 직접 거쳐야** 한다.
+                //
+                // 이 플러그인은 정식 FlutterPlugin이라 `GeneratedPluginRegistrant`가
+                // **WorkManager 백그라운드 엔진에도 자동 등록**한다 — `MainActivity`에
+                // 붙인 MethodChannel과 달리 워커 isolate에서도 호출된다.
+                //
+                // ⚠️ 진단 전용이다. 개인정보·토큰·서버 응답 본문을 넘기지 말 것
+                // (logcat은 같은 기기의 다른 앱이 읽을 수 없지만 adb로는 평문이다).
+                val tag = call.argument<String>("tag") ?: "Anbu"
+                val message = call.argument<String>("message") ?: ""
+                android.util.Log.d(tag, message)
+                result.success(null)
+            }
             else -> result.notImplemented()
         }
     }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:pedometer_2/pedometer_2.dart' as p2;
+import 'package:screen_state/screen_state.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
@@ -438,6 +439,14 @@ class HeartbeatService {
       try {
         await remote.send(request);
         debugPrint('[HeartbeatService] API 전송 성공 (시도 $attempt)');
+        // 성공도 남긴다 — 실패만 찍으면 "그럼 어느 계층이 보냈나"를 여전히 프로세스
+        // 시작 사유로 역추적해야 한다(2026-08-26에 실제로 그랬다).
+        await ScreenState.log(
+          'HeartbeatSend',
+          'OK src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
+              'attempt=$attempt manual=${request.manual} '
+              'key=${reqKey ?? "-"} steps=${request.stepsDelta ?? "-"}',
+        );
         break;
       } catch (e) {
         debugPrint('[HeartbeatService] API 전송 실패 (시도 $attempt): $e');
@@ -456,6 +465,20 @@ class HeartbeatService {
             }
           }
           // 메모는 전송 **전에** 이미 저장돼 있으므로 여기서 다시 저장하지 않는다.
+          //
+          // ★ 진단 로그 — **이 알림이 어느 계층에서 났는지 그 자리에서 남긴다.**
+          // 2026-08-25에 `send_failed` 알림 하나를 놓고 "알람이 실패했다"고 오진했다가,
+          // 프로세스 시작 사유(`Start proc ... for service {SystemJobService}`)를 뒤져서야
+          // 워커였음을 알아냈다. 그런 사후 추론이 다시 필요 없게 한다.
+          // `debugPrint`는 릴리스에서 무력화되므로 **네이티브 Log.d**로 내보낸다.
+          await ScreenState.log(
+            'HeartbeatSend',
+            'FAIL src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
+                'attempt=$attempt unreachable=$unreachable '
+                'outOfBudget=$outOfBudget manual=${request.manual} '
+                'key=${reqKey ?? "-"} steps=${request.stepsDelta ?? "-"} '
+                'notify=${!request.manual}',
+          );
           if (!request.manual) await LocalAlarmService.notifySendFailed();
           // oneOff fire-and-not-rescheduled 차단 — pending 큐가 다음 fire에서 회복할 수
           // 있도록 one-off을 내일자로 재무장한다. 단 **실패 경로이므로 periodic은 살려둬

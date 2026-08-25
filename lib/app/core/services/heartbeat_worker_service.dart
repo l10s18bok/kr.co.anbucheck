@@ -39,6 +39,7 @@ void heartbeatWorkerCallback() {
       // 없다. 그대로 null로 두면 자기 자신을 못 알아보고 레거시 이름을 취소해버려,
       // 바로 이 커밋이 없애려던 self-cancel이 업그레이드 시점에 한 번 더 발생한다.
       // `source`로 레거시 이름을 역산해 그 구멍을 막는다.
+      HeartbeatWorkerService.triggerSource = inputData?['source'] as String?;
       HeartbeatWorkerService.runningUniqueName =
           inputData?['unique'] as String? ??
               HeartbeatWorkerService.legacyUniqueNameFor(
@@ -198,6 +199,17 @@ class HeartbeatWorkerService {
   /// 등록 함수들이 "취소 대상 == 나 자신"을 판별하는 유일한 근거다.
   /// 포그라운드 호출에서는 null이라 어떤 취소도 자기 취소가 될 수 없다.
   static String? runningUniqueName;
+
+  /// 이 발화를 만든 트리거 — 진단 전용. `inputData['source']`를 그대로 담는다.
+  ///
+  /// 알람이 enqueue한 work는 `'alarm'`(리시버가 `payload_source`로 넣고 플러그인이
+  /// `payload_` 접두사를 떼어 전달한다), 평소 등록은 `'one-off'`/`'periodic'`,
+  /// 포그라운드 호출은 null이다.
+  ///
+  /// **판정에 쓰지 말 것.** 전송 실패 알림이 어느 계층에서 났는지 사후에 가리기 위한
+  /// 로그용이다 — 2026-08-25에 `send_failed`를 보고 알람 실패로 오진했다가
+  /// 프로세스 시작 사유를 뒤져서야 워커였음을 알아냈다.
+  static String? triggerSource;
 
   /// 구버전이 등록한 work의 unique 이름 역산 — `inputData['unique']`가 없을 때만 사용.
   /// 업데이트 직후 첫 발화가 여기 해당한다([runningUniqueName] 참조).
