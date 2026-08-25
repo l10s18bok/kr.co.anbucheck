@@ -879,6 +879,41 @@ caller=android` — 알람 브로드캐스트가 아님), 창 유지자가 없�
 adb -s "$SER" shell "dumpsys alarm | grep -A4 'anbucheck.live.HEARTBEAT_ALARM'"
 ```
 
+#### ⚠️ 정정 — `power_pending`은 **영구 플래그가 아니라 동적 상태**다 (2026-08-26 06:51)
+
+다음 날 같은 기기에서 우리 앱 알람의 `power_pending`이 **`--`(미적용)로 바뀌어 있었다.**
+
+```
+origWhen=2026-08-27 06:30:00.000
+policyWhenElapsed: requester=+23h36m45s816ms ... power_pending=--
+whenElapsed=+23h36m45s816ms          ← 밀리지 않음 = 내일 06:30 정상
+```
+
+기기 전체로는 정책이 여전히 살아 있다(`power_pending=+` **38건** / `--` 195건). **우리 앱만
+그 집합에서 빠진 것**이다. 그사이에 있었던 일은 두 가지 — 08-25 08:19~08:23 **사용자가 앱을
+열었고**, 08-26 06:49 **heartbeat 전송이 성공**했다.
+
+⚠️ **따라서 "MIUI에서 0차는 동작하지 않는다"는 단정은 과했다.** 정확한 진술은
+**"MIUI는 앱이 `power_pending` 상태일 때 allow-while-idle 알람을 정확히 +72시간 미룬다"**이며,
+그 상태가 무엇으로 설정·해제되는지는 **미확인**이다. 앱 사용이 해제 조건이라면, **앱을 열지 않는
+실사용자는 대부분의 시간을 그 상태로 보내게 되므로** 실사용 영향은 여전히 크다.
+확인 방법은 공짜다 — 앱을 열지 않은 채 며칠 두고 `power_pending`이 돌아오는지 본다.
+
+#### 같은 날 MIUI 실측 — 알람 없이 WorkManager 단독으로 **+19분** (2026-08-26)
+
+```
+06:09:32  ARMED (app-process-start) for=08-26 06:30      ← 무장은 됨
+06:30     (알람 미발화 — power_pending +3d 상태였음)
+06:49:16  Start proc ... for service {SystemJobService} caller=android   ← JobScheduler
+06:49:16  ARMED (app-process-start) for=08-27 06:30
+06:49:22  걸음수 result: 20 → 전송 성공 (send_failed 없음)
+```
+
+기기는 **딥 Doze**(`mState=IDLE`, 화면 꺼짐, 비충전)였고 다음 창은 +28분이었다. 즉 06:49에
+유지보수 창이 열려 job이 뛴 것이다. **예약 +19분** — 삼성의 WorkManager 단독 실측
+(+1h27m~+2h52m)보다 훨씬 낫다. **OEM별로 job 스케줄링 관대함이 크게 다르다**는 뜻이며,
+"WorkManager는 상한이 없다"는 삼성 관측을 다른 기기에 그대로 일반화하지 말 것.
+
 ⚠️ **`dumpsys jobscheduler`의 "job 2개가 내일자"를 성공 서명으로 읽지 말 것.** 앱을 열면
 `_syncScheduleFromServer → schedule()`이 같은 모양을 만든다. 2026-08-25에 이 오독으로
 "샤오미 전송 성공"이라 판단했다가 `send_failed` 알림(ID `0x53466169`) 게시 로그로 뒤집혔다.
