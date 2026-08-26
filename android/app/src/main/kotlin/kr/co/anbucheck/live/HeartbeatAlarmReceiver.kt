@@ -57,13 +57,18 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
             intent.action == Intent.ACTION_MY_PACKAGE_REPLACED ||
             intent.action == "android.intent.action.QUICKBOOT_POWERON"
         ) {
-            armNextDaily(context, reason = "system:${intent.action}")
+            // 부팅·업데이트 복원은 **무조건 무장한다**(force). 이 경로들은 알람이
+            // 사라진 상태를 되돌리는 것이 목적이라 "오늘 창 유지" 판정이 끼어들면 안 된다.
+            armNextDaily(context, reason = "system:${intent.action}", force = true)
             return
         }
 
         // ★ 재무장을 무엇보다 먼저. worker에서 배운 불변식이다 — lmkd가 프로세스를 시작
         // 0.73초 만에 죽인 실측이 있고(2026-08-18 15:07) 리시버도 동일하게 노출돼 있다.
-        armNextDaily(context, reason = "refire")
+        // ⚠️ **재무장은 무조건이다(force).** 발화 직후는 "창 안 + 오늘 미전송"이 모두
+        //    참이라 가드에 걸리는데, 여기서 건너뛰면 **다음 날 알람이 무장되지 않는다.**
+        //    창 만료·lmkd 킬로 이 프로세스가 곧 죽어도 트리거가 살아남아야 한다.
+        armNextDaily(context, reason = "refire", force = true)
 
         Log.d(TAG, "FIRED at=${now()} ${context(context)}")
 
@@ -127,6 +132,17 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
          * (`MethodCallHandlerImpl`의 `putLong(key, number.longValue())`). `getInt`로 읽으면
          * `ClassCastException`이 난다 — 반드시 `getLong`을 쓰고, 구버전 대비 `getInt` 폴백을 둔다.
          */
+        /**
+         * allow-while-idle 알람의 배달 창 상한. `dumpsys alarm`이 이 알람에 대해
+         * `window=+1h0m0s0ms`로 표시하는 값과 같고, 문서상 "API 31+는 1시간 이내"와도 일치한다.
+         * 실측 발화는 예약 +7~32분(n=6)이었다.
+         *
+         * [todaysWindowStillUseful]이 "오늘 알람이 아직 뜰 수 있는가"를 판정하는 데만 쓴다.
+         * 조금 넉넉하게 잡아도 손해는 헛기상 1회뿐이고, 짧게 잡으면 아직 뜰 수 있는 알람을
+         * 지우게 되므로 **줄이지 말 것.**
+         */
+        private const val ALARM_WINDOW_MS = 60L * 60L * 1000L
+
         private const val FLUTTER_PREFS = "FlutterSharedPreferences"
         private const val KEY_HOUR = "flutter.heartbeat_hour"
         private const val KEY_MINUTE = "flutter.heartbeat_minute"
@@ -193,7 +209,10 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
                     .build()
                 WorkManager.getInstance(context)
                     .enqueueUniqueWork(HEARTBEAT_WORK_NAME, ExistingWorkPolicy.REPLACE, req)
-                Log.d(TAG, "HB expedited enqueued ($HEARTBEAT_WORK_NAME)")
+                // ⚠️ 이 work는 **expedited가 아니다**(평범한 OneTimeWorkRequest). 방화벽을 여는
+                //    expedited job은 창 유지자 하나뿐이다. 예전 문구가 "expedited"라
+                //    로그만 보고 이 work가 창을 연다고 오해하기 쉬웠다.
+                Log.d(TAG, "HB enqueued ($HEARTBEAT_WORK_NAME, non-expedited)")
             } catch (e: Throwable) {
                 Log.d(TAG, "HB enqueue 실패: ${e.javaClass.simpleName}: ${e.message}")
             }
@@ -220,7 +239,13 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
         }
 
         /** 저장된 시각의 "다음 발생"으로 무장. 이미 지났으면 내일. */
-        fun armNextDaily(context: Context, reason: String) {
+        /**
+         * [force] = true면 "오늘 발화 창 유지" 판정을 건너뛰고 무조건 다음 발생으로 무장한다.
+         * 알람이 사라진 상태를 되돌리는 경로(발화 직후 재무장·부팅·업데이트)에만 쓴다.
+         * `Application.onCreate`처럼 **아무 이유로나 뜨는** 경로는 force를 쓰면 안 된다 —
+         * 그게 아직 발화하지 않은 오늘 알람을 지우던 원인이다.
+         */
+        fun armNextDaily(context: Context, reason: String, force: Boolean = false) {
             val prefs = context.getSharedPreferences(FLUTTER_PREFS, Context.MODE_PRIVATE)
             if (!isSubjectEnabled(prefs)) {
                 Log.d(TAG, "ARM skipped ($reason) — 대상자 기능 꺼짐")
@@ -233,7 +258,78 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
                 Log.d(TAG, "ARM skipped ($reason) — 예약시각 없음 (h=$hour m=$minute)")
                 return
             }
+            if (!force && todaysWindowStillUseful(context, prefs, hour, minute)) {
+                // 오늘 발화 창이 아직 살아 있고 오늘 전송도 없다 — 그대로 둔다.
+                Log.d(TAG, "ARM skipped ($reason) — 오늘 발화 창 유지 ($hour:$minute)")
+                return
+            }
             armAt(context, hour, minute, reason)
+        }
+
+        /**
+         * "지금 재무장하면 **아직 발화하지 않은 오늘 알람을 없애게 되는가**"를 판정한다.
+         *
+         * [armNextDaily]는 저장 시각의 **다음 발생**을 계산하므로, 예약시각이 지난 뒤
+         * 어떤 이유로든 프로세스가 뜨면(워커 발화·FCM 도착) 같은 PendingIntent를 내일자로
+         * 덮어써 **오늘 남은 발화 창을 지운다.** 취소는 `Application.onCreate`에서
+         * **전송을 시도하기도 전에** 일어나므로 그날의 성패와 무관하다.
+         *
+         * 2026-08-27 샤오미 실측: one-off이 알람보다 1분 43초 먼저 프로세스를 띄웠고
+         * (`ARMED (app-process-start) for=08-28`), 알람은 발화 기회를 잃었다. MIUI는
+         * WorkManager가 관대해(+1m49s~+19분) 알람(+7~32분)보다 대체로 빠르므로 이게 상시였다.
+         *
+         * 대부분은 무해하다 — 워커가 성공하면 알람은 어차피 불필요하다. 그러나 **워커가
+         * 먼저 실패한 날에는 방화벽을 여는 유일한 재시도를 잃는다**(창 유지자는 알람 경로에만 있다).
+         *
+         * 세 조건이 모두 참일 때만 건너뛴다:
+         *  1. **오늘용 알람이 실제로 대기 중** — `FLAG_NO_CREATE`가 null이 아니어야 한다.
+         *     ⚠️ 이 조건이 없으면 **최초 설치가 깨진다**: 창 안에서 처음 무장하는 기기가
+         *     아무것도 등록하지 못한 채 건너뛰게 된다.
+         *  2. 지금이 `[T, T + ALARM_WINDOW_MS]` 안 — 창 밖이면 오늘 알람은 이미 소멸했다.
+         *  3. 오늘 전송 기록이 없다 — 있으면 오늘 알람은 불필요하니 내일자로 정리한다.
+         *
+         * 대가: 워커가 성공한 날에도 알람이 그대로 발화한다(성공 경로의 `HeartbeatAlarm.arm`은
+         * MethodChannel이 `MainActivity` 전용이라 워커 isolate에서 no-op). 발화해도
+         * `lastHeartbeatDate == 오늘` 가드로 즉시 스킵하고 `onReceive`가 내일자로 재무장하므로
+         * 하루 1회 헛기상에 그친다(알람 계층 전체 실측 0.34 mAh/일).
+         */
+        private fun todaysWindowStillUseful(
+            context: Context,
+            prefs: android.content.SharedPreferences,
+            hour: Int,
+            minute: Int,
+        ): Boolean = try {
+            val pending = android.app.PendingIntent.getBroadcast(
+                context,
+                REQUEST_CODE,
+                Intent(context, HeartbeatAlarmReceiver::class.java).setAction(ACTION),
+                android.app.PendingIntent.FLAG_NO_CREATE or android.app.PendingIntent.FLAG_IMMUTABLE,
+            )
+            if (pending == null) {
+                false
+            } else {
+                val scheduled = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, hour)
+                    set(Calendar.MINUTE, minute)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }.timeInMillis
+                val now = System.currentTimeMillis()
+                now >= scheduled &&
+                    now < scheduled + ALARM_WINDOW_MS &&
+                    !heartbeatDoneToday(prefs)
+            }
+        } catch (_: Throwable) {
+            // 판정 실패 시 기존 동작(재무장)으로 간다 — 무장이 아예 없는 상태보다 낫다.
+            false
+        }
+
+        /** `flutter.last_heartbeat_date`가 오늘인가. 창 유지자와 같은 값을 본다. */
+        private fun heartbeatDoneToday(prefs: android.content.SharedPreferences): Boolean = try {
+            val v = prefs.getString("flutter.last_heartbeat_date", null)
+            v != null && v == SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+        } catch (_: Throwable) {
+            false
         }
 
         /** Dart 워커 콜백과 같은 기준: `role == 'subject' || isAlsoSubject`. */
