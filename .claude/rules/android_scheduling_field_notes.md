@@ -1036,6 +1036,52 @@ whenElapsed=+23h36m45s816ms          ← 밀리지 않음 = 내일 06:30 정상
   이 케이스에서 그 알림은 **정확했다**(진짜 통신 두절). 알림 억제 정책을 논의할 때
   "억제하면 안 되는 쪽"의 사례로 이 건을 쓸 것.
 
+### 계측 로그 읽는 법 — `src=`만 보면 오독한다 (2026-08-27)
+
+`HeartbeatSend` 계측(1.2.8+51~)은 **어느 워커가 POST를 쐈는지**를 찍는다. 알람이 한 일은
+거기 안 나온다 — 알람은 앱을 깨우고 창 유지자가 방화벽을 열 뿐, **전송은 그 창 안에서
+평소의 워커가 하기 때문**이다(설계상 의도).
+
+```
+08-27 07:29:16.974  HeartbeatAlarm: FIRED idle=true bucket=40      ← 예약 07:00 대비 +29분 16초
+08-27 07:29:17.367  HeartbeatWindowHolderWorker 시작
+08-27 07:29:29.622  HeartbeatSend: OK src=periodic attempt=1 steps=54   ← ★ src는 periodic
+08-27 07:29:29.927  HeartbeatAlarm: HOLD ended held=12550ms reason=heartbeat-done
+```
+
+**`src=periodic`을 "알람은 쓸모없었다"로 읽으면 틀린다.** 그 periodic은 딥 Doze에 막혀 있다가
+알람이 깨워서 풀려난 것이다. 판독은 반드시 세 줄을 묶어서 한다:
+
+| 로그 조합 | 판정 |
+|---|---|
+| `FIRED` → `HOLD started` → `src=*` → `HOLD ended reason=heartbeat-done` | **알람이 만든 창 안에서 전송** |
+| `FIRED` 없이 `src=one-off`/`periodic` | 워커 단독 (알람은 발화 못 했거나 취소됨) |
+| `FIRED` → `HOLD ended reason=timeout` | 알람은 떴으나 창 안에 전송이 못 들어감 |
+
+⚠️ **`Application.onCreate`가 아직 발화하지 않은 오늘 알람을 취소한다** (2026-08-27 발견).
+`armNextDaily`는 "저장 시각의 다음 발생"을 계산하므로, 예약시각이 지난 뒤 **어떤 이유로든**
+프로세스가 뜨면(워커 발화·FCM 도착) 같은 PendingIntent를 내일자로 덮어써 **오늘 남은 발화 창을
+없앤다.** 08-27 샤오미가 그 사례다 — one-off이 알람보다 1분 43초 먼저 프로세스를 띄웠고
+(`ARMED (app-process-start) for=08-28`), 알람은 발화 기회를 잃었다. 취소는 **전송 시도 전에**
+일어나므로 성패와 무관하다.
+
+무해한 경우가 대부분이나(워커가 성공하면 알람은 불필요), **워커가 먼저 실패한 날에는 방화벽을
+여는 유일한 재시도를 잃는다.** 수정 방향: `armNextDaily`가 ①오늘용 알람이 실제로 대기 중이고
+(`PendingIntent.getBroadcast(..., FLAG_NO_CREATE) != null`) ②지금이 `[T, T+1h]` 안이며
+③`flutter.last_heartbeat_date != 오늘`이면 **재무장을 건너뛴다.** ①이 없으면 최초 설치가
+창 안에서 아무것도 무장하지 못한다. 대가는 워커가 성공한 날의 헛기상 1회다(성공 경로의
+`HeartbeatAlarm.arm`은 MethodChannel이 `MainActivity` 전용이라 워커 isolate에서 no-op).
+
+### 정시성 재현 — 3일 연속 +29분 16~17초 (SM-A325N)
+
+| 날짜 | 예약 | 발화 | 지연 |
+|---|---|---|---|
+| 08-25 | 07:00 | 07:29:17 | +29m17s |
+| 08-26 | 07:00 | 07:29:16 | +29m16s |
+| 08-27 | 07:00 | 07:29:16 | +29m16s |
+
+셋 다 딥 Doze·RARE이고 유지보수 창 밖이다. 초 단위 재현의 이유는 **미확인**.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
