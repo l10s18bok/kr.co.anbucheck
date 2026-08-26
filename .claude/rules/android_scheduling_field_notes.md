@@ -1072,6 +1072,34 @@ whenElapsed=+23h36m45s816ms          ← 밀리지 않음 = 내일 06:30 정상
 창 안에서 아무것도 무장하지 못한다. 대가는 워커가 성공한 날의 헛기상 1회다(성공 경로의
 `HeartbeatAlarm.arm`은 MethodChannel이 `MainActivity` 전용이라 워커 isolate에서 no-op).
 
+### 가드(`todaysWindowStillUseful`) 검증 기준 — 실패는 **로그가 아니라 부재로** 나타난다
+
+`ARM skipped — 오늘 발화 창 유지` + `FIRED`만 보면 **위험한 방향을 못 잡는다.** 가드가 과하게
+발동해 **무장이 멈추는** 실패는 아무 로그도 남기지 않는다. 그래서 판정은 두 갈래 모두 본다.
+
+**① 필수 통과 조건 — 아침 사이클이 끝난 뒤 양쪽 폰에서:**
+```bash
+adb -s "$SER" shell "dumpsys alarm | grep -A3 'anbucheck.live.HEARTBEAT_ALARM'"
+#   origWhen 이 **모레 날짜**여야 한다.
+#   오늘·어제 날짜이거나 항목 자체가 없으면 → 재무장이 깨졌다 = 실패.
+#   (그래도 창 밖 프로세스 시작에서 자가 복구되지만, 이 변경이 원인이므로 되돌린다.)
+```
+
+**② `ARM skipped (app-process-start)`는 "워커가 먼저 뛰었다"의 증거가 아니다.**
+콜드 스타트 알람 배달에서는 `Application.onCreate`가 `onReceive`보다 **먼저** 돈다. 그 시점엔
+pending 존재 + 창 안 + 오늘 미전송이 모두 참이라 **알람 자신의 발화 경로에서도 skip 줄이 찍힌다**
+(그 뒤 `ARMED (refire)`가 따라온다). 발화 후 PendingIntent 레코드가 이미 회수됐다면 대신
+`ARMED (app-process-start)`가 찍힌다 — **둘 다 정상이고 비결정적**이다(refire가 force라 무해).
+
+판별자는 **바로 위의 프로세스 시작 사유**다:
+
+| 앞 줄 | 의미 |
+|---|---|
+| `Start proc ... for service {SystemJobService} caller=android` | **워커가 프로세스를 띄웠다** → 가드가 설계 목적대로 동작 |
+| `Start proc ... for broadcast {...HeartbeatAlarmReceiver}` | 알람 자체 발화 → skip 줄은 부수적, 판정 근거 아님 |
+
+샤오미에서 **첫 번째 형태**가 확인돼야 이 수정이 실증된 것이다.
+
 ### 정시성 재현 — 3일 연속 +29분 16~17초 (SM-A325N)
 
 | 날짜 | 예약 | 발화 | 지연 |
