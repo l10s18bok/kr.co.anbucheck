@@ -18,6 +18,25 @@ class ScreenState {
   ///
   /// 호출 실패 시 `true` 반환 — 판정 실패로 인한 false positive(정상인데 의심)보다
   /// 기존 걸음수 단독 판정에 결과를 맡기는 쪽이 보호자 부담이 적다.
+  /// Dart 메시지를 **네이티브 `Log.d`로** 내보낸다 (Android 전용, 진단용).
+  ///
+  /// 릴리스 빌드는 `main()`과 worker 콜백에서 `debugPrint`를 빈 함수로 덮어쓰므로
+  /// `debugPrint`로 남긴 것은 Play 내부 테스트 빌드에서 한 줄도 보이지 않는다.
+  /// 실기기 현장 진단이 필요한 지점에서만 이걸 쓴다.
+  ///
+  /// fire-and-forget이며 어떤 예외도 삼킨다 — 로깅 실패가 heartbeat 경로를 막으면 안 된다.
+  static Future<void> log(String tag, String message) async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _channel.invokeMethod<void>('nativeLog', {
+        'tag': tag,
+        'message': message,
+      });
+    } catch (_) {
+      // 무시 — 진단 로그다.
+    }
+  }
+
   static Future<bool> isInteractive() async {
     if (!Platform.isAndroid) return true;
     try {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -7,6 +8,7 @@ import 'package:timezone/timezone.dart' as tzlib;
 import 'package:workmanager/workmanager.dart';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
+import 'package:anbucheck/app/core/services/heartbeat_alarm.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 
@@ -37,6 +39,7 @@ void heartbeatWorkerCallback() {
       // 없다. 그대로 null로 두면 자기 자신을 못 알아보고 레거시 이름을 취소해버려,
       // 바로 이 커밋이 없애려던 self-cancel이 업그레이드 시점에 한 번 더 발생한다.
       // `source`로 레거시 이름을 역산해 그 구멍을 막는다.
+      HeartbeatWorkerService.triggerSource = inputData?['source'] as String?;
       HeartbeatWorkerService.runningUniqueName =
           inputData?['unique'] as String? ??
               HeartbeatWorkerService.legacyUniqueNameFor(
@@ -197,6 +200,17 @@ class HeartbeatWorkerService {
   /// 포그라운드 호출에서는 null이라 어떤 취소도 자기 취소가 될 수 없다.
   static String? runningUniqueName;
 
+  /// 이 발화를 만든 트리거 — 진단 전용. `inputData['source']`를 그대로 담는다.
+  ///
+  /// 알람이 enqueue한 work는 `'alarm'`(리시버가 `payload_source`로 넣고 플러그인이
+  /// `payload_` 접두사를 떼어 전달한다), 평소 등록은 `'one-off'`/`'periodic'`,
+  /// 포그라운드 호출은 null이다.
+  ///
+  /// **판정에 쓰지 말 것.** 전송 실패 알림이 어느 계층에서 났는지 사후에 가리기 위한
+  /// 로그용이다 — 2026-08-25에 `send_failed`를 보고 알람 실패로 오진했다가
+  /// 프로세스 시작 사유를 뒤져서야 워커였음을 알아냈다.
+  static String? triggerSource;
+
   /// 구버전이 등록한 work의 unique 이름 역산 — `inputData['unique']`가 없을 때만 사용.
   /// 업데이트 직후 첫 발화가 여기 해당한다([runningUniqueName] 참조).
   static String? legacyUniqueNameFor(String? source) => switch (source) {
@@ -257,6 +271,11 @@ class HeartbeatWorkerService {
   /// 실패해도 다른 쪽이 stranded되지 않으며, 가장 중요한 periodic이 우선 자리잡는다.
   /// "둘 다 영구 유실"은 두 독립 연산이 각각 2회씩 실패해야 발생해 확률이 크게 낮다.
   static Future<void> schedule(int hour, int minute) async {
+    // [실험] Doze 관통 알람 프로브를 **heartbeat와 같은 시각**으로 무장한다.
+    // 같은 순간을 두 메커니즘이 겨루게 해야 비교가 성립한다 —
+    // WorkManager one-off은 창을 기다리고(실측 +2.5~3h), 알람은 안 기다린다(기대 +2~15m).
+    // 포그라운드에서만 성공하며 실패해도 무해하다(리시버가 매일 자가 재무장).
+    unawaited(HeartbeatAlarm.arm(hour, minute));
     // periodic(안전망) 우선 — one-off 등록이 실패해도 15분 폴링은 살아남는다.
     await _retryRegister('periodic', () => _registerPeriodic(hour, minute));
     await _retryRegister('one-off', () => _registerOneOff(hour, minute));
@@ -402,6 +421,14 @@ class HeartbeatWorkerService {
   /// one-off은 dated 이름이라 존재할 수 있는 것이 "오늘분"과 "내일분" 둘뿐이다
   /// (재무장은 항상 다음 발화 1건만 등록한다). 레거시 고정 이름도 함께 정리한다.
   static Future<void> cancel() async {
+    // [실험] Doze 관통 알람도 함께 해제한다. 이게 없으면 heartbeat 책임이 사라진 뒤에도
+    // (401로 계정 삭제·G+S 비활성화·탈퇴·모드 전환) 알람이 매일 발화해 앱을 깨우고
+    // 엔진을 띄운 뒤 Dart가 role 체크로 빠져나오는 낭비가 반복된다.
+    //
+    // ⚠️ 채널이 MainActivity에 있어 **포그라운드에서만 실제로 취소된다.** G+S 비활성화·
+    // 탈퇴·모드 전환은 전부 포그라운드라 문제없고, 백그라운드 isolate에서 오는 401 경로는
+    // 취소가 스킵되지만 그때도 Dart의 role 가드가 매 발화를 무해하게 만든다.
+    unawaited(HeartbeatAlarm.cancel());
     final now = DateTime.now();
     for (final d in [now, now.add(const Duration(days: 1))]) {
       await Workmanager().cancelByUniqueName(_oneOffNameFor(d));

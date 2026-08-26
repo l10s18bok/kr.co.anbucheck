@@ -29,6 +29,8 @@ flowchart TD
     Start --> Trigger
 
     Trigger{트리거 종류?}
+    Trigger -->|"고정 시각 Android (0차·정시)"| ALARM[AlarmManager.setAndAllowWhileIdle<br/>딥 Doze를 관통해 예약시각 +0~60분에 발화<br/>실측 +7~32분 n=6, 상한 60분 보장<br/>⚠️ 알람 자체는 네트워크 불가 — allowed=NONE<br/>방화벽을 여는 것은 expedited job이고<br/>창 길이 = 그 job의 수명<br/>HeartbeatWindowHolderWorker가 최대 90초 창을 유지하고<br/>전송은 평소의 BackgroundWorker가 그 창 안에서 수행<br/>재무장은 onReceive 첫 줄 + BOOT_COMPLETED/MY_PACKAGE_REPLACED<br/>⚠️ 1~3차를 대체하지 않음 — 하루 1회라 같은 날 재시도 없음]
+    ALARM --> WM
     Trigger -->|고정 시각 Android| WM[WorkManager 2계층<br/>one-off 정확 발화 + periodic 15분 폴링<br/>예약시각 -15분 이전 fire는 평소 스킵<br/>단 2일 이상 미전송 갭이면 회복 전송(정시 슬롯 미소비)<br/>전송 성공 시 _onHeartbeatSent가<br/>schedule 호출 → one-off + periodic 둘 다<br/>cancel + 내일자 register<br/>race 방어: lastScheduledKey 성공 마커<br/>+ HeartbeatLockDatasource SQLite UNIQUE CAS<br/>cross-isolate 원자 락, TTL 30초]
     Trigger -->|고정 시각 iOS G+S 로컬알림| BG[LocalAlarmService 예약시각 정각<br/>사용자 탭 → 앱 진입 → 자동 전송]
     Trigger -->|공통| FG[앱 시작 / 백그라운드→포그라운드<br/>당일 미전송이면 자정 전까지<br/>무조건 자동 heartbeat 전송<br/>가드: isReportedToday + isScheduleInFuture]

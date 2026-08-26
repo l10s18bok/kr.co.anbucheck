@@ -11,6 +11,12 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <!-- 재부팅 후 예약 알림 복구 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- Doze 프로브 리시버가 onReceive 반환 후에도 프로브를 이어가기 위해 필요.
+         normal 권한이라 설치 시 자동 승인 — 사용자 프롬프트도 Play 정책 이슈도 없다.
+         ⚠️ SCHEDULE_EXACT_ALARM은 선언하지 않는다. setAndAllowWhileIdle(부정확)은
+         권한이 필요 없고, 그 권한은 Android 14+ 기본 거부 + Play 정책상
+         알람시계·캘린더 앱 전용이라 선언하면 정당화 서류를 요구받는다. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- AdMob 광고 ID (Android 13+ 필수 선언) -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
@@ -18,9 +24,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
+<!-- ⚠️ android:name은 Flutter 기본값 ${applicationName}(= android.app.Application) 대신 자체 클래스다.
+     프로세스가 뜨는 모든 경로에서 heartbeat 알람을 재무장하기 위함 — 상세 사유는 AnbuApplication 주석.
+     Flutter tool의 -Pbase-application-name 오버라이드는 minSdk 29(네이티브 multidex)라 쓰이지 않는다. -->
 <application
         android:label="@string/app_name"
-        android:name="${applicationName}"
+        android:name=".AnbuApplication"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
         android:fullBackupContent="false"
@@ -96,6 +105,22 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Doze 관통 알람 실측 프로브 (Phase 1, 네이티브 전용 — Dart를 실행하지 않는다).
+             exported=false: 외부에서 부를 필요가 없다. adb로 강제 발화시킬 일이 있으면
+             `am broadcast`가 아니라 앱을 열어 armInMinutes로 무장한다. -->
+        <receiver
+            android:name=".HeartbeatAlarmReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <!-- Play 자동 업데이트는 앱을 열지 않아도 일어나고 그때 알람이 유실된다.
+                     이게 없으면 업데이트된 기기는 사용자가 앱을 다시 열 때까지 알람이 없다. -->
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>
         </receiver>
     </application>

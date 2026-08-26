@@ -15,6 +15,10 @@ class MainActivity : FlutterActivity() {
     private val hibernationChannel = "anbucheck/hibernation"
     private val deviceIdChannel = "anbucheck/device_id"
 
+    // Doze 관통 알람 실측 프로브 (Phase 1). 포그라운드 전용 채널이면 충분하다 —
+    // 리시버가 발화 때마다 스스로 다음 날로 재무장하므로 1회만 무장하면 된다.
+    private val heartbeatAlarmChannel = "anbucheck/heartbeat_alarm"
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, deviceIdChannel)
@@ -26,6 +30,22 @@ class MainActivity : FlutterActivity() {
                     "getAndroidId" -> {
                         val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
                         result.success(id)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, heartbeatAlarmChannel)
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "arm" -> {
+                        val hour = call.argument<Int>("hour") ?: 18
+                        val minute = call.argument<Int>("minute") ?: 0
+                        HeartbeatAlarmReceiver.arm(applicationContext, hour, minute)
+                        result.success(true)
+                    }
+                    "cancel" -> {
+                        HeartbeatAlarmReceiver.cancel(applicationContext)
+                        result.success(true)
                     }
                     else -> result.notImplemented()
                 }

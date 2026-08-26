@@ -84,6 +84,9 @@ android {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // [실험] Doze 관통 프로브가 expedited job을 직접 enqueue하기 위해 필요.
+    // 버전은 workmanager_android 플러그인과 동일하게 맞춘다(중복 클래스 회피).
+    implementation("androidx.work:work-runtime:2.10.2")
 }
 
 flutter {
