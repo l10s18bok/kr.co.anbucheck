@@ -137,6 +137,15 @@ struct HeartbeatStore {
     static func rearmOfflineFallback(hour: Int, minute: Int) {
         let center = UNUserNotificationCenter.current()
         let cal = Calendar.current
+        // ⚠️ **오늘 이미 전송됐으면 오늘치는 다시 심지 않는다.**
+        // 성공 경로는 clearTodayOfflineFallback() **직후** 이 함수를 부른다. 그런데
+        // 전송이 폴백 시각(+15분)보다 이르면 `fire > Date()`가 참이라 방금 지운 오늘치를
+        // 같은 ID로 그대로 되살린다 — 그리고 전송이 폴백보다 이른 것이 **정상 성공
+        // 케이스**라서 성공할 때마다 발동한다.
+        // 2026-08-27 실측: 06:14:51 전송 성공 → 06:15:00 "인터넷 연결 확인" 발화.
+        // (8/23에 본 "전송했는데 알림이 남아 있다"도 같은 원인이었고, removeDelivered
+        //  추가는 증상만 덮은 것이었다.)
+        let sentToday = group?.string(forKey: K.lastDate) == today()
         let title = text("offline_alarm_title", fallback: "Check your internet connection")
         let body = text(
             "offline_alarm_body",
@@ -144,6 +153,7 @@ struct HeartbeatStore {
         )
 
         for offset in 0..<offlineRollingDays {
+            if offset == 0 && sentToday { continue }
             guard let day = cal.date(byAdding: .day, value: offset, to: Date()) else { continue }
             var comps = cal.dateComponents([.year, .month, .day], from: day)
             comps.hour = hour
