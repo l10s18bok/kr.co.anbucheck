@@ -161,12 +161,40 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
          */
         private const val KEY_ROLE = "flutter.user_role"
         private const val KEY_IS_ALSO_SUBJECT = "flutter.is_also_subject"
-        private fun pendingIntent(context: Context) = android.app.PendingIntent.getBroadcast(
-            context,
-            REQUEST_CODE,
-            Intent(context, HeartbeatAlarmReceiver::class.java).setAction(ACTION),
-            android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE,
-        )
+        /**
+         * 알람용 PendingIntent — **무장·취소·조회가 모두 이 하나를 거친다.**
+         *
+         * ⚠️ `getBroadcast`는 `(requestCode, Intent)` 조합으로 기존 항목을 찾으므로, 조회 쪽이
+         * action·requestCode·컴포넌트 중 하나라도 어긋나면 **아무 에러 없이 null**을 돌려준다.
+         * 그러면 [todaysWindowStillUseful]이 영원히 false가 되어 가드가 조용히 죽는다.
+         * 이 파일은 이미 클래스명 변경을 한 번 겪었으므로(`DozeAlarmProbeReceiver` →
+         * `HeartbeatAlarmReceiver`) 정의를 복제하지 말고 반드시 이 함수만 쓸 것.
+         *
+         * [flags]에 `FLAG_NO_CREATE`를 주면 "이미 등록된 게 있는지"만 묻는다(없으면 null).
+         */
+        /** 알람 Intent의 **유일한 정의.** 무장·취소·조회가 전부 이걸 쓴다. */
+        private fun alarmIntent(context: Context) =
+            Intent(context, HeartbeatAlarmReceiver::class.java).setAction(ACTION)
+
+        /** 무장·취소용 — 없으면 만들어 주므로 null이 아니다. */
+        private fun pendingIntent(context: Context): android.app.PendingIntent =
+            android.app.PendingIntent.getBroadcast(
+                context,
+                REQUEST_CODE,
+                alarmIntent(context),
+                android.app.PendingIntent.FLAG_UPDATE_CURRENT or
+                    android.app.PendingIntent.FLAG_IMMUTABLE,
+            )
+
+        /** 조회 전용 — "이미 등록된 게 있는가"만 묻는다. 없으면 null. */
+        private fun existingPendingIntent(context: Context): android.app.PendingIntent? =
+            android.app.PendingIntent.getBroadcast(
+                context,
+                REQUEST_CODE,
+                alarmIntent(context),
+                android.app.PendingIntent.FLAG_NO_CREATE or
+                    android.app.PendingIntent.FLAG_IMMUTABLE,
+            )
 
         /**
          * 방화벽을 열어둘 [HeartbeatWindowHolderWorker]를 **expedited로** 등록한다.
@@ -299,12 +327,7 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
             hour: Int,
             minute: Int,
         ): Boolean = try {
-            val pending = android.app.PendingIntent.getBroadcast(
-                context,
-                REQUEST_CODE,
-                Intent(context, HeartbeatAlarmReceiver::class.java).setAction(ACTION),
-                android.app.PendingIntent.FLAG_NO_CREATE or android.app.PendingIntent.FLAG_IMMUTABLE,
-            )
+            val pending = existingPendingIntent(context)
             if (pending == null) {
                 false
             } else {
