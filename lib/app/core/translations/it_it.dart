@@ -501,8 +501,8 @@ abstract class ItIt {
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Segnale di benessere inviato',
     'nse_delivered_body': 'Il segnale di benessere di oggi è stato inviato al tuo referente.',
-    'offline_alarm_title': '📶 Controlla la connessione a Internet',
-    'offline_alarm_body': 'Tocca questa notifica appena torni online.\nAltrimenti il segnale di oggi non verrà inviato.',
+    'offline_alarm_title': '💗 Il segnale di oggi non è ancora stato inviato',
+    'offline_alarm_body': 'Tocca questa notifica una volta.\nIl tuo segnale verrà inviato al tuo referente.',
     'wellbeing_check_title': '💛 Verifica di benessere',
     'wellbeing_check_body': 'Come sta? Per favore, tocca questa notifica.',
     'noti_channel_name': 'Avvisi Anbu',

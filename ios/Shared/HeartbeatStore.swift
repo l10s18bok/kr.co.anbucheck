@@ -197,10 +197,14 @@ struct HeartbeatStore {
         // (8/23에 본 "전송했는데 알림이 남아 있다"도 같은 원인이었고, removeDelivered
         //  추가는 증상만 덮은 것이었다.)
         let sentToday = group?.string(forKey: K.lastDate) == today()
-        let title = text("offline_alarm_title", fallback: "Check your internet connection")
+        // ⚠️ 문구는 **원인을 특정하지 않는다.** 이전 문구는 "인터넷이 연결되면…"이라
+        // 망 문제를 단정했는데, 실제로는 APNs 슬롯 덮어쓰기(§13.5)나 확장 실패로도 뜬다 —
+        // 망이 멀쩡한데 "인터넷 연결 확인"이 뜨는 일이 드물지 않다. 이 알림이 참인 조건은
+        // 하나뿐이다: **오늘 안부가 아직 나가지 않았다.** 문구도 그것만 말한다.
+        let title = text("offline_alarm_title", fallback: "💗 Today's wellness check hasn't been sent")
         let body = text(
             "offline_alarm_body",
-            fallback: "Tap this notification once you're back online.\nOtherwise today's wellness check won't be sent."
+            fallback: "Tap this notification once.\nTapping sends your wellness check to your guardian."
         )
 
         for offset in 0..<offlineRollingDays {

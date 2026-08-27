@@ -468,8 +468,8 @@ abstract class FrFr {
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Message de bien-être envoyé',
     'nse_delivered_body': 'Votre message de bien-être du jour a été transmis à votre proche aidant.',
-    'offline_alarm_title': '📶 Vérifiez votre connexion Internet',
-    'offline_alarm_body': "Appuyez sur cette notification dès que vous êtes de nouveau en ligne.\nSinon, le message d'aujourd'hui ne sera pas envoyé.",
+    'offline_alarm_title': "💗 Votre message du jour n'a pas encore été transmis",
+    'offline_alarm_body': 'Appuyez une fois sur cette notification.\nVotre message sera alors transmis à votre proche aidant.',
     'wellbeing_check_title': '💛 Vérification de bien-être',
     'wellbeing_check_body': 'Comment allez-vous ? Veuillez appuyer sur cette notification.',
     'noti_channel_name': 'Alertes Anbu',

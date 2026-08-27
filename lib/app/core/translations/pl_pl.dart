@@ -460,8 +460,8 @@ abstract class PlPl {
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Sygnał o samopoczuciu wysłany',
     'nse_delivered_body': 'Dzisiejszy sygnał o samopoczuciu został przekazany opiekunowi.',
-    'offline_alarm_title': '📶 Sprawdź połączenie z internetem',
-    'offline_alarm_body': 'Dotknij tego powiadomienia, gdy wrócisz do sieci.\nW przeciwnym razie dzisiejszy sygnał nie zostanie wysłany.',
+    'offline_alarm_title': '💗 Dzisiejszy sygnał nie został jeszcze wysłany',
+    'offline_alarm_body': 'Dotknij tego powiadomienia jeden raz.\nWtedy sygnał zostanie wysłany do opiekuna.',
     'wellbeing_check_title': '💛 Sprawdzenie samopoczucia',
     'wellbeing_check_body': 'Czy wszystko w porządku? Proszę dotknąć tego powiadomienia.',
     'noti_channel_name': 'Powiadomienia Anbu',

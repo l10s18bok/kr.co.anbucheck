@@ -452,8 +452,8 @@ abstract class SvSe {
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Trygghetssignal skickad',
     'nse_delivered_body': 'Dagens trygghetssignal har skickats till din anhörigkontakt.',
-    'offline_alarm_title': '📶 Kontrollera din internetanslutning',
-    'offline_alarm_body': 'Tryck på den här aviseringen när du är online igen.\nAnnars skickas inte dagens signal.',
+    'offline_alarm_title': '💗 Dagens signal har inte skickats än',
+    'offline_alarm_body': 'Tryck en gång på den här aviseringen.\nDå skickas din signal till din anhörigkontakt.',
     'wellbeing_check_title': '💛 Välmåendekontroll',
     'wellbeing_check_body': 'Mår du bra? Vänligen tryck på denna avisering.',
     'noti_channel_name': 'Anbu-aviseringar',

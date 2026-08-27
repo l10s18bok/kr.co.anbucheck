@@ -416,8 +416,8 @@ abstract class ZhTw {
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ 平安訊息已送達',
     'nse_delivered_body': '今天的平安訊息已傳送給您的守護者。',
-    'offline_alarm_title': '📶 請檢查網路連線',
-    'offline_alarm_body': '網路恢復後請點擊此通知。\n否則今天的平安訊息將無法傳送。',
+    'offline_alarm_title': '💗 今天的平安訊息尚未傳送',
+    'offline_alarm_body': '請點擊此通知一次。\n點擊後會向您的守護者傳送平安訊息。',
     'wellbeing_check_title': '💛 平安確認',
     'wellbeing_check_body': '您還好嗎？請點擊此通知。',
     'noti_channel_name': 'Anbu提醒',

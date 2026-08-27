@@ -504,8 +504,8 @@ abstract class DeDe {
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Wohlbefindens-Meldung gesendet',
     'nse_delivered_body': 'Die heutige Wohlbefindens-Meldung wurde an Ihre Betreuungsperson übermittelt.',
-    'offline_alarm_title': '📶 Internetverbindung prüfen',
-    'offline_alarm_body': 'Tippen Sie auf diese Mitteilung, sobald Sie wieder online sind.\nSonst wird die heutige Meldung nicht gesendet.',
+    'offline_alarm_title': '💗 Die heutige Meldung wurde noch nicht gesendet',
+    'offline_alarm_body': 'Tippen Sie einmal auf diese Mitteilung.\nDanach wird Ihre Meldung an Ihre Betreuungsperson gesendet.',
     'wellbeing_check_title': '💛 Wohlbefindens-Meldung',
     'wellbeing_check_body':
         'Geht es Ihnen gut? Bitte tippen Sie auf diese Benachrichtigung.',
