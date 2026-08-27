@@ -322,8 +322,26 @@ rearmOfflineFallback(6, 0)    // ← 같은 ID로 다시 심는다 ❌
 
 ## 13. APNs 보관 슬롯 덮어쓰기 — 가설이 아니라 문서화된 동작
 
-APNs는 기기가 **도달 불가**일 때 그 앱(토큰)의 알림을 **단 하나만** 보관하고, 이후 도착한
+APNs는 기기가 **도달 불가**일 때 그 앱(토픽)의 알림을 **단 하나만** 보관하고, 이후 도착한
 알림이 보관된 것을 **교체**한다. `apns-collapse-id`와 무관하고 알림 종류도 가리지 않는다.
+
+**애플 문서·포럼 확인 (2026-08-27)** — 이 동작의 이름은 **coalescing**이다:
+
+> Only one recent notification for a particular app is stored. If multiple notifications are
+> sent while the device is offline, **each new notification causes the prior notification to
+> be discarded.**
+>
+> APNs stores a single notification **per topic (bundle ID) per device, regardless of push type.**
+
+출처: [Apple Developer Forums #103527](https://developer.apple.com/forums/thread/103527),
+[#765801](https://developer.apple.com/forums/thread/765801)
+
+⚠️ **다만 문서가 말하는 조건은 "offline"이다.** 화면만 꺼진 채 Wi-Fi에 붙어 있는 아이폰이
+APNs 기준으로 offline인지는 **문서에 없다** — 판정 기준이 "잠들었는가"가 아니라 **"APNs
+지속 연결이 닫혔는가"**이고, 그건 기기·공유기·전파 상태에 좌우된다. 애플은 임계 시간을
+문서화하지 않았고 iOS에는 `dumpsys deviceidle` 같은 관측 수단도 없다.
+그래서 §14.1 판별 테스트가 필요하다 — **"평범한 수면"이 offline로 취급되는가**가 요점이다.
+(참고: 저전력 모드가 켜져 있으면 알림 수신이 추가로 억제된다 — 테스트 시 꺼둘 것.)
 
 이전 판에는 "가설"이라 적어 두었으나 과도한 신중이었다. 우리 트리거 푸시는 **보호자 경고
 하나만 뒤에 와도 사라진다** — 이 앱의 G+S 사용자는 동시에 보호자이므로 드문 일이 아니다.
