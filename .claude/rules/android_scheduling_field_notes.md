@@ -1150,8 +1150,27 @@ Redmi 23021RAA2Y / HyperOS 2.0, 예약 06:30, 딥 Doze(`mState=IDLE`), 셀룰러
 여기서는 `NOT_IN_BACKGROUND`에 그쳐 **`effective=APP_STANDBY`로 막힌다.**
 
 **③ 그리고 프로세스가 6분 30초간 얼었다.** 창 유지자의 `held=395077ms`(예산 90,000ms)가 증거다 —
-루프는 `elapsedRealtime` 기준 0.5초마다 도는데 그게 안 돌았다는 뜻이다. **expedited job이
-MIUI PowerKeeper의 동결을 막지 못한다.** 해동 직후 periodic이 재시도했으나 같은 방화벽에 또 막혔다.
+루프는 `elapsedRealtime` 기준 0.5초마다 도는데 그게 안 돌았다는 뜻이다. 해동 직후 periodic이
+재시도했으나 같은 방화벽에 또 막혔다.
+
+⚠️ **"expedited가 무시됐다"고 단정하려면 창 유지자가 실제로 expedited로 떴는지 먼저 확인해야 한다.**
+`enqueueWindowHolder`는 `setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)`라
+**EJ 쿼터가 없으면 조용히 일반 job으로 강등**된다. 강등됐다면 애초에 면제를 요청조차 안 한 것이므로
+"MIUI가 expedited를 무시한다"는 결론이 성립하지 않는다.
+
+**확인 방법 — `Timer<EJ>`가 아니라 `ShrinkableDebits`를 볼 것:**
+```bash
+adb -s "$SER" shell "dumpsys jobscheduler | grep -m2 -A2 'kr.co.anbucheck.live.*ShrinkableDebits'"
+#   <0>kr.co.anbucheck.live: ShrinkableDebits { debit tally: 389125, bucket: 3 }
+```
+EJ 부채는 **expedited job만** 발생시킨다. 08-28 실측에서 부채 **389,125ms**가 창 유지자의
+`held=395077ms`와 1.5% 안에서 일치했다 → **expedited로 실행된 것이 맞다**(enqueue 시점엔
+부채가 거의 0이라 강등 조건도 아니었다). 따라서 이 기기에서는 **expedited 상태로도 동결과
+APP_STANDBY 차단을 피하지 못한다.**
+
+⚠️ `Timer<EJ>{...} started at ... N running bg jobs`를 근거로 쓰지 말 것 — 거기 표시되는 job 이름은
+전부 `SystemJobService`라 어느 워커인지 알 수 없고, 시작 시각도 다른 EJ 세션의 것일 수 있다
+(2026-08-28에 이걸로 한 번 오독했다).
 
 ⚠️ **결론: 이 기기에서 0차 계층은 "깨우기"까지만 되고 "내보내기"가 안 된다.** 회귀는 아니다
 (1~3차는 그대로) 하지만 **MIUI에서 알람 계층의 이득을 기대하면 안 된다.** 표본 1대다.
