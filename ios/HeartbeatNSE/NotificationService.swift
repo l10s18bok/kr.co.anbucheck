@@ -11,6 +11,10 @@ import UserNotifications
 ///  확장 실행, HTTPS 왕복 성공, 걸음수 조회, pending 알림 제거까지 확인)
 final class NotificationService: UNNotificationServiceExtension {
 
+    /// 피기백 실행 중인가. true면 성공해도 **알림 내용을 절대 건드리지 않는다** —
+    /// 보호자 경고·리포트 문구가 "안부 전달 완료"로 덮이면 정보가 사라진다.
+    private var piggyback = false
+
     private var contentHandler: ((UNNotificationContent) -> Void)?
     private var original: UNNotificationContent?
     private var mutable: UNMutableNotificationContent?
@@ -38,7 +42,40 @@ final class NotificationService: UNNotificationServiceExtension {
         // 네트워크를 기다리면 **긴급 경고가 그만큼 늦게 뜬다**.
         // 이 가드를 지우거나 아래로 옮기지 말 것.
         // ─────────────────────────────────────────────────────────────
-        guard (request.content.userInfo["type"] as? String) == "heartbeat_push" else {
+        let type = (request.content.userInfo["type"] as? String) ?? ""
+        let isTrigger = (type == "heartbeat_push")
+
+        // ─────────────────────────────────────────────────────────────
+        // ★ 피기백 — 밀려난 트리거를 **다른 푸시가 대신 실어 나른다.**
+        //
+        // APNs는 기기가 도달 불가일 때 앱(토픽)당 알림을 **1개만** 보관하고 새 알림이
+        // 앞의 것을 버린다(coalescing, 애플 문서). 그런데 iOS 사용자는 **전원 보호자를
+        // 겸하므로**, 대상자 안부 알림이 매일 아침 자기 트리거와 슬롯을 다툰다.
+        // 2026-08-27 실측: 화면 끈 채 83분 방치 → 트리거 → 긴급 순서로 보내자
+        // **긴급만 도착**하고 트리거는 영구 소실됐다.
+        //
+        // 그래서 트리거 하나에 의존하지 않는다. 서버는 `send_push`에서 **모든** 푸시에
+        // `mutable_content=True`를 붙이므로 이 확장은 보호자 알림에서도 이미 깨어난다.
+        // 그 기회를 그대로 쓴다 — **어느 푸시가 살아남든 안부가 나간다.**
+        //
+        // ⚠️ **허용목록(allow-list)이다. 부정목록으로 바꾸지 말 것.**
+        // 새 푸시 타입이 추가됐을 때 안전한 쪽(즉시 통과)으로 떨어져야 한다.
+        //
+        // ⚠️ **긴급·경고·구독 계열은 절대 넣지 말 것.** 여기 넣으면 네트워크를 기다리는
+        // 만큼 **긴급 경고가 늦게 뜬다.** 사람 안전이 걸린 알림을 안부 전송 편의와
+        // 바꾸지 않는다.
+        let piggybackable: Set<String> = [
+            "auto_report",      // 오늘 안부 확인 완료
+            "manual_report",    // 수동 안부 확인
+            "steps",            // 활동 정보
+            "battery_low",
+            "battery_dead",
+            "alert_resolved",   // 정상 복귀
+            "alert_cleared",    // 보호자 경고 클리어
+        ]
+        let isPiggyback = piggybackable.contains(type)
+
+        guard isTrigger || isPiggyback else {
             contentHandler(request.content)
             return
         }
@@ -48,6 +85,7 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
         self.mutable = body
+        self.piggyback = isPiggyback
 
         // 예산 초과 시에도 반드시 무언가를 배달한다(안 하면 iOS가 원본을 띄운다 —
         // 그 경우도 안전하지만, 여기서 명시적으로 끝내 로그를 남긴다).
@@ -81,8 +119,16 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
 
+        // 중복 전송 방지 — 보호자 알림 여러 건이 동시에 도착하면 확장이 병렬로 뜬다.
+        // 못 잡으면 다른 인스턴스가 이미 보내는 중이므로 원본만 배달하고 끝낸다.
+        guard HeartbeatStore.tryAcquireSendLock() else {
+            finish(success: false, note: "locked")
+            return
+        }
+
         collectSteps { steps in
             self.send(store: store, steps: steps) { ok in
+                HeartbeatStore.releaseSendLock()
                 if ok {
                     HeartbeatStore.markSent(scheduledKey: store.scheduledKey)
                     HeartbeatStore.clearTodayOfflineFallback()
@@ -108,7 +154,9 @@ final class NotificationService: UNNotificationServiceExtension {
 
         HeartbeatStore.log("nse \(note)")
 
-        guard success, let body = mutable else {
+        // ⚠️ 피기백은 **성공해도 원본을 그대로 배달한다.** 이 알림의 본래 용도(보호자
+        // 리포트·배터리 안내 등)가 우선이고, 안부 전송은 그 뒤에 조용히 얹힌 것이다.
+        guard success, !piggyback, let body = mutable else {
             handler(original ?? UNMutableNotificationContent())
             return
         }

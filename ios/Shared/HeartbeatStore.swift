@@ -26,6 +26,7 @@ struct HeartbeatStore {
         static let sentTime = "nse_sent_time"
         static let sentKey  = "nse_sent_key"
         static let lastLog  = "nse_last_log"
+        static let inflight = "nse_inflight"
     }
 
     /// 오프라인 폴백 알림 식별자 접두어. 날짜별 **단발** 요청이라
@@ -118,6 +119,29 @@ struct HeartbeatStore {
     }
 
     // MARK: - 오프라인 폴백 알림
+
+    /// 확장 인스턴스 간 **중복 전송 방지** 마커. 잡으면 true.
+    ///
+    /// ⚠️ 피기백(§14.3)이 들어가면서 필요해졌다. 보호자 알림 여러 건이 거의 동시에
+    /// 도착하면 확장이 **병렬로 여러 개** 뜨고, 각자 "오늘 미전송"으로 보고 동시에
+    /// 전송할 수 있다. iOS 확장에는 안드로이드의 SQLite UNIQUE 같은 **원자 락이 없다** —
+    /// UserDefaults는 CAS가 아니라 read→write 사이 틈이 남는다. 완벽하지 않지만
+    /// 실제로 문제가 되는 "수백 ms 간격 병렬 기동"은 이걸로 막힌다.
+    ///
+    /// 서버의 `is_first_today` 판정이 `auto_report` 중복 푸시까지는 막아주지만,
+    /// `heartbeat_logs`에 행이 둘 생기는 것은 막지 못한다.
+    static func tryAcquireSendLock(ttl: TimeInterval = 30) -> Bool {
+        guard let g = group else { return true }  // 못 읽으면 전송을 막지 않는다
+        let now = Date().timeIntervalSince1970
+        let prev = g.double(forKey: K.inflight)
+        if prev > 0, now - prev < ttl { return false }  // 다른 인스턴스가 진행 중
+        g.set(now, forKey: K.inflight)
+        return true
+    }
+
+    static func releaseSendLock() {
+        group?.removeObject(forKey: K.inflight)
+    }
 
     /// 지금이 **오늘의** 예약시각을 지났는가.
     ///

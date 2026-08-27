@@ -122,6 +122,28 @@ class LocalAlarmService {
     }
   }
 
+  /// 오늘치 오프라인 폴백 알림을 pending·표시 양쪽에서 제거한다 (iOS 전용).
+  ///
+  /// ⚠️ **앱이 안부를 보낸 날의 오발화를 막는다.** 폴백을 지우는 경로는 원래
+  /// 확장 성공 하나뿐이었다(`HeartbeatStore.clearTodayOfflineFallback`). 그래서
+  /// 사용자가 아침에 앱을 열어 안부가 나간 날에도 어제 심어둔 오늘치가 남아
+  /// 예약시각 +45분에 "인터넷이 연결되면 이 알림을 눌러 주세요"가 떴다 —
+  /// 망도 있고 안부도 전달된 상태에서.
+  ///
+  /// 재무장(`schedule()`)의 `sentToday` 스킵으로는 막을 수 없다. **다시 심지 않는 것과
+  /// 이미 심긴 것을 지우는 것은 다르다.**
+  ///
+  /// Android는 오프라인 폴백 자체가 없어 no-op.
+  static Future<void> clearOfflineFallbackToday() async {
+    if (!Platform.isIOS) return;
+    try {
+      await _iosNotificationChannel
+          .invokeMethod<void>('clearOfflineFallbackToday');
+    } catch (e) {
+      debugPrint('[LocalAlarm] iOS 오프라인 폴백 제거 실패: $e');
+    }
+  }
+
   /// 일일 안전망 알림 취소 (예약 + 표시 중인 알림 모두 제거).
   /// 양 플랫폼 모두에서 동작 — 401 세션 만료, G+S 비활성화, 모드 전환 등에서 호출.
   static Future<void> cancel() async {

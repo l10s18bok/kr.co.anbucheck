@@ -21,6 +21,10 @@ import GoogleMaps
     // ⚠️ 확장이 남긴 전송 마커를 **Flutter 엔진 시작보다 먼저** 흡수한다.
     // 늦으면 Dart가 첫 조회에서 옛 값을 읽어 "오늘 미전송"으로 판단하고 중복 전송한다.
     SharedStore.importFromExtension()
+    // 진단: 확장이 마지막으로 언제 무엇을 했는지 콘솔에 남긴다(`flutter logs`로 확인).
+    // "확장이 돌았나 / 푸시가 도착했나"를 사후에 판정할 유일한 수단이다 —
+    // 알림 표시만으로는 '오지 않음'과 '왔는데 표시가 억제됨'을 구분할 수 없다.
+    NSLog("[HeartbeatNSE] last=%@", HeartbeatStore.group?.string(forKey: HeartbeatStore.K.lastLog) ?? "(없음)")
 
     // Flutter 엔진 + Firebase + 플러그인 초기화
     let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -146,6 +150,20 @@ import GoogleMaps
         // 진입까지 미루면 그 사이 확장이 **옛 예약시각으로 scheduled_key**를 만든다.
         SharedStore.exportToExtension()
         HeartbeatStore.rearmOfflineFallback(hour: hour, minute: minute)
+        result(nil)
+        return
+      }
+
+      // 오늘치 오프라인 폴백 제거 — Dart `_onHeartbeatSent`가 **앱이 전송했을 때** 호출한다.
+      //
+      // ⚠️ 확장이 아니라 **앱**이 안부를 보낸 날의 오발화를 막는 것이 목적이다.
+      // 폴백을 지우는 경로는 원래 확장 성공(clearTodayOfflineFallback) 하나뿐이었다.
+      // 그래서 사용자가 아침에 앱을 열어 안부가 나간 날에도 어제 심어둔 오늘치가 그대로
+      // 남아 예약시각 +45분에 "인터넷이 연결되면…"이 떴다 — 망도 있고 안부도 갔는데.
+      // (재무장의 `sentToday` 스킵으로는 못 막는다. **건너뛰는 것과 이미 심긴 것을
+      //  지우는 것은 다르다.**)
+      if call.method == "clearOfflineFallbackToday" {
+        HeartbeatStore.clearTodayOfflineFallback()
         result(nil)
         return
       }
