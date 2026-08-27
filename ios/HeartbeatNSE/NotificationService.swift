@@ -72,6 +72,15 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
 
+        // ⚠️ 예약시각 이전이면 오늘 몫이 아니다 — 자정을 넘겨 배달된 어제 트리거다.
+        // 여기서 보내면 `오늘_HH:mm` 키로 서버에 귀속돼 오늘 정시 트리거가 통째로
+        // 스킵되고, 그날 걸음수가 배달 시각까지만 기록된다. 상세는
+        // HeartbeatStore.scheduledTimePassed 주석 참조.
+        guard HeartbeatStore.scheduledTimePassed(hour: store.hour, minute: store.minute) else {
+            finish(success: false, note: "before-schedule")
+            return
+        }
+
         collectSteps { steps in
             self.send(store: store, steps: steps) { ok in
                 if ok {

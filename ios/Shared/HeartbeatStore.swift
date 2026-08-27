@@ -32,7 +32,14 @@ struct HeartbeatStore {
     /// 확장이 "그날치만" 제거할 수 있다(반복 요청이면 제거 시 이후가 전부 사라진다).
     static let offlineIdPrefix = "anbu_offline_"
     /// 푸시가 도착했어야 할 시각으로부터 이만큼 뒤에 발화 — 그 사이 확장이 지운다.
-    static let offlineDelayMinutes = 15
+    ///
+    /// ⚠️ **15분이었다가 45분으로 늘렸다(2026-08-27). 되돌리지 말 것.**
+    /// 로컬 알림은 예약시각에 **정확히** 발화하는데, 원격 푸시는 기기가 깨어날 때까지
+    /// 보관됐다 전달된다(실측 지연 +9분·+15분·+19분). 이 비대칭 때문에 15분은 경계선
+    /// 위였고, 08-27에는 전송 성공(06:14:51)과 폴백 발화(06:15:00)가 **9초** 차이였다.
+    /// 45분이면 관측 상한의 2배 이상이면서 보호자 미수신 경고(+2h)까지 75분이 남아,
+    /// 대상자가 스스로 고칠 창이 실질적으로 확보된다.
+    static let offlineDelayMinutes = 45
     /// 재무장 창. 한 번의 실패로 최후 보루가 죽지 않도록 롤링으로 채운다.
     static let offlineRollingDays = 7
 
@@ -111,6 +118,26 @@ struct HeartbeatStore {
     }
 
     // MARK: - 오프라인 폴백 알림
+
+    /// 지금이 **오늘의** 예약시각을 지났는가.
+    ///
+    /// ⚠️ **자정을 넘겨 배달된 어제 트리거를 걸러내기 위한 것이다.**
+    /// APNs는 기기가 깨어날 때까지 푸시를 보관하므로, 어제 18:00 트리거가 오늘 08:00에
+    /// 배달될 수 있다. 그때 그냥 전송하면 `scheduled_key`가 `오늘_18:00`이 되어 서버가
+    /// **오늘의 안부로 귀속**시키고, 그러면 오늘 18:00 트리거는 `last_seen`이 오늘이라
+    /// 발사되지 않는다 → **그날 걸음수가 08시까지만** 기록된다.
+    /// (안드로이드가 `heartbeatPayloadIsFromToday`로 막아둔 것과 같은 종류의 문제다.)
+    ///
+    /// 예약시각을 **지난 뒤의** 늦은 배달은 그대로 통과시킨다 — 그건 오늘 몫이 맞고,
+    /// 늦게라도 보내는 것이 이 계층의 목적이다.
+    static func scheduledTimePassed(hour: Int, minute: Int) -> Bool {
+        let cal = Calendar.current
+        var comps = cal.dateComponents([.year, .month, .day], from: Date())
+        comps.hour = hour
+        comps.minute = minute
+        guard let scheduled = cal.date(from: comps) else { return true }  // 못 구하면 기존 동작
+        return Date() >= scheduled
+    }
 
     /// 오늘치 오프라인 폴백을 pending에서 제거한다.
     ///
