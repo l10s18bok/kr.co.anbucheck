@@ -64,6 +64,10 @@ final class NotificationService: UNNotificationServiceExtension {
         // 이미 오늘 보냈으면 통신하지 않는다 — 앱이 먼저 보낸 날의 중복 전송 차단.
         if store.lastSentDate == HeartbeatStore.today() {
             HeartbeatStore.clearTodayOfflineFallback()
+            // ⚠️ 이 분기에서도 롤링 창을 채운다. 빼면 앱이 먼저 보낸 날마다 7일 창이
+            // 하루씩 줄어들고, 복구가 "사용자가 앱을 여는 것"에 의존하게 된다 —
+            // 이 앱의 대상자는 앱을 열지 않는 것이 정상 사용 패턴이다.
+            HeartbeatStore.rearmOfflineFallback(hour: store.hour, minute: store.minute)
             finish(success: true, note: "already-sent")
             return
         }
