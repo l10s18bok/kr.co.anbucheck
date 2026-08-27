@@ -1117,6 +1117,57 @@ pending 존재 + 창 안 + 오늘 미전송이 모두 참이라 **알람 자신�
 
 셋 다 딥 Doze·RARE이고 유지보수 창 밖이다. 초 단위 재현의 이유는 **미확인**.
 
+### ★★ MIUI 실측 — 알람은 정시에 뜨는데 **창 유지자가 방화벽을 못 연다** (2026-08-28, 표본 1대)
+
+Redmi 23021RAA2Y / HyperOS 2.0, 예약 06:30, 딥 Doze(`mState=IDLE`), 셀룰러 LTE, 비충전, 앱 미실행.
+
+```
+06:02:54  Start proc ... FlutterFirebaseMessagingReceiver (아이폰 06:00 안부 푸시)
+06:02:55  ARMED (app-process-start) for=08-28 06:30      ← 창 밖이라 정상 무장
+06:30:34  Start proc ... for broadcast {HeartbeatAlarmReceiver}
+06:30:35.030  ARM skipped (app-process-start) — 오늘 발화 창 유지 (6:30)
+06:30:35.070  ARMED (refire) for=08-29 06:30             ← force 정상
+06:30:35.090  FIRED idle=true bucket=40                  ← ★ 예약 +35초
+06:30:35.353  HOLD started budget=90000ms
+06:30:38      SmartPower: adj=-10000 → adj=227           ← 발화 3초 만에 강등
+06:30:41.044  FAIL src=alarm attempt=3 unreachable=true steps=110 notify=true
+06:37:10.428  HOLD ended held=395077ms reason=timeout    ← ★ 90초 예산을 6분 35초에 소진
+06:37:10.924  FAIL src=periodic attempt=3 unreachable=true
+```
+
+**① 알람 자체는 MIUI에서 아주 잘 뜬다 — 딥 Doze에서 예약 +35초.** 삼성의 +29분과 극명하게 다르다
+(Doze 유지보수 창과 겹친 덕으로 보인다). `power_pending=--`였다.
+
+**② 그런데 전송이 방화벽에 막힌다. 망은 멀쩡했다.**
+```
+망 : MOBILE[LTE] CONNECTED ... VALIDATED
+앱 : blocked_state={blocked=APP_STANDBY|APP_BACKGROUND,
+                    allowed=NOT_IN_BACKGROUND, effective=APP_STANDBY}
+     06:30:35 Firewall rule changed: 10521-background-allow   ← background만 열림
+     06:03:15 Firewall rule changed: 10521-standby-deny       ← standby 차단은 그대로
+```
+삼성이 성공했을 때는 `allowed=FOREGROUND` / `effective=NONE`이었다(2026-08-21 기록).
+여기서는 `NOT_IN_BACKGROUND`에 그쳐 **`effective=APP_STANDBY`로 막힌다.**
+
+**③ 그리고 프로세스가 6분 30초간 얼었다.** 창 유지자의 `held=395077ms`(예산 90,000ms)가 증거다 —
+루프는 `elapsedRealtime` 기준 0.5초마다 도는데 그게 안 돌았다는 뜻이다. **expedited job이
+MIUI PowerKeeper의 동결을 막지 못한다.** 해동 직후 periodic이 재시도했으나 같은 방화벽에 또 막혔다.
+
+⚠️ **결론: 이 기기에서 0차 계층은 "깨우기"까지만 되고 "내보내기"가 안 된다.** 회귀는 아니다
+(1~3차는 그대로) 하지만 **MIUI에서 알람 계층의 이득을 기대하면 안 된다.** 표본 1대다.
+
+#### ★ 부수 확인 — "인터넷 연결을 확인해 주세요" 알림이 **거짓 원인**임이 실증됐다
+
+`send_failed`(ID `0x53466169`)가 게시된 그 시각에 **LTE가 `CONNECTED`+`VALIDATED`**였다.
+문구는 망을 의심하라고 하지만 실제 원인은 **APP_STANDBY 방화벽**이다. 2026-08-25에 사용자가
+"워커/알람 실패로 사용자가 오해할 수 있다"고 제기한 문제이며, 계측(`HeartbeatSend`)이 그
+자리에서 `unreachable=true`와 망 `VALIDATED`를 함께 보여줘 처음으로 근거가 생겼다.
+→ 알림 정책 변경("지속 실패에서만" / 문구에서 원인 단정 제거)을 검토할 때 이 건을 근거로 쓸 것.
+
+⚠️ 판정 함정 재확인: 이날 `ARM skipped — 오늘 발화 창 유지`가 찍혔지만 앞 줄이
+`Start proc ... for broadcast {HeartbeatAlarmReceiver}`였다 — **알람 자신의 발화 경로**다.
+가드가 노리는 **워커-먼저 시나리오는 아직 미실증**이다.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
