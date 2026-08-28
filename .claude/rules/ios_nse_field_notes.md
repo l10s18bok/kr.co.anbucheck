@@ -737,3 +737,35 @@ guard store.isSubject else { finish(success: false, note: "not-subject"); return
 얹는" 설계라 대상 선택권이 서버에서 **확장으로 넘어왔다.** 그러면 서버가 하던 판정을
 확장이 이어받아야 하는데, 그 이관이 빠져 있었다. **전달 경로를 바꿀 때는 그 경로가
 암묵적으로 의존하던 조건이 무엇이었는지 먼저 적어 볼 것.**
+
+### 16.4 부분 검증 — 게이트·`isSubject` 가드가 정상 동작한다 (2026-08-29 05:52)
+
+`1.2.9+53`(main 통합본) 설치 직후, 오늘 안부가 이미 나간 상태에서 `manual_report`를 쏴
+**전송 직전까지의 경로**를 확인했다. USB + `idevicesyslog`로 실시간 관측.
+
+```
+05:52:40      서버가 manual_report 발사 (admin, push_type=manual_report)
+05:52:41.384  확장 로드 — HeartbeatNSE(1.2.9)
+05:52:41.422  [HeartbeatNSE] nse already-sent      ← 0.04초 만에 판정
+```
+
+| 판정 | 근거 |
+|---|---|
+| 확장이 실행됨 | 로그 존재 |
+| **피기백 게이트가 `manual_report`를 통과시킴** | 게이트에서 즉시 반환하면 **로그가 아예 없다**(그 분기는 `HeartbeatStore.log`를 부르지 않는다) |
+| **`isSubject` 가드가 대상자 기기를 막지 않음** | `not-subject`가 아니다 → `hb_is_subject` 브리지 정상 |
+| App Group 자격증명 전달 | `no-credentials`가 아니다 |
+| 본문 불변 규칙 | 잠금화면에 "수동 안부 확인" 원본 그대로 |
+
+**로그 문자열이 판정을 가른다는 점이 핵심이다.** 각 분기가 서로 다른 note를 남기도록 만들어
+둔 덕에, 전송이 일어나지 않는 상황에서도 어디까지 갔는지 정확히 알 수 있다.
+
+⚠️ `idevicesyslog` 판독 시: 우리 로그의 프로세스명은 **`HeartbeatNSE(Foundation)`**이다.
+`grep -i heartbeatnse`로는 `runningboardd`·`PerfPowerServices`의 시스템 잡음이 압도하므로
+**`grep -F "[HeartbeatNSE]"`**로 우리 NSLog만 뽑을 것. (`-i`로 `locked`를 찾으면 시스템의
+`Locked`가 대량으로 걸린다 — 실제로 한 번 오독했다.)
+
+**남은 것은 실제 전송 한 단계뿐이다.** 조건("오늘 안부 미전송")을 만들려면 밤새 비행기
+모드가 가장 확실하다 — 망이 없으면 실수로 앱을 열어도 전송이 실패해 `lastHeartbeatDate`가
+박히지 않으므로 조건이 유지된다(08-29 새벽에 앱이 포그라운드로 올라와 00:22에 전송되는
+바람에 그날 테스트를 통째로 날렸다).
