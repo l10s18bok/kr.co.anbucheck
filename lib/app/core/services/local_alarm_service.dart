@@ -93,57 +93,55 @@ class LocalAlarmService {
       return;
     }
 
-    // iOS: heartbeat 예약 시각 정시에 매일 fire (BGTaskScheduler 미사용 → PRIMARY 트리거).
-    //   matchDateTimeComponents.time으로 한 번만 등록하면 OS가 매일 자동 반복.
-    //   heartbeat 전송 성공 후 재등록하지 않으며, heartbeat가 예약시각 전에 전송돼도
-    //   알림은 정시에 정상 발화한다 — 탭 시 isReportedToday 체크로 중복 전송 차단.
-    final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(
-      tz.local,
-      now.year, now.month, now.day,
-      heartbeatHour, heartbeatMinute,
-    );
-
-    // 오늘 시각이 이미 지났으면 내일로 (첫 발화 시각만 결정 — 이후 매일 자동 반복)
-    if (scheduled.isBefore(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
+    // iOS: 정시 `gs_deadman` 일일 알림을 **더 이상 예약하지 않는다.**
+    //
+    // 그 알림은 "매일 안부를 보내라"는 주 트리거였고, 사용자가 **탭해야** 전송됐다.
+    // 이제는 서버가 예약시각 정각에 보내는 트리거 푸시를 Notification Service
+    // Extension이 받아 **탭 없이** 전송하므로 그 역할이 사라졌다.
+    //
+    // 대신 로컬 알림은 **오프라인 전용 최후 보루**로 역할이 바뀐다:
+    //   망 있음 → 푸시 도착 → 확장이 전송하고 그날치 폴백 알림을 pending에서 제거
+    //   망 없음 → 푸시 자체가 안 옴 → 살아남은 폴백 알림이 "인터넷 연결 확인"으로 발화
+    //
+    // ⚠️ iOS 로컬 알림은 "망이 없을 때만 뜨게" 만들 수 없다 — 앱이 죽어 있어 조건을
+    // 판단할 주체가 없기 때문이다. 그래서 조건을 뒤집어 무조건 심어두고 확장이 지운다.
+    // (확장이 다른 프로세스가 심은 pending을 제거할 수 있음은 실측으로 확인됐다 —
+    //  .claude/rules/ios_nse_field_notes.md)
+    //
+    // 재무장 구현은 앱·확장이 공유하는 네이티브 HeartbeatStore에 있다. Dart로 옮기면
+    // 확장이 쓰는 규칙과 두 벌이 되어 조용히 어긋난다.
+    await _cancelInternal(); // 업그레이드 기기에 남은 gs_deadman 잔존 알림 정리
+    try {
+      await _iosNotificationChannel.invokeMethod<void>('armOfflineFallback', {
+        'hour': heartbeatHour,
+        'minute': heartbeatMinute,
+      });
+      debugPrint('[LocalAlarm] iOS 오프라인 폴백 재무장: $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')} +15분, 7일 롤링');
+    } catch (e) {
+      debugPrint('[LocalAlarm] iOS 오프라인 폴백 재무장 실패: $e');
     }
+  }
 
-    debugPrint('[LocalAlarm] iOS 예약 시도: ${scheduled.toString()} (heartbeat $heartbeatHour:${heartbeatMinute.toString().padLeft(2, '0')})');
-
-    // 백그라운드 isolate에서는 GetX .tr 사용 불가 → SharedPreferences 캐시 사용
-    final title = await NotificationTextCache.get(
-        'local_alarm_title', fallback: '💗 Wellness check needed');
-    final body = await NotificationTextCache.get(
-        'local_alarm_body', fallback: 'Please tap this notification.');
-    final channelName = await NotificationTextCache.get(
-        'noti_channel_name', fallback: 'Anbu Alerts');
-
-    await _plugin!.zonedSchedule(
-      _alarmId,
-      title,
-      body,
-      scheduled,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          _androidChannelId,
-          channelName,
-          importance: Importance.high,
-          priority: Priority.high,
-          icon: '@mipmap/ic_launcher',
-        ),
-        iOS: const DarwinNotificationDetails(
-          presentAlert: true,
-          presentSound: true,
-        ),
-      ),
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
-      payload: alarmPayload, // iOS 전용 — gs_deadman
-    );
-    debugPrint('[LocalAlarm] 예약 완료: ${scheduled.toString()}');
+  /// 오늘치 오프라인 폴백 알림을 pending·표시 양쪽에서 제거한다 (iOS 전용).
+  ///
+  /// ⚠️ **앱이 안부를 보낸 날의 오발화를 막는다.** 폴백을 지우는 경로는 원래
+  /// 확장 성공 하나뿐이었다(`HeartbeatStore.clearTodayOfflineFallback`). 그래서
+  /// 사용자가 아침에 앱을 열어 안부가 나간 날에도 어제 심어둔 오늘치가 남아
+  /// 예약시각 +45분에 "인터넷이 연결되면 이 알림을 눌러 주세요"가 떴다 —
+  /// 망도 있고 안부도 전달된 상태에서.
+  ///
+  /// 재무장(`schedule()`)의 `sentToday` 스킵으로는 막을 수 없다. **다시 심지 않는 것과
+  /// 이미 심긴 것을 지우는 것은 다르다.**
+  ///
+  /// Android는 오프라인 폴백 자체가 없어 no-op.
+  static Future<void> clearOfflineFallbackToday() async {
+    if (!Platform.isIOS) return;
+    try {
+      await _iosNotificationChannel
+          .invokeMethod<void>('clearOfflineFallbackToday');
+    } catch (e) {
+      debugPrint('[LocalAlarm] iOS 오프라인 폴백 제거 실패: $e');
+    }
   }
 
   /// 일일 안전망 알림 취소 (예약 + 표시 중인 알림 모두 제거).

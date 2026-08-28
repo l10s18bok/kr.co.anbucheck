@@ -564,6 +564,10 @@ class HeartbeatService {
     // 서버 FCM 푸시 subject_safety_net 잔존 알림 제거 (Android 전용).
     // 포그라운드·WorkManager periodic 어느 경로로 성공하든 공통 처리.
     await LocalAlarmService.cancelSubjectSafetyNet();
+    // iOS 오늘치 오프라인 폴백 제거 — **앱이 보낸 날**의 오발화 차단.
+    // 확장이 보낸 날은 확장 자신이 지우지만(NSE 성공 경로), 이 경로가 없으면
+    // 사용자가 앱을 열어 안부가 나간 날 예약시각 +45분에 거짓 안내가 뜬다.
+    await LocalAlarmService.clearOfflineFallbackToday();
   }
 
   Future<int?> _getBatteryLevel() async {

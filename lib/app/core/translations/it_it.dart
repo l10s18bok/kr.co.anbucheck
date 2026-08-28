@@ -498,6 +498,11 @@ abstract class ItIt {
     // ── Notifiche locali ──
     'local_alarm_title': '💗 Verifica di benessere necessaria',
     'local_alarm_body': 'Per favore, tocca questa notifica.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ Segnale di benessere inviato',
+    'nse_delivered_body': 'Il segnale di benessere di oggi è stato inviato al tuo referente.',
+    'offline_alarm_title': '💗 Il segnale di oggi non è ancora stato inviato',
+    'offline_alarm_body': 'Tocca questa notifica una volta.\nIl tuo segnale verrà inviato al tuo referente.',
     'wellbeing_check_title': '💛 Verifica di benessere',
     'wellbeing_check_body': 'Come sta? Per favore, tocca questa notifica.',
     'noti_channel_name': 'Avvisi Anbu',

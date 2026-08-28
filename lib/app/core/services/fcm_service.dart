@@ -110,9 +110,18 @@ Future<void> _handleNotificationTap(String type,
     case 'heartbeat':
       // 대상자 전용 — 보호자에게 표시되지 않음. 라우팅 없음.
       break;
+    case 'heartbeat_push':
+    case 'offline_fallback':
     case 'subject_safety_net':
     case 'safety_net':
     case 'send_failed':
+      // `heartbeat_push`: iOS 예약시각 트리거 푸시. **정상 경로에서는 이 탭이 일어나지
+      //   않는다** — Notification Service Extension이 이미 전송을 끝내고 문구를
+      //   "전달 완료"로 바꿔 무음으로 내리기 때문이다. 여기로 오는 것은 확장이 실행되지
+      //   못했거나(자원 부족) 전송에 실패한 경우이며, 그때는 원본 문구(탭 유도)가 그대로
+      //   표시된다 → 기존 안전망과 **똑같이** 처리하면 된다(자동 재전송 + 안내 다이얼로그).
+      // `offline_fallback`: 망이 없어 푸시가 도착하지 못한 날 발화하는 로컬 알림.
+      //   사용자가 통신을 복구하고 탭하면 같은 경로로 그날 안부가 전송된다.
       // `subject_safety_net`: 서버가 미수신 체크(예약시각 +2h) 시 Android 대상자
       //   본인 기기로 보내는 안부유도 FCM 푸시. (버그 있던 Android 일일 로컬 안전망
       //   알림을 대체 — 서버 발송이라 OEM이 worker/로컬알람을 죽인 상황에도 도달.)

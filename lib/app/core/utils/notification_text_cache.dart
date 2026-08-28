@@ -17,6 +17,13 @@ class NotificationTextCache {
     'noti_channel_name',
     'notification_send_failed_title',
     'notification_send_failed_body',
+    // iOS Notification Service Extension이 읽는 문구.
+    // 확장은 별도 프로세스라 GetX 번역을 쓸 수 없어, 여기 캐시된 값을
+    // 네이티브 SharedStore가 App Group으로 넘긴다.
+    'nse_delivered_title',
+    'nse_delivered_body',
+    'offline_alarm_title',
+    'offline_alarm_body',
   ];
 
   /// 포그라운드에서 호출 — 현재 locale 기준 번역 문자열을 캐시

@@ -423,6 +423,11 @@ abstract class KoKr {
     // ── 로컬 알림 ──
     'local_alarm_title': '💗 안부 확인이 필요합니다',
     'local_alarm_body': '이 메시지 알림을 한 번 터치해 주세요.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ 안부 전달 완료',
+    'nse_delivered_body': '오늘의 안부를 보호자에게 전달했습니다.',
+    'offline_alarm_title': '💗 안부를 아직 전하지 못했습니다',
+    'offline_alarm_body': '이 알림을 한 번 눌러 주세요.\n눌러 주시면 보호자에게 안부를 전합니다.',
     'wellbeing_check_title': '💛 안부 확인',
     'wellbeing_check_body': '잘 지내고 계시죠? 이 메시지 알림을 한 번 터치해 주세요.',
     'noti_channel_name': '안부 알림',

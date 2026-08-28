@@ -1,0 +1,4 @@
+// 확장용 최소 xcconfig — Flutter가 매 빌드 생성하는 Generated.xcconfig만 포함해
+// $(FLUTTER_BUILD_NAME)/$(FLUTTER_BUILD_NUMBER)가 앱과 동일하게 해석되게 한다.
+// ⚠️ Pods-Runner xcconfig는 포함하지 않는다 — 확장에 Flutter 프레임워크가 링크되면 안 된다.
+#include "../Flutter/Generated.xcconfig"

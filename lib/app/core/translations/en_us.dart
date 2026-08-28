@@ -448,6 +448,11 @@ abstract class EnUs {
     // ── Local Notifications ──
     'local_alarm_title': '💗 Wellness check needed',
     'local_alarm_body': 'Please tap this notification.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ Wellness check sent',
+    'nse_delivered_body': "Today's wellness check has been delivered to your guardian.",
+    'offline_alarm_title': "💗 Today's wellness check hasn't been sent",
+    'offline_alarm_body': 'Tap this notification once.\nTapping sends your wellness check to your guardian.',
     'wellbeing_check_title': '💛 Wellness Check',
     'wellbeing_check_body': 'Are you doing well? Please tap this notification.',
     'noti_channel_name': 'Anbu Alerts',

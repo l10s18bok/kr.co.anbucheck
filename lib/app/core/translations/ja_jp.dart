@@ -421,6 +421,11 @@ abstract class JaJp {
     // ── ローカル通知 ──
     'local_alarm_title': '💗 安否確認が必要です',
     'local_alarm_body': 'この通知をタップしてください。',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ 安否を伝えました',
+    'nse_delivered_body': '今日の安否を保護者に伝えました。',
+    'offline_alarm_title': '💗 今日の安否をまだ伝えていません',
+    'offline_alarm_body': 'この通知を一度タップしてください。\nタップすると保護者に安否を伝えます。',
     'wellbeing_check_title': '💛 安否確認',
     'wellbeing_check_body': 'お元気ですか？この通知をタップしてください。',
     'noti_channel_name': 'Anbu通知',

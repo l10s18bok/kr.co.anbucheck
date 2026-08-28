@@ -501,6 +501,11 @@ abstract class DeDe {
     // ── Lokale Benachrichtigungen ──
     'local_alarm_title': '💗 Wohlbefindens-Meldung erforderlich',
     'local_alarm_body': 'Bitte tippen Sie auf diese Benachrichtigung.',
+    // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
+    'nse_delivered_title': '✅ Wohlbefindens-Meldung gesendet',
+    'nse_delivered_body': 'Die heutige Wohlbefindens-Meldung wurde an Ihre Betreuungsperson übermittelt.',
+    'offline_alarm_title': '💗 Die heutige Meldung wurde noch nicht gesendet',
+    'offline_alarm_body': 'Tippen Sie einmal auf diese Mitteilung.\nDanach wird Ihre Meldung an Ihre Betreuungsperson gesendet.',
     'wellbeing_check_title': '💛 Wohlbefindens-Meldung',
     'wellbeing_check_body':
         'Geht es Ihnen gut? Bitte tippen Sie auf diese Benachrichtigung.',
