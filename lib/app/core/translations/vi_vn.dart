@@ -218,6 +218,7 @@ abstract class ViVn {
     'guardian_activity_needs_exercise': 'Cần vận động',
     'guardian_activity_collecting': 'Đang thu thập dữ liệu',
     'guardian_error_load_step_history': 'Không thể tải lịch sử bước',
+    'guardian_my_steps': 'Bước chân của tôi',
     'guardian_chart_y_axis_steps': 'Bước',
     'guardian_chart_x_axis_last_7_days': '7 ngày qua',
     'guardian_chart_x_axis_last_30_days': '30 ngày qua',

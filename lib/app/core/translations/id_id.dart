@@ -222,6 +222,7 @@ abstract class IdId {
     'guardian_activity_needs_exercise': 'Perlu olahraga',
     'guardian_activity_collecting': 'Mengumpulkan data',
     'guardian_error_load_step_history': 'Gagal memuat riwayat langkah',
+    'guardian_my_steps': 'Langkah saya',
     'guardian_chart_y_axis_steps': 'Langkah',
     'guardian_chart_x_axis_last_7_days': '7 hari terakhir',
     'guardian_chart_x_axis_last_30_days': '30 hari terakhir',

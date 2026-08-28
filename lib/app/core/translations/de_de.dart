@@ -240,6 +240,7 @@ abstract class DeDe {
     'guardian_activity_collecting': 'Daten werden gesammelt',
     'guardian_error_load_step_history':
         'Schrittverlauf konnte nicht geladen werden',
+    'guardian_my_steps': 'Meine Schritte',
     'guardian_chart_y_axis_steps': 'Schritte',
     'guardian_chart_x_axis_last_7_days': 'Letzte 7 Tage',
     'guardian_chart_x_axis_last_30_days': 'Letzte 30 Tage',

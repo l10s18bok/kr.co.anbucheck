@@ -38,6 +38,29 @@ class DeviceRemoteDatasource {
     }
   }
 
+  /// POST /api/v1/devices/me/steps — [내 걸음수] 버튼: 당일 누적 걸음수 적재 + 30일 이력 수신
+  ///
+  /// ⚠️ **안부 보고가 아니다.** 서버는 last_seen을 갱신하지 않고 보호자 Push도 보내지
+  /// 않는다 — 걸음수 확인이 안부 보고를 대신하면 미수신 체크(+2h)와 보호자 경고가
+  /// 조용히 사라진다. 안부 전송은 HeartbeatService가 단독으로 담당한다.
+  Future<List<int?>> syncMySteps(
+    String deviceToken,
+    int stepsDelta, {
+    int days = 30,
+  }) async {
+    final result = await ApiClientFactory.instance.post<dynamic>(
+      ApiEndpoints.devicesMeSteps,
+      {'steps_delta': stepsDelta, 'days': days},
+      headers: _auth(deviceToken),
+    );
+    if (!result.isOk) {
+      throw Exception('걸음수 동기화 실패 (${result.statusCode})');
+    }
+    final body = Map<String, dynamic>.from(result.body as Map);
+    final raw = (body['step_history'] as List?) ?? const [];
+    return raw.map((e) => e == null ? null : (e as num).toInt()).toList();
+  }
+
   /// GET /api/v1/devices/me — 내 기기 정보 조회 (heartbeat 시각, last_seen)
   Future<Map<String, dynamic>> getMyDevice(String deviceToken) async {
     final result = await ApiClientFactory.instance.get<dynamic>(

@@ -172,6 +172,7 @@ lib/
    - 번역 파일: `lib/app/core/translations/` 아래 20개 파일
    - 대상 언어: ko_KR, en_US, ja_JP, zh_CN, zh_TW, de_DE, fr_FR, es_ES, it_IT, nl_NL, pt_BR, ru_RU, ar_SA, tr_TR, pl_PL, vi_VN, th_TH, sv_SE, hi_IN, id_ID
    - 앱 이름 브랜드 규칙: 한국어만 "안부", 나머지 19개 언어는 "Anbu"
+     - ⚠️ **예외 1개**: `app_guardian_title`(보호자 대시보드 헤더)은 **한국어도 영문** `Anbu Guardian`이다. 브랜드 노출 목적의 의도된 예외이며 "번역 누락"으로 보고 되돌리지 말 것. 사용처는 그 헤더 한 곳뿐이고 averic-lab 추출 키 목록에도 없어 웹사이트 영향이 없다
    - 하드코딩 한글 텍스트 금지 — 반드시 `'key'.tr` 사용
 
 ## 디자인 시스템

@@ -1999,6 +1999,12 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 
 - Lottie 애니메이션 없음 — 아이콘 + 웨이브 애니메이션 기반 UI
 - 대상자 카드는 PageView로 좌우 슬라이드 전환, **경고 등급순 정렬** (긴급 → 경고 → 주의 → 정보 → 정상). 카드가 2장 이상이면 아래 dot 인디케이터로 장수·현재 위치를 표시
+- **AppBar [내 걸음수] 버튼 (G+S 전용)** — 헤더 우측 끝. 탭하면 그 순간까지의 당일 누적 걸음수를 서버에 올리고 본인의 30일 걸음수 차트를 띄운다(대상자 카드의 달력 아이콘과 **동일한 다이얼로그**를 공유 — `_showStepsChartDialog`).
+  - **노출 조건 3가지**: `isAlsoSubject` + `inviteCode` 존재(= 안전 코드 생성됨) + `isSubscriptionActive`. 셋 중 하나라도 false면 버튼이 사라지고 **헤더 제목이 다시 중앙 정렬로 돌아간다**(`centerTitle: !showMySteps`). 구독 게이팅은 §9.8 "보호자 대시보드 시각화 마스킹"의 일부이며 heartbeat 경로와 무관하다.
+  - ⚠️ **안부 보고가 아니다 — `HeartbeatService.execute()`를 절대 타지 않는다.** 그 경로는 (1) 수동 보고 하루 1회 제한에 걸리고, (2) 보호자 전원에게 `manual_report` Push를 보내며, (3) `lastHeartbeatDate`/`lastScheduledKey`를 찍어 그날 정시 전송을 스킵시켜 **걸음수가 버튼 누른 시각까지만** 기록되게 만든다. 전용 엔드포인트 `POST /api/v1/devices/me/steps`만 호출한다.
+  - **걸음수 권한 거부 시**: 전송하지 않고 권한 안내 다이얼로그만 띄운다(safety_home과 동일 키 `gs_activity_permission_settings_title/body` 재사용). [확인] → OS 권한 요청(영구 거부면 앱 설정). 계속 거부 상태면 탭할 때마다 다시 뜬다 — 권한 없이 차트를 열어봐야 오늘 막대가 영원히 0이라 사용자가 원인을 알 수 없기 때문(빈 차트를 보여주지 않는 것이 의도).
+  - 권한은 있는데 걸음수 조회가 실패하면(Google Fit 콜드 스타트 등) `0`을 보낸다 — 서버가 `GREATEST`로 최댓값만 유지하므로 기존 기록을 덮어쓰지 않는 무해한 값이고, 사용자는 최소한 지난 29일 차트를 볼 수 있다.
+  - 헤더 제목(`app_guardian_title`)은 **한국어도 영문 `Anbu Guardian`**(브랜드 노출 목적의 의도된 예외, CLAUDE.md 규칙 8 참조). 다른 19개 언어는 현지어라 길이가 제각각이므로 제목에 `overflow: ellipsis`를 주고 **버튼이 폭을 먼저 가져간다** — 제목은 브랜드 장식이고 버튼은 기능이다.
 - **등급별 인원 카운터는 "보호 대상자 리스트" 헤더 우측 → 상단 요약 블록으로 이동**했다. 헤더와 한 줄을 공유하던 탓에 등급이 3종 이상 섞이면 `Wrap`이 두 줄로 늘어 헤더 높이가 흔들렸기 때문. 지금은 전체 폭을 쓰는 독립 행이라 접혀도 헤더에 영향이 없다
 - **AppBar 우측의 최악등급 배지는 제거**됨 — 위 카운터가 최악 등급을 포함한 전체 분포를 더 정확히 전달하므로 중복이었다
 - **`오늘의 안부 요약` 라벨은 헤드라인 위 eyebrow가 아니라 카운터 바로 위**에 둔다. 헤드라인(`현재 N명의 안부를 확인 중입니다`)은 연결된 대상자 수라 오늘과 무관해서 "오늘의 요약"이라는 라벨과 맞지 않았다 — 등급 분포 위에 놓여야 라벨이 참이 된다. 표시할 등급이 없으면(대상자 0명) 라벨도 카운터와 함께 숨긴다
@@ -2662,6 +2668,7 @@ lib/app/core/translations/
 | `/api/v1/alerts/{id}/clear`    | PUT    | 개별 경고 클리어 (보호자가 건강 확인 후)               |
 | `/api/v1/alerts/clear-all`     | PUT    | 대상자별 모든 활성 경고 일괄 클리어 + 적응형 주기 복원 |
 | `/api/v1/devices/fcm-token`    | PUT    | FCM 토큰 갱신                                          |
+| `/api/v1/devices/me/steps`     | POST   | [내 걸음수] — 당일 누적 걸음수 적재 + 30일 이력 수신. ⚠️ 안부 보고가 아니다: `last_seen` 미갱신·보호자 Push 없음 |
 | `/api/v1/emergency`            | POST   | 긴급 도움 요청 (대상자 → 보호자 전원 긴급 Push, body.location optional: 사용자 동의 시 lat/lng/accuracy 1회 첨부, body.message optional: 대상자 선택 메시지 최대 100자 — 있으면 푸시 본문을 원문으로 치환하고 그 앞에 별칭 프리픽스) |
 | `/api/v1/app/version-check`    | GET    | 앱 버전 체크 (강제 업데이트 판정)                      |
 

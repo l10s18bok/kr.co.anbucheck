@@ -205,6 +205,7 @@ abstract class JaJp {
     'guardian_activity_needs_exercise': '運動が必要',
     'guardian_activity_collecting': 'データ収集中',
     'guardian_error_load_step_history': '歩数履歴を読み込めません',
+    'guardian_my_steps': '私の歩数',
     'guardian_chart_y_axis_steps': '歩数',
     'guardian_chart_x_axis_last_7_days': '過去7日間',
     'guardian_chart_x_axis_last_30_days': '過去30日間',

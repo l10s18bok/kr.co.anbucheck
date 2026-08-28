@@ -587,6 +587,12 @@ class HeartbeatService {
   /// 자동/수동 모두 실제 걸음수를 전송한다. 서버는 `manual=true`일 때
   /// 활동 정보 알림(`message_key=steps`) 생성을 건너뛰므로, 수동 보고 시에도
   /// 이중 알림이 발생하지 않고 일별 걸음수 이력은 정확히 반영된다.
+  /// 오늘 자정~현재 누적 걸음수 (권한 거부·조회 실패 시 null).
+  ///
+  /// [내 걸음수] 버튼처럼 heartbeat 전송과 무관하게 걸음수만 필요한 화면용 공개 창구.
+  /// ⚠️ 이 메서드는 **아무것도 전송하지 않는다** — 값을 읽기만 한다.
+  Future<int?> readTodaySteps() => _getStepsDelta();
+
   Future<int?> _getStepsDelta() async {
     try {
       final now = DateTime.now();

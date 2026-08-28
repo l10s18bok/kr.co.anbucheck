@@ -218,6 +218,7 @@ abstract class TrTr {
     'guardian_activity_needs_exercise': 'Egzersiz gerekli',
     'guardian_activity_collecting': 'Veri toplanıyor',
     'guardian_error_load_step_history': 'Adım geçmişi yüklenemedi',
+    'guardian_my_steps': 'Adımlarım',
     'guardian_chart_y_axis_steps': 'Adım',
     'guardian_chart_x_axis_last_7_days': 'Son 7 gün',
     'guardian_chart_x_axis_last_30_days': 'Son 30 gün',

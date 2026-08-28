@@ -198,6 +198,7 @@ abstract class ZhCn {
     'guardian_activity_needs_exercise': '需要运动',
     'guardian_activity_collecting': '正在收集数据',
     'guardian_error_load_step_history': '无法加载步数记录',
+    'guardian_my_steps': '我的步数',
     'guardian_chart_y_axis_steps': '步数',
     'guardian_chart_x_axis_last_7_days': '最近7天',
     'guardian_chart_x_axis_last_30_days': '最近30天',

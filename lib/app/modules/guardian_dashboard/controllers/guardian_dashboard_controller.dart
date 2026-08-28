@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:anbucheck/app/core/base/base_controller.dart';
+import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/core/mixins/heartbeat_schedule_mixin.dart';
@@ -36,6 +37,10 @@ class GuardianDashboardController extends BaseController
 
   /// 30일 걸음수 캐시 (invite_code → 30일 배열). 차트 다이얼로그에서 사용.
   final monthlyStepsCache = <String, List<int?>>{}.obs;
+
+  /// [내 걸음수] 30일 캐시 키. 자기 자신은 대상자 목록에 없고(self-link 차단)
+  /// invite_code가 비어 있을 수도 있어, 대상자 코드와 절대 겹치지 않는 상수 키를 쓴다.
+  static const String myStepsCacheKey = '__me__';
 
   /// 차트 다이얼로그 중복 오픈 방지 가드. 캘린더 아이콘 탭 → 30일 데이터 로드(서버
   /// 호출, 지연 가능) → 다이얼로그 표시 구간 동안 true. 로드 대기 중 다시 탭해 다이얼로그가
@@ -356,6 +361,103 @@ class GuardianDashboardController extends BaseController
 
   /// 차트 다이얼로그 오픈 전 30일 데이터 확보.
   /// 캐시 있으면 즉시 true, 없으면 서버 호출 후 캐시. 실패 시 false.
+  /// [내 걸음수] — 지금까지의 당일 걸음수를 서버에 올리고 30일 이력을 캐시에 담는다.
+  ///
+  /// ⚠️ **안부 보고가 아니다.** `HeartbeatService.execute()`를 타지 않는다 —
+  /// 그 경로는 (1) 하루 1회 제한에 걸리고, (2) 보호자 전원에게 `manual_report` Push를
+  /// 보내며, (3) `lastHeartbeatDate`/`lastScheduledKey`를 찍어 그날 정시 전송을 통째로
+  /// 스킵시켜 걸음수가 버튼 누른 시각까지만 기록되게 만든다. 걸음수 확인은 안부 보고와
+  /// 별개 사실이므로 전용 엔드포인트(POST /devices/me/steps)만 호출한다.
+  ///
+  /// 반환: 성공 시 true(차트를 열어도 됨). 권한 거부·전송 실패면 false.
+  Future<bool> syncMyStepsAndLoad() async {
+    // 걸음수 권한이 없으면 전송하지 않고 권한 요청 다이얼로그만 띄운다.
+    // 계속 거부 상태면 탭할 때마다 이 다이얼로그가 다시 뜬다(빈 차트를 보여주지 않는다) —
+    // 권한 없이 열어봐야 오늘 막대가 영원히 0이라 사용자가 원인을 알 수 없기 때문.
+    if (await _isActivityPermissionDenied()) {
+      await _requestActivityPermissionForSteps();
+      return false;
+    }
+
+    final token = await _tokenDs.getDeviceToken();
+    if (token == null) return false;
+
+    // 권한은 있는데 조회가 실패하면(Google Fit 콜드 스타트 등) 0을 보낸다.
+    // 서버가 GREATEST로 최댓값만 유지하므로 0은 기존 기록을 덮어쓰지 않는 무해한 값이고,
+    // 사용자는 최소한 지난 29일 차트를 볼 수 있다.
+    final steps = await HeartbeatService().readTodaySteps() ?? 0;
+
+    try {
+      final history = await DeviceRemoteDatasource().syncMySteps(token, steps);
+      monthlyStepsCache[myStepsCacheKey] = history;
+      return true;
+    } catch (_) {
+      AppSnackbar.show('common_error'.tr, 'guardian_error_load_step_history'.tr);
+      return false;
+    }
+  }
+
+  /// 걸음수(신체 활동) 권한 거부 여부. 조회 실패는 거부로 보지 않는다(오탐 방지).
+  Future<bool> _isActivityPermissionDenied() async {
+    try {
+      final status = Platform.isAndroid
+          ? await Permission.activityRecognition.status
+          : await Permission.sensors.status;
+      return !status.isGranted;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// 권한 안내 다이얼로그 → [확인] 시 OS 권한 요청(영구 거부면 앱 설정으로).
+  /// 문구는 safety_home과 동일한 키를 재사용한다.
+  Future<void> _requestActivityPermissionForSteps() async {
+    final proceed = await Get.dialog<bool>(
+      AlertDialog(
+        title: Text('gs_activity_permission_settings_title'.tr,
+            style: AppTextTheme.headlineSmall(
+                fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
+        content: Text('gs_activity_permission_settings_body'.tr,
+            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text('common_cancel'.tr),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: Text('common_confirm'.tr),
+          ),
+        ],
+      ),
+    );
+    if (proceed != true) return;
+
+    try {
+      if (Platform.isAndroid) {
+        final status = await Permission.activityRecognition.status;
+        if (status.isPermanentlyDenied) {
+          await openAppSettings();
+        } else {
+          await Permission.activityRecognition.request();
+        }
+      } else if (Platform.isIOS) {
+        final status = await Permission.sensors.status;
+        if (status.isPermanentlyDenied || status.isRestricted) {
+          await openAppSettings();
+        } else {
+          await Permission.sensors.request();
+        }
+      }
+    } catch (_) {
+      // 권한 요청 실패는 조용히 무시 — 다음 탭에서 다시 시도된다
+    }
+    // 권한이 새로 허용됐으면 Google Fit 구독을 즉시 선점(fire-and-forget).
+    if (!await _isActivityPermissionDenied()) {
+      HeartbeatService.warmUpStepSubscription();
+    }
+  }
+
   Future<bool> loadMonthlyStepsIfNeeded(SubjectStatus s) async {
     // 구독 만료 시: 30일 상세 차트도 걸음수 전부 0으로(서버 호출 없이). 7일 그래프
     // 마스킹과 일관. 재구독 시 ever(isActive)가 캐시를 비워 다음 오픈에 실제값 재조회.
@@ -629,14 +731,21 @@ class SubjectStatus {
   ///   - 그 외       → "운동 필요"
   String activityLabelFor(List<int?> steps) {
     if (!isNormal) return 'guardian_safety_needed'.tr;
-    final prefix = '${'guardian_activity_prefix'.tr} : ';
-    final valid = steps.whereType<int>().toList();
-    if (valid.length < 3) {
-      return '$prefix${'guardian_activity_collecting'.tr}';
-    }
-    final avg = valid.reduce((a, b) => a + b) / valid.length;
-    if (avg >= 6000) return '$prefix${'guardian_activity_very_active'.tr}';
-    if (avg >= 3000) return '$prefix${'guardian_activity_active'.tr}';
-    return '$prefix${'guardian_activity_needs_exercise'.tr}';
+    return activityLabelFromSteps(steps);
   }
+}
+
+/// 경고 등급과 무관하게 걸음수 배열만으로 활동량 라벨 산출.
+/// [SubjectStatus.activityLabelFor]와 [내 걸음수] 다이얼로그가 공유한다 —
+/// 본인에게는 대상자 카드 같은 경고 등급 개념이 없어 등급 분기 없이 이 함수만 쓴다.
+String activityLabelFromSteps(List<int?> steps) {
+  final prefix = '${'guardian_activity_prefix'.tr} : ';
+  final valid = steps.whereType<int>().toList();
+  if (valid.length < 3) {
+    return '$prefix${'guardian_activity_collecting'.tr}';
+  }
+  final avg = valid.reduce((a, b) => a + b) / valid.length;
+  if (avg >= 6000) return '$prefix${'guardian_activity_very_active'.tr}';
+  if (avg >= 3000) return '$prefix${'guardian_activity_active'.tr}';
+  return '$prefix${'guardian_activity_needs_exercise'.tr}';
 }

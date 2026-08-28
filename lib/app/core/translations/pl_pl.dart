@@ -221,6 +221,7 @@ abstract class PlPl {
     'guardian_activity_needs_exercise': 'Potrzeba ruchu',
     'guardian_activity_collecting': 'Zbieranie danych',
     'guardian_error_load_step_history': 'Nie udało się wczytać historii kroków',
+    'guardian_my_steps': 'Moje kroki',
     'guardian_chart_y_axis_steps': 'Kroki',
     'guardian_chart_x_axis_last_7_days': 'Ostatnie 7 dni',
     'guardian_chart_x_axis_last_30_days': 'Ostatnie 30 dni',

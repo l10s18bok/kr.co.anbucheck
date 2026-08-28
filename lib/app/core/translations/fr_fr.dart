@@ -223,6 +223,7 @@ abstract class FrFr {
     'guardian_activity_needs_exercise': "Besoin d'exercice",
     'guardian_activity_collecting': 'Collecte en cours',
     'guardian_error_load_step_history': "Échec du chargement de l'historique des pas",
+    'guardian_my_steps': 'Mes pas',
     'guardian_chart_y_axis_steps': 'Pas',
     'guardian_chart_x_axis_last_7_days': '7 derniers jours',
     'guardian_chart_x_axis_last_30_days': '30 derniers jours',

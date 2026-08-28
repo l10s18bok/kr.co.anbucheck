@@ -218,6 +218,7 @@ abstract class HiIn {
     'guardian_activity_needs_exercise': 'व्यायाम आवश्यक',
     'guardian_activity_collecting': 'डेटा एकत्र हो रहा है',
     'guardian_error_load_step_history': 'कदम इतिहास लोड नहीं हो सका',
+    'guardian_my_steps': 'मेरे कदम',
     'guardian_chart_y_axis_steps': 'कदम',
     'guardian_chart_x_axis_last_7_days': 'पिछले 7 दिन',
     'guardian_chart_x_axis_last_30_days': 'पिछले 30 दिन',

@@ -213,6 +213,7 @@ abstract class ArSa {
     'guardian_activity_needs_exercise': 'بحاجة لتمارين',
     'guardian_activity_collecting': 'جاري جمع البيانات',
     'guardian_error_load_step_history': 'فشل تحميل سجل الخطوات',
+    'guardian_my_steps': 'خطواتي',
     'guardian_chart_y_axis_steps': 'الخطوات',
     'guardian_chart_x_axis_last_7_days': 'آخر 7 أيام',
     'guardian_chart_x_axis_last_30_days': 'آخر 30 يومًا',

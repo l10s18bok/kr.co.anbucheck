@@ -26,19 +26,66 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
       },
       child: Scaffold(
         backgroundColor: AppColors.surface,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          // centerTitle 기본값은 플랫폼마다 다르다(iOS 중앙 / Android 좌측). 이 화면의
-          // title은 아이콘 없는 순수 Text라 그 차이가 그대로 드러나므로 명시적으로 고정한다.
-          // (다른 보호자 화면들은 title이 Row = 폭을 꽉 채워 정렬 차이가 보이지 않는다.)
-          centerTitle: true,
-          // 우측 최악등급 배지는 제거됨 — 본문 "오늘의 안부 요약" 아래 등급별 카운터가
-          // 최악 등급을 포함한 전체 분포를 더 정확히 알려주므로 중복이었다.
-          // ⚠️ 하드코딩 금지 — 과거 'Anbu Guardian' 리터럴이라 20개 언어 전부에서
-          // 영어가 그대로 노출됐다(번역 키는 있는데 아무도 쓰지 않는 상태였다).
-          title: Text('app_guardian_title'.tr, style: AppTextTheme.headlineSmall()),
+        // Obx는 PreferredSizeWidget이 아니라 appBar에 직접 넣을 수 없어 PreferredSize로 감싼다.
+        // [내 걸음수] 버튼 노출 여부에 따라 제목 정렬이 바뀌어야 하므로 AppBar 전체가 반응형이다.
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: Obx(() {
+            // 버튼 노출 조건 3가지 — 안전 코드가 있어야(G+S) 자기 걸음수가 존재하고,
+            // 구독이 만료되면 대시보드 시각화 전체가 마스킹되므로(PRD §9.8) 함께 숨긴다.
+            // ⚠️ 이 게이팅은 "보호자 대시보드의 시각화"에 대한 것이지 heartbeat 경로가
+            // 아니다 — 대상자 본인의 안부 전송은 구독과 무관하게 계속 동작한다.
+            final showMySteps = controller.isAlsoSubject.value &&
+                controller.inviteCode.value.isNotEmpty &&
+                controller.isSubscriptionActive.value;
+            return AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              // centerTitle 기본값은 플랫폼마다 다르다(iOS 중앙 / Android 좌측). 이 화면의
+              // title은 아이콘 없는 순수 Text라 그 차이가 그대로 드러나므로 명시적으로 고정한다.
+              // 버튼이 뜨면 좌측 정렬로 바꿔 우측에 버튼 자리를 온전히 내준다.
+              centerTitle: !showMySteps,
+              // 우측 최악등급 배지는 제거됨 — 본문 "오늘의 안부 요약" 아래 등급별 카운터가
+              // 최악 등급을 포함한 전체 분포를 더 정확히 알려주므로 중복이었다.
+              // ⚠️ 하드코딩 금지 — 과거 'Anbu Guardian' 리터럴이라 20개 언어 전부에서
+              // 영어가 그대로 노출됐다(번역 키는 있는데 아무도 쓰지 않는 상태였다).
+              //
+              // ellipsis: 제목은 브랜드 장식이고 버튼은 기능이라, 폭이 모자라면 제목이
+              // 잘려야 한다(베트남어 "Người bảo vệ Anbu" 등 긴 로케일 대비).
+              title: Text(
+                'app_guardian_title'.tr,
+                style: AppTextTheme.headlineSmall(),
+                overflow: TextOverflow.ellipsis,
+              ),
+              actions: showMySteps
+                  ? [
+                      Padding(
+                        padding: EdgeInsets.only(right: 4.w),
+                        child: TextButton.icon(
+                          onPressed: () => _openMyStepsChart(context, controller),
+                          icon: Icon(Icons.directions_walk_rounded, size: 18.w),
+                          label: Text(
+                            'guardian_my_steps'.tr,
+                            style: AppTextTheme.labelMedium(
+                                color: AppColors.textPrimary, fw: FontWeight.w600),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          // 색은 제목과 같은 테마 인지 색(AppBar action 관례). 고정
+                          // guardianPrimary(#4355B9)를 쓰면 다크 배경(#121212)에서
+                          // 대비가 떨어진다.
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.textPrimary,
+                            minimumSize: Size(0, 48.h),
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                        ),
+                      ),
+                    ]
+                  : null,
+            );
+          }),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
@@ -297,27 +344,14 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                                   if (!ok) return;
                                   if (!context.mounted) return;
                                   // 차트가 작게 시작해 튀어나오는 느낌 — scale(0.7→1.0, easeOutBack) + fade
-                                  await showGeneralDialog<void>(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    barrierLabel: 'dismiss',
-                                    barrierColor: Colors.black54,
-                                    transitionDuration: const Duration(milliseconds: 300),
-                                    pageBuilder: (_, _, _) => _StepsChartDialog(subject: subject),
-                                    transitionBuilder: (_, anim, _, child) {
-                                      final scale = CurvedAnimation(
-                                        parent: anim,
-                                        curve: Curves.easeOutBack,
-                                        reverseCurve: Curves.easeInBack,
-                                      );
-                                      return FadeTransition(
-                                        opacity: anim,
-                                        child: ScaleTransition(
-                                          scale: Tween<double>(begin: 0.7, end: 1.0).animate(scale),
-                                          child: child,
-                                        ),
-                                      );
-                                    },
+                                  final monthly = controller
+                                          .monthlyStepsCache[subject.inviteCode] ??
+                                      const <int?>[];
+                                  await _showStepsChartDialog(
+                                    context,
+                                    title: subject.alias,
+                                    subtitle: subject.activityLabelFor(monthly),
+                                    steps: monthly,
                                   );
                                 } finally {
                                   controller.isChartDialogBusy = false;
@@ -875,19 +909,91 @@ class _StepsBarChart extends StatelessWidget {
   }
 }
 
+/// 30일 차트 다이얼로그 표시 — 대상자 카드(달력 아이콘)와 [내 걸음수] 버튼이 공유한다.
+/// 차트가 작게 시작해 튀어나오는 느낌 — scale(0.7→1.0, easeOutBack) + fade.
+Future<void> _showStepsChartDialog(
+  BuildContext context, {
+  required String title,
+  required String subtitle,
+  required List<int?> steps,
+}) {
+  return showGeneralDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: 'dismiss',
+    barrierColor: Colors.black54,
+    transitionDuration: const Duration(milliseconds: 300),
+    pageBuilder: (_, _, _) =>
+        _StepsChartDialog(title: title, subtitle: subtitle, steps: steps),
+    transitionBuilder: (_, anim, _, child) {
+      final scale = CurvedAnimation(
+        parent: anim,
+        curve: Curves.easeOutBack,
+        reverseCurve: Curves.easeInBack,
+      );
+      return FadeTransition(
+        opacity: anim,
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.7, end: 1.0).animate(scale),
+          child: child,
+        ),
+      );
+    },
+  );
+}
+
+/// [내 걸음수] 탭 — 지금까지의 당일 걸음수를 서버에 올린 뒤 30일 차트를 연다.
+///
+/// ⚠️ 이 경로는 **안부 보고가 아니다** — `syncMyStepsAndLoad`가 heartbeat 전송 경로를
+/// 타지 않고 걸음수 전용 엔드포인트만 호출한다(컨트롤러 주석 참조).
+/// 걸음수 권한이 없으면 전송 없이 권한 요청 다이얼로그만 뜨고 차트는 열리지 않는다.
+Future<void> _openMyStepsChart(
+  BuildContext context,
+  GuardianDashboardController controller,
+) async {
+  // 대상자 차트와 같은 가드를 공유 — 서버 왕복 중 재탭으로 다이얼로그가 2개 뜨는 것 차단.
+  if (controller.isChartDialogBusy) return;
+  controller.isChartDialogBusy = true;
+  try {
+    final ok = await controller.syncMyStepsAndLoad();
+    if (!ok) return;
+    if (!context.mounted) return;
+    final steps =
+        controller.monthlyStepsCache[GuardianDashboardController.myStepsCacheKey] ??
+            const <int?>[];
+    await _showStepsChartDialog(
+      context,
+      title: 'guardian_my_steps'.tr,
+      // 본인 카드에는 경고 등급 개념이 없으므로 걸음수만으로 활동량 라벨을 만든다.
+      subtitle: activityLabelFromSteps(steps),
+      steps: steps,
+    );
+  } finally {
+    controller.isChartDialogBusy = false;
+  }
+}
+
 /// 달력 아이콘 탭 시 뜨는 확대 차트 다이얼로그 (30일 고정).
 /// · scale + fade transition으로 "튀어나오는" 느낌 (showGeneralDialog 경로에서 적용)
 /// · 닉네임 Row 오른쪽 X 아이콘 탭 또는 barrier 탭으로 닫힘
 class _StepsChartDialog extends StatelessWidget {
-  final SubjectStatus subject;
+  /// 상단 제목 — 대상자 별칭 또는 [내 걸음수].
+  final String title;
 
-  const _StepsChartDialog({required this.subject});
+  /// 제목 아래 한 줄 — 활동량 라벨.
+  final String subtitle;
+
+  /// 30일 걸음수 배열.
+  final List<int?> steps;
+
+  const _StepsChartDialog({
+    required this.title,
+    required this.subtitle,
+    required this.steps,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<GuardianDashboardController>();
-    final steps = controller.monthlyStepsCache[subject.inviteCode] ?? const <int?>[];
-
     return Dialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 40.h),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
@@ -900,7 +1006,7 @@ class _StepsChartDialog extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(subject.alias, style: AppTextTheme.bodyLarge(fw: FontWeight.w700)),
+                  child: Text(title, style: AppTextTheme.bodyLarge(fw: FontWeight.w700)),
                 ),
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -914,7 +1020,7 @@ class _StepsChartDialog extends StatelessWidget {
             ),
             SizedBox(height: 4.h),
             Text(
-              subject.activityLabelFor(steps),
+              subtitle,
               style: AppTextTheme.bodySmall(color: AppColors.textSecondary),
             ),
             SizedBox(height: 12.h),

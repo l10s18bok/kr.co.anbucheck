@@ -198,6 +198,7 @@ abstract class ZhTw {
     'guardian_activity_needs_exercise': '需要運動',
     'guardian_activity_collecting': '正在收集資料',
     'guardian_error_load_step_history': '無法載入步數記錄',
+    'guardian_my_steps': '我的步數',
     'guardian_chart_y_axis_steps': '步數',
     'guardian_chart_x_axis_last_7_days': '最近7天',
     'guardian_chart_x_axis_last_30_days': '最近30天',

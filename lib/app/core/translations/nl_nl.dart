@@ -220,6 +220,7 @@ abstract class NlNl {
     'guardian_activity_needs_exercise': 'Beweging nodig',
     'guardian_activity_collecting': 'Gegevens verzamelen',
     'guardian_error_load_step_history': 'Stappenhistorie laden mislukt',
+    'guardian_my_steps': 'Mijn stappen',
     'guardian_chart_y_axis_steps': 'Stappen',
     'guardian_chart_x_axis_last_7_days': 'Afgelopen 7 dagen',
     'guardian_chart_x_axis_last_30_days': 'Afgelopen 30 dagen',

@@ -221,6 +221,7 @@ abstract class EsEs {
     'guardian_activity_needs_exercise': 'Necesita ejercicio',
     'guardian_activity_collecting': 'Recopilando datos',
     'guardian_error_load_step_history': 'No se pudo cargar el historial de pasos',
+    'guardian_my_steps': 'Mis pasos',
     'guardian_chart_y_axis_steps': 'Pasos',
     'guardian_chart_x_axis_last_7_days': 'Últimos 7 días',
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 días',

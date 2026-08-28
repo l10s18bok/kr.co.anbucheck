@@ -221,6 +221,7 @@ abstract class PtBr {
     'guardian_activity_needs_exercise': 'Precisa de exercício',
     'guardian_activity_collecting': 'Coletando dados',
     'guardian_error_load_step_history': 'Falha ao carregar histórico de passos',
+    'guardian_my_steps': 'Meus passos',
     'guardian_chart_y_axis_steps': 'Passos',
     'guardian_chart_x_axis_last_7_days': 'Últimos 7 dias',
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 dias',

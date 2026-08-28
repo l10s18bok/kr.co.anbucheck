@@ -135,6 +135,14 @@ class ApiEndpoints {
   /// - 대상자·보호자 모두 사용 가능
   static const String devicesMe = '/api/v1/devices/me';
 
+  /// POST /api/v1/devices/me/steps  { steps_delta, days }
+  /// - [내 걸음수] 버튼 전용: 지금까지의 당일 누적 걸음수를 올리고 30일 이력을 받는다
+  /// - ⚠️ **안부 보고(heartbeat)가 아니다** — 서버가 last_seen을 갱신하지 않고
+  ///   보호자 Push도 보내지 않는다. 걸음수 확인이 안부 보고를 대신하면
+  ///   미수신 체크(+2h)와 보호자 경고가 조용히 사라진다
+  /// - 대상자 또는 invite_code를 가진 G+S 보호자만 호출 가능
+  static const String devicesMeSteps = '/api/v1/devices/me/steps';
+
   /// PUT /api/v1/devices/{deviceId}/heartbeat-schedule  { heartbeat_hour, heartbeat_minute }
   /// - 대상자 전용: heartbeat 예약 시각 변경
   /// - 기본값 09:30, 변경 시 WorkManager/BGTaskScheduler 재예약

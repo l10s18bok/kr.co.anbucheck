@@ -30,7 +30,10 @@ abstract class KoKr {
     'app_brand': '안부 (Anbu)',
     'app_tagline': '당신의 안부를 확인합니다.\n(Checking your wellbeing.)',
     'app_service_desc': '자동 안부 확인 서비스',
-    'app_guardian_title': '안부 수호자',
+    // ⚠️ 한국어만 영문 유지 — 보호자 대시보드 헤더는 브랜드명으로 노출한다
+    // (CLAUDE.md 규칙 8 "한국어만 '안부'"의 명시적 예외. 사용처는 이 헤더 한 곳뿐이고
+    //  averic-lab의 추출 키 목록에도 포함돼 있지 않아 웹사이트 빌드에 영향이 없다).
+    'app_guardian_title': 'Anbu Guardian',
     'app_copyright': '© 2026 Averic Lab',
 
     // ── 스플래시 ──
@@ -206,6 +209,7 @@ abstract class KoKr {
     'guardian_activity_needs_exercise': '운동 필요',
     'guardian_activity_collecting': '데이터 수집 중',
     'guardian_error_load_step_history': '걸음수 이력을 불러올 수 없습니다',
+    'guardian_my_steps': '내 걸음수',
     'guardian_chart_y_axis_steps': '걸음수',
     'guardian_chart_x_axis_last_7_days': '지난 7일',
     'guardian_chart_x_axis_last_30_days': '지난 30일',

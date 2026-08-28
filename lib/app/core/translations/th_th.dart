@@ -215,6 +215,7 @@ abstract class ThTh {
     'guardian_activity_needs_exercise': 'ต้องออกกำลังกาย',
     'guardian_activity_collecting': 'กำลังเก็บข้อมูล',
     'guardian_error_load_step_history': 'โหลดประวัติก้าวไม่สำเร็จ',
+    'guardian_my_steps': 'ก้าวเดินของฉัน',
     'guardian_chart_y_axis_steps': 'ก้าว',
     'guardian_chart_x_axis_last_7_days': '7 วันที่ผ่านมา',
     'guardian_chart_x_axis_last_30_days': '30 วันที่ผ่านมา',

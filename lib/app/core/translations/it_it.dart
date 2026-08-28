@@ -242,6 +242,7 @@ abstract class ItIt {
     'guardian_activity_collecting': 'Raccolta dati in corso',
     'guardian_error_load_step_history':
         'Impossibile caricare la cronologia dei passi',
+    'guardian_my_steps': 'I miei passi',
     'guardian_chart_y_axis_steps': 'Passi',
     'guardian_chart_x_axis_last_7_days': 'Ultimi 7 giorni',
     'guardian_chart_x_axis_last_30_days': 'Ultimi 30 giorni',

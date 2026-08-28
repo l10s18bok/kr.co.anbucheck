@@ -218,6 +218,7 @@ abstract class EnUs {
     'guardian_activity_needs_exercise': 'Needs exercise',
     'guardian_activity_collecting': 'Collecting data',
     'guardian_error_load_step_history': 'Failed to load step history',
+    'guardian_my_steps': 'My Steps',
     'guardian_chart_y_axis_steps': 'Steps',
     'guardian_chart_x_axis_last_7_days': 'Last 7 days',
     'guardian_chart_x_axis_last_30_days': 'Last 30 days',

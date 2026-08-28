@@ -222,6 +222,7 @@ abstract class RuRu {
     'guardian_activity_needs_exercise': 'Нужны упражнения',
     'guardian_activity_collecting': 'Сбор данных',
     'guardian_error_load_step_history': 'Не удалось загрузить историю шагов',
+    'guardian_my_steps': 'Мои шаги',
     'guardian_chart_y_axis_steps': 'Шаги',
     'guardian_chart_x_axis_last_7_days': 'Последние 7 дней',
     'guardian_chart_x_axis_last_30_days': 'Последние 30 дней',
