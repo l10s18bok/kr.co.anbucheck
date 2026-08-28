@@ -44,6 +44,14 @@ enum SharedStore {
     g.set(d.string(forKey: std("api_base_url")) ?? apiBaseFallback, forKey: HeartbeatStore.K.apiBase)
     g.set(d.string(forKey: std("last_heartbeat_date")), forKey: HeartbeatStore.K.lastDate)
 
+    // ⚠️ **안부를 보내는 쪽인지**를 확장에 알린다. invite_code가 있으면 대상자다
+    // (G+S 포함). 이게 없으면 피기백이 순수 보호자 기기에서도 발동해, 보호자가
+    // 대상자 알림을 받을 때마다 자기 heartbeat를 서버로 보내게 된다.
+    // 트리거 푸시는 서버가 G+S에게만 보내 안전했지만, 피기백은 **모든 보호자에게
+    // 가는 알림에 얹히므로** 그 게이팅이 통하지 않는다.
+    let inviteCode = d.string(forKey: std("invite_code")) ?? ""
+    g.set(!inviteCode.isEmpty, forKey: HeartbeatStore.K.isSubject)
+
     // shared_preferences의 setInt는 NSNumber로 저장된다
     if let h = d.object(forKey: std("heartbeat_hour")) as? NSNumber { g.set(h.intValue, forKey: HeartbeatStore.K.hour) }
     if let m = d.object(forKey: std("heartbeat_minute")) as? NSNumber { g.set(m.intValue, forKey: HeartbeatStore.K.minute) }

@@ -99,6 +99,17 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
 
+        // ⚠️ **안부를 보내는 쪽이 아니면 여기서 끝낸다(순수 보호자).**
+        // 트리거 푸시는 서버가 G+S에게만 보내 이 검사가 필요 없었지만, 피기백은
+        // **모든 보호자에게 가는 알림**(auto_report 등)에 얹히므로 그 게이팅이 통하지
+        // 않는다. 이 가드가 없으면 순수 보호자 기기가 대상자 알림을 받을 때마다
+        // 자기 heartbeat를 서버로 보낸다 — `lastSentDate`가 늘 비어 있고 예약시각
+        // 기본값이 18:00이라 저녁 이후 알림마다 조건이 성립한다.
+        guard store.isSubject else {
+            finish(success: false, note: "not-subject")
+            return
+        }
+
         // 이미 오늘 보냈으면 통신하지 않는다 — 앱이 먼저 보낸 날의 중복 전송 차단.
         if store.lastSentDate == HeartbeatStore.today() {
             HeartbeatStore.clearTodayOfflineFallback()

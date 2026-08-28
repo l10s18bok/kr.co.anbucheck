@@ -19,6 +19,9 @@ struct HeartbeatStore {
         static let hour        = "hb_hour"
         static let minute      = "hb_minute"
         static let lastDate    = "hb_last_date"
+        /// 이 기기가 **안부를 보내는 쪽**인가(G+S 또는 순수 대상자).
+        /// 순수 보호자는 false — 확장이 이 기기로 heartbeat를 보내면 안 된다.
+        static let isSubject   = "hb_is_subject"
         static let textPrefix  = "hb_text_"      // 번역 문구 (백그라운드 캐시 패턴)
 
         // 확장 → 앱
@@ -54,6 +57,9 @@ struct HeartbeatStore {
     let hour: Int
     let minute: Int
     let lastSentDate: String
+    /// 안부를 보내는 쪽인가. **순수 보호자면 false** — 피기백이 오발동하면
+    /// 보호자 기기가 자기 heartbeat를 보내게 된다(§16).
+    let isSubject: Bool
 
     /// 자동 heartbeat의 idempotency key — 서버 계약상 "YYYY-MM-DD_HH:mm"
     var scheduledKey: String {
@@ -73,7 +79,10 @@ struct HeartbeatStore {
             apiBase: base,
             hour: g.object(forKey: K.hour) as? Int ?? 18,
             minute: g.object(forKey: K.minute) as? Int ?? 0,
-            lastSentDate: g.string(forKey: K.lastDate) ?? ""
+            lastSentDate: g.string(forKey: K.lastDate) ?? "",
+            // ⚠️ 기본값 false. 값이 없으면 **보내지 않는 쪽**으로 떨어져야 안전하다 —
+            // 잘못 보내는 것(보호자가 대상자처럼 기록됨)이 안 보내는 것보다 나쁘다.
+            isSubject: g.bool(forKey: K.isSubject)
         )
     }
 
