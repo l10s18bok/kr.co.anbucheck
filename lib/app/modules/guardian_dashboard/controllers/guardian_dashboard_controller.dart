@@ -209,9 +209,20 @@ class GuardianDashboardController extends BaseController
   Future<void> _checkAndSendHeartbeat() async {
     if (isReportedToday) return;
     final hasEverSent = lastHeartbeatDate.isNotEmpty;
-    if (hasEverSent && Platform.isAndroid && isScheduleInFuture) {
+    if (hasEverSent && isScheduleInFuture) {
       // 예약시각 이전 — 평소엔 정시까지 대기. 단 전날(이전) 미전송 갭이 있으면
       // 앱을 연 행위가 강한 생존 신호이므로 회복 전송(추가, 정시 슬롯 미소비)을 보낸다.
+      //
+      // ⚠️ **iOS도 이 가드를 적용한다(2026-08-29 변경). `Platform.isAndroid`를 다시
+      // 넣지 말 것.** 예전에 iOS만 예외였던 이유는 "예약시각에 자동 전송할 수단이
+      // 없다"였는데, NSE 트리거가 그 전제를 없앴다. 예외를 유지하면 대가가 크다:
+      //   · 걸음수가 앱을 연 시각까지만 기록된다. 정시 전송은 last_seen이 오늘이라
+      //     트리거가 발사되지 않아 영영 오지 않는다(08-29 실측: 00:22에 열어
+      //     43보로 하루가 고정됐다).
+      //   · heartbeat의 의미가 "예약시각에 살아 있었다"인데 이른 전송은 그 시점의
+      //     생존만 주장하고 그날의 진짜 확인을 무력화한다. 00:22에 열고 03:00에
+      //     기기가 꺼지면 보호자 화면은 종일 '정상'이고 미수신 경고도 안 나간다.
+      // 트리거가 실패한 날은 예약시각 **이후**에 앱을 열면 이 가드를 통과해 전송된다.
       if (_isRecoveryPending) {
         await HeartbeatService().execute(recovery: true);
       }
