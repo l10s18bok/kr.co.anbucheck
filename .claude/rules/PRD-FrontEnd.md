@@ -342,6 +342,7 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 
 **채택 배경:**
 - 기존 서버 Silent Push 방식은 앱 강제 종료 시 FCM 미전달로 heartbeat가 누락되는 문제가 있었음
+  - ⚠️ **정정(2026-08-29 실측)**: 여기서 "앱 강제 종료"는 **설정 → 앱 → 강제 중지**를 말한다. **스와이프 킬은 FCM을 막지 않는다** — 테스트폰 2대가 스와이프 킬 상태로 닷새간 정상 수신했고, MIUI에서는 업데이트로 job·알람이 전부 지워진 뒤에도 FCM 도착이 프로세스를 되살렸다. 두 종류를 뭉뚱그리면 Silent Push의 실제 신뢰도를 과소평가하게 된다.
 - WorkManager(Android)는 앱 강제 종료 후에도 OS가 재스케줄링하므로 **Silent Push보다 안정적**
 - BGTaskScheduler(iOS)는 정확한 시각 보장이 안 되지만, 앱 열기 자동 전송 + 오늘의 안부 확인 메시지 로컬 알림와 조합하면 충분한 신뢰성 확보
 - 서버 의존도를 줄여 **오프라인 상황에서도 클라이언트 자체적으로 heartbeat 시도** 가능
@@ -531,7 +532,7 @@ periodic 15분 폴링은 단순 백업 발화가 아니라 **앱을 열지 않�
 | 메커니즘 | 거부 사유 |
 |---------|----------|
 | System Broadcast (`SCREEN_ON` / `USER_PRESENT`) | Android 8+ implicit broadcast 금지. runtime registration은 프로세스가 살아있어야 동작 → 앱이 죽은 상태에서는 무용지물 |
-| FCM Silent Push | 앱 강제 종료 시 FCM 미전달 + OEM(MIUI, OneUI)이 Silent Push 자체 차단. 과거 시도 후 제거 |
+| FCM Silent Push | 과거 시도 후 제거. ⚠️ **기각 사유 두 개 중 하나는 부정확하고 하나는 미검증이다(2026-08-29)**: (a) "앱 강제 종료 시 미전달"은 **설정→강제 중지**에 한한다 — 스와이프 킬은 FCM을 막지 않는다(실측). (b) "OEM이 Silent Push 자체 차단"은 **근거의 시점·기기가 불명확하고 재현된 적이 없다.** 확인된 것은 **표시형** 푸시가 MIUI에 정상 도달하며 프로세스를 `adj=0`으로 올려 방화벽을 연다는 것뿐이고, 데이터 전용 푸시가 같은 대우를 받는지는 미측정이다. **기각은 유지하되**(현재 클라에 푸시로 heartbeat를 보내는 코드가 없어 실익도 없다), 되살릴 때는 위 두 가지를 실기기로 먼저 답할 것 |
 | JobScheduler 직접 사용 | WorkManager 내부 메커니즘 — 같은 제약 그대로 |
 | Foreground Service 24/7 | Google Play 정책상 wellness check 용도 정당화 어려움 + 배터리 소모로 앱 핵심 가치(제로 인터랙션, 최소 배터리) 위배 |
 | AlarmManager 기반 (`android_alarm_manager_plus` 등) | 알람 아이콘 노출 회피 |
