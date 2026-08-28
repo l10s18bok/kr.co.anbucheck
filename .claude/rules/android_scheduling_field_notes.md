@@ -1187,6 +1187,62 @@ APP_STANDBY 차단을 피하지 못한다.**
 `Start proc ... for broadcast {HeartbeatAlarmReceiver}`였다 — **알람 자신의 발화 경로**다.
 가드가 노리는 **워커-먼저 시나리오는 아직 미실증**이다.
 
+### ★ 가드 검증 통과 — 그리고 MIUI를 실제로 구한 것은 **밖에서 들어온 FCM**이었다 (2026-08-28)
+
+`1.2.8+52`(가드 `todaysWindowStillUseful` 포함) 양 기기 관측. **필수 조건 ①② 모두 통과.**
+
+| | SM-A325N | 23021RAA2Y (MIUI) |
+|---|---|---|
+| 알람 발화 | 07:29:17 (예약 07:00, **4일 연속 +29분대**) | 06:30:35 (예약 06:30, **+35초**) |
+| 가드 발동 | ✅ `ARM skipped — 오늘 발화 창 유지` | ✅ 동일 |
+| **재무장** | ✅ `origWhen=08-29` | ✅ `origWhen=08-29` |
+| 전송 | ✅ 07:29:29 `OK src=periodic steps=106` | ❌ 06:30·06:37 실패 → **07:29:33 FCM으로 성공** |
+
+**★ 가드가 실제로 켜진 상태에서 재무장이 깨지지 않음이 양 기기에서 확인됐다** — `force` 분기가
+정확히 그 자리를 막았다. 이것이 이 변경의 유일한 필수 조건이었다.
+
+#### MIUI를 구한 것은 우리 트리거가 아니었다
+
+```
+06:30:35  알람 FIRED (정시 +35초)  →  06:30:41 FAIL src=alarm  unreachable=true
+06:37:10  periodic                →  06:37:10 FAIL src=periodic unreachable=true
+07:29:29  SmartPower: idle→background **adj=0**
+          R(broadcast start Intent { act=...c2dm.intent.RECEIVE pkg=kr.co.anbucheck.live })
+          ← 삼성 07:00 안부 → 서버 → 샤오미(보호자)로 FCM 도착
+07:29:30  onNotificationRemoved ...|1397121385|   ← send_failed 제거 = _onHeartbeatSent 실행
+07:29:33  서버 POST /api/v1/heartbeat 200 OK      ← 보류 큐의 06:30 payload(steps=110) 전달
+```
+
+**`adj=0`이 핵심이다.** 알람이 깨웠을 때는 3초 만에 `adj=227`로 강등돼 방화벽이 `APP_STANDBY`로
+닫혀 있었다. FCM 브로드캐스트만이 프로세스를 포그라운드급으로 올려 방화벽을 열었다.
+
+⚠️ **방화벽은 UID 단위다.** 다른 앱에 온 푸시는 소용없고 **`kr.co.anbucheck.live`로 배달되는
+푸시**여야 한다. 그래서 **순수 S 모드 MIUI 사용자**는 보호자 푸시를 받을 일이 없어
+`subject_safety_net`(+2h)까지 밀릴 수 있다 — 이날 샤오미가 1시간 일찍 구제된 것은 **G+S여서**
+삼성의 안부가 보호자 푸시로 돌아온 덕이다.
+
+→ 이 관측을 근거로 "사일런트 푸시로 앞당기기"를 TODO에 남겼다. 단 PRD §2.2가 이미 기각한
+   항목이므로(하필 MIUI가 막는다고 적혀 있다) 실측 3건이 선행돼야 한다.
+
+#### ⚠️ 계측 구멍 — 보류 큐 재전송에는 로그가 없다
+
+`_sendPendingInternal`이 `HeartbeatRemoteDatasource.send()`를 **직접** 호출해
+`_sendOrSavePending`의 `HeartbeatSend` 로그를 거치지 않는다. 그래서 07:29 성공이 로그에
+남지 않았고, **무엇이 그 전송을 호출했는지(FCM 핸들러인가 풀려난 워커인가) 아직 못 갈랐다.**
+다음 사이클에 로그 한 줄을 추가할 것.
+
+#### 진단 팁 — `dumpsys alarm`의 이력 섹션
+
+logcat 없이도 **과거 발화 시각**을 바로 볼 수 있다:
+```bash
+adb -s "$SER" shell "dumpsys alarm | grep -A6 'anbucheck.live.HEARTBEAT_ALARM'"
+#   [tag=*walarm*:...HEARTBEAT_ALARM origWhen=... rtc=2026-08-27 07:29:16.660]
+```
+삼성은 08-26·08-27 배달이 `elapsed` 기준 **정확히 86,400,000ms 간격**이었다 — 시스템이 우리
+알람을 매일 같은 시각에 도는 다른 알람과 **묶어서** 배달한다는 뜻이고, `+29분대`가 초 단위로
+재현되는 이유다. ⚠️ 따라서 **요청 시각을 앞당겨도 배달 시각은 따라오지 않는다**(`setExactAndAllowWhileIdle`은
+`SCHEDULE_EXACT_ALARM`이 필요해 쓸 수 없다). "알람을 몇 분 먼저 쏘자"는 방향은 성립하지 않는다.
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]
