@@ -596,6 +596,18 @@ TTL)를 두면 대부분 막힌다.
 (2026-08-27에 이걸 모르고 설치해 13:21 판정의 양성 증거를 잃었다. 결론 자체는
 11:14 대조군으로 유지된다.)
 
+⚠️ **다만 "재설치했으니 검증이 무효"로 넘겨짚지 말 것** (2026-08-28 정정). 지워지는 것은
+App Group의 **과거 진단 기록**(`nse_last_log` 등)이지 앞으로의 테스트가 쓸 값이 아니다.
+새 커밋이 NSE·피기백·폴백·알람·heartbeat 경로를 건드리지 않았다면 검증 대상 코드는 그대로이므로
+**그 빌드로 테스트를 이어가면 된다.** 판단 근거는 설치 방식이 아니라 **diff 범위**다.
+
+✅ **개발 서명 빌드도 푸시가 정상 도달한다 — 실측**(2026-08-28). `flutter build ios --release`
+산출물은 `aps-environment: development`(sandbox APNs)라 TestFlight(production)와 환경이 다르지만,
+**아이폰 앱을 스와이프 킬한 상태에서 안드로이드 대상자의 안부 → 보호자 알림이 정상 도착**했다.
+Firebase가 sandbox 토큰을 정상 처리한다는 뜻이므로 **푸시 테스트를 위해 TestFlight로 되돌릴
+필요가 없다.** (확장도 `Runner.app/PlugIns/HeartbeatNSE.appex`로 정상 번들된다 —
+`codesign -d --entitlements - --xml <app>`으로 `aps-environment`를, `ls PlugIns/`로 확장 포함을 확인.)
+
 ### 15.3 진단 수단 — 이제 확장 실행 여부를 사후에 알 수 있다
 
 앱 실행 시 `NSLog("[HeartbeatNSE] last=%@", nse_last_log)`가 찍힌다. 값에 타임스탬프가
