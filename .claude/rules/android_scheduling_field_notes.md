@@ -980,8 +980,15 @@ whenElapsed=+23h36m45s816ms          ← 밀리지 않음 = 내일 06:30 정상
 
 기기는 **딥 Doze**(`mState=IDLE`, 화면 꺼짐, 비충전)였고 다음 창은 +28분이었다. 즉 06:49에
 유지보수 창이 열려 job이 뛴 것이다. **예약 +19분** — 삼성의 WorkManager 단독 실측
-(+1h27m~+2h52m)보다 훨씬 낫다. **OEM별로 job 스케줄링 관대함이 크게 다르다**는 뜻이며,
-"WorkManager는 상한이 없다"는 삼성 관측을 다른 기기에 그대로 일반화하지 말 것.
+(+1h27m~+2h52m)보다 훨씬 낫다.
+
+⚠️ **"OEM별로 job 스케줄링이 관대하다"로 결론내지 말 것 — 조건이 다를 수 있다.**
+이 샤오미는 **셀룰러 폰이자 다른 기기들의 핫스팟 소스**다(2026-08-27 사용자 확인).
+테더링 중에는 딥 Doze에 잘 들어가지 않으므로, 빠른 발화가 OEM 특성이 아니라 **애초에
+Doze가 아니었기 때문**일 수 있다. 실제로 08-27의 **+1분 49초**는 이례적으로 빠른데
+그때 `mState`를 찍어두지 않았다. 위 08-26 06:51 판독만이 딥 Doze를 확인한 유일한 표본이다.
+→ **샤오미 발화 시각을 기록할 때는 반드시 `dumpsys deviceidle`의 `mState`를 함께 남길 것.**
+   그것 없이는 삼성과 비교 가능한 값이 아니다.
 
 ⚠️ **`dumpsys jobscheduler`의 "job 2개가 내일자"를 성공 서명으로 읽지 말 것.** 앱을 열면
 `_syncScheduleFromServer → schedule()`이 같은 모양을 만든다. 2026-08-25에 이 오독으로
@@ -1072,6 +1079,34 @@ whenElapsed=+23h36m45s816ms          ← 밀리지 않음 = 내일 06:30 정상
 창 안에서 아무것도 무장하지 못한다. 대가는 워커가 성공한 날의 헛기상 1회다(성공 경로의
 `HeartbeatAlarm.arm`은 MethodChannel이 `MainActivity` 전용이라 워커 isolate에서 no-op).
 
+### 가드(`todaysWindowStillUseful`) 검증 기준 — 실패는 **로그가 아니라 부재로** 나타난다
+
+`ARM skipped — 오늘 발화 창 유지` + `FIRED`만 보면 **위험한 방향을 못 잡는다.** 가드가 과하게
+발동해 **무장이 멈추는** 실패는 아무 로그도 남기지 않는다. 그래서 판정은 두 갈래 모두 본다.
+
+**① 필수 통과 조건 — 아침 사이클이 끝난 뒤 양쪽 폰에서:**
+```bash
+adb -s "$SER" shell "dumpsys alarm | grep -A3 'anbucheck.live.HEARTBEAT_ALARM'"
+#   origWhen 이 **모레 날짜**여야 한다.
+#   오늘·어제 날짜이거나 항목 자체가 없으면 → 재무장이 깨졌다 = 실패.
+#   (그래도 창 밖 프로세스 시작에서 자가 복구되지만, 이 변경이 원인이므로 되돌린다.)
+```
+
+**② `ARM skipped (app-process-start)`는 "워커가 먼저 뛰었다"의 증거가 아니다.**
+콜드 스타트 알람 배달에서는 `Application.onCreate`가 `onReceive`보다 **먼저** 돈다. 그 시점엔
+pending 존재 + 창 안 + 오늘 미전송이 모두 참이라 **알람 자신의 발화 경로에서도 skip 줄이 찍힌다**
+(그 뒤 `ARMED (refire)`가 따라온다). 발화 후 PendingIntent 레코드가 이미 회수됐다면 대신
+`ARMED (app-process-start)`가 찍힌다 — **둘 다 정상이고 비결정적**이다(refire가 force라 무해).
+
+판별자는 **바로 위의 프로세스 시작 사유**다:
+
+| 앞 줄 | 의미 |
+|---|---|
+| `Start proc ... for service {SystemJobService} caller=android` | **워커가 프로세스를 띄웠다** → 가드가 설계 목적대로 동작 |
+| `Start proc ... for broadcast {...HeartbeatAlarmReceiver}` | 알람 자체 발화 → skip 줄은 부수적, 판정 근거 아님 |
+
+샤오미에서 **첫 번째 형태**가 확인돼야 이 수정이 실증된 것이다.
+
 ### 정시성 재현 — 3일 연속 +29분 16~17초 (SM-A325N)
 
 | 날짜 | 예약 | 발화 | 지연 |
@@ -1081,6 +1116,76 @@ whenElapsed=+23h36m45s816ms          ← 밀리지 않음 = 내일 06:30 정상
 | 08-27 | 07:00 | 07:29:16 | +29m16s |
 
 셋 다 딥 Doze·RARE이고 유지보수 창 밖이다. 초 단위 재현의 이유는 **미확인**.
+
+### ★★ MIUI 실측 — 알람은 정시에 뜨는데 **창 유지자가 방화벽을 못 연다** (2026-08-28, 표본 1대)
+
+Redmi 23021RAA2Y / HyperOS 2.0, 예약 06:30, 딥 Doze(`mState=IDLE`), 셀룰러 LTE, 비충전, 앱 미실행.
+
+```
+06:02:54  Start proc ... FlutterFirebaseMessagingReceiver (아이폰 06:00 안부 푸시)
+06:02:55  ARMED (app-process-start) for=08-28 06:30      ← 창 밖이라 정상 무장
+06:30:34  Start proc ... for broadcast {HeartbeatAlarmReceiver}
+06:30:35.030  ARM skipped (app-process-start) — 오늘 발화 창 유지 (6:30)
+06:30:35.070  ARMED (refire) for=08-29 06:30             ← force 정상
+06:30:35.090  FIRED idle=true bucket=40                  ← ★ 예약 +35초
+06:30:35.353  HOLD started budget=90000ms
+06:30:38      SmartPower: adj=-10000 → adj=227           ← 발화 3초 만에 강등
+06:30:41.044  FAIL src=alarm attempt=3 unreachable=true steps=110 notify=true
+06:37:10.428  HOLD ended held=395077ms reason=timeout    ← ★ 90초 예산을 6분 35초에 소진
+06:37:10.924  FAIL src=periodic attempt=3 unreachable=true
+```
+
+**① 알람 자체는 MIUI에서 아주 잘 뜬다 — 딥 Doze에서 예약 +35초.** 삼성의 +29분과 극명하게 다르다
+(Doze 유지보수 창과 겹친 덕으로 보인다). `power_pending=--`였다.
+
+**② 그런데 전송이 방화벽에 막힌다. 망은 멀쩡했다.**
+```
+망 : MOBILE[LTE] CONNECTED ... VALIDATED
+앱 : blocked_state={blocked=APP_STANDBY|APP_BACKGROUND,
+                    allowed=NOT_IN_BACKGROUND, effective=APP_STANDBY}
+     06:30:35 Firewall rule changed: 10521-background-allow   ← background만 열림
+     06:03:15 Firewall rule changed: 10521-standby-deny       ← standby 차단은 그대로
+```
+삼성이 성공했을 때는 `allowed=FOREGROUND` / `effective=NONE`이었다(2026-08-21 기록).
+여기서는 `NOT_IN_BACKGROUND`에 그쳐 **`effective=APP_STANDBY`로 막힌다.**
+
+**③ 그리고 프로세스가 6분 30초간 얼었다.** 창 유지자의 `held=395077ms`(예산 90,000ms)가 증거다 —
+루프는 `elapsedRealtime` 기준 0.5초마다 도는데 그게 안 돌았다는 뜻이다. 해동 직후 periodic이
+재시도했으나 같은 방화벽에 또 막혔다.
+
+⚠️ **"expedited가 무시됐다"고 단정하려면 창 유지자가 실제로 expedited로 떴는지 먼저 확인해야 한다.**
+`enqueueWindowHolder`는 `setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)`라
+**EJ 쿼터가 없으면 조용히 일반 job으로 강등**된다. 강등됐다면 애초에 면제를 요청조차 안 한 것이므로
+"MIUI가 expedited를 무시한다"는 결론이 성립하지 않는다.
+
+**확인 방법 — `Timer<EJ>`가 아니라 `ShrinkableDebits`를 볼 것:**
+```bash
+adb -s "$SER" shell "dumpsys jobscheduler | grep -m2 -A2 'kr.co.anbucheck.live.*ShrinkableDebits'"
+#   <0>kr.co.anbucheck.live: ShrinkableDebits { debit tally: 389125, bucket: 3 }
+```
+EJ 부채는 **expedited job만** 발생시킨다. 08-28 실측에서 부채 **389,125ms**가 창 유지자의
+`held=395077ms`와 1.5% 안에서 일치했다 → **expedited로 실행된 것이 맞다**(enqueue 시점엔
+부채가 거의 0이라 강등 조건도 아니었다). 따라서 이 기기에서는 **expedited 상태로도 동결과
+APP_STANDBY 차단을 피하지 못한다.**
+
+⚠️ `Timer<EJ>{...} started at ... N running bg jobs`를 근거로 쓰지 말 것 — 거기 표시되는 job 이름은
+전부 `SystemJobService`라 어느 워커인지 알 수 없고, 시작 시각도 다른 EJ 세션의 것일 수 있다
+(2026-08-28에 이걸로 한 번 오독했다).
+
+⚠️ **결론: 이 기기에서 0차 계층은 "깨우기"까지만 되고 "내보내기"가 안 된다.** 회귀는 아니다
+(1~3차는 그대로) 하지만 **MIUI에서 알람 계층의 이득을 기대하면 안 된다.** 표본 1대다.
+
+#### ★ 부수 확인 — "인터넷 연결을 확인해 주세요" 알림이 **거짓 원인**임이 실증됐다
+
+`send_failed`(ID `0x53466169`)가 게시된 그 시각에 **LTE가 `CONNECTED`+`VALIDATED`**였다.
+문구는 망을 의심하라고 하지만 실제 원인은 **APP_STANDBY 방화벽**이다. 2026-08-25에 사용자가
+"워커/알람 실패로 사용자가 오해할 수 있다"고 제기한 문제이며, 계측(`HeartbeatSend`)이 그
+자리에서 `unreachable=true`와 망 `VALIDATED`를 함께 보여줘 처음으로 근거가 생겼다.
+→ 알림 정책 변경("지속 실패에서만" / 문구에서 원인 단정 제거)을 검토할 때 이 건을 근거로 쓸 것.
+
+⚠️ 판정 함정 재확인: 이날 `ARM skipped — 오늘 발화 창 유지`가 찍혔지만 앞 줄이
+`Start proc ... for broadcast {HeartbeatAlarmReceiver}`였다 — **알람 자신의 발화 경로**다.
+가드가 노리는 **워커-먼저 시나리오는 아직 미실증**이다.
 
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
