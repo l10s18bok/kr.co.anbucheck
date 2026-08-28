@@ -1243,6 +1243,66 @@ adb -s "$SER" shell "dumpsys alarm | grep -A6 'anbucheck.live.HEARTBEAT_ALARM'"
 재현되는 이유다. ⚠️ 따라서 **요청 시각을 앞당겨도 배달 시각은 따라오지 않는다**(`setExactAndAllowWhileIdle`은
 `SCHEDULE_EXACT_ALARM`이 필요해 쓸 수 없다). "알람을 몇 분 먼저 쏘자"는 방향은 성립하지 않는다.
 
+### ★ 1.2.9+53(iOS 머지본) 검증 — 삼성 통과 / 샤오미는 전송 성공·재무장 지연 (2026-08-29)
+
+두 기기 모두 안부 전달 성공. 삼성은 필수 조건 ①② 모두 통과, 샤오미는 ①이 **지연**됐다.
+
+| | SM-A325N | 23021RAA2Y (MIUI) |
+|---|---|---|
+| 알람 발화 | 07:29:16 (**5일 연속 +29분 16~17초**) | ❌ 미발화 — `power_pending=+3d` |
+| 가드 발동 | ✅ `ARM skipped — 오늘 발화 창 유지` | ✅ 동일(07:24, 07:29:28 두 번) |
+| 재무장 | ✅ `ARMED (refire)` → `origWhen=08-30` | ⚠️ **`origWhen=08-29` 그대로** |
+| 전송 | ✅ 07:29:29 `OK src=periodic steps=57` | ✅ 07:29:35 `OK src=periodic steps=64` |
+
+#### ⚠️ 새로 드러난 케이스 — **알람이 발화 못 한 날은 재무장이 다음 프로세스 시작까지 밀린다**
+
+샤오미의 재무장 미완은 **가드 오작동이 아니라** 세 조건이 겹친 결과다:
+
+1. `power_pending`으로 알람이 +3일 밀려 **발화하지 못함** → `onReceive`의 `force` 재무장 경로가 아예 없었다.
+2. 07:24·07:29:28의 `app-process-start`는 **창 안 + 오늘 미전송**이라 가드가 정확히 스킵했다(설계대로).
+3. 07:29:35 전송 성공 후 `_onHeartbeatSent → HeartbeatWorkerService.schedule() → HeartbeatAlarm.arm()`은
+   **MethodChannel이 `MainActivity` 전용이라 워커 isolate에서 no-op**이다.
+
+→ 결과적으로 그날 재무장 기회가 **한 번도 오지 않았다.** 다음 프로세스 시작 때는
+`flutter.last_heartbeat_date == 오늘`이라 가드가 스킵하지 않고 내일자로 무장하므로 **자가 복구된다.**
+
+⚠️ 가드 커밋(`770b200`)에 적어둔 대가는 *"워커가 성공한 날에도 알람이 발화한다(헛기상 1회)"*였는데,
+**그 반대 케이스** — 알람이 발화하지 못하고 워커가 성공한 날 — 는 적어두지 않았다. 최악은
+"그날 0차 계층 없음 = 기존 1~3차 동작"이라 회귀는 아니다. 특히 이 기기는 `power_pending`으로
+어차피 알람이 3일 밀려 있어 0차가 무의미한 상태였다.
+
+#### 샤오미를 구한 것은 또 FCM이었다 (n=2)
+
+```
+07:29:28.554  Start proc ... FlutterFirebaseMessagingReceiver caller=com.google.android.gms
+              ← 삼성 07:00 안부 → 서버 → 샤오미(보호자)로 푸시
+07:29:35.270  HeartbeatSend: OK src=periodic steps=64      ← 푸시 도착 7초 뒤
+```
+08-28과 같은 패턴이 하루 더 재현됐다. 다만 이번엔 `src=periodic`으로 **계측 로그가 남았다**
+(08-28은 보류 큐 경로라 로그가 없었다).
+
+#### ★ "다른 앱 푸시는 소용없다"가 통제 실험으로 확정됐다
+
+07:21경 **Gmail 알림이 도착했으나 우리 앱은 전혀 깨어나지 않았다.**
+```
+07:23:06  UID=10521 state=null
+          blocked_state={blocked=DOZE|APP_BACKGROUND, allowed=NONE, effective=DOZE|APP_BACKGROUND}
+          같은 시간대 Start proc(anbucheck): 0건 / HeartbeatSend: 없음
+```
+`state=null`은 프로세스가 아예 없다는 뜻이다. 지금까지 `netpolicy` 출력에서 "UID 단위니까"라고
+**추론만** 하던 것이 반례 실험으로 확정됐다 — **우리 앱으로 배달되는 푸시여야 한다.**
+
+⚠️ 차단 사유가 06:30의 `APP_STANDBY`에서 07:23엔 `DOZE`로 바뀌었다. 기기가 딥 Doze로 다시
+들어갔기 때문이며, 어느 쪽이든 막힌다는 결과는 같다.
+
+#### AOD는 Doze를 깨지 않는다
+
+샤오미 화면이 불규칙하게 켜졌다 꺼지길 반복하는 것은 **AOD(항상 표시 화면)**다
+(`settings get secure doze_always_on` = 1, `screen_doze` 이벤트 118건, 켜짐 구간 ~12초).
+⚠️ **그런데 Doze는 유지된다** — 사용자가 "지금 화면이 켜졌다"고 한 시간대에 시스템은
+`mScreenOn=false, mState=IDLE`로 보고했다. AOD는 디스플레이가 저전력 doze 상태로 켜지는 것이라
+`DeviceIdleController`가 화면 켜짐으로 치지 않는다. **AOD 때문에 관측이 무효가 되지 않는다.**
+
 ## 5. 테스트 환경 주의사항 (실수로 날린 것들)
 
 - **이 테스트폰은 Play 설치본**(`installer=com.android.vending`)이다. 로컬 서명 release APK를 사이드로드하면 서명 불일치로 실패하거나, 강제로 재설치할 경우 **SSAID가 바뀌어 서버 계정(G+S·구독·보호자 연결)이 고아가 된다.** 검증 빌드는 **Play 내부 테스트 트랙**으로 올린다. → [[project_ssaid_signing_scope]]

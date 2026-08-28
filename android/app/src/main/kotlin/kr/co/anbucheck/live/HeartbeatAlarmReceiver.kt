@@ -316,10 +316,17 @@ class HeartbeatAlarmReceiver : BroadcastReceiver() {
          *  2. 지금이 `[T, T + ALARM_WINDOW_MS]` 안 — 창 밖이면 오늘 알람은 이미 소멸했다.
          *  3. 오늘 전송 기록이 없다 — 있으면 오늘 알람은 불필요하니 내일자로 정리한다.
          *
-         * 대가: 워커가 성공한 날에도 알람이 그대로 발화한다(성공 경로의 `HeartbeatAlarm.arm`은
+         * 대가 ①: 워커가 성공한 날에도 알람이 그대로 발화한다(성공 경로의 `HeartbeatAlarm.arm`은
          * MethodChannel이 `MainActivity` 전용이라 워커 isolate에서 no-op). 발화해도
          * `lastHeartbeatDate == 오늘` 가드로 즉시 스킵하고 `onReceive`가 내일자로 재무장하므로
          * 하루 1회 헛기상에 그친다(알람 계층 전체 실측 0.34 mAh/일).
+         *
+         * ⚠️ 대가 ②(2026-08-29 실측): **알람이 발화하지 못한 날은 그날 재무장이 통째로 밀린다.**
+         * 알람 미발화 → `onReceive`의 force 경로 없음 + 창 안의 `app-process-start`는 이 가드가
+         * 스킵 + 전송 성공 경로의 `arm()`은 위 이유로 no-op → 재무장 기회가 한 번도 오지 않는다.
+         * 샤오미(`power_pending`으로 알람이 +3일 밀린 기기)에서 실제로 관측됐다.
+         * **자가 복구된다** — 다음 프로세스 시작 때는 `last_heartbeat_date == 오늘`이라 스킵하지
+         * 않고 내일자로 무장한다. 최악은 "그날 0차 없음 = 기존 1~3차 동작"이므로 회귀가 아니다.
          */
         private fun todaysWindowStillUseful(
             context: Context,
