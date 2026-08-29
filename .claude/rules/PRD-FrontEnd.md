@@ -810,7 +810,7 @@ Future<void> sendHeartbeat({
 `screen_state`는 Android 전용 플러그인이라 iOS는 별도 채널을 쓴다. iOS 채널은 `AppDelegate.didInitializeImplicitFlutterEngine`에서 `applicationRegistrar.messenger()`로 등록한다 — `getFlutterVC()`는 scene 기반 앱에서 런치 직후 `nil`일 수 있어 등록 시점으로 부적합하다.
 
 > ⚠️ **불변 규칙 — 예약(pending)은 절대 건드리지 않는다.**
-> `FlutterLocalNotificationsPlugin.cancelAll()`(표시 + 예약을 **함께** 제거)과 iOS `removeAllPendingNotificationRequests`를 사용 금지한다. iOS 일일 안전망 알림(`gs_deadman`, `matchDateTimeComponents.time`)은 pending 반복 요청으로 살아 있어야 매일 발화하며 **iOS G+S의 PRIMARY heartbeat 트리거**다 — 지우면 iOS 안부 전송이 조용히 중단된다. 무료체험 종료(`trial_ended`) 단발 예약도 동일. 순수 Dart 우회로(`getActiveNotifications()` + `cancel(id)`)도 금지 — iOS `cancel(id)`는 delivered와 pending을 함께 제거하며, FCM 알림 식별자는 정수가 아니라 round-trip되지 않는다.
+> `FlutterLocalNotificationsPlugin.cancelAll()`(표시 + 예약을 **함께** 제거)과 iOS `removeAllPendingNotificationRequests`를 사용 금지한다. iOS **오프라인 폴백 알림**(`anbu_offline_<날짜>`)은 pending으로 살아 있어야 **망이 없는 날** 발화한다 — 푸시는 망이 있어야 도착하므로 그 역할을 대신할 수 없고, 지우면 오프라인 사용자에게 알릴 유일한 수단이 사라진다. `trial_ended` 단발 예약도 동일. (2026-08-22 이전에는 이 규칙의 근거가 `gs_deadman` 정시 알림이었으나 그 알림은 더 이상 예약되지 않는다 — 근거만 바뀌고 규칙은 그대로다.) 순수 Dart 우회로(`getActiveNotifications()` + `cancel(id)`)도 금지 — iOS `cancel(id)`는 delivered와 pending을 함께 제거하며, FCM 알림 식별자는 정수가 아니라 round-trip되지 않는다.
 
 **대체하지 않는 것**: `LocalAlarmService.cancelSubjectSafetyNet()` / `cancelSendFailed()`는 그대로 유지된다 — 이들은 `HeartbeatService._onHeartbeatSent`가 WorkManager 백그라운드 isolate(앱이 포그라운드가 **아닌** 상태)에서 호출하는 별개 경로라 이 정리 로직으로 커버되지 않는다.
 
