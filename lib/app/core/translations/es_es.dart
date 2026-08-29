@@ -190,6 +190,7 @@ abstract class EsEs {
     'drawer_terms': 'Términos de uso',
     'drawer_withdraw': 'Eliminar cuenta',
     'drawer_withdraw_message': 'Su cuenta y todos sus datos serán eliminados.\n¿Está seguro/a?',
+    'drawer_withdraw_message_trial': 'El período de prueba gratuito no volverá a empezar si vuelve a registrarse.',
 
     // ── Panel del protector ──
     'guardian_status_normal': 'Seguro',

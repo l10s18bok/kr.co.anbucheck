@@ -208,6 +208,7 @@ abstract class ItIt {
     'drawer_withdraw': 'Elimina account',
     'drawer_withdraw_message':
         'Il Suo account e tutti i dati verranno eliminati.\nÈ sicuro/a?',
+    'drawer_withdraw_message_trial': 'Il periodo di prova gratuito non ricomincia se ti registri di nuovo.',
 
     // ── Dashboard guardiano ──
     'guardian_status_normal': 'Normale',

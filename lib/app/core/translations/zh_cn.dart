@@ -168,6 +168,7 @@ abstract class ZhCn {
     'drawer_terms': '使用条款',
     'drawer_withdraw': '注销账户',
     'drawer_withdraw_message': '账户及所有数据将被删除。\n确定要注销吗？',
+    'drawer_withdraw_message_trial': '免费试用期不会因重新注册而重新开始。',
 
     // ── 守护者仪表盘 ──
     'guardian_status_normal': '安全',

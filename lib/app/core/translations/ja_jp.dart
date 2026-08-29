@@ -175,6 +175,7 @@ abstract class JaJp {
     'drawer_terms': '利用規約',
     'drawer_withdraw': '退会',
     'drawer_withdraw_message': 'アカウントとすべてのデータが削除されます。\n本当に退会しますか？',
+    'drawer_withdraw_message_trial': '無料体験期間は、再登録しても最初からやり直しにはなりません。',
 
     // ── 見守りダッシュボード ──
     'guardian_status_normal': '安全',

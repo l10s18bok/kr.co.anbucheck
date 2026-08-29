@@ -184,6 +184,7 @@ abstract class ThTh {
     'drawer_terms': 'ข้อกำหนดการใช้งาน',
     'drawer_withdraw': 'ลบบัญชี',
     'drawer_withdraw_message': 'บัญชีและข้อมูลทั้งหมดจะถูกลบ\nคุณแน่ใจหรือไม่?',
+    'drawer_withdraw_message_trial': 'ระยะเวลาทดลองใช้ฟรีจะไม่เริ่มต้นใหม่หากคุณสมัครอีกครั้ง',
 
     // ── แดชบอร์ดผู้ดูแล ──
     'guardian_status_normal': 'ปลอดภัย',

@@ -179,6 +179,7 @@ abstract class KoKr {
     'drawer_terms': '이용약관',
     'drawer_withdraw': '탈퇴',
     'drawer_withdraw_message': '계정과 모든 데이터가 삭제됩니다.\n정말 탈퇴하시겠습니까?',
+    'drawer_withdraw_message_trial': '무료 체험 기간은 재가입하셔도 다시 시작되지 않습니다.',
 
     // ── 보호자 대시보드 ──
     'guardian_status_normal': '안전',

@@ -191,6 +191,7 @@ abstract class RuRu {
     'drawer_terms': 'Условия использования',
     'drawer_withdraw': 'Удалить аккаунт',
     'drawer_withdraw_message': 'Ваш аккаунт и все данные будут удалены.\nВы уверены?',
+    'drawer_withdraw_message_trial': 'Бесплатный пробный период не начнётся заново при повторной регистрации.',
 
     // ── Панель опекуна ──
     'guardian_status_normal': 'Норма',

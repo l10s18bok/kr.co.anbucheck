@@ -191,6 +191,7 @@ abstract class IdId {
     'drawer_terms': 'Ketentuan Layanan',
     'drawer_withdraw': 'Hapus Akun',
     'drawer_withdraw_message': 'Akun dan semua data Anda akan dihapus.\nApakah Anda yakin?',
+    'drawer_withdraw_message_trial': 'Masa uji coba gratis tidak akan dimulai ulang jika Anda mendaftar lagi.',
 
     // ── Dashboard Pelindung ──
     'guardian_status_normal': 'Aman',

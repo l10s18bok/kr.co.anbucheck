@@ -187,6 +187,7 @@ abstract class EnUs {
     'drawer_terms': 'Terms of Service',
     'drawer_withdraw': 'Delete Account',
     'drawer_withdraw_message': 'Your account and all data will be deleted.\nAre you sure?',
+    'drawer_withdraw_message_trial': 'Your free trial will not restart if you sign up again.',
 
     // ── Guardian Dashboard ──
     'guardian_status_normal': 'Safe',

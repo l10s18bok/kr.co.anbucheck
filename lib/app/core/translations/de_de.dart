@@ -207,6 +207,7 @@ abstract class DeDe {
     'drawer_withdraw': 'Konto löschen',
     'drawer_withdraw_message':
         'Ihr Konto und alle Daten werden gelöscht.\nSind Sie sicher?',
+    'drawer_withdraw_message_trial': 'Die kostenlose Testphase beginnt bei einer erneuten Anmeldung nicht von vorn.',
 
     // ── Betreuer-Dashboard ──
     'guardian_status_normal': 'Sicher',

@@ -182,6 +182,7 @@ abstract class ArSa {
     'drawer_terms': 'شروط الاستخدام',
     'drawer_withdraw': 'حذف الحساب',
     'drawer_withdraw_message': 'سيتم حذف حسابك وجميع بياناتك.\nهل أنت متأكد؟',
+    'drawer_withdraw_message_trial': 'لن تبدأ الفترة التجريبية المجانية من جديد عند إعادة التسجيل.',
 
     // ── لوحة المُرافِق ──
     'guardian_status_normal': 'آمن',

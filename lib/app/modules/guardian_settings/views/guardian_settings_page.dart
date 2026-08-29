@@ -473,7 +473,13 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
       AlertDialog(
         title: Text('drawer_withdraw'.tr, style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
         content: Text(
-          'drawer_withdraw_message'.tr,
+          // 체험 안내는 **보호자 경로에만** 붙인다. safety_home의 탈퇴 다이얼로그는
+          // Drawer가 isSubject일 때만 생성되므로 순수 대상자만 보게 되고,
+          // 체험이 없는 사용자에게는 무관한 문장이 된다.
+          // 재등록 시 잔여 기간은 그대로 복원되지만 90일이 새로 시작되지는 않는다
+          // (서버 trial_grants — PRD-BackEnd §4.2.1). 손해 경고가 아니라
+          // "탈퇴하면 초기화되니 체험도 다시 받겠지"라는 오해를 막기 위한 고지다.
+          '${'drawer_withdraw_message'.tr}\n\n${'drawer_withdraw_message_trial'.tr}',
           style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
         ),
         actions: [

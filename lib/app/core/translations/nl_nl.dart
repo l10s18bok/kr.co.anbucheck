@@ -189,6 +189,7 @@ abstract class NlNl {
     'drawer_terms': 'Gebruiksvoorwaarden',
     'drawer_withdraw': 'Account verwijderen',
     'drawer_withdraw_message': 'Uw account en alle gegevens worden verwijderd.\nWeet u het zeker?',
+    'drawer_withdraw_message_trial': 'De gratis proefperiode begint niet opnieuw als u zich opnieuw aanmeldt.',
 
     // ── Dashboard beschermer ──
     'guardian_status_normal': 'Veilig',

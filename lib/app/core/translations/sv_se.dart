@@ -185,6 +185,7 @@ abstract class SvSe {
     'drawer_terms': 'Användarvillkor',
     'drawer_withdraw': 'Radera konto',
     'drawer_withdraw_message': 'Ditt konto och all data raderas.\nÄr du säker?',
+    'drawer_withdraw_message_trial': 'Den kostnadsfria provperioden börjar inte om ifall du registrerar dig igen.',
 
     // ── Vardarens instrumentpanel ──
     'guardian_status_normal': 'Säker',

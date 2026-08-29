@@ -187,6 +187,7 @@ abstract class ViVn {
     'drawer_terms': 'Điều khoản sử dụng',
     'drawer_withdraw': 'Xóa tài khoản',
     'drawer_withdraw_message': 'Tài khoản và tất cả dữ liệu sẽ bị xóa.\nBạn có chắc không?',
+    'drawer_withdraw_message_trial': 'Thời gian dùng thử miễn phí sẽ không bắt đầu lại nếu bạn đăng ký lại.',
 
     // ── Bang dieu khien nguoi bao ve ──
     'guardian_status_normal': 'An toàn',

@@ -190,6 +190,7 @@ abstract class PtBr {
     'drawer_terms': 'Termos de uso',
     'drawer_withdraw': 'Excluir conta',
     'drawer_withdraw_message': 'Sua conta e todos os dados serão excluídos.\nTem certeza?',
+    'drawer_withdraw_message_trial': 'O período de teste gratuito não recomeça se você se cadastrar novamente.',
 
     // ── Painel do guardião ──
     'guardian_status_normal': 'Seguro',

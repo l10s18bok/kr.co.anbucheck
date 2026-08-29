@@ -1354,6 +1354,13 @@ Authorization: Bearer <device_token> → 항상 유효
 - Android: `Settings.Secure.ANDROID_ID` (SSAID) 사용 — 앱 삭제 후에도 유지, 공장 초기화 시에만 변경. **`device_info_plus` 패키지로는 조회하지 않는다** — 이 패키지의 `AndroidDeviceInfo.id`는 SSAID가 아니라 `Build.ID`(펌웨어 빌드 식별자)이며, 같은 기종·같은 보안 패치 레벨의 기기는 전부 동일한 값을 반환한다. 이 오탐지로 실제로 서로 다른 물리 기기 두 대가 같은 계정으로 병합되는 사고가 발생했다(2026-07-04, `register_user`의 재설치 인식 분기가 device_token을 새 기기 것으로 덮어써 원래 소유자가 401로 잠김). 수정 후에는 `MainActivity`의 네이티브 MethodChannel(`anbucheck/device_id`)로 `Settings.Secure.ANDROID_ID`를 직접 조회한다(`TokenLocalDatasource._getHardwareDeviceId()`). 이 수정은 **신규 설치에만 적용**되며, 이미 로컬에 device_id가 캐시된 기존 사용자는 `getOrCreateDeviceId()`의 "있으면 그대로 반환" 로직 때문에 계속 기존(Build.ID 기반) 값을 쓴다 — 서버가 device_id로 계정을 식별하는 구조상, 임의로 재발급하면 서버가 신규 기기로 오인해 기존 계정(구독·연결)을 고아로 만들 수 있어 기존 설치 마이그레이션은 의도적으로 하지 않는다
 - iOS: `identifierForVendor` + **Keychain 백업** 사용 — IDFV는 vendor 앱을 전부 삭제 후 재설치하면 변경되므로, 최초 발급값을 `flutter_secure_storage`로 Keychain에 저장해 재설치 후에도 동일 device_id를 복원. Apple 구독 시스템도 자체적으로 무료 체험 중복 관리. IDFV는 Apple이 "동일 기기 + 동일 vendor"에만 발급하는 값이라 Android의 Build.ID 문제와 같은 종류의 충돌은 발생하지 않는다
 
+**탈퇴해도 체험은 초기화되지 않는다 (서버 `trial_grants`, PRD-BackEnd §4.2.1).** 탈퇴는 `users`·`devices`·`subscriptions`를 하드 삭제하므로 재등록은 "신규" 분기로 떨어지고, 과거에는 그때마다 90일이 새로 부여됐다 — 앱 재설치조차 필요 없이 설정의 탈퇴 버튼만으로, 그리고 모드 전환(보호자→대상자→보호자, `mode_select_controller`가 `deleteMe`를 태운다)으로 **우발적으로도** 리셋됐다. 지금은 서버가 기기 해시 단위로 최초 만료일을 기억해 **잔여 기간을 그대로 복원**한다.
+
+앱 쪽 계약 2가지:
+
+- **체험 종료 알림은 서버 `expires_at`을 쓴다** (`onboarding_controller._trialExpiresAt`). ⚠️ `DateTime.now() + 90일`로 되돌리지 말 것 — 재등록자는 90일이 아니라 최초 만료일을 받으므로 잔여 70일인데 알림만 90일 뒤로 잡힌다. `checkDevice`는 register **전에** 호출되고 탈퇴 후엔 `devices` 행이 없어 `exists:false`가 되므로, 이 어긋남은 farming 시도자만이 아니라 **모드 전환 오조작으로 탈퇴한 정상 보호자에게도** 발생한다. 파싱 실패·과거 시각이면 예약을 건너뛴다(구버전 서버에서도 안전한 no-op).
+- **탈퇴 다이얼로그의 체험 안내는 보호자 경로에만 붙인다** (`drawer_withdraw_message_trial`, `guardian_settings_page._showDeleteConfirm`). `safety_home`의 탈퇴 다이얼로그는 Drawer가 `isSubject`일 때만 생성되어 **순수 대상자만** 보게 되고, 체험이 없는 사용자에게는 무관한 문장이 된다. 모드 전환 경고(`onboarding_already_registered_message`)에도 넣지 않는다 — 되돌아오면 잔여 기간이 복원되어 손해가 없는데 경고처럼 읽히면 오히려 오해를 만든다. 이 문구의 목적은 손해 경고가 아니라 "탈퇴하면 초기화되니 체험도 다시 받겠지"라는 **기대 오해 방지**다.
+
 
 ### 3.5 앱 재설치 시 동작
 
@@ -1386,6 +1393,9 @@ Authorization: Bearer <device_token> → 항상 유효
   · 앱 로컬: _tokenDs.clear() + _nicknameDs.clearAll() 호출
     → device_token, 역할, 초대 코드 등 토큰 정보 및 대상자 별칭 전체 삭제
   · 이후 새 모드로 재등록 (completeOnboarding 재호출)
+  · ⚠️ trial_grants(서버)는 삭제되지 않는다 — 보호자로 되돌아와도 무료 체험이
+    새로 시작되지 않고 최초 만료일이 복원된다(잔여 기간은 그대로 유지되므로
+    정상 사용자에게 손해는 없다). 상세 §3.4 / PRD-BackEnd §4.2.1
 ```
 
 

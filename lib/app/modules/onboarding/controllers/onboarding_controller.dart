@@ -162,6 +162,19 @@ class OnboardingController extends BaseController {
     }
   }
 
+  /// 등록 응답의 무료체험 만료 시각. 파싱 실패·미래가 아닌 값이면 null을 반환해
+  /// 알림 예약을 건너뛴다 — 이미 끝난 체험에 "종료됐습니다" 알림을 거는 것은
+  /// 무의미하고, 구버전 서버(subscription 미포함)에서도 안전하게 no-op이 된다.
+  DateTime? _trialExpiresAt(Map<String, dynamic> response) {
+    final sub = response['subscription'];
+    if (sub is! Map) return null;
+    final raw = sub['expires_at'];
+    if (raw is! String) return null;
+    final parsed = DateTime.tryParse(raw)?.toLocal();
+    if (parsed == null || !parsed.isAfter(DateTime.now())) return null;
+    return parsed;
+  }
+
   Future<void> _saveAndNavigate(Map<String, dynamic> response, String role,
       {bool isFirstInstall = false}) async {
     await _tokenDs.saveDeviceToken(response['device_token'] as String);
@@ -192,16 +205,21 @@ class OnboardingController extends BaseController {
       Get.offNamed(AppRoutes.safetyHome,
           arguments: {'role': HomeRole.subject});
     } else {
-      // 최초 설치 보호자: 무료체험 종료(가입 +90일)에 1회 로컬 알림 예약.
-      // POST /users 응답엔 expires_at이 없으므로 서버 FREE_TRIAL_DAYS(90)와 동일하게
-      // 로컬에서 계산한다(서버 값과 수 초 내 일치). ⚠️ 서버 FREE_TRIAL_DAYS 변경 시 이 90도 갱신.
+      // 최초 설치 보호자: 무료체험 종료에 1회 로컬 알림 예약.
+      // ⚠️ 만료일은 **서버 응답값**을 쓴다. 로컬에서 now+90일로 계산하면 안 된다 —
+      // 체험은 기기 단위 1회라(서버 trial_grants, PRD-BackEnd §4.2.1) 탈퇴 후
+      // 재등록하면 90일이 아니라 **최초 만료일이 복원**된다. 잔여 70일인데 알림만
+      // 90일 뒤로 잡히는 어긋남이 생기고, 모드 전환 오조작으로 탈퇴한 정상
+      // 보호자도 여기 해당한다(그 경로도 재등록을 태운다).
+      // 덤으로 서버 FREE_TRIAL_DAYS와 앱의 하드코딩 90이 어긋날 위험도 사라진다.
       // ScheduledNotificationBootReceiver가 매니페스트에 있어 재부팅에도 복원됨.
       // 구독하면 cancelTrialEnded로 취소. 재설치(isFirstInstall=false)는 예약 안 함.
       // 무료체험은 보호자 전용이라 subject 분기에는 두지 않는다.
-      if (isFirstInstall) {
+      final trialEndsAt = _trialExpiresAt(response);
+      if (isFirstInstall && trialEndsAt != null) {
         try {
           await LocalAlarmService.scheduleTrialEnded(
-            DateTime.now().add(const Duration(days: 90)),
+            trialEndsAt,
             title: 'trial_ended_noti_title'.tr,
             body: 'trial_ended_noti_body'.tr,
           );

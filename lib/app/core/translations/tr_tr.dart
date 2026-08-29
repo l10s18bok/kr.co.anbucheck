@@ -187,6 +187,7 @@ abstract class TrTr {
     'drawer_terms': 'Kullanım Koşulları',
     'drawer_withdraw': 'Hesabı Sil',
     'drawer_withdraw_message': 'Hesabınız ve tüm verileriniz silinecektir.\nEmin misiniz?',
+    'drawer_withdraw_message_trial': 'Ücretsiz deneme süresi yeniden kaydolduğunuzda baştan başlamaz.',
 
     // ── Koruyucu Paneli ──
     'guardian_status_normal': 'Güvende',

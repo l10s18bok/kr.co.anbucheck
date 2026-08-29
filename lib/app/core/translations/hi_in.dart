@@ -187,6 +187,7 @@ abstract class HiIn {
     'drawer_terms': 'सेवा की शर्तें',
     'drawer_withdraw': 'खाता हटाएं',
     'drawer_withdraw_message': 'आपका खाता और सभी डेटा हटा दिया जाएगा।\nक्या आप सुनिश्चित हैं?',
+    'drawer_withdraw_message_trial': 'दोबारा साइन अप करने पर मुफ़्त परीक्षण अवधि फिर से शुरू नहीं होगी।',
 
     // ── अभिभावक डैशबोर्ड ──
     'guardian_status_normal': 'सुरक्षित',

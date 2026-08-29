@@ -192,6 +192,7 @@ abstract class FrFr {
     'drawer_withdraw': 'Supprimer le compte',
     'drawer_withdraw_message':
         'Votre compte et toutes vos données seront supprimés.\nÊtes-vous sûr(e) ?',
+    'drawer_withdraw_message_trial': 'La période d\'essai gratuite ne recommence pas si vous vous réinscrivez.',
 
     // ── Tableau de bord (Protecteur) ──
     'guardian_status_normal': 'Normal',

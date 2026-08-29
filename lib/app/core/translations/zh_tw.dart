@@ -168,6 +168,7 @@ abstract class ZhTw {
     'drawer_terms': '使用條款',
     'drawer_withdraw': '註銷帳號',
     'drawer_withdraw_message': '帳號及所有資料將被刪除。\n確定要註銷嗎？',
+    'drawer_withdraw_message_trial': '免費試用期不會因重新註冊而重新開始。',
 
     // ── 守護者儀表板 ──
     'guardian_status_normal': '安全',

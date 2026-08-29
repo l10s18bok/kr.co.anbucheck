@@ -190,6 +190,7 @@ abstract class PlPl {
     'drawer_terms': 'Regulamin',
     'drawer_withdraw': 'Usuń konto',
     'drawer_withdraw_message': 'Twoje konto i wszystkie dane zostaną usunięte.\nCzy na pewno?',
+    'drawer_withdraw_message_trial': 'Bezpłatny okres próbny nie rozpocznie się od nowa po ponownej rejestracji.',
 
     // ── Panel opiekuna ──
     'guardian_status_normal': 'W porządku',
