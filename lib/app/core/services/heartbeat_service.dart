@@ -353,6 +353,20 @@ class HeartbeatService {
       final now = DateTime.now();
       final isTodaysReport = heartbeatPayloadIsFromToday(payload, now);
 
+      // ★ 계측 — 보류 큐 재전송은 `_sendOrSavePending`을 거치지 않아 여기서 직접 남긴다.
+      // 이 줄이 없던 탓에 **성공 전송에 `src=`가 통째로 비어**, 필드노트의 4줄 판독
+      // (`FIRED` → `HOLD started` → `src=*` → `HOLD ended reason=heartbeat-done`)에서
+      // 한 칸이 빈 채로 남았다. `heartbeat-done`은 "마커가 오늘이 됐다"만 말하므로
+      // **"창 안에서 보냈다"와 "창이 열리기 직전에 이미 보내져 있었다"를 가르지 못한다** —
+      // 2026-08-28(샤오미)·2026-08-30(삼성) 두 번 다 DNS 타임스탬프를 뒤져 메웠다.
+      await ScreenState.log(
+        'HeartbeatSend',
+        'OK src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
+            'pending=true today=$isTodaysReport '
+            'key=${payload['scheduled_key'] ?? "-"} '
+            'steps=${payload['steps_delta'] ?? "-"}',
+      );
+
       // 보류 큐의 payload가 **오늘 것인지 지난 날 것인지**로 갈린다.
       //
       //  · 오늘 것 (18:00 전송 실패 → 18:15 periodic이 큐를 비움)

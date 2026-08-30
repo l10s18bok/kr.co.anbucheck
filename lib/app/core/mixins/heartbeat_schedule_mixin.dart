@@ -234,9 +234,22 @@ mixin HeartbeatScheduleMixin on GetxController {
       _applyToHeartbeatTime(hour, minute);
 
       if (!wasReportedToday) {
-        // 미전송이면 선점 키를 비워 새 시각에 전송이 가능하게 한다.
-        await tokenDs.saveLastHeartbeatDate('');
-        await tokenDs.saveLastHeartbeatTime('');
+        // 미전송이면 **선점 키만** 비워 새 시각에 전송이 가능하게 한다.
+        //
+        // ⚠️ `lastHeartbeatDate`/`lastHeartbeatTime`은 **여기서 절대 비우지 말 것**
+        // (2026-04-03부터 있던 결함을 2026-08-30에 제거).
+        // 빈 `last_heartbeat_date`는 두 컨트롤러의 `_checkAndSendHeartbeat`가
+        // **"첫 설치"로 읽는 신호**(`hasEverSent`)다. 여기서 비우면 시각 변경이
+        // 신규 설치를 사칭하게 되어, 다음 앱 진입에서 `isScheduleInFuture` 가드가
+        // 통째로 우회되고 **새 예약시각 전에 안부가 나간다.** 그러면 그날 정시
+        // 전송이 스킵되어 걸음수가 앱을 연 시각까지만 기록된다 — 이 파일 위쪽
+        // 케이스 3("미전송 + 새 시각이 미래 → 그 시각에 트리거 예약")을 정면으로
+        // 위반한다. (2026-08-30 실측: 21:00으로 바꾼 뒤 17:59에 전송돼 7,091보로 고정)
+        //
+        // 날짜를 남겨도 이 분기는 정의상 `lastDate != 오늘`이라 `isReportedToday`는
+        // 그대로 false다 — 새 시각 전송을 실제로 막는 것은 `lastScheduledKey`뿐이다.
+        // 또한 worker 콜백(`heartbeat_worker_service.dart`)의 회복 전송 분기가
+        // `lastDate.isNotEmpty`를 요구하므로, 날짜가 살아 있어야 그 경로도 동작한다.
         await tokenDs.saveLastScheduledKey('');
       }
       // 이미 전송됨이면 lastHeartbeatDate를 유지 → 오늘 재전송 안 함, 다음 사이클은 내일.

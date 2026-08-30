@@ -333,7 +333,19 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 |------|------|
 | **이미 오늘 전송됨** (어느 시각으로 변경하든) | Android WorkManager 내일자 재등록 + iOS 안전망 알림 내일로(`schedule()` 내 `scheduled.isBefore(now)`가 자동 결정). `lastHeartbeatDate` 유지 → 오늘 재전송 차단(다음 사이클 = 내일) |
 | **미전송 + 새 시각이 과거** (예: 15시에 12시로 변경) | (iOS) 안전망 알람 **내일로** + **즉시 heartbeat 전송**(앱에서 시각 변경 = 살아있음 증거 → 오늘분 기록 → 거짓 미수신 경고 방지). 전송 성공 시 "보호자에게 안부를 전했습니다"(`subject_home_manual_report_sent` 재사용) 스낵바, 실패 시 시각 변경 메시지로 폴백. Android는 로컬 안전망 알림이 없어 즉시 전송만 수행 |
-| **미전송 + 새 시각이 미래** (예: 15시에 18시로 변경) | 그 시각에 트리거 예약(오늘). iOS 안전망 알림은 정시. Android는 로컬 안전망 알림이 없고, 미수신 시 서버 푸시 `subject_safety_net`(예약시각 +2h)이 담당 |
+| **미전송 + 새 시각이 미래** (예: 15시에 18시로 변경) | 그 시각에 트리거 예약(오늘) — **지금 보내지 않고 기다린다.** iOS 안전망 알림은 정시. Android는 로컬 안전망 알림이 없고, 미수신 시 서버 푸시 `subject_safety_net`(예약시각 +2h)이 담당. 이때 `lastHeartbeatDate`는 **유지**한다(아래 ⚠️) |
+
+> ⚠️ **미전송 분기에서 비우는 것은 `lastScheduledKey` 하나뿐이다 — `lastHeartbeatDate`/`lastHeartbeatTime`은 절대 비우지 말 것.**
+> (2026-04-03 도입 → 2026-08-30 제거된 결함. "정리"로 되돌리지 말 것.)
+>
+> 빈 `last_heartbeat_date`는 두 컨트롤러의 `_checkAndSendHeartbeat`가 **"첫 설치"로 읽는 신호**(`hasEverSent`)다. 여기서 비우면 **시각 변경이 신규 설치를 사칭**하게 되어, 다음 앱 진입에서 `isScheduleInFuture` 가드가 통째로 우회되고 **새 예약시각 전에 안부가 나간다.** 그러면 그날 정시 전송이 스킵되어 걸음수가 앱을 연 시각까지만 기록된다 — 바로 위 표의 "미전송 + 새 시각이 미래 → 그 시각에 트리거 예약" 행을 정면으로 위반한다.
+>
+> **2026-08-30 실측**(샤오미 G+S): 오늘 정시 전송이 실패한 상태에서 예약시각을 20:00 → **21:00**으로 바꿨고(17:57:08), 2분 뒤 프로세스가 뜨자 **17:59:30에 전송**됐다(`OK src=foreground manual=false key=2026-08-30_21:00 steps=7091`). 그날 걸음수는 7,091보로 고정되고 21:00 정시 확인은 이뤄지지 않았다.
+>
+> 날짜를 남겨도 이 분기는 정의상 `lastDate != 오늘`이라 `isReportedToday`는 그대로 false이고, 새 시각 전송을 실제로 막는 것은 `lastScheduledKey`뿐이다. 또한 worker 콜백(`heartbeat_worker_service.dart`)의 회복 전송 분기가 `lastDate.isNotEmpty`를 요구하므로, 날짜를 비우면 그 경로까지 함께 죽는다.
+>
+> ⚠️ 고칠 곳은 **여기(마커를 비우는 쪽)**이지 `_checkAndSendHeartbeat`의 `hasEverSent` 우회가 아니다 — 그 우회는 진짜 첫 설치의 D0 갭을 메우는 기능이다. `disableSubjectFeature`의 `saveLastHeartbeatDate('')`도 정상이다(G+S를 끄면 대상자 상태를 지우는 것이 맞고, 재활성화 시 즉시 전송이 의도된 동작).
+
 
 - 견고성: iOS 안전망 알람은 시각 변경 직후 **결정적 재등록**(`schedule(hour, minute)`, 전송 실패와 무관). 미전송+과거 시각의 즉시 전송은 그 위에 얹어 오늘분 기록 — `_onHeartbeatSent`는 iOS 알람을 건드리지 않으므로 별도 재확정 불필요. 즉시 전송은 `HeartbeatService.execute()`의 `_busy` + SQLite 락 + `lastScheduledKey`로 자가 직렬화돼 역할(S/G+S) 무관 중복 전송이 차단된다. (Android는 로컬 안전망 알림이 폐지되어 재예약 대상이 아니며, 미수신 안내는 서버 푸시 `subject_safety_net`이 담당)
 
