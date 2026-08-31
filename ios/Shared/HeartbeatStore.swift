@@ -30,6 +30,8 @@ struct HeartbeatStore {
         static let sentTime = "nse_sent_time"
         static let sentKey  = "nse_sent_key"
         static let lastLog  = "nse_last_log"
+        /// 최근 N건 롤링 기록. 케이블을 계속 물고 있지 않아도 며칠치를 몰아 읽기 위함.
+        static let logRing  = "nse_log_ring"
         static let inflight = "nse_inflight"
     }
 
@@ -105,9 +107,28 @@ struct HeartbeatStore {
         return v
     }
 
+    /// 확장 실행 1건을 기록한다.
+    ///
+    /// ⚠️ **롤링으로 남기는 이유**: `idevicesyslog`는 USB가 있어야 실시간으로 읽히는데,
+    /// 며칠짜리 관측에 케이블을 계속 물고 있을 수는 없다. 최근 `logRingSize`건을
+    /// 보관해 두면 나중에 한 번 연결해 앱을 열었을 때 몰아서 읽을 수 있다
+    /// (`AppDelegate`가 실행 시 전부 출력한다).
+    static let logRingSize = 12
+
     static func log(_ message: String) {
         NSLog("[HeartbeatNSE] %@", message)
-        group?.set("\(Date()): \(message)", forKey: K.lastLog)
+
+        let f = DateFormatter()
+        f.dateFormat = "MM-dd HH:mm:ss"
+        let line = "\(f.string(from: Date())) \(message)"
+
+        guard let g = group else { return }
+        g.set(line, forKey: K.lastLog)   // 기존 단건 키도 유지(하위 호환)
+
+        var ring = g.stringArray(forKey: K.logRing) ?? []
+        ring.append(line)
+        if ring.count > logRingSize { ring.removeFirst(ring.count - logRingSize) }
+        g.set(ring, forKey: K.logRing)
     }
 
     // MARK: - 확장 → 앱 마커
