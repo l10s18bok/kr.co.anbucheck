@@ -121,6 +121,9 @@ struct HeartbeatStore {
     /// (`AppDelegate`가 실행 시 전부 출력한다).
     static let logRingSize = 12
 
+    /// 움직임 조회가 끝날 때까지 매니저를 살려두기 위한 강한 참조(§18.11 주석 참조).
+    private static var motionManager: CMMotionActivityManager?
+
     static func log(_ message: String) {
         NSLog("[HeartbeatNSE] %@", message)
 
@@ -243,11 +246,17 @@ struct HeartbeatStore {
     static func hadMotionToday(_ done: @escaping (Bool?) -> Void) {
         guard CMMotionActivityManager.isActivityAvailable() else { done(nil); return }
         let start = Calendar.current.startOfDay(for: Date())
+        // ⚠️ **강한 참조를 유지해야 콜백이 온다.** 지역 변수로 두면 함수가 반환되는
+        // 순간 해제돼 조회 결과가 영영 오지 않을 수 있다(빠르면 우연히 오기도 해서
+        // 증상이 간헐적이다). 확장이 `CMPedometer`를 프로퍼티로 붙들고 있는 것과
+        // 같은 이유다.
         let mgr = CMMotionActivityManager()
+        motionManager = mgr
         var finished = false
         let complete: (Bool?) -> Void = { v in
             guard !finished else { return }
             finished = true
+            motionManager = nil
             done(v)
         }
         // 확장 예산을 태우지 않도록 짧게 끊는다.
