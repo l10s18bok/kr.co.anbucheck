@@ -119,13 +119,13 @@ final class NotificationService: UNNotificationServiceExtension {
         // ⚠️ 그래서 `finish()`가 먼저 끝나는 경로(already-sent 등 빠른 분기)에서는
         // 결과가 diag에 실리지 못한다 — 실제로 09-01 00:07 관측에서 motion이 통째로
         // 빠졌다. 늦게 온 값은 **별도 줄로** 남겨 잃지 않게 한다.
-        HeartbeatStore.hadMotionToday { [weak self] moved in
+        HeartbeatStore.motionSummary { [weak self] day, recent in
             guard let self = self else { return }
-            let v = moved.map { $0 ? "Y" : "N" } ?? "?"
+            let v = " motion=\(day) motion15=\(recent)"
             if self.contentHandler == nil {
-                HeartbeatStore.log("nse motion-late motion=\(v)")  // 이미 배달됨
+                HeartbeatStore.log("nse motion-late\(v)")  // 이미 배달됨
             } else {
-                self.diag += " motion=\(v)"
+                self.diag += v
             }
         }
 

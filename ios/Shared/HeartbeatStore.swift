@@ -231,41 +231,70 @@ struct HeartbeatStore {
         }
     }
 
-    /// 오늘 자정 이후 **정지 이외의 움직임**이 있었는가. 판별 불가·미지원이면 nil.
+    /// 움직임 이력 요약. `(오늘 전체, 최근 15분)` 두 문자열을 돌려준다.
     ///
     /// 계측 ③ — 잠금 프로브(순간)와 포그라운드 마커(앱 한정)가 놓치는 자리를 메운다.
     /// `CMMotionActivityManager`는 **최근 7일을 소급 조회**하므로, 확장이 예약시각에
-    /// 한 번 도는 것만으로 하루 전체의 움직임을 볼 수 있다.
+    /// 한 번 도는 것만으로 하루 전체의 이동을 볼 수 있다(확장 가용성은 2026-08-31 실측 확인).
     ///
-    /// ⚠️ 확장에서의 가용성은 문서로 확인되지 않았다. 같은 CoreMotion·같은 권한인
-    /// `CMPedometer`가 이 확장에서 동작하므로 될 가능성이 높다는 것이 근거이며,
-    /// **이 프로브의 첫 목적이 그 확인 자체**다. 안 되면 nil이 찍힌다.
+    /// ⚠️ **두 창을 함께 재는 이유.** 쓰임이 다르다.
+    ///   · 오늘 전체 → "하루 종일 이동이 없었다"  = suspicious 의 근거
+    ///   · 최근 15분 → "지금 활동 중이다"          = 즉시 구제의 근거
+    /// 어느 쪽이 유용한지는 분포를 봐야 알 수 있어 **둘 다 남긴다**. 조회는 한 번만 하고
+    /// 같은 배열에서 걸러낸다.
     ///
-    /// ⚠️ 걸음수와 다른 것을 잰다. 걸음이 0이어도 차량 이동·기기 들어올림 등이
-    /// 잡히므로, 거동이 불편한 대상자를 구제할 여지가 있다.
-    static func hadMotionToday(_ done: @escaping (Bool?) -> Void) {
-        guard CMMotionActivityManager.isActivityAvailable() else { done(nil); return }
-        let start = Calendar.current.startOfDay(for: Date())
-        // ⚠️ **강한 참조를 유지해야 콜백이 온다.** 지역 변수로 두면 함수가 반환되는
-        // 순간 해제돼 조회 결과가 영영 오지 않을 수 있다(빠르면 우연히 오기도 해서
-        // 증상이 간헐적이다). 확장이 `CMPedometer`를 프로퍼티로 붙들고 있는 것과
-        // 같은 이유다.
+    /// ⚠️ **신뢰도를 함께 남긴다.** `CMMotionActivity.confidence`는 low/medium/high인데,
+    /// 낮은 신뢰도의 `walking` 하나로도 "이동함"이 되어 **거짓 구제**가 될 수 있다.
+    /// 판정에 쓰기 전에 신뢰도 분포를 봐야 한다.
+    ///
+    /// ⚠️ 걸음수와 다른 것을 잰다. 걸음이 0이어도 차량 이동이 잡히므로 거동이 불편한
+    /// 대상자를 구제할 여지가 있다. 반대로 **폰을 집어 드는 것은 이동이 아니다** —
+    /// 이건 보행·달리기·자전거·차량 분류기이지 "폰을 만졌는가"가 아니다.
+    static func motionSummary(_ done: @escaping (String, String) -> Void) {
+        guard CMMotionActivityManager.isActivityAvailable() else { done("?", "?"); return }
+        let now = Date()
+        let dayStart = Calendar.current.startOfDay(for: now)
+        let cutoff = now.addingTimeInterval(-15 * 60)
+
         let mgr = CMMotionActivityManager()
         motionManager = mgr
         var finished = false
-        let complete: (Bool?) -> Void = { v in
+        let complete: (String, String) -> Void = { a, b in
             guard !finished else { return }
             finished = true
             motionManager = nil
-            done(v)
+            done(a, b)
         }
-        // 확장 예산을 태우지 않도록 짧게 끊는다.
-        DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) { complete(nil) }
-        mgr.queryActivityStarting(from: start, to: Date(), to: .main) { acts, _ in
-            guard let acts = acts else { complete(nil); return }
-            // 정지가 아닌 구간이 하나라도 있으면 움직임 있음.
-            let moved = acts.contains { $0.walking || $0.running || $0.cycling || $0.automotive }
-            complete(moved)
+        DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) { complete("?", "?") }
+
+        mgr.queryActivityStarting(from: dayStart, to: now, to: .main) { acts, _ in
+            guard let acts = acts else { complete("?", "?"); return }
+
+            func summarize(_ list: [CMMotionActivity]) -> String {
+                var kinds: [String] = []
+                var best = -1
+                for a in list {
+                    var hit = false
+                    if a.walking { kinds.append("walk"); hit = true }
+                    if a.running { kinds.append("run"); hit = true }
+                    if a.cycling { kinds.append("cycle"); hit = true }
+                    if a.automotive { kinds.append("auto"); hit = true }
+                    if hit { best = max(best, a.confidence.rawValue) }
+                }
+                guard !kinds.isEmpty else { return "N" }
+                let conf = ["low", "med", "high"]
+                let c = (best >= 0 && best < conf.count) ? conf[best] : "?"
+                // 종류 중복 제거(순서 유지)
+                var seen = Set<String>()
+                let uniq = kinds.filter { seen.insert($0).inserted }
+                return "Y(\(uniq.joined(separator: "+")),\(c))"
+            }
+
+            // 최근 15분: cutoff 이후 항목 + 그 직전 항목(구간이 이어지고 있을 수 있다)
+            var recent = acts.filter { $0.startDate >= cutoff }
+            if let prior = acts.last(where: { $0.startDate < cutoff }) { recent.append(prior) }
+
+            complete(summarize(acts), summarize(recent))
         }
     }
 
