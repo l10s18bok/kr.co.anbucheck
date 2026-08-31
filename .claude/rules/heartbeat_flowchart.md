@@ -186,7 +186,7 @@ flowchart TD
     Scheduler([서버 APScheduler: 매 분 정각 실행<br/>CronTrigger(second=0)<br/>기기 로컬 타임존 기준 예약시각 + 2시간 경과 시 미수신 체크<br/>devices.timezone 기반 — 비-KST 사용자도 정확])
     Scheduler --> FindMissing[해당 시각까지<br/>heartbeat 미수신 대상자 조회]
 
-    FindMissing --> SubjectSafetyNet[대상자 본인 Android 기기로<br/>subject_safety_net FCM 푸시<br/>보호자 유무·구독 게이팅 앞에서 발송 — 무관<br/>OEM이 worker/로컬알람 죽인 LAST-RESORT에도 서버 발송이라 도달<br/>미수신일마다 1회 → 무시 시 매일 반복<br/>iOS 대상자는 클라 정시 로컬 알림이 PRIMARY라 제외]
+    FindMissing --> SubjectSafetyNet[대상자 본인 Android 기기로<br/>subject_safety_net FCM 푸시<br/>보호자 유무·구독 게이팅 앞에서 발송 — 무관<br/>OEM이 worker/로컬알람 죽인 LAST-RESORT에도 서버 발송이라 도달<br/>미수신일마다 1회 → 무시 시 매일 반복<br/>iOS 대상자는 제외 — 정각 트리거가 실패해도 오프라인 폴백(+45분)이 이미 안내를 띄우므로, +2h에 또 보내면 같은 날 알림이 2개가 된다 (2026-08-22 이전 근거였던 'gs_deadman이 PRIMARY'는 그 알림 폐지로 무효)]
     SubjectSafetyNet --> SubActive{보호자<br/>구독 활성?}
     SubActive -->|NO| Skip([알림 미발송<br/>heartbeat는 계속 수신])
     SubActive -->|YES| CheckLastBatt{마지막 heartbeat의<br/>battery_level < 20%?}
