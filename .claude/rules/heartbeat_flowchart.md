@@ -396,7 +396,7 @@ flowchart TD
 ※ 예약 시각 변경은 대상자 앱에서만 가능. 변경 시 WorkManager 재예약 + iOS 일일 로컬 안전망 알림 재예약이 수행됨(Android는 로컬 안전망 알림이 없으므로 서버 미수신 체크가 변경된 예약시각 +2h를 자동 반영).
 ※ 시각 변경 시 안전망 알림 재예약(`onHeartbeatTimeChanged`): `LocalAlarmService.schedule(hour, minute)` 호출 — `scheduled.isBefore(now)` 기준으로 오늘/내일을 자동 결정한다(`forceNextDay` 파라미터 제거). `matchDateTimeComponents.time`이라 동일 ID 덮어쓰기이므로 별도 취소 불필요.
   - **이미 오늘 전송됨** → `lastHeartbeatDate` 유지(오늘 재전송 차단). 알람 재등록은 새 시각으로 덮어씀.
-  - **미전송 + 과거 시각** → iOS 안전망 알람 재등록(내일 정시) + **즉시 heartbeat 전송**(앱 조작=살아있음 증거, 오늘분 기록 → 거짓 미수신 경고 방지) + "안부 전했습니다" 스낵바. (Android는 로컬 안전망 알림이 폐지됐으며, 미수신 안내는 서버 푸시 subject_safety_net이 담당.)
+  - **미전송 + 과거 시각** → iOS 안전망 알람 재등록(내일 정시) + **즉시 heartbeat 전송**(앱 조작=살아있음 증거, 오늘분 기록 → 그날이 미수신으로 판정되는 것 방지) + "안부 전했습니다" 스낵바. (Android는 로컬 안전망 알림이 폐지됐으며, 미수신 안내는 서버 푸시 subject_safety_net이 담당.)
   - **미전송 + 미래 시각** → 그 시각에 트리거(오늘). iOS 안전망 알람은 새 정시로 재등록. Android는 서버 미수신 체크가 +2h에 발화.
 
 
