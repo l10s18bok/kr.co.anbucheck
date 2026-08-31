@@ -356,11 +356,17 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
     });
   }
 
+  /// G+S 활성화 확인 — **플랫폼 분기 없음**(2026-08-31 통합).
+  ///
+  /// 예전에는 iOS만 별도 다이얼로그에 "알림을 탭하거나 직접 앱을 열어야 안부가
+  /// 전송됩니다"라는 경고 카드를 띄웠다. 2026-08-22 NSE 트리거 + 08-29 피기백으로
+  /// **iOS도 탭 없이 자동 전송**되면서 그 경고는 사실이 아니게 됐고, 겁을 주는 문구가
+  /// 잔존율이 가장 높은 모드(G+S)의 진입을 막고 있었다.
+  ///
+  /// ⚠️ `gs_enable_dialog_ios_warning_title`/`_body`/`gs_enable_dialog_ios_confirm`
+  /// 세 키는 **번역 파일에서 지우지 말 것** — 웹(`averic-lab/_faq-build/extract_strings.py`)의
+  /// 추출 키 목록에 있어 지우면 페이지 빌드가 exit 1로 실패한다. 코드에서 쓰지 않을 뿐이다.
   void _showEnableConfirm() {
-    if (Platform.isIOS) {
-      _showEnableConfirmIOS();
-      return;
-    }
     Get.dialog(
       AlertDialog(
         title: Text(
@@ -387,78 +393,6 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
             child: Text(
               'gs_enable_confirm'.tr,
               style: AppTextTheme.bodyMedium(color: const Color(0xFF4355B9), fw: FontWeight.w700),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// iOS G+S 전용 활성화 확인 다이얼로그
-  /// 강조 경고 카드로 "하루 한 번만 기억" 원칙을 명시 (PRD 4.2)
-  void _showEnableConfirmIOS() {
-    Get.dialog(
-      barrierDismissible: false,
-      AlertDialog(
-        title: Text(
-          'gs_enable_dialog_title'.tr,
-          style: AppTextTheme.headlineSmall(fw: FontWeight.w700, color: const Color(0xFF1A1C1C)),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'gs_enable_dialog_body'.tr,
-                style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
-              ),
-              SizedBox(height: AppSpacing.lg),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(AppSpacing.md),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFF3E0),
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: const Border(left: BorderSide(color: Color(0xFFE65100), width: 4)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'gs_enable_dialog_ios_warning_title'.tr,
-                      style: AppTextTheme.bodyLarge(
-                        fw: FontWeight.w700,
-                        color: const Color(0xFFE65100),
-                      ),
-                    ),
-                    SizedBox(height: AppSpacing.sm),
-                    Text(
-                      'gs_enable_dialog_ios_warning_body'.tr,
-                      style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'common_cancel'.tr,
-              style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              Get.find<GuardianDashboardController>().enableSubjectFeature();
-            },
-            child: Text(
-              'gs_enable_dialog_ios_confirm'.tr,
-              style: AppTextTheme.bodyMedium(color: const Color(0xFFE65100), fw: FontWeight.w700),
             ),
           ),
         ],

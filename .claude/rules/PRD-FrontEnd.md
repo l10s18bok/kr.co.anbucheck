@@ -2232,7 +2232,7 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 G+S 라이프사이클(활성화/해제/스케줄 예약)과 heartbeat 자동 재전송 모두 `GuardianDashboardController`가 단독 소유하여 중복 전송 race를 구조적으로 차단한다. 설정 화면(`GuardianSettingsController`)과 안전 홈 화면(`GuardianSafetyCodeController`, 통합 모듈 `lib/app/modules/safety_home/controllers/`, `SafetyHomeBaseController` 자식)은 모두 UI 전용으로 Dashboard에 위임한다. `GuardianDashboardBinding` / `GuardianSettingsBinding` 모두 Dashboard 컨트롤러를 `permanent: true`로 등록해 어느 진입 경로에서도 동일 인스턴스를 공유한다.
 
 - **활성화** (`GuardianDashboardController.enableSubjectFeature()`):
-  1. **기능 안내 다이얼로그** 표시 (iOS는 안부 푸시 알림 동작 방식 포함) → 사용자가 `이해했습니다, 활성화` 탭으로만 진행
+  1. **기능 안내 다이얼로그** 표시 → 사용자가 `생성` 탭으로만 진행. ⚠️ **플랫폼 분기 없음**(2026-08-31 통합) — 예전에는 iOS만 별도 다이얼로그에 "알림을 탭하거나 직접 앱을 열어야 안부가 전송됩니다"라는 주황 경고 카드를 띄웠으나, 2026-08-22 NSE 트리거 + 08-29 피기백으로 **iOS도 탭 없이 자동 전송**되면서 그 경고가 사실이 아니게 됐다. 겁을 주는 문구가 잔존율이 가장 높은 모드(G+S)의 진입을 막고 있어 제거했다. ⚠️ `gs_enable_dialog_ios_warning_title`/`_body`/`gs_enable_dialog_ios_confirm` 세 번역 키는 **지우지 말 것** — averic-lab `extract_strings.py`의 추출 키 목록에 있어 지우면 웹 페이지 빌드가 exit 1로 실패한다(코드에서 쓰지 않을 뿐이다)
   2. **Lazy Permission — 걸음수 권한 요청** (다이얼로그 확정 직후, 최초 권한 화면에서 요청하지 않았으므로):
      - Android: `Permission.activityRecognition.request()` 호출
      - iOS: `Pedometer.stepCountStream.first.timeout(3s)` 호출로 CMPedometer를 유발해 모션 권한 시스템 팝업 표시
