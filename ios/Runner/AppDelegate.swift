@@ -60,6 +60,11 @@ import GoogleMaps
   /// 포그라운드 복귀 시 확장이 보낸 사실을 먼저 흡수한다(Dart의 onResumed보다 앞선다).
   override func applicationWillEnterForeground(_ application: UIApplication) {
     SharedStore.importFromExtension()
+    // ⚠️ import만으로는 부족하다. 포그라운드 마커(계측 ①)가 여기서 갱신되지 않으면,
+    // 백그라운드에 있던 앱을 오늘 처음 띄운 경우 마커가 어제 날짜로 남아 확장이
+    // `fg=N`으로 잘못 읽는다. 콜드 런치(42행)와 백그라운드 진입(56행)은 이미
+    // export를 타지만 이 경로만 빠져 있었다.
+    SharedStore.exportToExtension()
     super.applicationWillEnterForeground(application)
   }
 

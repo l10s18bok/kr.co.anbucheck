@@ -1,3 +1,4 @@
+import CoreMotion
 import Foundation
 import Security
 import UserNotifications
@@ -23,6 +24,8 @@ struct HeartbeatStore {
         /// 이 기기가 **안부를 보내는 쪽**인가(G+S 또는 순수 대상자).
         /// 순수 보호자는 false — 확장이 이 기기로 heartbeat를 보내면 안 된다.
         static let isSubject   = "hb_is_subject"
+        /// 앱이 마지막으로 포그라운드에 뜬 날짜(yyyy-MM-dd). 계측 ① — §18.3
+        static let appFgDate   = "hb_app_fg_date"
         static let textPrefix  = "hb_text_"      // 번역 문구 (백그라운드 캐시 패턴)
 
         // 확장 → 앱
@@ -63,6 +66,8 @@ struct HeartbeatStore {
     /// 안부를 보내는 쪽인가. **순수 보호자면 false** — 피기백이 오발동하면
     /// 보호자 기기가 자기 heartbeat를 보내게 된다(§16).
     let isSubject: Bool
+    /// 앱이 마지막으로 포그라운드에 뜬 날짜. 계측 ① — 오늘이면 사용자가 앱을 열었다.
+    let appFgDate: String
 
     /// 자동 heartbeat의 idempotency key — 서버 계약상 "YYYY-MM-DD_HH:mm"
     var scheduledKey: String {
@@ -85,7 +90,8 @@ struct HeartbeatStore {
             lastSentDate: g.string(forKey: K.lastDate) ?? "",
             // ⚠️ 기본값 false. 값이 없으면 **보내지 않는 쪽**으로 떨어져야 안전하다 —
             // 잘못 보내는 것(보호자가 대상자처럼 기록됨)이 안 보내는 것보다 나쁘다.
-            isSubject: g.bool(forKey: K.isSubject)
+            isSubject: g.bool(forKey: K.isSubject),
+            appFgDate: g.string(forKey: K.appFgDate) ?? ""
         )
     }
 
@@ -219,6 +225,38 @@ struct HeartbeatStore {
             }
         default:
             return nil
+        }
+    }
+
+    /// 오늘 자정 이후 **정지 이외의 움직임**이 있었는가. 판별 불가·미지원이면 nil.
+    ///
+    /// 계측 ③ — 잠금 프로브(순간)와 포그라운드 마커(앱 한정)가 놓치는 자리를 메운다.
+    /// `CMMotionActivityManager`는 **최근 7일을 소급 조회**하므로, 확장이 예약시각에
+    /// 한 번 도는 것만으로 하루 전체의 움직임을 볼 수 있다.
+    ///
+    /// ⚠️ 확장에서의 가용성은 문서로 확인되지 않았다. 같은 CoreMotion·같은 권한인
+    /// `CMPedometer`가 이 확장에서 동작하므로 될 가능성이 높다는 것이 근거이며,
+    /// **이 프로브의 첫 목적이 그 확인 자체**다. 안 되면 nil이 찍힌다.
+    ///
+    /// ⚠️ 걸음수와 다른 것을 잰다. 걸음이 0이어도 차량 이동·기기 들어올림 등이
+    /// 잡히므로, 거동이 불편한 대상자를 구제할 여지가 있다.
+    static func hadMotionToday(_ done: @escaping (Bool?) -> Void) {
+        guard CMMotionActivityManager.isActivityAvailable() else { done(nil); return }
+        let start = Calendar.current.startOfDay(for: Date())
+        let mgr = CMMotionActivityManager()
+        var finished = false
+        let complete: (Bool?) -> Void = { v in
+            guard !finished else { return }
+            finished = true
+            done(v)
+        }
+        // 확장 예산을 태우지 않도록 짧게 끊는다.
+        DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) { complete(nil) }
+        mgr.queryActivityStarting(from: start, to: Date(), to: .main) { acts, _ in
+            guard let acts = acts else { complete(nil); return }
+            // 정지가 아닌 구간이 하나라도 있으면 움직임 있음.
+            let moved = acts.contains { $0.walking || $0.running || $0.cycling || $0.automotive }
+            complete(moved)
         }
     }
 

@@ -108,9 +108,17 @@ final class NotificationService: UNNotificationServiceExtension {
         // "iOS도 suspicious를 판정할 수 있는가"를 데이터로 답할 수 있다.
         let unlocked = HeartbeatStore.deviceUnlocked()
         let lag = HeartbeatStore.minutesSinceScheduled(hour: store.hour, minute: store.minute)
+        let fgToday = (store.appFgDate == HeartbeatStore.today())
         diag = " unlocked=\(unlocked.map { $0 ? "Y" : "N" } ?? "?")"
+            + " fg=\(fgToday ? "Y" : "N")"
             + " lag=\(lag.map { "\($0)m" } ?? "?")"
             + " type=\(isTrigger ? "trigger" : "piggyback")"
+
+        // 움직임 이력은 비동기라 결과가 늦게 온다. 도착하면 계측 문자열에 덧붙인다
+        // (못 오면 그냥 빠진다 — 계측이 전송을 지연시키면 안 된다).
+        HeartbeatStore.hadMotionToday { [weak self] moved in
+            self?.diag += " motion=\(moved.map { $0 ? "Y" : "N" } ?? "?")"
+        }
 
         // ⚠️ **안부를 보내는 쪽이 아니면 여기서 끝낸다(순수 보호자).**
         // 트리거 푸시는 서버가 G+S에게만 보내 이 검사가 필요 없었지만, 피기백은
