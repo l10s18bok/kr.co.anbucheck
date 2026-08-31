@@ -24,7 +24,16 @@ import GoogleMaps
     // 진단: 확장이 마지막으로 언제 무엇을 했는지 콘솔에 남긴다(`flutter logs`로 확인).
     // "확장이 돌았나 / 푸시가 도착했나"를 사후에 판정할 유일한 수단이다 —
     // 알림 표시만으로는 '오지 않음'과 '왔는데 표시가 억제됨'을 구분할 수 없다.
-    NSLog("[HeartbeatNSE] last=%@", HeartbeatStore.group?.string(forKey: HeartbeatStore.K.lastLog) ?? "(없음)")
+    // 확장이 남긴 최근 실행 기록을 전부 출력한다. 케이블 없이 며칠 두었다가
+    // 한 번 연결해 앱을 열면 그동안의 실행이 한꺼번에 보인다.
+    let ring = HeartbeatStore.group?.stringArray(forKey: HeartbeatStore.K.logRing) ?? []
+    if ring.isEmpty {
+      NSLog("[HeartbeatNSE] ring (없음)")
+    } else {
+      for (i, line) in ring.enumerated() {
+        NSLog("[HeartbeatNSE] #%d %@", i + 1, line)
+      }
+    }
 
     // Flutter 엔진 + Firebase + 플러그인 초기화
     let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -51,6 +60,11 @@ import GoogleMaps
   /// 포그라운드 복귀 시 확장이 보낸 사실을 먼저 흡수한다(Dart의 onResumed보다 앞선다).
   override func applicationWillEnterForeground(_ application: UIApplication) {
     SharedStore.importFromExtension()
+    // ⚠️ import만으로는 부족하다. 포그라운드 마커(계측 ①)가 여기서 갱신되지 않으면,
+    // 백그라운드에 있던 앱을 오늘 처음 띄운 경우 마커가 어제 날짜로 남아 확장이
+    // `fg=N`으로 잘못 읽는다. 콜드 런치(42행)와 백그라운드 진입(56행)은 이미
+    // export를 타지만 이 경로만 빠져 있었다.
+    SharedStore.exportToExtension()
     super.applicationWillEnterForeground(application)
   }
 

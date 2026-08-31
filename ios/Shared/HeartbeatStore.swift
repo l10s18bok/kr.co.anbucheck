@@ -1,4 +1,6 @@
+import CoreMotion
 import Foundation
+import Security
 import UserNotifications
 
 /// 앱과 확장이 **함께 컴파일하는** 공유 저장소.
@@ -22,6 +24,8 @@ struct HeartbeatStore {
         /// 이 기기가 **안부를 보내는 쪽**인가(G+S 또는 순수 대상자).
         /// 순수 보호자는 false — 확장이 이 기기로 heartbeat를 보내면 안 된다.
         static let isSubject   = "hb_is_subject"
+        /// 앱이 마지막으로 포그라운드에 뜬 날짜(yyyy-MM-dd). 계측 ① — §18.3
+        static let appFgDate   = "hb_app_fg_date"
         static let textPrefix  = "hb_text_"      // 번역 문구 (백그라운드 캐시 패턴)
 
         // 확장 → 앱
@@ -29,6 +33,8 @@ struct HeartbeatStore {
         static let sentTime = "nse_sent_time"
         static let sentKey  = "nse_sent_key"
         static let lastLog  = "nse_last_log"
+        /// 최근 N건 롤링 기록. 케이블을 계속 물고 있지 않아도 며칠치를 몰아 읽기 위함.
+        static let logRing  = "nse_log_ring"
         static let inflight = "nse_inflight"
     }
 
@@ -60,6 +66,8 @@ struct HeartbeatStore {
     /// 안부를 보내는 쪽인가. **순수 보호자면 false** — 피기백이 오발동하면
     /// 보호자 기기가 자기 heartbeat를 보내게 된다(§16).
     let isSubject: Bool
+    /// 앱이 마지막으로 포그라운드에 뜬 날짜. 계측 ① — 오늘이면 사용자가 앱을 열었다.
+    let appFgDate: String
 
     /// 자동 heartbeat의 idempotency key — 서버 계약상 "YYYY-MM-DD_HH:mm"
     var scheduledKey: String {
@@ -82,7 +90,8 @@ struct HeartbeatStore {
             lastSentDate: g.string(forKey: K.lastDate) ?? "",
             // ⚠️ 기본값 false. 값이 없으면 **보내지 않는 쪽**으로 떨어져야 안전하다 —
             // 잘못 보내는 것(보호자가 대상자처럼 기록됨)이 안 보내는 것보다 나쁘다.
-            isSubject: g.bool(forKey: K.isSubject)
+            isSubject: g.bool(forKey: K.isSubject),
+            appFgDate: g.string(forKey: K.appFgDate) ?? ""
         )
     }
 
@@ -104,9 +113,31 @@ struct HeartbeatStore {
         return v
     }
 
+    /// 확장 실행 1건을 기록한다.
+    ///
+    /// ⚠️ **롤링으로 남기는 이유**: `idevicesyslog`는 USB가 있어야 실시간으로 읽히는데,
+    /// 며칠짜리 관측에 케이블을 계속 물고 있을 수는 없다. 최근 `logRingSize`건을
+    /// 보관해 두면 나중에 한 번 연결해 앱을 열었을 때 몰아서 읽을 수 있다
+    /// (`AppDelegate`가 실행 시 전부 출력한다).
+    static let logRingSize = 12
+
+    /// 움직임 조회가 끝날 때까지 매니저를 살려두기 위한 강한 참조(§18.11 주석 참조).
+    private static var motionManager: CMMotionActivityManager?
+
     static func log(_ message: String) {
         NSLog("[HeartbeatNSE] %@", message)
-        group?.set("\(Date()): \(message)", forKey: K.lastLog)
+
+        let f = DateFormatter()
+        f.dateFormat = "MM-dd HH:mm:ss"
+        let line = "\(f.string(from: Date())) \(message)"
+
+        guard let g = group else { return }
+        g.set(line, forKey: K.lastLog)   // 기존 단건 키도 유지(하위 호환)
+
+        var ring = g.stringArray(forKey: K.logRing) ?? []
+        ring.append(line)
+        if ring.count > logRingSize { ring.removeFirst(ring.count - logRingSize) }
+        g.set(ring, forKey: K.logRing)
     }
 
     // MARK: - 확장 → 앱 마커
@@ -150,6 +181,135 @@ struct HeartbeatStore {
 
     static func releaseSendLock() {
         group?.removeObject(forKey: K.inflight)
+    }
+
+    // MARK: - 계측 프로브 (판정에는 아직 쓰지 않는다 — 로그 전용)
+
+    /// 기기가 **지금 잠금 해제 상태**인가. 판별 불가면 nil.
+    ///
+    /// ⚠️ **왜 "화면 켜짐"이 아니라 "잠금 해제"인가.**
+    /// 안드로이드는 `PowerManager.isInteractive()`(화면 켜짐)를 쓰는데, 알림 하나로
+    /// 화면이 켜져도 참이 된다 — **사람이 아무것도 하지 않아도 활동 있음으로 구제된다.**
+    /// 잠금 해제는 Face ID(주시 필요) 또는 암호 입력을 요구하므로 **살아 있는 사람이
+    /// 의도적으로 조작했다는 증거**다. 신호로서 더 강하다.
+    ///
+    /// ⚠️ **방향이 비대칭이다.** 해제됨 = 사람이 조작했다(강함). 잠금 = "지금 안 만지고
+    /// 있다"일 뿐이고 30분 전에 썼는지는 알 수 없다(약함). 그래서 판정에 넣을 때는
+    /// **`suspicious=false`를 만드는 구제 조건으로만** 써야 한다.
+    ///
+    /// 원리: `kSecAttrAccessibleWhenUnlockedThisDeviceOnly` 항목은 기기가 잠겨 있으면
+    /// 접근이 거부된다(`errSecInteractionNotAllowed` = -25308). 확장에서도 동작하며
+    /// 앱이 미리 심어줄 필요가 없다 — 확장이 자기 access group에 직접 쓰고 읽는다
+    /// (키체인 공유 entitlement 불필요).
+    static func deviceUnlocked() -> Bool? {
+        let base: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: "kr.co.anbucheck.lockprobe",
+            kSecAttrAccount as String: "probe",
+        ]
+
+        var read = base
+        read[kSecReturnData as String] = true
+        var out: CFTypeRef?
+        switch SecItemCopyMatching(read as CFDictionary, &out) {
+        case errSecSuccess:
+            return true
+        case errSecInteractionNotAllowed:
+            return false
+        case errSecItemNotFound:
+            // 최초 1회. 쓰기 성공 자체가 해제 상태의 증거다.
+            var add = base
+            add[kSecValueData as String] = Data([1])
+            add[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+            switch SecItemAdd(add as CFDictionary, nil) {
+            case errSecSuccess: return true
+            case errSecInteractionNotAllowed: return false
+            default: return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    /// 움직임 이력 요약. `(오늘 전체, 최근 15분)` 두 문자열을 돌려준다.
+    ///
+    /// 계측 ③ — 잠금 프로브(순간)와 포그라운드 마커(앱 한정)가 놓치는 자리를 메운다.
+    /// `CMMotionActivityManager`는 **최근 7일을 소급 조회**하므로, 확장이 예약시각에
+    /// 한 번 도는 것만으로 하루 전체의 이동을 볼 수 있다(확장 가용성은 2026-08-31 실측 확인).
+    ///
+    /// ⚠️ **두 창을 함께 재는 이유.** 쓰임이 다르다.
+    ///   · 오늘 전체 → "하루 종일 이동이 없었다"  = suspicious 의 근거
+    ///   · 최근 15분 → "지금 활동 중이다"          = 즉시 구제의 근거
+    /// 어느 쪽이 유용한지는 분포를 봐야 알 수 있어 **둘 다 남긴다**. 조회는 한 번만 하고
+    /// 같은 배열에서 걸러낸다.
+    ///
+    /// ⚠️ **신뢰도를 함께 남긴다.** `CMMotionActivity.confidence`는 low/medium/high인데,
+    /// 낮은 신뢰도의 `walking` 하나로도 "이동함"이 되어 **거짓 구제**가 될 수 있다.
+    /// 판정에 쓰기 전에 신뢰도 분포를 봐야 한다.
+    ///
+    /// ⚠️ 걸음수와 다른 것을 잰다. 걸음이 0이어도 차량 이동이 잡히므로 거동이 불편한
+    /// 대상자를 구제할 여지가 있다. 반대로 **폰을 집어 드는 것은 이동이 아니다** —
+    /// 이건 보행·달리기·자전거·차량 분류기이지 "폰을 만졌는가"가 아니다.
+    static func motionSummary(_ done: @escaping (String, String) -> Void) {
+        guard CMMotionActivityManager.isActivityAvailable() else { done("?", "?"); return }
+        let now = Date()
+        let dayStart = Calendar.current.startOfDay(for: now)
+        let cutoff = now.addingTimeInterval(-15 * 60)
+
+        let mgr = CMMotionActivityManager()
+        motionManager = mgr
+        var finished = false
+        let complete: (String, String) -> Void = { a, b in
+            guard !finished else { return }
+            finished = true
+            motionManager = nil
+            done(a, b)
+        }
+        DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) { complete("?", "?") }
+
+        mgr.queryActivityStarting(from: dayStart, to: now, to: .main) { acts, _ in
+            guard let acts = acts else { complete("?", "?"); return }
+
+            func summarize(_ list: [CMMotionActivity]) -> String {
+                var kinds: [String] = []
+                var best = -1
+                for a in list {
+                    var hit = false
+                    if a.walking { kinds.append("walk"); hit = true }
+                    if a.running { kinds.append("run"); hit = true }
+                    if a.cycling { kinds.append("cycle"); hit = true }
+                    if a.automotive { kinds.append("auto"); hit = true }
+                    if hit { best = max(best, a.confidence.rawValue) }
+                }
+                guard !kinds.isEmpty else { return "N" }
+                let conf = ["low", "med", "high"]
+                let c = (best >= 0 && best < conf.count) ? conf[best] : "?"
+                // 종류 중복 제거(순서 유지)
+                var seen = Set<String>()
+                let uniq = kinds.filter { seen.insert($0).inserted }
+                return "Y(\(uniq.joined(separator: "+")),\(c))"
+            }
+
+            // 최근 15분: cutoff 이후 항목 + 그 직전 항목(구간이 이어지고 있을 수 있다)
+            var recent = acts.filter { $0.startDate >= cutoff }
+            if let prior = acts.last(where: { $0.startDate < cutoff }) { recent.append(prior) }
+
+            complete(summarize(acts), summarize(recent))
+        }
+    }
+
+    /// 오늘 예약시각으로부터 몇 분 지났는가(음수면 이전).
+    ///
+    /// 트리거 푸시는 예약시각 정각에 발사되므로 이 값이 곧 **APNs 도착 지연**이다.
+    /// 기기가 깨어 있으면 짧고, 딥 슬립이면 길다(실측 +2분54초 ~ +14분50초).
+    /// ⚠️ 피기백 푸시는 예약시각과 무관한 시각에 오므로 이 값에 의미가 없다.
+    static func minutesSinceScheduled(hour: Int, minute: Int) -> Int? {
+        let cal = Calendar.current
+        var comps = cal.dateComponents([.year, .month, .day], from: Date())
+        comps.hour = hour
+        comps.minute = minute
+        guard let scheduled = cal.date(from: comps) else { return nil }
+        return Int(Date().timeIntervalSince(scheduled) / 60.0)
     }
 
     /// 지금이 **오늘의** 예약시각을 지났는가.

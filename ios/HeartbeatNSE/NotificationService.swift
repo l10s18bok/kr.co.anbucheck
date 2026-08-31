@@ -11,6 +11,14 @@ import UserNotifications
 ///  확장 실행, HTTPS 왕복 성공, 걸음수 조회, pending 알림 제거까지 확인)
 final class NotificationService: UNNotificationServiceExtension {
 
+    /// 계측 문자열(잠금 상태·걸음수·도착 지연). **판정에는 쓰지 않는다** — 로그 전용.
+    /// iOS가 안드로이드처럼 `suspicious`를 판정할 수 있는지 가늠하기 위한 측정이다.
+    private var diag = ""
+
+    /// suspicious 판정에 쓰는 두 값. `didReceive`에서 채우고 `send`에서 읽는다.
+    private var unlockedNow: Bool?
+    private var fgToday = false
+
     /// 피기백 실행 중인가. true면 성공해도 **알림 내용을 절대 건드리지 않는다** —
     /// 보호자 경고·리포트 문구가 "안부 전달 완료"로 덮이면 정보가 사라진다.
     private var piggyback = false
@@ -99,6 +107,34 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
 
+        // ── 계측 (판정에 영향 없음) ─────────────────────────────
+        // 잠금 해제 여부와 예약시각 대비 도착 지연을 남긴다. 며칠 모으면
+        // "iOS도 suspicious를 판정할 수 있는가"를 데이터로 답할 수 있다.
+        let unlocked = HeartbeatStore.deviceUnlocked()
+        let lag = HeartbeatStore.minutesSinceScheduled(hour: store.hour, minute: store.minute)
+        let fgToday = (store.appFgDate == HeartbeatStore.today())
+        self.unlockedNow = unlocked
+        self.fgToday = fgToday
+        diag = " unlocked=\(unlocked.map { $0 ? "Y" : "N" } ?? "?")"
+            + " fg=\(fgToday ? "Y" : "N")"
+            + " lag=\(lag.map { "\($0)m" } ?? "?")"
+            + " type=\(isTrigger ? "trigger" : "piggyback")"
+
+        // 움직임 이력은 비동기다. **계측이 전송을 지연시켜서는 안 되므로** 기다리지 않는다.
+        //
+        // ⚠️ 그래서 `finish()`가 먼저 끝나는 경로(already-sent 등 빠른 분기)에서는
+        // 결과가 diag에 실리지 못한다 — 실제로 09-01 00:07 관측에서 motion이 통째로
+        // 빠졌다. 늦게 온 값은 **별도 줄로** 남겨 잃지 않게 한다.
+        HeartbeatStore.motionSummary { [weak self] day, recent in
+            guard let self = self else { return }
+            let v = " motion=\(day) motion15=\(recent)"
+            if self.contentHandler == nil {
+                HeartbeatStore.log("nse motion-late\(v)")  // 이미 배달됨
+            } else {
+                self.diag += v
+            }
+        }
+
         // ⚠️ **안부를 보내는 쪽이 아니면 여기서 끝낸다(순수 보호자).**
         // 트리거 푸시는 서버가 G+S에게만 보내 이 검사가 필요 없었지만, 피기백은
         // **모든 보호자에게 가는 알림**(auto_report 등)에 얹히므로 그 게이팅이 통하지
@@ -138,6 +174,7 @@ final class NotificationService: UNNotificationServiceExtension {
         }
 
         collectSteps { steps in
+            self.diag += " steps=\(steps.map(String.init) ?? "?")"
             self.send(store: store, steps: steps) { ok in
                 HeartbeatStore.releaseSendLock()
                 if ok {
@@ -163,7 +200,7 @@ final class NotificationService: UNNotificationServiceExtension {
         guard let handler = contentHandler else { return }
         contentHandler = nil  // 중복 배달 방지
 
-        HeartbeatStore.log("nse \(note)")
+        HeartbeatStore.log("nse \(note)\(diag)")
 
         // ⚠️ 피기백은 **성공해도 원본을 그대로 배달한다.** 이 알림의 본래 용도(보호자
         // 리포트·배터리 안내 등)가 우선이고, 안부 전송은 그 뒤에 조용히 얹힌 것이다.
@@ -214,15 +251,25 @@ final class NotificationService: UNNotificationServiceExtension {
             "device_id": store.deviceId,
             "timestamp": ISO8601DateFormatter().string(from: Date()),
             "scheduled_key": store.scheduledKey,
-            // ⚠️ 확장 전송은 항상 suspicious=false다.
-            // 지금까지 iOS heartbeat는 전부 포그라운드에서 나가 `isInteractiveAtTrigger: true`가
-            // 하드코딩됐고, 그래서 **iOS는 "활동 기록 없음" 경고를 한 번도 낸 적이 없다**.
-            // 확장에는 화면 상태 신호가 없어(iOS 확장은 UIApplication 접근 불가) 걸음수만
-            // 남는데, 걸음수만으로 판정하면 안드로이드보다 **더 엄격해진다**(안드로이드는
-            // 화면 켜짐이라는 구제 조건이 하나 더 있다). 없던 경고 종류를 "탭 없이 전달"이라는
-            // 핵심 변경과 같은 릴리스에 넣지 않기로 했다. 걸음수는 계속 실어 보내므로
-            // 실제 분포가 쌓이고, 나중에 켜는 것은 쉽다. 상세는 PRD-FrontEnd §2.3.
-            "suspicious": false,
+            // ── suspicious 판정 (2026-09-01 도입) ─────────────────────
+            // 안드로이드와 **같은 질문**을 한다: "전송 시점에 사람의 조작 흔적이 있는가".
+            //   안드로이드  워커 발화 시점에 화면이 켜져 있었는가
+            //   iOS        확장 실행 시점에 잠금이 풀려 있었는가
+            // 오히려 iOS 쪽이 정확하다 — 알림만으로 화면이 켜져도 참이 되는 안드로이드와
+            // 달리 잠금 해제는 Face ID나 암호를 요구한다(§18.10 ② 실측).
+            //
+            // ⚠️ **구제 조건으로만 쓴다.** 세 신호 중 하나라도 참이면 false다.
+            // "잠김"은 "30분 전에 뭘 했는지"를 모르므로 단독으로 true의 근거가 못 된다.
+            // true는 **셋 다 아닐 때**만 나온다.
+            //
+            // ⚠️ `motion`은 판정에 넣지 않는다. 비동기라 이 시점에 값이 없을 수 있고,
+            // walking·running이 걸음수를 함께 올려 `steps>0`과 대부분 겹친다(§18.15).
+            //
+            // ⚠️ **되돌리려면 이 줄을 `false`로 바꾸면 된다.** iOS에 없던 경고 종류가
+            // 생기는 변경이라, 보호자 경고가 과도해지면 그것이 즉시 복구 경로다.
+            "suspicious": !(
+                (steps ?? 0) > 0 || unlockedNow == true || fgToday
+            ),
         ]
         if let steps = steps { payload["steps_delta"] = steps }
         if let battery = batteryLevel() { payload["battery_level"] = battery }

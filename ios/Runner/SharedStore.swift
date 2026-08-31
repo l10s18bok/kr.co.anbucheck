@@ -44,6 +44,16 @@ enum SharedStore {
     g.set(d.string(forKey: std("api_base_url")) ?? apiBaseFallback, forKey: HeartbeatStore.K.apiBase)
     g.set(d.string(forKey: std("last_heartbeat_date")), forKey: HeartbeatStore.K.lastDate)
 
+    // ── 계측 ① 앱 포그라운드 마커 ─────────────────────────
+    // "오늘 사용자가 앱을 열었는가"를 확장에 알린다. 잠금 프로브(§18.10)는 정확하지만
+    // **창이 극도로 좁다** — 화면을 끄는 즉시 N이라 "지금 보고 있다"만 잡는다.
+    // 이 마커는 반대로 **하루 단위**라, 아침에 한 번 열었어도 저녁 확장 실행에서
+    // 잡힌다. 두 신호는 서로의 사각을 메운다.
+    // export는 런치 직후 + 백그라운드 진입에 호출되므로, 앱이 떴다는 사실이 곧 기록된다.
+    let f = DateFormatter()
+    f.dateFormat = "yyyy-MM-dd"
+    g.set(f.string(from: Date()), forKey: HeartbeatStore.K.appFgDate)
+
     // ⚠️ **안부를 보내는 쪽인지**를 확장에 알린다. invite_code가 있으면 대상자다
     // (G+S 포함). 이게 없으면 피기백이 순수 보호자 기기에서도 발동해, 보호자가
     // 대상자 알림을 받을 때마다 자기 heartbeat를 서버로 보내게 된다.
