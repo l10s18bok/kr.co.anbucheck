@@ -1,4 +1,5 @@
 import Foundation
+import Security
 import UserNotifications
 
 /// 앱과 확장이 **함께 컴파일하는** 공유 저장소.
@@ -150,6 +151,68 @@ struct HeartbeatStore {
 
     static func releaseSendLock() {
         group?.removeObject(forKey: K.inflight)
+    }
+
+    // MARK: - 계측 프로브 (판정에는 아직 쓰지 않는다 — 로그 전용)
+
+    /// 기기가 **지금 잠금 해제 상태**인가. 판별 불가면 nil.
+    ///
+    /// ⚠️ **왜 "화면 켜짐"이 아니라 "잠금 해제"인가.**
+    /// 안드로이드는 `PowerManager.isInteractive()`(화면 켜짐)를 쓰는데, 알림 하나로
+    /// 화면이 켜져도 참이 된다 — **사람이 아무것도 하지 않아도 활동 있음으로 구제된다.**
+    /// 잠금 해제는 Face ID(주시 필요) 또는 암호 입력을 요구하므로 **살아 있는 사람이
+    /// 의도적으로 조작했다는 증거**다. 신호로서 더 강하다.
+    ///
+    /// ⚠️ **방향이 비대칭이다.** 해제됨 = 사람이 조작했다(강함). 잠금 = "지금 안 만지고
+    /// 있다"일 뿐이고 30분 전에 썼는지는 알 수 없다(약함). 그래서 판정에 넣을 때는
+    /// **`suspicious=false`를 만드는 구제 조건으로만** 써야 한다.
+    ///
+    /// 원리: `kSecAttrAccessibleWhenUnlockedThisDeviceOnly` 항목은 기기가 잠겨 있으면
+    /// 접근이 거부된다(`errSecInteractionNotAllowed` = -25308). 확장에서도 동작하며
+    /// 앱이 미리 심어줄 필요가 없다 — 확장이 자기 access group에 직접 쓰고 읽는다
+    /// (키체인 공유 entitlement 불필요).
+    static func deviceUnlocked() -> Bool? {
+        let base: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: "kr.co.anbucheck.lockprobe",
+            kSecAttrAccount as String: "probe",
+        ]
+
+        var read = base
+        read[kSecReturnData as String] = true
+        var out: CFTypeRef?
+        switch SecItemCopyMatching(read as CFDictionary, &out) {
+        case errSecSuccess:
+            return true
+        case errSecInteractionNotAllowed:
+            return false
+        case errSecItemNotFound:
+            // 최초 1회. 쓰기 성공 자체가 해제 상태의 증거다.
+            var add = base
+            add[kSecValueData as String] = Data([1])
+            add[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+            switch SecItemAdd(add as CFDictionary, nil) {
+            case errSecSuccess: return true
+            case errSecInteractionNotAllowed: return false
+            default: return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    /// 오늘 예약시각으로부터 몇 분 지났는가(음수면 이전).
+    ///
+    /// 트리거 푸시는 예약시각 정각에 발사되므로 이 값이 곧 **APNs 도착 지연**이다.
+    /// 기기가 깨어 있으면 짧고, 딥 슬립이면 길다(실측 +2분54초 ~ +14분50초).
+    /// ⚠️ 피기백 푸시는 예약시각과 무관한 시각에 오므로 이 값에 의미가 없다.
+    static func minutesSinceScheduled(hour: Int, minute: Int) -> Int? {
+        let cal = Calendar.current
+        var comps = cal.dateComponents([.year, .month, .day], from: Date())
+        comps.hour = hour
+        comps.minute = minute
+        guard let scheduled = cal.date(from: comps) else { return nil }
+        return Int(Date().timeIntervalSince(scheduled) / 60.0)
     }
 
     /// 지금이 **오늘의** 예약시각을 지났는가.

@@ -11,6 +11,10 @@ import UserNotifications
 ///  확장 실행, HTTPS 왕복 성공, 걸음수 조회, pending 알림 제거까지 확인)
 final class NotificationService: UNNotificationServiceExtension {
 
+    /// 계측 문자열(잠금 상태·걸음수·도착 지연). **판정에는 쓰지 않는다** — 로그 전용.
+    /// iOS가 안드로이드처럼 `suspicious`를 판정할 수 있는지 가늠하기 위한 측정이다.
+    private var diag = ""
+
     /// 피기백 실행 중인가. true면 성공해도 **알림 내용을 절대 건드리지 않는다** —
     /// 보호자 경고·리포트 문구가 "안부 전달 완료"로 덮이면 정보가 사라진다.
     private var piggyback = false
@@ -99,6 +103,15 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
 
+        // ── 계측 (판정에 영향 없음) ─────────────────────────────
+        // 잠금 해제 여부와 예약시각 대비 도착 지연을 남긴다. 며칠 모으면
+        // "iOS도 suspicious를 판정할 수 있는가"를 데이터로 답할 수 있다.
+        let unlocked = HeartbeatStore.deviceUnlocked()
+        let lag = HeartbeatStore.minutesSinceScheduled(hour: store.hour, minute: store.minute)
+        diag = " unlocked=\(unlocked.map { $0 ? "Y" : "N" } ?? "?")"
+            + " lag=\(lag.map { "\($0)m" } ?? "?")"
+            + " type=\(isTrigger ? "trigger" : "piggyback")"
+
         // ⚠️ **안부를 보내는 쪽이 아니면 여기서 끝낸다(순수 보호자).**
         // 트리거 푸시는 서버가 G+S에게만 보내 이 검사가 필요 없었지만, 피기백은
         // **모든 보호자에게 가는 알림**(auto_report 등)에 얹히므로 그 게이팅이 통하지
@@ -138,6 +151,7 @@ final class NotificationService: UNNotificationServiceExtension {
         }
 
         collectSteps { steps in
+            self.diag += " steps=\(steps.map(String.init) ?? "?")"
             self.send(store: store, steps: steps) { ok in
                 HeartbeatStore.releaseSendLock()
                 if ok {
@@ -163,7 +177,7 @@ final class NotificationService: UNNotificationServiceExtension {
         guard let handler = contentHandler else { return }
         contentHandler = nil  // 중복 배달 방지
 
-        HeartbeatStore.log("nse \(note)")
+        HeartbeatStore.log("nse \(note)\(diag)")
 
         // ⚠️ 피기백은 **성공해도 원본을 그대로 배달한다.** 이 알림의 본래 용도(보호자
         // 리포트·배터리 안내 등)가 우선이고, 안부 전송은 그 뒤에 조용히 얹힌 것이다.
