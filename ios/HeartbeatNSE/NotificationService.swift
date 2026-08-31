@@ -114,10 +114,19 @@ final class NotificationService: UNNotificationServiceExtension {
             + " lag=\(lag.map { "\($0)m" } ?? "?")"
             + " type=\(isTrigger ? "trigger" : "piggyback")"
 
-        // 움직임 이력은 비동기라 결과가 늦게 온다. 도착하면 계측 문자열에 덧붙인다
-        // (못 오면 그냥 빠진다 — 계측이 전송을 지연시키면 안 된다).
+        // 움직임 이력은 비동기다. **계측이 전송을 지연시켜서는 안 되므로** 기다리지 않는다.
+        //
+        // ⚠️ 그래서 `finish()`가 먼저 끝나는 경로(already-sent 등 빠른 분기)에서는
+        // 결과가 diag에 실리지 못한다 — 실제로 09-01 00:07 관측에서 motion이 통째로
+        // 빠졌다. 늦게 온 값은 **별도 줄로** 남겨 잃지 않게 한다.
         HeartbeatStore.hadMotionToday { [weak self] moved in
-            self?.diag += " motion=\(moved.map { $0 ? "Y" : "N" } ?? "?")"
+            guard let self = self else { return }
+            let v = moved.map { $0 ? "Y" : "N" } ?? "?"
+            if self.contentHandler == nil {
+                HeartbeatStore.log("nse motion-late motion=\(v)")  // 이미 배달됨
+            } else {
+                self.diag += " motion=\(v)"
+            }
         }
 
         // ⚠️ **안부를 보내는 쪽이 아니면 여기서 끝낸다(순수 보호자).**
