@@ -1462,6 +1462,7 @@ SM-A325N의 +1h27m~+2h52m과 **비교 대상이 아니다** — 이 기기는 �
 ```
 
 **재무장(fresh arm)으로도 빠져나가지 못한다.** 무엇이 이 상태를 설정·해제하는지는 여전히 미확인.
+→ 08-31에 스스로 `--`로 풀린 것이 관측됐고, 그때 다른 MIUI 증상도 함께 사라졌다. **`power_pending`이 단일 스위치인지**를 묻는 측정 절차를 §7.8.2에 적어 뒀다.
 
 ### 7.4 ★ MIUI는 앱을 열어도 버킷이 올라가지 않고 딥 Doze도 빠르다
 
@@ -1554,3 +1555,105 @@ adb도 못 붙여 `mState`를 모른다** — 조건이 다른 값이지 반례�
 - `steps=0` → `suspicious=true`로 나가 보호자에게 **주의 등급**이 갔다. 책상에 방치된
   테스트폰의 구조적 결과이지 결함이 아니다. 며칠 두면 경고 → 긴급으로 에스컬레이션되므로
   관측을 이어갈 때는 보호자 앱의 [건강 확인 완료]로 카운터를 리셋할 것.
+
+### 7.8 샤오미 08-31 — 알람이 워커 실패를 구했다(MIUI 첫 사례) + 개입이 사라진 날
+
+```
+20:59:29.665  Start proc … FlutterFirebaseMessagingReceiver caller=com.google.android.gms
+20:59:29.927  ARMED (app-process-start) for=08-31 21:00
+20:59:33.009  SmartPower: background->idle(3281ms) R(broadcast end …) adj=905
+21:00:00.318  ContentValues: result: 10376              ← one-off이 예약 정각에 발화
+21:00:00.391  FAIL src=one-off attempt=3 unreachable=true → 보류 큐 저장 + send_failed
+21:07:14.539  SM_S_DeviceIdleN: nowIdling=true          ← 기기가 딥 Doze 진입
+21:07:17.777  SmartPower: idle->background adj=0 R(service create … SystemJobService)
+21:07:18.350  ★ FIRED idle=false bucket=10               (예약 +7분 18초)
+21:07:18.623  HOLD started budget=90000ms
+21:07:19.272  OK src=periodic pending=true today=true key=2026-08-31_21:00 steps=10376
+21:07:19.489  OK src=alarm    pending=true today=true key=2026-08-31_21:00 steps=10376
+21:07:19.625  HOLD ended held=1003ms reason=heartbeat-done
+```
+
+**08-30 삼성(§7.1)과 같은 "워커 실패 → 알람 구제" 패턴이 MIUI에서 처음 관측됐다.**
+
+⚠️ **21:00 실패는 딥 Doze 탓이 아니다.** `nowIdling=true`가 21:07:14이므로 그때 기기는 아직
+Doze가 아니었다. 막은 것은 **프로세스 강등**이다 — FCM 브로드캐스트가 끝나고 3.3초 만에
+`SmartPower`가 `adj=905`로 내렸고, 27초 뒤 one-off이 뛰었을 때는 이미 방화벽 안쪽이었다.
+21:07에 `adj=0`으로 승격되면서 열렸다. (⚠️ 이 강등이 삼성보다 이례적으로 빠른지는 **같은
+조건의 대조군이 없어 단정할 수 없다.** AOSP도 브로드캐스트 후 강등한다.)
+
+★ **`pending=true`가 처음 실전 데이터를 냈다.** 1.3.2+57에서 메운 계측 구멍(§7.1)이 없었다면
+이 두 줄이 통째로 없어 08-30처럼 DNS 타임스탬프를 뒤져야 했다.
+
+#### 7.8.1 MIUI 개입 대조 — 이틀 사이에 전부 사라졌다
+
+| 개입 | 이전 관측 | 08-31 |
+|---|---|---|
+| `power_pending` +72시간 | 알람을 3일 뒤로 밀어 무력화(08-25 · 08-30 ×2) | **`--`** → 정상 발화 |
+| 프로세스 동결 | 창 유지자 `held`가 예산의 2~4배(187s / 377s / 395s) | **`held=1003ms`** |
+| `onStopped()` 강제 중단 | ~188초에 expedited job 중단 | 없음 |
+| `APP_STANDBY` 방화벽 | 창을 열어도 `effective=APP_STANDBY`로 전송 실패(08-28) | **열림**(`attempt=1` 성공) |
+| 버킷 억제 | 앱을 열어도 **RARE(40)** 유지(08-30) | **ACTIVE(10)** |
+
+삼성과 구분이 안 되는 날이었다.
+
+#### 7.8.2 ⚠️ "안 쓰는 날에 개입한다"는 가설은 **폐기한다** — 반례가 이미 있다
+
+08-31에 그 폰이 실제로 사용됐고(`steps=10376`) 버킷이 ACTIVE였기에 *"실제 사용이 MIUI
+절전 개입의 스위치"*라는 설명을 붙이고 싶어지지만, **08-30 21:35 관측이 그것을 반증한다** —
+그날도 앱을 여러 번 열었는데 버킷은 **RARE(40)**였고 `power_pending`은 `+3d23h`였다.
+사용이 풀지 못했다. 그러므로 변수는 "오늘 폰을 썼는가"가 아니다.
+
+**대신 측정 가능한 것은 이것이다: 지금까지 기록한 MIUI 증상이 전부 `power_pending`과
+동반 발생한다.** 질문을 다시 세운다:
+
+> ~~"MIUI는 언제 개입하나"~~ → **"`power_pending`이 단일 스위치인가, 무엇이 설정·해제하는가"**
+
+가설이 아니라 **명명된 측정이 딸린 미해결 질문**으로 둔다. 매일 같은 시각에 한 줄이면 된다:
+
+```bash
+adb -s "$S2" shell "dumpsys alarm | grep -A4 'anbucheck.live.HEARTBEAT_ALARM' \
+  | grep -E 'origWhen|power_pending|whenElapsed'; am get-standby-bucket kr.co.anbucheck.live"
+```
+
+`power_pending` · 버킷 · 그날 걸음수를 3~4일 나란히 적으면 **"사용이 푼다" / "스스로
+순환한다" / "제3의 요인"** 이 갈린다. ⚠️ 하루 좋았다고 §7.3의 "미확인" 판정을 흔들지 말 것.
+
+#### 7.8.3 ★ 딥 Doze 진입 **4초 뒤** 알람이 발화했다 (독립 관측, n=1)
+
+```
+21:07:14.539  nowIdling=true
+21:07:18.295  FIRED
+```
+
+딥 Doze로 들어가는 순간 시스템이 밀려 있던 allow-while-idle 알람을 방출한 것으로 보인다.
+§6의 *"`idle=false`로 찍힌 2회의 원인은 미확정"*과 연결될 수 있는 단서다(이날도 `idle=false`).
+
+⚠️ **§7.7의 `+29분` 퍼즐에 붙이지 말 것** — 다른 기기, 다른 오프셋(+7분 18초), 관측 1회다.
+
+#### 7.8.4 ⚠️ 보류 큐가 중복 전송된다 — 알려진 무해 동작, **고치지 않는다**
+
+```
+21:07:19.272  OK src=periodic pending=true …
+21:07:19.489  OK src=alarm    pending=true …     ← 217ms 뒤, 같은 payload
+```
+
+두 워커가 거의 동시에 보류 큐를 읽고 각자 전송했다. `_sendPendingInternal`은 **SQLite 락을
+잡지 않고** `clearPendingIfMatches`를 전송 *뒤에* 부르므로 그 사이에 둘 다 읽는다.
+
+**발생 조건은 "실패한 날 + 알람 구제"다** — 큐에 payload가 있어야 하고, 알람이 깨운
+프로세스에서 밀려 있던 워커들이 함께 방출돼야 한다. 즉 이 계층이 노리는 시나리오 그 자체이며
+**플랫폼과 무관하다**(삼성도 같은 조건이면 난다. 08-30 20:34가 그 상황이었으나 그날은
+계측이 없어 확인 불가).
+
+**고치지 않는 이유:**
+
+- 쓰기 경로는 이미 **3중 멱등**이다 — 서버 `(device_id, scheduled_key)` dedup,
+  `heartbeat_logs ON CONFLICT DO NOTHING`, `clearPendingIfMatches`. 보호자 알림도 1건만 간다.
+- 비용은 **이미 한 번 실패한 날에 POST 1회 추가**뿐이고 창 예산 안에서 200ms다.
+- ⚠️ **고치는 쪽이 더 위험하다.** `_sendPendingInternal`은 `execute()`의 recovery 분기에서
+  `_executeInternal`이 락을 쥔 채로도 불린다. 별도 키(`pending_<날짜>`)로 교착은 피해도
+  **전송 경로에 두 번째 락 프로토콜이 생기고**, 그걸 틀리면 실패 모드가 **"큐가 영영
+  안 비워짐" = 조용한 데이터 손실**이다. 중복 POST보다 훨씬 나쁘다.
+
+**되돌릴 조건**: `heartbeat_logs`에 실제로 중복 행이 쌓이는 것이 관측되면 그때 다시 본다.
+그전에는 이 함수를 건드리지 않는다.
