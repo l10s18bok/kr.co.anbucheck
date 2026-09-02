@@ -159,48 +159,50 @@ iOS는 산출물 질문 없이 ipa.
 
 App Store Connect는 **언어별 "이번 버전의 새로운 기능" 칸에 하나씩 직접 입력**한다(태그 일괄 붙여넣기 불가). 그래서 **언어 이름을 제목으로 단 개별 블록**으로 출력해 한 칸씩 복사하기 쉽게 만든다. **각 언어 4000자 이내.**
 
+⚠️ **언어 이름은 한국어로 적는다** — `Dutch`가 아니라 `네덜란드어`. 사용자가 한국어로 읽고 찾으므로 영문 언어명을 그대로 두지 않는다(뒤의 로케일 코드가 입력 칸을 식별해 주므로 영문명은 없어도 된다). ⚠️ 단 **Android 6-A의 `<en-US>` 같은 태그는 입력 형식 그 자체**이므로 절대 한국어로 바꾸지 않는다 — 바꾸면 Play Console이 파싱하지 못한다.
+
 ⚠️ **로케일 코드가 Play와 다르다** — 아래 App Store Connect 표기를 쓴다:
 
 ```
-■ English (U.S.) / en-US
+■ 영어(미국) / en-US
 
-■ Arabic / ar-SA
+■ 아랍어 / ar-SA
 
-■ German / de-DE
+■ 독일어 / de-DE
 
-■ Spanish (Spain) / es-ES
+■ 스페인어(스페인) / es-ES
 
-■ French / fr-FR
+■ 프랑스어 / fr-FR
 
-■ Hindi / hi
+■ 힌디어 / hi
 
-■ Indonesian / id
+■ 인도네시아어 / id
 
-■ Italian / it
+■ 이탈리아어 / it
 
-■ Japanese / ja
+■ 일본어 / ja
 
-■ Korean / ko
+■ 한국어 / ko
 
-■ Dutch / nl-NL
+■ 네덜란드어 / nl-NL
 
-■ Polish / pl
+■ 폴란드어 / pl
 
-■ Portuguese (Brazil) / pt-BR
+■ 포르투갈어(브라질) / pt-BR
 
-■ Russian / ru
+■ 러시아어 / ru
 
-■ Swedish / sv
+■ 스웨덴어 / sv
 
-■ Thai / th
+■ 태국어 / th
 
-■ Turkish / tr
+■ 터키어 / tr
 
-■ Vietnamese / vi
+■ 베트남어 / vi
 
-■ Chinese (Simplified) / zh-Hans
+■ 중국어 간체 / zh-Hans
 
-■ Chinese (Traditional) / zh-Hant
+■ 중국어 번체 / zh-Hant
 ```
 
 Play와 다른 코드: `hi-IN→hi`, `it-IT→it`, `ja-JP→ja`, `ko-KR→ko`, `pl-PL→pl`, `ru-RU→ru`, `sv-SE→sv`, `tr-TR→tr`, `ar→ar-SA`, `zh-CN→zh-Hans`, `zh-TW→zh-Hant`.
@@ -303,6 +305,7 @@ curl -s "$BASE/api/v1/app/version-check?platform=<platform>&current_version=<new
 ## 주의사항
 - 빌드번호(`+` 뒤 정수)는 매 업로드마다 이전보다 커야 한다 — 자동/수동 어느 쪽이든 +1 한다.
 - **둘 다**를 고르면 한 번 실행으로 Android·iOS를 모두 빌드한다. 버전은 3단계에서 **양쪽 동일**(pubspec 1회 수정) 또는 **플랫폼별 개별**(빌드 플래그 주입, pubspec 미수정) 중 선택한다 — 스토어 버전이 이미 어긋난 경우 개별을 쓴다.
+- iOS 출시 노트의 **언어 이름은 한국어**로 적는다(`네덜란드어 / nl-NL`). Android 6-A의 `<en-US>` 태그는 입력 형식이므로 그대로 둔다.
 - 출시 노트는 **빌드한 플랫폼의 포맷만** 낸다 — Play Console과 App Store Connect는 로케일 코드도 입력 방식도 다르다. Android 전용 개선을 iOS 노트에 넣지 말 것(iOS는 보호자 모드 전용이라 거짓이 된다).
 - **A 모드(1~7단계)는 서버 API를 호출하지 않는다.** 서버 접근은 8단계에서만, 그것도 별도 호출로 진입했을 때만 일어난다.
 - **서버 반영은 출시 확인 후** — 8-0 게이트가 이 분리의 존재 이유다. 빌드 직후 이어서 실행하지 말 것.
