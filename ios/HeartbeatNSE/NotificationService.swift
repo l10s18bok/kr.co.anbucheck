@@ -35,6 +35,9 @@ final class NotificationService: UNNotificationServiceExtension {
     /// CMPedometer는 강한 참조를 유지해야 콜백이 온다
     private let pedometer = CMPedometer()
 
+    /// 확장이 시작된 시각. 백필처럼 **부가적인** 작업을 예산 잔량으로 가르는 데 쓴다.
+    private let startedAt = Date()
+
     private static let overallBudget: TimeInterval = 20.0  // iOS 상한 30초보다 여유
     private static let netTimeout: TimeInterval = 10.0
     private static let stepTimeout: TimeInterval = 3.0
@@ -182,12 +185,27 @@ final class NotificationService: UNNotificationServiceExtension {
             self.diag += " steps=\(steps.map(String.init) ?? "?")"
             self.send(store: store, steps: steps) { ok in
                 HeartbeatStore.releaseSendLock()
-                if ok {
-                    HeartbeatStore.markSent(scheduledKey: store.scheduledKey)
-                    HeartbeatStore.clearTodayOfflineFallback()
-                    HeartbeatStore.rearmOfflineFallback(hour: store.hour, minute: store.minute)
+                guard ok else {
+                    self.finish(success: false, note: "send-failed")
+                    return
                 }
-                self.finish(success: ok, note: ok ? "sent" : "send-failed")
+                HeartbeatStore.markSent(scheduledKey: store.scheduledKey)
+                HeartbeatStore.clearTodayOfflineFallback()
+                HeartbeatStore.rearmOfflineFallback(hour: store.hour, minute: store.minute)
+
+                // ★ 오늘 안부가 나간 **뒤에만** 어제 걸음수를 채운다.
+                // ⚠️ `store`는 값 복사본이라 `markSent` 뒤에도 `yesterdayMissed`가
+                //    전송 이전 상태를 그대로 들고 있다(App Group을 다시 읽지 않는다).
+                // ⚠️ 예산이 절반 넘게 지났으면 건너뛴다 — 알림 배달이 우선이다.
+                //    건너뛰어도 다음 날 같은 판정이 다시 돌아 기회가 남는다.
+                let elapsed = Date().timeIntervalSince(self.startedAt)
+                guard store.yesterdayMissed, elapsed < Self.overallBudget / 2 else {
+                    self.finish(success: true, note: "sent")
+                    return
+                }
+                self.backfillYesterday(store: store) {
+                    self.finish(success: true, note: "sent")
+                }
             }
         }
     }
@@ -302,7 +320,15 @@ final class NotificationService: UNNotificationServiceExtension {
     // MARK: - 걸음수
 
     /// 실패해도 전송은 진행한다 — 걸음수는 부가 정보고, 안부 신호가 본질이다.
-    private func collectSteps(_ done: @escaping (Int?) -> Void) {
+    ///
+    /// 범위를 받지 않으면 **오늘 자정 ~ 지금**을 센다(정시 전송의 기본 동작).
+    /// ⚠️ `CMPedometer`는 **최근 7일**만 소급 조회할 수 있다 — 그보다 오래된 날은
+    /// 날짜를 알아도 값을 채울 수 없다(애플 문서).
+    private func collectSteps(
+        from: Date? = nil,
+        to: Date? = nil,
+        _ done: @escaping (Int?) -> Void
+    ) {
         guard CMPedometer.isStepCountingAvailable() else { done(nil); return }
 
         var finished = false
@@ -313,13 +339,93 @@ final class NotificationService: UNNotificationServiceExtension {
         }
         DispatchQueue.global().asyncAfter(deadline: .now() + Self.stepTimeout) { complete(nil) }
 
-        pedometer.queryPedometerData(from: Calendar.current.startOfDay(for: Date()), to: Date()) {
-            data, _ in
+        let start = from ?? Calendar.current.startOfDay(for: Date())
+        let end = to ?? Date()
+        pedometer.queryPedometerData(from: start, to: end) { data, _ in
             complete(data?.numberOfSteps.intValue)
         }
     }
 
+    // MARK: - 지난 걸음수 백필
+
+    /// 어제가 미전송이었으면 **어제 걸음수만** 뒤늦게 부친다 (2026-09-10 도입).
+    ///
+    /// **왜 필요한가.** 안드로이드는 전송에 실패한 날 걸음수를 보류 큐에 저장했다가
+    /// 다음 성공 전송 때 부쳐 그날 막대를 채운다. iOS에는 그 큐가 없다 — 미전송이
+    /// 발생하는 순간 앱도 확장도 돌지 않아 **저장할 주체가 없기** 때문이다.
+    /// 대신 `CMPedometer`가 최근 7일을 소급 조회할 수 있으므로 **사후에 만들어** 부친다.
+    ///
+    /// ⚠️ **어제 하루만 채운다.** 안드로이드 보류 큐도 1건만 보관해 마지막 실패일
+    /// 하나만 복구하므로, 이게 두 플랫폼을 같게 만드는 지점이다. 더 채우려면 POST가
+    /// 날짜 수만큼 늘어 확장 예산(20초)을 위협하고, 서버 쪽 경고 해소도 그만큼 반복된다.
+    ///
+    /// ⚠️ **정시 전송이 성공한 뒤에만 부른다.** 오늘 안부가 본질이고 어제 걸음수는
+    /// 부가 정보다 — 예산이 모자라면 버려야 하는 쪽은 후자다.
+    ///
+    /// ⚠️ **`battery_level`을 싣지 않는다.** 지금 배터리는 어제 값이 아니고, 서버는
+    /// 지난 기록에서도 `battery_level`을 갱신하므로(계약이 "마지막으로 수신한 heartbeat의
+    /// 배터리") 실으면 미수신 스케줄러의 배터리 분기 입력이 오염된다.
+    private func backfillYesterday(store: HeartbeatStore, done: @escaping () -> Void) {
+        let cal = Calendar.current
+        guard let yStart = cal.date(byAdding: .day, value: -1, to: cal.startOfDay(for: Date())),
+              let yEnd = cal.date(byAdding: .day, value: 1, to: yStart)
+        else { done(); return }
+
+        collectSteps(from: yStart, to: yEnd) { steps in
+            // ⚠️ **0보도 부친다.** 안드로이드는 보류 메모를 걸음수와 무관하게 그대로
+            // 부치므로 여기서만 걸러내면 두 플랫폼이 갈린다. 0보는 `suspicious=true`가
+            // 되어 서버가 이력만 적재하고 경고는 건드리지 않는다(지난 기록은 새 경고를
+            // 만들지도 않는다) — 그날 막대가 "값 없음"이 아니라 "0보"로 확정된다.
+            //
+            // 조회 **실패**(nil)는 다르다. 그건 "0보였다"가 아니라 "모른다"이므로
+            // 부치지 않는다 — 모르는 것을 0으로 단정하면 그날 막대가 거짓이 된다.
+            guard let steps = steps else {
+                HeartbeatStore.log("nse backfill-skip y=?")
+                done()
+                return
+            }
+            self.sendBackfill(store: store, steps: steps) { ok in
+                HeartbeatStore.log("nse backfill\(ok ? "" : "-failed") y=\(steps) key=\(store.yesterdayKey)")
+                done()
+            }
+        }
+    }
+
     // MARK: - 전송
+
+    /// 어제 걸음수 1건을 부친다. `<어제>_HH:mm` 키라 서버가 **지난 기록 보정**으로
+    /// 분류해 `last_seen`을 밀지 않고 당일 알림도 보내지 않는다(`heartbeat_keys.py`).
+    ///
+    /// `suspicious`는 걸음수로 정한다 — 안드로이드 보류 메모가 담고 있던 값과 같은
+    /// 의미다(0보 = 활동 증거 없음). 서버는 지난 기록으로 **새 경고를 만들지 않으므로**
+    /// `true`여도 보호자에게 알림이 가지 않고, `false`일 때만 지난 경고를 해소한다.
+    private func sendBackfill(store: HeartbeatStore, steps: Int, done: @escaping (Bool) -> Void) {
+        guard let url = URL(string: store.apiBase + "/api/v1/heartbeat") else { done(false); return }
+
+        let payload: [String: Any] = [
+            "device_id": store.deviceId,
+            "timestamp": ISO8601DateFormatter().string(from: Date()),
+            "scheduled_key": store.yesterdayKey,
+            "steps_delta": steps,
+            "suspicious": steps <= 0,
+            // ⚠️ battery_level 없음 — 지금 값은 어제 것이 아니다(위 주석 참조).
+        ]
+
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.setValue("Bearer " + store.deviceToken, forHTTPHeaderField: "Authorization")
+        req.httpBody = try? JSONSerialization.data(withJSONObject: payload)
+
+        let cfg = URLSessionConfiguration.ephemeral
+        cfg.timeoutIntervalForRequest = Self.netTimeout
+        cfg.timeoutIntervalForResource = Self.netTimeout
+
+        URLSession(configuration: cfg).dataTask(with: req) { _, resp, _ in
+            let code = (resp as? HTTPURLResponse)?.statusCode ?? -1
+            done((200...299).contains(code))
+        }.resume()
+    }
 
     /// `scheduledKey`를 밖에서 받는 이유: 정시 전송(`오늘_HH:mm`)과 회복 전송
     /// (`recovery_<오늘>`)이 같은 경로를 쓰되 **서버 분류만 다르기** 때문이다.

@@ -85,6 +85,23 @@ struct HeartbeatStore {
     /// `last_seen`·`steps_delta`도 밀지 않는다 → 그날 정시 트리거가 그대로 발사된다.
     var recoveryKey: String { "recovery_" + HeartbeatStore.today() }
 
+    /// **어제가 미전송이었는가** — 지난 걸음수 백필 대상 판정.
+    ///
+    /// `lastSentDate`가 어제보다 이전이면 어제는 안부가 나가지 않은 날이다.
+    /// ⚠️ **`markSent` 전에 캡처해야 한다** — 오늘 전송이 성공하면 `lastSentDate`가
+    /// 오늘로 바뀌어 이 판정이 깨진다.
+    ///
+    /// ⚠️ 빈 값이면 false(재설치 직후를 미전송으로 읽지 않는다).
+    var yesterdayMissed: Bool {
+        guard !lastSentDate.isEmpty else { return false }
+        return lastSentDate < HeartbeatStore.yesterday()
+    }
+
+    /// 어제 몫의 백필 키 — 서버가 "지난 기록 보정"으로 분류한다(`키 날짜 < 도착일`).
+    var yesterdayKey: String {
+        String(format: "%@_%02d:%02d", HeartbeatStore.yesterday(), hour, minute)
+    }
+
     /// 마지막 전송이 **오늘도 어제도 아닌** 2일 이상 미전송 갭인가.
     ///
     /// 안드로이드 `_isRecoveryPending`과 같은 판정이다. 어제 보냈으면(=하루치만
