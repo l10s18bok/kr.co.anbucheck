@@ -134,7 +134,7 @@ flowchart TD
     Classify -->|"키 날짜 < 도착일 (n일 기록이 n+1일에 도착)"| Backfill[지난 기록 보정 — 이력 전용<br/>battery_level만 갱신 — last_seen·걸음수 미갱신<br/>heartbeat_logs INSERT<br/>suspicious=false면 활성 경고 해소 + suspicious_count 리셋<br/>SOS는 해소 대상 제외<br/>auto_report·오늘 N보·suspicious 에스컬레이션<br/>·배터리 부족 Push 모두 생략]
     Backfill --> EndBF([완료 — 오늘의 안부 확인으로 세지 않음])
 
-    Classify -->|"recovery_날짜 (살아있음 신호)"| Liveness[경고 해소만 수행<br/>battery_level만 갱신 — last_seen·steps_delta 미갱신<br/>auto_report 미발송<br/>당일 첫 수신으로 세지 않음]
+    Classify -->|"recovery_날짜 (살아있음 신호)"| Liveness[이력 적재만 수행<br/>battery_level만 갱신 — last_seen·steps_delta 미갱신<br/>활성 경고 해소 안 함 — 사다리 유지<br/>auto_report 미발송<br/>당일 첫 수신으로 세지 않음]
     Liveness --> EndLV([완료 — 정시 전송이 오늘 몫을 담당])
 
     Classify -->|"오늘 키 · 미래 키(시계 오차) · 수동 보고"| UpdateLastSeen[last_seen 갱신]
@@ -177,6 +177,7 @@ flowchart TD
 - **판정은 `키 날짜 < 도착일`(엄격히 과거)이다.** `!=`가 아닌 이유: 도착일은 `devices.timezone`으로 계산하므로 기기 이동·시계 오차 시 키 날짜가 앞설 수 있고, 그때 오분류하면 정상 당일 heartbeat의 알림이 조용히 사라진다. 미래 날짜는 기존 동작(당일 처리)으로 흘려보낸다.
 - **`last_seen`은 "오늘의 안부가 확인된 시각"이라 당일 안부 확인 기록만 전진시킨다**(2026-09-09 수정): 지난 기록 보정과 살아있음 신호(`recovery_`)는 갱신하지 않는다. 갱신하면 `job_ios_heartbeat_trigger`(예약시각 정각)와 `job_heartbeat_check`(+2h)가 둘 다 `last_seen < 오늘 로컬 자정`으로 대상을 걸러 그 기기를 **그날 통째로 건너뛴다** — iOS는 서버 트리거가 유일한 자동 전송 경로라 그날 안부가 통째로 사라지고, 안드로이드는 실제 미수신인 날의 보호자 경고가 조용히 사라진다(2026-09-09 실증: 30일 중 13일 발생, iOS 3대 트리거 미발사 + 안드로이드 1대 이틀 연속 경고 소실). `steps_delta`도 같은 조건으로 묶는다 — recovery는 null을 실어 마지막으로 알던 값을 덮는다. 상세는 PRD-BackEnd §4.6.
 - **`battery_level`은 저장하되 알림만 생략한다**: 이 값은 표시 전용이 아니라 미수신 스케줄러가 '배터리 방전 추정' 분기에 읽는 입력이고, 계약이 "마지막으로 수신한 heartbeat의 배터리"라 저장을 건너뛰면 더 오래된 값이 남는다. "지금 부족하다"고 주장하는 Push만 막는다. 걸음수(`devices.steps_delta`)는 반대로 덮어쓰지 않는다.
+- **살아있음 신호(`recovery_`)는 활성 경고를 해소하지 않는다**(2026-09-10): recovery가 주장하는 것은 "기기가 켜져 있다"이지 "오늘의 안부가 확인됐다"가 아니다. 그런데 recovery는 예약시각 이전에만 발동하므로 **그날 미수신 체크(+2h)보다 항상 먼저** 온다 — 여기서 경고를 지우면 연속 미전송이어도 매일 "주의"만 반복되고 경고·긴급으로 올라가지 못한다(에스컬레이션 사다리 무력화). 대가는 "기기가 살아났는데 보호자 경고가 몇 시간 더 남는다"이며, 그날 정시 전송이 성공하면 그때 해소된다. **지난 기록 보정(backfill)은 계속 해소한다** — 그건 그 날 기기가 실제로 살아 있었다는 사후 증거다. `suspicious_count`도 같은 조건으로 묶인다(한쪽만 고치면 "경고는 caution인데 카운터는 0"이라는 불일치가 생겨 사다리가 여전히 안 올라간다).
 - **지난 기록은 경고를 새로 만들지 않는다**: 그 날의 미수신은 스케줄러가 이미 경고했으므로, 늦게 도착한 `suspicious=true`로 오늘 또 경고를 만들면 같은 날에 대해 두 번 경고하는 셈이 된다. 반대로 **경고 해소는 수행한다** — 늦게라도 도착했다는 것은 그 날 기기가 살아 있었다는 증거다.
 
 

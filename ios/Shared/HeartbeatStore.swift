@@ -33,6 +33,12 @@ struct HeartbeatStore {
         static let sentTime = "nse_sent_time"
         static let sentKey  = "nse_sent_key"
         static let lastLog  = "nse_last_log"
+        /// 회복 전송을 마지막으로 보낸 날짜(yyyy-MM-dd). **하루 1회 제한용.**
+        /// ⚠️ Dart의 `last_recovery_date`와는 **조율되지 않는다**(의도).
+        /// 같은 날 앱과 확장이 각각 `recovery_<날짜>`를 보낼 수 있으나 무해하다 —
+        /// 서버가 `ON CONFLICT DO NOTHING`으로 dedup하고, 두 번째 전송은 이미
+        /// 해소할 경고가 없어 아무 일도 일어나지 않는다.
+        static let recoveryDate = "nse_recovery_date"
         /// 최근 N건 롤링 기록. 케이블을 계속 물고 있지 않아도 며칠치를 몰아 읽기 위함.
         static let logRing  = "nse_log_ring"
         static let inflight = "nse_inflight"
@@ -74,6 +80,24 @@ struct HeartbeatStore {
         String(format: "%@_%02d:%02d", HeartbeatStore.today(), hour, minute)
     }
 
+    /// 회복 전송(살아있음 신호)의 키 — 서버 계약상 "recovery_YYYY-MM-DD".
+    /// 정시 키와 형식이 달라 서버가 **당일 안부 확인으로 세지 않고**,
+    /// `last_seen`·`steps_delta`도 밀지 않는다 → 그날 정시 트리거가 그대로 발사된다.
+    var recoveryKey: String { "recovery_" + HeartbeatStore.today() }
+
+    /// 마지막 전송이 **오늘도 어제도 아닌** 2일 이상 미전송 갭인가.
+    ///
+    /// 안드로이드 `_isRecoveryPending`과 같은 판정이다. 어제 보냈으면(=하루치만
+    /// 비었으면) 회복 전송을 하지 않는다 — 그 정도는 그날 정시 전송이 메운다.
+    ///
+    /// ⚠️ **빈 값이면 false다.** 재설치 직후에는 이 값이 없는데, 그걸 갭으로 읽으면
+    /// 첫 설치가 곧바로 회복 전송을 하게 된다. 안드로이드도 `lastDate.isNotEmpty`를
+    /// 요구한다.
+    var hasMultiDayGap: Bool {
+        guard !lastSentDate.isEmpty else { return false }
+        return lastSentDate != HeartbeatStore.today() && lastSentDate != HeartbeatStore.yesterday()
+    }
+
     static func load() -> HeartbeatStore? {
         guard let g = group,
               let token = g.string(forKey: K.deviceToken), !token.isEmpty,
@@ -98,6 +122,11 @@ struct HeartbeatStore {
     // MARK: - 날짜/문구/로그
 
     static func today() -> String { dayFormatter.string(from: Date()) }
+
+    static func yesterday() -> String {
+        guard let d = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else { return "" }
+        return dayFormatter.string(from: d)
+    }
 
     static let dayFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -156,6 +185,21 @@ struct HeartbeatStore {
         g.set(scheduledKey, forKey: K.sentKey)
         // 확장 자신도 같은 값을 보고 판단하므로 즉시 갱신한다(같은 날 재발송 차단)
         g.set(today(), forKey: K.lastDate)
+    }
+
+    /// 회복 전송을 오늘 이미 보냈는가. 하루 1회로 제한한다 —
+    /// 갭이 이어지는 동안 보호자 알림이 여러 건 도착하면 매번 보내게 되고,
+    /// 그건 서버에 같은 의미의 행을 쌓을 뿐이다.
+    static func recoverySentToday() -> Bool {
+        group?.string(forKey: K.recoveryDate) == today()
+    }
+
+    /// ⚠️ **`K.lastDate`는 건드리지 않는다.** 회복 전송은 정시 슬롯을 소비하지
+    /// 않으므로, 여기서 `lastDate`를 오늘로 찍으면 그날 예약시각 전송이 `already-sent`로
+    /// 스킵되어 **걸음수가 통째로 사라진다.** 안드로이드 `_executeRecovery`도
+    /// `lastRecoveryDate`만 저장하고 `lastHeartbeatDate`는 그대로 둔다.
+    static func markRecoverySent() {
+        group?.set(today(), forKey: K.recoveryDate)
     }
 
     // MARK: - 오프라인 폴백 알림

@@ -23,6 +23,11 @@ final class NotificationService: UNNotificationServiceExtension {
     /// 보호자 경고·리포트 문구가 "안부 전달 완료"로 덮이면 정보가 사라진다.
     private var piggyback = false
 
+    /// 회복 전송(살아있음 신호) 실행 중인가. true면 성공해도 **문구를 바꾸지 않는다** —
+    /// 회복 전송은 "오늘의 안부"가 아니라 "기기가 살아 있다"이므로, "안부 전달 완료"로
+    /// 바꾸면 거짓말이 된다(오늘 안부는 아직 안 나갔고, 폴백이 +45분 뒤에 그렇다고 알린다).
+    private var recoveryMode = false
+
     private var contentHandler: ((UNNotificationContent) -> Void)?
     private var original: UNNotificationContent?
     private var mutable: UNMutableNotificationContent?
@@ -162,7 +167,7 @@ final class NotificationService: UNNotificationServiceExtension {
         // 스킵되고, 그날 걸음수가 배달 시각까지만 기록된다. 상세는
         // HeartbeatStore.scheduledTimePassed 주석 참조.
         guard HeartbeatStore.scheduledTimePassed(hour: store.hour, minute: store.minute) else {
-            finish(success: false, note: "before-schedule")
+            attemptRecovery(store: store)
             return
         }
 
@@ -187,6 +192,78 @@ final class NotificationService: UNNotificationServiceExtension {
         }
     }
 
+    // MARK: - 회복 전송 (예약시각 이전)
+
+    /// 예약시각 이전에 도착한 푸시로 **살아있음 신호**를 보낸다 (2026-09-10 도입).
+    ///
+    /// **왜 필요한가.** 안드로이드는 워커가 예약시각 전에 발화하면 앱 실행 없이 회복
+    /// 전송을 보낸다. iOS에는 그 경로가 없어 **사람이 앱을 열어야만** 회복됐다 —
+    /// 그런데 이 앱의 대상자는 앱을 열지 않는 것이 정상 사용 패턴이다. 그래서 며칠씩
+    /// 망이 끊겼다 복구돼도, 그날 예약시각(저녁)까지 보호자는 아무 신호를 못 받았다.
+    ///
+    /// **왜 안전한가 — `recovery_<오늘>` 키가 열쇠다.** 이 분기가 원래 아무것도 하지
+    /// 않았던 이유는 `오늘_HH:mm` 키로 보내면 서버가 당일 안부로 귀속시켜 **그날 정시
+    /// 트리거가 미발사**되기 때문이다(자정 넘겨 배달된 어제 트리거 문제, §13.2 ①).
+    /// 회복 키는 서버가 `is_todays_report=False`로 분류해 `last_seen`·`steps_delta`를
+    /// 밀지 않으므로(2026-09-09 서버 수정) **정시 트리거가 그대로 발사된다.**
+    ///
+    /// ⚠️ **`scheduledTimePassed` 가드의 두 번째 목적은 그대로 살아 있다.**
+    /// 자정을 넘겨 배달된 어제 트리거는 `lastSentDate == 어제`라 갭 조건에 걸리지 않아
+    /// 예전처럼 원본만 통과한다. 갭이 2일 이상일 때만 회복 키로 나가고, 그 키는
+    /// 애초에 정시 슬롯을 소비할 수 없다. **가드가 약해졌다고 보고 되돌리지 말 것.**
+    private func attemptRecovery(store: HeartbeatStore) {
+        // 하루치만 비었으면 보내지 않는다 — 그건 그날 정시 전송이 메운다.
+        guard store.hasMultiDayGap else {
+            finish(success: false, note: "before-schedule")
+            return
+        }
+        guard !HeartbeatStore.recoverySentToday() else {
+            finish(success: false, note: "recovery-done")
+            return
+        }
+        guard HeartbeatStore.tryAcquireSendLock() else {
+            finish(success: false, note: "locked")
+            return
+        }
+
+        recoveryMode = true
+
+        collectSteps { steps in
+            self.diag += " steps=\(steps.map(String.init) ?? "?")"
+
+            // ⚠️ **세 신호는 `suspicious` 값이 아니라 "보낼지 말지"를 정한다.**
+            // 회복 전송이 서버에서 하는 일은 "이 기기 살아있다"를 알리는 것이고,
+            // 사람 흔적이 없으면 그 주장을 할 근거가 없다. 그때는 아무것도 보내지
+            // 않는 것이 맞다 — 경고가 유지되는 게 정확하고, 그날 정시 트리거는
+            // 여전히 살아 있으니 잃는 것도 없다.
+            //
+            // ⚠️ **`suspicious=true`인 회복 전송을 만들지 말 것.** 서버에서 회복 키는
+            // 지난 기록 보정과 달리 조기 반환을 타지 않아 suspicious 분기로 떨어지고,
+            // 거기서 caution/warning/urgent **에스컬레이션 푸시가 발송된다.**
+            // "기기가 돌아왔다"는 신호로 경고를 올리는 셈이라 설계가 뒤집힌다.
+            let alive = (steps ?? 0) > 0 || self.unlockedNow == true || self.fgToday
+            guard alive else {
+                HeartbeatStore.releaseSendLock()
+                self.finish(success: false, note: "recovery-no-signal")
+                return
+            }
+
+            // 걸음수는 싣지 않는다 — 안드로이드 `_executeRecovery`와 동일.
+            // 회복 전송은 그날의 걸음수를 확정하지 않으며, 그 일은 정시 전송이 한다.
+            self.send(store: store, steps: nil, scheduledKey: store.recoveryKey) { ok in
+                HeartbeatStore.releaseSendLock()
+                if ok {
+                    HeartbeatStore.markRecoverySent()
+                    // ⚠️ `markSent`도 `clearTodayOfflineFallback`도 부르지 않는다.
+                    // 오늘 안부는 아직 안 나갔으므로 오늘치 폴백은 **살아 있어야 한다.**
+                    // 롤링 창만 채워 둔다(§13.2 ③ — 확장이 돌 때마다 7일 창을 갱신).
+                    HeartbeatStore.rearmOfflineFallback(hour: store.hour, minute: store.minute)
+                }
+                self.finish(success: ok, note: ok ? "recovery" : "recovery-failed")
+            }
+        }
+    }
+
     /// iOS가 30초 예산 만료를 알릴 때 — 여기서 안 띄우면 원본이 표시된다(=현행 동작).
     override func serviceExtensionTimeWillExpire() {
         finish(success: false, note: "expired")
@@ -204,7 +281,7 @@ final class NotificationService: UNNotificationServiceExtension {
 
         // ⚠️ 피기백은 **성공해도 원본을 그대로 배달한다.** 이 알림의 본래 용도(보호자
         // 리포트·배터리 안내 등)가 우선이고, 안부 전송은 그 뒤에 조용히 얹힌 것이다.
-        guard success, !piggyback, let body = mutable else {
+        guard success, !piggyback, !recoveryMode, let body = mutable else {
             handler(original ?? UNMutableNotificationContent())
             return
         }
@@ -244,13 +321,20 @@ final class NotificationService: UNNotificationServiceExtension {
 
     // MARK: - 전송
 
-    private func send(store: HeartbeatStore, steps: Int?, done: @escaping (Bool) -> Void) {
+    /// `scheduledKey`를 밖에서 받는 이유: 정시 전송(`오늘_HH:mm`)과 회복 전송
+    /// (`recovery_<오늘>`)이 같은 경로를 쓰되 **서버 분류만 다르기** 때문이다.
+    private func send(
+        store: HeartbeatStore,
+        steps: Int?,
+        scheduledKey: String? = nil,
+        done: @escaping (Bool) -> Void
+    ) {
         guard let url = URL(string: store.apiBase + "/api/v1/heartbeat") else { done(false); return }
 
         var payload: [String: Any] = [
             "device_id": store.deviceId,
             "timestamp": ISO8601DateFormatter().string(from: Date()),
-            "scheduled_key": store.scheduledKey,
+            "scheduled_key": scheduledKey ?? store.scheduledKey,
             // ── suspicious 판정 (2026-09-01 도입) ─────────────────────
             // 안드로이드와 **같은 질문**을 한다: "전송 시점에 사람의 조작 흔적이 있는가".
             //   안드로이드  워커 발화 시점에 화면이 켜져 있었는가
@@ -267,7 +351,11 @@ final class NotificationService: UNNotificationServiceExtension {
             //
             // ⚠️ **되돌리려면 이 줄을 `false`로 바꾸면 된다.** iOS에 없던 경고 종류가
             // 생기는 변경이라, 보호자 경고가 과도해지면 그것이 즉시 복구 경로다.
-            "suspicious": !(
+            //
+            // ⚠️ **회복 전송은 항상 false다.** 위 attemptRecovery가 세 신호로 이미
+            // "사람 흔적이 있을 때만" 보내도록 걸렀고, 회복 키의 `suspicious=true`는
+            // 서버에서 정의되지 않은 경로다(에스컬레이션 푸시가 나간다).
+            "suspicious": recoveryMode ? false : !(
                 (steps ?? 0) > 0 || unlockedNow == true || fgToday
             ),
         ]
