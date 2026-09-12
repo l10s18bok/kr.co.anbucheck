@@ -13,6 +13,10 @@ heartbeat worker가 "예약시각에 왜 안 뛰는가"를 추적하며 실기�
 
 예약시각이 되어도 worker가 뛰지 않는 이유는 하나가 아니다. **아래 셋을 모두 통과해야** 실행된다.
 
+⚠️ **넷째 층이 있다 — §8.** `RUN_ANY_IN_BACKGROUND: ignore`(패키지 단위 백그라운드 차단)는
+아래 셋과 **독립**이며, 걸리면 이 셋이 전부 통과해도 `Ready: false`다. 게다가 **알람(0차)까지
+함께 막는다.** `Unsatisfied constraints:`가 비어 있는데 안 뛰면 §8부터 볼 것.
+
 | 층 | 무엇 | 이 기기 값 |
 |---|---|---|
 | ① Doze | 유지보수 창 밖에서는 job 자체가 실행 불가 | 딥 Doze 최소 보장 **30초**, 실측 창 **약 64초** |
@@ -218,6 +222,8 @@ max_non_active_job_batch_delay_ms = 1860000  ( = 31분 )
 **핵심 교훈**
 
 - "폰 화면을 켜면 뜬다"는 **반만 맞다.** Doze는 풀리지만 배칭 지연이 그 뒤에 또 붙는다(실측 2.5분~8분).
+- ⚠️ **위 표의 값은 전부 `RUN_ANY_IN_BACKGROUND`가 살아 있던 때의 것이다(§8.7).** 그 appop이
+  `ignore`면 화면을 켜도 **영원히 안 뜬다** — 2026-09-12에 1시간 39분 초과가 실측됐다.
 - **다른 앱 실행이 오히려 효과적인 트리거**다. 그쪽 job이 `min_ready_non_active_jobs_count=5`를 채워 우리 job까지 방출시킨다.
 - FCM 푸시 도착은 **망만 잠깐 열 뿐** Doze를 풀지 않는다 → job 발화 트리거가 되지 못한다.
 - ⚠️ **Doze를 깨는 것은 adb가 아니라 USB 충전이다** (2026-08-21 정정). 이전 판에는 "adb 접속은 Doze를 깨운다"라고 적혀 있었으나 상관을 인과로 오해한 것이다. Doze 진입 조건은 **화면 꺼짐 + 비충전 + 정지**이고 adb 프로토콜은 어디에도 없다. 위 08-17 20:16 관측도 USB 케이블의 **충전** 때문이었다.
@@ -1702,3 +1708,340 @@ adb -s "$S2" shell "dumpsys alarm | grep -A4 'anbucheck.live.HEARTBEAT_ALARM' \
 
 **되돌릴 조건**: `heartbeat_logs`에 실제로 중복 행이 쌓이는 것이 관측되면 그때 다시 본다.
 그전에는 이 함수를 건드리지 않는다.
+
+---
+
+## 8. ★★ `RUN_ANY_IN_BACKGROUND: ignore` — 0차와 1차를 **동시에** 막는 단일 게이트 (2026-09-12, SM-A325N)
+
+지금까지 이 문서는 발화를 막는 층을 셋으로 적어 왔다(§1: Doze / 쿼터 / 배칭). **넷째 층이 있다.**
+그리고 이것 하나가 **알람(0차)과 WorkManager job(1차)을 함께** 막는다. 실패가 계층별로 독립이라는
+설계 전제가 이 기기에서는 성립하지 않는다.
+
+### 8.1 증상 — 제약이 하나도 안 걸렸는데 `Ready: false`
+
+2026-09-12 21:11:59 KST 판독. 예약 19:30, **화면 켜짐·비충전·Doze 아님**(`mScreenOn=true
+mState=ACTIVE mLightState=ACTIVE`), 버킷 `20`(WORKING_SET).
+
+```
+JOB #u0a1227/618  Run time: earliest=-1h42m   ← 오늘 19:29:49 (one-off)
+JOB #u0a1227/617  Run time: earliest=-1h39m   ← 오늘 19:32:49 (periodic, +3분 offset)
+
+Unsatisfied constraints:                       ← ★ 비어 있다
+Satisfied: TIMING_DELAY DEVICE_NOT_DOZING TARE_WEALTH WITHIN_QUOTA UID_NOT_RESTRICTED
+Restricted due to: none.
+Implicit constraints:
+  readyNotDozing: true
+  readyNotRestrictedInBg: false                ← ★ 유일한 false
+  readyComponentEnabled: true
+Ready: false (job=false user=true !restricted=true !pending=true !active=true !backingup=true comp=true)
+```
+
+두 job 모두 실행 예정시각을 **1시간 40분** 넘겼고, `Unsatisfied constraints:`가 비어 있으며,
+`WITHIN_QUOTA`·`DEVICE_NOT_DOZING`·`UID_NOT_RESTRICTED`가 전부 충족인데 안 뛴다.
+`JobStatus.isReady()`에 남은 false 입력은 `mReadyNotRestrictedInBg` 하나뿐이다.
+
+⚠️ **`Ready:` 줄의 `!restricted=true`와 혼동하지 말 것.** 그건 `isJobRestricted()`
+(배터리 세이버 계열)라 서로 다른 플래그다. 모순이 아니다.
+
+### 8.2 원인 — 패키지 단위 백그라운드 실행 차단
+
+```bash
+$ cmd appops get kr.co.anbucheck.live RUN_ANY_IN_BACKGROUND
+RUN_ANY_IN_BACKGROUND: ignore        # 이 기기 기본값은 allow
+```
+
+`readyNotRestrictedInBg`의 출처가 이 appop이다. **Doze·버킷·쿼터·배칭과 독립된 별개 게이트**라
+화면을 켜도, 충전을 해도, 버킷이 ACTIVE여도 풀리지 않는다.
+
+**우리 앱만 지정된 게 아니다.** 같은 상태인 패키지가 이 기기에 약 **27개**다.
+
+```bash
+$ cmd appops query-op RUN_ANY_IN_BACKGROUND ignore
+# Chrome, Gmail, 구글지도, 네이버지도, 삼성 기본앱 다수, kr.co.anbucheck.live …
+```
+
+삼성 **"미사용 앱 절전"** 자동 편입으로 보인다. ⚠️ **설정 시점은 알 수 없다** —
+`dumpsys appops`에 이 op의 타임스탬프가 남지 않는다(uid 줄에 `foregroundOps`만 나온다).
+
+### 8.3 ★ 이것이 **어제 그 원인과 같다** — 게이트가 하나다
+
+`AppStateTrackerImpl`은 `areJobsRestricted()`·`areAlarmsRestricted()` 양쪽에서
+`RUN_ANY_IN_BACKGROUND`를 보기 **전에** 세 가지로 면제한다 — uid가 active이거나,
+전력절약 allowlist에 있거나, **temp-power-save allowlist에 있을 때**.
+
+그래서 09-10 21:30 로그가 그대로 A/B다.
+
+```
+21:30:00.666  temp-power-save whitelist for 11227 → true
+              reason=PUSH_MESSAGING <broadcast:u0a222:…c2dm.intent.RECEIVE, reason:high-prio FCM>
+21:30:00.735  HEARTBEAT_ALARM 배달 (origWhen=09-09 19:30)      ← +69ms  ← 0차가 풀림
+21:30:13.662  HeartbeatSend: OK src=periodic key=2026-09-10_19:30  ← +13초 ← 1차가 풀림
+```
+
+**임시 허용 하나가 알람과 job을 동시에 풀어 준다.** 하루 종일 막혀 있다가 FCM이 도착한
+그 순간 둘 다 나간다.
+
+→ 2026-09-11에 "억제 주체 **미확정**"으로 남겨 둔 자리가 이걸로 메워진다. 버킷 강등과
+백그라운드 제한이 **별개 후보가 아니라** `RUN_ANY_IN_BACKGROUND: ignore` 하나이며,
+FCM temp-allowlist 하나가 함께 푼다.
+
+⚠️ 다만 `areAlarmsRestricted` 경로가 09-04 전환의 원인이라는 것까지는 **단정하지 않는다.**
+확정된 것은 (a) 지금 job을 막는 것이 이 appop이고, (b) 알람 배달이 FCM 허용 순간에
+69ms로 붙는다는 두 가지 실측이다.
+
+### 8.4 ★★ 편입 시점을 날짜로 특정했다 — 기준은 알람이 아니라 **앱을 마지막으로 연 날**이다
+
+appop 자체에는 타임스탬프가 없지만 `dumpsys usagestats`가 **마지막 사용 시각**을 갖고 있다.
+
+```
+# 2026-09-12 21:29:25 KST 판독
+package=kr.co.anbucheck.live totalTimeUsed="2:06:31" appLaunchCount=55
+        lastTimeUsed="2026-09-01 17:36:13"           ← ★
+package=kr.co.anbucheck.live u=0 bucket=20 reason=f
+        used=+11d3h53m12s394ms                        ← 같은 값(21:29:25 − 11d3h53m12s = 09-01 17:36:13)
+        lastJob=+23h59m25s450ms                       ← job이 마지막으로 돈 것은 어제 21:30 (FCM 창)
+```
+
+이걸 알람 배달 전환표와 겹치면 간격이 그대로 나온다.
+
+| 날짜 | 알람 배달 | 마지막 사용(09-01 17:36) 이후 |
+|---|---|---|
+| 09-01 | +4분 48초 (정상) | — (그날 앱을 씀) |
+| 09-02 | +29분 18초 (정상) | 약 1일 |
+| 09-03 | +27분 43초 (정상) | 약 2일 |
+| **09-04** | **21:30 고정 시작** | **약 3일** ← 전환 |
+| 09-05 ~ 09-11 | 21:30 고정 | 3일 초과 |
+
+**즉 방아쇠는 "알람 계층을 넣은 날(08-22)"이 아니라 "앱을 마지막으로 연 날(09-01)"이고,
+그로부터 약 3일 뒤에 편입됐다.** 08-22~09-01 사이에 증상이 없었던 이유도 같은 것으로
+설명된다 — 그 기간에는 빌드 설치·검증·앱 실행이 계속 있어 **미사용 카운터가 매번
+리셋**됐다(`appLaunchCount=55`).
+
+⚠️ **"3일"은 이 기기 실측 간격이고, 삼성 문서로 확인한 임계값이 아니다.** 표본 1대·전환 1회.
+
+#### ⚠️⚠️ 이 테스트폰은 예외 상황이 아니라 **실사용자 조건을 정확히 재현한 것**이다
+
+이 앱의 대상자는 **앱을 열지 않는 것이 정상 사용 패턴**이다(그래서 "업데이트 후 앱을 한 번
+열어 주세요"를 요구하지 않는다는 규칙이 있다). 그렇다면 설치 후 며칠이 지난 삼성 대상자
+기기는 **전부 이 상태로 들어간다**는 뜻이 된다 — 테스트 환경의 인위적 조건이 아니다.
+
+⚠️ 다만 §7.2의 Galaxy S10 실사용자가 **9일 연속 +1~7분**이었던 것과 모순되지 않는다.
+그 기기는 그 기간 **배터리 최적화에서 제외**돼 있었고, 전력절약 allowlist는 §8.3의 면제
+경로 중 하나라 이 appop 판정에 도달하지 않는다. 두 관측은 오히려 정합적이다.
+
+**→ 확인해야 할 것**: 최적화 제외가 아닌 삼성 실사용자 기기에서 `fire_delay_min`이
+설치 며칠 뒤부터 +2h 근처(= 서버 푸시 시각)로 몰리는가. 서버 `heartbeat_logs`만으로
+adb 없이 답할 수 있다.
+
+### 8.4.1 알람 계층 때문이 아니다 — 통제 비교
+
+위 날짜 증거 외에 독립적인 반증이 셋 더 있다.
+
+| 근거 | 내용 |
+|---|---|
+| 같은 `ignore` 목록의 다른 앱들 | Chrome·Gmail·구글지도·네이버지도가 같은 상태다. **allow-while-idle 알람도 90초 expedited 창 유지자도 쓰지 않는다** |
+| 시점이 안 맞는다 | 알람 계층은 **08-22부터** 있었고 periodic은 08-27·08-31에 정상 발화했다(`src=periodic`) |
+| 전환 날짜 | 배달이 21:30에 못 박히기 시작한 09-04와 일치한다 |
+
+⚠️ 알람 계층이 "선정"에 기여했을 가능성까지 완전히 배제하지는 못한다(삼성 기기 케어는
+백그라운드 배터리 사용도 본다). 다만 §8.4의 날짜 증거상 **지배 변수는 미사용 일수**이고,
+알람이 원인이라면 08-22~09-01 열흘 동안 증상이 없었던 것이 설명되지 않는다.
+
+### 8.5 ⚠️ 이건 어제보다 나쁘다 — 1차가 통째로 없다
+
+문서 곳곳에 적힌 *"0차가 실패해도 최악이 기존 동작(1~3차)"*이라는 전제가 **이 기기에서는
+거짓**이다.
+
+```
+0차 알람   → 막힘 (배달이 21:30 FCM까지 밀림)
+1차 one-off → 막힘 (618, Ready:false)
+1차 periodic → 막힘 (617, Ready:false)
+2차 앱 열기 → 없음 (대상자는 앱을 열지 않는다 — 정상 사용 패턴)
+3차 서버 푸시 subject_safety_net → ★ 0차·1차를 동시에 깨우는 유일한 트리거
+```
+
+즉 `subject_safety_net`은 문서에 적힌 **"LAST-RESORT"가 아니라 SOLE-RESORT**다.
+그 푸시가 실패하면(망·FCM 토큰 만료·스케줄러 tick 누락 §13.2②) 그날은 아무것도 돌지 않는다.
+
+### 8.6 진단 절차
+
+```bash
+# ① job이 왜 안 뛰는가 — Unsatisfied가 비어 있는데 Ready:false면 여기를 본다
+adb -s "$SER" shell "dumpsys jobscheduler | grep -A45 'JOB #u0a1227' \
+  | grep -E 'Run time|Unsatisfied|Satisfied|Restricted due|readyNot|Ready:'"
+
+# ② 확정 — 이 한 줄이 판정자다
+adb -s "$SER" shell "cmd appops get kr.co.anbucheck.live RUN_ANY_IN_BACKGROUND"
+#   ignore → 차단 / allow(또는 기본값) → 다른 층을 보라
+
+# ③ 우리 앱만인지 기기 전체 정책인지
+adb -s "$SER" shell "cmd appops query-op RUN_ANY_IN_BACKGROUND ignore"
+
+# ④ 임시 허용 이력 (FCM이 문을 연 순간)
+adb -s "$SER" shell "dumpsys netpolicy | grep -i 'temp-power-save'"
+
+# ⑤ ★ dumpsys 없이도 잡힌다 — 커널이 사유를 문자열로 말해 준다
+adb -s "$SER" shell "logcat -d | grep 'background restricted'"
+#   Killing NNNN:kr.co.anbucheck.live (adj 915): cached idle & background restricted
+```
+
+⚠️ **`cmd appops set ... allow`로 확인하지 말 것.** 밀려 있던 job 2개가 즉시 실행돼
+**오늘이 수신일로 확정되고 그날 21:30 안전망 푸시 관측이 사라진다.** 같은 이유로
+`cmd jobscheduler run -f`도 금지다. 증거는 위 네 줄로 이미 충분하다.
+
+### 8.7 ⚠️ §2의 "화면 켜면 2분50초~9분"은 **조건부 값이다**
+
+§2 표의 `08-16 18:08(+8분43초)` / `08-18 15:07(+2분50초)` / `08-18 15:22(+9분)` 세 행은
+**`RUN_ANY_IN_BACKGROUND`가 살아 있던 때**의 값이다. 배칭 모델(§1③)은 화면 켠 뒤
+최대 31분 내 발화를 예측하는데, 이 날은 `mState=ACTIVE`에 전 제약 충족인 채로
+**1시간 39분이 지나도 안 떴다.**
+
+→ §7.2의 *"최적화 제외 여부를 명시하지 않은 발화 시각은 비교 불가"*와 같은 종류의 규칙이
+하나 더 생긴다:
+
+> **`RUN_ANY_IN_BACKGROUND` 상태를 명시하지 않은 발화 시각은 다른 날짜와 비교할 수 없다.**
+> `mState`·버킷·쿼터가 전부 정상이어도 이 appop 하나로 결과가 뒤집힌다.
+
+### 8.8 미확인으로 남는 것
+
+- ~~이 appop이 언제 설정되는가~~ → **§8.4에서 해소.** 마지막 앱 사용(09-01 17:36) +약 3일.
+  단 임계값 3일은 이 기기 실측이며 삼성 문서로 확인한 값이 아니다(n=1).
+- ~~해제 조건~~ → **§8.10에서 해소.** 앱을 포그라운드로 열면 **12초 안에** op 항목이 삭제되어
+  기본값 `allow`로 돌아간다. 편입/해제가 대칭이다
+- 최적화 제외가 아닌 **삼성 실사용자**에게도 같은 일이 일어나는가 (§8.4 마지막 항목)
+- `areAlarmsRestricted` 경로가 09-04 알람 전환의 직접 원인인지 (정황 일치, 미확정)
+
+### 8.9 ★★ 실시간 확인 — 푸시가 문을 여는 20초 안에 전부 일어난다 (2026-09-12 21:30, 예측 후 관측)
+
+§8.3의 A/B(09-10 사후 로그)를 **예측을 먼저 적어 두고** 같은 날 저녁에 재현했다. 21:11에
+"0차·1차가 다 막혀 있고 21:30 서버 푸시만이 유일한 트리거"라고 판정했고, 21:30에 그대로 일어났다.
+
+```
+21:30:00.468  temp-power-save whitelist for 11227 → true
+              reason=PUSH_MESSAGING <broadcast:u0a222:…c2dm.intent.RECEIVE, reason:high-prio FCM>
+21:30:00.553  ★ HEARTBEAT_ALARM 배달  (origWhen=오늘 19:30)   ← 허용 +85ms / 예약 +2시간 0분
+21:30:01.8    안전망 알림 표시 (tag=anbu_safety_net)
+21:30:05.9    앱 프로세스 시작
+21:30:06.7    JobScheduler: Job didn't exist in JobStore: #618, #620  ← 밀려 있던 job 방출
+21:30:07.945  ★ HeartbeatSend: OK src=periodic attempt=1 key=2026-09-12_19:30 steps=0
+21:30:08.220  HOLD ended held=7022ms reason=heartbeat-done
+21:30:20.779  temp-power-save → false                          ← 창 20.3초
+21:31:24.572  ★ Killing 14221:kr.co.anbucheck.live (adj 915):
+              **cached idle & background restricted**          ← 시스템이 사유를 직접 말한다
+```
+
+**얻은 것 넷**
+
+1. **하루를 통째로 막던 것이 20초 만에 전부 풀린다.** 알람(0차)·job(1차)·전송이 같은 창 안에서
+   순서대로 나갔다. 게이트가 하나라는 §8.3의 판정이 **n=2**가 됐다.
+2. **알람 지각이 정확히 +2시간 0분**이다 — 예약 19:30, 배달 21:30:00.553. 이건 알람 정책의
+   지연이 아니라 **서버 미수신 체크(+2h) 시각에 붙은 것**이다. "알람 지연 +2시간"으로 읽으면
+   원인을 통째로 오진한다.
+3. **★ 커널이 사유를 문자열로 말해 준다** — `Killing … (adj 915): cached idle & background
+   restricted`. `dumpsys`를 읽을 수 없는 상황에서도 이 한 줄이 같은 판정을 준다.
+   `logcat | grep 'background restricted'`를 진단 절차(§8.6)에 추가할 것.
+4. **재무장·재등록은 정상이다.** 전송 성공 후 one-off `#624`가 내일 19:30(+21h56m)으로 재등록됐고,
+   periodic `#625`는 15분 주기 그대로 살아남았다(실행 중인 워커가 periodic 자신이라 `schedule()`이
+   자기 재등록을 건너뛴 설계대로 — 2026-08-25 부수 관측과 동일). **둘 다 `readyNotRestrictedInBg:
+   false`라 내일도 같은 일이 반복된다.**
+
+⚠️ **`cmd appops get`이 여전히 `ignore`다.** 푸시가 연 창은 임시 면제일 뿐 appop을 바꾸지 않는다.
+
+⚠️ **`steps=0`으로 나갔다 → `suspicious=true` → 보호자에게 주의 등급이 간다.** 책상에 방치된
+테스트폰의 구조적 결과이며(§7.7과 동일) 이 게이트와는 별개 사안이다.
+
+### 8.10 ★★ 해제 조건 확정 — 앱을 한 번 열면 **12초 안에** 풀린다 (2026-09-12 21:41)
+
+§8.8의 미해결 항목을 실측으로 닫았다. **편입과 해제가 대칭이다 — 둘 다 "사용자가 앱을
+포그라운드로 여는가" 하나로 결정된다.**
+
+```
+21:40:44  BEFORE   appop=ignore  bucket=20(reason=f)  used=+11d4h4m  jobs readyNotRestrictedInBg=false ×2
+~21:40:56          사용자가 앱 아이콘 탭 (폰에서 직접)
+21:41:08  AFTER    appop 항목 소멸  bucket=10  used=+12s  jobs readyNotRestrictedInBg=true ×3
+21:41:43           query-op ignore 목록: 27개 → 26개 (우리 앱만 빠짐)
+                   usagestats: reason=f → reason=u-si
+```
+
+**해제는 `allow`로 바꾸는 게 아니라 패키지 op 항목을 지우는 방식이다.**
+
+```bash
+$ cmd appops get kr.co.anbucheck.live RUN_ANY_IN_BACKGROUND
+No operations.          ← 패키지별 op가 없다
+Default mode: allow     ← 기본값으로 되돌아감
+```
+
+⚠️ **진단 스크립트를 짤 때 이 출력 형태를 반드시 감안할 것.** 차단 상태는 한 줄
+(`RUN_ANY_IN_BACKGROUND: ignore`)인데 해제 상태는 **두 줄이고 op 이름이 아예 안 나온다.**
+`awk '{print $2}'` 같은 단순 파서는 여기서 깨진다(2026-09-12에 실제로 깨졌다 —
+`appop=operations.` / `mode:`로 찍혀 나왔다). 판정은 `grep -c 'RUN_ANY_IN_BACKGROUND: ignore'`나
+`query-op` 목록 포함 여부로 하는 편이 안전하다.
+
+#### ⚠️⚠️ 그래서 이 게이트는 **우리 앱의 주 대상 사용자에게만 선택적으로 걸린다**
+
+해제 조건이 "포그라운드 실행"인데, §8.9에서 **프로세스 실행만으로는 풀리지 않음**이
+9일치로 확인됐다(09-04~09-12 매일 FCM으로 프로세스가 떴는데 계속 `ignore`).
+
+| 사용자 유형 | 앱을 여는가 | 결과 |
+|---|---|---|
+| 순수 S 대상자 (고령·주 대상) | **열지 않는 것이 정상** | 3일 뒤 편입 → **빠져나올 계기가 구조적으로 없다** |
+| G+S 보호자 | 대시보드를 보려고 자주 엶 | 편입돼도 곧 풀린다 |
+| 배터리 최적화 제외 기기 | 무관 | 애초에 면제 경로(§8.3)라 도달 안 함 |
+
+**즉 가장 취약한 사용자에게만, 영구적으로 걸린다.** 그리고 우리는 "앱을 한 번 열어 주세요"를
+요구하지 않기로 돼 있으므로(그 규칙의 근거가 바로 이 사용자층이다) **앱 실행은 해법이 아니다.**
+지금 필요한 것은 "어떻게 열게 할까"가 아니라 **"이 상태에서도 안부가 나가는가"**이며,
+현재 답은 §8.5 — 3차 서버 푸시 하나뿐이다.
+
+#### 이 조작이 관측에 남긴 것
+
+- **차단 상태 관측 지점을 잃었다.** 되돌리려면 다시 3일쯤 손대지 않아야 한다(편입이 사용
+  기반임이 §8.4에서 확인됐으므로 재진입은 가능하다).
+- **09-10의 강제 버킷 교란(`reason=f`)이 씻겼다** — 지금은 `reason=u-si`. 부수 이득.
+- **내일(09-13) 19:30이 대조군이 된다.** 단 ⚠️ **완전한 통제는 아니다** — appop만 바뀐 게
+  아니라 버킷도 10(ACTIVE)으로 리셋됐다. 내일 저녁이면 20~30으로 내려가 차단 기간(20)과
+  얼추 맞겠지만, §7.7이 경고한 "변수 2개" 상황이므로 결과를 단정적으로 읽지 말 것.
+  기대값은 알람 배달 **+7~30분**(§6 표)이고, 21:30에 붙으면 판정이 뒤집힌다.
+
+#### 8.10.1 ⚠️ 내일 대조군의 변수는 **셋**이다 — 결과를 단정적으로 읽지 말 것
+
+09-13 19:30을 §8.4의 대조군으로 쓸 때, 바뀐 것이 appop 하나가 아니다.
+
+| 변수 | 차단 기간(09-04~09-12) | 09-13 |
+|---|---|---|
+| `RUN_ANY_IN_BACKGROUND` | `ignore` | **`allow`(기본값)** |
+| standby 버킷 | 20 (09-10 이후 `reason=f` 강제) | 10 → 저녁엔 20~30으로 자연 감쇠 예상 |
+| **알람 무장 경로** | 9일 내내 **백그라운드 프로세스**(FCM·워커)에서 무장 | **포그라운드에서 무장**(앱을 열며 `armNextDaily` + `_syncScheduleFromServer → schedule()`이 돌았다) |
+
+세 번째는 `armNextDaily`가 idempotent라 실질 영향이 없어 보이지만, 지금까지 관측 전부와
+조건이 다른 것은 사실이다. **결과를 적을 때 세 변수를 함께 남길 것** — §7.7이 "변수 2개"로
+판정을 못 가른 것과 같은 함정이다.
+
+기대값: 알람 배달 **+7~30분**(§6). 21:30에 붙으면 판정이 뒤집힌다.
+
+#### 8.10.2 ★ 이 게이트가 실제로 만든 피해 — 매일 미수신 판정이 **안부보다 7초 먼저** 났다
+
+`subject_safety_net`을 쏘는 tick이 **보호자 경고를 만드는 바로 그 tick**이다
+(`anbucheck-server/services/scheduler.py::_process_missed_heartbeat` — 대상자 푸시가
+보호자 게이트 **앞**에 놓여 있을 뿐 같은 함수다. 코드로 확인).
+
+```
+21:30:00  미수신 판정 → subject_safety_net + 보호자 경고 생성/에스컬레이션
+21:30:07  heartbeat 도착 (key=2026-09-12_19:30)
+```
+
+**09-04부터 9일 연속, 기기가 멀쩡한데 매일 미수신 구간에 들어가 있었다.**
+
+⚠️ §6의 규칙대로 이걸 "거짓 경고"라 부르지 않는다 — 21:30:00 시점엔 실제로 안 왔다.
+요점은 다른 데 있다: **0차 계층의 존재 근거가 "정상 기기가 미수신으로 판정되는 구간에
+들어가지 않게 한다"(§6)인데, 이 게이트가 그 근거를 통째로 무효화한다.** 0차를 넣기 전보다
+나빠진 게 아니라 **0차가 없는 것과 같아진다.**
+
+⚠️ 그 경고는 해소되지도 않는다 — 7초 뒤 도착한 heartbeat가 `suspicious=true`면(걸음수 0)
+해소가 아니라 **하향 + `suspicious_count` 에스컬레이션**으로 간다(차트 2). §8.9의 `steps=0`과
+**원인이 둘**이므로 섞어 읽지 말 것.
+
+⚠️ **미확인 — 세면 숫자가 나온다.** `alerts`·`guardian_notifications`의 09-04~09-12 실제 행
+수는 확인하지 못했다(로컬에 운영 DB 접속 수단이 없고 admin 진단 엔드포인트는 iOS 트리거용
+하나뿐이다). 경로는 코드로 확정했고 활성 보호자 존재는 08-31 관측으로 확인됐다.
+→ **Android용 읽기 전용 admin 진단 엔드포인트**가 있으면 이런 질문이 그 자리에서 끝난다(미착수 TODO).

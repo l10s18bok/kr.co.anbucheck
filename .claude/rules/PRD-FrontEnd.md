@@ -332,6 +332,99 @@ iOS판이며, 앱을 열지 않아도 갭이 끊긴다. 조건은 `갭 2일+ && 
 **미수신 체크(+2h)의 `subject_safety_net`은 Android 한정을 유지한다** — iOS는 정각 트리거가
 실패해도 폴백 문구가 이미 표시돼 있어, +2h에 또 보내면 같은 날 알림이 2개가 된다.
 
+#### 2.2.2 ⚠️ Android — 계층 독립성이 깨지는 조건 (2026-09-12 실측)
+
+이 문서 곳곳에 적힌 **"0차가 실패해도 최악이 기존 동작(1~3차)"**이라는 전제가
+**성립하지 않는 기기 상태가 있다.** 0차(알람)와 1차(WorkManager one-off·periodic)를
+**하나의 게이트가 동시에** 막는다.
+
+**게이트**: `RUN_ANY_IN_BACKGROUND` 앱옵이 `ignore`로 설정된 상태(= 패키지 단위 백그라운드
+실행 차단). Doze·standby 버킷·JobScheduler 쿼터·배칭과 **독립된 별개 층**이라, 그 넷이 전부
+통과해도 job은 `Ready: false`가 되고 알람 배달도 밀린다. 화면을 켜도 충전을 해도 풀리지 않는다.
+
+```
+0차 알람      ✕     ┐
+1차 one-off   ✕     ├── 한 게이트가 동시에 막는다
+1차 periodic  ✕     ┘
+2차 앱 열기   —     대상자는 앱을 열지 않는 것이 정상 사용 패턴
+3차 서버 푸시 ★     0차·1차를 동시에 깨우는 유일한 트리거
+```
+
+고우선순위 FCM이 도착하면 시스템이 ~20초짜리 임시 허용(temp-power-save allowlist)을 주고,
+**그 한 창에서 알람 배달·job 실행·전송이 순서대로 전부 일어난다**(실측: 허용 +85ms에 알람 배달,
++7.5초에 전송 성공, +20.3초에 창 종료).
+
+**진입·해제 조건 — 둘 다 "사용자가 앱을 포그라운드로 여는가" 하나다 (실측)**
+
+| | 조건 | 실측 |
+|---|---|---|
+| 진입 | 마지막 **포그라운드 실행** 이후 약 3일 경과 | 09-01 17:36 마지막 실행 → 09-04 저녁 전환 |
+| 해제 | 앱을 포그라운드로 **1회 실행** | 실행 후 **12초 이내** 앱옵 항목 삭제 → 기본값 `allow` |
+| 무관 | **프로세스 실행은 어느 쪽에도 해당하지 않는다** | 9일간 매일 FCM으로 프로세스가 떴으나 계속 차단 |
+
+⚠️⚠️ **그래서 이 게이트는 이 앱의 주 대상 사용자에게만 선택적으로, **사실상 영구히**(프로세스 실행으로는 안 풀린다 — 관측 9일) 걸린다.**
+
+| 사용자 | 앱을 여는가 | 결과 |
+|---|---|---|
+| **순수 대상자(S)** — 고령 단독 사용자 | **열지 않는 것이 정상** | 설치 며칠 뒤 진입 → **빠져나올 계기가 구조적으로 없다** |
+| G+S 보호자 | 대시보드를 보려고 자주 연다 | 진입해도 곧 해제된다 |
+| 배터리 최적화 제외 기기 | 무관 | 앱옵 판정 전에 면제된다 |
+
+**⚠️⚠️ 이건 가정이 아니라 이미 매일 일어나고 있는 피해다**
+
+`subject_safety_net`을 쏘는 tick이 **보호자 경고를 만드는 바로 그 tick**이다 — 같은 함수
+(`services/scheduler.py::_process_missed_heartbeat`)이고, 대상자 푸시가 보호자 게이트 **앞**에
+놓여 있을 뿐이다.
+
+```
+21:30:00  서버 미수신 판정 → subject_safety_net 발송 + 보호자 경고 생성/에스컬레이션
+21:30:07  heartbeat 도착 (key=2026-09-12_19:30)                      ← 7초 뒤
+```
+
+**기기가 멀쩡하고 안부가 7초 뒤에 도착하는데도 매일 "미수신" 판정이 먼저 난다.** 09-04부터
+9일 연속이다.
+
+⚠️ 이걸 "거짓 경고"라 부르지 말 것 — 21:30:00 시점에 실제로 안 온 것이 맞으므로 경고가
+주장하는 명제는 참이다. 문제는 다른 데 있다: **0차 계층의 존재 근거가 "정상 기기가 미수신으로
+판정되는 구간에 들어가지 않게 한다"인데, 이 게이트가 그 근거를 통째로 무효화한다.** 0차를
+넣기 전보다 나빠진 것이 아니라 **0차가 없는 것과 같아진다.**
+
+⚠️ 그리고 그 경고가 해소되지도 않는다 — 7초 뒤 도착하는 heartbeat가 `suspicious=true`면
+(걸음수 0인 날) 경고 해소가 아니라 **하향 + `suspicious_count` 에스컬레이션** 경로를 탄다
+(heartbeat_flowchart 차트 2). 원인이 둘(미수신 판정 + suspicious)이므로 따로 읽을 것.
+
+⚠️ **미확인**: `alerts`·`guardian_notifications`의 실제 행 수는 세어 보지 않았다(로컬에 운영
+DB 접속 수단이 없다). 발생 경로는 코드로 확정했고, 이 기기에 활성 보호자가 있다는 것은
+2026-08-31 관측으로 확인됐다. **세어 보면 피해 규모가 숫자로 나온다.**
+
+**이 절이 확정하는 제품 규칙 4가지**
+
+1. **`subject_safety_net`을 "LAST-RESORT"로만 서술하지 말 것.** 이 상태의 기기에서는
+   **그날 안부를 내보내는 유일한 경로**다. 그 푸시가 실패하면(망·FCM 토큰 만료·스케줄러
+   tick 누락) 그날은 0차·1차가 통째로 돌지 않는다. 서버 미수신 체크의 신뢰성 요구 수준이
+   "보호자 경고용"이 아니라 **"전송 트리거용"**으로 올라간다.
+2. **"앱을 한 번 열어 주세요"는 해법이 아니다.** 해제 조건이 포그라운드 실행인 것은
+   맞지만, 이 앱은 **앱을 열지 않는 사용자를 전제로 설계**됐고 그 요구를 하지 않기로 돼
+   있다(§2.2 "업데이트 후 사용자 행동 요구 금지"와 같은 근거). 이 발견을 사용자 안내로
+   전환하지 말 것.
+3. **배터리 최적화 관련 UI·권한을 추가하는 근거로 쓰지 말 것.** `REQUEST_IGNORE_BATTERY_
+   OPTIMIZATIONS` 미사용 방침(§2.2 "한계 및 대응")은 그대로다. 이 앱옵은 **측정된 사실로
+   보고**하는 대상이지 사용자에게 끄라고 안내하는 대상이 아니다.
+4. **periodic 15분 폴링을 약화하는 근거로 쓰지 말 것**(§2.2 "금지된 최적화 방향"). 폴링이
+   막히는 것은 폴링 설계의 결함이 아니라 이 외부 게이트 때문이며, 게이트가 없는 기기에서는
+   폴링이 정상적으로 회복 경로로 기능한다.
+
+**측정·진단 절차와 원시 로그**는 `.claude/rules/android_scheduling_field_notes.md` §8에 있다
+(증상 판독, `cmd appops` 출력 형태 주의, `logcat | grep 'background restricted'` 단축 판정).
+⚠️ 표본은 삼성 SM-A325N **1대**이고 전환 관측도 1회다. 앱옵을 설정하는 주체는 삼성
+"미사용 앱 절전"으로 보이나 설정 시점 타임스탬프가 남지 않아 **간접 증거(날짜 간격)**로만
+확인했다.
+
+**미확인 — 확인 방법은 서버 데이터로 공짜다**: 최적화 제외가 아닌 삼성 실사용자 기기에서
+`heartbeat_logs`의 `fire_delay_min`이 설치 며칠 뒤부터 예약시각 +2h 근처(= 서버 푸시 시각)로
+몰리는가. 몰린다면 이 현상이 테스트 기기 1대의 특성이 아니라 **실사용자 다수에게 이미
+일어나고 있다**는 뜻이다.
+
 #### Heartbeat 시각 설정
 
 **기본값:** 오후 18:00 (기기 로컬 시간대 기준, 모든 국가 공통)
@@ -410,12 +503,12 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 
 | 계층 | 방식 | 실행 조건 | 특성 |
 |------|------|-----------|------|
-| **0차 (정시, Android)** | `AlarmManager.setAndAllowWhileIdle` + expedited 창 유지자 | 예약시각 (+0~60분) | **딥 Doze를 관통하는 유일한 경로.** JobScheduler는 유지보수 창 밖에서 아예 실행되지 못하고 창 간격이 1h→2h→4h→6h로 배증해 **지연에 상한이 없다**(실측 +1h27m~+2h52m, 그중 이틀은 서버 미수신 체크 +2h를 넘겨 **기기가 멀쩡한데도 미수신 판정 구간에 들어갔다** — 그 경고 자체는 "오늘 안부 확인이 없습니다"가 참이므로 거짓이 아니다). allow-while-idle 알람은 창을 기다리지 않고 발화하며 **상한이 60분으로 보장**된다(실측 +7~32분, n=6). ⚠️ **알람 자체는 네트워크를 못 쓴다** — temp power-save allowlist를 받지 못해 `allowed=NONE`으로 DNS가 즉시 거부된다. **방화벽을 여는 것은 expedited job**이고(`allowed=FOREGROUND`), **창 길이는 그 job의 수명과 같다**. 그래서 전송을 expedited job 안에서 하려 하면 안 된다 — 알람이 깨운 프로세스에서 워커가 3개 뜨고 락을 잡아 전송하는 워커가 expedited가 아닐 수 있어 창이 먼저 닫힌다(2026-08-23 실측 실패). **`HeartbeatWindowHolderWorker`는 아무 일도 하지 않고 창만 최대 90초 유지**하며, 전송은 평소의 `BackgroundWorker`가 그 창 안에서 한다. ⚠️ `setExactAndAllowWhileIdle`은 `SCHEDULE_EXACT_ALARM`(Android 14+ 기본 거부 + Play 정책상 알람시계·캘린더 전용)을 요구해 쓸 수 없다 — **정시 발화는 불가능하고 "1시간 이내"가 정확한 표현**이다. ⚠️ **이 계층은 1~3차를 대체하지 않는다** — 알람은 하루 1회뿐이라 같은 날 재시도가 없고, 실패한 날을 회복한 것은 1차 워커였다. 상세 실측은 `.claude/rules/android_scheduling_field_notes.md` |
+| **0차 (정시, Android)** | `AlarmManager.setAndAllowWhileIdle` + expedited 창 유지자 | 예약시각 (+0~60분) | **딥 Doze를 관통하는 유일한 경로.** JobScheduler는 유지보수 창 밖에서 아예 실행되지 못하고 창 간격이 1h→2h→4h→6h로 배증해 **지연에 상한이 없다**(실측 +1h27m~+2h52m, 그중 이틀은 서버 미수신 체크 +2h를 넘겨 **기기가 멀쩡한데도 미수신 판정 구간에 들어갔다** — 그 경고 자체는 "오늘 안부 확인이 없습니다"가 참이므로 거짓이 아니다). allow-while-idle 알람은 창을 기다리지 않고 발화하며 **상한이 60분으로 보장**된다(실측 +7~32분, n=6). ⚠️ **알람 자체는 네트워크를 못 쓴다** — temp power-save allowlist를 받지 못해 `allowed=NONE`으로 DNS가 즉시 거부된다. **방화벽을 여는 것은 expedited job**이고(`allowed=FOREGROUND`), **창 길이는 그 job의 수명과 같다**. 그래서 전송을 expedited job 안에서 하려 하면 안 된다 — 알람이 깨운 프로세스에서 워커가 3개 뜨고 락을 잡아 전송하는 워커가 expedited가 아닐 수 있어 창이 먼저 닫힌다(2026-08-23 실측 실패). **`HeartbeatWindowHolderWorker`는 아무 일도 하지 않고 창만 최대 90초 유지**하며, 전송은 평소의 `BackgroundWorker`가 그 창 안에서 한다. ⚠️ `setExactAndAllowWhileIdle`은 `SCHEDULE_EXACT_ALARM`(Android 14+ 기본 거부 + Play 정책상 알람시계·캘린더 전용)을 요구해 쓸 수 없다 — **정시 발화는 불가능하고 "1시간 이내"가 정확한 표현**이다. ⚠️ **이 계층은 1~3차를 대체하지 않는다** — 알람은 하루 1회뿐이라 같은 날 재시도가 없고, 실패한 날을 회복한 것은 1차 워커였다. 상세 실측은 `.claude/rules/android_scheduling_field_notes.md`. ⚠️ **이 계층의 "실패해도 최악이 기존 동작"이라는 전제가 깨지는 기기 상태가 있다 — §2.2.2.** `RUN_ANY_IN_BACKGROUND: ignore`는 0차와 1차를 **동시에** 막으며, 앱을 열지 않는 순수 대상자에게 선택적·영구적으로 걸린다 |
 | 1차 (정확) | WorkManager `registerOneOffTask` (Android) | 예약 시각 정각 도래 | 정확한 발화. **전송 성공 후** `HeartbeatService._onHeartbeatSent`가 `HeartbeatWorkerService.schedule()` 호출 → one-off + periodic 둘 다 cancel + 내일자 register(periodic 재워 배터리 절약). **전송 실패 시에는** `_rescheduleNextDay(success: false)` → `rescheduleOneOffOnly()`로 **one-off만 내일자 재무장, periodic 15분 폴링은 유지**(살아있는 periodic이 같은 날 통신 복구를 잡음 — 실패가 풀 schedule()을 부르면 그날 안전망 해체, Defect 1). iOS는 사용하지 않음 |
 | 1차 (폴링 안전망) | WorkManager `registerPeriodicTask(frequency: 15분)` (Android) | 매 15분(명목) | one-off가 OEM 배터리 절약/Doze로 지연·미실행되어도 백업 발화 + 화면 켜짐 Doze 해제 piggyback. ⚠️ **실효 cadence는 15분이 아니다** — 딥 Doze에서 하룻밤 1~5회이며 RARE 버킷은 24시간 3세션이 상한이다. ⚠️ **`flexInterval: 15분`(= 주기 전체)을 반드시 명시해야 한다** — 넘기지 않으면 플러그인 기본 flex 5분(`DEFAULT_FLEX_INTERVAL_SECONDS = MIN_PERIODIC_FLEX_MILLIS`)이 적용되어 periodic이 15분 주기의 **마지막 5분 창에서만** 실행 가능해지고(실행 기회 1/3), 그 좁은 창이 Doze 유지보수 창(하룻밤 1~5회, 약 64초)과 겹쳐야 하므로 적중률이 곱으로 떨어진다. 부작용으로 첫 fire도 코드상 +3분이 아니라 `+3분 + (15분 − 5분)` = **+13분**이 됐다(2026-08-16 실측). 이 명시는 폴링 약화가 아니라 **의도한 15분 폴링을 실제로 15분으로 되돌리는** 수정이다. ⚠️ 또한 **동시 발화 회피라는 offset의 목적은 실측상 달성되지 않는다** — 둘 다 밀려 있다가 같은 Doze 창에서 함께 방출되므로(02:16·15:22 두 번 다 동시 발화) offset은 아무 역할도 못 한다. 당일 중복 전송은 `lastScheduledKey`(성공 마커) + `HeartbeatLockDatasource`(SQLite UNIQUE CAS, TTL 30초)로 차단. 콜백 시각 가드는 `예약시각 -15분`을 경계로 한다 — `-15분` 이후 fire는 정상 정시 전송, `-15분` 이전 fire는 평소 스킵. ⚠️ 이 가드의 근거를 "조기 발화 흡수"로 적지 말 것: 실측상 **job은 일찍 뛰지 않고 늦게만 뛴다.** 실제 역할은 **지난 날짜용으로 등록됐다 뒤늦게 발화한 job을 오늘 정시 전송으로 오인하지 않는 것**이다 |
 | 1차 (worker 회복 전송) | WorkManager 콜백 — `HeartbeatService.execute(recovery: true)` (Android) | 예약시각 `-15분` 이전 fire + `lastHeartbeatDate`가 오늘도 어제도 아닌 2일 이상 미전송 갭 | 예약시각 이전 구간에서 2일 이상 미전송 갭이 감지되면 예약시각을 기다리지 않고 **살아있음 신호**를 보낸다 — 포그라운드 회복 전송과 **완전히 동일한** `_executeRecovery` 경로다. 기기가 네트워크에 연결된 채 WorkManager가 발화했다는 것 자체가 활동 증거라 `suspicious=false`이며, 전용 키 `recovery_<날짜>` + 마커 `lastRecoveryDate`(1일 1회)를 쓰고 `steps_delta`는 싣지 않는다. **정시 슬롯을 소비하지 않으므로 예약시각 정시 전송이 그대로 수행되어 그날 걸음수가 온전히 기록된다.** ⚠️ 과거에는 정시 키로 전송해 슬롯을 소비했고, 그 탓에 정시 전송이 콜백 상단 `lastHeartbeatDate == 오늘` 가드에 걸려 **그날 걸음수가 폰을 켠 시각까지만**(이른 아침이면 사실상 0) 기록됐다 — 포그라운드 경로와 다시 갈라놓지 말 것. `_onHeartbeatSent`를 부르지 않지만 재무장은 **콜백 진입부에서 이미 완료**돼 있다(네트워크보다 먼저, 모든 분기 공통). iOS는 worker가 없어 미적용(Android 전용) |
 | 2차 | 앱 시작 / 백그라운드→포그라운드 자동 전송 | 예약 시각 경과 + 당일 미전송 | 자정 전까지 무조건 전송. 가드는 `isReportedToday`(이미 전송) + `isScheduleInFuture`(예약시각 이전, **양 플랫폼 공통** — 2026-08-29부터 iOS도 적용) 두 개로 단순화 — 자정이 유일한 의미 경계. 1차 2계층 모두 실패하거나 retry 3회 실패 후 사용자가 send_failed 알림을 탭해 진입한 경우의 최종 안전망. `isScheduleInFuture`(예약시각 이전)에 막혀 정시 전송이 보류되더라도 `_isRecoveryPending`(`lastHeartbeatDate`가 오늘도 어제도 아닌 미전송 갭)이면 **포그라운드 회복 전송**(`HeartbeatService().execute(recovery: true)` → `_executeRecovery`)을 보낸다 — 포그라운드 진입 자체가 살아있음 증거이며, worker 회복 전송과 **동일한 경로**로 **정시 슬롯을 소비하지 않는다**(별도 키 `recovery_<날짜>`·마커 `lastRecoveryDate`로 `lastHeartbeatDate`/`lastScheduledKey` 미갱신) → 예약시각 정시 전송은 그대로 수행된다. 늦은 전송 성공 시 `_onHeartbeatSent`가 WorkManager를 즉시 내일자로 재등록해 정시 사이클 정상화 |
-| 3차 (안전망) | **iOS**: 일일 로컬 안부 확인 안전망 알림 (`LocalAlarmService`) / **Android**: 서버 FCM 푸시 `subject_safety_net` | **iOS**: heartbeat 시각 정시 (매일 반복, daily repeat via `matchDateTimeComponents.time`) / **Android**: 서버 미수신 체크 = heartbeat 예약시각 + 2시간 (미수신일마다 1회 → 무시 시 매일 반복) | **iOS**: ⚠️ **더 이상 안전망이 아니라 오프라인 전용 폴백이다(2026-08-22 변경, §2.2.1).** PRIMARY 트리거는 서버 푸시 `heartbeat_push` + 확장이며 탭 없이 전송된다. 로컬 알림은 `anbu_offline_<날짜>`(예약시각 **+45분**, 7일 롤링 단발)로만 남아, 망이 있으면 확장이 그날치를 지우고 망이 없으면 그대로 발화한다. `gs_deadman`은 신규 예약하지 않으며 탭 라우팅만 잔존 기기용으로 유지. **Android**: WorkManager one-off + periodic 15분 + 앱 열기(2차) 모두 실패해 worker 자체가 OEM/사용자에 의해 cancel된 시나리오까지 메우는 LAST-RESORT 사용자 유도 알림 — 서버 발송이라 보호자 유무·구독 만료와 무관하게 도달(서버 미수신 체크에서 보호자/구독 게이팅 **앞**에서 대상자 본인 Android 기기로 발송). 과거 Android 일일 로컬 안전망 알림(+3h, `LocalAlarmService`)은 폐지(`matchDateTimeComponents.time`이 forceNextDay에도 "그 시각의 다음 발생=오늘"로 당겨 정상 전송한 날에도 매일 오발화하던 결함) — `LocalAlarmService.schedule()`은 Android에서 잔존 알림 cancel 후 즉시 return. 푸시 탭 라우팅: iOS `gs_deadman` / Android `subject_safety_net`·(잔존 `safety_net`)·`send_failed` 모두 **safety_home으로 이동**(`_routeToSafetyHome`, 역할 인식; kill 런치는 splash) |
+| 3차 (안전망) | **iOS**: 일일 로컬 안부 확인 안전망 알림 (`LocalAlarmService`) / **Android**: 서버 FCM 푸시 `subject_safety_net` | **iOS**: heartbeat 시각 정시 (매일 반복, daily repeat via `matchDateTimeComponents.time`) / **Android**: 서버 미수신 체크 = heartbeat 예약시각 + 2시간 (미수신일마다 1회 → 무시 시 매일 반복) | **iOS**: ⚠️ **더 이상 안전망이 아니라 오프라인 전용 폴백이다(2026-08-22 변경, §2.2.1).** PRIMARY 트리거는 서버 푸시 `heartbeat_push` + 확장이며 탭 없이 전송된다. 로컬 알림은 `anbu_offline_<날짜>`(예약시각 **+45분**, 7일 롤링 단발)로만 남아, 망이 있으면 확장이 그날치를 지우고 망이 없으면 그대로 발화한다. `gs_deadman`은 신규 예약하지 않으며 탭 라우팅만 잔존 기기용으로 유지. **Android**: WorkManager one-off + periodic 15분 + 앱 열기(2차) 모두 실패해 worker 자체가 OEM/사용자에 의해 cancel된 시나리오까지 메우는 LAST-RESORT 사용자 유도 알림 — 서버 발송이라 보호자 유무·구독 만료와 무관하게 도달(서버 미수신 체크에서 보호자/구독 게이팅 **앞**에서 대상자 본인 Android 기기로 발송). 과거 Android 일일 로컬 안전망 알림(+3h, `LocalAlarmService`)은 폐지(`matchDateTimeComponents.time`이 forceNextDay에도 "그 시각의 다음 발생=오늘"로 당겨 정상 전송한 날에도 매일 오발화하던 결함) — `LocalAlarmService.schedule()`은 Android에서 잔존 알림 cancel 후 즉시 return. 푸시 탭 라우팅: iOS `gs_deadman` / Android `subject_safety_net`·(잔존 `safety_net`)·`send_failed` 모두 **safety_home으로 이동**(`_routeToSafetyHome`, 역할 인식; kill 런치는 splash). ⚠️ **§2.2.2 참조 — 이 푸시가 "LAST-RESORT"가 아니라 그날의 유일한 전송 트리거가 되는 기기 상태가 있다**(0차·1차가 한 게이트에 동시에 막히는 경우). 그때는 이 푸시 실패 = 그날 전송 0 |
 
 **보류 큐 재전송의 날짜 귀속 (걸음수 이틀 손실 방지):**
 
@@ -577,7 +670,7 @@ PATCH /api/v1/devices/{device_id}/heartbeat-schedule
 
 **한계 및 대응:**
 - **iOS BGProcessingTask 미실행**: iOS가 실행 시점을 OS 재량으로 결정 → 2차(앱 열기) + 3차(정시 로컬 안전망 알림)로 보완. iOS에서는 periodic 태스크(BGAppRefreshTask) 미사용
-- **Android Doze/OEM 절전 모드**: 스와이프 종료 + 화면 꺼짐 상태에서 one-off 태스크가 지연/미실행될 수 있음. periodic 폴링이 백업 발화로 일부를 복구하며(⚠️ "최대 15분 내"는 사실이 아니다 — 실측 하룻밤 1~5회), 그래도 실패 시 앱 열기 자동 전송(2차)이 받아낸다. worker 자체가 OEM/사용자에 의해 영구 cancel된 LAST-RESORT는 서버 FCM 푸시 `subject_safety_net`(예약시각 +2h)이 사용자에게 앱 실행을 유도 — 서버 발송이라 worker/로컬알람이 OEM에 죽어도 도달한다. 사전 안내 다이얼로그는 두지 않고 사용자가 OEM 정책에 따라 직접 조정하도록 맡긴다 (Google Play 정책상 `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` 권한 미사용).
+- **Android Doze/OEM 절전 모드**: 스와이프 종료 + 화면 꺼짐 상태에서 one-off 태스크가 지연/미실행될 수 있음. periodic 폴링이 백업 발화로 일부를 복구하며(⚠️ "최대 15분 내"는 사실이 아니다 — 실측 하룻밤 1~5회), 그래도 실패 시 앱 열기 자동 전송(2차)이 받아낸다. worker 자체가 OEM/사용자에 의해 영구 cancel된 LAST-RESORT는 서버 FCM 푸시 `subject_safety_net`(예약시각 +2h)이 사용자에게 앱 실행을 유도 — 서버 발송이라 worker/로컬알람이 OEM에 죽어도 도달한다. 사전 안내 다이얼로그는 두지 않고 사용자가 OEM 정책에 따라 직접 조정하도록 맡긴다 (Google Play 정책상 `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` 권한 미사용). ⚠️ **단, 이 완화책이 전부 무력화되는 별도 게이트가 있다 — §2.2.2**(`RUN_ANY_IN_BACKGROUND: ignore`). Doze·버킷·쿼터·배칭과 독립이라 periodic 폴링도 앱 열기도 닿지 않으며, 그 상태에서 남는 것은 서버 푸시 하나뿐이다.
 - 사용자가 알림을 무시하면 앱이 열리지 않음 → 서버가 미수신 감지 → 보호자에게 경고 발송
 - 알림 권한 거부 시 3차 안전망 동작 안 함 → 모드 선택 후 권한 요청 안내 화면(9.0)에서 중요성 안내
 - 알림 권한은 이 앱의 핵심 기능(보호자 경고 Push 수신)에도 필수이므로, 별도 권한 추가 부담 없음
