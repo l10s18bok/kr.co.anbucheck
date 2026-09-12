@@ -1026,6 +1026,8 @@ Day 8+: 추가 알림 없음 (향후 정책 변경 가능)
                              ├─ manual = true  → 보호자 Push "수동 안부 확인" (정보 등급 DND 적용)
                              └─ manual = false → 보호자 Push "오늘 안부 확인 완료" (정보 등급 DND 적용)
     suspicious = true  → warning/urgent → caution 하향 (정상 복귀 알림 없음)
+                         ※ SOS(note='emergency_request')도 하향 대상 — 의도된 현행 동작
+                           (하향 직후 아래 카운터로 다시 올라가므로 영구히 묻히지 않는다)
                          → suspicious_count 기반 보호자 경고 에스컬레이션:
                            - suspicious_count=1 → 주의(caution) 등급 생성 + 보호자 Push + notification_event 저장
                            - suspicious_count=2 → 경고(warning) 등급 생성 + 보호자 Push + notification_event 저장

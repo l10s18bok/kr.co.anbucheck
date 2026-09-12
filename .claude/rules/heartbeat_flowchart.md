@@ -154,7 +154,7 @@ flowchart TD
     AlertActive -->|YES| SuspiciousFirst{suspicious?}
 
     SuspiciousFirst -->|false| Resolve[경고 완전 해소<br/>보호자 Push 알림<br/>✅ 정상 복귀<br/>보호 대상자의 안부가<br/>정상적으로 확인되었습니다]
-    SuspiciousFirst -->|true| Downgrade[경고 등급 하향<br/>warning / urgent → caution<br/>정상 복귀 알림 없음<br/>안부 신호만 수신, 활동 기록 없음]
+    SuspiciousFirst -->|true| Downgrade[경고 등급 하향<br/>warning / urgent → caution<br/>SOS note=emergency_request도 하향 대상 — 의도<br/>정상 복귀 알림 없음<br/>안부 신호만 수신, 활동 기록 없음]
 
     AlertActive -->|NO| CheckSuspicious{suspicious?}
     Resolve --> StatusNormal([✅ 정상<br/>센서 움직임 감지 — 사용 확인])
@@ -178,6 +178,7 @@ flowchart TD
 - **`last_seen`은 "오늘의 안부가 확인된 시각"이라 당일 안부 확인 기록만 전진시킨다**(2026-09-09 수정): 지난 기록 보정과 살아있음 신호(`recovery_`)는 갱신하지 않는다. 갱신하면 `job_ios_heartbeat_trigger`(예약시각 정각)와 `job_heartbeat_check`(+2h)가 둘 다 `last_seen < 오늘 로컬 자정`으로 대상을 걸러 그 기기를 **그날 통째로 건너뛴다** — iOS는 서버 트리거가 유일한 자동 전송 경로라 그날 안부가 통째로 사라지고, 안드로이드는 실제 미수신인 날의 보호자 경고가 조용히 사라진다(2026-09-09 실증: 30일 중 13일 발생, iOS 3대 트리거 미발사 + 안드로이드 1대 이틀 연속 경고 소실). `steps_delta`도 같은 조건으로 묶는다 — recovery는 null을 실어 마지막으로 알던 값을 덮는다. 상세는 PRD-BackEnd §4.6.
 - **`battery_level`은 저장하되 알림만 생략한다**: 이 값은 표시 전용이 아니라 미수신 스케줄러가 '배터리 방전 추정' 분기에 읽는 입력이고, 계약이 "마지막으로 수신한 heartbeat의 배터리"라 저장을 건너뛰면 더 오래된 값이 남는다. "지금 부족하다"고 주장하는 Push만 막는다. 걸음수(`devices.steps_delta`)는 반대로 덮어쓰지 않는다.
 - **살아있음 신호(`recovery_`)는 `last_seen`을 밀지 않지만 활성 경고는 해소한다**(2026-09-12 확정): 두 가지는 별개의 사실이다 — `last_seen`을 밀면 그날 트리거와 미수신 체크가 그 기기를 건너뛰지만, `alerts`는 독립 테이블이라 그런 부작용이 없다. 해소하는 이유 둘 — ① 해소는 `suspicious=false` 분기에서만 일어나고 회복 전송이 나가는 조건(`걸음수>0 || 잠금해제 || 오늘앱실행`)은 정상 전송이 `suspicious=false`가 되는 조건과 **같은 세 신호**다(빠진 건 "예약시각에"뿐). ② 죽어 있던 기기가 살아났다는 사실은 **한시라도 빨리** 보호자에게 닿아야 헛된 전화·방문을 막는다. 대가는 **그날 정시 전송까지 실패한 날에 한해** 등급이 한 칸 안 오르는 것이며(주의 → 주의), 영구 상한이 아니라 그만큼 지연이다. `suspicious_count`도 **반드시 함께** 리셋한다 — 한쪽만 게이팅하면 "경고는 지워졌는데 카운터는 2"가 되어 다음 suspicious 한 번에 상위 등급으로 튄다. SOS(`note='emergency_request'`)도 함께 해소된다(사람 흔적이 확인된 분기에서만 도달하고, SOS 푸시는 이미 즉시 나갔다). **지난 기록 보정(backfill)은 경고는 해소하되 SOS는 남긴다** — 그건 "그 날 살아 있었다"는 사후 증거라 지금의 SOS 상태를 말해 주지 못한다. ⚠️ 2026-09-10에 이것을 게이팅했다가 되돌렸다. 당시 근거였던 "사다리가 **매일** 리셋된다"는 과장이었다 — 미수신 사다리는 `alerts` **행**으로 오르므로 정시 전송이 성공한 날에는 그 전송이 어차피 경고를 지운다. 다시 게이팅하지 말 것.
+- **`suspicious=true`는 경고를 해소하지 않고 `warning`/`urgent`를 `caution`으로 하향한다** — 그리고 **SOS(`note='emergency_request'`)도 하향 대상이다**(2026-09-12 검토 후 현행 유지). 방향이 거꾸로로 보인다: `suspicious=false`(사람 흔적 있음)는 SOS를 해소하는데 `suspicious=true`(사람 흔적 **전무**)는 긴급을 주의로 낮춘다. 그럼에도 유지하는 근거는 **영구히 묻히지 않는다**는 것이다 — 하향 직후 `suspicious_count` 기반으로 새 경고가 생성되어(1회 주의 / 2회 경고 / 3회+ 긴급) 걸음수 0이 사흘 이어지면 다시 긴급으로 올라간다. 바꾸려면 `alert_service.downgrade_alerts_on_suspicious`의 UPDATE에 `AND (note IS NULL OR note != 'emergency_request')` 한 줄을 더하면 된다. **버그로 오인해 고치지 말 것.**
 - **지난 기록은 경고를 새로 만들지 않는다**: 그 날의 미수신은 스케줄러가 이미 경고했으므로, 늦게 도착한 `suspicious=true`로 오늘 또 경고를 만들면 같은 날에 대해 두 번 경고하는 셈이 된다. 반대로 **경고 해소는 수행한다** — 늦게라도 도착했다는 것은 그 날 기기가 살아 있었다는 증거다.
 
 
