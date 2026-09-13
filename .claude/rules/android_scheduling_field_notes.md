@@ -1863,6 +1863,33 @@ adb 없이 답할 수 있다.
 즉 `subject_safety_net`은 문서에 적힌 **"LAST-RESORT"가 아니라 SOLE-RESORT**다.
 그 푸시가 실패하면(망·FCM 토큰 만료·스케줄러 tick 누락 §13.2②) 그날은 아무것도 돌지 않는다.
 
+#### 대응 (2026-09-13) — 문을 90분 일찍 여는 잡을 서버에 추가했다
+
+위 판정의 실질적 피해는 "안부가 안 나간다"가 아니라 **"미수신 판정이 안부보다 먼저 난다"**였다
+(§8.10.2 — 도착 7초 전에 판정). 그래서 서버에 `job_silent_wake`를 새로 뒀다:
+**예약시각 +30m까지 미전송인 Android 기기에 데이터 전용 고우선순위 FCM 1건**을 쏜다.
+
+```
+예약시각        0차·1차 — 앱옵에 막힘
+  +30m   ★ 사일런트 깨우기(신규) → 창 오픈 → 밀려 있던 알람·job이 전송
+  +2h      미수신 체크(기존, 무변경) — +30m에 뚫렸으면 last_seen이 오늘이라 대상에서 자동 제외
+```
+
+- 데이터 전용이라 **사용자에게 아무것도 보이지 않고**, 클라 대응 코드도 필요 없다
+  (`firebaseMessagingBackgroundHandler`는 로그만 찍고, 포그라운드 핸들러는 `notification == null`에
+  즉시 반환한다). 창이 열리면 워커가 스스로 전송한다.
+- `job_heartbeat_check`는 손대지 않았다. 함수·쿼리·advisory lock·job id 전부 독립이라 끄려면
+  `add_job` 한 줄만 주석 처리하면 된다.
+- ⚠️ **쿼리에 `AND d.platform = 'android'` 필수** — 기존 미수신 체크 쿼리에는 platform 필터가
+  없고 Android 게이팅이 `_process_missed_heartbeat` 안에 있다. 그대로 복사하면 iOS 대상자가
+  단 하나뿐인 APNs 보관 슬롯을 이 푸시에 뺏겨 그날 트리거를 잃는다(`ios_nse_field_notes.md` §13.5).
+- ⚠️ **미검증 전제 — 이 잡 자체가 실험이다.** temp-power-save allowlist 부여가 관측된 것은
+  전부 **표시형** 푸시(§8.3·§8.9)였고, **데이터 전용도 같은 대우를 받는지는 아직 모른다.**
+  받지 못하면 조용히 아무 일도 하지 않고 +2h가 그날을 담당한다 — 최악이 기존 동작이다.
+  **판정 방법**: 예약시각 +30m 시점의 `dumpsys netpolicy | grep temp-power-save`에
+  `reason=PUSH_MESSAGING` 항목이 찍히는가, 그리고 `HeartbeatSend: OK`가 21:30이 아니라
+  **예약시각 +30분대**로 앞당겨지는가.
+
 ### 8.6 진단 절차
 
 ```bash

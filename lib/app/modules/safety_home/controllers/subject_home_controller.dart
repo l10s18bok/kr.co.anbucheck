@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +11,6 @@ import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
-import 'package:anbucheck/app/core/services/stability_service.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/heartbeat_local_datasource.dart';
@@ -50,12 +48,6 @@ class SubjectHomeController extends SafetyHomeBaseController {
   }
 
   // ── 라이프사이클 hook ─────────────────────────────────────────────
-
-  @override
-  void onInit() {
-    super.onInit();
-    _checkHibernationSetting();
-  }
 
   @override
   Future<void> onAfterLoad() async {
@@ -166,75 +158,6 @@ class SubjectHomeController extends SafetyHomeBaseController {
   Future<void> refreshAndSend() async {
     await loadScheduleFromLocal();
     await _sendAndConsumeSafetyNetDialog();
-  }
-
-  // ── Android 휴면(Auto-Revoke) 안내 다이얼로그 ─────────────────────
-
-  static const _hibernationChannel =
-      MethodChannel('anbucheck/hibernation');
-
-  /// 앱이 auto-revoke whitelist에 등록되어 있으면 안내 생략.
-  /// 등록되지 않은 경우에만 앱 실행 때마다 계속 안내한다.
-  ///
-  /// **S 전용 — G+S에는 의도적으로 두지 않는다.** G+S 보호자는 자신이 지켜보는
-  /// 대상자의 푸시 알림을 확인하려고 앱을 자주 여는 사용자이므로 "오랫동안 앱을
-  /// 열지 않아 권한이 자동 해제되는" 상황 자체에 잘 빠지지 않는다. 또한 순수 S
-  /// 사용자(주로 고령)에 비해 평소 폰 사용이 많은 층이라, 매 실행마다
-  /// `barrierDismissible: false` 다이얼로그를 띄우는 비용이 얻는 것보다 크다.
-  /// G+S로 옮기거나 부모 컨트롤러로 올리지 말 것.
-  Future<void> _checkHibernationSetting() async {
-    if (!Platform.isAndroid) return;
-
-    try {
-      final whitelisted = await _hibernationChannel
-          .invokeMethod<bool>('isAutoRevokeWhitelisted');
-      if (whitelisted == true) return;
-    } catch (_) {
-      return;
-    }
-
-    await Get.dialog<void>(
-      AlertDialog(
-        title: _buildHibernationTitle(),
-        content: Text('permission_hibernation_message'.tr),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text('common_later'.tr),
-          ),
-          TextButton(
-            onPressed: () async {
-              Get.back();
-              await Get.find<StabilityService>().openAutoRevokeSettings();
-            },
-            child: Text('permission_hibernation_go_to_settings'.tr),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
-  }
-
-  /// 제목에서 "사용하지 않는 앱 일시 정지"(로케일별 highlight 문구) 부분만 강조 색상 적용
-  Widget _buildHibernationTitle() {
-    final title = 'permission_hibernation_title'.tr;
-    final highlight = 'permission_hibernation_highlight'.tr;
-    final idx = title.indexOf(highlight);
-    if (idx < 0) return Text(title);
-    const highlightStyle = TextStyle(
-      color: Color(0xFFB71C1C),
-      fontWeight: FontWeight.w700,
-    );
-    return Text.rich(
-      TextSpan(
-        children: [
-          if (idx > 0) TextSpan(text: title.substring(0, idx)),
-          TextSpan(text: highlight, style: highlightStyle),
-          if (idx + highlight.length < title.length)
-            TextSpan(text: title.substring(idx + highlight.length)),
-        ],
-      ),
-    );
   }
 
   // ── 앱 버전 (S Drawer 표시용) ─────────────────────────────────────

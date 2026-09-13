@@ -354,6 +354,33 @@ iOS판이며, 앱을 열지 않아도 갭이 끊긴다. 조건은 `갭 2일+ && 
 **그 한 창에서 알람 배달·job 실행·전송이 순서대로 전부 일어난다**(실측: 허용 +85ms에 알람 배달,
 +7.5초에 전송 성공, +20.3초에 창 종료).
 
+**대응 — 예약시각 +30m 사일런트 깨우기 푸시 (2026-09-13, 서버 `job_silent_wake`)**
+
+그 창을 여는 것이 지금까지 **예약시각 +2h 미수신 푸시**뿐이었는데, 그 푸시를 쏘는 tick이
+보호자 경고를 만드는 바로 그 tick이라 **안부가 7초 뒤 도착하는데도 매일 미수신 판정이 먼저
+났다**(아래 참조). 그래서 서버에 **90분 앞선 잡**을 하나 더 뒀다.
+
+| | 예약시각 +30m (신규) | 예약시각 +2h (기존, 무변경) |
+|---|---|---|
+| 보내는 것 | **데이터 전용** 고우선순위 FCM 1건 | 표시형 `subject_safety_net` + 보호자 경고 |
+| 사용자에게 보이는 것 | **없음**(`notification` 없음 → 트레이에 뜨지 않는다) | 알림 표시 |
+| 대상 | `platform = 'android'` + 오늘 미수신 | 오늘 미수신 전부 |
+| 경고·`alerts` | **만들지 않는다** | 기존대로 생성·에스컬레이션 |
+
+- **역할은 "해결"이 아니라 "뚫기"다.** 이 푸시가 창을 열면 밀려 있던 알람·job이 스스로
+  전송한다. **클라 대응 코드가 없어도 된다** — `firebaseMessagingBackgroundHandler`는 로그만
+  찍고, `_handleForegroundMessage`는 `notification == null`이면 즉시 반환한다.
+- **+2h는 한 글자도 바뀌지 않았다.** +30m로 뚫리면 `last_seen`이 오늘이 되어 +2h의
+  `last_seen < 오늘 로컬 자정` 필터가 그 기기를 자동으로 떨어뜨린다. 안 뚫리면 +2h가
+  기존대로 동작한다 — **최악이 현재 동작이다.**
+- ⚠️ **iOS에는 절대 보내지 않는다.** APNs 보관 슬롯이 앱당 1칸이라 이 한 발이 그날의 iOS
+  트리거 푸시를 밀어내 안부를 통째로 소실시킨다(§2.2.1 / `ios_nse_field_notes.md` §13.5).
+  기존 미수신 체크 쿼리에는 `platform` 필터가 없고 Android 게이팅이 `_process_missed_heartbeat`
+  **안**에 있으므로, 그 쿼리를 복사할 때 `AND d.platform = 'android'`를 반드시 함께 넣어야 한다.
+- ⚠️ **미검증 전제**: temp-power-save allowlist 부여가 관측된 것은 전부 **표시형** 푸시였다.
+  데이터 전용도 같은 대우를 받는지는 이 잡 자체가 실험이며, 받지 못하면 조용히 아무 일도
+  하지 않는다(무해).
+
 **진입·해제 조건 — 둘 다 "사용자가 앱을 포그라운드로 여는가" 하나다 (실측)**
 
 | | 조건 | 실측 |
@@ -399,10 +426,11 @@ DB 접속 수단이 없다). 발생 경로는 코드로 확정했고, 이 기기
 
 **이 절이 확정하는 제품 규칙 4가지**
 
-1. **`subject_safety_net`을 "LAST-RESORT"로만 서술하지 말 것.** 이 상태의 기기에서는
-   **그날 안부를 내보내는 유일한 경로**다. 그 푸시가 실패하면(망·FCM 토큰 만료·스케줄러
-   tick 누락) 그날은 0차·1차가 통째로 돌지 않는다. 서버 미수신 체크의 신뢰성 요구 수준이
-   "보호자 경고용"이 아니라 **"전송 트리거용"**으로 올라간다.
+1. **서버 푸시를 "LAST-RESORT"로만 서술하지 말 것.** 이 상태의 기기에서는 **그날 안부를
+   내보내는 유일한 경로**다. 이제 그 경로가 둘(+30m 사일런트, +2h 안전망)로 나뉘었지만
+   성질은 같다 — 둘 다 실패하면(망·FCM 토큰 만료·스케줄러 tick 누락) 그날은 0차·1차가
+   통째로 돌지 않는다. 두 스케줄러 잡의 신뢰성 요구 수준이 "보호자 경고용"이 아니라
+   **"전송 트리거용"**으로 올라간다.
 2. **"앱을 한 번 열어 주세요"는 해법이 아니다.** 해제 조건이 포그라운드 실행인 것은
    맞지만, 이 앱은 **앱을 열지 않는 사용자를 전제로 설계**됐고 그 요구를 하지 않기로 돼
    있다(§2.2 "업데이트 후 사용자 행동 요구 금지"와 같은 근거). 이 발견을 사용자 안내로
@@ -2150,9 +2178,13 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
   - 수동 보고 시에도 `stepsDelta`에 실제 누적 걸음수를 실어 보낸다. 서버가 `manual=true`를 가드로 활동 정보 알림(`steps`) 중복 생성을 차단하므로 보호자 알림 목록에는 "수동 안부 확인"(`manual_report`) 1건만 도달하며, 일별 걸음수 이력은 자동/수동 구분 없이 `heartbeat_logs`에 집계된다
 - **SubjectHomeController 핵심 동작 (`lib/app/modules/safety_home/controllers/`, `SafetyHomeBaseController` 상속):**
   - 부모 `SafetyHomeBaseController`(추상)가 invite_code, schedule, 알림/활동/위치 권한, 배터리/네트워크 모니터링, `reportNow`, `sendEmergency`, `_syncScheduleFromServer` 공통 로직 담당. `deviceData` arguments 캐시(부모 `_deviceData` getter)로 G+S 진입 시 중복 API 호출 방지
-  - 자식 `onInit()`: 부모 onInit 호출 후 `_checkHibernationSetting` 다이얼로그 추가
-  - **휴면(Auto-Revoke) 안내 다이얼로그 — S 전용 (G+S 미적용은 의도)**: Android에서 네이티브 채널 `anbucheck/hibernation`의 `isAutoRevokeWhitelisted`가 false일 때만, 앱 실행 때마다 매번 표시(`barrierDismissible: false`, [나중에]/[설정 열기] → `StabilityService.openAutoRevokeSettings()`). 제목 `permission_hibernation_title`("자동 권한 해제를 꺼주세요")에서 `permission_hibernation_highlight` 부분만 `#B71C1C` 강조. 채널 호출 예외 시 조용히 미표시.
-    **G+S 보호자에게는 띄우지 않는다** — G+S는 자신이 지켜보는 대상자의 푸시 알림을 확인하려고 앱을 자주 여는 사용자라 "오랫동안 앱을 열지 않아 권한이 자동 해제되는" 상황에 잘 빠지지 않고, 순수 S 사용자(주로 고령)에 비해 평소 폰 사용이 많은 층이라 매 실행마다 강제 다이얼로그를 띄우는 비용이 얻는 것보다 크다. `GuardianSafetyCodeController`로 옮기거나 `SafetyHomeBaseController`로 올리는 "일관성 수정"을 하지 말 것.
+  - 자식 `onInit()` 오버라이드 **없음** — 부모 것을 그대로 쓴다
+  - ⚠️ **휴면(Auto-Revoke) 안내 다이얼로그는 삭제됐다 (2026-09-13). 다시 넣지 말 것.**
+    S 모드에서 앱을 열 때마다 `barrierDismissible: false`로 "사용하지 않는 앱 일시 정지를 꺼 달라"고 강제하던 다이얼로그였다. 삭제 근거 둘:
+    - **효과가 중복된다.** 여러 제조사 테스트폰 관측 결과, 배터리 최적화에서 제외된 기기는 "사용하지 않는 앱"으로 분류되지 않는다. 최적화 제외 안내는 safety_home 위젯이 이미 하고 있다.
+    - **위협의 크기와 시급성이 맞지 않는다.** auto-revoke는 **3개월** 미사용에서야 권한을 회수하는데, 실제로 매일 안부를 막고 있는 것은 **3일**이면 걸리는 `RUN_ANY_IN_BACKGROUND` 앱옵이다(§2.2.2). 3일짜리 문제를 두고 3개월짜리 경고를 매 실행마다 띄우는 셈이었고, 그마저도 **해제하려면 사용자가 설정 앱에서 조작해야 한다** — 이 앱은 사용자 행동을 요구하지 않기로 돼 있다.
+    번역 키 `permission_hibernation_title`/`_highlight`/`_message`/`_go_to_settings` **4개는 남겨 둔다** — averic-lab `extract_strings.py`의 추출 키 목록에 있어 지우면 웹 페이지 빌드가 exit 1로 실패한다(코드에서 참조하지 않을 뿐이다). `StabilityService.openAutoRevokeSettings()`와 네이티브 `anbucheck/hibernation` 핸들러도 남아 있으나 Dart 호출부는 없다.
+    **대체재는 사용자 안내가 아니라 서버다** — 예약시각 +30m 사일런트 깨우기 푸시(§2.2.2)가 앱옵 차단을 뚫는다.
   - `onAfterLoad()` hook (부모 `loadStatus()` 후): `_checkAndSendHeartbeat`로 미전송 시 자동 전송
   - `onResumedRoleSpecific()` hook: `_reloadHeartbeatState` + `_checkAndSendHeartbeat`
   - **첫 설치 시각 가드 우회**: `lastHeartbeatDate.isEmpty`(전송 이력 없음)이면 `isScheduleInFuture` 검사를 건너뛰고 즉시 전송 — Google Fit 구독 생성 + last_seen baseline + 등록→heartbeat 파이프라인 검증을 한 번에 처리해 D0(설치 당일) 갭 해소. 첫 전송 후 `lastHeartbeatDate`가 박히면 이후 진입에서는 정상 가드(`isReportedToday` + `isScheduleInFuture`)가 다시 적용된다. 자정 전까지는 시각 경과량 무관하게 무조건 전송하며, 자정 넘어가면 `isScheduleInFuture`(다음 날 예약시각 이전)에 막혀 자연스럽게 다음 날로 넘어간다 — 이전 `isScheduleTooOld`(예약 +3h 초과 차단) 가드는 늦은 정상 복귀 신호의 가치(보호자 stale 경고 즉시 해소 + WorkManager 정시 사이클 즉시 정상화)가 더 커서 제거됨
