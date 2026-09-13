@@ -229,6 +229,9 @@ class GuardianSubjectService extends GetxService {
   /// 특정 대상자 제거
   void removeByGuardianId(int guardianId) {
     subjects.removeWhere((s) => s.guardianId == guardianId);
+    // 서버가 마지막에 내려준 can_add_more(=false)가 남아 삭제 후에도
+    // [+] 버튼이 숨겨지던 문제 — 한 명이 빠졌으니 한도 기준으로 재계산
+    canAddMore.value = subjects.length < maxSubjects.value;
     _rebuildOrderIndex();
     // 저장된 순서에서 사라진 invite_code도 정리
     _orderDs.saveOrder(subjects.map((s) => s.inviteCode).toList());
