@@ -1593,11 +1593,13 @@ APNs는 앱당 1칸만 보관하므로 재연결 때 확장이 받는 것은 **�
 `finish()`의 `guard success, !piggyback, !recoveryMode` — 피기백은 성공·실패·`budget`·`expired`
 어느 경로든 `original`을 배달한다. 이 가드를 바꾸면 경고 문구가 "안부 전달 완료"로 덮인다.
 
-⚠️ **1일 갭은 여전히 안 나간다(의도).** late-alert는 허용목록 게이트만 통과시킬 뿐 그 뒤
-`scheduledTimePassed` → `attemptRecovery` → `hasMultiDayGap`을 그대로 거친다. 그래서
-"n일 미전송 → n+1일 예약시각 **이전** 재연결"은 `before-schedule`로 끝나고, 그날 정시 트리거가
-보내며 n일 걸음수를 백필한다. "late-alert를 넣었는데 왜 안 나가나"로 `hasMultiDayGap`을
-건드리지 말 것 — 복구가 되는 것은 **예약시각 이후 재연결** 또는 **2일 이상 갭**일 때다.
+⚠️ **갭 판정을 오해하지 말 것.** late-alert는 허용목록 게이트만 통과시킬 뿐 그 뒤
+`scheduledTimePassed` → `attemptRecovery` → `hasMultiDayGap`을 그대로 거친다.
+`hasMultiDayGap`은 `lastSentDate`가 **오늘도 어제도 아닐 때** 참이다 — 그래서
+**n일 하루만 미전송이어도** n+1일 오전 재연결 시 `lastSentDate=n-1`이라 갭이 참이고 회복
+전송이 나간다(09-16이 정확히 이 경우: 09-15 미전송 → 09-16 00:32 회복). 막히는 것은
+`lastSentDate == 어제`(= 미전송일이 없음, 오늘만 아직)뿐이며 그건 그날 정시 트리거가 메운다.
+(⚠️ 이 문단의 첫 판은 "n일 미전송 → n+1 오전은 before-schedule로 끝난다"고 적었다 — 틀렸다.)
 
 ⚠️ 앱 채널(`clearOfflineFallbackToday`)에 넣은 과거 폴백 정리는 **거의 중복**이다 — 앱이 보내는
 경로는 포그라운드 진입을 거치고, 그때 §2.5.2 `removeAllDeliveredNotifications()`가 트레이를
