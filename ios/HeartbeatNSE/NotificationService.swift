@@ -79,7 +79,7 @@ final class NotificationService: UNNotificationServiceExtension {
         //
         // ⚠️ **긴급·경고·구독 계열은 절대 넣지 말 것.** 여기 넣으면 네트워크를 기다리는
         // 만큼 **긴급 경고가 늦게 뜬다.** 사람 안전이 걸린 알림을 안부 전송 편의와
-        // 바꾸지 않는다.
+        // 바꾸지 않는다. (유일한 예외는 아래 `lateAlertTypes` — **뒤늦게 온** 경고만.)
         let piggybackable: Set<String> = [
             "auto_report",      // 오늘 안부 확인 완료
             "manual_report",    // 수동 안부 확인
@@ -89,7 +89,25 @@ final class NotificationService: UNNotificationServiceExtension {
             "alert_resolved",   // 정상 복귀
             "alert_cleared",    // 보호자 경고 클리어
         ]
-        let isPiggyback = piggybackable.contains(type)
+        // ★ 뒤늦게 배달된 경고 — 2026-09-16 추가.
+        //
+        // 보호 대상자가 있는 G+S는 오프라인 동안 대상자의 미수신 경고가 슬롯의 **마지막
+        // 푸시**로 남기 쉽다(대상자도 같은 망에 있으면 거의 확정이다). 그 경고가 허용목록
+        // 밖이면 통신이 돌아와도 확장이 원본만 통과시켜 **안부가 나가지 않는다.**
+        // 2026-09-16은 대상자가 먼저 복구해 `alert_resolved`가 마지막이라 운 좋게 나갔다.
+        //
+        // 위 "경고 계열 절대 금지"의 근거는 **제때 온 경고가 늦게 뜨는 것**이다. 보관됐다가
+        // 몇 시간 늦게 배달되는 경고에는 그 비용이 없으므로, `sent_at` 대비 30분 이상 늦게
+        // 온 경고에만 얹는다. 제때 온 경고는 지금처럼 즉시 통과한다.
+        //
+        // ⚠️ **`alert_emergency`(긴급 도움 요청)는 넣지 말 것 — 늦게 왔더라도.** 그 결과
+        // "SOS 뒤 오프라인이었던 날"은 복구 전송이 나가지 않는 구멍이 **의도적으로 남는다.**
+        // 버그로 재발견해도 이 목록에 넣는 방향으로 고치지 말 것.
+        let lateAlertTypes: Set<String> = ["alert_caution", "alert_warning", "alert_urgent"]
+        let isLateAlert = lateAlertTypes.contains(type)
+            && HeartbeatStore.arrivedLate(request.content.userInfo)
+
+        let isPiggyback = piggybackable.contains(type) || isLateAlert
 
         guard isTrigger || isPiggyback else {
             contentHandler(request.content)
@@ -126,7 +144,7 @@ final class NotificationService: UNNotificationServiceExtension {
         diag = " unlocked=\(unlocked.map { $0 ? "Y" : "N" } ?? "?")"
             + " fg=\(fgToday ? "Y" : "N")"
             + " lag=\(lag.map { "\($0)m" } ?? "?")"
-            + " type=\(isTrigger ? "trigger" : "piggyback")"
+            + " type=\(isTrigger ? "trigger" : (isLateAlert ? "late-alert" : "piggyback"))"
 
         // 움직임 이력은 비동기다. **계측이 전송을 지연시켜서는 안 되므로** 기다리지 않는다.
         //
@@ -157,6 +175,7 @@ final class NotificationService: UNNotificationServiceExtension {
         // 이미 오늘 보냈으면 통신하지 않는다 — 앱이 먼저 보낸 날의 중복 전송 차단.
         if store.lastSentDate == HeartbeatStore.today() {
             HeartbeatStore.clearTodayOfflineFallback()
+            HeartbeatStore.clearPastDeliveredOfflineFallbacks()
             // ⚠️ 이 분기에서도 롤링 창을 채운다. 빼면 앱이 먼저 보낸 날마다 7일 창이
             // 하루씩 줄어들고, 복구가 "사용자가 앱을 여는 것"에 의존하게 된다 —
             // 이 앱의 대상자는 앱을 열지 않는 것이 정상 사용 패턴이다.
@@ -191,6 +210,8 @@ final class NotificationService: UNNotificationServiceExtension {
                 }
                 HeartbeatStore.markSent(scheduledKey: store.scheduledKey)
                 HeartbeatStore.clearTodayOfflineFallback()
+                // 어제 이전에 이미 떠 있던 폴백도 지운다 — 오늘 안부가 나갔으니 사실이 아니다.
+                HeartbeatStore.clearPastDeliveredOfflineFallbacks()
                 HeartbeatStore.rearmOfflineFallback(hour: store.hour, minute: store.minute)
 
                 // ★ 오늘 안부가 나간 **뒤에만** 어제 걸음수를 채운다.
@@ -272,6 +293,9 @@ final class NotificationService: UNNotificationServiceExtension {
                 HeartbeatStore.releaseSendLock()
                 if ok {
                     HeartbeatStore.markRecoverySent()
+                    // 지난 날짜의 표시된 폴백만 지운다(오늘치는 남긴다 — 아래 주석).
+                    // 2026-09-16 실측: 어제 19:45 폴백이 00:32 회복 성공 뒤에도 남았다.
+                    HeartbeatStore.clearPastDeliveredOfflineFallbacks()
                     // ⚠️ `markSent`도 `clearTodayOfflineFallback`도 부르지 않는다.
                     // 오늘 안부는 아직 안 나갔으므로 오늘치 폴백은 **살아 있어야 한다.**
                     // 롤링 창만 채워 둔다(§13.2 ③ — 확장이 돌 때마다 7일 창을 갱신).

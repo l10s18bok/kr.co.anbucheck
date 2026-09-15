@@ -410,6 +410,51 @@ struct HeartbeatStore {
         center.removeDeliveredNotifications(withIdentifiers: [id])
     }
 
+    /// **지난 날짜의** 이미 표시된 오프라인 폴백을 트레이에서 지운다 (2026-09-16 추가).
+    ///
+    /// `clearTodayOfflineFallback`은 오늘 ID 하나만 지워서, 어제 발화한 폴백이
+    /// 오늘 전송이 성공해도 앱을 열 때까지 남았다. 2026-09-16 실측: 09-15 19:45 발화
+    /// → 09-16 00:32 회복 전송 성공 → "안부를 아직 전하지 못했습니다"가 계속 남음.
+    ///
+    /// ⚠️ **delivered만 지운다. pending은 절대 건드리지 말 것.** 지난 날짜의 pending은
+    /// 존재할 수 없지만, 호출부가 이 함수를 "폴백 정리"로 오해해 pending 제거를 더하면
+    /// 오늘치 폴백까지 사라져 망이 없는 날 알릴 수단이 없어진다(§2.5.2 불변 규칙).
+    ///
+    /// ⚠️ **오늘 ID는 포함하지 않는다.** 회복 전송도 이 함수를 부르는데, 오늘 안부는
+    /// 아직 안 나갔으므로 오늘치 폴백은 표시돼 있어도 사실이다.
+    ///
+    /// 범위가 롤링 일수와 같은 이유: 폴백은 마지막 확장/앱 실행 시점부터 최대 7일치만
+    /// 심겨 있으므로, 그보다 오래된 날짜의 폴백은 애초에 발화할 수 없다.
+    static func clearPastDeliveredOfflineFallbacks() {
+        let cal = Calendar.current
+        let now = Date()
+        let ids: [String] = (1...offlineRollingDays).compactMap { back in
+            guard let day = cal.date(byAdding: .day, value: -back, to: now) else { return nil }
+            return offlineIdPrefix + dayFormatter.string(from: day)
+        }
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ids)
+    }
+
+    /// 푸시가 **보관됐다가 뒤늦게 배달됐는가** — 서버가 `data.sent_at`(UTC epoch 초)을 싣는다.
+    ///
+    /// ⚠️ 임계값이 30분인 이유: 이 판정이 틀리면 **제때 온 경고가 전송을 기다리느라
+    /// 늦게 뜬다.** 기기 시계 오차와 온라인 배달 지터(실측 +2초)를 넉넉히 흡수해야 한다.
+    /// 고치려는 경우(오프라인 동안 보관)는 실측 수 시간이라 30분으로도 전부 잡힌다.
+    /// 줄여서 얻는 것이 없다.
+    ///
+    /// 필드가 없거나(구버전 서버) 파싱이 안 되면 **false** — 즉시 통과(현행 동작)로 떨어진다.
+    static let lateDeliveryThreshold: TimeInterval = 30 * 60
+
+    static func arrivedLate(_ userInfo: [AnyHashable: Any]) -> Bool {
+        guard let raw = userInfo["sent_at"] else { return false }
+        let sentAt: Double?
+        if let s = raw as? String { sentAt = Double(s) }
+        else if let n = raw as? NSNumber { sentAt = n.doubleValue }
+        else { sentAt = nil }
+        guard let t = sentAt, t > 0 else { return false }
+        return Date().timeIntervalSince1970 - t >= lateDeliveryThreshold
+    }
+
     /// 앞으로 N일치 오프라인 폴백을 단발로 채운다(이미 있는 날은 같은 ID로 덮어씀).
     ///
     /// ⚠️ **롤링이 필수다.** 단발 알림 + 매일 재무장 구조는 재무장이 한 번만 실패해도

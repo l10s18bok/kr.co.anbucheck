@@ -178,6 +178,9 @@ import GoogleMaps
       //  지우는 것은 다르다.**)
       if call.method == "clearOfflineFallbackToday" {
         HeartbeatStore.clearTodayOfflineFallback()
+        // 지난 날짜의 표시된 폴백도 함께 — 앱이 보낸 날에도 어제 알림이 남지 않게.
+        // (채널 이름은 Dart 계약이라 그대로 둔다.)
+        HeartbeatStore.clearPastDeliveredOfflineFallbacks()
         result(nil)
         return
       }
