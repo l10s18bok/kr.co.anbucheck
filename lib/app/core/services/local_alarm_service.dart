@@ -151,18 +151,34 @@ class LocalAlarmService {
   }
 
   /// heartbeat 전송이 retry 3회 모두 실패해 pending 큐에 적재됐을 때 호출 (Android 전용).
-  /// 네트워크 끊김 등으로 사용자가 인지해야 할 상황을 정보성 알림으로 전달.
-  /// 인터넷 복구 시 자동 재전송되므로 사용자에게 강한 액션을 요구하지 않는다.
+  /// 사용자가 인지해야 할 상황을 정보성 알림으로 전달하며, 통신이 돌아오면 다음 워커
+  /// 발화가 자동 재전송하므로 강한 액션을 요구하지 않는다.
+  ///
+  /// ⚠️ **제목은 원인을 특정하지 않는다** — iOS 오프라인 폴백과 같은 문장
+  /// (`offline_alarm_title`)을 쓴다. 예전 제목 `notification_send_failed_title`
+  /// (`📶 인터넷 연결을 확인해주세요`)은 **거짓일 수 있다**: 2026-08-28 MIUI 실측에서
+  /// LTE가 `CONNECTED`+`VALIDATED`인데도 `effective=APP_STANDBY` 방화벽에 막혀 이
+  /// 알림이 떴다(`android_scheduling_field_notes.md` — "부수 확인 — 인터넷 연결을
+  /// 확인해 주세요 알림이 거짓 원인임이 실증됐다"). 그 사용자는 통신을
+  /// 의심하며 엉뚱한 곳을 보게 된다. 이 알림이 참인 조건은 하나뿐이다 —
+  /// **오늘 안부가 아직 나가지 않았다.** iOS가 같은 이유로 먼저 고쳤다
+  /// (PRD-FrontEnd §2.2.1 불변 규칙 3). **원인을 단정하는 문구로 되돌리지 말 것.**
+  ///
+  /// **본문도 iOS와 같은 문장**(`offline_alarm_body`)을 쓴다 — 안드로이드에서도 탭하면
+  /// 앱이 열려 2차 안전망이 전송하므로 "눌러 주시면 보호자에게 안부를 전합니다"가 그대로
+  /// 참이고, 양 플랫폼이 같은 상황에서 다른 말을 할 이유가 없다. 옛 키
+  /// (`notification_send_failed_title`/`_body`)는 번역 파일에 남지만 참조되지 않는다.
   static Future<void> notifySendFailed() async {
     if (Platform.isIOS) return;
     await _ensureInitialized();
 
     final title = await NotificationTextCache.get(
-        'notification_send_failed_title',
-        fallback: '📶 Check your internet connection');
+        'offline_alarm_title',
+        fallback: "💗 Today's wellness check hasn't been sent");
     final body = await NotificationTextCache.get(
-        'notification_send_failed_body',
-        fallback: 'Open the app to resend your wellness check.');
+        'offline_alarm_body',
+        fallback: 'Tap this notification once.\n'
+            'Tapping sends your wellness check to your guardian.');
     final channelName = await NotificationTextCache.get(
         'noti_channel_name', fallback: 'Anbu Alerts');
 

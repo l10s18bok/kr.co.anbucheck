@@ -972,7 +972,7 @@ Future<void> sendHeartbeat({
 | iOS 일일 로컬 안전망 알림 (정시) | `gs_deadman` | **safety_home** (`refreshAndForceSend` 호출 — `isReportedToday=false`일 때만 전송, 이미 전송됐으면 다이얼로그만) | iOS는 `LocalAlarmService.alarmPayload` |
 | Android 대상자 안전망 (서버 FCM 푸시, 예약시각 +2h) | `subject_safety_net` | **safety_home** (`_routeToSafetyHome` — 역할 인식: G+S는 Dashboard base + push, 순수 S는 단독) | 컨트롤러 onResumed가 미전송 heartbeat 자동 전송 + 안내 다이얼로그. 보호자 유무·구독 무관 도달 |
 | ~~Android 일일 로컬 안전망 알림 (+3h)~~ | `safety_net` | **safety_home** (위와 동일 경로) | **폐지 — `subject_safety_net` 서버 푸시로 이관.** `safety_net` payload 핸들링은 잔존 기기용으로 유지 |
-| Android retry 실패 알림 (즉시) | `send_failed` | **safety_home** (위와 동일) | retry 3회 실패 시 즉시 표시, heartbeat 성공 시 `cancelSendFailed`로 제거 |
+| Android retry 실패 알림 (즉시) | `send_failed` | **safety_home** (위와 동일) | retry 3회 실패 시 즉시 표시, heartbeat 성공 시 `cancelSendFailed`로 제거. ⚠️ **문구는 iOS 오프라인 폴백과 동일**(`offline_alarm_title`/`_body`, 2026-09-16) — 예전 제목 `📶 인터넷 연결을 확인해주세요`는 MIUI에서 **거짓**이었다(LTE `VALIDATED`인데 `APP_STANDBY` 방화벽에 막혀 발생, `android_scheduling_field_notes.md` 2026-08-28). 참인 조건은 "오늘 안부가 아직 나가지 않았다" 하나뿐이므로 **원인을 단정하는 문구로 되돌리지 말 것**(§2.2.1 불변 규칙 3과 같은 근거) |
 | 무료체험 종료 알림 (가입 +90일, 1회) | `trial_ended` | **보호자 설정** (`_routeToGuardianSettings`, 구독 동선) | 최초 설치 보호자 전용. `scheduleTrialEnded`로 단발 예약, 구독/탈퇴 시 `cancelTrialEnded`. kill 런치는 대시보드(만료 카드) — `subscription_*`와 동일 |
 
 ```
