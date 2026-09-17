@@ -69,9 +69,31 @@ void heartbeatWorkerCallback() {
       final today = formatYmd(now);
       final lastDate = await tokenDs.getLastHeartbeatDate();
 
+      // ★ 릴리스 관측용 — 이 콜백은 전 구간을 debugPrint로 찍는데 위에서 백그라운드
+      // isolate의 debugPrint를 무력화하므로, 릴리스에 남는 것은 **전송까지 도달했을 때의
+      // `HeartbeatSend` 한 줄뿐**이다. 그래서 "워커가 떴는데 스킵했다"와 "아예 안 떴다"가
+      // 구분되지 않는다 — 2026-09-16 실사용자 기기 진단에서 이 구멍에 반복해서 걸렸다.
+      // `ScreenState.log`는 네이티브 `Log.d`라 release에서 스트립되지 않으며, **같은
+      // isolate에서 `HeartbeatSend`가 이미 쓰고 있는 검증된 경로**다.
+      //
+      // ⚠️ 콜백당 **한 줄만** 남긴다. 분기마다 찍으면 필드노트의 4줄 판독
+      // (`FIRED` → `HOLD started` → `src=*` → `HOLD ended`)에서 한 이벤트가 여러 줄로
+      // 흩어져 읽기가 깨진다.
+      // ⚠️ role 미일치 조기 return과 catch 경로는 이 줄을 남기지 않는다(의도) — 전자는
+      //    대상자가 아닌 기기라 관측 대상이 아니고, 후자는 예외 메시지가 더 정확하다.
+      Future<void> logFire(String decision) => ScreenState.log(
+            'HeartbeatWorker',
+            'fire src=${HeartbeatWorkerService.triggerSource ?? "-"} '
+            'task=$taskName last=${lastDate ?? "-"} sched=$hour:$minute '
+            '→ $decision',
+          );
+
       // 오늘 정시 전송 이미 완료 → 스킵 (콜백 레벨 1차 거름, 동시 발화 race 차단)
       if (lastDate == today) {
         debugPrint('[HeartbeatWorker] lastHeartbeatDate=$lastDate, today=$today → 스킵(오늘 전송 완료)');
+        // ⚠️ `wasInteractive`는 아직 읽지 않았고, 여기서 읽지 않는다 — 채널 왕복이라
+        // **이미 전송된 날의 모든 periodic 발화**(가장 잦은 경로)에 비용을 더하게 된다.
+        await logFire('skip-today');
         return true;
       }
 
@@ -112,15 +134,18 @@ void heartbeatWorkerCallback() {
             lastDate != yesterday;
         if (isRecovery) {
           debugPrint('[HeartbeatWorker] 예약시각 이전 — 미전송 갭 감지 → 회복 전송(정시 슬롯 미소비)');
+          await logFire('recovery interactive=$wasInteractive');
           await HeartbeatService().execute(recovery: true);
         } else {
           debugPrint('[HeartbeatWorker] 예약시각 -15분 이전 → 스킵 '
               '(isRecovery=$isRecovery, isInteractive=$wasInteractive)');
+          await logFire('skip-early interactive=$wasInteractive');
         }
         // 재무장은 콜백 진입부에서 이미 완료됐다(네트워크보다 먼저). 여기서 다시 하지 않는다.
         return true;
       }
       debugPrint('[HeartbeatWorker] schedule=$hour:$minute, lastHeartbeatDate=$lastDate → 통과');
+      await logFire('execute interactive=$wasInteractive');
       await HeartbeatService().execute(isInteractiveAtTrigger: wasInteractive);
 
       // 재등록 책임은 HeartbeatService._onHeartbeatSent 단일 — 자동/수동/pending/worker

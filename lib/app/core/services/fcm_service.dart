@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:screen_state/screen_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:anbucheck/app/core/services/guardian_subject_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
@@ -21,6 +22,19 @@ import 'package:anbucheck/app/routes/app_pages.dart';
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('[FCM] 백그라운드 메시지 수신: ${message.data['type']}');
+
+  // ★ 릴리스 관측용 — 지금까지 "푸시가 도착했다"를 시스템 로그
+  // (`Start proc … FlutterFirebaseMessagingReceiver`)로 **간접 추정**만 해 왔다.
+  // 이 한 줄이 있으면 "푸시 도착 → 워커 발화"를 앱 로그만으로 직접 이어 읽는다.
+  //
+  // ⚠️ **반드시 try/catch로 감싼다.** 이 배경 isolate의 엔진은 firebase_messaging이
+  // 띄우는 것이라 WorkManager 엔진과 **플러그인 등록 경로가 다르다**(같은 이유로
+  // `anbucheck/heartbeat_alarm` MethodChannel이 백그라운드 엔진에서 no-op이 된 전례가
+  // 있다). screen_state가 등록돼 있지 않으면 MissingPluginException이 나는데,
+  // **배경 메시지 핸들러에서 잡히지 않은 예외는 로그가 없는 것보다 나쁘다.**
+  try {
+    await ScreenState.log('Fcm', 'received type=${message.data['type'] ?? "-"}');
+  } catch (_) {}
 }
 
 /// 로컬 알림 탭 핸들러 (top-level 함수 필수)
