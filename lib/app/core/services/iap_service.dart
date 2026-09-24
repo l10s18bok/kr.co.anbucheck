@@ -88,42 +88,72 @@ class IapService extends GetxService {
       // 결제 중 앱 강제 종료 후 재시작 시 pending 트랜잭션 복원을 위해 영속값 로드
       _pendingBuy = await _tokenDs.getPendingBuy();
       '[IAP] pendingBuy 복원: $_pendingBuy'.printLog();
+    } catch (e) {
+      '[IAP] pendingBuy 로드 예외: $e'.printLog();
+    }
 
+    // purchaseStream 구독은 스토어 가용성과 **무관하게 먼저** 연결한다.
+    // pending 트랜잭션이 앱 재시작 직후 재발행되므로 UI 진입 전에도 받아야 하고,
+    // 예전처럼 isAvailable==true일 때만 연결하면 Splash 시점에 스토어가 5초 안에
+    // 응답하지 못한 날은 그 세션 내내 결제 결과를 받을 통로가 없었다.
+    // 여기서 한 번만 연결하므로 ensureReady() 재시도는 중복 구독을 신경 쓸 필요가 없다.
+    try {
+      _sub = _iap.purchaseStream.listen(
+        _onPurchaseUpdated,
+        onError: (e) => '[IAP] purchaseStream 에러: $e'.printLog(),
+        onDone: () => '[IAP] purchaseStream done'.printLog(),
+      );
+    } catch (e) {
+      '[IAP] purchaseStream 구독 예외: $e'.printLog();
+    }
+
+    await ensureReady();
+    return this;
+  }
+
+  /// 진행 중인 가용성·상품 조회. 동시 호출은 같은 Future를 공유한다.
+  Future<void>? _readyFuture;
+
+  /// 스토어 가용성 + 상품 정보를 (재)조회한다. 이미 상품 정보가 있으면 즉시 반환.
+  ///
+  /// Splash에서 1회만 조회하던 시절에는 그 1회가 실패(스토어 무응답·일시 네트워크
+  /// 장애)하면 앱을 다시 켤 때까지 설정 구독 카드의 가격·[구독하기]·[구독 복원]이
+  /// 숨고 "스토어 연결 불가" 문구만 남았다. 설정 화면 진입·복귀 시 이 메서드를
+  /// 불러 자가 복구한다. 결과는 `isAvailable`/`productDetails` Rx로 UI에 즉시 반영.
+  Future<void> ensureReady() {
+    if (productDetails.value != null) return Future.value();
+    return _readyFuture ??= _queryStore().whenComplete(() => _readyFuture = null);
+  }
+
+  Future<void> _queryStore() async {
+    try {
       // StoreKit/Play Billing hang 대비 — try/catch는 throw만 잡고 hang을 못 막는다.
       isAvailable.value = await _iap.isAvailable().timeout(
             const Duration(seconds: 5),
             onTimeout: () => false,
           );
       '[IAP] isAvailable: ${isAvailable.value}'.printLog();
+      if (!isAvailable.value) return;
 
-      if (isAvailable.value) {
-        // 상품 조회 — 미등록 상태에서는 notFoundIDs에 담겨 오므로 productDetails는 null로 둠
-        final response =
-            await _iap.queryProductDetails({kAnbuYearlyProductId});
-        if (response.error != null) {
-          '[IAP] 상품 조회 에러: ${response.error}'.printLog();
-        }
-        if (response.notFoundIDs.isNotEmpty) {
-          '[IAP] notFoundIDs: ${response.notFoundIDs}'.printLog();
-        }
-        if (response.productDetails.isNotEmpty) {
-          productDetails.value = response.productDetails.first;
-          '[IAP] 상품 조회 성공: ${productDetails.value!.title} ${productDetails.value!.price}'
-              .printLog();
-        }
-
-        // purchaseStream 구독 — pending 트랜잭션이 앱 재시작 직후 재발행되므로
-        // UI 진입 전에도 받을 수 있도록 Splash 단계에서 등록한다.
-        _sub = _iap.purchaseStream.listen(
-          _onPurchaseUpdated,
-          onError: (e) => '[IAP] purchaseStream 에러: $e'.printLog(),
-          onDone: () => '[IAP] purchaseStream done'.printLog(),
-        );
+      // 상품 조회 — 미등록 상태에서는 notFoundIDs에 담겨 오므로 productDetails는 null로 둠.
+      // ⚠️ 타임아웃 필수: init()은 Splash의 putAsync가 await하므로 여기서 멈추면
+      // Splash 자체가 멈춘다. 타임아웃 시 productDetails는 null로 남고 다음 재시도에 맡긴다.
+      final response = await _iap
+          .queryProductDetails({kAnbuYearlyProductId}).timeout(const Duration(seconds: 10));
+      if (response.error != null) {
+        '[IAP] 상품 조회 에러: ${response.error}'.printLog();
+      }
+      if (response.notFoundIDs.isNotEmpty) {
+        '[IAP] notFoundIDs: ${response.notFoundIDs}'.printLog();
+      }
+      if (response.productDetails.isNotEmpty) {
+        productDetails.value = response.productDetails.first;
+        '[IAP] 상품 조회 성공: ${productDetails.value!.title} ${productDetails.value!.price}'
+            .printLog();
       }
     } catch (e) {
-      '[IAP] init 예외: $e'.printLog();
+      '[IAP] 스토어 조회 예외: $e'.printLog();
     }
-    return this;
   }
 
   /// 신규 구독 결제 시작. 결과는 purchaseStream으로 비동기 수신.

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -58,6 +59,9 @@ class GuardianSettingsController extends BaseController {
       final iap = Get.find<IapService>();
       iap.onVerified = (_) => _loadSubscription();
 
+      // Splash의 1회 상품 조회가 실패했으면 여기서 재시도 (결제 진입점은 설정 화면뿐).
+      unawaited(iap.ensureReady());
+
       // 에러/정보 메시지가 채워지면 스낵바 1회 표시 후 비움.
       // View(Obx) 안 addPostFrameCallback + 상태 재설정 패턴은 self-rebuild를
       // 트리거해 fragile하므로 컨트롤러에서 ever 워커로 처리.
@@ -72,6 +76,15 @@ class GuardianSettingsController extends BaseController {
         AppSnackbar.show('common_notice'.tr, msg.tr, type: SnackType.info);
         iap.lastInfo.value = '';
       }));
+    }
+  }
+
+  @override
+  void onResumed() {
+    super.onResumed();
+    // 비행기 모드 해제 등 앱 밖에서 통신이 돌아온 뒤 복귀하는 경우 — 앱 재시작 없이 복구.
+    if (Get.isRegistered<IapService>()) {
+      unawaited(Get.find<IapService>().ensureReady());
     }
   }
 
