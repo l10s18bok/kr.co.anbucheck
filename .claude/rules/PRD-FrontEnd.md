@@ -2410,9 +2410,11 @@ kill 상태에서 알림 탭으로 런치돼도 `initialRoute: splash`라 Splash
 └─────────────────────────────┘
 ```
 
-- 구독 카드는 `GET /api/v1/devices/me`의 `subscription_plan` 값으로 분기:
-  - `yearly`: 인디고 그라데이션 + "프리미엄 구독 중" + [구독 관리] 버튼만 표시
-  - `free_trial`/기타: 회색 그라데이션 + "무료 체험 중" + [구독하기] + [구독 복원] 두 버튼 표시
+- 구독 카드는 `GET /api/v1/devices/me`의 `subscription_plan` + `subscription_active`로 분기:
+  - **만료**: `plan == 'expired'` **또는 `plan`이 비어 있지 않은데 `active == false`** → 만료 카드(주황 톤, Dashboard 만료 카드와 동일) + [구독하기] + [구독 복원]
+  - `yearly` + `active`: 인디고 그라데이션 + "프리미엄 구독 중" + [구독 관리] 버튼만 표시
+  - `free_trial`/`''`: 회색 그라데이션 + "무료 체험 중" + [구독하기] + [구독 복원] 두 버튼 표시
+  - ⚠️ **`active`를 plan보다 우선한다 — plan 문자열만으로 만료를 판정하지 말 것.** 서버는 `active`를 요청마다 `expires_at > NOW()`로 계산하지만 plan은 **00:00 KST 만료 잡**(`job_subscription_expire_check`)이 돌 때까지 `'free_trial'`/`'yearly'`로 남는다. 과거 `free_trial` + `active=false`를 만료로 보지 않아 만료 당일 대시보드는 만료 카드인데 설정은 "무료 체험 중"(D-day 빈칸 — 비활성 구독은 `days_remaining=0`)으로 뜨던 불일치가 있었다(2026-09 실측). `plan == ''`(서버 응답 전·구독 행 없음)은 근거가 없어 만료로 단정하지 않는다
 - [구독 관리] → Apple/Google 구독 관리 페이지로 딥링크 이동 (기존 구독 취소/변경)
 - [구독하기] → `IapService.buy()` → `_pendingBuy = true`(영속 저장) → `buyNonConsumable(PurchaseParam)` → `purchaseStream`에서 `PurchaseStatus.purchased` 수신 → **`_pendingBuy == true`인 경우에만** 서버 `POST /api/v1/subscription/verify` → 200 응답 시 `_pendingBuy = false` + `onVerified` 콜백이 `_loadSubscription()` 재호출 → 카드 `yearly`로 자동 전환. `_pendingBuy == false`인 경우(재설치·강제종료 재시작 시 StoreKit 자동 재전달) → verify 없이 스킵 + `completePurchase()` 호출(StoreKit 큐 영구 제거, 이후 재전달 없음)
 - [구독 복원] → `IapService.restore()` → `restorePurchases()` → `purchaseStream`에서 `PurchaseStatus.restored` 수신 시 서버 `POST /api/v1/subscription/restore` → 5초 내 emit이 없으면 "복원할 구독이 없습니다" 정보 안내. **Apple Review Guideline 3.1.1** 요구사항이라 free_trial 사용자에게도 항상 노출 (폰 교체·재설치 사용자 복구용)

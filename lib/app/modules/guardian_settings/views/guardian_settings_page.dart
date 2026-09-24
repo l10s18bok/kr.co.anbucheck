@@ -447,14 +447,17 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
       final isActive = controller.isSubscriptionActive.value;
       // 3-state 분기:
       //  · yearly + is_active=true  → 인디고 카드 + 흰 텍스트 + [구독 관리]
-      //  · expired OR (yearly + is_active=false) → 만료 카드 (Dashboard 만료 배너와 동일 톤 #FFF3E0 + #E65100) + [구독하기]
+      //  · expired OR (plan 있음 + is_active=false) → 만료 카드 (Dashboard 만료 배너와 동일 톤 #FFF3E0 + #E65100) + [구독하기]
       //    서버 안전망 활용: expires_at < now면 is_active=false 응답이므로
-      //    RTDN(EXPIRED) 누락·지연 상황에서 plan='yearly'가 잔존해도 만료로 인식.
-      //    plan만 보면 RTDN을 안 보낸 sandbox 환경 + production grace period 등에서
-      //    "프리미엄 구독 중" 영구 표시되는 production hole 차단.
+      //    plan 문자열이 아직 'yearly'/'free_trial'로 남아 있어도 만료로 인식한다.
+      //    ⚠️ plan은 서버 00:00 KST 만료 잡이 바꿀 때까지 갱신되지 않는다 — 만료 시각부터
+      //    그 잡까지 free_trial + is_active=false가 내려와 "무료 체험 중" 카드(D-day 빈칸)가
+      //    뜨던 결함이 있었다(2026-09 실측). yearly도 RTDN 누락·지연 시 같은 구멍이 있다.
+      //    Dashboard는 isActive 하나로 판정하므로 여기도 isActive를 우선한다.
       //  · free_trial / '' → 회색 카드 + 흰 텍스트 + [구독하기] + [구독 복원]
+      //    '' (서버 응답 전·구독 행 없음)은 판단 근거가 없으므로 만료로 단정하지 않는다.
       final isPremium = plan == 'yearly' && isActive;
-      final isExpired = plan == 'expired' || (plan == 'yearly' && !isActive);
+      final isExpired = plan == 'expired' || (plan.isNotEmpty && !isActive);
       final iap = Get.isRegistered<IapService>() ? Get.find<IapService>() : null;
       final iapAvailable = iap?.isAvailable.value ?? false;
       final processing = iap?.isProcessing.value ?? false;
