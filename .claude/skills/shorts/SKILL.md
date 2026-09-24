@@ -32,6 +32,24 @@ export CHROMIUM_PATH="$HOME/Library/Caches/ms-playwright/chromium-1243/chrome-ma
 
 ## 1. 시나리오 초안 (한국어) → 확인①
 
+### 먼저 — 이전 편과 문구가 겹치지 않게
+
+지난 편의 문구는 `shorts.json`의 `langs.ko`에 전부 있다(따로 기록하지 않는다 — 두 벌이 되면 어긋난다).
+초안을 쓰기 **전에** 제목·첫 자막·엔딩을 뽑아 본다:
+
+```bash
+cd ../averic-lab/_shorts-build && python3 -c "
+import json,re;d=json.load(open('shorts.json'));k=d['langs']['ko']
+for v in d['videos']:
+  p=v['page'][0];f=lambda x:re.sub('<[^>]+>',' ',k.get(x,'(공통 엔딩)'))
+  print(p,'|',k[v['title']],'|',f(p+'1'),'|',f(p+'_q1'),'/',f(p+'_q2'))
+t=json.load(open('../i18n/translations.json'))['ko']['dawn_q3_html'];print('공통 엔딩:',re.sub('<[^>]+>',' ',t))"
+```
+
+- 같은 **핵심 단어**(연락·멀리·혼자 …), 같은 **문장 틀**("~가 없다", "A보다 B가 더"), 같은 **엔딩 구조**를 피한다.
+- 초안과 함께 **겹침 검사 결과**를 적는다. "안부"처럼 피할 수 없는 단어가 겹치면 그렇다고 적는다.
+- 엔딩을 정의하지 않은 편(`mountEnding()` 기본값)은 공통 엔딩(홈페이지 `dawn_q3_html`, gen.py 가 `q1`/`q2`로 나눈다)을 쓴다 — 그것과도 겹치지 않게 본다.
+
 아래 형식으로 **한 번에** 보여 준다. 자막은 편당 4~6개, 각 2줄 이내(한국어 한 줄 약 16자), 영상 20~27초.
 
 ```
@@ -49,6 +67,7 @@ export CHROMIUM_PATH="$HOME/Library/Caches/ms-playwright/chromium-1243/chrome-ma
   공간·사물·폰 불빛·앱 화면으로 상황을 보여준다.
 - **효과음 계획** — 팝업·알림이 뜨는 장면만. 엔딩 로고 차임은 모든 편 공통.
 - **걸음수** — 성인 5,000보 이상, 고령자 1천 보대(딱 1,000 피함). 7일치를 정한다.
+- **이전 편과의 겹침 검사** — 위에서 뽑은 표와 대조한 결과.
 - **번역 참고** — 직역하면 뜻이 바뀌는 표현(예: "~해지는 순간이 있다"는 becomes / there are moments).
 - **앱 사실 검사 결과** — 아래 표로 하나씩 대조한 결과. 걸리는 게 있으면 고친 안을 같이 낸다.
 
