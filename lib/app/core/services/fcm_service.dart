@@ -16,6 +16,7 @@ import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_da
 import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardian_notifications_controller.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/utils/device_timezone.dart';
 
 /// FCM 백그라운드 메시지 핸들러 (top-level 함수 필수)
 /// heartbeat 트리거는 WorkManager/BGTaskScheduler로 전환 — FCM은 보호자 알림만 처리
@@ -318,6 +319,11 @@ class FcmService extends GetxService {
   final _token = Rxn<String>();
   String? get token => _token.value;
 
+  /// 서버 `devices.timezone`에 마지막으로 **성공적으로** 반영한 기기 시간대.
+  /// 포그라운드 복귀 때 현재 시간대가 이 값과 다르면 토큰 갱신 요청을 다시 보낸다
+  /// ([_syncTimezoneIfChanged]). 전송이 실패하면 갱신하지 않으므로 다음 복귀에서 재시도된다.
+  String? _lastSyncedTimezone;
+
   /// iOS APNs 권한 요청 + FCM 토큰 재발급
   /// PermissionController에서 알림 권한 허용 후 호출
   Future<void> requestIosPermission() async {
@@ -486,7 +492,10 @@ class FcmService extends GetxService {
     // AppLifecycleListener는 생성 시 WidgetsBinding에 옵저버로 자기 등록되므로
     // 참조를 보관하지 않아도 유지된다. FcmService는 앱 수명 내내 살아있어 해제 불필요.
     AppLifecycleListener(
-      onResume: LocalAlarmService.clearDeliveredNotifications,
+      onResume: () {
+        LocalAlarmService.clearDeliveredNotifications();
+        _syncTimezoneIfChanged();
+      },
     );
     await LocalAlarmService.clearDeliveredNotifications();
 
@@ -549,12 +558,30 @@ class FcmService extends GetxService {
     }
   }
 
+  /// 포그라운드 복귀 시 기기 시간대가 서버 반영값과 달라졌으면 다시 보낸다 — 해외 여행·이주.
+  ///
+  /// 콜드 스타트는 [init]의 [_getToken]이 이미 시간대를 실어 보내므로, 여기서는 **앱이
+  /// 살아 있는 채** 시간대가 바뀐 경우만 잡는다. 대상자는 heartbeat에도 시간대가 실리지만,
+  /// 보호자는 heartbeat를 보내지 않아 이 경로가 방해금지(DND) 시간대를 갱신하는 수단이다.
+  /// iOS에서 서쪽으로 이동하면 확장의 정시 전송이 "예약시각 전"으로 막히므로, 앱을 여는
+  /// 것이 가장 빠른 복구 경로이기도 하다(PRD-FrontEnd §2.2.3).
+  ///
+  /// fire-and-forget이며 throw하지 않는다([_getToken]·[_sendTokenToServer]가 삼킨다).
+  Future<void> _syncTimezoneIfChanged() async {
+    final tzName = await DeviceTimezone.refresh();
+    if (tzName == null || tzName == _lastSyncedTimezone) return;
+    await _getToken();
+  }
+
   /// 서버에 FCM 토큰 전송 — device_token이 없으면(등록 전) 건너뜀
   Future<void> _sendTokenToServer(String fcmToken) async {
     try {
       final deviceToken = await TokenLocalDatasource().getDeviceToken();
       if (deviceToken == null) return;
+      // 요청에 실린 값과 같은 시점의 값을 기록한다(전송 중 복귀로 바뀌어도 어긋나지 않게).
+      final sentTimezone = DeviceTimezone.current;
       await DeviceRemoteDatasource().updateFcmToken(deviceToken, fcmToken);
+      if (sentTimezone != null) _lastSyncedTimezone = sentTimezone;
       debugPrint('[FCM] 서버 토큰 갱신 완료');
     } catch (e) {
       debugPrint('[FCM] 서버 토큰 갱신 실패: $e');

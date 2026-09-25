@@ -432,6 +432,9 @@ final class NotificationService: UNNotificationServiceExtension {
             "scheduled_key": store.yesterdayKey,
             "steps_delta": steps,
             "suspicious": steps <= 0,
+            // 기기 현재 시간대 — 해외 여행·이주 시 서버 devices.timezone을 따라오게 한다
+            // (PRD-FrontEnd §2.2.3). 확장은 실행마다 새 프로세스라 값이 낡지 않는다.
+            "timezone": TimeZone.current.identifier,
             // ⚠️ battery_level 없음 — 지금 값은 어제 것이 아니다(위 주석 참조).
         ]
 
@@ -465,6 +468,10 @@ final class NotificationService: UNNotificationServiceExtension {
             "device_id": store.deviceId,
             "timestamp": ISO8601DateFormatter().string(from: Date()),
             "scheduled_key": scheduledKey ?? store.scheduledKey,
+            // 기기 현재 시간대(해외 여행·이주 대응, PRD-FrontEnd §2.2.3). 정시·피기백·회복
+            // 전송이 모두 이 함수를 지난다. ⚠️ 회복 전송에도 실려야 한다 — 서쪽으로 이동하면
+            // 정시 트리거가 "예약시각 전"으로 막혀 **회복 전송이 첫 전송**이 되기 때문이다.
+            "timezone": TimeZone.current.identifier,
             // ── suspicious 판정 (2026-09-01 도입) ─────────────────────
             // 안드로이드와 **같은 질문**을 한다: "전송 시점에 사람의 조작 흔적이 있는가".
             //   안드로이드  워커 발화 시점에 화면이 켜져 있었는가

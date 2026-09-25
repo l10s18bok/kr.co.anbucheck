@@ -12,6 +12,7 @@ import 'package:anbucheck/app/data/datasources/local/heartbeat_lock_datasource.d
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/heartbeat_remote_datasource.dart';
 import 'package:anbucheck/app/data/models/heartbeat_request.dart';
+import 'package:anbucheck/app/core/utils/device_timezone.dart';
 
 /// Heartbeat 수집 → suspicious 판정 → 서버 전송 (오프라인 시 큐 저장)
 ///
@@ -364,7 +365,8 @@ class HeartbeatService {
         'OK src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
             'pending=true today=$isTodaysReport '
             'key=${payload['scheduled_key'] ?? "-"} '
-            'steps=${payload['steps_delta'] ?? "-"}',
+            'steps=${payload['steps_delta'] ?? "-"} '
+            'tz=${DeviceTimezone.current ?? "-"}',
       );
 
       // 보류 큐의 payload가 **오늘 것인지 지난 날 것인지**로 갈린다.
@@ -459,7 +461,8 @@ class HeartbeatService {
           'HeartbeatSend',
           'OK src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
               'attempt=$attempt manual=${request.manual} '
-              'key=${reqKey ?? "-"} steps=${request.stepsDelta ?? "-"}',
+              'key=${reqKey ?? "-"} steps=${request.stepsDelta ?? "-"} '
+              'tz=${DeviceTimezone.current ?? "-"}',
         );
         break;
       } catch (e) {
@@ -491,6 +494,7 @@ class HeartbeatService {
                 'attempt=$attempt unreachable=$unreachable '
                 'outOfBudget=$outOfBudget manual=${request.manual} '
                 'key=${reqKey ?? "-"} steps=${request.stepsDelta ?? "-"} '
+                'tz=${DeviceTimezone.current ?? "-"} '
                 'notify=${!request.manual}',
           );
           if (!request.manual) await LocalAlarmService.notifySendFailed();

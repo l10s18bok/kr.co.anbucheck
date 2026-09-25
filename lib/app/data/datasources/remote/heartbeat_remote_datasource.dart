@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:anbucheck/app/core/network/api_client_factory.dart';
 import 'package:anbucheck/app/core/network/api_endpoints.dart';
 import 'package:anbucheck/app/data/models/heartbeat_request.dart';
+import 'package:anbucheck/app/core/utils/device_timezone.dart';
 
 /// heartbeat 전송 실패 — [statusCode]로 실패 **종류**를 구분한다.
 ///
@@ -33,9 +34,18 @@ class HeartbeatRemoteDatasource {
       : _auth = {'Authorization': 'Bearer $deviceToken'};
 
   Future<HeartbeatResponse> send(HeartbeatRequest request) async {
+    // 기기 현재 시간대는 **전송 직전에** 병합한다 — `toJson()`에 넣지 말 것.
+    // 보류 큐는 `toJson()` 결과를 그대로 저장하므로, 거기에 넣으면 서울에서 저장된 지난
+    // 기록이 파리에서 재전송될 때 서버 시간대를 서울로 되돌린다. 모든 전송 경로(정시·
+    // 회복·보류 큐 재전송·수동)가 이 메서드를 지나므로 여기 한 곳이면 된다.
+    // 값이 없으면(조회 실패·FCM 백그라운드 isolate) 싣지 않는다 — 서버가 저장값을 유지한다.
+    final payload = request.toJson();
+    final tzName = DeviceTimezone.current;
+    if (tzName != null) payload['timezone'] = tzName;
+
     final result = await ApiClientFactory.instance.post<dynamic>(
       ApiEndpoints.heartbeat,
-      request.toJson(),
+      payload,
       headers: _auth,
     );
 

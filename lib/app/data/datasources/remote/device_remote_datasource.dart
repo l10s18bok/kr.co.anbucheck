@@ -3,6 +3,7 @@ import 'package:anbucheck/app/core/network/api_endpoints.dart';
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/utils/device_timezone.dart';
 
 /// 기기 관련 원격 저장소
 class DeviceRemoteDatasource {
@@ -30,6 +31,9 @@ class DeviceRemoteDatasource {
           // gs_deadman 로컬 알림을 그대로 갖고 있어, 푸시까지 받으면 같은 시각에
           // 알림이 2개 뜬다(대상이 고령 사용자라 그 혼란은 이 앱이 없애려는 문제다).
         'supports_push_heartbeat': Platform.isIOS,
+        // 기기 현재 시간대 — 보호자 기기는 heartbeat를 보내지 않으므로 이 경로가 보호자
+        // 방해금지(DND) 판정 시간대를 갱신하는 유일한 수단이다. 조회 실패면 싣지 않는다.
+        if (DeviceTimezone.current != null) 'timezone': DeviceTimezone.current,
       },
       headers: _auth(deviceToken),
     );

@@ -22,6 +22,7 @@ import 'package:anbucheck/app/data/datasources/remote/version_remote_datasource.
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/firebase_options.dart';
+import 'package:anbucheck/app/core/utils/device_timezone.dart';
 
 /// Splash 컨트롤러
 /// 흐름: 네이티브 스플래시 제거 → 서비스 초기화 → 버전 체크 → 홈 or 모드 선택
@@ -142,6 +143,8 @@ class SplashController extends BaseController {
     tz.initializeTimeZones();
     try {
       final localTzName = await FlutterTimezone.getLocalTimezone();
+      // 서버 전송용 원본값 — getLocation 실패(→ 서울 폴백)와 무관하게 OS 값만 담는다.
+      DeviceTimezone.current = localTzName;
       tzlib.setLocalLocation(tzlib.getLocation(localTzName));
     } catch (_) {
       tzlib.setLocalLocation(tzlib.getLocation('Asia/Seoul'));

@@ -11,6 +11,7 @@ import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_alarm.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
+import 'package:anbucheck/app/core/utils/device_timezone.dart';
 
 /// WorkManager 백그라운드 콜백 (top-level 함수 필수)
 @pragma('vm:entry-point')
@@ -25,6 +26,8 @@ void heartbeatWorkerCallback() {
       tz.initializeTimeZones();
       try {
         final localTzName = await FlutterTimezone.getLocalTimezone();
+        // 서버 전송용 원본값 — getLocation 실패(→ 서울 폴백)와 무관하게 OS 값만 담는다.
+        DeviceTimezone.current = localTzName;
         tzlib.setLocalLocation(tzlib.getLocation(localTzName));
       } catch (_) {
         tzlib.setLocalLocation(tzlib.getLocation('Asia/Seoul'));
