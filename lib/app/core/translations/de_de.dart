@@ -6,13 +6,9 @@ abstract class DeDe {
     'common_continue': 'Weiter',
     'common_save': 'Speichern',
     'common_delete': 'Löschen',
-    'common_close': 'Schließen',
     'common_next': 'Weiter',
-    'common_previous': 'Zurück',
     'common_start': 'Jetzt starten',
-    'common_skip': 'Überspringen',
     'common_later': 'Später',
-    'common_loading': 'Wird geladen...',
     'common_error': 'Fehler',
     'common_session_expired': 'Ihre Kontodaten sind abgelaufen. Bitte registrieren Sie sich erneut.',
     'common_complete': 'Fertig',
@@ -32,9 +28,6 @@ abstract class DeDe {
     'app_service_desc': 'Automatischer Wohlbefindens-Check',
     'app_guardian_title': 'Anbu Betreuer',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Wohlbefinden wird geprüft...',
 
     // ── Update ──
     'update_required_title': 'Update erforderlich',
@@ -83,21 +76,11 @@ abstract class DeDe {
         '„Anbu" auswählen und unter „Ort" „Beim Verwenden der App" wählen.',
     'location_permission_settings_body_android':
         '„Berechtigungen" → „Standort" auswählen und „Nur während der Nutzung der App zulassen" wählen.',
-    'permission_activity_dialog_title': 'Hinweis zur Aktivitätsberechtigung',
-    'permission_activity_dialog_message':
-        'Wird verwendet, um Schritte zu erkennen und Aktivität zu bestätigen.\nBitte tippen Sie im nächsten Bildschirm auf „Erlauben".',
     'permission_notification_required_title':
         'Benachrichtigungsberechtigung erforderlich',
     'permission_notification_required_message':
         'Für den Wohlbefindens-Check ist die Benachrichtigungsberechtigung erforderlich.\nBitte aktivieren Sie diese in den Einstellungen.',
     'permission_go_to_settings': 'Zu den Einstellungen',
-    'permission_activity_denied_title':
-        'Berechtigung für körperliche Aktivität erforderlich',
-    'permission_activity_denied_message':
-        'Wird verwendet, um Schritte zu erkennen und die Genauigkeit der Wohlbefindensprüfung zu verbessern.\nBitte aktivieren Sie die Berechtigung in den Einstellungen.',
-    'permission_battery': 'Akku-Optimierung ausschließen',
-    'permission_battery_desc':
-        'Schließt die App von der Akku-Optimierung aus, damit der tägliche Wohlbefindens-Check zur geplanten Zeit nicht verpasst wird',
     'permission_hibernation_title':
         'Bitte automatische Berechtigungsentfernung deaktivieren',
     'permission_hibernation_highlight': 'automatische Berechtigungsentfernung',
@@ -155,11 +138,9 @@ abstract class DeDe {
     'subject_home_check_body_reported': 'Gemeldet um @time',
     'subject_home_check_body_scheduled': 'Geplant um @time',
     'subject_home_check_body_waiting': 'Warten seit @time',
-    'subject_home_battery_status': 'Akkustand',
     'subject_home_battery_charging': 'Wird geladen',
     'subject_home_battery_full': 'Voll',
     'subject_home_battery_low': 'Akku schwach',
-    'subject_home_connectivity_status': 'Verbindungsstatus',
     'subject_home_report_loading': 'Wird gemeldet...',
     'subject_home_report_button': 'Jetzt Wohlbefinden melden',
     'subject_home_report_desc':
@@ -167,7 +148,6 @@ abstract class DeDe {
     'subject_home_emergency_button': 'Ich brauche Hilfe',
     'subject_home_emergency_desc': 'Sendet einen Notruf an Ihre Betreuer',
     'subject_home_emergency_loading': 'Notruf wird gesendet...',
-    'subject_home_emergency_sent': 'Notruf wurde gesendet',
     'subject_home_emergency_failed': 'Notruf konnte nicht gesendet werden',
     'subject_home_manual_report_limit_reached':
         'Sie haben Ihre heutige Wohlbefindens-Meldung bereits gesendet. Bitte versuchen Sie es morgen erneut.',
@@ -190,8 +170,6 @@ abstract class DeDe {
     'emergency_map_accuracy_label': 'Genauigkeit',
     'emergency_map_open_external': 'In externer Karten-App öffnen',
     'emergency_map_no_location': 'Keine Standortdaten verfügbar',
-    'emergency_location_permission_denied_snackbar':
-        'Notruf ohne Standortberechtigung gesendet',
     'subject_home_emergency_confirm_send': 'Notruf senden',
     'emergency_message_hint': 'Nachricht hinzufügen (optional)',
     'subject_home_share_text':
@@ -218,8 +196,6 @@ abstract class DeDe {
     'guardian_subscription_expired': 'Abo erforderlich',
     'guardian_subscription_expired_message':
         'Die täglichen Wohlbefindens-Meldungen sind verstummt.\nFür den Preis eines Mittagessens wachen Sie das ganze Jahr über Ihre Liebsten.',
-    'guardian_subscribe': 'Abonnieren',
-    'guardian_payment_preparing': 'Zahlungsfunktion wird vorbereitet.',
     'guardian_today_summary': 'Heutige Wohlbefindens-Übersicht',
     'guardian_no_subjects': 'Keine betreuten Personen verbunden.',
     'guardian_checking_subjects':
@@ -233,7 +209,6 @@ abstract class DeDe {
     'guardian_last_check_minutes': 'Letzte Prüfung: vor @minutes Min.',
     'guardian_last_check_hours': 'Letzte Prüfung: vor @hours Std.',
     'guardian_last_check_days': 'Letzte Prüfung: vor @days Tag(en)',
-    'guardian_activity_stable': 'Aktivität: stabil',
     'guardian_activity_prefix': 'Aktivität',
     'guardian_activity_very_active': 'Sehr aktiv',
     'guardian_activity_active': 'Aktiv',
@@ -245,7 +220,6 @@ abstract class DeDe {
     'guardian_chart_y_axis_steps': 'Schritte',
     'guardian_chart_x_axis_last_7_days': 'Letzte 7 Tage',
     'guardian_chart_x_axis_last_30_days': 'Letzte 30 Tage',
-    'guardian_chart_today': 'Heute',
     'guardian_safety_needed': 'Prüfung erforderlich',
     'guardian_error_load_subjects':
         'Betreute Personen konnten nicht geladen werden.',
@@ -259,7 +233,6 @@ abstract class DeDe {
     'add_subject_guide_subtitle':
         'Verbinden Sie die App einer betreuten Person, um deren Zustand in Echtzeit zu verfolgen.',
     'add_subject_code_label': 'Einladungscode (7 Zeichen)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
         'Den Einladungscode finden Sie in der App der betreuten Person.',
     'add_subject_alias_label': 'Spitzname',
@@ -281,11 +254,6 @@ abstract class DeDe {
 
     // ── Betreuer-Einstellungen ──
     'settings_title': 'Einstellungen',
-    'settings_light_mode': 'Heller Modus',
-    'settings_dark_mode': 'Dunkler Modus',
-    'settings_connection_management': 'Verbindungsverwaltung',
-    'settings_managed_subjects': 'Verwaltete betreute Personen',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Abo & Service',
     'settings_current_membership': 'Aktuelle Mitgliedschaft',
     'settings_premium': 'Premium aktiv',
@@ -335,10 +303,6 @@ abstract class DeDe {
     'gs_enable_confirm': 'Erstellen',
     'gs_enabled_message': 'Wohlbefindens-Schutz wurde aktiviert',
     'gs_enable_failed': 'Wohlbefindens-Schutz konnte nicht aktiviert werden',
-    'gs_disable_dialog_title': 'Wohlbefindens-Schutz deaktivieren',
-    'gs_disable_dialog_body':
-        'Bei Deaktivierung wird Ihr Sicherheitscode gelöscht und die Wohlbefindens-Meldungen an verbundene Betreuer werden gestoppt.',
-    'gs_disable_confirm': 'Deaktivieren',
     'gs_disabled_message': 'Wohlbefindens-Schutz wurde deaktiviert',
     'gs_disable_failed': 'Wohlbefindens-Schutz konnte nicht deaktiviert werden',
     'gs_activity_permission_denied_warning':
@@ -412,7 +376,6 @@ abstract class DeDe {
 
     // ── Verbindungsverwaltung ──
     'connection_title': 'Verbindungsverwaltung',
-    'connection_managed_count': 'Verwaltete betreute Personen ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Verbundene betreute Personen',
     'connection_reorder_hint':
@@ -442,10 +405,7 @@ abstract class DeDe {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Check-in-Zeit ändern',
-    'heartbeat_schedule_title_ios': 'Check-in-Zeit',
     'heartbeat_schedule_change_title_ios': 'Check-in-Zeit ändern',
-    'heartbeat_schedule_hint_ios':
-        'Eine Wohlbefindens-Benachrichtigung trifft täglich zu dieser Zeit ein. Tippen Sie auf die Benachrichtigung oder öffnen Sie die App um diese Zeit, um Ihr Wohlbefindens-Signal zu senden.',
     'heartbeat_daily_time': 'Täglich um @time',
     'heartbeat_scheduled_today':
         'Ihr Wohlbefindens-Signal wird täglich um @time an Ihre Betreuer gesendet.',
@@ -463,12 +423,6 @@ abstract class DeDe {
 
     // ── Sonstiges ──
     'back_press_exit': 'Noch einmal drücken, um die App zu beenden.',
-
-    // ── API-Fehler ──
-    'error_unknown': 'Ein unbekannter Fehler ist aufgetreten.',
-    'error_timeout': 'Zeitüberschreitung der Anfrage.',
-    'error_network': 'Bitte überprüfen Sie Ihre Internetverbindung.',
-    'error_unauthorized': 'Authentifizierung erforderlich.',
 
     // ── Benachrichtigungstexte ──
     'noti_auto_report_body':
@@ -496,7 +450,6 @@ abstract class DeDe {
         'Die betreute Person hat direkt um Hilfe gebeten. Bitte sofort überprüfen.',
     'noti_resolved_body':
         'Das Wohlbefinden der betreuten Person wurde wieder bestätigt.',
-    'noti_cleared_by_guardian_title': '✅ Sicherheit bestätigt',
     'noti_cleared_by_guardian_body':
         'Einer der Betreuer hat die Sicherheit persönlich bestätigt.',
 

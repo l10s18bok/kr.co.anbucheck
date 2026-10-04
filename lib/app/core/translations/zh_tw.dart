@@ -6,13 +6,9 @@ abstract class ZhTw {
     'common_continue': '繼續',
     'common_save': '儲存',
     'common_delete': '刪除',
-    'common_close': '關閉',
     'common_next': '下一步',
-    'common_previous': '上一步',
     'common_start': '開始使用',
-    'common_skip': '跳過',
     'common_later': '稍後',
-    'common_loading': '載入中...',
     'common_error': '錯誤',
     'common_session_expired': '帳戶資訊已過期，請重新註冊。',
     'common_complete': '完成',
@@ -32,9 +28,6 @@ abstract class ZhTw {
     'app_service_desc': '自動問安服務',
     'app_guardian_title': 'Anbu 守護者',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── 啟動頁 ──
-    'splash_loading': '正在確認平安...',
 
     // ── 更新 ──
     'update_required_title': '需要更新',
@@ -72,15 +65,9 @@ abstract class ZhTw {
     'location_permission_settings_title': '需要位置權限設定',
     'location_permission_settings_body_ios': '找到並選擇「Anbu」,然後在「位置」中選擇「使用App期間」。',
     'location_permission_settings_body_android': '依序選擇「權限」→「位置」,然後選擇「僅在使用此應用程式時允許」。',
-    'permission_activity_dialog_title': '身體活動權限說明',
-    'permission_activity_dialog_message': '用於偵測步數以確認活動狀態。\n請在下一個畫面中選擇「允許」。',
     'permission_notification_required_title': '需要通知權限',
     'permission_notification_required_message': '問安服務需要通知權限。\n請在設定中開啟通知權限。',
     'permission_go_to_settings': '前往設定',
-    'permission_activity_denied_title': '需要身體活動權限',
-    'permission_activity_denied_message': '用於偵測步數並提高問安準確性。\n請在設定中開啟身體活動權限。',
-    'permission_battery': '電池最佳化例外',
-    'permission_battery_desc': '將應用程式從電池最佳化中排除，以免每天定時的問安檢查被遺漏',
     'permission_hibernation_title': '請關閉「自動撤銷權限」',
     'permission_hibernation_highlight': '自動撤銷權限',
     'permission_hibernation_message':
@@ -125,18 +112,15 @@ abstract class ZhTw {
     'subject_home_check_body_reported': '@time 已正常報告',
     'subject_home_check_body_scheduled': '@time 預定報告',
     'subject_home_check_body_waiting': '@time 等待報告中',
-    'subject_home_battery_status': '電池狀態',
     'subject_home_battery_charging': '充電中',
     'subject_home_battery_full': '已充滿',
     'subject_home_battery_low': '電量不足',
-    'subject_home_connectivity_status': '網路連線狀態',
     'subject_home_report_loading': '正在報告平安...',
     'subject_home_report_button': '立即報告安全',
     'subject_home_report_desc': '讓守護者知道您一切安好',
     'subject_home_emergency_button': '我需要幫助',
     'subject_home_emergency_desc': '向守護者發送緊急警報',
     'subject_home_emergency_loading': '正在發送緊急警報...',
-    'subject_home_emergency_sent': '緊急警報已發送',
     'subject_home_emergency_failed': '緊急警報發送失敗',
     'subject_home_manual_report_limit_reached': '今天的安全報告已完成。請明天再試。',
     'subject_home_manual_report_sent': '已向守護者傳送問候。',
@@ -154,7 +138,6 @@ abstract class ZhTw {
     'emergency_map_accuracy_label': '精度',
     'emergency_map_open_external': '在外部地圖應用程式中開啟',
     'emergency_map_no_location': '沒有位置資訊',
-    'emergency_location_permission_denied_snackbar': '未取得位置權限，已發送緊急警報',
     'subject_home_emergency_confirm_send': '發送緊急請求',
     'emergency_message_hint': '附言（選填）',
     'subject_home_share_text': '請在 Anbu 應用程式中與我連結。\n安全碼：@code',
@@ -178,8 +161,6 @@ abstract class ZhTw {
     'guardian_status_confirmed': '✅ 安全',
     'guardian_subscription_expired': '需要訂閱',
     'guardian_subscription_expired_message': '每天傳來的平安訊息現已中斷。\n用一頓午餐的錢，全年守護您牽掛的人。',
-    'guardian_subscribe': '訂閱',
-    'guardian_payment_preparing': '付款功能正在準備中。',
     'guardian_today_summary': '今日問安總結',
     'guardian_no_subjects': '尚無已連線的被守護者。',
     'guardian_checking_subjects': '正在關注\n@count 位被守護者的平安。',
@@ -192,7 +173,6 @@ abstract class ZhTw {
     'guardian_last_check_minutes': '上次確認：@minutes 分鐘前',
     'guardian_last_check_hours': '上次確認：@hours 小時前',
     'guardian_last_check_days': '上次確認：@days 天前',
-    'guardian_activity_stable': '活動量：穩定',
     'guardian_activity_prefix': '活動量',
     'guardian_activity_very_active': '非常活躍',
     'guardian_activity_active': '活躍',
@@ -203,7 +183,6 @@ abstract class ZhTw {
     'guardian_chart_y_axis_steps': '步數',
     'guardian_chart_x_axis_last_7_days': '最近7天',
     'guardian_chart_x_axis_last_30_days': '最近30天',
-    'guardian_chart_today': '今天',
     'guardian_safety_needed': '需要確認安全',
     'guardian_error_load_subjects': '載入被守護者列表失敗。',
     'guardian_safety_confirmed': '安全已確認。',
@@ -214,7 +193,6 @@ abstract class ZhTw {
     'add_subject_guide_title': '請輸入被守護者的安全碼和別名。',
     'add_subject_guide_subtitle': '連結被守護者的應用程式後，可以即時查看其健康狀態和活動情況。',
     'add_subject_code_label': '安全碼（7位）',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': '安全碼可在被守護者的應用程式中找到。',
     'add_subject_alias_label': '被守護者別名',
     'add_subject_alias_hint': '例如：媽媽、爸爸',
@@ -233,11 +211,6 @@ abstract class ZhTw {
 
     // ── 守護者設定 ──
     'settings_title': '設定',
-    'settings_light_mode': '淺色模式',
-    'settings_dark_mode': '深色模式',
-    'settings_connection_management': '連線管理',
-    'settings_managed_subjects': '管理的被守護者人數',
-    'settings_managed_subjects_count': '@current / @max 人',
     'settings_subscription_service': '訂閱與服務',
     'settings_current_membership': '目前會員',
     'settings_premium': '進階訂閱中',
@@ -284,9 +257,6 @@ abstract class ZhTw {
     'gs_enable_confirm': '產生',
     'gs_enabled_message': '平安守護已啟用',
     'gs_enable_failed': '平安守護啟用失敗',
-    'gs_disable_dialog_title': '停用平安守護',
-    'gs_disable_dialog_body': '停用平安守護將刪除您的安全碼，並停止向已連接的守護者發送平安確認。',
-    'gs_disable_confirm': '停用',
     'gs_disabled_message': '平安守護已停用',
     'gs_disable_failed': '平安守護停用失敗',
     'gs_activity_permission_denied_warning': '計步權限已被拒絕。點擊此處授予權限。',
@@ -344,7 +314,6 @@ abstract class ZhTw {
 
     // ── 守護者連線管理 ──
     'connection_title': '連線管理',
-    'connection_managed_count': '管理的被守護者人數 ',
     'connection_managed_count_value': '@current / @max 人',
     'connection_connected_subjects': '已連線的被守護者',
     'connection_reorder_hint': '長按下方卡片即可調整順序',
@@ -371,9 +340,7 @@ abstract class ZhTw {
 
     // ── Heartbeat 相關 ──
     'heartbeat_schedule_change': '變更平安確認時間',
-    'heartbeat_schedule_title_ios': '平安確認時間',
     'heartbeat_schedule_change_title_ios': '變更平安確認時間',
-    'heartbeat_schedule_hint_ios': '每天在此時間會收到平安推播通知。點按通知或在前後開啟應用程式即可傳送平安信號。',
     'heartbeat_daily_time': '每天 @time',
     'heartbeat_scheduled_today': '每天 @time 將向守護者傳送問安。',
     'heartbeat_change_failed_title': '更改時間失敗',
@@ -389,12 +356,6 @@ abstract class ZhTw {
     // ── 其他 ──
     'back_press_exit': '再按一次返回鍵退出應用程式。',
 
-    // ── API 錯誤 ──
-    'error_unknown': '發生了未知錯誤。',
-    'error_timeout': '請求逾時。',
-    'error_network': '請檢查網路連線。',
-    'error_unauthorized': '需要驗證身分。',
-
     // ── 通知內文 ──
     'noti_auto_report_body': '問安已正常收到。',
     'noti_manual_report_body': '被守護者手動發送了平安資訊。',
@@ -409,7 +370,6 @@ abstract class ZhTw {
     'noti_steps_body': '今天共走了@steps步。',
     'noti_emergency_body': '被守護者直接請求了幫助。請立即確認。',
     'noti_resolved_body': '已恢復正常。被守護者的平安已正常確認。',
-    'noti_cleared_by_guardian_title': '✅ 安全確認完成',
     'noti_cleared_by_guardian_body': '一位守護者已親自確認了被守護者的安全。',
 
     // ── 本地通知 ──

@@ -6,13 +6,9 @@ abstract class ArSa {
     'common_continue': 'متابعة',
     'common_save': 'حفظ',
     'common_delete': 'حذف',
-    'common_close': 'إغلاق',
     'common_next': 'التالي',
-    'common_previous': 'السابق',
     'common_start': 'ابدأ الآن',
-    'common_skip': 'تخطي',
     'common_later': 'لاحقاً',
-    'common_loading': 'جارٍ التحميل...',
     'common_error': 'خطأ',
     'common_session_expired': 'انتهت صلاحية بيانات حسابك. يرجى التسجيل من جديد.',
     'common_complete': 'تم',
@@ -32,9 +28,6 @@ abstract class ArSa {
     'app_service_desc': 'خدمة الاطمئنان التلقائي على السلامة',
     'app_guardian_title': 'مُرافِق Anbu',
     'app_copyright': '© Averic Lab',
-
-    // ── شاشة البداية ──
-    'splash_loading': 'جارٍ الاطمئنان...',
 
     // ── التحديث ──
     'update_required_title': 'التحديث مطلوب',
@@ -74,19 +67,10 @@ abstract class ArSa {
         'ابحث عن «Anbu» واختره، ثم في «الموقع» اختر «عند استخدام التطبيق».',
     'location_permission_settings_body_android':
         'اختر «الأذونات» ← «الموقع»، ثم اختر «السماح فقط أثناء استخدام التطبيق».',
-    'permission_activity_dialog_title': 'معلومات عن إذن النشاط',
-    'permission_activity_dialog_message':
-        'يُستخدم لاكتشاف الخطوات والتأكد من النشاط.\nيرجى الضغط على «السماح» في الشاشة التالية.',
     'permission_notification_required_title': 'إذن الإشعارات مطلوب',
     'permission_notification_required_message':
         'يتطلب عمل خدمة الاطمئنان إذن الإشعارات.\nيرجى تفعيله من الإعدادات.',
     'permission_go_to_settings': 'الذهاب إلى الإعدادات',
-    'permission_activity_denied_title': 'إذن النشاط البدني مطلوب',
-    'permission_activity_denied_message':
-        'يلزم إذن النشاط البدني لاكتشاف الخطوات والتحقق من سلامتك.\n\nبدون هذا الإذن، لن يتم إرسال معلومات الخطوات إلى الأوصياء.\n\nيرجى تفعيل إذن "النشاط البدني" في إعدادات التطبيق.',
-    'permission_battery': 'استثناء من تحسين البطارية',
-    'permission_battery_desc':
-        'يستثني التطبيق من تحسين البطارية حتى لا تفوت عمليات التحقق اليومية من السلامة في الوقت المحدد',
     'permission_hibernation_title': 'الرجاء إيقاف الإزالة التلقائية للأذونات',
     'permission_hibernation_highlight': 'الإزالة التلقائية للأذونات',
     'permission_hibernation_message':
@@ -135,18 +119,15 @@ abstract class ArSa {
     'subject_home_check_body_reported': 'تم الإبلاغ في @time',
     'subject_home_check_body_scheduled': 'مقرر في @time',
     'subject_home_check_body_waiting': 'في الانتظار منذ @time',
-    'subject_home_battery_status': 'حالة البطارية',
     'subject_home_battery_charging': 'قيد الشحن',
     'subject_home_battery_full': 'مشحونة بالكامل',
     'subject_home_battery_low': 'بطارية منخفضة',
-    'subject_home_connectivity_status': 'حالة الاتصال',
     'subject_home_report_loading': 'جارٍ الإبلاغ...',
     'subject_home_report_button': 'أبلغ عن سلامتك الآن',
     'subject_home_report_desc': 'أخبر مُرافِقك أنك بخير',
     'subject_home_emergency_button': 'أحتاج مساعدة',
     'subject_home_emergency_desc': 'يرسل تنبيه طوارئ إلى المُرافِقين',
     'subject_home_emergency_loading': 'جاري إرسال تنبيه الطوارئ...',
-    'subject_home_emergency_sent': 'تم إرسال تنبيه الطوارئ',
     'subject_home_emergency_failed': 'فشل إرسال تنبيه الطوارئ',
     'subject_home_manual_report_limit_reached':
         'لقد قمت بالفعل بإرسال تقرير السلامة لهذا اليوم. يرجى المحاولة غدًا.',
@@ -168,7 +149,6 @@ abstract class ArSa {
     'emergency_map_accuracy_label': 'الدقة',
     'emergency_map_open_external': 'افتح في تطبيق خرائط خارجي',
     'emergency_map_no_location': 'لا تتوفر معلومات الموقع',
-    'emergency_location_permission_denied_snackbar': 'تم إرسال تنبيه الطوارئ دون إذن الموقع',
     'subject_home_emergency_confirm_send': 'إرسال طلب الطوارئ',
     'emergency_message_hint': 'إضافة رسالة (اختياري)',
     'subject_home_share_text': 'تواصل معي عبر تطبيق Anbu.\nرمز الاتصال: @code',
@@ -193,8 +173,6 @@ abstract class ArSa {
     'guardian_subscription_expired': 'الاشتراك مطلوب',
     'guardian_subscription_expired_message':
         'توقفت رسائل الاطمئنان اليومية.\nبثمن وجبة غداء، اطمئن على من تحب طوال العام.',
-    'guardian_subscribe': 'اشترك',
-    'guardian_payment_preparing': 'ميزة الدفع قيد الإعداد.',
     'guardian_today_summary': 'ملخص اطمئنان اليوم',
     'guardian_no_subjects': 'لا يوجد أشخاص محميون متصلون.',
     'guardian_checking_subjects': 'قيد المتابعة حالياً\nالأشخاص المحميون: @count',
@@ -207,7 +185,6 @@ abstract class ArSa {
     'guardian_last_check_minutes': 'آخر اطمئنان: منذ @minutes دقيقة',
     'guardian_last_check_hours': 'آخر اطمئنان: منذ @hours ساعة',
     'guardian_last_check_days': 'آخر اطمئنان: منذ @days يوم',
-    'guardian_activity_stable': 'النشاط: مستقر',
     'guardian_activity_prefix': 'النشاط',
     'guardian_activity_very_active': 'نشيط جدًا',
     'guardian_activity_active': 'نشيط',
@@ -218,7 +195,6 @@ abstract class ArSa {
     'guardian_chart_y_axis_steps': 'الخطوات',
     'guardian_chart_x_axis_last_7_days': 'آخر 7 أيام',
     'guardian_chart_x_axis_last_30_days': 'آخر 30 يومًا',
-    'guardian_chart_today': 'اليوم',
     'guardian_safety_needed': 'مطلوب التحقق من السلامة',
     'guardian_error_load_subjects': 'تعذر تحميل قائمة الأشخاص المحميين.',
     'guardian_safety_confirmed': 'تم تأكيد السلامة.',
@@ -229,7 +205,6 @@ abstract class ArSa {
     'add_subject_guide_title': 'أدخل الرمز الفريد للشخص المحمي وحدد اسماً له.',
     'add_subject_guide_subtitle': 'اربط تطبيق الشخص المحمي لمراقبة حالته ونشاطه.',
     'add_subject_code_label': 'الرمز الفريد (7 أحرف)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'يمكن العثور على الرمز الفريد في تطبيق الشخص المحمي.',
     'add_subject_alias_label': 'اسم الشخص المحمي',
     'add_subject_alias_hint': 'مثال: أمي، أبي',
@@ -248,11 +223,6 @@ abstract class ArSa {
 
     // ── إعدادات المُرافِق ──
     'settings_title': 'الإعدادات',
-    'settings_light_mode': 'الوضع الفاتح',
-    'settings_dark_mode': 'الوضع الداكن',
-    'settings_connection_management': 'إدارة الاتصالات',
-    'settings_managed_subjects': 'عدد الأشخاص المحميين',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'الاشتراك والخدمة',
     'settings_current_membership': 'العضوية الحالية',
     'settings_premium': 'اشتراك مميز نشط',
@@ -300,10 +270,6 @@ abstract class ArSa {
     'gs_enable_confirm': 'إنشاء',
     'gs_enabled_message': 'تم تفعيل الحماية',
     'gs_enable_failed': 'فشل تفعيل الحماية',
-    'gs_disable_dialog_title': 'إلغاء الحماية',
-    'gs_disable_dialog_body':
-        'سيؤدي إلغاء الحماية إلى حذف رمز الأمان الخاص بك وإيقاف إرسال فحوصات السلامة إلى الأوصياء المتصلين.',
-    'gs_disable_confirm': 'إلغاء',
     'gs_disabled_message': 'تم إلغاء الحماية',
     'gs_disable_failed': 'فشل إلغاء الحماية',
     'gs_activity_permission_denied_warning': 'تم رفض إذن عداد الخطوات. انقر هنا للسماح.',
@@ -362,7 +328,6 @@ abstract class ArSa {
 
     // ── إدارة اتصالات المُرافِق ──
     'connection_title': 'إدارة الاتصالات',
-    'connection_managed_count': 'عدد الأشخاص المحميين ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'الأشخاص المحميون المتصلون',
     'connection_reorder_hint': 'اضغط مطولاً على البطاقة أدناه لإعادة الترتيب',
@@ -390,10 +355,7 @@ abstract class ArSa {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'تغيير موعد الاطمئنان',
-    'heartbeat_schedule_title_ios': 'موعد الاطمئنان',
     'heartbeat_schedule_change_title_ios': 'تغيير موعد الاطمئنان',
-    'heartbeat_schedule_hint_ios':
-        'يصل إشعار دفع الاطمئنان في هذا الوقت يوميًا. انقر على الإشعار أو افتح التطبيق في ذلك الوقت لإرسال إشارة الاطمئنان.',
     'heartbeat_daily_time': 'يومياً في @time',
     'heartbeat_scheduled_today': 'سيتم إرسال إشارة الاطمئنان إلى الحراس يومياً في @time.',
     'heartbeat_change_failed_title': 'فشل تغيير الوقت',
@@ -408,12 +370,6 @@ abstract class ArSa {
 
     // ── متنوع ──
     'back_press_exit': 'اضغط رجوع مرة أخرى للخروج.',
-
-    // ── أخطاء API ──
-    'error_unknown': 'حدث خطأ غير معروف.',
-    'error_timeout': 'انتهت مهلة الطلب.',
-    'error_network': 'يرجى التحقق من اتصالك بالشبكة.',
-    'error_unauthorized': 'المصادقة مطلوبة.',
 
     // ── نصوص الإشعارات ──
     'noti_auto_report_body': 'تم استلام فحص الاطمئنان بنجاح.',
@@ -434,7 +390,6 @@ abstract class ArSa {
     'noti_steps_body': 'تم قطع @steps خطوة اليوم.',
     'noti_emergency_body': 'طلب الشخص المحمي المساعدة مباشرة. يرجى التحقق فوراً.',
     'noti_resolved_body': 'عاد فحص سلامة الشخص المحمي إلى الوضع الطبيعي.',
-    'noti_cleared_by_guardian_title': '✅ تم تأكيد السلامة',
     'noti_cleared_by_guardian_body': 'أكد أحد المُرافِقين سلامة الشخص المحمي بنفسه.',
 
     // ── الإشعارات المحلية ──

@@ -6,13 +6,9 @@ abstract class IdId {
     'common_continue': 'Lanjutkan',
     'common_save': 'Simpan',
     'common_delete': 'Hapus',
-    'common_close': 'Tutup',
     'common_next': 'Berikutnya',
-    'common_previous': 'Sebelumnya',
     'common_start': 'Mulai',
-    'common_skip': 'Lewati',
     'common_later': 'Nanti',
-    'common_loading': 'Memuat...',
     'common_error': 'Kesalahan',
     'common_session_expired': 'Informasi akun Anda telah kedaluwarsa. Silakan daftar ulang.',
     'common_complete': 'Selesai',
@@ -32,9 +28,6 @@ abstract class IdId {
     'app_service_desc': 'Layanan pemeriksaan kesejahteraan otomatis',
     'app_guardian_title': 'Pelindung Anbu',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Memeriksa kesejahteraan...',
 
     // ── Pembaruan ──
     'update_required_title': 'Pembaruan diperlukan',
@@ -79,19 +72,10 @@ abstract class IdId {
         "Temukan dan pilih 'Anbu', lalu di 'Lokasi' pilih 'Ketika Menggunakan App Ini'.",
     'location_permission_settings_body_android':
         "Pilih 'Izin' → 'Lokasi', lalu pilih 'Izinkan hanya saat menggunakan aplikasi'.",
-    'permission_activity_dialog_title': 'Info Izin Aktivitas',
-    'permission_activity_dialog_message':
-        'Digunakan untuk mendeteksi langkah dan memastikan aktivitas.\nSilakan ketuk "Izinkan" di layar berikutnya.',
     'permission_notification_required_title': 'Izin Notifikasi Diperlukan',
     'permission_notification_required_message':
         'Izin notifikasi diperlukan untuk layanan pemeriksaan kesejahteraan.\nSilakan aktifkan di Pengaturan.',
     'permission_go_to_settings': 'Buka Pengaturan',
-    'permission_activity_denied_title': 'Izin Aktivitas Fisik Diperlukan',
-    'permission_activity_denied_message':
-        'Izin aktivitas fisik diperlukan untuk mendeteksi langkah dan memverifikasi keselamatan Anda.\n\nTanpa izin ini, informasi langkah tidak akan dikirim ke wali.\n\nSilakan aktifkan izin "Aktivitas Fisik" di pengaturan aplikasi.',
-    'permission_battery': 'Pengecualian Pengoptimalan Baterai',
-    'permission_battery_desc':
-        'Mengecualikan aplikasi dari pengoptimalan baterai agar pemeriksaan kesejahteraan harian tidak terlewat pada waktu yang dijadwalkan',
     'permission_hibernation_title': 'Matikan penghapusan izin otomatis',
     'permission_hibernation_highlight': 'penghapusan izin otomatis',
     'permission_hibernation_message':
@@ -143,18 +127,15 @@ abstract class IdId {
     'subject_home_check_body_reported': 'Dilaporkan pada @time',
     'subject_home_check_body_scheduled': 'Dijadwalkan pada @time',
     'subject_home_check_body_waiting': 'Menunggu sejak @time',
-    'subject_home_battery_status': 'Status Baterai',
     'subject_home_battery_charging': 'Mengisi daya',
     'subject_home_battery_full': 'Penuh',
     'subject_home_battery_low': 'Baterai Lemah',
-    'subject_home_connectivity_status': 'Konektivitas',
     'subject_home_report_loading': 'Melaporkan...',
     'subject_home_report_button': 'Laporkan Keselamatan Sekarang',
     'subject_home_report_desc': 'Beritahu pelindung Anda bahwa Anda baik-baik saja',
     'subject_home_emergency_button': 'Saya butuh bantuan',
     'subject_home_emergency_desc': 'Mengirim peringatan darurat ke pelindung Anda',
     'subject_home_emergency_loading': 'Mengirim peringatan darurat...',
-    'subject_home_emergency_sent': 'Peringatan darurat telah dikirim',
     'subject_home_emergency_failed': 'Gagal mengirim peringatan darurat',
     'subject_home_manual_report_limit_reached':
         'Anda sudah mengirim laporan keamanan hari ini. Silakan coba lagi besok.',
@@ -176,7 +157,6 @@ abstract class IdId {
     'emergency_map_accuracy_label': 'Akurasi',
     'emergency_map_open_external': 'Buka di aplikasi peta eksternal',
     'emergency_map_no_location': 'Tidak ada informasi lokasi',
-    'emergency_location_permission_denied_snackbar': 'Peringatan darurat dikirim tanpa izin lokasi',
     'subject_home_emergency_confirm_send': 'Kirim permintaan darurat',
     'emergency_message_hint': 'Tambahkan pesan (opsional)',
     'subject_home_share_text':
@@ -202,8 +182,6 @@ abstract class IdId {
     'guardian_subscription_expired': 'Perlu berlangganan',
     'guardian_subscription_expired_message':
         'Kabar harian tentang orang tersayang kini terhenti.\nDengan harga satu kali makan siang, jagalah orang tersayang sepanjang tahun.',
-    'guardian_subscribe': 'Berlangganan',
-    'guardian_payment_preparing': 'Fitur pembayaran segera hadir.',
     'guardian_today_summary': 'Ringkasan Kesejahteraan Hari Ini',
     'guardian_no_subjects': 'Belum ada orang yang dilindungi.',
     'guardian_checking_subjects': 'Sedang memeriksa\n@count orang yang dilindungi.',
@@ -216,7 +194,6 @@ abstract class IdId {
     'guardian_last_check_minutes': 'Pemeriksaan terakhir: @minutes menit lalu',
     'guardian_last_check_hours': 'Pemeriksaan terakhir: @hours jam lalu',
     'guardian_last_check_days': 'Pemeriksaan terakhir: @days hari lalu',
-    'guardian_activity_stable': 'Aktivitas: Stabil',
     'guardian_activity_prefix': 'Aktivitas',
     'guardian_activity_very_active': 'Sangat aktif',
     'guardian_activity_active': 'Aktif',
@@ -227,7 +204,6 @@ abstract class IdId {
     'guardian_chart_y_axis_steps': 'Langkah',
     'guardian_chart_x_axis_last_7_days': '7 hari terakhir',
     'guardian_chart_x_axis_last_30_days': '30 hari terakhir',
-    'guardian_chart_today': 'Today',
     'guardian_safety_needed': 'Perlu diperiksa',
     'guardian_error_load_subjects': 'Gagal memuat daftar orang yang dilindungi.',
     'guardian_safety_confirmed': 'Keamanan dikonfirmasi.',
@@ -239,7 +215,6 @@ abstract class IdId {
     'add_subject_guide_subtitle':
         'Hubungkan aplikasi orang yang dilindungi untuk memantau kesehatan dan aktivitas secara real-time.',
     'add_subject_code_label': 'Kode Unik (7 digit)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'Kode unik dapat ditemukan di aplikasi orang yang dilindungi.',
     'add_subject_alias_label': 'Alias Orang yang Dilindungi',
     'add_subject_alias_hint': 'contoh: Ibu, Ayah',
@@ -258,11 +233,6 @@ abstract class IdId {
 
     // ── Pengaturan Pelindung ──
     'settings_title': 'Pengaturan',
-    'settings_light_mode': 'Mode Terang',
-    'settings_dark_mode': 'Mode Gelap',
-    'settings_connection_management': 'Manajemen Koneksi',
-    'settings_managed_subjects': 'Orang yang Dilindungi',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Langganan & Layanan',
     'settings_current_membership': 'Keanggotaan Saat Ini',
     'settings_premium': 'Premium Aktif',
@@ -310,10 +280,6 @@ abstract class IdId {
     'gs_enable_confirm': 'Buat',
     'gs_enabled_message': 'Perlindungan telah diaktifkan',
     'gs_enable_failed': 'Gagal mengaktifkan perlindungan',
-    'gs_disable_dialog_title': 'Nonaktifkan perlindungan',
-    'gs_disable_dialog_body':
-        'Menonaktifkan akan menghapus kode keamanan Anda dan menghentikan pengiriman pemeriksaan kesehatan ke penjaga yang terhubung.',
-    'gs_disable_confirm': 'Nonaktifkan',
     'gs_disabled_message': 'Perlindungan telah dinonaktifkan',
     'gs_disable_failed': 'Gagal menonaktifkan perlindungan',
     'gs_activity_permission_denied_warning':
@@ -379,7 +345,6 @@ abstract class IdId {
 
     // ── Manajemen Koneksi Pelindung ──
     'connection_title': 'Manajemen Koneksi',
-    'connection_managed_count': 'Orang yang Dilindungi ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Orang yang Dilindungi Terhubung',
     'connection_reorder_hint': 'Tekan dan tahan kartu di bawah untuk mengubah urutan',
@@ -407,10 +372,7 @@ abstract class IdId {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Ubah jadwal kabar',
-    'heartbeat_schedule_title_ios': 'Jadwal kabar',
     'heartbeat_schedule_change_title_ios': 'Ubah jadwal kabar',
-    'heartbeat_schedule_hint_ios':
-        'Notifikasi push kesehatan datang setiap hari pada waktu ini. Ketuk notifikasi atau buka aplikasi di sekitar waktu itu untuk mengirim sinyal kesehatan Anda.',
     'heartbeat_daily_time': 'Setiap hari pukul @time',
     'heartbeat_scheduled_today':
         'Sinyal kesejahteraan Anda akan dikirim ke penjaga Anda setiap hari pukul @time.',
@@ -426,12 +388,6 @@ abstract class IdId {
 
     // ── Lain-lain ──
     'back_press_exit': 'Tekan kembali sekali lagi untuk keluar.',
-
-    // ── Kesalahan API ──
-    'error_unknown': 'Terjadi kesalahan yang tidak diketahui.',
-    'error_timeout': 'Waktu permintaan habis.',
-    'error_network': 'Silakan periksa koneksi jaringan Anda.',
-    'error_unauthorized': 'Autentikasi diperlukan.',
 
     // ── Isi Notifikasi ──
     'noti_auto_report_body': 'Pemeriksaan kesejahteraan telah diterima dengan sukses.',
@@ -455,7 +411,6 @@ abstract class IdId {
     'noti_steps_body': 'Hari ini berjalan @steps langkah.',
     'noti_emergency_body': 'Orang yang dilindungi langsung meminta bantuan. Harap segera periksa.',
     'noti_resolved_body': 'Pemeriksaan kesejahteraan orang yang dilindungi telah kembali normal.',
-    'noti_cleared_by_guardian_title': '✅ Keamanan dikonfirmasi',
     'noti_cleared_by_guardian_body':
         'Salah satu pelindung telah memastikan keamanan secara langsung.',
 

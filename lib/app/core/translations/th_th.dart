@@ -6,13 +6,9 @@ abstract class ThTh {
     'common_continue': 'ดำเนินต่อ',
     'common_save': 'บันทึก',
     'common_delete': 'ลบ',
-    'common_close': 'ปิด',
     'common_next': 'ถัดไป',
-    'common_previous': 'ก่อนหน้า',
     'common_start': 'เริ่มต้นใช้งาน',
-    'common_skip': 'ข้าม',
     'common_later': 'ภายหลัง',
-    'common_loading': 'กำลังโหลด...',
     'common_error': 'ข้อผิดพลาด',
     'common_session_expired': 'ข้อมูลบัญชีหมดอายุแล้ว กรุณาลงทะเบียนใหม่',
     'common_complete': 'เสร็จสิ้น',
@@ -32,9 +28,6 @@ abstract class ThTh {
     'app_service_desc': 'บริการตรวจสอบความเป็นอยู่อัตโนมัติ',
     'app_guardian_title': 'ผู้ดูแล Anbu',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'กำลังตรวจสอบความเป็นอยู่...',
 
     // ── อัปเดต ──
     'update_required_title': 'จำเป็นต้องอัปเดต',
@@ -75,19 +68,10 @@ abstract class ThTh {
         'ค้นหาและเลือก "Anbu" จากนั้นในหัวข้อ "ตำแหน่งที่ตั้ง" เลือก "ขณะใช้แอป"',
     'location_permission_settings_body_android':
         'เลือก "การอนุญาต" → "ตำแหน่ง" แล้วเลือก "อนุญาตเฉพาะขณะใช้แอปเท่านั้น"',
-    'permission_activity_dialog_title': 'ข้อมูลสิทธิ์กิจกรรม',
-    'permission_activity_dialog_message':
-        'ใช้ในการตรวจจับก้าวเดินและยืนยันกิจกรรม\nกรุณาแตะ "อนุญาต" ในหน้าจอถัดไป',
     'permission_notification_required_title': 'จำเป็นต้องอนุญาตการแจ้งเตือน',
     'permission_notification_required_message':
         'สิทธิ์การแจ้งเตือนจำเป็นสำหรับบริการตรวจสอบความเป็นอยู่\nกรุณาเปิดในการตั้งค่า',
     'permission_go_to_settings': 'ไปที่การตั้งค่า',
-    'permission_activity_denied_title': 'ต้องการสิทธิ์กิจกรรมทางกาย',
-    'permission_activity_denied_message':
-        'สิทธิ์กิจกรรมทางกายจำเป็นสำหรับการตรวจจับก้าวเดินและยืนยันความปลอดภัยของคุณ\n\nหากไม่มีสิทธิ์นี้ ข้อมูลก้าวเดินจะไม่ถูกส่งไปยังผู้ดูแล\n\nกรุณาเปิดสิทธิ์ "กิจกรรมทางกาย" ในการตั้งค่าแอป',
-    'permission_battery': 'ยกเว้นการเพิ่มประสิทธิภาพแบตเตอรี่',
-    'permission_battery_desc':
-        'ยกเว้นแอปจากการเพิ่มประสิทธิภาพแบตเตอรี่เพื่อไม่ให้การตรวจสอบความเป็นอยู่ประจำวันถูกพลาดในเวลาที่กำหนด',
     'permission_hibernation_title': 'โปรดปิดการลบสิทธิ์อัตโนมัติ',
     'permission_hibernation_highlight': 'การลบสิทธิ์อัตโนมัติ',
     'permission_hibernation_message':
@@ -137,18 +121,15 @@ abstract class ThTh {
     'subject_home_check_body_reported': 'รายงานเมื่อ @time',
     'subject_home_check_body_scheduled': 'กำหนดเวลา @time',
     'subject_home_check_body_waiting': 'รอตั้งแต่ @time',
-    'subject_home_battery_status': 'สถานะแบตเตอรี่',
     'subject_home_battery_charging': 'กำลังชาร์จ',
     'subject_home_battery_full': 'เต็ม',
     'subject_home_battery_low': 'แบตเตอรี่ต่ำ',
-    'subject_home_connectivity_status': 'การเชื่อมต่อ',
     'subject_home_report_loading': 'กำลังรายงาน...',
     'subject_home_report_button': 'รายงานความปลอดภัยตอนนี้',
     'subject_home_report_desc': 'แจ้งผู้ดูแลว่าคุณสบายดี',
     'subject_home_emergency_button': 'ฉันต้องการความช่วยเหลือ',
     'subject_home_emergency_desc': 'ส่งการแจ้งเตือนฉุกเฉินไปยังผู้ดูแล',
     'subject_home_emergency_loading': 'กำลังส่งการแจ้งเตือนฉุกเฉิน...',
-    'subject_home_emergency_sent': 'ส่งการแจ้งเตือนฉุกเฉินแล้ว',
     'subject_home_emergency_failed': 'ไม่สามารถส่งการแจ้งเตือนฉุกเฉินได้',
     'subject_home_manual_report_limit_reached':
         'คุณได้ส่งรายงานความปลอดภัยของวันนี้แล้ว โปรดลองอีกครั้งในวันพรุ่งนี้',
@@ -169,8 +150,6 @@ abstract class ThTh {
     'emergency_map_accuracy_label': 'ความแม่นยำ',
     'emergency_map_open_external': 'เปิดในแอปแผนที่ภายนอก',
     'emergency_map_no_location': 'ไม่มีข้อมูลตำแหน่ง',
-    'emergency_location_permission_denied_snackbar':
-        'ส่งการแจ้งเตือนฉุกเฉินโดยไม่ได้รับสิทธิ์ตำแหน่ง',
     'subject_home_emergency_confirm_send': 'ส่งคำขอฉุกเฉิน',
     'emergency_message_hint': 'เพิ่มข้อความ (ไม่บังคับ)',
     'subject_home_share_text': 'โปรดเชื่อมต่อกับฉันผ่านแอป Anbu\nรหัสเชื่อมต่อ: @code',
@@ -195,8 +174,6 @@ abstract class ThTh {
     'guardian_subscription_expired': 'ต้องสมัครสมาชิก',
     'guardian_subscription_expired_message':
         'ข่าวคราวความปลอดภัยที่เคยส่งมาทุกวันได้หยุดลงแล้ว\nด้วยราคาอาหารกลางวันมื้อเดียว ดูแลคนที่คุณรักได้ตลอดทั้งปี',
-    'guardian_subscribe': 'สมัครสมาชิก',
-    'guardian_payment_preparing': 'ฟีเจอร์การชำระเงินเร็วๆ นี้',
     'guardian_today_summary': 'สรุปความเป็นอยู่วันนี้',
     'guardian_no_subjects': 'ยังไม่มีผู้ได้รับการดูแล',
     'guardian_checking_subjects': 'กำลังตรวจสอบ\nผู้ได้รับการดูแล @count คน',
@@ -209,7 +186,6 @@ abstract class ThTh {
     'guardian_last_check_minutes': 'ตรวจสอบล่าสุด: @minutes นาทีที่แล้ว',
     'guardian_last_check_hours': 'ตรวจสอบล่าสุด: @hours ชั่วโมงที่แล้ว',
     'guardian_last_check_days': 'ตรวจสอบล่าสุด: @days วันที่แล้ว',
-    'guardian_activity_stable': 'กิจกรรม: คงที่',
     'guardian_activity_prefix': 'กิจกรรม',
     'guardian_activity_very_active': 'กระฉับกระเฉงมาก',
     'guardian_activity_active': 'กระฉับกระเฉง',
@@ -220,7 +196,6 @@ abstract class ThTh {
     'guardian_chart_y_axis_steps': 'ก้าว',
     'guardian_chart_x_axis_last_7_days': '7 วันที่ผ่านมา',
     'guardian_chart_x_axis_last_30_days': '30 วันที่ผ่านมา',
-    'guardian_chart_today': 'วันนี้',
     'guardian_safety_needed': 'ต้องตรวจสอบความปลอดภัย',
     'guardian_error_load_subjects': 'ไม่สามารถโหลดรายชื่อผู้ได้รับการดูแล',
     'guardian_safety_confirmed': 'ยืนยันความปลอดภัยแล้ว',
@@ -232,7 +207,6 @@ abstract class ThTh {
     'add_subject_guide_subtitle':
         'เชื่อมต่อแอปของผู้ได้รับการดูแลเพื่อติดตามความเป็นอยู่และกิจกรรมแบบเรียลไทม์',
     'add_subject_code_label': 'รหัสเฉพาะ (7 หลัก)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'รหัสเฉพาะสามารถพบได้ในแอปของผู้ได้รับการดูแล',
     'add_subject_alias_label': 'ชื่อเล่นผู้ได้รับการดูแล',
     'add_subject_alias_hint': 'เช่น แม่, พ่อ',
@@ -251,11 +225,6 @@ abstract class ThTh {
 
     // ── การตั้งค่าผู้ดูแล ──
     'settings_title': 'การตั้งค่า',
-    'settings_light_mode': 'โหมดสว่าง',
-    'settings_dark_mode': 'โหมดมืด',
-    'settings_connection_management': 'จัดการการเชื่อมต่อ',
-    'settings_managed_subjects': 'จำนวนผู้ได้รับการดูแล',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'การสมัครสมาชิกและบริการ',
     'settings_current_membership': 'สมาชิกปัจจุบัน',
     'settings_premium': 'พรีเมียมใช้งานอยู่',
@@ -303,10 +272,6 @@ abstract class ThTh {
     'gs_enable_confirm': 'สร้าง',
     'gs_enabled_message': 'เปิดใช้งานการดูแลแล้ว',
     'gs_enable_failed': 'ไม่สามารถเปิดใช้งานการดูแลได้',
-    'gs_disable_dialog_title': 'ปิดใช้งานการดูแล',
-    'gs_disable_dialog_body':
-        'การปิดใช้งานจะลบรหัสความปลอดภัยและหยุดส่งการตรวจสอบความเป็นอยู่ไปยังผู้ดูแลที่เชื่อมต่อ',
-    'gs_disable_confirm': 'ปิดใช้งาน',
     'gs_disabled_message': 'ปิดใช้งานการดูแลแล้ว',
     'gs_disable_failed': 'ไม่สามารถปิดใช้งานการดูแลได้',
     'gs_activity_permission_denied_warning': 'สิทธิ์นับก้าวถูกปฏิเสธ แตะที่นี่เพื่ออนุญาต',
@@ -367,7 +332,6 @@ abstract class ThTh {
 
     // ── การจัดการการเชื่อมต่อผู้ดูแล ──
     'connection_title': 'การจัดการการเชื่อมต่อ',
-    'connection_managed_count': 'จำนวนผู้ได้รับการดูแล ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'ผู้ได้รับการดูแลที่เชื่อมต่อ',
     'connection_reorder_hint': 'กดค้างที่การ์ดด้านล่างเพื่อจัดเรียงใหม่',
@@ -395,10 +359,7 @@ abstract class ThTh {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'เปลี่ยนเวลารายงาน',
-    'heartbeat_schedule_title_ios': 'เวลารายงาน',
     'heartbeat_schedule_change_title_ios': 'เปลี่ยนเวลารายงาน',
-    'heartbeat_schedule_hint_ios':
-        'การแจ้งเตือนพุชความเป็นอยู่จะมาถึงทุกวันในเวลานี้ แตะที่การแจ้งเตือนหรือเปิดแอปในช่วงเวลานั้นเพื่อส่งสัญญาณความเป็นอยู่ของคุณ',
     'heartbeat_daily_time': 'ทุกวันเวลา @time',
     'heartbeat_scheduled_today': 'สัญญาณความปลอดภัยของคุณจะถูกส่งถึงผู้ดูแลทุกวันเวลา @time',
     'heartbeat_change_failed_title': 'เปลี่ยนเวลาไม่สำเร็จ',
@@ -413,12 +374,6 @@ abstract class ThTh {
 
     // ── อื่นๆ ──
     'back_press_exit': 'กดย้อนกลับอีกครั้งเพื่อออก',
-
-    // ── ข้อผิดพลาด API ──
-    'error_unknown': 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ',
-    'error_timeout': 'หมดเวลาคำขอ',
-    'error_network': 'กรุณาตรวจสอบการเชื่อมต่อเครือข่าย',
-    'error_unauthorized': 'จำเป็นต้องยืนยันตัวตน',
 
     // ── เนื้อหาการแจ้งเตือน ──
     'noti_auto_report_body': 'การตรวจสอบความเป็นอยู่ได้รับเรียบร้อยแล้ว',
@@ -438,7 +393,6 @@ abstract class ThTh {
     'noti_steps_body': 'วันนี้เดิน @steps ก้าว',
     'noti_emergency_body': 'ผู้ได้รับการดูแลขอความช่วยเหลือโดยตรง กรุณาตรวจสอบทันที',
     'noti_resolved_body': 'การตรวจสอบความเป็นอยู่ของผู้ได้รับการดูแลกลับสู่ปกติแล้ว',
-    'noti_cleared_by_guardian_title': '✅ ยืนยันความปลอดภัย',
     'noti_cleared_by_guardian_body': 'ผู้ดูแลท่านหนึ่งได้ยืนยันความปลอดภัยด้วยตนเอง',
 
     // ── การแจ้งเตือนในเครื่อง ──

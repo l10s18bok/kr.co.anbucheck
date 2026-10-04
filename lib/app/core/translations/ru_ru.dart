@@ -6,13 +6,9 @@ abstract class RuRu {
     'common_continue': 'Продолжить',
     'common_save': 'Сохранить',
     'common_delete': 'Удалить',
-    'common_close': 'Закрыть',
     'common_next': 'Далее',
-    'common_previous': 'Назад',
     'common_start': 'Начать',
-    'common_skip': 'Пропустить',
     'common_later': 'Позже',
-    'common_loading': 'Загрузка...',
     'common_error': 'Ошибка',
     'common_session_expired': 'Срок действия данных аккаунта истёк. Пожалуйста, зарегистрируйтесь заново.',
     'common_complete': 'Готово',
@@ -32,9 +28,6 @@ abstract class RuRu {
     'app_service_desc': 'Автоматическая проверка самочувствия',
     'app_guardian_title': 'Anbu Опекун',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Заставка ──
-    'splash_loading': 'Проверяем самочувствие...',
 
     // ── Обновление ──
     'update_required_title': 'Требуется обновление',
@@ -78,19 +71,10 @@ abstract class RuRu {
         'Найдите и выберите «Anbu», затем в разделе «Геопозиция» выберите «При использовании приложения».',
     'location_permission_settings_body_android':
         'Выберите «Разрешения» → «Геолокация», затем выберите «Разрешить только во время использования приложения».',
-    'permission_activity_dialog_title': 'Информация о разрешении',
-    'permission_activity_dialog_message':
-        'Используется для подсчёта шагов и подтверждения активности.\nПожалуйста, нажмите «Разрешить» на следующем экране.',
     'permission_notification_required_title': 'Требуется разрешение на уведомления',
     'permission_notification_required_message':
         'Для работы сервиса проверки самочувствия необходимо разрешение на уведомления.\nПожалуйста, включите его в настройках.',
     'permission_go_to_settings': 'Перейти в настройки',
-    'permission_activity_denied_title': 'Требуется разрешение на физическую активность',
-    'permission_activity_denied_message':
-        'Используется для подсчёта шагов и повышения точности проверки самочувствия.\nПожалуйста, включите разрешение в настройках.',
-    'permission_battery': 'Исключение из оптимизации батареи',
-    'permission_battery_desc':
-        'Исключает приложение из оптимизации батареи, чтобы ежедневные проверки самочувствия не пропускались',
     'permission_hibernation_title': 'Отключите автоматическое удаление разрешений',
     'permission_hibernation_highlight': 'автоматическое удаление разрешений',
     'permission_hibernation_message':
@@ -142,18 +126,15 @@ abstract class RuRu {
     'subject_home_check_body_reported': 'Отчёт в @time',
     'subject_home_check_body_scheduled': 'Запланировано на @time',
     'subject_home_check_body_waiting': 'Ожидание с @time',
-    'subject_home_battery_status': 'Состояние батареи',
     'subject_home_battery_charging': 'Заряжается',
     'subject_home_battery_full': 'Полностью заряжено',
     'subject_home_battery_low': 'Низкий заряд',
-    'subject_home_connectivity_status': 'Состояние связи',
     'subject_home_report_loading': 'Отправка отчёта...',
     'subject_home_report_button': 'Сообщить, что всё хорошо',
     'subject_home_report_desc': 'Сообщите опекуну, что у вас всё в порядке',
     'subject_home_emergency_button': 'Мне нужна помощь',
     'subject_home_emergency_desc': 'Отправляет экстренное оповещение вашим опекунам',
     'subject_home_emergency_loading': 'Отправка экстренного оповещения...',
-    'subject_home_emergency_sent': 'Экстренное оповещение отправлено',
     'subject_home_emergency_failed': 'Не удалось отправить экстренное оповещение',
     'subject_home_manual_report_limit_reached':
         'Вы уже отправили сегодняшний отчёт о безопасности. Попробуйте завтра снова.',
@@ -175,8 +156,6 @@ abstract class RuRu {
     'emergency_map_accuracy_label': 'Точность',
     'emergency_map_open_external': 'Открыть во внешнем приложении карт',
     'emergency_map_no_location': 'Нет информации о местоположении',
-    'emergency_location_permission_denied_snackbar':
-        'Экстренное оповещение отправлено без разрешения на местоположение',
     'subject_home_emergency_confirm_send': 'Отправить экстренный запрос',
     'emergency_message_hint': 'Добавить сообщение (необязательно)',
     'subject_home_share_text':
@@ -202,8 +181,6 @@ abstract class RuRu {
     'guardian_subscription_expired': 'Требуется подписка',
     'guardian_subscription_expired_message':
         'Ежедневные вести о самочувствии прекратились.\nЗа стоимость одного обеда оберегайте близкого человека весь год.',
-    'guardian_subscribe': 'Подписаться',
-    'guardian_payment_preparing': 'Функция оплаты скоро будет доступна.',
     'guardian_today_summary': 'Сводка самочувствия за сегодня',
     'guardian_no_subjects': 'Нет подключённых подопечных.',
     'guardian_checking_subjects': 'Сейчас проверяем\nподопечных: @count',
@@ -216,7 +193,6 @@ abstract class RuRu {
     'guardian_last_check_minutes': 'Последняя проверка: @minutes мин назад',
     'guardian_last_check_hours': 'Последняя проверка: @hours ч назад',
     'guardian_last_check_days': 'Последняя проверка: @days дн назад',
-    'guardian_activity_stable': 'Активность: стабильная',
     'guardian_activity_prefix': 'Активность',
     'guardian_activity_very_active': 'Очень активен',
     'guardian_activity_active': 'Активен',
@@ -227,7 +203,6 @@ abstract class RuRu {
     'guardian_chart_y_axis_steps': 'Шаги',
     'guardian_chart_x_axis_last_7_days': 'Последние 7 дней',
     'guardian_chart_x_axis_last_30_days': 'Последние 30 дней',
-    'guardian_chart_today': 'Сегодня',
     'guardian_safety_needed': 'Требуется проверка',
     'guardian_error_load_subjects': 'Не удалось загрузить список подопечных.',
     'guardian_safety_confirmed': 'Безопасность подтверждена.',
@@ -239,7 +214,6 @@ abstract class RuRu {
     'add_subject_guide_subtitle':
         'Привяжите приложение подопечного для отслеживания состояния здоровья и активности.',
     'add_subject_code_label': 'Уникальный код (7 символов)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'Уникальный код можно найти в приложении подопечного.',
     'add_subject_alias_label': 'Имя подопечного',
     'add_subject_alias_hint': 'Напр.: мама, папа',
@@ -258,11 +232,6 @@ abstract class RuRu {
 
     // ── Настройки опекуна ──
     'settings_title': 'Настройки',
-    'settings_light_mode': 'Светлая тема',
-    'settings_dark_mode': 'Тёмная тема',
-    'settings_connection_management': 'Управление подключениями',
-    'settings_managed_subjects': 'Количество подопечных',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Подписка и сервис',
     'settings_current_membership': 'Текущая подписка',
     'settings_premium': 'Премиум активен',
@@ -310,10 +279,6 @@ abstract class RuRu {
     'gs_enable_confirm': 'Создать',
     'gs_enabled_message': 'Защита включена',
     'gs_enable_failed': 'Не удалось включить защиту',
-    'gs_disable_dialog_title': 'Отключить защиту',
-    'gs_disable_dialog_body':
-        'При отключении ваш код безопасности будет удалён, и проверки для связанных опекунов прекратятся.',
-    'gs_disable_confirm': 'Отключить',
     'gs_disabled_message': 'Защита отключена',
     'gs_disable_failed': 'Не удалось отключить защиту',
     'gs_activity_permission_denied_warning':
@@ -378,7 +343,6 @@ abstract class RuRu {
 
     // ── Управление подключениями опекуна ──
     'connection_title': 'Управление подключениями',
-    'connection_managed_count': 'Количество подопечных ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Подключённые подопечные',
     'connection_reorder_hint': 'Удерживайте карточку ниже, чтобы изменить порядок',
@@ -406,10 +370,7 @@ abstract class RuRu {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Изменить время проверки',
-    'heartbeat_schedule_title_ios': 'Время проверки',
     'heartbeat_schedule_change_title_ios': 'Изменить время проверки',
-    'heartbeat_schedule_hint_ios':
-        'Push-уведомление о самочувствии приходит каждый день в это время. Нажмите на уведомление или откройте приложение в это время, чтобы отправить сигнал самочувствия.',
     'heartbeat_daily_time': 'Ежедневно в @time',
     'heartbeat_scheduled_today':
         'Ваш сигнал самочувствия будет отправляться опекунам каждый день в @time.',
@@ -425,12 +386,6 @@ abstract class RuRu {
 
     // ── Разное ──
     'back_press_exit': 'Нажмите «Назад» ещё раз для выхода.',
-
-    // ── Ошибки API ──
-    'error_unknown': 'Произошла неизвестная ошибка.',
-    'error_timeout': 'Время ожидания истекло.',
-    'error_network': 'Пожалуйста, проверьте подключение к сети.',
-    'error_unauthorized': 'Требуется авторизация.',
 
     // ── Текст уведомлений ──
     'noti_auto_report_body': 'Проверка самочувствия успешно получена.',
@@ -451,7 +406,6 @@ abstract class RuRu {
     'noti_steps_body': 'Сегодня пройдено @steps шагов.',
     'noti_emergency_body': 'Подопечный лично запросил помощь. Пожалуйста, проверьте немедленно.',
     'noti_resolved_body': 'Самочувствие подопечного вернулось в норму.',
-    'noti_cleared_by_guardian_title': '✅ Проверка подтверждена',
     'noti_cleared_by_guardian_body': 'Один из опекунов лично подтвердил безопасность подопечного.',
 
     // ── Локальные уведомления ──

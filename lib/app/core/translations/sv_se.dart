@@ -6,13 +6,9 @@ abstract class SvSe {
     'common_continue': 'Fortsätt',
     'common_save': 'Spara',
     'common_delete': 'Radera',
-    'common_close': 'Stäng',
     'common_next': 'Nästa',
-    'common_previous': 'Föregående',
     'common_start': 'Kom igång',
-    'common_skip': 'Hoppa över',
     'common_later': 'Senare',
-    'common_loading': 'Laddar...',
     'common_error': 'Fel',
     'common_session_expired': 'Dina kontouppgifter har upphört att gälla. Registrera dig igen.',
     'common_complete': 'Klart',
@@ -32,9 +28,6 @@ abstract class SvSe {
     'app_service_desc': 'Automatisk välmåendekontroll',
     'app_guardian_title': 'Anbu-vårdare',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Kontrollerar välmående...',
 
     // ── Uppdatering ──
     'update_required_title': 'Uppdatering krävs',
@@ -75,19 +68,10 @@ abstract class SvSe {
         "Hitta och välj 'Anbu', välj sedan 'När appen används' under 'Plats'.",
     'location_permission_settings_body_android':
         "Välj 'Behörigheter' → 'Plats' och välj sedan 'Tillåt endast medan appen används'.",
-    'permission_activity_dialog_title': 'Info om aktivitetsbehörighet',
-    'permission_activity_dialog_message':
-        'Används för att upptäcka steg och bekräfta aktivitet.\nTryck på "Tillåt" på nästa skärm.',
     'permission_notification_required_title': 'Aviseringsbehörighet krävs',
     'permission_notification_required_message':
         'Aviseringsbehörighet krävs för välmåendetjänsten.\nAktivera den i Inställningar.',
     'permission_go_to_settings': 'Gå till Inställningar',
-    'permission_activity_denied_title': 'Behörighet för fysisk aktivitet krävs',
-    'permission_activity_denied_message':
-        'Behörighet för fysisk aktivitet krävs för att upptäcka steg och verifiera din säkerhet.\n\nUtan denna behörighet skickas ingen steginformation till dina vårdare.\n\nAktivera behörigheten "Fysisk aktivitet" i appinställningarna.',
-    'permission_battery': 'Undantag från batterioptimering',
-    'permission_battery_desc':
-        'Utesluter appen från batterioptimering så att dagliga välmåendekontroller inte missas vid den schemalagda tiden',
     'permission_hibernation_title': 'Stäng av automatisk borttagning av behörigheter',
     'permission_hibernation_highlight': 'automatisk borttagning av behörigheter',
     'permission_hibernation_message':
@@ -138,18 +122,15 @@ abstract class SvSe {
     'subject_home_check_body_reported': 'Rapporterad kl. @time',
     'subject_home_check_body_scheduled': 'Schemalagd kl. @time',
     'subject_home_check_body_waiting': 'Väntar sedan @time',
-    'subject_home_battery_status': 'Batteristatus',
     'subject_home_battery_charging': 'Laddar',
     'subject_home_battery_full': 'Fullt',
     'subject_home_battery_low': 'Lågt batteri',
-    'subject_home_connectivity_status': 'Anslutning',
     'subject_home_report_loading': 'Rapporterar...',
     'subject_home_report_button': 'Rapportera säkerhet nu',
     'subject_home_report_desc': 'Låt din vårdare veta att du mår bra',
     'subject_home_emergency_button': 'Jag behöver hjälp',
     'subject_home_emergency_desc': 'Skickar ett nödlarm till dina vårdare',
     'subject_home_emergency_loading': 'Skickar nödlarm...',
-    'subject_home_emergency_sent': 'Nödlarmet har skickats',
     'subject_home_emergency_failed': 'Det gick inte att skicka nödlarmet',
     'subject_home_manual_report_limit_reached':
         'Du har redan skickat dagens säkerhetsrapport. Försök igen imorgon.',
@@ -171,7 +152,6 @@ abstract class SvSe {
     'emergency_map_accuracy_label': 'Noggrannhet',
     'emergency_map_open_external': 'Öppna i extern kartapp',
     'emergency_map_no_location': 'Ingen platsinformation',
-    'emergency_location_permission_denied_snackbar': 'Nödlarm skickat utan platsåtkomst',
     'subject_home_emergency_confirm_send': 'Skicka nödbegäran',
     'emergency_message_hint': 'Lägg till ett meddelande (valfritt)',
     'subject_home_share_text': 'Anslut till mig via Anbu-appen.\nAnslutningskod: @code',
@@ -196,8 +176,6 @@ abstract class SvSe {
     'guardian_subscription_expired': 'Prenumeration krävs',
     'guardian_subscription_expired_message':
         'De dagliga välmåendesignalerna har upphört.\nFör priset av en lunch vakar du över din närstående hela året.',
-    'guardian_subscribe': 'Prenumerera',
-    'guardian_payment_preparing': 'Betalningsfunktionen kommer snart.',
     'guardian_today_summary': 'Dagens välmåendesammanfattning',
     'guardian_no_subjects': 'Inga anslutna skyddade personer.',
     'guardian_checking_subjects': 'Kontrollerar för närvarande\n@count skyddsperson(er).',
@@ -210,7 +188,6 @@ abstract class SvSe {
     'guardian_last_check_minutes': 'Senaste kontroll: @minutes min sedan',
     'guardian_last_check_hours': 'Senaste kontroll: @hours tim sedan',
     'guardian_last_check_days': 'Senaste kontroll: @days dag(ar) sedan',
-    'guardian_activity_stable': 'Aktivitet: Stabil',
     'guardian_activity_prefix': 'Aktivitet',
     'guardian_activity_very_active': 'Mycket aktiv',
     'guardian_activity_active': 'Aktiv',
@@ -221,7 +198,6 @@ abstract class SvSe {
     'guardian_chart_y_axis_steps': 'Steg',
     'guardian_chart_x_axis_last_7_days': 'Senaste 7 dagarna',
     'guardian_chart_x_axis_last_30_days': 'Senaste 30 dagarna',
-    'guardian_chart_today': 'Idag',
     'guardian_safety_needed': 'Säkerhetskontroll behövs',
     'guardian_error_load_subjects': 'Kunde inte ladda skyddade personer.',
     'guardian_safety_confirmed': 'Säkerhet bekräftad.',
@@ -233,7 +209,6 @@ abstract class SvSe {
     'add_subject_guide_subtitle':
         'Anslut en skyddad persons app för att övervaka hälsa och aktivitet i realtid.',
     'add_subject_code_label': 'Unik kod (7 siffror)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'Den unika koden finns i den skyddade personens app.',
     'add_subject_alias_label': 'Den skyddade personens alias',
     'add_subject_alias_hint': 't.ex. Mamma, Pappa',
@@ -252,11 +227,6 @@ abstract class SvSe {
 
     // ── Vardarens installningar ──
     'settings_title': 'Inställningar',
-    'settings_light_mode': 'Ljust läge',
-    'settings_dark_mode': 'Mörkt läge',
-    'settings_connection_management': 'Anslutningshantering',
-    'settings_managed_subjects': 'Antal skyddade personer',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Prenumeration och tjänst',
     'settings_current_membership': 'Nuvarande medlemskap',
     'settings_premium': 'Premium aktivt',
@@ -304,10 +274,6 @@ abstract class SvSe {
     'gs_enable_confirm': 'Skapa',
     'gs_enabled_message': 'Välmåendeskydd har aktiverats',
     'gs_enable_failed': 'Kunde inte aktivera välmåendeskydd',
-    'gs_disable_dialog_title': 'Inaktivera välmåendeskydd',
-    'gs_disable_dialog_body':
-        'Att inaktivera raderar din säkerhetskod och stoppar välmåendekontroller till anslutna vårdare.',
-    'gs_disable_confirm': 'Inaktivera',
     'gs_disabled_message': 'Välmåendeskydd har inaktiverats',
     'gs_disable_failed': 'Kunde inte inaktivera välmåendeskydd',
     'gs_activity_permission_denied_warning':
@@ -371,7 +337,6 @@ abstract class SvSe {
 
     // ── Vardarens anslutningshantering ──
     'connection_title': 'Anslutningshantering',
-    'connection_managed_count': 'Antal skyddade personer ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Anslutna skyddade personer',
     'connection_reorder_hint': 'Tryck och håll på ett kort nedan för att ändra ordning',
@@ -399,10 +364,7 @@ abstract class SvSe {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Ändra välmåendetid',
-    'heartbeat_schedule_title_ios': 'Välmåendetid',
     'heartbeat_schedule_change_title_ios': 'Ändra välmåendetid',
-    'heartbeat_schedule_hint_ios':
-        'En välmåendeavisering kommer varje dag vid denna tid. Tryck på aviseringen eller öppna appen vid den tidpunkten för att skicka din välmåendesignal.',
     'heartbeat_daily_time': 'Dagligen kl. @time',
     'heartbeat_scheduled_today':
         'Din välmåendesignal skickas till dina vårdare varje dag kl. @time.',
@@ -418,12 +380,6 @@ abstract class SvSe {
 
     // ── Ovrigt ──
     'back_press_exit': 'Tryck tillbaka igen för att avsluta.',
-
-    // ── API-fel ──
-    'error_unknown': 'Ett okänt fel uppstod.',
-    'error_timeout': 'Förfrågan tog för lång tid.',
-    'error_network': 'Kontrollera din nätverksanslutning.',
-    'error_unauthorized': 'Autentisering krävs.',
 
     // ── Aviseringsinnehall ──
     'noti_auto_report_body': 'Välmåendekontrollen mottogs utan problem.',
@@ -445,7 +401,6 @@ abstract class SvSe {
     'noti_emergency_body': 'Den skyddade personen har direkt begärt hjälp. Kontrollera omedelbart.',
     'noti_resolved_body':
         'Den skyddade personens välmående har bekräftats igen.',
-    'noti_cleared_by_guardian_title': '✅ Säkerhet bekräftad',
     'noti_cleared_by_guardian_body': 'En av vårdarna har personligen bekräftat säkerheten.',
 
     // ── Lokala aviseringar ──

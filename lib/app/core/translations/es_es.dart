@@ -6,13 +6,9 @@ abstract class EsEs {
     'common_continue': 'Continuar',
     'common_save': 'Guardar',
     'common_delete': 'Eliminar',
-    'common_close': 'Cerrar',
     'common_next': 'Siguiente',
-    'common_previous': 'Anterior',
     'common_start': 'Comenzar',
-    'common_skip': 'Omitir',
     'common_later': 'Más tarde',
-    'common_loading': 'Cargando...',
     'common_error': 'Error',
     'common_session_expired': 'La información de su cuenta ha caducado. Vuelva a registrarse.',
     'common_complete': 'Listo',
@@ -32,9 +28,6 @@ abstract class EsEs {
     'app_service_desc': 'Servicio automático de verificación de bienestar',
     'app_guardian_title': 'Protector Anbu',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Verificando bienestar...',
 
     // ── Actualización ──
     'update_required_title': 'Actualización necesaria',
@@ -78,19 +71,10 @@ abstract class EsEs {
         'Busque y seleccione "Anbu", luego en "Ubicación" elija "Al usar la app".',
     'location_permission_settings_body_android':
         'Seleccione "Permisos" → "Ubicación", luego elija "Permitir solo mientras uso la app".',
-    'permission_activity_dialog_title': 'Información sobre el permiso de actividad',
-    'permission_activity_dialog_message':
-        'Se utiliza para detectar pasos y confirmar la actividad.\nPulse "Permitir" en la siguiente pantalla.',
     'permission_notification_required_title': 'Permiso de notificaciones necesario',
     'permission_notification_required_message':
         'Se necesita el permiso de notificaciones para el servicio de bienestar.\nActívelo en Ajustes.',
     'permission_go_to_settings': 'Ir a Ajustes',
-    'permission_activity_denied_title': 'Se requiere permiso de actividad física',
-    'permission_activity_denied_message':
-        'Se utiliza para detectar pasos y mejorar la precisión de la verificación de bienestar.\nActive el permiso de actividad física en Ajustes.',
-    'permission_battery': 'Exclusión de optimización de batería',
-    'permission_battery_desc':
-        'Excluye la aplicación de la optimización de batería para que las verificaciones diarias de bienestar no se pierdan',
     'permission_hibernation_title': 'Desactive la eliminación automática de permisos',
     'permission_hibernation_highlight': 'eliminación automática de permisos',
     'permission_hibernation_message':
@@ -142,18 +126,15 @@ abstract class EsEs {
     'subject_home_check_body_reported': 'Reportado a las @time',
     'subject_home_check_body_scheduled': 'Previsto a las @time',
     'subject_home_check_body_waiting': 'En espera desde las @time',
-    'subject_home_battery_status': 'Nivel de batería',
     'subject_home_battery_charging': 'Cargando',
     'subject_home_battery_full': 'Completa',
     'subject_home_battery_low': 'Batería baja',
-    'subject_home_connectivity_status': 'Estado de conexión',
     'subject_home_report_loading': 'Enviando reporte...',
     'subject_home_report_button': 'Reportar bienestar ahora',
     'subject_home_report_desc': 'Haga saber a su protector que se encuentra bien',
     'subject_home_emergency_button': 'Necesito ayuda',
     'subject_home_emergency_desc': 'Envía una alerta de emergencia a sus protectores',
     'subject_home_emergency_loading': 'Enviando alerta de emergencia...',
-    'subject_home_emergency_sent': 'La alerta de emergencia ha sido enviada',
     'subject_home_emergency_failed': 'Error al enviar la alerta de emergencia',
     'subject_home_manual_report_limit_reached':
         'Ya ha enviado el informe de seguridad de hoy. Por favor, inténtelo de nuevo mañana.',
@@ -175,8 +156,6 @@ abstract class EsEs {
     'emergency_map_accuracy_label': 'Precisión',
     'emergency_map_open_external': 'Abrir en la aplicación de mapas externa',
     'emergency_map_no_location': 'No hay información de ubicación',
-    'emergency_location_permission_denied_snackbar':
-        'Alerta de emergencia enviada sin permiso de ubicación',
     'subject_home_emergency_confirm_send': 'Enviar solicitud de emergencia',
     'emergency_message_hint': 'Añadir un mensaje (opcional)',
     'subject_home_share_text': 'Conéctate conmigo en la aplicación Anbu.\nCódigo de conexión: @code',
@@ -201,8 +180,6 @@ abstract class EsEs {
     'guardian_subscription_expired': 'Suscripción necesaria',
     'guardian_subscription_expired_message':
         'Las novedades diarias se han detenido.\nPor el precio de un almuerzo, cuide a su ser querido todo el año.',
-    'guardian_subscribe': 'Suscribirse',
-    'guardian_payment_preparing': 'La función de pago estará disponible próximamente.',
     'guardian_today_summary': 'Resumen del día',
     'guardian_no_subjects': 'No hay personas protegidas conectadas.',
     'guardian_checking_subjects': 'Actualmente se vigila el bienestar\nde @count persona(s).',
@@ -215,7 +192,6 @@ abstract class EsEs {
     'guardian_last_check_minutes': 'Última verif.: hace @minutes min',
     'guardian_last_check_hours': 'Última verif.: hace @hours h',
     'guardian_last_check_days': 'Última verif.: hace @days día(s)',
-    'guardian_activity_stable': 'Actividad: estable',
     'guardian_activity_prefix': 'Actividad',
     'guardian_activity_very_active': 'Muy activo',
     'guardian_activity_active': 'Activo',
@@ -226,7 +202,6 @@ abstract class EsEs {
     'guardian_chart_y_axis_steps': 'Pasos',
     'guardian_chart_x_axis_last_7_days': 'Últimos 7 días',
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 días',
-    'guardian_chart_today': 'Hoy',
     'guardian_safety_needed': 'Verificación necesaria',
     'guardian_error_load_subjects': 'No se pudo cargar la lista de personas protegidas.',
     'guardian_safety_confirmed': 'Seguridad confirmada.',
@@ -238,7 +213,6 @@ abstract class EsEs {
     'add_subject_guide_subtitle':
         'Vincule la aplicación de un ser querido para seguir su estado en tiempo real.',
     'add_subject_code_label': 'Código único (7 caracteres)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
         'El código único se encuentra en la aplicación de la persona protegida.',
     'add_subject_alias_label': 'Apodo',
@@ -258,11 +232,6 @@ abstract class EsEs {
 
     // ── Ajustes (Protector) ──
     'settings_title': 'Ajustes',
-    'settings_light_mode': 'Modo claro',
-    'settings_dark_mode': 'Modo oscuro',
-    'settings_connection_management': 'Gestión de conexiones',
-    'settings_managed_subjects': 'Personas protegidas gestionadas',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Suscripción y servicio',
     'settings_current_membership': 'Membresía actual',
     'settings_premium': 'Premium activo',
@@ -310,10 +279,6 @@ abstract class EsEs {
     'gs_enable_confirm': 'Crear',
     'gs_enabled_message': 'La protección ha sido activada',
     'gs_enable_failed': 'Error al activar la protección',
-    'gs_disable_dialog_title': 'Desactivar protección',
-    'gs_disable_dialog_body':
-        'Al desactivar se eliminará su código de seguridad y se dejará de enviar verificaciones a sus protectores conectados.',
-    'gs_disable_confirm': 'Desactivar',
     'gs_disabled_message': 'La protección ha sido desactivada',
     'gs_disable_failed': 'Error al desactivar la protección',
     'gs_activity_permission_denied_warning':
@@ -379,7 +344,6 @@ abstract class EsEs {
 
     // ── Gestión de conexiones ──
     'connection_title': 'Gestión de conexiones',
-    'connection_managed_count': 'Personas protegidas gestionadas ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Personas protegidas conectadas',
     'connection_reorder_hint': 'Mantenga pulsada una tarjeta abajo para reordenar',
@@ -407,10 +371,7 @@ abstract class EsEs {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Cambiar hora de comprobación',
-    'heartbeat_schedule_title_ios': 'Hora de comprobación',
     'heartbeat_schedule_change_title_ios': 'Cambiar hora de comprobación',
-    'heartbeat_schedule_hint_ios':
-        'Una notificación push de bienestar llega cada día a esta hora. Toque la notificación o abra la aplicación en ese momento para enviar su señal de bienestar.',
     'heartbeat_daily_time': 'Cada día a las @time',
     'heartbeat_scheduled_today':
         'Su señal de bienestar se enviará a sus protectores cada día a las @time.',
@@ -426,12 +387,6 @@ abstract class EsEs {
 
     // ── Otros ──
     'back_press_exit': 'Pulse de nuevo para salir de la aplicación.',
-
-    // ── Errores API ──
-    'error_unknown': 'Se ha producido un error desconocido.',
-    'error_timeout': 'La solicitud ha expirado.',
-    'error_network': 'Compruebe su conexión a internet.',
-    'error_unauthorized': 'Se requiere autenticación.',
 
     // ── Cuerpo de notificaciones ──
     'noti_auto_report_body': 'La verificación de bienestar se recibió correctamente.',
@@ -457,7 +412,6 @@ abstract class EsEs {
     'noti_emergency_body':
         'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',
     'noti_resolved_body': 'La verificación de bienestar del protegido ha vuelto a la normalidad.',
-    'noti_cleared_by_guardian_title': '✅ Verificación confirmada',
     'noti_cleared_by_guardian_body':
         'Uno de los protectores ha confirmado personalmente la seguridad.',
 

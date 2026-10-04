@@ -6,13 +6,9 @@ abstract class EnUs {
     'common_continue': 'Continue',
     'common_save': 'Save',
     'common_delete': 'Delete',
-    'common_close': 'Close',
     'common_next': 'Next',
-    'common_previous': 'Previous',
     'common_start': 'Get Started',
-    'common_skip': 'Skip',
     'common_later': 'Later',
-    'common_loading': 'Loading...',
     'common_error': 'Error',
     'common_session_expired': 'Your account information has expired. Please register again.',
     'common_complete': 'Done',
@@ -32,9 +28,6 @@ abstract class EnUs {
     'app_service_desc': 'Automatic wellness check service',
     'app_guardian_title': 'Anbu Guardian',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Checking in...',
 
     // ── Update ──
     'update_required_title': 'Update Required',
@@ -76,19 +69,10 @@ abstract class EnUs {
         "Find and tap 'Anbu', then under 'Location' select 'While Using the App'.",
     'location_permission_settings_body_android':
         "Tap 'Permissions' → 'Location', then select 'Allow only while using the app'.",
-    'permission_activity_dialog_title': 'Activity Permission Info',
-    'permission_activity_dialog_message':
-        'Used to detect steps and confirm activity.\nPlease tap "Allow" on the next screen.',
     'permission_notification_required_title': 'Notification Permission Required',
     'permission_notification_required_message':
         'Notification permission is required for the wellness check service.\nPlease enable it in Settings.',
     'permission_go_to_settings': 'Go to Settings',
-    'permission_activity_denied_title': 'Physical Activity Permission Required',
-    'permission_activity_denied_message':
-        'This is used to detect steps and improve wellness check accuracy.\nPlease enable physical activity permission in Settings.',
-    'permission_battery': 'Battery Optimization Exclusion',
-    'permission_battery_desc':
-        'Excludes the app from battery optimization so that daily wellness checks are not missed at the scheduled time',
     'permission_hibernation_title': 'Please turn off Auto Permission Removal',
     'permission_hibernation_highlight': 'Auto Permission Removal',
     'permission_hibernation_message':
@@ -139,18 +123,15 @@ abstract class EnUs {
     'subject_home_check_body_reported': 'Reported at @time',
     'subject_home_check_body_scheduled': 'Scheduled at @time',
     'subject_home_check_body_waiting': 'Waiting since @time',
-    'subject_home_battery_status': 'Battery Status',
     'subject_home_battery_charging': 'Charging',
     'subject_home_battery_full': 'Full',
     'subject_home_battery_low': 'Low Battery',
-    'subject_home_connectivity_status': 'Connectivity',
     'subject_home_report_loading': 'Reporting...',
     'subject_home_report_button': 'Report Safety Now',
     'subject_home_report_desc': 'Let your guardian know you\'re okay',
     'subject_home_emergency_button': 'I need help',
     'subject_home_emergency_desc': 'Sends an emergency alert to your guardians',
     'subject_home_emergency_loading': 'Sending emergency alert...',
-    'subject_home_emergency_sent': 'Emergency alert has been sent',
     'subject_home_emergency_failed': 'Failed to send emergency alert',
     'subject_home_manual_report_limit_reached':
         "You've already submitted today's safety report. Please try again tomorrow.",
@@ -172,8 +153,6 @@ abstract class EnUs {
     'emergency_map_accuracy_label': 'Accuracy',
     'emergency_map_open_external': 'Open in external map app',
     'emergency_map_no_location': 'No location information available',
-    'emergency_location_permission_denied_snackbar':
-        'Emergency alert sent without location permission',
     'subject_home_emergency_confirm_send': 'Send Emergency Request',
     'emergency_message_hint': 'Add a message (optional)',
     'subject_home_share_text': 'Please connect with me on the Anbu app.\nConnection code: @code',
@@ -198,8 +177,6 @@ abstract class EnUs {
     'guardian_subscription_expired': 'Subscription required',
     'guardian_subscription_expired_message':
         'The daily check-ins have stopped.\nFor the price of one lunch, watch over your loved one all year long.',
-    'guardian_subscribe': 'Subscribe',
-    'guardian_payment_preparing': 'Payment feature coming soon.',
     'guardian_today_summary': 'Today\'s Wellness Summary',
     'guardian_no_subjects': 'No subjects connected.',
     'guardian_checking_subjects': 'Currently checking on\n@count subject(s).',
@@ -212,7 +189,6 @@ abstract class EnUs {
     'guardian_last_check_minutes': 'Last check: @minutes min ago',
     'guardian_last_check_hours': 'Last check: @hours hr ago',
     'guardian_last_check_days': 'Last check: @days day(s) ago',
-    'guardian_activity_stable': 'Activity: Stable',
     'guardian_activity_prefix': 'Activity',
     'guardian_activity_very_active': 'Very active',
     'guardian_activity_active': 'Active',
@@ -223,7 +199,6 @@ abstract class EnUs {
     'guardian_chart_y_axis_steps': 'Steps',
     'guardian_chart_x_axis_last_7_days': 'Last 7 days',
     'guardian_chart_x_axis_last_30_days': 'Last 30 days',
-    'guardian_chart_today': 'Today',
     'guardian_safety_needed': 'Safety check needed',
     'guardian_error_load_subjects': 'Failed to load subjects.',
     'guardian_safety_confirmed': 'Safety confirmed.',
@@ -235,7 +210,6 @@ abstract class EnUs {
     'add_subject_guide_subtitle':
         'Link a subject\'s app to monitor their health and activity in real-time.',
     'add_subject_code_label': 'Unique Code (7 digits)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'The unique code can be found in the subject\'s app.',
     'add_subject_alias_label': 'Subject Alias',
     'add_subject_alias_hint': 'e.g., Mom, Dad',
@@ -254,11 +228,6 @@ abstract class EnUs {
 
     // ── Guardian Settings ──
     'settings_title': 'Settings',
-    'settings_light_mode': 'Light Mode',
-    'settings_dark_mode': 'Dark Mode',
-    'settings_connection_management': 'Connection Management',
-    'settings_managed_subjects': 'Managed Subjects',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Subscription & Service',
     'settings_current_membership': 'Current Membership',
     'settings_premium': 'Premium Active',
@@ -306,10 +275,6 @@ abstract class EnUs {
     'gs_enable_confirm': 'Create',
     'gs_enabled_message': 'Wellness protection has been enabled',
     'gs_enable_failed': 'Failed to enable wellness protection',
-    'gs_disable_dialog_title': 'Disable Wellness Protection',
-    'gs_disable_dialog_body':
-        'Disabling wellness protection will delete your safety code and stop sending wellness checks to connected guardians.',
-    'gs_disable_confirm': 'Disable',
     'gs_disabled_message': 'Wellness protection has been disabled',
     'gs_disable_failed': 'Failed to disable wellness protection',
     'gs_activity_permission_denied_warning': 'Activity permission is denied. Tap here to allow.',
@@ -370,7 +335,6 @@ abstract class EnUs {
 
     // ── Guardian Connection Management ──
     'connection_title': 'Connection Management',
-    'connection_managed_count': 'Managed Subjects ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Connected Subjects',
     'connection_reorder_hint': 'Long-press a card below to reorder',
@@ -398,10 +362,7 @@ abstract class EnUs {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Change check-in time',
-    'heartbeat_schedule_title_ios': 'Check-in time',
     'heartbeat_schedule_change_title_ios': 'Change check-in time',
-    'heartbeat_schedule_hint_ios':
-        'A wellness push notification arrives at this time every day. Tap the notification or open the app around then to send your wellness signal.',
     'heartbeat_daily_time': 'Daily at @time',
     'heartbeat_scheduled_today':
         'Your wellness check will be delivered to your guardians every day at @time.',
@@ -417,12 +378,6 @@ abstract class EnUs {
 
     // ── Misc ──
     'back_press_exit': 'Press back again to exit.',
-
-    // ── API Errors ──
-    'error_unknown': 'An unknown error occurred.',
-    'error_timeout': 'Request timed out.',
-    'error_network': 'Please check your network connection.',
-    'error_unauthorized': 'Authentication required.',
 
     // ── Notification Bodies ──
     'noti_auto_report_body': 'Wellness check was received successfully.',
@@ -443,7 +398,6 @@ abstract class EnUs {
     'noti_steps_body': '@steps steps taken today.',
     'noti_emergency_body': 'The subject has directly requested help. Please check immediately.',
     'noti_resolved_body': 'The subject\'s wellness check has returned to normal.',
-    'noti_cleared_by_guardian_title': '✅ Wellness Check Confirmed',
     'noti_cleared_by_guardian_body':
         'One of the guardians has personally confirmed the subject\'s safety.',
 

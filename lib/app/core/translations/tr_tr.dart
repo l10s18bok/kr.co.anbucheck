@@ -6,13 +6,9 @@ abstract class TrTr {
     'common_continue': 'Devam',
     'common_save': 'Kaydet',
     'common_delete': 'Sil',
-    'common_close': 'Kapat',
     'common_next': 'İleri',
-    'common_previous': 'Geri',
     'common_start': 'Başla',
-    'common_skip': 'Atla',
     'common_later': 'Sonra',
-    'common_loading': 'Yükleniyor...',
     'common_error': 'Hata',
     'common_session_expired': 'Hesap bilgilerinizin süresi doldu. Lütfen yeniden kaydolun.',
     'common_complete': 'Tamam',
@@ -32,9 +28,6 @@ abstract class TrTr {
     'app_service_desc': 'Otomatik hal hatır sorgulama hizmeti',
     'app_guardian_title': 'Anbu Koruyucu',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Açılış Ekranı ──
-    'splash_loading': 'Hal hatır soruluyor...',
 
     // ── Güncelleme ──
     'update_required_title': 'Güncelleme Gerekli',
@@ -77,19 +70,10 @@ abstract class TrTr {
         "'Anbu'yu bulup seçin, ardından 'Konum' altında 'Uygulamayı kullanırken' seçeneğini seçin.",
     'location_permission_settings_body_android':
         "'İzinler' → 'Konum' seçin, ardından 'Yalnızca uygulamayı kullanırken izin ver' seçeneğini seçin.",
-    'permission_activity_dialog_title': 'Aktivite İzni Bilgisi',
-    'permission_activity_dialog_message':
-        'Adım sayısını tespit edip aktiviteyi doğrulamak için kullanılır.\nLütfen sonraki ekranda "İzin Ver"e dokunun.',
     'permission_notification_required_title': 'Bildirim İzni Gerekli',
     'permission_notification_required_message':
         'Hal hatır hizmeti için bildirim izni gereklidir.\nLütfen Ayarlar\'dan etkinleştirin.',
     'permission_go_to_settings': 'Ayarlara Git',
-    'permission_activity_denied_title': 'Fiziksel Aktivite İzni Gerekli',
-    'permission_activity_denied_message':
-        'Adım sayınızı algılamak ve güvenliğinizi doğrulamak için fiziksel aktivite izni gereklidir.\n\nBu izin olmadan adım bilgileri koruyuculara gönderilmeyecektir.\n\nLütfen uygulama ayarlarından "Fiziksel Aktivite" iznini etkinleştirin.',
-    'permission_battery': 'Pil Optimizasyonu Hariç Tutma',
-    'permission_battery_desc':
-        'Günlük hal hatır kontrollerinin belirlenen saatte kaçırılmaması için uygulamayı pil optimizasyonundan hariç tutar',
     'permission_hibernation_title': 'Otomatik izin kaldırmayı kapatın',
     'permission_hibernation_highlight': 'Otomatik izin kaldırma',
     'permission_hibernation_message':
@@ -140,18 +124,15 @@ abstract class TrTr {
     'subject_home_check_body_reported': '@time itibarıyla bildirildi',
     'subject_home_check_body_scheduled': '@time için planlandı',
     'subject_home_check_body_waiting': '@time\'dan beri bekleniyor',
-    'subject_home_battery_status': 'Pil Durumu',
     'subject_home_battery_charging': 'Şarj oluyor',
     'subject_home_battery_full': 'Tam dolu',
     'subject_home_battery_low': 'Düşük pil',
-    'subject_home_connectivity_status': 'Bağlantı Durumu',
     'subject_home_report_loading': 'Bildiriliyor...',
     'subject_home_report_button': 'Şimdi Güvenliğini Bildir',
     'subject_home_report_desc': 'Koruyucunuza iyi olduğunuzu bildirin',
     'subject_home_emergency_button': 'Yardıma ihtiyacım var',
     'subject_home_emergency_desc': 'Koruyucularınıza acil durum uyarısı gönderir',
     'subject_home_emergency_loading': 'Acil durum uyarısı gönderiliyor...',
-    'subject_home_emergency_sent': 'Acil durum uyarısı gönderildi',
     'subject_home_emergency_failed': 'Acil durum uyarısı gönderilemedi',
     'subject_home_manual_report_limit_reached':
         'Bugünün güvenlik raporunu zaten gönderdiniz. Lütfen yarın tekrar deneyin.',
@@ -172,8 +153,6 @@ abstract class TrTr {
     'emergency_map_accuracy_label': 'Doğruluk',
     'emergency_map_open_external': 'Harici harita uygulamasında aç',
     'emergency_map_no_location': 'Konum bilgisi yok',
-    'emergency_location_permission_denied_snackbar':
-        'Konum izni olmadan acil durum uyarısı gönderildi',
     'subject_home_emergency_confirm_send': 'Acil talep gönder',
     'emergency_message_hint': 'Mesaj ekle (isteğe bağlı)',
     'subject_home_share_text': 'Anbu uygulamasında benimle bağlantı kurun.\nBağlantı kodu: @code',
@@ -198,8 +177,6 @@ abstract class TrTr {
     'guardian_subscription_expired': 'Abonelik gerekli',
     'guardian_subscription_expired_message':
         'Her gün gelen hal hatır haberleri artık kesildi.\nBir öğle yemeği fiyatına, sevdiğinize tüm yıl göz kulak olun.',
-    'guardian_subscribe': 'Abone Ol',
-    'guardian_payment_preparing': 'Ödeme özelliği yakında kullanıma sunulacak.',
     'guardian_today_summary': 'Bugünün Özeti',
     'guardian_no_subjects': 'Bağlı korunan kişi yok.',
     'guardian_checking_subjects': 'Şu anda @count kişi\ntakip ediliyor.',
@@ -212,7 +189,6 @@ abstract class TrTr {
     'guardian_last_check_minutes': 'Son kontrol: @minutes dk önce',
     'guardian_last_check_hours': 'Son kontrol: @hours sa önce',
     'guardian_last_check_days': 'Son kontrol: @days gün önce',
-    'guardian_activity_stable': 'Aktivite: Stabil',
     'guardian_activity_prefix': 'Aktivite',
     'guardian_activity_very_active': 'Çok aktif',
     'guardian_activity_active': 'Aktif',
@@ -223,7 +199,6 @@ abstract class TrTr {
     'guardian_chart_y_axis_steps': 'Adım',
     'guardian_chart_x_axis_last_7_days': 'Son 7 gün',
     'guardian_chart_x_axis_last_30_days': 'Son 30 gün',
-    'guardian_chart_today': 'Bugün',
     'guardian_safety_needed': 'Güvenlik kontrolü gerekli',
     'guardian_error_load_subjects': 'Korunan kişiler listesi yüklenemedi.',
     'guardian_safety_confirmed': 'Güvenlik onaylandı.',
@@ -235,7 +210,6 @@ abstract class TrTr {
     'add_subject_guide_subtitle':
         'Sağlık durumunu ve aktivitesini gerçek zamanlı izlemek için bağlayın.',
     'add_subject_code_label': 'Benzersiz Kod (7 hane)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'Benzersiz kod, korunan kişinin uygulamasında bulunabilir.',
     'add_subject_alias_label': 'Korunan Kişi Adı',
     'add_subject_alias_hint': 'Örn: Annem, Babam',
@@ -254,11 +228,6 @@ abstract class TrTr {
 
     // ── Koruyucu Ayarları ──
     'settings_title': 'Ayarlar',
-    'settings_light_mode': 'Açık Tema',
-    'settings_dark_mode': 'Koyu Tema',
-    'settings_connection_management': 'Bağlantı Yönetimi',
-    'settings_managed_subjects': 'Korunan Kişi Sayısı',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Abonelik ve Hizmet',
     'settings_current_membership': 'Mevcut Üyelik',
     'settings_premium': 'Premium Aktif',
@@ -306,10 +275,6 @@ abstract class TrTr {
     'gs_enable_confirm': 'Oluştur',
     'gs_enabled_message': 'Koruma etkinleştirildi',
     'gs_enable_failed': 'Koruma etkinleştirilemedi',
-    'gs_disable_dialog_title': 'Korumayı devre dışı bırak',
-    'gs_disable_dialog_body':
-        'Korumayı devre dışı bırakmak güvenlik kodunuzu silecek ve bağlı koruyuculara kontrol gönderimini durduracaktır.',
-    'gs_disable_confirm': 'Devre dışı bırak',
     'gs_disabled_message': 'Koruma devre dışı bırakıldı',
     'gs_disable_failed': 'Koruma devre dışı bırakılamadı',
     'gs_activity_permission_denied_warning':
@@ -372,7 +337,6 @@ abstract class TrTr {
 
     // ── Koruyucu Bağlantı Yönetimi ──
     'connection_title': 'Bağlantı Yönetimi',
-    'connection_managed_count': 'Korunan Kişi Sayısı ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Bağlı Korunan Kişiler',
     'connection_reorder_hint': 'Sıralamayı değiştirmek için aşağıdaki karta uzun basın',
@@ -400,10 +364,7 @@ abstract class TrTr {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Bildirim saatini değiştir',
-    'heartbeat_schedule_title_ios': 'Bildirim saati',
     'heartbeat_schedule_change_title_ios': 'Bildirim saatini değiştir',
-    'heartbeat_schedule_hint_ios':
-        'Her gün bu saatte hal hatır bildirimi gelir. Bildirime dokunun veya o sırada uygulamayı açın, böylece hal hatır sinyaliniz gönderilir.',
     'heartbeat_daily_time': 'Her gün @time',
     'heartbeat_scheduled_today':
         'Hal hatır sinyaliniz her gün @time saatinde koruyucularınıza iletilecek.',
@@ -419,12 +380,6 @@ abstract class TrTr {
 
     // ── Diğer ──
     'back_press_exit': 'Çıkmak için geri tuşuna tekrar basın.',
-
-    // ── API Hataları ──
-    'error_unknown': 'Bilinmeyen bir hata oluştu.',
-    'error_timeout': 'İstek zaman aşımına uğradı.',
-    'error_network': 'Lütfen ağ bağlantınızı kontrol edin.',
-    'error_unauthorized': 'Kimlik doğrulama gerekli.',
 
     // ── Bildirim Metinleri ──
     'noti_auto_report_body': 'Hal hatır kontrolü başarıyla alındı.',
@@ -445,7 +400,6 @@ abstract class TrTr {
     'noti_steps_body': 'Bugün @steps adım atıldı.',
     'noti_emergency_body': 'Korunan kişi doğrudan yardım istedi. Lütfen hemen kontrol edin.',
     'noti_resolved_body': 'Korunan kişinin hal hatır kontrolü normale döndü.',
-    'noti_cleared_by_guardian_title': '✅ Güvenlik onaylandı',
     'noti_cleared_by_guardian_body': 'Koruyuculardan biri güvenliğini bizzat doğruladı.',
 
     // ── Yerel bildirimler ──

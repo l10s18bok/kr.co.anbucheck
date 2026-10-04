@@ -6,13 +6,9 @@ abstract class FrFr {
     'common_continue': 'Continuer',
     'common_save': 'Enregistrer',
     'common_delete': 'Supprimer',
-    'common_close': 'Fermer',
     'common_next': 'Suivant',
-    'common_previous': 'Précédent',
     'common_start': 'Commencer',
-    'common_skip': 'Passer',
     'common_later': 'Plus tard',
-    'common_loading': 'Chargement...',
     'common_error': 'Erreur',
     'common_session_expired': 'Les informations de votre compte ont expiré. Veuillez vous réinscrire.',
     'common_complete': 'Terminé',
@@ -32,9 +28,6 @@ abstract class FrFr {
     'app_service_desc': 'Service automatique de suivi du bien-être',
     'app_guardian_title': 'Protecteur Anbu',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Vérification du bien-être...',
 
     // ── Mise à jour ──
     'update_required_title': 'Mise à jour requise',
@@ -78,19 +71,10 @@ abstract class FrFr {
         "Trouvez et sélectionnez « Anbu », puis dans « Position » choisissez « Lorsque l'app est active ».",
     'location_permission_settings_body_android':
         "Sélectionnez « Autorisations » → « Position », puis choisissez « Autoriser uniquement lorsque l'app est utilisée ».",
-    'permission_activity_dialog_title': 'À propos de l\'autorisation d\'activité',
-    'permission_activity_dialog_message':
-        'Utilisée pour détecter les pas et confirmer l\'activité.\nVeuillez appuyer sur « Autoriser » à l\'écran suivant.',
     'permission_notification_required_title': 'Autorisation de notification requise',
     'permission_notification_required_message':
         'L\'autorisation de notification est nécessaire pour le service de bien-être.\nVeuillez l\'activer dans les Réglages.',
     'permission_go_to_settings': 'Ouvrir les Réglages',
-    'permission_activity_denied_title': 'Autorisation d\'activité physique requise',
-    'permission_activity_denied_message':
-        'Utilisée pour détecter les pas et améliorer la précision de la vérification du bien-être.\nVeuillez activer l\'autorisation d\'activité physique dans les Réglages.',
-    'permission_battery': 'Exclusion de l\'optimisation de la batterie',
-    'permission_battery_desc':
-        'Exclut l\'application de l\'optimisation de la batterie afin que les vérifications quotidiennes de bien-être ne soient pas manquées',
     'permission_hibernation_title': 'Veuillez désactiver la suppression automatique des autorisations',
     'permission_hibernation_highlight': 'suppression automatique des autorisations',
     'permission_hibernation_message':
@@ -142,18 +126,15 @@ abstract class FrFr {
     'subject_home_check_body_reported': 'Signalé à @time',
     'subject_home_check_body_scheduled': 'Prévu à @time',
     'subject_home_check_body_waiting': 'En attente depuis @time',
-    'subject_home_battery_status': 'Niveau de batterie',
     'subject_home_battery_charging': 'En charge',
     'subject_home_battery_full': 'Pleine',
     'subject_home_battery_low': 'Batterie faible',
-    'subject_home_connectivity_status': 'État de la connexion',
     'subject_home_report_loading': 'Envoi en cours...',
     'subject_home_report_button': 'Signaler mon bien-être maintenant',
     'subject_home_report_desc': 'Rassurez votre protecteur en lui montrant que vous allez bien',
     'subject_home_emergency_button': "J'ai besoin d'aide",
     'subject_home_emergency_desc': "Envoie une alerte d'urgence à vos protecteurs",
     'subject_home_emergency_loading': "Envoi de l'alerte d'urgence...",
-    'subject_home_emergency_sent': "L'alerte d'urgence a été envoyée",
     'subject_home_emergency_failed': "Échec de l'envoi de l'alerte d'urgence",
     'subject_home_manual_report_limit_reached':
         "Vous avez déjà envoyé le rapport de sécurité d'aujourd'hui. Veuillez réessayer demain.",
@@ -175,8 +156,6 @@ abstract class FrFr {
     'emergency_map_accuracy_label': 'Précision',
     'emergency_map_open_external': "Ouvrir dans l'application de cartes externe",
     'emergency_map_no_location': 'Aucune information de position',
-    'emergency_location_permission_denied_snackbar':
-        "Alerte d'urgence envoyée sans autorisation de localisation",
     'subject_home_emergency_confirm_send': "Envoyer la demande d'urgence",
     'emergency_message_hint': 'Ajouter un message (facultatif)',
     'subject_home_share_text':
@@ -203,8 +182,6 @@ abstract class FrFr {
     'guardian_subscription_expired': 'Abonnement requis',
     'guardian_subscription_expired_message':
         'Les nouvelles quotidiennes se sont arrêtées.\nPour le prix d\'un déjeuner, veillez sur votre proche toute l\'année.',
-    'guardian_subscribe': 'S\'abonner',
-    'guardian_payment_preparing': 'La fonctionnalité de paiement sera bientôt disponible.',
     'guardian_today_summary': 'Résumé du bien-être du jour',
     'guardian_no_subjects': 'Aucune personne protégée connectée.',
     'guardian_checking_subjects': 'Suivi en cours pour\n@count personne(s).',
@@ -217,7 +194,6 @@ abstract class FrFr {
     'guardian_last_check_minutes': 'Dernière vérif. : il y a @minutes min',
     'guardian_last_check_hours': 'Dernière vérif. : il y a @hours h',
     'guardian_last_check_days': 'Dernière vérif. : il y a @days jour(s)',
-    'guardian_activity_stable': 'Activité : stable',
     'guardian_activity_prefix': 'Activité',
     'guardian_activity_very_active': 'Très actif',
     'guardian_activity_active': 'Actif',
@@ -228,7 +204,6 @@ abstract class FrFr {
     'guardian_chart_y_axis_steps': 'Pas',
     'guardian_chart_x_axis_last_7_days': '7 derniers jours',
     'guardian_chart_x_axis_last_30_days': '30 derniers jours',
-    'guardian_chart_today': "Aujourd'hui",
     'guardian_safety_needed': 'Vérification nécessaire',
     'guardian_error_load_subjects': 'Impossible de charger la liste des personnes protégées.',
     'guardian_safety_confirmed': 'Sécurité confirmée.',
@@ -240,7 +215,6 @@ abstract class FrFr {
     'add_subject_guide_subtitle':
         'Associez l\'application d\'un proche pour suivre son état en temps réel.',
     'add_subject_code_label': 'Code unique (7 caractères)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
         'Le code unique se trouve dans l\'application de la personne protégée.',
     'add_subject_alias_label': 'Surnom',
@@ -260,11 +234,6 @@ abstract class FrFr {
 
     // ── Paramètres (Protecteur) ──
     'settings_title': 'Paramètres',
-    'settings_light_mode': 'Mode clair',
-    'settings_dark_mode': 'Mode sombre',
-    'settings_connection_management': 'Gestion des connexions',
-    'settings_managed_subjects': 'Personnes protégées suivies',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Abonnement & service',
     'settings_current_membership': 'Abonnement actuel',
     'settings_premium': 'Premium actif',
@@ -312,10 +281,6 @@ abstract class FrFr {
     'gs_enable_confirm': 'Créer',
     'gs_enabled_message': 'La protection a été activée',
     'gs_enable_failed': 'Échec de l\'activation de la protection',
-    'gs_disable_dialog_title': 'Désactiver la protection',
-    'gs_disable_dialog_body':
-        "La désactivation supprimera votre code de sécurité et arrêtera l'envoi des vérifications à vos protecteurs connectés.",
-    'gs_disable_confirm': 'Désactiver',
     'gs_disabled_message': 'La protection a été désactivée',
     'gs_disable_failed': 'Échec de la désactivation de la protection',
     'gs_activity_permission_denied_warning':
@@ -382,7 +347,6 @@ abstract class FrFr {
 
     // ── Gestion des connexions ──
     'connection_title': 'Gestion des connexions',
-    'connection_managed_count': 'Personnes protégées suivies ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Personnes protégées connectées',
     'connection_reorder_hint': 'Maintenez une carte ci-dessous appuyée pour réorganiser',
@@ -410,10 +374,7 @@ abstract class FrFr {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': "Modifier l'heure de vérification",
-    'heartbeat_schedule_title_ios': 'Heure de vérification',
     'heartbeat_schedule_change_title_ios': "Modifier l'heure de vérification",
-    'heartbeat_schedule_hint_ios':
-        'Une notification push de bien-être arrive chaque jour à cette heure. Appuyez sur la notification ou ouvrez l\'application à ce moment-là pour envoyer votre signal de bien-être.',
     'heartbeat_daily_time': 'Tous les jours à @time',
     'heartbeat_scheduled_today':
         'Votre signal de bien-être sera transmis à vos protecteurs chaque jour à @time.',
@@ -430,12 +391,6 @@ abstract class FrFr {
 
     // ── Divers ──
     'back_press_exit': 'Appuyez à nouveau pour quitter l\'application.',
-
-    // ── Erreurs API ──
-    'error_unknown': 'Une erreur inconnue est survenue.',
-    'error_timeout': 'La requête a expiré.',
-    'error_network': 'Veuillez vérifier votre connexion internet.',
-    'error_unauthorized': 'Authentification requise.',
 
     // ── Corps des notifications ──
     'noti_auto_report_body': 'La vérification de bien-être a été reçue avec succès.',
@@ -461,7 +416,6 @@ abstract class FrFr {
     'noti_emergency_body':
         "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
     'noti_resolved_body': 'La vérification de bien-être de la personne protégée est revenue à la normale.',
-    'noti_cleared_by_guardian_title': '✅ Vérification confirmée',
     'noti_cleared_by_guardian_body': "Un des protecteurs a personnellement confirmé la sécurité.",
 
     // ── Notifications locales ──

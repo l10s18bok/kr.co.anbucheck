@@ -6,13 +6,9 @@ abstract class PtBr {
     'common_continue': 'Continuar',
     'common_save': 'Salvar',
     'common_delete': 'Excluir',
-    'common_close': 'Fechar',
     'common_next': 'Avançar',
-    'common_previous': 'Voltar',
     'common_start': 'Começar',
-    'common_skip': 'Pular',
     'common_later': 'Depois',
-    'common_loading': 'Carregando...',
     'common_error': 'Erro',
     'common_session_expired': 'As informações da sua conta expiraram. Cadastre-se novamente.',
     'common_complete': 'Concluído',
@@ -32,9 +28,6 @@ abstract class PtBr {
     'app_service_desc': 'Serviço automático de verificação de bem-estar',
     'app_guardian_title': 'Anbu Guardião',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Verificando...',
 
     // ── Atualização ──
     'update_required_title': 'Atualização necessária',
@@ -78,19 +71,10 @@ abstract class PtBr {
         "Localize e selecione 'Anbu', depois em 'Localização' escolha 'Ao Usar o App'.",
     'location_permission_settings_body_android':
         "Selecione 'Permissões' → 'Local' e escolha 'Permitir somente ao usar o app'.",
-    'permission_activity_dialog_title': 'Informações sobre a permissão de atividade',
-    'permission_activity_dialog_message':
-        'Usado para detectar passos e confirmar atividade.\nToque em "Permitir" na próxima tela.',
     'permission_notification_required_title': 'Permissão de notificações necessária',
     'permission_notification_required_message':
         'A permissão de notificações é necessária para o serviço de verificação de bem-estar.\nAtive-a nas Configurações.',
     'permission_go_to_settings': 'Ir para Configurações',
-    'permission_activity_denied_title': 'Permissão de atividade física necessária',
-    'permission_activity_denied_message':
-        'Usada para detectar passos e melhorar a precisão da verificação de bem-estar.\nAtive a permissão de atividade física nas Configurações.',
-    'permission_battery': 'Exclusão da otimização de bateria',
-    'permission_battery_desc':
-        'Exclui o aplicativo da otimização de bateria para que as verificações diárias de bem-estar não sejam perdidas',
     'permission_hibernation_title': 'Desative a remoção automática de permissões',
     'permission_hibernation_highlight': 'remoção automática de permissões',
     'permission_hibernation_message':
@@ -142,18 +126,15 @@ abstract class PtBr {
     'subject_home_check_body_reported': 'Reportado às @time',
     'subject_home_check_body_scheduled': 'Programado às @time',
     'subject_home_check_body_waiting': 'Aguardando desde @time',
-    'subject_home_battery_status': 'Status da bateria',
     'subject_home_battery_charging': 'Carregando',
     'subject_home_battery_full': 'Completa',
     'subject_home_battery_low': 'Bateria fraca',
-    'subject_home_connectivity_status': 'Conectividade',
     'subject_home_report_loading': 'Reportando...',
     'subject_home_report_button': 'Reportar segurança agora',
     'subject_home_report_desc': 'Avise seu guardião de que você está bem',
     'subject_home_emergency_button': 'Preciso de ajuda',
     'subject_home_emergency_desc': 'Envia um alerta de emergência aos seus guardiões',
     'subject_home_emergency_loading': 'Enviando alerta de emergência...',
-    'subject_home_emergency_sent': 'Alerta de emergência enviado',
     'subject_home_emergency_failed': 'Falha ao enviar alerta de emergência',
     'subject_home_manual_report_limit_reached':
         'Você já enviou o relatório de segurança de hoje. Tente novamente amanhã.',
@@ -175,8 +156,6 @@ abstract class PtBr {
     'emergency_map_accuracy_label': 'Precisão',
     'emergency_map_open_external': 'Abrir no app de mapas externo',
     'emergency_map_no_location': 'Sem informações de localização',
-    'emergency_location_permission_denied_snackbar':
-        'Alerta de emergência enviado sem permissão de localização',
     'subject_home_emergency_confirm_send': 'Enviar pedido de emergência',
     'emergency_message_hint': 'Adicionar uma mensagem (opcional)',
     'subject_home_share_text': 'Conecte-se comigo no app Anbu.\nCódigo de conexão: @code',
@@ -201,8 +180,6 @@ abstract class PtBr {
     'guardian_subscription_expired': 'Assinatura necessária',
     'guardian_subscription_expired_message':
         'As atualizações diárias pararam.\nPelo preço de um almoço, cuide de quem você ama o ano todo.',
-    'guardian_subscribe': 'Assinar',
-    'guardian_payment_preparing': 'A função de pagamento estará disponível em breve.',
     'guardian_today_summary': 'Resumo de bem-estar de hoje',
     'guardian_no_subjects': 'Nenhum protegido conectado.',
     'guardian_checking_subjects': 'Monitorando atualmente\n@count protegido(s).',
@@ -215,7 +192,6 @@ abstract class PtBr {
     'guardian_last_check_minutes': 'Última verificação: @minutes min atrás',
     'guardian_last_check_hours': 'Última verificação: @hours h atrás',
     'guardian_last_check_days': 'Última verificação: @days dia(s) atrás',
-    'guardian_activity_stable': 'Atividade: estável',
     'guardian_activity_prefix': 'Atividade',
     'guardian_activity_very_active': 'Muito ativo',
     'guardian_activity_active': 'Ativo',
@@ -226,7 +202,6 @@ abstract class PtBr {
     'guardian_chart_y_axis_steps': 'Passos',
     'guardian_chart_x_axis_last_7_days': 'Últimos 7 dias',
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 dias',
-    'guardian_chart_today': 'Hoje',
     'guardian_safety_needed': 'Verificação necessária',
     'guardian_error_load_subjects': 'Não foi possível carregar a lista de protegidos.',
     'guardian_safety_confirmed': 'Segurança confirmada.',
@@ -238,7 +213,6 @@ abstract class PtBr {
     'add_subject_guide_subtitle':
         'Vincule o app do protegido para monitorar saúde e atividade em tempo real.',
     'add_subject_code_label': 'Código único (7 dígitos)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'O código único pode ser encontrado no app do protegido.',
     'add_subject_alias_label': 'Apelido do protegido',
     'add_subject_alias_hint': 'Ex: Mãe, Pai',
@@ -257,11 +231,6 @@ abstract class PtBr {
 
     // ── Configurações do guardião ──
     'settings_title': 'Configurações',
-    'settings_light_mode': 'Modo claro',
-    'settings_dark_mode': 'Modo escuro',
-    'settings_connection_management': 'Gerenciamento de conexões',
-    'settings_managed_subjects': 'Protegidos gerenciados',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Assinatura e serviço',
     'settings_current_membership': 'Plano atual',
     'settings_premium': 'Premium ativo',
@@ -309,10 +278,6 @@ abstract class PtBr {
     'gs_enable_confirm': 'Criar',
     'gs_enabled_message': 'A proteção foi ativada',
     'gs_enable_failed': 'Falha ao ativar a proteção',
-    'gs_disable_dialog_title': 'Desativar proteção',
-    'gs_disable_dialog_body':
-        'Ao desativar, seu código de segurança será excluído e as verificações aos guardiões conectados serão interrompidas.',
-    'gs_disable_confirm': 'Desativar',
     'gs_disabled_message': 'A proteção foi desativada',
     'gs_disable_failed': 'Falha ao desativar a proteção',
     'gs_activity_permission_denied_warning':
@@ -378,7 +343,6 @@ abstract class PtBr {
 
     // ── Gerenciamento de conexões do guardião ──
     'connection_title': 'Gerenciamento de conexões',
-    'connection_managed_count': 'Protegidos gerenciados ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Protegidos conectados',
     'connection_reorder_hint': 'Pressione e segure um cartão abaixo para reordenar',
@@ -406,10 +370,7 @@ abstract class PtBr {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Alterar horário de verificação',
-    'heartbeat_schedule_title_ios': 'Horário de verificação',
     'heartbeat_schedule_change_title_ios': 'Alterar horário de verificação',
-    'heartbeat_schedule_hint_ios':
-        'Uma notificação push de bem-estar chega todos os dias neste horário. Toque na notificação ou abra o aplicativo nesse momento para enviar seu sinal de bem-estar.',
     'heartbeat_daily_time': 'Diariamente às @time',
     'heartbeat_scheduled_today':
         'Seu sinal de bem-estar será enviado aos seus guardiões todos os dias às @time.',
@@ -425,12 +386,6 @@ abstract class PtBr {
 
     // ── Diversos ──
     'back_press_exit': 'Pressione voltar novamente para sair.',
-
-    // ── Erros de API ──
-    'error_unknown': 'Ocorreu um erro desconhecido.',
-    'error_timeout': 'A solicitação expirou.',
-    'error_network': 'Verifique sua conexão de rede.',
-    'error_unauthorized': 'Autenticação necessária.',
 
     // ── Corpo das notificações ──
     'noti_auto_report_body': 'A verificação de bem-estar foi recebida com sucesso.',
@@ -455,7 +410,6 @@ abstract class PtBr {
     'noti_steps_body': '@steps passos dados hoje.',
     'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
     'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',
-    'noti_cleared_by_guardian_title': '✅ Verificação confirmada',
     'noti_cleared_by_guardian_body': 'Um dos guardiões confirmou pessoalmente a segurança.',
 
     // ── Notificações locais ──

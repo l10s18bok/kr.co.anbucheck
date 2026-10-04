@@ -6,13 +6,9 @@ abstract class ViVn {
     'common_continue': 'Tiếp tục',
     'common_save': 'Lưu',
     'common_delete': 'Xóa',
-    'common_close': 'Đóng',
     'common_next': 'Tiếp theo',
-    'common_previous': 'Quay lại',
     'common_start': 'Bắt đầu',
-    'common_skip': 'Bỏ qua',
     'common_later': 'Để sau',
-    'common_loading': 'Đang tải...',
     'common_error': 'Lỗi',
     'common_session_expired': 'Thông tin tài khoản đã hết hạn. Vui lòng đăng ký lại.',
     'common_complete': 'Hoàn thành',
@@ -32,9 +28,6 @@ abstract class ViVn {
     'app_service_desc': 'Dịch vụ kiểm tra bình an tự động',
     'app_guardian_title': 'Người bảo vệ Anbu',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Đang kiểm tra bình an...',
 
     // ── Cap nhat ──
     'update_required_title': 'Cần cập nhật',
@@ -77,19 +70,10 @@ abstract class ViVn {
         "Tìm và chọn 'Anbu', sau đó trong mục 'Vị trí' chọn 'Khi đang sử dụng ứng dụng'.",
     'location_permission_settings_body_android':
         "Chọn 'Quyền' → 'Vị trí', sau đó chọn 'Chỉ cho phép khi đang sử dụng ứng dụng'.",
-    'permission_activity_dialog_title': 'Thông tin quyền hoạt động',
-    'permission_activity_dialog_message':
-        'Dùng để phát hiện bước chân và xác nhận hoạt động.\nVui lòng nhấn "Cho phép" trên màn hình tiếp theo.',
     'permission_notification_required_title': 'Cần quyền thông báo',
     'permission_notification_required_message':
         'Quyền thông báo là bắt buộc cho dịch vụ kiểm tra bình an.\nVui lòng bật trong Cài đặt.',
     'permission_go_to_settings': 'Đi đến Cài đặt',
-    'permission_activity_denied_title': 'Cần quyền hoạt động thể chất',
-    'permission_activity_denied_message':
-        'Quyền hoạt động thể chất cần thiết để phát hiện bước chân và xác minh sự an toàn của bạn.\n\nNếu không có quyền này, thông tin bước chân sẽ không được gửi đến người bảo vệ.\n\nVui lòng bật quyền "Hoạt động thể chất" trong cài đặt ứng dụng.',
-    'permission_battery': 'Loại trừ tối ưu hóa pin',
-    'permission_battery_desc':
-        'Loại trừ ứng dụng khỏi tối ưu hóa pin để kiểm tra bình an hàng ngày không bị bỏ lỡ vào giờ đã định',
     'permission_hibernation_title': 'Hãy tắt tính năng tự động xóa quyền',
     'permission_hibernation_highlight': 'tự động xóa quyền',
     'permission_hibernation_message':
@@ -139,18 +123,15 @@ abstract class ViVn {
     'subject_home_check_body_reported': 'Đã báo cáo lúc @time',
     'subject_home_check_body_scheduled': 'Đã lên lịch lúc @time',
     'subject_home_check_body_waiting': 'Đang chờ từ @time',
-    'subject_home_battery_status': 'Tình trạng pin',
     'subject_home_battery_charging': 'Đang sạc',
     'subject_home_battery_full': 'Đầy',
     'subject_home_battery_low': 'Pin yếu',
-    'subject_home_connectivity_status': 'Kết nối',
     'subject_home_report_loading': 'Đang báo cáo...',
     'subject_home_report_button': 'Báo cáo an toàn ngay',
     'subject_home_report_desc': 'Cho người bảo vệ biết bạn vẫn khỏe',
     'subject_home_emergency_button': 'Tôi cần giúp đỡ',
     'subject_home_emergency_desc': 'Gửi cảnh báo khẩn cấp đến người bảo vệ',
     'subject_home_emergency_loading': 'Đang gửi cảnh báo khẩn cấp...',
-    'subject_home_emergency_sent': 'Cảnh báo khẩn cấp đã được gửi',
     'subject_home_emergency_failed': 'Gửi cảnh báo khẩn cấp thất bại',
     'subject_home_manual_report_limit_reached':
         'Bạn đã gửi báo cáo an toàn hôm nay. Vui lòng thử lại vào ngày mai.',
@@ -172,8 +153,6 @@ abstract class ViVn {
     'emergency_map_accuracy_label': 'Độ chính xác',
     'emergency_map_open_external': 'Mở trong ứng dụng bản đồ bên ngoài',
     'emergency_map_no_location': 'Không có thông tin vị trí',
-    'emergency_location_permission_denied_snackbar':
-        'Đã gửi cảnh báo khẩn cấp mà không có quyền vị trí',
     'subject_home_emergency_confirm_send': 'Gửi yêu cầu khẩn cấp',
     'emergency_message_hint': 'Thêm lời nhắn (tùy chọn)',
     'subject_home_share_text': 'Hãy kết nối với tôi trên ứng dụng Anbu.\nMã kết nối: @code',
@@ -198,8 +177,6 @@ abstract class ViVn {
     'guardian_subscription_expired': 'Cần đăng ký',
     'guardian_subscription_expired_message':
         'Tin bình an mỗi ngày nay đã dừng lại.\nChỉ với giá một bữa trưa, hãy ở bên người thân suốt cả năm.',
-    'guardian_subscribe': 'Đăng ký',
-    'guardian_payment_preparing': 'Tính năng thanh toán sắp có.',
     'guardian_today_summary': 'Tóm tắt bình an hôm nay',
     'guardian_no_subjects': 'Chưa có người được bảo vệ nào.',
     'guardian_checking_subjects': 'Đang kiểm tra\n@count người được bảo vệ.',
@@ -212,7 +189,6 @@ abstract class ViVn {
     'guardian_last_check_minutes': 'Lần kiểm tra cuối: @minutes phút trước',
     'guardian_last_check_hours': 'Lần kiểm tra cuối: @hours giờ trước',
     'guardian_last_check_days': 'Lần kiểm tra cuối: @days ngày trước',
-    'guardian_activity_stable': 'Hoạt động: Ổn định',
     'guardian_activity_prefix': 'Hoạt động',
     'guardian_activity_very_active': 'Rất năng động',
     'guardian_activity_active': 'Năng động',
@@ -223,7 +199,6 @@ abstract class ViVn {
     'guardian_chart_y_axis_steps': 'Bước',
     'guardian_chart_x_axis_last_7_days': '7 ngày qua',
     'guardian_chart_x_axis_last_30_days': '30 ngày qua',
-    'guardian_chart_today': 'Hôm nay',
     'guardian_safety_needed': 'Cần kiểm tra an toàn',
     'guardian_error_load_subjects': 'Không thể tải danh sách người được bảo vệ.',
     'guardian_safety_confirmed': 'Đã xác nhận an toàn.',
@@ -235,7 +210,6 @@ abstract class ViVn {
     'add_subject_guide_subtitle':
         'Kết nối ứng dụng của người được bảo vệ để theo dõi tình trạng và hoạt động theo thời gian thực.',
     'add_subject_code_label': 'Mã duy nhất (7 ký tự)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'Mã duy nhất có thể tìm thấy trong ứng dụng của người được bảo vệ.',
     'add_subject_alias_label': 'Tên gọi người được bảo vệ',
     'add_subject_alias_hint': 'VD: Mẹ, Bố',
@@ -254,11 +228,6 @@ abstract class ViVn {
 
     // ── Cai dat nguoi bao ve ──
     'settings_title': 'Cài đặt',
-    'settings_light_mode': 'Chế độ sáng',
-    'settings_dark_mode': 'Chế độ tối',
-    'settings_connection_management': 'Quản lý kết nối',
-    'settings_managed_subjects': 'Số người được bảo vệ',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Đăng ký & Dịch vụ',
     'settings_current_membership': 'Thành viên hiện tại',
     'settings_premium': 'Premium đang hoạt động',
@@ -306,10 +275,6 @@ abstract class ViVn {
     'gs_enable_confirm': 'Tạo',
     'gs_enabled_message': 'Bảo vệ đã được kích hoạt',
     'gs_enable_failed': 'Không thể kích hoạt bảo vệ',
-    'gs_disable_dialog_title': 'Tắt bảo vệ',
-    'gs_disable_dialog_body':
-        'Tắt bảo vệ sẽ xóa mã an toàn của bạn và ngừng gửi kiểm tra bình an cho người bảo vệ đã kết nối.',
-    'gs_disable_confirm': 'Tắt',
     'gs_disabled_message': 'Bảo vệ đã được tắt',
     'gs_disable_failed': 'Không thể tắt bảo vệ',
     'gs_activity_permission_denied_warning':
@@ -373,7 +338,6 @@ abstract class ViVn {
 
     // ── Quan ly ket noi nguoi bao ve ──
     'connection_title': 'Quản lý kết nối',
-    'connection_managed_count': 'Số người được bảo vệ ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Người được bảo vệ đã kết nối',
     'connection_reorder_hint': 'Nhấn giữ thẻ bên dưới để sắp xếp lại',
@@ -401,10 +365,7 @@ abstract class ViVn {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Đổi giờ báo bình an',
-    'heartbeat_schedule_title_ios': 'Giờ báo bình an',
     'heartbeat_schedule_change_title_ios': 'Đổi giờ báo bình an',
-    'heartbeat_schedule_hint_ios':
-        'Thông báo đẩy bình an sẽ đến vào thời điểm này mỗi ngày. Chạm vào thông báo hoặc mở ứng dụng quanh thời điểm đó để gửi tín hiệu bình an.',
     'heartbeat_daily_time': 'Hằng ngày lúc @time',
     'heartbeat_scheduled_today':
         'Tín hiệu bình an của bạn sẽ được gửi đến người bảo vệ mỗi ngày lúc @time.',
@@ -420,12 +381,6 @@ abstract class ViVn {
 
     // ── Khac ──
     'back_press_exit': 'Nhấn lại để thoát.',
-
-    // ── Loi API ──
-    'error_unknown': 'Đã xảy ra lỗi không xác định.',
-    'error_timeout': 'Yêu cầu đã hết thời gian.',
-    'error_network': 'Vui lòng kiểm tra kết nối mạng.',
-    'error_unauthorized': 'Cần xác thực.',
 
     // ── Noi dung thong bao ──
     'noti_auto_report_body': 'Kiểm tra bình an đã được nhận thành công.',
@@ -447,7 +402,6 @@ abstract class ViVn {
     'noti_emergency_body':
         'Người được bảo vệ đã trực tiếp yêu cầu giúp đỡ. Vui lòng kiểm tra ngay.',
     'noti_resolved_body': 'Bình an của người được bảo vệ đã trở lại bình thường.',
-    'noti_cleared_by_guardian_title': '✅ Xác nhận an toàn',
     'noti_cleared_by_guardian_body': 'Một trong các người bảo vệ đã trực tiếp xác nhận sự an toàn.',
 
     // ── Thông báo cục bộ ──

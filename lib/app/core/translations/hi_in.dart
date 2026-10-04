@@ -6,13 +6,9 @@ abstract class HiIn {
     'common_continue': 'जारी रखें',
     'common_save': 'सहेजें',
     'common_delete': 'हटाएं',
-    'common_close': 'बंद करें',
     'common_next': 'अगला',
-    'common_previous': 'पिछला',
     'common_start': 'शुरू करें',
-    'common_skip': 'छोड़ें',
     'common_later': 'बाद में',
-    'common_loading': 'लोड हो रहा है...',
     'common_error': 'त्रुटि',
     'common_session_expired': 'आपके खाते की जानकारी की अवधि समाप्त हो गई है। कृपया दोबारा पंजीकरण करें।',
     'common_complete': 'पूर्ण',
@@ -32,9 +28,6 @@ abstract class HiIn {
     'app_service_desc': 'खैरियत की स्वचालित जांच सेवा',
     'app_guardian_title': 'Anbu अभिभावक',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── स्प्लैश ──
-    'splash_loading': 'खैरियत की जांच हो रही है...',
 
     // ── अपडेट ──
     'update_required_title': 'अपडेट आवश्यक',
@@ -77,19 +70,10 @@ abstract class HiIn {
         '"Anbu" खोजकर चुनें, फिर "स्थान" में "ऐप का उपयोग करते समय" चुनें।',
     'location_permission_settings_body_android':
         '"अनुमतियाँ" → "स्थान" चुनें, फिर "केवल ऐप का उपयोग करते समय अनुमति दें" चुनें।',
-    'permission_activity_dialog_title': 'गतिविधि अनुमति जानकारी',
-    'permission_activity_dialog_message':
-        'कदमों की पहचान और गतिविधि की पुष्टि के लिए उपयोग किया जाता है।\nकृपया अगली स्क्रीन पर "अनुमति दें" दबाएं।',
     'permission_notification_required_title': 'सूचना अनुमति आवश्यक',
     'permission_notification_required_message':
         'खैरियत की जांच सेवा के लिए सूचना अनुमति आवश्यक है।\nकृपया सेटिंग्स में इसे सक्षम करें।',
     'permission_go_to_settings': 'सेटिंग्स पर जाएं',
-    'permission_activity_denied_title': 'शारीरिक गतिविधि अनुमति आवश्यक',
-    'permission_activity_denied_message':
-        'आपके कदमों का पता लगाने और आपकी सुरक्षा सत्यापित करने के लिए शारीरिक गतिविधि अनुमति आवश्यक है।\n\nइस अनुमति के बिना, कदम की जानकारी अभिभावकों को नहीं भेजी जाएगी।\n\nकृपया ऐप सेटिंग्स में "शारीरिक गतिविधि" अनुमति सक्षम करें।',
-    'permission_battery': 'बैटरी अनुकूलन अपवाद',
-    'permission_battery_desc':
-        'निर्धारित समय पर रोज़ाना खैरियत की जांच छूट न जाए, इसके लिए ऐप को बैटरी अनुकूलन से बाहर रखता है',
     'permission_hibernation_title': 'स्वचालित अनुमति हटाना बंद करें',
     'permission_hibernation_highlight': 'स्वचालित अनुमति हटाना',
     'permission_hibernation_message':
@@ -139,18 +123,15 @@ abstract class HiIn {
     'subject_home_check_body_reported': '@time पर रिपोर्ट किया गया',
     'subject_home_check_body_scheduled': '@time पर निर्धारित',
     'subject_home_check_body_waiting': '@time से प्रतीक्षा में',
-    'subject_home_battery_status': 'बैटरी स्थिति',
     'subject_home_battery_charging': 'चार्ज हो रहा है',
     'subject_home_battery_full': 'पूर्ण',
     'subject_home_battery_low': 'कम बैटरी',
-    'subject_home_connectivity_status': 'कनेक्टिविटी',
     'subject_home_report_loading': 'रिपोर्ट हो रही है...',
     'subject_home_report_button': 'अभी सुरक्षा रिपोर्ट करें',
     'subject_home_report_desc': 'अपने अभिभावक को बताएं कि आप ठीक हैं',
     'subject_home_emergency_button': 'मुझे मदद चाहिए',
     'subject_home_emergency_desc': 'अभिभावकों को आपातकालीन अलर्ट भेजता है',
     'subject_home_emergency_loading': 'आपातकालीन अलर्ट भेजा जा रहा है...',
-    'subject_home_emergency_sent': 'आपातकालीन अलर्ट भेज दिया गया',
     'subject_home_emergency_failed': 'आपातकालीन अलर्ट भेजने में विफल',
     'subject_home_manual_report_limit_reached':
         'आपने आज की सुरक्षा रिपोर्ट पहले ही भेज दी है। कृपया कल पुनः प्रयास करें।',
@@ -172,8 +153,6 @@ abstract class HiIn {
     'emergency_map_accuracy_label': 'सटीकता',
     'emergency_map_open_external': 'बाहरी मानचित्र ऐप में खोलें',
     'emergency_map_no_location': 'कोई स्थान जानकारी उपलब्ध नहीं',
-    'emergency_location_permission_denied_snackbar':
-        'स्थान अनुमति के बिना आपातकालीन अलर्ट भेजा गया',
     'subject_home_emergency_confirm_send': 'आपातकालीन अनुरोध भेजें',
     'emergency_message_hint': 'संदेश जोड़ें (वैकल्पिक)',
     'subject_home_share_text': 'Anbu ऐप पर मुझसे जुड़ें।\nकनेक्शन कोड: @code',
@@ -198,8 +177,6 @@ abstract class HiIn {
     'guardian_subscription_expired': 'सदस्यता आवश्यक है',
     'guardian_subscription_expired_message':
         'हर दिन आने वाली खैरियत की खबरें अब रुक गई हैं।\nएक दोपहर के भोजन की कीमत में, पूरे साल अपनों का ख्याल रखें।',
-    'guardian_subscribe': 'सदस्यता लें',
-    'guardian_payment_preparing': 'भुगतान सुविधा जल्द आ रही है।',
     'guardian_today_summary': 'आज की खैरियत का सारांश',
     'guardian_no_subjects': 'कोई संरक्षित व्यक्ति जुड़ा नहीं है।',
     'guardian_checking_subjects': 'वर्तमान में @count संरक्षित व्यक्ति(यों)\nकी जांच हो रही है।',
@@ -212,7 +189,6 @@ abstract class HiIn {
     'guardian_last_check_minutes': 'अंतिम जांच: @minutes मिनट पहले',
     'guardian_last_check_hours': 'अंतिम जांच: @hours घंटे पहले',
     'guardian_last_check_days': 'अंतिम जांच: @days दिन पहले',
-    'guardian_activity_stable': 'गतिविधि: स्थिर',
     'guardian_activity_prefix': 'गतिविधि',
     'guardian_activity_very_active': 'बहुत सक्रिय',
     'guardian_activity_active': 'सक्रिय',
@@ -223,7 +199,6 @@ abstract class HiIn {
     'guardian_chart_y_axis_steps': 'कदम',
     'guardian_chart_x_axis_last_7_days': 'पिछले 7 दिन',
     'guardian_chart_x_axis_last_30_days': 'पिछले 30 दिन',
-    'guardian_chart_today': 'आज',
     'guardian_safety_needed': 'सुरक्षा जांच आवश्यक',
     'guardian_error_load_subjects': 'संरक्षित व्यक्तियों की सूची लोड करने में विफल।',
     'guardian_safety_confirmed': 'सुरक्षा की पुष्टि हो गई।',
@@ -235,7 +210,6 @@ abstract class HiIn {
     'add_subject_guide_subtitle':
         'संरक्षित व्यक्ति के ऐप को जोड़कर उनके स्वास्थ्य और गतिविधि पर नजर रखें।',
     'add_subject_code_label': 'अनोखा कोड (7 अंक)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'अनोखा कोड संरक्षित व्यक्ति के ऐप में मिल सकता है।',
     'add_subject_alias_label': 'संरक्षित व्यक्ति का उपनाम',
     'add_subject_alias_hint': 'जैसे: मां, पिताजी',
@@ -254,11 +228,6 @@ abstract class HiIn {
 
     // ── अभिभावक सेटिंग्स ──
     'settings_title': 'सेटिंग्स',
-    'settings_light_mode': 'लाइट मोड',
-    'settings_dark_mode': 'डार्क मोड',
-    'settings_connection_management': 'कनेक्शन प्रबंधन',
-    'settings_managed_subjects': 'प्रबंधित संरक्षित व्यक्ति',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'सदस्यता और सेवा',
     'settings_current_membership': 'वर्तमान सदस्यता',
     'settings_premium': 'प्रीमियम सक्रिय',
@@ -306,10 +275,6 @@ abstract class HiIn {
     'gs_enable_confirm': 'बनाएं',
     'gs_enabled_message': 'सुरक्षा सक्रिय हो गई',
     'gs_enable_failed': 'सुरक्षा सक्रिय करने में विफल',
-    'gs_disable_dialog_title': 'सुरक्षा निष्क्रिय करें',
-    'gs_disable_dialog_body':
-        'सुरक्षा निष्क्रिय करने पर आपका सुरक्षा कोड हटा दिया जाएगा और जुड़े अभिभावकों को जाँच भेजना बंद हो जाएगा।',
-    'gs_disable_confirm': 'निष्क्रिय करें',
     'gs_disabled_message': 'सुरक्षा निष्क्रिय हो गई',
     'gs_disable_failed': 'सुरक्षा निष्क्रिय करने में विफल',
     'gs_activity_permission_denied_warning':
@@ -371,7 +336,6 @@ abstract class HiIn {
 
     // ── अभिभावक कनेक्शन प्रबंधन ──
     'connection_title': 'कनेक्शन प्रबंधन',
-    'connection_managed_count': 'प्रबंधित संरक्षित व्यक्ति ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'जुड़े संरक्षित व्यक्ति',
     'connection_reorder_hint': 'क्रम बदलने के लिए नीचे कार्ड को देर तक दबाएं',
@@ -399,10 +363,7 @@ abstract class HiIn {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'हालचाल का समय बदलें',
-    'heartbeat_schedule_title_ios': 'हालचाल का समय',
     'heartbeat_schedule_change_title_ios': 'हालचाल का समय बदलें',
-    'heartbeat_schedule_hint_ios':
-        'हर दिन इस समय एक वेलनेस पुश सूचना आती है। अपना वेलनेस संकेत भेजने के लिए सूचना पर टैप करें या उस समय के आसपास ऐप खोलें।',
     'heartbeat_daily_time': 'रोज @time पर',
     'heartbeat_scheduled_today': 'आपकी खैरियत का संकेत हर दिन @time पर आपके अभिभावकों को भेजा जाएगा।',
     'heartbeat_change_failed_title': 'समय बदलना विफल',
@@ -417,12 +378,6 @@ abstract class HiIn {
 
     // ── अन्य ──
     'back_press_exit': 'बाहर निकलने के लिए फिर से दबाएं।',
-
-    // ── API त्रुटियां ──
-    'error_unknown': 'एक अज्ञात त्रुटि हुई।',
-    'error_timeout': 'अनुरोध का समय समाप्त हो गया।',
-    'error_network': 'कृपया अपना नेटवर्क कनेक्शन जांचें।',
-    'error_unauthorized': 'प्रमाणीकरण आवश्यक है।',
 
     // ── सूचना सामग्री ──
     'noti_auto_report_body': 'खैरियत की जांच सफलतापूर्वक प्राप्त हुई।',
@@ -443,7 +398,6 @@ abstract class HiIn {
     'noti_steps_body': 'आज @steps कदम चले।',
     'noti_emergency_body': 'संरक्षित व्यक्ति ने सीधे मदद का अनुरोध किया है। कृपया तुरंत जांचें।',
     'noti_resolved_body': 'संरक्षित व्यक्ति की स्वास्थ्य जाँच सामान्य हो गई है।',
-    'noti_cleared_by_guardian_title': '✅ सुरक्षा पुष्टि',
     'noti_cleared_by_guardian_body': 'एक अभिभावक ने व्यक्तिगत रूप से सुरक्षा की पुष्टि की है।',
 
     // ── स्थानीय सूचनाएँ ──

@@ -6,13 +6,9 @@ abstract class NlNl {
     'common_continue': 'Doorgaan',
     'common_save': 'Opslaan',
     'common_delete': 'Verwijderen',
-    'common_close': 'Sluiten',
     'common_next': 'Volgende',
-    'common_previous': 'Vorige',
     'common_start': 'Beginnen',
-    'common_skip': 'Overslaan',
     'common_later': 'Later',
-    'common_loading': 'Laden...',
     'common_error': 'Fout',
     'common_session_expired': 'Uw accountgegevens zijn verlopen. Registreer u opnieuw.',
     'common_complete': 'Gereed',
@@ -32,9 +28,6 @@ abstract class NlNl {
     'app_service_desc': 'Automatische welzijnscontrole',
     'app_guardian_title': 'Anbu Beschermer',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Welzijn wordt gecontroleerd...',
 
     // ── Update ──
     'update_required_title': 'Update vereist',
@@ -77,19 +70,10 @@ abstract class NlNl {
         "Zoek en selecteer 'Anbu', kies vervolgens bij 'Locatie' de optie 'Bij gebruik van de app'.",
     'location_permission_settings_body_android':
         "Selecteer 'Rechten' → 'Locatie' en kies 'Alleen toestaan bij gebruik van de app'.",
-    'permission_activity_dialog_title': 'Informatie over activiteitstoestemming',
-    'permission_activity_dialog_message':
-        'Wordt gebruikt om stappen te detecteren en activiteit te bevestigen.\nSelecteer "Toestaan" op het volgende scherm.',
     'permission_notification_required_title': 'Meldingstoestemming vereist',
     'permission_notification_required_message':
         'De welzijnscontrole vereist meldingstoestemming.\nSchakel deze in via Instellingen.',
     'permission_go_to_settings': 'Ga naar Instellingen',
-    'permission_activity_denied_title': 'Toestemming voor fysieke activiteit vereist',
-    'permission_activity_denied_message':
-        'Wordt gebruikt om stappen te detecteren en de nauwkeurigheid van de welzijnscontrole te verbeteren.\nSchakel de toestemming in via Instellingen.',
-    'permission_battery': 'Uitsluiting van batterijoptimalisatie',
-    'permission_battery_desc':
-        'Sluit de app uit van batterijoptimalisatie zodat dagelijkse welzijnscontroles niet worden gemist',
     'permission_hibernation_title': 'Schakel automatische verwijdering van rechten uit',
     'permission_hibernation_highlight': 'automatische verwijdering van rechten',
     'permission_hibernation_message':
@@ -141,18 +125,15 @@ abstract class NlNl {
     'subject_home_check_body_reported': 'Gemeld om @time',
     'subject_home_check_body_scheduled': 'Gepland om @time',
     'subject_home_check_body_waiting': 'Wacht sinds @time',
-    'subject_home_battery_status': 'Batterijstatus',
     'subject_home_battery_charging': 'Opladen',
     'subject_home_battery_full': 'Vol',
     'subject_home_battery_low': 'Batterij bijna leeg',
-    'subject_home_connectivity_status': 'Verbinding',
     'subject_home_report_loading': 'Wordt gemeld...',
     'subject_home_report_button': 'Meld nu dat het goed gaat',
     'subject_home_report_desc': 'Laat uw beschermer weten dat het goed met u gaat',
     'subject_home_emergency_button': 'Ik heb hulp nodig',
     'subject_home_emergency_desc': 'Stuurt een noodmelding naar uw beschermers',
     'subject_home_emergency_loading': 'Noodmelding wordt verzonden...',
-    'subject_home_emergency_sent': 'Noodmelding is verzonden',
     'subject_home_emergency_failed': 'Noodmelding kon niet worden verzonden',
     'subject_home_manual_report_limit_reached':
         'U heeft het veiligheidsrapport van vandaag al verzonden. Probeer het morgen opnieuw.',
@@ -174,7 +155,6 @@ abstract class NlNl {
     'emergency_map_accuracy_label': 'Nauwkeurigheid',
     'emergency_map_open_external': 'Open in externe kaart-app',
     'emergency_map_no_location': 'Geen locatie-informatie',
-    'emergency_location_permission_denied_snackbar': 'Noodmelding verzonden zonder locatierechten',
     'subject_home_emergency_confirm_send': 'Noodverzoek verzenden',
     'emergency_message_hint': 'Bericht toevoegen (optioneel)',
     'subject_home_share_text':
@@ -200,8 +180,6 @@ abstract class NlNl {
     'guardian_subscription_expired': 'Abonnement vereist',
     'guardian_subscription_expired_message':
         'De dagelijkse tekenen van leven zijn gestopt.\nVoor de prijs van één lunch waakt u het hele jaar over uw dierbare.',
-    'guardian_subscribe': 'Abonneren',
-    'guardian_payment_preparing': 'De betaalfunctie is binnenkort beschikbaar.',
     'guardian_today_summary': 'Welzijnsoverzicht van vandaag',
     'guardian_no_subjects': 'Geen beschermelingen verbonden.',
     'guardian_checking_subjects': 'Momenteel controleren we\n@count beschermeling(en).',
@@ -214,7 +192,6 @@ abstract class NlNl {
     'guardian_last_check_minutes': 'Laatste controle: @minutes min geleden',
     'guardian_last_check_hours': 'Laatste controle: @hours uur geleden',
     'guardian_last_check_days': 'Laatste controle: @days dag(en) geleden',
-    'guardian_activity_stable': 'Activiteit: stabiel',
     'guardian_activity_prefix': 'Activiteit',
     'guardian_activity_very_active': 'Zeer actief',
     'guardian_activity_active': 'Actief',
@@ -225,7 +202,6 @@ abstract class NlNl {
     'guardian_chart_y_axis_steps': 'Stappen',
     'guardian_chart_x_axis_last_7_days': 'Afgelopen 7 dagen',
     'guardian_chart_x_axis_last_30_days': 'Afgelopen 30 dagen',
-    'guardian_chart_today': 'Vandaag',
     'guardian_safety_needed': 'Veiligheidscontrole nodig',
     'guardian_error_load_subjects': 'Kan de lijst met beschermelingen niet laden.',
     'guardian_safety_confirmed': 'Veiligheid bevestigd.',
@@ -237,7 +213,6 @@ abstract class NlNl {
     'add_subject_guide_subtitle':
         'Koppel de app van een beschermeling om gezondheid en activiteit in realtime te volgen.',
     'add_subject_code_label': 'Unieke code (7 cijfers)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': 'De unieke code is te vinden in de app van de beschermeling.',
     'add_subject_alias_label': 'Bijnaam beschermeling',
     'add_subject_alias_hint': 'Bijv. Mama, Papa',
@@ -256,11 +231,6 @@ abstract class NlNl {
 
     // ── Instellingen beschermer ──
     'settings_title': 'Instellingen',
-    'settings_light_mode': 'Lichte modus',
-    'settings_dark_mode': 'Donkere modus',
-    'settings_connection_management': 'Verbindingsbeheer',
-    'settings_managed_subjects': 'Beheerde beschermelingen',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Abonnement en service',
     'settings_current_membership': 'Huidig lidmaatschap',
     'settings_premium': 'Premium actief',
@@ -308,10 +278,6 @@ abstract class NlNl {
     'gs_enable_confirm': 'Aanmaken',
     'gs_enabled_message': 'Welzijnsbescherming is geactiveerd',
     'gs_enable_failed': 'Welzijnsbescherming activeren mislukt',
-    'gs_disable_dialog_title': 'Welzijnsbescherming deactiveren',
-    'gs_disable_dialog_body':
-        'Bij deactivering wordt uw veiligheidscode verwijderd en worden welzijnscontroles aan verbonden beschermers gestopt.',
-    'gs_disable_confirm': 'Deactiveren',
     'gs_disabled_message': 'Welzijnsbescherming is gedeactiveerd',
     'gs_disable_failed': 'Welzijnsbescherming deactiveren mislukt',
     'gs_activity_permission_denied_warning':
@@ -376,7 +342,6 @@ abstract class NlNl {
 
     // ── Verbindingsbeheer beschermer ──
     'connection_title': 'Verbindingsbeheer',
-    'connection_managed_count': 'Beheerde beschermelingen ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Verbonden beschermelingen',
     'connection_reorder_hint': 'Houd een kaart hieronder ingedrukt om de volgorde te wijzigen',
@@ -405,10 +370,7 @@ abstract class NlNl {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Check-intijd wijzigen',
-    'heartbeat_schedule_title_ios': 'Check-intijd',
     'heartbeat_schedule_change_title_ios': 'Check-intijd wijzigen',
-    'heartbeat_schedule_hint_ios':
-        'Een welzijns-pushmelding komt elke dag op deze tijd binnen. Tik op de melding of open de app rond dat tijdstip om uw welzijnssignaal te verzenden.',
     'heartbeat_daily_time': 'Dagelijks om @time',
     'heartbeat_scheduled_today':
         'Uw welzijnssignaal wordt elke dag om @time naar uw beschermers gestuurd.',
@@ -424,12 +386,6 @@ abstract class NlNl {
 
     // ── Overig ──
     'back_press_exit': 'Druk nogmaals op terug om af te sluiten.',
-
-    // ── API-fouten ──
-    'error_unknown': 'Er is een onbekende fout opgetreden.',
-    'error_timeout': 'Het verzoek is verlopen.',
-    'error_network': 'Controleer uw netwerkverbinding.',
-    'error_unauthorized': 'Authenticatie vereist.',
 
     // ── Meldingsteksten ──
     'noti_auto_report_body': 'De welzijnscontrole is succesvol ontvangen.',
@@ -453,7 +409,6 @@ abstract class NlNl {
     'noti_emergency_body':
         'De beschermde persoon heeft rechtstreeks om hulp gevraagd. Controleer onmiddellijk.',
     'noti_resolved_body': 'De welzijnscontrole van de beschermde persoon is weer normaal.',
-    'noti_cleared_by_guardian_title': '✅ Controle bevestigd',
     'noti_cleared_by_guardian_body':
         'Een van de beschermers heeft de veiligheid persoonlijk bevestigd.',
 

@@ -6,13 +6,9 @@ abstract class ItIt {
     'common_continue': 'Continua',
     'common_save': 'Salva',
     'common_delete': 'Elimina',
-    'common_close': 'Chiudi',
     'common_next': 'Avanti',
-    'common_previous': 'Indietro',
     'common_start': 'Inizia',
-    'common_skip': 'Salta',
     'common_later': 'Dopo',
-    'common_loading': 'Caricamento...',
     'common_error': 'Errore',
     'common_session_expired': "Le informazioni dell'account sono scadute. Registrati di nuovo.",
     'common_complete': 'Fatto',
@@ -32,9 +28,6 @@ abstract class ItIt {
     'app_service_desc': 'Servizio automatico di verifica del benessere',
     'app_guardian_title': 'Anbu Guardiano',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── Splash ──
-    'splash_loading': 'Verifica in corso...',
 
     // ── Aggiornamento ──
     'update_required_title': 'Aggiornamento necessario',
@@ -83,20 +76,10 @@ abstract class ItIt {
         'Cerchi e selezioni "Anbu", poi in "Posizione" scelga "Mentre uso l\'app".',
     'location_permission_settings_body_android':
         'Selezioni "Autorizzazioni" → "Posizione", poi scelga "Consenti solo durante l\'uso dell\'app".',
-    'permission_activity_dialog_title': 'Informazioni sul permesso attività',
-    'permission_activity_dialog_message':
-        'Utilizzato per rilevare i passi e verificare l\'attività.\nSelezioni "Consenti" nella schermata successiva.',
     'permission_notification_required_title': 'Permesso notifiche necessario',
     'permission_notification_required_message':
         'Il permesso notifiche è necessario per il servizio di verifica del benessere.\nLo abiliti nelle Impostazioni.',
     'permission_go_to_settings': 'Vai alle Impostazioni',
-    'permission_activity_denied_title':
-        'Autorizzazione attività fisica richiesta',
-    'permission_activity_denied_message':
-        "Viene utilizzata per rilevare i passi e migliorare la precisione del controllo del benessere.\nAbiliti l'autorizzazione attività fisica nelle Impostazioni.",
-    'permission_battery': 'Esclusione ottimizzazione batteria',
-    'permission_battery_desc':
-        'Esclude l\'app dall\'ottimizzazione della batteria affinché il controllo giornaliero del benessere non venga perso',
     'permission_hibernation_title':
         'Disattivi la rimozione automatica dei permessi',
     'permission_hibernation_highlight': 'rimozione automatica dei permessi',
@@ -155,11 +138,9 @@ abstract class ItIt {
     'subject_home_check_body_reported': 'Segnalato alle @time',
     'subject_home_check_body_scheduled': 'Previsto alle @time',
     'subject_home_check_body_waiting': 'In attesa dalle @time',
-    'subject_home_battery_status': 'Stato batteria',
     'subject_home_battery_charging': 'In carica',
     'subject_home_battery_full': 'Carica completa',
     'subject_home_battery_low': 'Batteria scarica',
-    'subject_home_connectivity_status': 'Connettività',
     'subject_home_report_loading': 'Invio segnalazione...',
     'subject_home_report_button': 'Segnala ora che sta bene',
     'subject_home_report_desc': 'Faccia sapere al Suo guardiano che sta bene',
@@ -167,7 +148,6 @@ abstract class ItIt {
     'subject_home_emergency_desc':
         "Invia un'allerta di emergenza ai Suoi guardiani",
     'subject_home_emergency_loading': "Invio dell'allerta di emergenza...",
-    'subject_home_emergency_sent': "L'allerta di emergenza è stata inviata",
     'subject_home_emergency_failed': "Invio dell'allerta di emergenza fallito",
     'subject_home_manual_report_limit_reached':
         'Ha già inviato la verifica di benessere di oggi. Riprovi domani.',
@@ -191,8 +171,6 @@ abstract class ItIt {
     'emergency_map_accuracy_label': 'Precisione',
     'emergency_map_open_external': "Apri in un'app di mappe esterna",
     'emergency_map_no_location': 'Nessuna informazione sulla posizione',
-    'emergency_location_permission_denied_snackbar':
-        'Allerta di emergenza inviata senza autorizzazione alla posizione',
     'subject_home_emergency_confirm_send': 'Invia richiesta di emergenza',
     'emergency_message_hint': 'Aggiungi un messaggio (facoltativo)',
     'subject_home_share_text':
@@ -219,9 +197,6 @@ abstract class ItIt {
     'guardian_subscription_expired': 'Abbonamento necessario',
     'guardian_subscription_expired_message':
         "Gli aggiornamenti quotidiani si sono fermati.\nAl prezzo di un pranzo, vegli sui Suoi cari tutto l'anno.",
-    'guardian_subscribe': 'Abbonati',
-    'guardian_payment_preparing':
-        'La funzione di pagamento sarà disponibile a breve.',
     'guardian_today_summary': 'Riepilogo benessere di oggi',
     'guardian_no_subjects': 'Nessun assistito connesso.',
     'guardian_checking_subjects':
@@ -235,7 +210,6 @@ abstract class ItIt {
     'guardian_last_check_minutes': 'Ultimo controllo: @minutes min fa',
     'guardian_last_check_hours': 'Ultimo controllo: @hours ore fa',
     'guardian_last_check_days': 'Ultimo controllo: @days giorno/i fa',
-    'guardian_activity_stable': 'Attività: stabile',
     'guardian_activity_prefix': 'Attività',
     'guardian_activity_very_active': 'Molto attivo',
     'guardian_activity_active': 'Attivo',
@@ -247,7 +221,6 @@ abstract class ItIt {
     'guardian_chart_y_axis_steps': 'Passi',
     'guardian_chart_x_axis_last_7_days': 'Ultimi 7 giorni',
     'guardian_chart_x_axis_last_30_days': 'Ultimi 30 giorni',
-    'guardian_chart_today': 'Oggi',
     'guardian_safety_needed': 'Verifica necessaria',
     'guardian_error_load_subjects':
         'Impossibile caricare la lista degli assistiti.',
@@ -261,7 +234,6 @@ abstract class ItIt {
     'add_subject_guide_subtitle':
         "Colleghi l'app dell'assistito per monitorare la sua salute e attività in tempo reale.",
     'add_subject_code_label': 'Codice univoco (7 cifre)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info':
         "Il codice univoco si trova nell'app dell'assistito.",
     'add_subject_alias_label': "Soprannome dell'assistito",
@@ -282,11 +254,6 @@ abstract class ItIt {
 
     // ── Impostazioni guardiano ──
     'settings_title': 'Impostazioni',
-    'settings_light_mode': 'Modalità chiara',
-    'settings_dark_mode': 'Modalità scura',
-    'settings_connection_management': 'Gestione connessioni',
-    'settings_managed_subjects': 'Assistiti gestiti',
-    'settings_managed_subjects_count': '@current / @max',
     'settings_subscription_service': 'Abbonamento e servizio',
     'settings_current_membership': 'Abbonamento attuale',
     'settings_premium': 'Premium attivo',
@@ -336,10 +303,6 @@ abstract class ItIt {
     'gs_enable_confirm': 'Crea',
     'gs_enabled_message': 'La protezione è stata attivata',
     'gs_enable_failed': 'Attivazione della protezione fallita',
-    'gs_disable_dialog_title': 'Disattiva protezione',
-    'gs_disable_dialog_body':
-        'Disattivando verrà eliminato il Suo codice di sicurezza e verranno interrotte le verifiche ai guardiani collegati.',
-    'gs_disable_confirm': 'Disattiva',
     'gs_disabled_message': 'La protezione è stata disattivata',
     'gs_disable_failed': 'Disattivazione della protezione fallita',
     'gs_activity_permission_denied_warning':
@@ -410,7 +373,6 @@ abstract class ItIt {
 
     // ── Gestione connessioni guardiano ──
     'connection_title': 'Gestione connessioni',
-    'connection_managed_count': 'Assistiti gestiti ',
     'connection_managed_count_value': '@current / @max',
     'connection_connected_subjects': 'Assistiti connessi',
     'connection_reorder_hint': 'Tenga premuta una scheda qui sotto per riordinare',
@@ -440,10 +402,7 @@ abstract class ItIt {
 
     // ── Heartbeat ──
     'heartbeat_schedule_change': 'Modifica orario di controllo',
-    'heartbeat_schedule_title_ios': 'Orario di controllo',
     'heartbeat_schedule_change_title_ios': 'Modifica orario di controllo',
-    'heartbeat_schedule_hint_ios':
-        'Una notifica push di benessere arriva ogni giorno a quest\'ora. Tocca la notifica o apri l\'app in quel momento per inviare il tuo segnale di benessere.',
     'heartbeat_daily_time': 'Ogni giorno alle @time',
     'heartbeat_scheduled_today':
         'Il tuo segnale di benessere sarà inviato ai tuoi guardiani ogni giorno alle @time.',
@@ -460,12 +419,6 @@ abstract class ItIt {
 
     // ── Varie ──
     'back_press_exit': 'Prema di nuovo indietro per uscire.',
-
-    // ── Errori API ──
-    'error_unknown': 'Si è verificato un errore sconosciuto.',
-    'error_timeout': 'La richiesta è scaduta.',
-    'error_network': 'Verifichi la connessione di rete.',
-    'error_unauthorized': 'Autenticazione necessaria.',
 
     // ── Corpo delle notifiche ──
     'noti_auto_report_body':
@@ -493,7 +446,6 @@ abstract class ItIt {
         "L'assistito ha richiesto direttamente aiuto. Verifichi immediatamente.",
     'noti_resolved_body':
         'Il controllo benessere dell\'assistito è tornato nella norma.',
-    'noti_cleared_by_guardian_title': '✅ Verifica confermata',
     'noti_cleared_by_guardian_body':
         'Uno dei guardiani ha confermato personalmente la sicurezza.',
 

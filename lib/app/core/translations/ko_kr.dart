@@ -6,13 +6,9 @@ abstract class KoKr {
     'common_continue': '계속',
     'common_save': '저장',
     'common_delete': '삭제',
-    'common_close': '닫기',
     'common_next': '다음',
-    'common_previous': '이전',
     'common_start': '시작하기',
-    'common_skip': '건너뛰기',
     'common_later': '나중에',
-    'common_loading': '로딩중...',
     'common_error': '오류',
     'common_session_expired': '계정 정보가 만료되었습니다. 다시 등록해 주세요.',
     'common_complete': '완료',
@@ -35,9 +31,6 @@ abstract class KoKr {
     //  averic-lab의 추출 키 목록에도 포함돼 있지 않아 웹사이트 빌드에 영향이 없다).
     'app_guardian_title': 'Anbu Guardian',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── 스플래시 ──
-    'splash_loading': '안부를 확인하는 중...',
 
     // ── 업데이트 ──
     'update_required_title': '업데이트 필요',
@@ -75,17 +68,10 @@ abstract class KoKr {
     'location_permission_settings_title': '위치 권한 설정 필요',
     'location_permission_settings_body_ios': "'안부'를 찾아 선택한 뒤, '위치' 항목에서 '앱을 사용하는 동안'을 선택해 주세요.",
     'location_permission_settings_body_android': "'권한' → '위치' 순서로 선택한 뒤 '앱 사용 중에만 허용'을 선택해 주세요.",
-    'permission_activity_dialog_title': '신체 활동 권한 안내',
-    'permission_activity_dialog_message': '걸음수를 감지하여 활동 여부를 확인하는 데 사용됩니다.\n다음 화면에서 "허용"을 선택해 주세요.',
     'permission_notification_required_title': '알림 권한이 필요합니다',
     'permission_notification_required_message':
         '안부 확인 서비스를 이용하려면 알림 권한이 필요합니다.\n설정에서 알림 권한을 허용해 주세요.',
     'permission_go_to_settings': '설정으로 이동',
-    'permission_activity_denied_title': '신체 활동 권한이 필요합니다',
-    'permission_activity_denied_message':
-        '걸음수를 감지하여 안부 확인 정확도를 높이는 데 사용됩니다.\n설정에서 신체 활동 권한을 허용해 주세요.',
-    'permission_battery': '배터리 최적화 제외',
-    'permission_battery_desc': '매일 정해진 시각에 안부 확인이 누락되지 않도록 배터리 최적화에서 제외합니다',
     'permission_hibernation_title': '자동 권한 해제를 꺼주세요',
     'permission_hibernation_highlight': '자동 권한 해제',
     'permission_hibernation_message':
@@ -134,18 +120,15 @@ abstract class KoKr {
     'subject_home_check_body_reported': '@time 정상 보고됨',
     'subject_home_check_body_scheduled': '@time 보고 예정',
     'subject_home_check_body_waiting': '@time 보고 대기 중',
-    'subject_home_battery_status': '배터리 상태',
     'subject_home_battery_charging': '충전 중',
     'subject_home_battery_full': '완충',
     'subject_home_battery_low': '충전 필요',
-    'subject_home_connectivity_status': '통신 연결 상태',
     'subject_home_report_loading': '안부 보고 중...',
     'subject_home_report_button': '지금 바로 안전 보고하기',
     'subject_home_report_desc': '보호자에게 걱정 말라고 알려주세요',
     'subject_home_emergency_button': '도움이 필요해요',
     'subject_home_emergency_desc': '보호자에게 긴급 상황을 알립니다',
     'subject_home_emergency_loading': '긴급 알림 전송 중...',
-    'subject_home_emergency_sent': '긴급 알림이 전송되었습니다',
     'subject_home_emergency_failed': '긴급 알림 전송에 실패했습니다',
     'subject_home_manual_report_limit_reached': '오늘은 이미 안전 보고를 완료했습니다. 내일 다시 가능합니다.',
     'subject_home_manual_report_sent': '보호자에게 안부를 전했습니다.',
@@ -165,7 +148,6 @@ abstract class KoKr {
     'emergency_map_accuracy_label': '정확도',
     'emergency_map_open_external': '외부 지도 앱으로 열기',
     'emergency_map_no_location': '위치 정보가 없습니다',
-    'emergency_location_permission_denied_snackbar': '위치 권한 없이 긴급 알림을 전송했습니다',
     'subject_home_emergency_confirm_send': '긴급 요청 보내기',
     'emergency_message_hint': '함께 전할 말 (선택)',
     'subject_home_share_text': '안부 앱에서 저와 연결해 주세요.\n연결 코드: @code',
@@ -189,8 +171,6 @@ abstract class KoKr {
     'guardian_status_confirmed': '✅ 안전',
     'guardian_subscription_expired': '구독이 필요합니다',
     'guardian_subscription_expired_message': '매일 전해지던 안부가 지금은 멈춰 있습니다.\n점심 한 끼 값으로 1년 내내 소중한 사람의 곁을 지키세요.',
-    'guardian_subscribe': '구독하기',
-    'guardian_payment_preparing': '결제 기능 준비 중입니다.',
     'guardian_today_summary': '오늘의 안부 요약',
     'guardian_no_subjects': '연결된 보호 대상자가 없습니다.',
     'guardian_checking_subjects': '현재 @count명의 안부를\n확인 중입니다.',
@@ -203,7 +183,6 @@ abstract class KoKr {
     'guardian_last_check_minutes': '마지막 확인: @minutes분 전',
     'guardian_last_check_hours': '마지막 확인: @hours시간 전',
     'guardian_last_check_days': '마지막 확인: @days일 전',
-    'guardian_activity_stable': '활동량: 안정적임',
     'guardian_activity_prefix': '활동량',
     'guardian_activity_very_active': '아주 활동적',
     'guardian_activity_active': '활동적',
@@ -214,7 +193,6 @@ abstract class KoKr {
     'guardian_chart_y_axis_steps': '걸음수',
     'guardian_chart_x_axis_last_7_days': '지난 7일',
     'guardian_chart_x_axis_last_30_days': '지난 30일',
-    'guardian_chart_today': '오늘',
     'guardian_safety_needed': '안전 확인이 필요합니다',
     'guardian_error_load_subjects': '보호 대상자 목록을 불러오지 못했습니다.',
     'guardian_safety_confirmed': '안전이 확인되었습니다.',
@@ -225,7 +203,6 @@ abstract class KoKr {
     'add_subject_guide_title': '연결할 보호 대상자의 고유 코드와 별칭을 입력해주세요.',
     'add_subject_guide_subtitle': '보호 대상자의 앱을 연결하여 실시간 건강 상태 및 활동을 확인할 수 있습니다.',
     'add_subject_code_label': '고유 코드 (7자리)',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': '고유 코드는 보호 대상자 앱에서 확인할 수 있습니다.',
     'add_subject_alias_label': '보호 대상자 별칭',
     'add_subject_alias_hint': '예: 어머니, 아버지',
@@ -244,11 +221,6 @@ abstract class KoKr {
 
     // ── 보호자 설정 ──
     'settings_title': '설정',
-    'settings_light_mode': '라이트모드',
-    'settings_dark_mode': '다크모드',
-    'settings_connection_management': '연결 관리',
-    'settings_managed_subjects': '관리 보호 대상자 수',
-    'settings_managed_subjects_count': '@current / @max명',
     'settings_subscription_service': '구독 및 서비스',
     'settings_current_membership': '현재 멤버십',
     'settings_premium': '프리미엄 구독 중',
@@ -296,9 +268,6 @@ abstract class KoKr {
     'gs_enable_confirm': '생성',
     'gs_enabled_message': '안부 보호가 활성화되었습니다',
     'gs_enable_failed': '안부 보호 활성화에 실패했습니다',
-    'gs_disable_dialog_title': '안부 보호 해제',
-    'gs_disable_dialog_body': '안부 보호를 해제하면 안전 코드가 삭제되고, 연결된 보호자에게 더 이상 안부 확인이 전송되지 않습니다.',
-    'gs_disable_confirm': '해제',
     'gs_disabled_message': '안부 보호가 해제되었습니다',
     'gs_disable_failed': '안부 보호 해제에 실패했습니다',
     'gs_activity_permission_denied_warning': '걸음수 권한이 거부되어 있습니다. 여기를 눌러 허용해 주세요.',
@@ -356,7 +325,6 @@ abstract class KoKr {
 
     // ── 보호자 연결 관리 ──
     'connection_title': '연결관리',
-    'connection_managed_count': '관리 보호 대상자 수 ',
     'connection_managed_count_value': '@current / @max명',
     'connection_connected_subjects': '연결된 보호 대상자',
     'connection_reorder_hint': '아래 카드를 길게 눌러 순서를 바꿔보세요',
@@ -383,9 +351,7 @@ abstract class KoKr {
 
     // ── Heartbeat 관련 ──
     'heartbeat_schedule_change': '안부 시간 변경',
-    'heartbeat_schedule_title_ios': '안부 시간',
     'heartbeat_schedule_change_title_ios': '안부 시간 변경',
-    'heartbeat_schedule_hint_ios': '매일 이 시각에 안부 푸시 알림이 도착합니다. 알림을 탭하거나 그 전후로 앱을 열면 안부가 전송됩니다.',
     'heartbeat_daily_time': '매일 @time',
     'heartbeat_scheduled_today': '매일 @time에 보호자에게 안부가 전달됩니다.',
     'heartbeat_change_failed_title': '시각 변경 실패',
@@ -400,12 +366,6 @@ abstract class KoKr {
 
     // ── 기타 ──
     'back_press_exit': '뒤로 버튼 한번 더 누르면 종료됩니다.',
-
-    // ── API 에러 ──
-    'error_unknown': '알수없는 에러가 발생했습니다.',
-    'error_timeout': '요청 시간이 초과되었습니다.',
-    'error_network': '네트워크 연결을 확인해주세요.',
-    'error_unauthorized': '인증이 필요합니다.',
 
     // ── 알림 본문 ──
     'noti_auto_report_body': '안부 확인이 정상 수신되었습니다.',
@@ -422,7 +382,6 @@ abstract class KoKr {
     'noti_steps_body': '오늘 @steps보를 걸으셨습니다.',
     'noti_emergency_body': '보호 대상자가 직접 도움을 요청했습니다. 즉시 확인해 주세요.',
     'noti_resolved_body': '정상 복귀되었습니다. 보호 대상자의 안부가 정상적으로 확인되었습니다.',
-    'noti_cleared_by_guardian_title': '✅ 안부 확인 완료',
     'noti_cleared_by_guardian_body': '보호자 중 한 명이 대상자의 안전을 직접 확인했습니다.',
 
     // ── 로컬 알림 ──

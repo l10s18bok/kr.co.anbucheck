@@ -6,13 +6,9 @@ abstract class JaJp {
     'common_continue': '続ける',
     'common_save': '保存',
     'common_delete': '削除',
-    'common_close': '閉じる',
     'common_next': '次へ',
-    'common_previous': '前へ',
     'common_start': 'はじめる',
-    'common_skip': 'スキップ',
     'common_later': 'あとで',
-    'common_loading': '読み込み中...',
     'common_error': 'エラー',
     'common_session_expired': 'アカウント情報の有効期限が切れました。もう一度登録してください。',
     'common_complete': '完了',
@@ -32,9 +28,6 @@ abstract class JaJp {
     'app_service_desc': '自動安否確認サービス',
     'app_guardian_title': 'Anbu 見守り人',
     'app_copyright': '© 2026 Averic Lab',
-
-    // ── スプラッシュ ──
-    'splash_loading': '安否を確認しています...',
 
     // ── アップデート ──
     'update_required_title': 'アップデートが必要です',
@@ -72,16 +65,10 @@ abstract class JaJp {
     'location_permission_settings_title': '位置情報の権限設定が必要です',
     'location_permission_settings_body_ios': '「Anbu」を選択し、「位置情報」で「このAppの使用中のみ許可」を選択してください。',
     'location_permission_settings_body_android': '「権限」→「位置情報」の順に選択し、「アプリの使用中のみ許可」を選択してください。',
-    'permission_activity_dialog_title': '身体活動の権限について',
-    'permission_activity_dialog_message': '歩数を検出して活動状況を確認するために使用されます。\n次の画面で「許可」を選択してください。',
     'permission_notification_required_title': '通知の権限が必要です',
     'permission_notification_required_message':
         '安否確認サービスをご利用いただくには通知の権限が必要です。\n設定から通知の権限を許可してください。',
     'permission_go_to_settings': '設定を開く',
-    'permission_activity_denied_title': '身体活動の権限が必要です',
-    'permission_activity_denied_message': '歩数を検知して安否確認の精度を向上させるために使用します。\n設定から身体活動の権限を許可してください。',
-    'permission_battery': 'バッテリー最適化の除外',
-    'permission_battery_desc': '毎日決まった時刻の安否確認が漏れないように、バッテリー最適化から除外します',
     'permission_hibernation_title': '自動的な権限の削除をオフにしてください',
     'permission_hibernation_highlight': '自動的な権限の削除',
     'permission_hibernation_message':
@@ -131,18 +118,15 @@ abstract class JaJp {
     'subject_home_check_body_reported': '@timeに正常に報告済み',
     'subject_home_check_body_scheduled': '@time に報告予定',
     'subject_home_check_body_waiting': '@timeから報告待ち',
-    'subject_home_battery_status': 'バッテリー状態',
     'subject_home_battery_charging': '充電中',
     'subject_home_battery_full': '満充電',
     'subject_home_battery_low': '充電が必要です',
-    'subject_home_connectivity_status': '通信状態',
     'subject_home_report_loading': '安否を報告しています...',
     'subject_home_report_button': '今すぐ安全を報告する',
     'subject_home_report_desc': '見守り人に元気であることを伝えましょう',
     'subject_home_emergency_button': '助けが必要です',
     'subject_home_emergency_desc': '見守り人に緊急事態を知らせます',
     'subject_home_emergency_loading': '緊急通知を送信中...',
-    'subject_home_emergency_sent': '緊急通知が送信されました',
     'subject_home_emergency_failed': '緊急通知の送信に失敗しました',
     'subject_home_manual_report_limit_reached': '本日の安全報告は既に完了しています。明日もう一度お試しください。',
     'subject_home_manual_report_sent': '見守り人に安否をお伝えしました。',
@@ -161,7 +145,6 @@ abstract class JaJp {
     'emergency_map_accuracy_label': '精度',
     'emergency_map_open_external': '外部地図アプリで開く',
     'emergency_map_no_location': '位置情報がありません',
-    'emergency_location_permission_denied_snackbar': '位置情報の権限なしで緊急通知を送信しました',
     'subject_home_emergency_confirm_send': '緊急リクエストを送信',
     'emergency_message_hint': '伝えたいこと（任意）',
     'subject_home_share_text': 'Anbuアプリで私とつながってください。\n連携コード：@code',
@@ -185,8 +168,6 @@ abstract class JaJp {
     'guardian_status_confirmed': '✅ 安全',
     'guardian_subscription_expired': 'サブスクリプションが必要です',
     'guardian_subscription_expired_message': '毎日届いていた安否が、今は止まっています。\nランチ一食分の値段で、一年中大切な人を見守りましょう。',
-    'guardian_subscribe': '登録する',
-    'guardian_payment_preparing': '決済機能は準備中です。',
     'guardian_today_summary': '今日の安否まとめ',
     'guardian_no_subjects': '見守り対象者が登録されていません。',
     'guardian_checking_subjects': '現在@count人の安否を\n確認しています。',
@@ -199,7 +180,6 @@ abstract class JaJp {
     'guardian_last_check_minutes': '最終確認：@minutes分前',
     'guardian_last_check_hours': '最終確認：@hours時間前',
     'guardian_last_check_days': '最終確認：@days日前',
-    'guardian_activity_stable': '活動量：安定',
     'guardian_activity_prefix': '活動量',
     'guardian_activity_very_active': 'とても活発',
     'guardian_activity_active': '活発',
@@ -210,7 +190,6 @@ abstract class JaJp {
     'guardian_chart_y_axis_steps': '歩数',
     'guardian_chart_x_axis_last_7_days': '過去7日間',
     'guardian_chart_x_axis_last_30_days': '過去30日間',
-    'guardian_chart_today': '今日',
     'guardian_safety_needed': '安全確認が必要です',
     'guardian_error_load_subjects': '対象者リストの読み込みに失敗しました。',
     'guardian_safety_confirmed': '安全が確認されました。',
@@ -221,7 +200,6 @@ abstract class JaJp {
     'add_subject_guide_title': '接続する対象者の固有コードとニックネームを入力してください。',
     'add_subject_guide_subtitle': '対象者のアプリを接続して、健康状態や活動をリアルタイムで確認できます。',
     'add_subject_code_label': '固有コード（7桁）',
-    'add_subject_code_hint': '123-4567',
     'add_subject_code_info': '固有コードは対象者のアプリで確認できます。',
     'add_subject_alias_label': '対象者のニックネーム',
     'add_subject_alias_hint': '例：おばあちゃん、お父さん',
@@ -240,11 +218,6 @@ abstract class JaJp {
 
     // ── 見守り設定 ──
     'settings_title': '設定',
-    'settings_light_mode': 'ライトモード',
-    'settings_dark_mode': 'ダークモード',
-    'settings_connection_management': '接続管理',
-    'settings_managed_subjects': '管理中の対象者数',
-    'settings_managed_subjects_count': '@current / @max人',
     'settings_subscription_service': 'サブスクリプション',
     'settings_current_membership': '現在のプラン',
     'settings_premium': 'プレミアム利用中',
@@ -292,9 +265,6 @@ abstract class JaJp {
     'gs_enable_confirm': '作成',
     'gs_enabled_message': '安否保護が有効化されました',
     'gs_enable_failed': '安否保護の有効化に失敗しました',
-    'gs_disable_dialog_title': '安否保護を無効化',
-    'gs_disable_dialog_body': '安否保護を無効化すると、安全コードが削除され、接続された見守り人への安否確認の送信が停止されます。',
-    'gs_disable_confirm': '無効化',
     'gs_disabled_message': '安否保護が無効化されました',
     'gs_disable_failed': '安否保護の無効化に失敗しました',
     'gs_activity_permission_denied_warning': '歩数の権限が拒否されています。ここをタップして許可してください。',
@@ -352,7 +322,6 @@ abstract class JaJp {
 
     // ── 見守り接続管理 ──
     'connection_title': '接続管理',
-    'connection_managed_count': '管理中の対象者数 ',
     'connection_managed_count_value': '@current / @max人',
     'connection_connected_subjects': '接続中の対象者',
     'connection_reorder_hint': '下のカードを長押しして並べ替えできます',
@@ -379,9 +348,7 @@ abstract class JaJp {
 
     // ── Heartbeat関連 ──
     'heartbeat_schedule_change': '見守り時刻を変更',
-    'heartbeat_schedule_title_ios': '見守り時刻',
     'heartbeat_schedule_change_title_ios': '見守り時刻を変更',
-    'heartbeat_schedule_hint_ios': '毎日この時刻に安否プッシュ通知が届きます。通知をタップするか、その前後にアプリを開くと安否が送信されます。',
     'heartbeat_daily_time': '毎日 @time',
     'heartbeat_scheduled_today': '毎日@timeに見守り人へ安否をお届けします。',
     'heartbeat_change_failed_title': '時刻の変更に失敗しました',
@@ -397,12 +364,6 @@ abstract class JaJp {
     // ── その他 ──
     'back_press_exit': 'もう一度戻るボタンを押すと終了します。',
 
-    // ── APIエラー ──
-    'error_unknown': '不明なエラーが発生しました。',
-    'error_timeout': 'リクエストがタイムアウトしました。',
-    'error_network': 'ネットワーク接続を確認してください。',
-    'error_unauthorized': '認証が必要です。',
-
     // ── 通知本文 ──
     'noti_auto_report_body': '安否確認が正常に受信されました。',
     'noti_manual_report_body': '対象者が手動で安否確認を送信しました。',
@@ -417,7 +378,6 @@ abstract class JaJp {
     'noti_steps_body': '本日の歩数は@steps歩です。',
     'noti_emergency_body': '対象者が直接助けを求めました。すぐに確認してください。',
     'noti_resolved_body': '見守り対象者の安否が正常に確認されました。',
-    'noti_cleared_by_guardian_title': '✅ 安否確認完了',
     'noti_cleared_by_guardian_body': '見守り人の一人が対象者の安全を直接確認しました。',
 
     // ── ローカル通知 ──
