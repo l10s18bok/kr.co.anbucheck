@@ -179,6 +179,7 @@ abstract class SvSe {
     'guardian_today_summary': 'Dagens välmåendesammanfattning',
     'guardian_no_subjects': 'Inga anslutna skyddade personer.',
     'guardian_checking_subjects': 'Kontrollerar för närvarande\n@count skyddsperson(er).',
+    'guardian_checking_subjects_one': 'Kontrollerar för närvarande\n@count skyddsperson(er).',
     'guardian_subject_list': 'Lista över skyddade personer',
     'guardian_call_now': 'Ring nu',
     'phone_call_failed': 'Det gick inte att ringa samtalet.',
@@ -188,6 +189,7 @@ abstract class SvSe {
     'guardian_last_check_minutes': 'Senaste kontroll: @minutes min sedan',
     'guardian_last_check_hours': 'Senaste kontroll: @hours tim sedan',
     'guardian_last_check_days': 'Senaste kontroll: @days dag(ar) sedan',
+    'guardian_last_check_days_one': 'Senaste kontroll: @days dag(ar) sedan',
     'guardian_activity_prefix': 'Aktivitet',
     'guardian_activity_very_active': 'Mycket aktiv',
     'guardian_activity_active': 'Aktiv',
@@ -397,6 +399,7 @@ abstract class SvSe {
     'noti_urgent_suspicious_body':
         'Ingen aktivitetsregistrering på @days dag(ar). Omedelbar verifiering krävs.',
     'noti_steps_body': '@steps steg gått idag.',
+    'noti_steps_body_one': '@steps steg gått idag.',
     'noti_emergency_body': 'Den skyddade personen har direkt begärt hjälp. Kontrollera omedelbart.',
     'noti_resolved_body':
         'Den skyddade personens välmående har bekräftats igen.',

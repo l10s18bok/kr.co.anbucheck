@@ -8,6 +8,7 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/emergency_button.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/invite_code_share_card.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/solid_action_button.dart';
+import 'package:anbucheck/app/core/utils/number_text.dart';
 
 /// 온보딩 목업 위젯 모음.
 /// 실제 화면(safety_home / guardian_add_subject / guardian_settings / drawer)의
@@ -312,13 +313,13 @@ class _NotificationsPreviewMockupState extends State<NotificationsPreviewMockup>
         AnimatedBuilder(
           animation: _controller,
           builder: (context, _) => _slideDown(_stepsProgress.value,
-              child: const _MiniNotificationCard(
+              child: _MiniNotificationCard(
                 labelKey: 'notifications_level_info',
                 bodyKey: 'noti_steps_body',
-                bodyParams: {'steps': '3,482'},
+                bodyParams: {'steps': NumberText.format(3482)},
                 icon: Icons.directions_walk_rounded,
-                color: Color(0xFF4355B9),
-                backgroundColor: Color(0xFFE3F2FD),
+                color: const Color(0xFF4355B9),
+                backgroundColor: const Color(0xFFE3F2FD),
               )),
         ),
       ],

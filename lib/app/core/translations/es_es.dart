@@ -183,6 +183,7 @@ abstract class EsEs {
     'guardian_today_summary': 'Resumen del día',
     'guardian_no_subjects': 'No hay personas protegidas conectadas.',
     'guardian_checking_subjects': 'Actualmente se vigila el bienestar\nde @count persona(s).',
+    'guardian_checking_subjects_one': 'Actualmente se vigila el bienestar\nde @count persona(s).',
     'guardian_subject_list': 'Lista de personas protegidas',
     'guardian_call_now': 'Llamar ahora',
     'phone_call_failed': 'No se pudo realizar la llamada.',
@@ -192,6 +193,7 @@ abstract class EsEs {
     'guardian_last_check_minutes': 'Última verif.: hace @minutes min',
     'guardian_last_check_hours': 'Última verif.: hace @hours h',
     'guardian_last_check_days': 'Última verif.: hace @days día(s)',
+    'guardian_last_check_days_one': 'Última verif.: hace @days día(s)',
     'guardian_activity_prefix': 'Actividad',
     'guardian_activity_very_active': 'Muy activo',
     'guardian_activity_active': 'Activo',
@@ -408,6 +410,7 @@ abstract class EsEs {
     'noti_urgent_suspicious_body':
         'Sin registro de actividad durante @days día(s). Se requiere verificación inmediata.',
     'noti_steps_body': '@steps pasos caminados hoy.',
+    'noti_steps_body_one': '@steps pasos caminados hoy.',
     'noti_emergency_body':
         'La persona protegida ha solicitado ayuda directamente. Por favor, verifique de inmediato.',
     'noti_resolved_body': 'La verificación de bienestar del protegido ha vuelto a la normalidad.',

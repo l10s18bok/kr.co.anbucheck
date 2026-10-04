@@ -183,6 +183,7 @@ abstract class NlNl {
     'guardian_today_summary': 'Welzijnsoverzicht van vandaag',
     'guardian_no_subjects': 'Geen beschermelingen verbonden.',
     'guardian_checking_subjects': 'Momenteel controleren we\n@count beschermeling(en).',
+    'guardian_checking_subjects_one': 'Momenteel controleren we\n@count beschermeling(en).',
     'guardian_subject_list': 'Lijst beschermelingen',
     'guardian_call_now': 'Nu bellen',
     'phone_call_failed': 'Bellen is niet gelukt.',
@@ -192,6 +193,7 @@ abstract class NlNl {
     'guardian_last_check_minutes': 'Laatste controle: @minutes min geleden',
     'guardian_last_check_hours': 'Laatste controle: @hours uur geleden',
     'guardian_last_check_days': 'Laatste controle: @days dag(en) geleden',
+    'guardian_last_check_days_one': 'Laatste controle: @days dag(en) geleden',
     'guardian_activity_prefix': 'Activiteit',
     'guardian_activity_very_active': 'Zeer actief',
     'guardian_activity_active': 'Actief',
@@ -405,6 +407,7 @@ abstract class NlNl {
     'noti_urgent_suspicious_body':
         'Geen activiteitsregistratie gedurende @days dag(en). Onmiddellijke controle vereist.',
     'noti_steps_body': '@steps stappen gelopen vandaag.',
+    'noti_steps_body_one': '@steps stappen gelopen vandaag.',
     'noti_emergency_body':
         'De beschermde persoon heeft rechtstreeks om hulp gevraagd. Controleer onmiddellijk.',
     'noti_resolved_body': 'De welzijnscontrole van de beschermde persoon is weer normaal.',

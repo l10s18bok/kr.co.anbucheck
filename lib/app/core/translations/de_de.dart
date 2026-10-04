@@ -200,6 +200,7 @@ abstract class DeDe {
     'guardian_no_subjects': 'Keine betreuten Personen verbunden.',
     'guardian_checking_subjects':
         'Derzeit wird das Wohlbefinden\nvon @count Person(en) geprüft.',
+    'guardian_checking_subjects_one': 'Derzeit wird das Wohlbefinden\nvon @count Person(en) geprüft.',
     'guardian_subject_list': 'Liste der betreuten Personen',
     'guardian_call_now': 'Jetzt anrufen',
     'phone_call_failed': 'Der Anruf konnte nicht gestartet werden.',
@@ -209,6 +210,7 @@ abstract class DeDe {
     'guardian_last_check_minutes': 'Letzte Prüfung: vor @minutes Min.',
     'guardian_last_check_hours': 'Letzte Prüfung: vor @hours Std.',
     'guardian_last_check_days': 'Letzte Prüfung: vor @days Tag(en)',
+    'guardian_last_check_days_one': 'Letzte Prüfung: vor @days Tag(en)',
     'guardian_activity_prefix': 'Aktivität',
     'guardian_activity_very_active': 'Sehr aktiv',
     'guardian_activity_active': 'Aktiv',
@@ -445,6 +447,7 @@ abstract class DeDe {
     'noti_urgent_suspicious_body':
         'Seit @days Tag(en) keine Aktivitätsaufzeichnung. Sofortige Überprüfung erforderlich.',
     'noti_steps_body': 'Heute @steps Schritte gegangen.',
+    'noti_steps_body_one': 'Heute @steps Schritte gegangen.',
     'noti_emergency_body':
         'Die betreute Person hat direkt um Hilfe gebeten. Bitte sofort überprüfen.',
     'noti_resolved_body':

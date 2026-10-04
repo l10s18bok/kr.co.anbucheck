@@ -12,6 +12,7 @@ import 'package:anbucheck/app/core/widgets/add_subject_button.dart';
 import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/utils/number_text.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
 class GuardianDashboardPage extends GetView<GuardianDashboardController> {
@@ -174,7 +175,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 final count = controller.subjects.length;
                 final text = count == 0
                     ? 'guardian_no_subjects'.tr
-                    : 'guardian_checking_subjects'.trParams({'count': count.toString()});
+                    : NumberText.tr('guardian_checking_subjects', 'count', count);
                 return Text(text, style: AppTextTheme.headlineMedium(fw: FontWeight.w700));
               }),
 

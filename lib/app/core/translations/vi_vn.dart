@@ -180,6 +180,7 @@ abstract class ViVn {
     'guardian_today_summary': 'Tóm tắt bình an hôm nay',
     'guardian_no_subjects': 'Chưa có người được bảo vệ nào.',
     'guardian_checking_subjects': 'Đang kiểm tra\n@count người được bảo vệ.',
+    'guardian_checking_subjects_one': 'Đang kiểm tra\n@count người được bảo vệ.',
     'guardian_subject_list': 'Danh sách người được bảo vệ',
     'guardian_call_now': 'Gọi ngay',
     'phone_call_failed': 'Không thể thực hiện cuộc gọi.',
@@ -189,6 +190,7 @@ abstract class ViVn {
     'guardian_last_check_minutes': 'Lần kiểm tra cuối: @minutes phút trước',
     'guardian_last_check_hours': 'Lần kiểm tra cuối: @hours giờ trước',
     'guardian_last_check_days': 'Lần kiểm tra cuối: @days ngày trước',
+    'guardian_last_check_days_one': 'Lần kiểm tra cuối: @days ngày trước',
     'guardian_activity_prefix': 'Hoạt động',
     'guardian_activity_very_active': 'Rất năng động',
     'guardian_activity_active': 'Năng động',
@@ -398,6 +400,7 @@ abstract class ViVn {
     'noti_urgent_suspicious_body':
         'Không phát hiện bản ghi hoạt động trong @days ngày. Cần xác minh ngay lập tức.',
     'noti_steps_body': 'Hôm nay đã đi @steps bước.',
+    'noti_steps_body_one': 'Hôm nay đã đi @steps bước.',
     'noti_emergency_body':
         'Người được bảo vệ đã trực tiếp yêu cầu giúp đỡ. Vui lòng kiểm tra ngay.',
     'noti_resolved_body': 'Bình an của người được bảo vệ đã trở lại bình thường.',

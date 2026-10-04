@@ -185,6 +185,7 @@ abstract class IdId {
     'guardian_today_summary': 'Ringkasan Kesejahteraan Hari Ini',
     'guardian_no_subjects': 'Belum ada orang yang dilindungi.',
     'guardian_checking_subjects': 'Sedang memeriksa\n@count orang yang dilindungi.',
+    'guardian_checking_subjects_one': 'Sedang memeriksa\n@count orang yang dilindungi.',
     'guardian_subject_list': 'Daftar Orang yang Dilindungi',
     'guardian_call_now': 'Telepon Sekarang',
     'phone_call_failed': 'Tidak dapat melakukan panggilan.',
@@ -194,6 +195,7 @@ abstract class IdId {
     'guardian_last_check_minutes': 'Pemeriksaan terakhir: @minutes menit lalu',
     'guardian_last_check_hours': 'Pemeriksaan terakhir: @hours jam lalu',
     'guardian_last_check_days': 'Pemeriksaan terakhir: @days hari lalu',
+    'guardian_last_check_days_one': 'Pemeriksaan terakhir: @days hari lalu',
     'guardian_activity_prefix': 'Aktivitas',
     'guardian_activity_very_active': 'Sangat aktif',
     'guardian_activity_active': 'Aktif',
@@ -408,6 +410,7 @@ abstract class IdId {
     'noti_urgent_suspicious_body':
         'Tidak ada catatan aktivitas selama @days hari. Diperlukan verifikasi segera.',
     'noti_steps_body': 'Hari ini berjalan @steps langkah.',
+    'noti_steps_body_one': 'Hari ini berjalan @steps langkah.',
     'noti_emergency_body': 'Orang yang dilindungi langsung meminta bantuan. Harap segera periksa.',
     'noti_resolved_body': 'Pemeriksaan kesejahteraan orang yang dilindungi telah kembali normal.',
     'noti_cleared_by_guardian_body':

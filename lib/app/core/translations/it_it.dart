@@ -201,6 +201,7 @@ abstract class ItIt {
     'guardian_no_subjects': 'Nessun assistito connesso.',
     'guardian_checking_subjects':
         'Attualmente monitoriamo\nassistiti: @count',
+    'guardian_checking_subjects_one': 'Attualmente monitoriamo\nassistiti: @count',
     'guardian_subject_list': 'Lista assistiti',
     'guardian_call_now': 'Chiama ora',
     'phone_call_failed': 'Impossibile effettuare la chiamata.',
@@ -210,6 +211,7 @@ abstract class ItIt {
     'guardian_last_check_minutes': 'Ultimo controllo: @minutes min fa',
     'guardian_last_check_hours': 'Ultimo controllo: @hours ore fa',
     'guardian_last_check_days': 'Ultimo controllo: @days giorno/i fa',
+    'guardian_last_check_days_one': 'Ultimo controllo: @days giorno/i fa',
     'guardian_activity_prefix': 'Attività',
     'guardian_activity_very_active': 'Molto attivo',
     'guardian_activity_active': 'Attivo',
@@ -440,6 +442,7 @@ abstract class ItIt {
     'noti_urgent_suspicious_body':
         'Nessun registro di attività da @days giorno/i. È necessaria una verifica immediata.',
     'noti_steps_body': '@steps passi percorsi oggi.',
+    'noti_steps_body_one': '@steps passi percorsi oggi.',
     'noti_emergency_body':
         "L'assistito ha richiesto direttamente aiuto. Verifichi immediatamente.",
     'noti_resolved_body':

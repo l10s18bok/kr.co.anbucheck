@@ -180,6 +180,7 @@ abstract class TrTr {
     'guardian_today_summary': 'Bugünün Özeti',
     'guardian_no_subjects': 'Bağlı korunan kişi yok.',
     'guardian_checking_subjects': 'Şu anda @count kişi\ntakip ediliyor.',
+    'guardian_checking_subjects_one': 'Şu anda @count kişi\ntakip ediliyor.',
     'guardian_subject_list': 'Korunan Kişiler Listesi',
     'guardian_call_now': 'Şimdi Ara',
     'phone_call_failed': 'Arama başlatılamadı.',
@@ -189,6 +190,7 @@ abstract class TrTr {
     'guardian_last_check_minutes': 'Son kontrol: @minutes dk önce',
     'guardian_last_check_hours': 'Son kontrol: @hours sa önce',
     'guardian_last_check_days': 'Son kontrol: @days gün önce',
+    'guardian_last_check_days_one': 'Son kontrol: @days gün önce',
     'guardian_activity_prefix': 'Aktivite',
     'guardian_activity_very_active': 'Çok aktif',
     'guardian_activity_active': 'Aktif',
@@ -397,6 +399,7 @@ abstract class TrTr {
     'noti_urgent_suspicious_body':
         '@days gündür aktivite kaydı tespit edilmedi. Acil doğrulama gereklidir.',
     'noti_steps_body': 'Bugün @steps adım atıldı.',
+    'noti_steps_body_one': 'Bugün @steps adım atıldı.',
     'noti_emergency_body': 'Korunan kişi doğrudan yardım istedi. Lütfen hemen kontrol edin.',
     'noti_resolved_body': 'Korunan kişinin hal hatır kontrolü normale döndü.',
     'noti_cleared_by_guardian_body': 'Koruyuculardan biri güvenliğini bizzat doğruladı.',

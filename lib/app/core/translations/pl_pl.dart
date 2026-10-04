@@ -183,6 +183,7 @@ abstract class PlPl {
     'guardian_today_summary': 'Dzisiejsze podsumowanie',
     'guardian_no_subjects': 'Brak połączonych podopiecznych.',
     'guardian_checking_subjects': 'Aktualnie sprawdzamy\npodopiecznych: @count',
+    'guardian_checking_subjects_one': 'Aktualnie sprawdzamy\npodopiecznych: @count',
     'guardian_subject_list': 'Lista podopiecznych',
     'guardian_call_now': 'Zadzwoń teraz',
     'phone_call_failed': 'Nie można nawiązać połączenia.',
@@ -192,6 +193,7 @@ abstract class PlPl {
     'guardian_last_check_minutes': 'Ostatnie sprawdzenie: @minutes min temu',
     'guardian_last_check_hours': 'Ostatnie sprawdzenie: @hours godz. temu',
     'guardian_last_check_days': 'Ostatnie sprawdzenie: @days dni temu',
+    'guardian_last_check_days_one': 'Ostatnie sprawdzenie: @days dni temu',
     'guardian_activity_prefix': 'Aktywność',
     'guardian_activity_very_active': 'Bardzo aktywny',
     'guardian_activity_active': 'Aktywny',
@@ -404,6 +406,7 @@ abstract class PlPl {
     'noti_urgent_suspicious_body':
         'Brak zapisu aktywności od @days dni. Wymagana natychmiastowa weryfikacja.',
     'noti_steps_body': 'Dzisiaj wykonano @steps kroków.',
+    'noti_steps_body_one': 'Dzisiaj wykonano @steps kroków.',
     'noti_emergency_body':
         'Podopieczny bezpośrednio poprosił o pomoc. Proszę natychmiast sprawdzić.',
     'noti_resolved_body': 'Samopoczucie podopiecznego wróciło do normy.',

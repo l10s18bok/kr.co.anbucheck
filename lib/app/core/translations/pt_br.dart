@@ -183,6 +183,7 @@ abstract class PtBr {
     'guardian_today_summary': 'Resumo de bem-estar de hoje',
     'guardian_no_subjects': 'Nenhum protegido conectado.',
     'guardian_checking_subjects': 'Monitorando atualmente\n@count protegido(s).',
+    'guardian_checking_subjects_one': 'Monitorando atualmente\n@count protegido(s).',
     'guardian_subject_list': 'Lista de protegidos',
     'guardian_call_now': 'Ligar agora',
     'phone_call_failed': 'Não foi possível fazer a ligação.',
@@ -192,6 +193,7 @@ abstract class PtBr {
     'guardian_last_check_minutes': 'Última verificação: @minutes min atrás',
     'guardian_last_check_hours': 'Última verificação: @hours h atrás',
     'guardian_last_check_days': 'Última verificação: @days dia(s) atrás',
+    'guardian_last_check_days_one': 'Última verificação: @days dia(s) atrás',
     'guardian_activity_prefix': 'Atividade',
     'guardian_activity_very_active': 'Muito ativo',
     'guardian_activity_active': 'Ativo',
@@ -407,6 +409,7 @@ abstract class PtBr {
     'noti_urgent_suspicious_body':
         'Sem registro de atividade por @days dia(s). Verificação imediata necessária.',
     'noti_steps_body': '@steps passos dados hoje.',
+    'noti_steps_body_one': '@steps passos dados hoje.',
     'noti_emergency_body': 'A pessoa protegida pediu ajuda diretamente. Verifique imediatamente.',
     'noti_resolved_body': 'A verificação de bem-estar do protegido voltou ao normal.',
     'noti_cleared_by_guardian_body': 'Um dos guardiões confirmou pessoalmente a segurança.',

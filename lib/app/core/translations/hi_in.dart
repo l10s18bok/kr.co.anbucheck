@@ -180,6 +180,7 @@ abstract class HiIn {
     'guardian_today_summary': 'आज की खैरियत का सारांश',
     'guardian_no_subjects': 'कोई संरक्षित व्यक्ति जुड़ा नहीं है।',
     'guardian_checking_subjects': 'वर्तमान में @count संरक्षित व्यक्ति(यों)\nकी जांच हो रही है।',
+    'guardian_checking_subjects_one': 'वर्तमान में @count संरक्षित व्यक्ति(यों)\nकी जांच हो रही है।',
     'guardian_subject_list': 'संरक्षित व्यक्ति सूची',
     'guardian_call_now': 'अभी कॉल करें',
     'phone_call_failed': 'कॉल नहीं लगाई जा सकी।',
@@ -189,6 +190,7 @@ abstract class HiIn {
     'guardian_last_check_minutes': 'अंतिम जांच: @minutes मिनट पहले',
     'guardian_last_check_hours': 'अंतिम जांच: @hours घंटे पहले',
     'guardian_last_check_days': 'अंतिम जांच: @days दिन पहले',
+    'guardian_last_check_days_one': 'अंतिम जांच: @days दिन पहले',
     'guardian_activity_prefix': 'गतिविधि',
     'guardian_activity_very_active': 'बहुत सक्रिय',
     'guardian_activity_active': 'सक्रिय',
@@ -395,6 +397,7 @@ abstract class HiIn {
     'noti_urgent_suspicious_body':
         '@days दिन से गतिविधि रिकॉर्ड नहीं मिला। तत्काल सत्यापन आवश्यक है।',
     'noti_steps_body': 'आज @steps कदम चले।',
+    'noti_steps_body_one': 'आज @steps कदम चले।',
     'noti_emergency_body': 'संरक्षित व्यक्ति ने सीधे मदद का अनुरोध किया है। कृपया तुरंत जांचें।',
     'noti_resolved_body': 'संरक्षित व्यक्ति की स्वास्थ्य जाँच सामान्य हो गई है।',
     'noti_cleared_by_guardian_body': 'एक अभिभावक ने व्यक्तिगत रूप से सुरक्षा की पुष्टि की है।',

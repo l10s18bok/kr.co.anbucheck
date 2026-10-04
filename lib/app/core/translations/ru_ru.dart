@@ -184,6 +184,7 @@ abstract class RuRu {
     'guardian_today_summary': 'Сводка самочувствия за сегодня',
     'guardian_no_subjects': 'Нет подключённых подопечных.',
     'guardian_checking_subjects': 'Сейчас проверяем\nподопечных: @count',
+    'guardian_checking_subjects_one': 'Сейчас проверяем\nподопечных: @count',
     'guardian_subject_list': 'Список подопечных',
     'guardian_call_now': 'Позвонить сейчас',
     'phone_call_failed': 'Не удалось совершить звонок.',
@@ -193,6 +194,7 @@ abstract class RuRu {
     'guardian_last_check_minutes': 'Последняя проверка: @minutes мин назад',
     'guardian_last_check_hours': 'Последняя проверка: @hours ч назад',
     'guardian_last_check_days': 'Последняя проверка: @days дн назад',
+    'guardian_last_check_days_one': 'Последняя проверка: @days дн назад',
     'guardian_activity_prefix': 'Активность',
     'guardian_activity_very_active': 'Очень активен',
     'guardian_activity_active': 'Активен',
@@ -403,6 +405,7 @@ abstract class RuRu {
     'noti_urgent_suspicious_body':
         'Нет записи активности уже @days дн. Требуется немедленная проверка.',
     'noti_steps_body': 'Сегодня пройдено @steps шагов.',
+    'noti_steps_body_one': 'Сегодня пройдено @steps шагов.',
     'noti_emergency_body': 'Подопечный лично запросил помощь. Пожалуйста, проверьте немедленно.',
     'noti_resolved_body': 'Самочувствие подопечного вернулось в норму.',
     'noti_cleared_by_guardian_body': 'Один из опекунов лично подтвердил безопасность подопечного.',

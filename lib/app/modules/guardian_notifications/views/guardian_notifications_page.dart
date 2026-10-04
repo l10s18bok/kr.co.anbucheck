@@ -9,6 +9,7 @@ import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/utils/number_text.dart';
 
 /// 보호자 알림 목록 페이지 — 당일 알림만 표시 (서버 API 기반)
 class GuardianNotificationsPage
@@ -392,6 +393,13 @@ class _NotificationCard extends StatelessWidget {
 
   String _formatTime(DateTime dt) => formatTimeOfDay(dt.hour, dt.minute);
 
+  String _stepsBody(Object? raw) {
+    final n = NumberText.parse(raw);
+    return n != null
+        ? NumberText.tr('noti_steps_body', 'steps', n)
+        : 'noti_steps_body'.trParams({'steps': '${raw ?? ''}'});
+  }
+
   /// message_key 기반 로컬 번역 본문 (없으면 서버 제공 body 사용)
   String get _localizedBody {
     final key = item.messageKey;
@@ -408,9 +416,8 @@ class _NotificationCard extends StatelessWidget {
       'warning_suspicious'  => 'noti_warning_suspicious_body'.tr,
       'urgent'              => 'noti_urgent_body'.trParams({'days': '${p['days'] ?? ''}'}),
       'urgent_suspicious'   => 'noti_urgent_suspicious_body'.trParams({'days': '${p['days'] ?? ''}'}),
-      'steps'               => 'noti_steps_body'.trParams({
-                                  'steps': '${p['steps'] ?? ''}',
-                                }),
+      // 서버는 ko 형식("1,234")으로 저장한다 — 숫자로 되돌려 이 기기 언어 형식으로 다시 찍는다.
+      'steps'               => _stepsBody(p['steps']),
       'emergency'           => (p['note'] as String?)?.trim().isNotEmpty == true
                                   ? (p['note'] as String).trim()
                                   : 'noti_emergency_body'.tr,

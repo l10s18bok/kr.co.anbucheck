@@ -176,6 +176,7 @@ abstract class ArSa {
     'guardian_today_summary': 'ملخص اطمئنان اليوم',
     'guardian_no_subjects': 'لا يوجد أشخاص محميون متصلون.',
     'guardian_checking_subjects': 'قيد المتابعة حالياً\nالأشخاص المحميون: @count',
+    'guardian_checking_subjects_one': 'قيد المتابعة حالياً\nالأشخاص المحميون: @count',
     'guardian_subject_list': 'قائمة الأشخاص المحميين',
     'guardian_call_now': 'اتصل الآن',
     'phone_call_failed': 'تعذر إجراء الاتصال.',
@@ -185,6 +186,7 @@ abstract class ArSa {
     'guardian_last_check_minutes': 'آخر اطمئنان: منذ @minutes دقيقة',
     'guardian_last_check_hours': 'آخر اطمئنان: منذ @hours ساعة',
     'guardian_last_check_days': 'آخر اطمئنان: منذ @days يوم',
+    'guardian_last_check_days_one': 'آخر اطمئنان: منذ @days يوم',
     'guardian_activity_prefix': 'النشاط',
     'guardian_activity_very_active': 'نشيط جدًا',
     'guardian_activity_active': 'نشيط',
@@ -387,6 +389,7 @@ abstract class ArSa {
     'noti_urgent_suspicious_body':
         'لم يتم اكتشاف سجل نشاط منذ @days يوم/أيام. مطلوب تحقق فوري.',
     'noti_steps_body': 'تم قطع @steps خطوة اليوم.',
+    'noti_steps_body_one': 'تم قطع @steps خطوة اليوم.',
     'noti_emergency_body': 'طلب الشخص المحمي المساعدة مباشرة. يرجى التحقق فوراً.',
     'noti_resolved_body': 'عاد فحص سلامة الشخص المحمي إلى الوضع الطبيعي.',
     'noti_cleared_by_guardian_body': 'أكد أحد المُرافِقين سلامة الشخص المحمي بنفسه.',

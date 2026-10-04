@@ -185,6 +185,7 @@ abstract class FrFr {
     'guardian_today_summary': 'Résumé du bien-être du jour',
     'guardian_no_subjects': 'Aucune personne protégée connectée.',
     'guardian_checking_subjects': 'Suivi en cours pour\n@count personne(s).',
+    'guardian_checking_subjects_one': 'Suivi en cours pour\n@count personne(s).',
     'guardian_subject_list': 'Liste des personnes protégées',
     'guardian_call_now': 'Appeler maintenant',
     'phone_call_failed': 'Impossible de passer l\'appel.',
@@ -194,6 +195,7 @@ abstract class FrFr {
     'guardian_last_check_minutes': 'Dernière vérif. : il y a @minutes min',
     'guardian_last_check_hours': 'Dernière vérif. : il y a @hours h',
     'guardian_last_check_days': 'Dernière vérif. : il y a @days jour(s)',
+    'guardian_last_check_days_one': 'Dernière vérif. : il y a @days jour(s)',
     'guardian_activity_prefix': 'Activité',
     'guardian_activity_very_active': 'Très actif',
     'guardian_activity_active': 'Actif',
@@ -412,6 +414,7 @@ abstract class FrFr {
     'noti_urgent_suspicious_body':
         'Aucun enregistrement d\'activité détecté depuis @days jour(s). Une vérification immédiate est requise.',
     'noti_steps_body': "@steps pas effectués aujourd'hui.",
+    'noti_steps_body_one': "@steps pas effectués aujourd'hui.",
     'noti_emergency_body':
         "La personne protégée a directement demandé de l'aide. Veuillez vérifier immédiatement.",
     'noti_resolved_body': 'La vérification de bien-être de la personne protégée est revenue à la normale.',

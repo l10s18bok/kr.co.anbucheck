@@ -23,6 +23,7 @@ import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/utils/number_text.dart';
 
 /// 보호자 대시보드 컨트롤러
 /// PRD 7.6: 대상자 목록, 상태 모니터링, 알림 레벨 표시
@@ -499,7 +500,7 @@ class GuardianDashboardController extends BaseController
     if (diff.inMinutes < 1) return 'guardian_last_check_now'.tr;
     if (diff.inHours < 1) return 'guardian_last_check_minutes'.trParams({'minutes': diff.inMinutes.toString()});
     if (diff.inHours < 24) return 'guardian_last_check_hours'.trParams({'hours': diff.inHours.toString()});
-    return 'guardian_last_check_days'.trParams({'days': diff.inDays.toString()});
+    return NumberText.tr('guardian_last_check_days', 'days', diff.inDays);
   }
 
   // highestAlertLevel getter 제거 — 유일한 소비자였던 AppBar 우측 최악등급 배지가
