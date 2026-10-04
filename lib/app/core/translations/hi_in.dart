@@ -201,7 +201,7 @@ abstract class HiIn {
     'guardian_chart_x_axis_last_30_days': 'पिछले 30 दिन',
     'guardian_safety_needed': 'सुरक्षा जांच आवश्यक',
     'guardian_error_load_subjects': 'संरक्षित व्यक्तियों की सूची लोड करने में विफल।',
-    'guardian_safety_confirmed': 'सुरक्षा की पुष्टि हो गई।',
+    'guardian_safety_confirmed_name': 'सुरक्षा की पुष्टि हो गई।',
     'guardian_error_clear_alerts': 'चेतावनियां हटाने में विफल।',
 
     // ── अभिभावक संरक्षित व्यक्ति जोड़ें ──
@@ -344,9 +344,8 @@ abstract class HiIn {
     'connection_unlink_warning_detail':
         'पुनः जोड़ने के बाद पिछले रिकॉर्ड पुनर्प्राप्त नहीं किए जा सकते। आपको संरक्षित व्यक्ति का कोड फिर से दर्ज करना होगा।',
     'connection_heartbeat_schedule': 'रोज @time पर',
-    'connection_heartbeat_report_time': 'खैरियत भेजने का समय: ',
+    'connection_time_change_note': 'खैरियत भेजने का समय: ',
     'connection_subject_label': 'संरक्षित व्यक्ति',
-    'connection_change_only_in_app': 'केवल ऐप में बदला जा सकता है',
     'connection_edit_title': 'संरक्षित व्यक्ति संपादित करें',
     'connection_alias_label': 'उपनाम',
     'connection_unlink_title': 'अनलिंक करें',

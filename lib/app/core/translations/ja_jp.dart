@@ -192,7 +192,7 @@ abstract class JaJp {
     'guardian_chart_x_axis_last_30_days': '過去30日間',
     'guardian_safety_needed': '安全確認が必要です',
     'guardian_error_load_subjects': '対象者リストの読み込みに失敗しました。',
-    'guardian_safety_confirmed': '安全が確認されました。',
+    'guardian_safety_confirmed_name': '安全が確認されました。',
     'guardian_error_clear_alerts': '警告の解除に失敗しました。',
 
     // ── 見守り対象者の追加 ──
@@ -329,9 +329,8 @@ abstract class JaJp {
     'connection_unlink_warning': '接続を解除すると、この対象者のデータは削除されます。',
     'connection_unlink_warning_detail': '再接続しても以前の記録は復元できません。 対象者のコードを再度入力する必要があります。',
     'connection_heartbeat_schedule': '毎日 @time',
-    'connection_heartbeat_report_time': '安否報告時刻は ',
+    'connection_time_change_note': '安否報告時刻は ',
     'connection_subject_label': '見守り対象者',
-    'connection_change_only_in_app': 'アプリでのみ変更できます',
     'connection_edit_title': '対象者の編集',
     'connection_alias_label': 'ニックネーム',
     'connection_unlink_title': '接続解除',

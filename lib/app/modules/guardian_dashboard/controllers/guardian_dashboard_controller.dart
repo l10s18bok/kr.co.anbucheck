@@ -512,7 +512,7 @@ class GuardianDashboardController extends BaseController
       await _svc.clearAlerts(inviteCode);
       AppSnackbar.show(
         '',
-        '$nickname ${'guardian_safety_confirmed'.tr}',
+        'guardian_safety_confirmed_name'.trParams({'name': nickname}),
       );
     } catch (_) {
       AppSnackbar.show('common_error'.tr, 'guardian_error_clear_alerts'.tr);

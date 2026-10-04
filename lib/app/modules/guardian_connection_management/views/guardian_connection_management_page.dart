@@ -304,6 +304,21 @@ class _SubjectListTile extends StatelessWidget {
     required this.onDelete,
   });
 
+  /// "안부 보고시간은 [보호 대상자] 앱에서만 변경 가능합니다" — 라벨만 굵게.
+  /// 언어마다 어순이 달라 문장을 조각으로 이어 붙이지 않고, 번역문 안의
+  /// `@label` 위치에 라벨을 끼워 넣는다.
+  List<TextSpan> _timeChangeNoteSpans() {
+    final parts = 'connection_time_change_note'.tr.split('@label');
+    final label = TextSpan(
+      text: 'connection_subject_label'.tr,
+      style: AppTextTheme.labelSmall(color: Colors.white, fw: FontWeight.w600),
+    );
+    return [
+      TextSpan(text: parts.first),
+      if (parts.length > 1) ...[label, TextSpan(text: parts.sublist(1).join())],
+    ];
+  }
+
   String get _timeLabel {
     return 'connection_heartbeat_schedule'.trParams({
       'time': formatTimeOfDay(heartbeatHour, heartbeatMinute),
@@ -429,17 +444,7 @@ class _SubjectListTile extends StatelessWidget {
                 child: RichText(
                   text: TextSpan(
                     style: AppTextTheme.labelSmall(color: Colors.white70),
-                    children: [
-                      TextSpan(text: 'connection_heartbeat_report_time'.tr),
-                      TextSpan(
-                        text: 'connection_subject_label'.tr,
-                        style: AppTextTheme.labelSmall(
-                          color: Colors.white,
-                          fw: FontWeight.w600,
-                        ),
-                      ),
-                      TextSpan(text: ' ${'connection_change_only_in_app'.tr}'),
-                    ],
+                    children: _timeChangeNoteSpans(),
                   ),
                 ),
               ),

@@ -185,7 +185,7 @@ abstract class ZhTw {
     'guardian_chart_x_axis_last_30_days': '最近30天',
     'guardian_safety_needed': '需要確認安全',
     'guardian_error_load_subjects': '載入被守護者列表失敗。',
-    'guardian_safety_confirmed': '安全已確認。',
+    'guardian_safety_confirmed_name': '安全已確認。',
     'guardian_error_clear_alerts': '解除警報失敗。',
 
     // ── 守護者新增被守護者 ──
@@ -321,9 +321,8 @@ abstract class ZhTw {
     'connection_unlink_warning': '解除連結後，該被守護者的資料將被刪除。',
     'connection_unlink_warning_detail': '重新連結後無法恢復之前的紀錄， 需要重新輸入被守護者的安全碼。',
     'connection_heartbeat_schedule': '每天 @time',
-    'connection_heartbeat_report_time': '問安報告時間為 ',
+    'connection_time_change_note': '問安報告時間為 ',
     'connection_subject_label': '被守護者',
-    'connection_change_only_in_app': '僅可在應用程式中更改',
     'connection_edit_title': '編輯被守護者',
     'connection_alias_label': '別名',
     'connection_unlink_title': '解除連結',

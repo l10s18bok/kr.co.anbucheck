@@ -198,7 +198,7 @@ abstract class ThTh {
     'guardian_chart_x_axis_last_30_days': '30 วันที่ผ่านมา',
     'guardian_safety_needed': 'ต้องตรวจสอบความปลอดภัย',
     'guardian_error_load_subjects': 'ไม่สามารถโหลดรายชื่อผู้ได้รับการดูแล',
-    'guardian_safety_confirmed': 'ยืนยันความปลอดภัยแล้ว',
+    'guardian_safety_confirmed_name': 'ยืนยันความปลอดภัยแล้ว',
     'guardian_error_clear_alerts': 'ไม่สามารถล้างการแจ้งเตือน',
 
     // ── เพิ่มผู้อยู่ในการดูแล ──
@@ -340,9 +340,8 @@ abstract class ThTh {
     'connection_unlink_warning_detail':
         'ไม่สามารถกู้คืนบันทึกก่อนหน้าหลังจากเชื่อมต่อใหม่ คุณจะต้องกรอกรหัสผู้ได้รับการดูแลอีกครั้ง',
     'connection_heartbeat_schedule': 'ทุกวันเวลา @time',
-    'connection_heartbeat_report_time': 'เวลารายงานความเป็นอยู่: ',
+    'connection_time_change_note': 'เวลารายงานความเป็นอยู่: ',
     'connection_subject_label': 'ผู้ได้รับการดูแล',
-    'connection_change_only_in_app': 'เปลี่ยนได้เฉพาะในแอปเท่านั้น',
     'connection_edit_title': 'แก้ไขผู้ได้รับการดูแล',
     'connection_alias_label': 'ชื่อเล่น',
     'connection_unlink_title': 'ยกเลิกเชื่อมต่อ',

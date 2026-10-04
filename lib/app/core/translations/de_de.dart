@@ -223,7 +223,7 @@ abstract class DeDe {
     'guardian_safety_needed': 'Prüfung erforderlich',
     'guardian_error_load_subjects':
         'Betreute Personen konnten nicht geladen werden.',
-    'guardian_safety_confirmed': 'Sicherheit bestätigt.',
+    'guardian_safety_confirmed_name': 'Sicherheit bestätigt.',
     'guardian_error_clear_alerts': 'Warnungen konnten nicht aufgehoben werden.',
 
     // ── Schutzperson hinzufügen ──
@@ -386,9 +386,8 @@ abstract class DeDe {
     'connection_unlink_warning_detail':
         'Frühere Aufzeichnungen können nach erneuter Verbindung nicht wiederhergestellt werden. Sie müssen den Code der betreuten Person erneut eingeben.',
     'connection_heartbeat_schedule': 'Täglich um @time',
-    'connection_heartbeat_report_time': 'Die Meldezeit ist ',
+    'connection_time_change_note': 'Die Meldezeit ist ',
     'connection_subject_label': 'Betreute Person',
-    'connection_change_only_in_app': 'kann nur in der App geändert werden',
     'connection_edit_title': 'Betreute Person bearbeiten',
     'connection_alias_label': 'Spitzname',
     'connection_unlink_title': 'Trennen',

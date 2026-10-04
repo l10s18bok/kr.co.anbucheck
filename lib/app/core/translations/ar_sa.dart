@@ -197,7 +197,7 @@ abstract class ArSa {
     'guardian_chart_x_axis_last_30_days': 'آخر 30 يومًا',
     'guardian_safety_needed': 'مطلوب التحقق من السلامة',
     'guardian_error_load_subjects': 'تعذر تحميل قائمة الأشخاص المحميين.',
-    'guardian_safety_confirmed': 'تم تأكيد السلامة.',
+    'guardian_safety_confirmed_name': 'تم تأكيد السلامة.',
     'guardian_error_clear_alerts': 'تعذر مسح التنبيهات.',
 
     // ── إضافة شخص محمي ──
@@ -336,9 +336,8 @@ abstract class ArSa {
     'connection_unlink_warning_detail':
         'لا يمكن استعادة السجلات السابقة بعد إعادة الربط. سيتعين عليك إدخال رمز الشخص المحمي مرة أخرى.',
     'connection_heartbeat_schedule': 'يومياً في @time',
-    'connection_heartbeat_report_time': 'وقت تقرير الاطمئنان هو ',
+    'connection_time_change_note': 'وقت تقرير الاطمئنان هو ',
     'connection_subject_label': 'الشخص المحمي',
-    'connection_change_only_in_app': 'يمكن تغييره فقط من التطبيق',
     'connection_edit_title': 'تعديل الشخص المحمي',
     'connection_alias_label': 'الاسم',
     'connection_unlink_title': 'إلغاء الربط',

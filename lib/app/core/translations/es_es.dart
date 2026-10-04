@@ -204,7 +204,7 @@ abstract class EsEs {
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 días',
     'guardian_safety_needed': 'Verificación necesaria',
     'guardian_error_load_subjects': 'No se pudo cargar la lista de personas protegidas.',
-    'guardian_safety_confirmed': 'Seguridad confirmada.',
+    'guardian_safety_confirmed_name': 'Seguridad confirmada.',
     'guardian_error_clear_alerts': 'No se pudieron eliminar las alertas.',
 
     // ── Agregar persona protegida ──
@@ -352,9 +352,8 @@ abstract class EsEs {
     'connection_unlink_warning_detail':
         'Los registros anteriores no se podrán recuperar tras una nueva vinculación. Deberá introducir de nuevo el código de la persona.',
     'connection_heartbeat_schedule': 'Cada día a las @time',
-    'connection_heartbeat_report_time': 'La hora de reporte es ',
+    'connection_time_change_note': 'La hora de reporte es ',
     'connection_subject_label': 'Persona protegida',
-    'connection_change_only_in_app': 'solo se puede cambiar en la aplicación',
     'connection_edit_title': 'Editar persona protegida',
     'connection_alias_label': 'Apodo',
     'connection_unlink_title': 'Desvincular',

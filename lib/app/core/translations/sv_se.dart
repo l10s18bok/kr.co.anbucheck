@@ -200,7 +200,7 @@ abstract class SvSe {
     'guardian_chart_x_axis_last_30_days': 'Senaste 30 dagarna',
     'guardian_safety_needed': 'Säkerhetskontroll behövs',
     'guardian_error_load_subjects': 'Kunde inte ladda skyddade personer.',
-    'guardian_safety_confirmed': 'Säkerhet bekräftad.',
+    'guardian_safety_confirmed_name': 'Säkerhet bekräftad.',
     'guardian_error_clear_alerts': 'Kunde inte rensa aviseringar.',
 
     // ── Lagg till skyddsperson ──
@@ -345,9 +345,8 @@ abstract class SvSe {
     'connection_unlink_warning_detail':
         'Tidigare poster kan inte återställas efter återanslutning. Du behöver ange den skyddade personens kod igen.',
     'connection_heartbeat_schedule': 'Dagligen kl. @time',
-    'connection_heartbeat_report_time': 'Välmåenderapporttid: ',
+    'connection_time_change_note': 'Välmåenderapporttid: ',
     'connection_subject_label': 'Skyddad person',
-    'connection_change_only_in_app': 'kan bara ändras i appen',
     'connection_edit_title': 'Redigera skyddad person',
     'connection_alias_label': 'Alias',
     'connection_unlink_title': 'Koppla från',

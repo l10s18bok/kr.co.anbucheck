@@ -204,7 +204,7 @@ abstract class PlPl {
     'guardian_chart_x_axis_last_30_days': 'Ostatnie 30 dni',
     'guardian_safety_needed': 'Wymagane sprawdzenie',
     'guardian_error_load_subjects': 'Nie udalo się załadować listy podopiecznych.',
-    'guardian_safety_confirmed': 'Bezpieczeństwo potwierdzone.',
+    'guardian_safety_confirmed_name': 'Bezpieczeństwo potwierdzone.',
     'guardian_error_clear_alerts': 'Nie udalo się usunąć alertow.',
 
     // ── Dodawanie podopiecznego ──
@@ -350,9 +350,8 @@ abstract class PlPl {
     'connection_unlink_warning_detail':
         'Poprzednich zapisów nie można odzyskać po ponownym połączeniu. Będzie trzeba ponownie wprowadzić kod podopiecznego.',
     'connection_heartbeat_schedule': 'Codziennie o @time',
-    'connection_heartbeat_report_time': 'Czas raportu samopoczucia: ',
+    'connection_time_change_note': 'Czas raportu samopoczucia: ',
     'connection_subject_label': 'Podopieczny',
-    'connection_change_only_in_app': 'można zmienić tylko w aplikacji',
     'connection_edit_title': 'Edytuj podopiecznego',
     'connection_alias_label': 'Alias',
     'connection_unlink_title': 'Odłącz',

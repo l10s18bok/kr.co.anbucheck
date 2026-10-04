@@ -80,7 +80,7 @@ abstract class KoKr {
     'stability_battery_warning_short': '배터리 사용 제한 해제가 필요해요',
     'stability_battery_dialog_title': '배터리 사용 제한 해제',
     'stability_battery_dialog_message':
-        '폰이 절전 모드에 들어가면 보호자에게 안부 신호가 늦게 도착하거나 누락될 수 있습니다.\n\n아래 [설정 열기]를 누르신 뒤, \'배터리\' → \'제한 없음\'으로 설정해 주세요. 매일 정확한 시각에 안부가 안정적으로 전달됩니다.\n\n※ 기기 제조사에 따라 표기는 조금씩 다를 수 있습니다.',
+        '폰이 절전 모드에 들어가면 보호자에게 안부 신호가 늦게 도착하거나 누락될 수 있습니다.\n\n아래 [설정 열기]를 누르신 뒤, \'배터리\' → \'제한 없음\'으로 설정해 주세요. 매일 정해진 시각 무렵에 안부가 더 안정적으로 전달됩니다.\n\n※ 기기 제조사에 따라 표기는 조금씩 다를 수 있습니다.',
 
     // ── 온보딩 ──
     'onboarding_safety_code_title': '안전코드가 자동으로 생성돼요',
@@ -195,13 +195,13 @@ abstract class KoKr {
     'guardian_chart_x_axis_last_30_days': '지난 30일',
     'guardian_safety_needed': '안전 확인이 필요합니다',
     'guardian_error_load_subjects': '보호 대상자 목록을 불러오지 못했습니다.',
-    'guardian_safety_confirmed': '안전이 확인되었습니다.',
+    'guardian_safety_confirmed_name': '@name의 안전이 확인되었습니다.',
     'guardian_error_clear_alerts': '경고 해제에 실패했습니다.',
 
     // ── 보호자 대상자 추가 ──
     'add_subject_title': '보호 대상자 연결',
     'add_subject_guide_title': '연결할 보호 대상자의 고유 코드와 별칭을 입력해주세요.',
-    'add_subject_guide_subtitle': '보호 대상자의 앱을 연결하여 실시간 건강 상태 및 활동을 확인할 수 있습니다.',
+    'add_subject_guide_subtitle': '연결하면 보호 대상자의 매일 안부와 걸음수를 확인할 수 있습니다.',
     'add_subject_code_label': '고유 코드 (7자리)',
     'add_subject_code_info': '고유 코드는 보호 대상자 앱에서 확인할 수 있습니다.',
     'add_subject_alias_label': '보호 대상자 별칭',
@@ -332,9 +332,8 @@ abstract class KoKr {
     'connection_unlink_warning': '연결 해제 시 해당 보호 대상자의 데이터는 삭제됩니다.',
     'connection_unlink_warning_detail': '재연결 시 이전의 기록을 복구할 수 없으며, 보호 대상자 코드를 다시 입력해야 합니다.',
     'connection_heartbeat_schedule': '매일 @time',
-    'connection_heartbeat_report_time': '안부 보고시간은 ',
+    'connection_time_change_note': '안부 보고시간은 @label 앱에서만 변경 가능합니다.',
     'connection_subject_label': '보호 대상자',
-    'connection_change_only_in_app': '앱에서만 변경 가능합니다',
     'connection_edit_title': '보호 대상자 편집',
     'connection_alias_label': '별칭',
     'connection_unlink_title': '연결 해제',
@@ -353,7 +352,7 @@ abstract class KoKr {
     'heartbeat_schedule_change': '안부 시간 변경',
     'heartbeat_schedule_change_title_ios': '안부 시간 변경',
     'heartbeat_daily_time': '매일 @time',
-    'heartbeat_scheduled_today': '매일 @time에 보호자에게 안부가 전달됩니다.',
+    'heartbeat_scheduled_today': '매일 @time 무렵 보호자에게 안부가 전달됩니다.',
     'heartbeat_change_failed_title': '시각 변경 실패',
     'heartbeat_change_failed_message': '서버에 반영되지 않았습니다.',
     'heartbeat_picker_help': '@limit 이전 시각을 선택해 주세요',
