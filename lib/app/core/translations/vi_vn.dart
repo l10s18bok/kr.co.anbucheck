@@ -405,17 +405,11 @@ abstract class ViVn {
     'noti_cleared_by_guardian_body': 'Một trong các người bảo vệ đã trực tiếp xác nhận sự an toàn.',
 
     // ── Thông báo cục bộ ──
-    'local_alarm_title': '💗 Cần kiểm tra bình an',
-    'local_alarm_body': 'Vui lòng chạm vào thông báo này.',
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Đã gửi thông tin an toàn',
     'nse_delivered_body': 'Thông tin an toàn hôm nay đã được gửi đến người thân của bạn.',
     'offline_alarm_title': '💗 Thông tin hôm nay chưa được gửi',
     'offline_alarm_body': 'Hãy chạm vào thông báo này một lần.\nKhi chạm, thông tin sẽ được gửi đến người thân của bạn.',
-    'wellbeing_check_title': '💛 Kiểm tra bình an',
-    'wellbeing_check_body': 'Bạn có khỏe không? Vui lòng chạm vào thông báo này.',
     'noti_channel_name': 'Cảnh báo Anbu',
-    'notification_send_failed_title': '📶 Vui lòng kiểm tra kết nối Internet',
-    'notification_send_failed_body': 'Chạm vào tin nhắn này để gửi lại tự động.',
   };
 }

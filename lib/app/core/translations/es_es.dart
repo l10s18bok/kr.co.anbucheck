@@ -416,17 +416,11 @@ abstract class EsEs {
         'Uno de los protectores ha confirmado personalmente la seguridad.',
 
     // ── Notificaciones locales ──
-    'local_alarm_title': '💗 Verificación de bienestar necesaria',
-    'local_alarm_body': 'Por favor, toque esta notificación.',
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Aviso de bienestar enviado',
     'nse_delivered_body': 'El aviso de bienestar de hoy se ha enviado a tu cuidador.',
     'offline_alarm_title': '💗 El aviso de hoy aún no se ha enviado',
     'offline_alarm_body': 'Toca esta notificación una vez.\nAsí se enviará tu aviso a tu cuidador.',
-    'wellbeing_check_title': '💛 Verificación de bienestar',
-    'wellbeing_check_body': '¿Se encuentra bien? Por favor, toque esta notificación.',
     'noti_channel_name': 'Alertas Anbu',
-    'notification_send_failed_title': '📶 Verifique su conexión a Internet',
-    'notification_send_failed_body': 'Toque este mensaje para reenviar automáticamente.',
   };
 }

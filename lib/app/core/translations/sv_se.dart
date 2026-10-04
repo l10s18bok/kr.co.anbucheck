@@ -404,17 +404,11 @@ abstract class SvSe {
     'noti_cleared_by_guardian_body': 'En av vårdarna har personligen bekräftat säkerheten.',
 
     // ── Lokala aviseringar ──
-    'local_alarm_title': '💗 Välmåendekontroll behövs',
-    'local_alarm_body': 'Vänligen tryck på denna avisering.',
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Trygghetssignal skickad',
     'nse_delivered_body': 'Dagens trygghetssignal har skickats till din anhörigkontakt.',
     'offline_alarm_title': '💗 Dagens signal har inte skickats än',
     'offline_alarm_body': 'Tryck en gång på den här aviseringen.\nDå skickas din signal till din anhörigkontakt.',
-    'wellbeing_check_title': '💛 Välmåendekontroll',
-    'wellbeing_check_body': 'Mår du bra? Vänligen tryck på denna avisering.',
     'noti_channel_name': 'Anbu-aviseringar',
-    'notification_send_failed_title': '📶 Kontrollera din internetanslutning',
-    'notification_send_failed_body': 'Tryck på det här meddelandet för att skicka igen automatiskt.',
   };
 }

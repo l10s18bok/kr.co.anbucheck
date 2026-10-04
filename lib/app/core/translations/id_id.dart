@@ -415,17 +415,11 @@ abstract class IdId {
         'Salah satu pelindung telah memastikan keamanan secara langsung.',
 
     // ── Notifikasi lokal ──
-    'local_alarm_title': '💗 Pemeriksaan kesejahteraan diperlukan',
-    'local_alarm_body': 'Silakan ketuk notifikasi ini.',
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Kabar hari ini terkirim',
     'nse_delivered_body': 'Kabar Anda hari ini telah dikirim ke pendamping Anda.',
     'offline_alarm_title': '💗 Kabar hari ini belum terkirim',
     'offline_alarm_body': 'Ketuk notifikasi ini satu kali.\nSetelah diketuk, kabar Anda akan dikirim ke pendamping Anda.',
-    'wellbeing_check_title': '💛 Pemeriksaan Kesejahteraan',
-    'wellbeing_check_body': 'Apakah Anda baik-baik saja? Silakan ketuk notifikasi ini.',
     'noti_channel_name': 'Peringatan Anbu',
-    'notification_send_failed_title': '📶 Periksa koneksi internet Anda',
-    'notification_send_failed_body': 'Ketuk pesan ini untuk mengirim ulang secara otomatis.',
   };
 }

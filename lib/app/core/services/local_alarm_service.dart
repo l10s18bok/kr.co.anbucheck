@@ -167,7 +167,7 @@ class LocalAlarmService {
   /// **본문도 iOS와 같은 문장**(`offline_alarm_body`)을 쓴다 — 안드로이드에서도 탭하면
   /// 앱이 열려 2차 안전망이 전송하므로 "눌러 주시면 보호자에게 안부를 전합니다"가 그대로
   /// 참이고, 양 플랫폼이 같은 상황에서 다른 말을 할 이유가 없다. 옛 키
-  /// (`notification_send_failed_title`/`_body`)는 번역 파일에 남지만 참조되지 않는다.
+  /// (`notification_send_failed_title`/`_body`)는 2026-10-05 번역 파일에서 삭제됐다.
   static Future<void> notifySendFailed() async {
     if (Platform.isIOS) return;
     await _ensureInitialized();

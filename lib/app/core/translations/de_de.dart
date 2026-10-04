@@ -454,20 +454,11 @@ abstract class DeDe {
         'Einer der Betreuer hat die Sicherheit persönlich bestätigt.',
 
     // ── Lokale Benachrichtigungen ──
-    'local_alarm_title': '💗 Wohlbefindens-Meldung erforderlich',
-    'local_alarm_body': 'Bitte tippen Sie auf diese Benachrichtigung.',
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Wohlbefindens-Meldung gesendet',
     'nse_delivered_body': 'Die heutige Wohlbefindens-Meldung wurde an Ihre Betreuungsperson übermittelt.',
     'offline_alarm_title': '💗 Die heutige Meldung wurde noch nicht gesendet',
     'offline_alarm_body': 'Tippen Sie einmal auf diese Mitteilung.\nDanach wird Ihre Meldung an Ihre Betreuungsperson gesendet.',
-    'wellbeing_check_title': '💛 Wohlbefindens-Meldung',
-    'wellbeing_check_body':
-        'Geht es Ihnen gut? Bitte tippen Sie auf diese Benachrichtigung.',
     'noti_channel_name': 'Anbu-Benachrichtigungen',
-    'notification_send_failed_title':
-        '📶 Bitte überprüfen Sie Ihre Internetverbindung',
-    'notification_send_failed_body':
-        'Tippen Sie auf diese Nachricht, um automatisch erneut zu senden.',
   };
 }

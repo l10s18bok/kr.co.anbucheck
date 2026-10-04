@@ -419,18 +419,11 @@ abstract class FrFr {
     'noti_cleared_by_guardian_body': "Un des protecteurs a personnellement confirmé la sécurité.",
 
     // ── Notifications locales ──
-    'local_alarm_title': '💗 Vérification de bien-être nécessaire',
-    'local_alarm_body': 'Veuillez appuyer sur cette notification.',
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ Message de bien-être envoyé',
     'nse_delivered_body': 'Votre message de bien-être du jour a été transmis à votre proche aidant.',
     'offline_alarm_title': "💗 Votre message du jour n'a pas encore été transmis",
     'offline_alarm_body': 'Appuyez une fois sur cette notification.\nVotre message sera alors transmis à votre proche aidant.',
-    'wellbeing_check_title': '💛 Vérification de bien-être',
-    'wellbeing_check_body': 'Comment allez-vous ? Veuillez appuyer sur cette notification.',
     'noti_channel_name': 'Alertes Anbu',
-    'notification_send_failed_title': '📶 Vérifiez votre connexion Internet',
-    'notification_send_failed_body':
-        'Touchez ce message pour renvoyer automatiquement.',
   };
 }

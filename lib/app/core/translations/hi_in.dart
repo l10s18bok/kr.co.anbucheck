@@ -401,17 +401,11 @@ abstract class HiIn {
     'noti_cleared_by_guardian_body': 'एक अभिभावक ने व्यक्तिगत रूप से सुरक्षा की पुष्टि की है।',
 
     // ── स्थानीय सूचनाएँ ──
-    'local_alarm_title': '💗 खैरियत की जांच ज़रूरी है',
-    'local_alarm_body': 'कृपया इस सूचना पर टैप करें।',
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ कुशल-क्षेम भेज दिया गया',
     'nse_delivered_body': 'आज का कुशल-क्षेम आपके देखभालकर्ता को भेज दिया गया है।',
     'offline_alarm_title': '💗 आज का कुशल-क्षेम अभी तक नहीं भेजा गया',
     'offline_alarm_body': 'इस सूचना पर एक बार टैप करें।\nटैप करने पर आपका कुशल-क्षेम आपके देखभालकर्ता को भेजा जाएगा।',
-    'wellbeing_check_title': '💛 खैरियत की जांच',
-    'wellbeing_check_body': 'क्या आप ठीक हैं? कृपया इस सूचना पर टैप करें।',
     'noti_channel_name': 'Anbu सूचनाएँ',
-    'notification_send_failed_title': '📶 कृपया अपना इंटरनेट कनेक्शन जांचें',
-    'notification_send_failed_body': 'स्वचालित रूप से पुनः भेजने के लिए इस संदेश पर टैप करें।',
   };
 }

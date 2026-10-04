@@ -10,13 +10,7 @@ class NotificationTextCache {
 
   /// 캐시할 키 목록 (번역 키 → SharedPreferences 키)
   static const _keys = [
-    'local_alarm_title',
-    'local_alarm_body',
-    'wellbeing_check_title',
-    'wellbeing_check_body',
     'noti_channel_name',
-    'notification_send_failed_title',
-    'notification_send_failed_body',
     // iOS Notification Service Extension이 읽는 문구.
     // 확장은 별도 프로세스라 GetX 번역을 쓸 수 없어, 여기 캐시된 값을
     // 네이티브 SharedStore가 App Group으로 넘긴다.

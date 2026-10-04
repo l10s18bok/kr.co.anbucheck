@@ -403,17 +403,11 @@ abstract class TrTr {
     'noti_cleared_by_guardian_body': 'Koruyuculardan biri güvenliğini bizzat doğruladı.',
 
     // ── Yerel bildirimler ──
-    'local_alarm_title': '💗 Hal hatır kontrolü gerekli',
-    'local_alarm_body': 'Lütfen bu bildirime dokunun.',
     // ── iOS 확장 전송 결과 / 오프라인 폴백 ──
     'nse_delivered_title': '✅ İyilik bildirimi gönderildi',
     'nse_delivered_body': 'Bugünkü iyilik bildiriminiz bakıcınıza iletildi.',
     'offline_alarm_title': '💗 Bugünkü bildiriminiz henüz gönderilmedi',
     'offline_alarm_body': 'Bu bildirime bir kez dokunun.\nDokununca bildiriminiz bakıcınıza gönderilir.',
-    'wellbeing_check_title': '💛 Hal Hatır Kontrolü',
-    'wellbeing_check_body': 'İyi misiniz? Lütfen bu bildirime dokunun.',
     'noti_channel_name': 'Anbu Uyarıları',
-    'notification_send_failed_title': '📶 İnternet bağlantınızı kontrol edin',
-    'notification_send_failed_body': 'Otomatik olarak yeniden göndermek için bu mesaja dokunun.',
   };
 }
