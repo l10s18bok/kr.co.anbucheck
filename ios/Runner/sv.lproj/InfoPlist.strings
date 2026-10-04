@@ -1,6 +1,6 @@
 "CFBundleDisplayName" = "Anbu";
 "CFBundleName" = "Anbu";
-"NSMotionUsageDescription" = "Används för att upptäcka steg och bekräfta din aktivitet.";
-"NSLocationWhenInUseUsageDescription" = "Används endast när du begär akut hjälp för att dela din nuvarande plats med dina vårdgivare så att de kan nå dig snabbare. Platsen samlas inte in vid andra tillfällen.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Din plats delas med dina vårdnadshavare endast när du skickar en nödförfrågan. Den här appen spårar inte din plats i bakgrunden.";
-"NSUserTrackingUsageDescription" = "Används för att visa annonser som bättre matchar dina intressen. Appen fungerar som vanligt om du avböjer.";
+"NSMotionUsageDescription" = "Används för att räkna dina steg och visa din dagliga aktivitet.";
+"NSLocationWhenInUseUsageDescription" = "Används bara när du ber om akut hjälp, för att skicka din nuvarande plats till dina kontaktpersoner så att de kan nå dig snabbare. Platsen samlas inte in vid något annat tillfälle.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Din plats skickas till dina kontaktpersoner bara när du ber om akut hjälp. Appen spårar inte din plats i bakgrunden.";
+"NSUserTrackingUsageDescription" = "Används för att visa annonser som passar dina intressen bättre. Appen fungerar som vanligt om du avböjer.";

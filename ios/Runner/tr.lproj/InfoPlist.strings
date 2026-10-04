@@ -1,6 +1,6 @@
 "CFBundleDisplayName" = "Anbu";
 "CFBundleName" = "Anbu";
-"NSMotionUsageDescription" = "Adımları algılamak ve etkinliğinizi doğrulamak için kullanılır.";
-"NSLocationWhenInUseUsageDescription" = "Yalnızca acil yardım istediğinizde mevcut konumunuzu bakıcılarınızla paylaşmak için kullanılır, böylece size daha hızlı ulaşabilirler. Diğer zamanlarda konum toplanmaz.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Konumunuz yalnızca acil yardım talebi gönderdiğinizde koruyucularınızla paylaşılır. Bu uygulama konumunuzu arka planda takip etmez.";
-"NSUserTrackingUsageDescription" = "Daha alakalı reklamlar göstermek için kullanılır. Reddetmeniz uygulamanın çalışmasını etkilemez.";
+"NSMotionUsageDescription" = "Günlük hareketinizi görmek için adımlarınızı saymakta kullanılır.";
+"NSLocationWhenInUseUsageDescription" = "Yalnızca acil yardım istediğinizde, size daha hızlı ulaşabilmeleri için anlık konumunuzu koruyucularınıza göndermekte kullanılır. Başka hiçbir zaman konum toplanmaz.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Konumunuz yalnızca acil yardım istediğinizde koruyucularınıza gönderilir. Bu uygulama konumunuzu arka planda takip etmez.";
+"NSUserTrackingUsageDescription" = "İlgi alanlarınıza daha uygun reklamlar göstermek için kullanılır. Reddederseniz uygulama normal şekilde çalışır.";

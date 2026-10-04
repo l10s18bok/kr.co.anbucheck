@@ -1,6 +1,6 @@
 "CFBundleDisplayName" = "Anbu";
 "CFBundleName" = "Anbu";
-"NSMotionUsageDescription" = "Gebruikt om stappen te detecteren en activiteit te bevestigen.";
-"NSLocationWhenInUseUsageDescription" = "Alleen gebruikt bij een noodhulpverzoek om uw huidige locatie met uw voogden te delen, zodat zij u sneller kunnen bereiken. Op andere momenten wordt de locatie niet verzameld.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Uw locatie wordt alleen gedeeld met uw voogden wanneer u een noodverzoek verzendt. Deze app volgt uw locatie niet op de achtergrond.";
-"NSUserTrackingUsageDescription" = "Gebruikt om relevantere advertenties te tonen. De app werkt normaal als u weigert.";
+"NSMotionUsageDescription" = "Telt uw stappen om uw dagelijkse activiteit te zien.";
+"NSLocationWhenInUseUsageDescription" = "Alleen gebruikt als u om dringende hulp vraagt: uw huidige locatie gaat dan naar uw contactpersonen, zodat zij u sneller kunnen bereiken. Op andere momenten wordt uw locatie niet verzameld.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Uw locatie wordt alleen naar uw contactpersonen gestuurd als u om dringende hulp vraagt. Deze app volgt uw locatie niet op de achtergrond.";
+"NSUserTrackingUsageDescription" = "Gebruikt om advertenties te tonen die beter bij uw interesses passen. Als u weigert, werkt de app gewoon.";

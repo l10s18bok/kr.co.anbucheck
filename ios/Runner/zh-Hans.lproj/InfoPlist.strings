@@ -1,6 +1,6 @@
 "CFBundleDisplayName" = "Anbu";
 "CFBundleName" = "Anbu";
-"NSMotionUsageDescription" = "用于检测步数以确认活动状态。";
-"NSLocationWhenInUseUsageDescription" = "仅在您请求紧急帮助时，向监护人共享您的当前位置，以便他们尽快到达。平时不会收集位置信息。";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "仅在您发送紧急求助请求时，您的位置才会共享给监护人。此应用不会在后台追踪您的位置。";
+"NSMotionUsageDescription" = "用于统计步数，了解每天的活动情况。";
+"NSLocationWhenInUseUsageDescription" = "仅在您发出紧急求助时，把当前位置发送给守护者，方便他们尽快赶到。其他时候不会收集位置信息。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "仅在您发出紧急求助时，才会把位置发送给守护者。本应用不会在后台追踪您的位置。";
 "NSUserTrackingUsageDescription" = "用于展示更符合您兴趣的广告。拒绝后应用仍可正常使用。";
