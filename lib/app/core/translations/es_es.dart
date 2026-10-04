@@ -63,8 +63,8 @@ abstract class EsEs {
     'permission_tracking_desc': 'Accede al identificador publicitario para mostrar anuncios personalizados',
     'location_permission_warning': 'Su ubicación no se enviará al pedir ayuda. Toque para permitirlo.',
     'location_permission_settings_title': 'Se necesita permiso de ubicación',
-    'location_permission_settings_body_ios': 'Busque y seleccione «Anbu» y, en «Ubicación», elija «Cuando se use la app».',
-    'location_permission_settings_body_android': 'Vaya a «Permisos» → «Ubicación» y elija «Permitir solo mientras se usa la aplicación».',
+    'location_permission_settings_body_ios': 'Busque y seleccione «Anbu» y, en «Ubicación», elija «Al usar la app».',
+    'location_permission_settings_body_android': 'Vaya a «Permisos» → «Ubicación» y elija «Permitir solo mientras uso la app».',
     'permission_notification_required_title': 'Se necesita permiso de notificaciones',
     'permission_notification_required_message': 'Anbu necesita las notificaciones para funcionar.\nPermítalas en Ajustes.',
     'permission_go_to_settings': 'Abrir Ajustes',
@@ -260,7 +260,7 @@ abstract class EsEs {
     'gs_disable_failed': 'No se pudieron desactivar sus avisos',
     'gs_activity_permission_denied_warning': 'El permiso para contar pasos está desactivado. Toque aquí para permitirlo.',
     'gs_activity_permission_settings_title': 'Se necesita un permiso',
-    'gs_activity_permission_settings_body': 'Permita «Actividad física» (Movimiento y forma física) en los ajustes de la aplicación.',
+    'gs_activity_permission_settings_body': 'Permita «Actividad física» (Movimiento y Estado Físico) en los ajustes de la aplicación.',
     'gs_activity_permission_settings_go': 'Abrir Ajustes',
 
     // ── Modo Protector → G+S (Drawer/Diálogo) ──

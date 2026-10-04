@@ -63,7 +63,7 @@ abstract class NlNl {
     'permission_tracking_desc': 'Gebruikt de advertentie-ID om gepersonaliseerde advertenties te tonen',
     'location_permission_warning': 'Bij een hulpverzoek wordt geen locatie meegestuurd. Tik om toe te staan.',
     'location_permission_settings_title': 'Locatietoestemming nodig',
-    'location_permission_settings_body_ios': 'Kies „Anbu” en kies bij „Locatie” voor „Bij gebruik van app”.',
+    'location_permission_settings_body_ios': 'Kies „Anbu” en kies bij „Locatie” voor „Bij gebruik van de app”.',
     'location_permission_settings_body_android': 'Kies „Rechten” → „Locatie” en daarna „Alleen toestaan bij gebruik van de app”.',
     'permission_notification_required_title': 'Toestemming voor meldingen nodig',
     'permission_notification_required_message': 'Anbu heeft meldingen nodig om te werken.\nSta ze toe in Instellingen.',
@@ -260,7 +260,7 @@ abstract class NlNl {
     'gs_disable_failed': 'Uw check-ins konden niet worden uitgezet',
     'gs_activity_permission_denied_warning': 'Toestemming voor stappen tellen staat uit. Tik hier om toe te staan.',
     'gs_activity_permission_settings_title': 'Toestemming nodig',
-    'gs_activity_permission_settings_body': 'Sta „Fysieke activiteit” (Beweging en fitness) toe in de app-instellingen.',
+    'gs_activity_permission_settings_body': 'Sta „Fysieke activiteit” (Beweging en Fitness) toe in de app-instellingen.',
     'gs_activity_permission_settings_go': 'Instellingen openen',
 
     // ── Beschermer → G+S omschakeling (Drawer/Dialoog) ──

@@ -63,7 +63,7 @@ abstract class DeDe {
     'permission_tracking_desc': 'Greift auf die Werbe-ID zu, um personalisierte Werbung anzuzeigen',
     'location_permission_warning': 'Bei einem Hilferuf wird kein Standort gesendet. Zum Erlauben tippen.',
     'location_permission_settings_title': 'Standortberechtigung erforderlich',
-    'location_permission_settings_body_ios': 'Wählen Sie „Anbu“ und unter „Standort“ die Option „Beim Verwenden der App“.',
+    'location_permission_settings_body_ios': 'Wählen Sie „Anbu“ und unter „Ort“ die Option „Beim Verwenden der App“.',
     'location_permission_settings_body_android': 'Wählen Sie „Berechtigungen“ → „Standort“ und dann „Nur während der Nutzung der App zulassen“.',
     'permission_notification_required_title': 'Benachrichtigungen erforderlich',
     'permission_notification_required_message': 'Anbu benötigt die Berechtigung für Benachrichtigungen.\nBitte erlauben Sie sie in den Einstellungen.',
@@ -76,7 +76,7 @@ abstract class DeDe {
     'permission_hibernation_go_to_settings': 'Einstellungen öffnen',
     'stability_battery_warning_short': 'Akkubeschränkung bitte aufheben',
     'stability_battery_dialog_title': 'Akkubeschränkung aufheben',
-    'stability_battery_dialog_message': 'Wenn das Telefon in den Energiesparmodus wechselt, kann das Lebenszeichen verspätet oder gar nicht bei Ihren Kontaktpersonen ankommen.\n\nTippen Sie unten auf [Einstellungen öffnen] und stellen Sie „Akku“ auf „Nicht eingeschränkt“. Dann kommt das Lebenszeichen jeden Tag zuverlässiger um die geplante Uhrzeit an.\n\n※ Die Bezeichnungen können je nach Hersteller leicht abweichen.',
+    'stability_battery_dialog_message': 'Wenn das Telefon in den Energiesparmodus wechselt, kann das Lebenszeichen verspätet oder gar nicht bei Ihren Kontaktpersonen ankommen.\n\nTippen Sie unten auf [Einstellungen öffnen] und stellen Sie „Akku“ auf „Uneingeschränkt“. Dann kommt das Lebenszeichen jeden Tag zuverlässiger um die geplante Uhrzeit an.\n\n※ Die Bezeichnungen können je nach Hersteller leicht abweichen.',
 
     // ── Onboarding ──
     'onboarding_safety_code_title': 'Ihr Sicherheitscode wird automatisch erstellt',

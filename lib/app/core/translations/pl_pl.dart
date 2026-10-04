@@ -63,7 +63,7 @@ abstract class PlPl {
     'permission_tracking_desc': 'Korzysta z identyfikatora reklamowego, aby wyświetlać spersonalizowane reklamy',
     'location_permission_warning': 'Przy wezwaniu pomocy lokalizacja nie zostanie wysłana. Dotknij, aby zezwolić.',
     'location_permission_settings_title': 'Potrzebne uprawnienie do lokalizacji',
-    'location_permission_settings_body_ios': 'Znajdź i wybierz „Anbu”, a następnie w „Lokalizacja” wybierz „Podczas używania aplikacji”.',
+    'location_permission_settings_body_ios': 'Znajdź i wybierz „Anbu”, a następnie w „Lokalizacja” wybierz „Podczas korzystania z aplikacji”.',
     'location_permission_settings_body_android': 'Wybierz „Uprawnienia” → „Lokalizacja”, a następnie „Zezwalaj tylko podczas korzystania z aplikacji”.',
     'permission_notification_required_title': 'Potrzebne uprawnienie do powiadomień',
     'permission_notification_required_message': 'Anbu potrzebuje powiadomień, aby działać.\nZezwól na nie w Ustawieniach.',

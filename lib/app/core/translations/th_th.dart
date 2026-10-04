@@ -64,7 +64,7 @@ abstract class ThTh {
     'location_permission_warning': 'ตอนขอความช่วยเหลือจะไม่มีการส่งตำแหน่ง แตะเพื่ออนุญาต',
     'location_permission_settings_title': 'ต้องให้สิทธิ์ตำแหน่ง',
     'location_permission_settings_body_ios': 'ค้นหาและเลือก "Anbu" แล้วเลือก "ขณะใช้แอป" ในหัวข้อ "ตำแหน่งที่ตั้ง"',
-    'location_permission_settings_body_android': 'เลือก "สิทธิ์" → "ตำแหน่ง" แล้วเลือก "อนุญาตเฉพาะขณะใช้แอป"',
+    'location_permission_settings_body_android': 'เลือก "การอนุญาต" → "ตำแหน่ง" แล้วเลือก "อนุญาตเฉพาะขณะใช้แอปเท่านั้น"',
     'permission_notification_required_title': 'ต้องให้สิทธิ์การแจ้งเตือน',
     'permission_notification_required_message': 'Anbu ต้องใช้การแจ้งเตือนจึงจะทำงานได้\nกรุณาอนุญาตการแจ้งเตือนในการตั้งค่า',
     'permission_go_to_settings': 'เปิดการตั้งค่า',
@@ -260,7 +260,7 @@ abstract class ThTh {
     'gs_disable_failed': 'ปิดการแจ้งว่าสบายดีไม่สำเร็จ',
     'gs_activity_permission_denied_warning': 'ปิดสิทธิ์นับก้าวอยู่ แตะที่นี่เพื่ออนุญาต',
     'gs_activity_permission_settings_title': 'ต้องให้สิทธิ์',
-    'gs_activity_permission_settings_body': 'กรุณาอนุญาต "การเคลื่อนไหวร่างกาย" (การเคลื่อนไหวและฟิตเนส) ในการตั้งค่าแอป',
+    'gs_activity_permission_settings_body': 'กรุณาอนุญาต "กิจกรรมทางกาย" (การเคลื่อนไหวและฟิตเนส) ในการตั้งค่าแอป',
     'gs_activity_permission_settings_go': 'เปิดการตั้งค่า',
 
     // ── โหมดผู้ดูแลสลับไป G+S (Drawer/กล่องโต้ตอบ) ──

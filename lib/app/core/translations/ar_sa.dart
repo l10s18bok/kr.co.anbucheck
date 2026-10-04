@@ -63,7 +63,7 @@ abstract class ArSa {
     'permission_tracking_desc': 'يستخدم معرّف الإعلانات لعرض إعلانات مخصصة',
     'location_permission_warning': 'لن يُرسَل موقعك عند طلب المساعدة. اضغط للسماح.',
     'location_permission_settings_title': 'يلزم إذن الموقع',
-    'location_permission_settings_body_ios': 'ابحث عن «Anbu» واختره، ثم اختر «أثناء استخدام التطبيق» في «الموقع».',
+    'location_permission_settings_body_ios': 'ابحث عن «Anbu» واختره، ثم اختر «عند استخدام التطبيق» في «الموقع».',
     'location_permission_settings_body_android': 'اختر «الأذونات» ← «الموقع»، ثم اختر «السماح فقط أثناء استخدام التطبيق».',
     'permission_notification_required_title': 'يلزم إذن الإشعارات',
     'permission_notification_required_message': 'يحتاج Anbu إلى الإشعارات ليعمل.\nيُرجى السماح بها من الإعدادات.',
@@ -75,7 +75,7 @@ abstract class ArSa {
     'permission_hibernation_go_to_settings': 'فتح الإعدادات',
     'stability_battery_warning_short': 'يلزم إلغاء تقييد البطارية',
     'stability_battery_dialog_title': 'إلغاء تقييد البطارية',
-    'stability_battery_dialog_message': 'عندما يدخل الهاتف وضع توفير الطاقة، قد تصل رسالة الاطمئنان إلى المرافقين متأخرة أو لا تصل.\n\nاضغط [فتح الإعدادات] أدناه واضبط «البطارية» على «غير مقيّد». عندها تصل رسالة الاطمئنان كل يوم بشكل أكثر انتظامًا قرابة الموعد المحدد.\n\n※ قد تختلف التسميات قليلًا حسب الشركة المصنّعة للهاتف.',
+    'stability_battery_dialog_message': 'عندما يدخل الهاتف وضع توفير الطاقة، قد تصل رسالة الاطمئنان إلى المرافقين متأخرة أو لا تصل.\n\nاضغط [فتح الإعدادات] أدناه واضبط «البطارية» على «بدون قيود». عندها تصل رسالة الاطمئنان كل يوم بشكل أكثر انتظامًا قرابة الموعد المحدد.\n\n※ قد تختلف التسميات قليلًا حسب الشركة المصنّعة للهاتف.',
 
     // ── التهيئة الأولية ──
     'onboarding_safety_code_title': 'يُنشأ رمز الأمان تلقائيًا',

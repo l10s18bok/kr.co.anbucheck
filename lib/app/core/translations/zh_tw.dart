@@ -64,7 +64,7 @@ abstract class ZhTw {
     'location_permission_warning': '緊急求助時將無法傳送位置。點一下以允許。',
     'location_permission_settings_title': '需要位置權限',
     'location_permission_settings_body_ios': '找到並選擇「Anbu」，然後在「位置」中選擇「使用App期間」。',
-    'location_permission_settings_body_android': '依序選擇「權限」→「位置資訊」，然後選擇「僅在使用該App時允許」。',
+    'location_permission_settings_body_android': '依序選擇「權限」→「位置」，然後選擇「僅在使用此應用程式時允許」。',
     'permission_notification_required_title': '需要通知權限',
     'permission_notification_required_message': '使用報平安服務需要通知權限。\n請在設定中允許通知。',
     'permission_go_to_settings': '前往設定',
@@ -260,7 +260,7 @@ abstract class ZhTw {
     'gs_disable_failed': '關閉報平安失敗',
     'gs_activity_permission_denied_warning': '步數權限已被拒絕。點一下此處以允許。',
     'gs_activity_permission_settings_title': '需要設定權限',
-    'gs_activity_permission_settings_body': '請在App設定中允許「身體活動（運動與健身）」權限。',
+    'gs_activity_permission_settings_body': '請在App設定中允許「體能活動（動態與健身）」權限。',
     'gs_activity_permission_settings_go': '前往設定',
 
     // ── 守護者模式下啟用G+S (Drawer/對話框) ──

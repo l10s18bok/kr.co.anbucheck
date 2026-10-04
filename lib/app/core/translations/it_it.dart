@@ -63,8 +63,8 @@ abstract class ItIt {
     'permission_tracking_desc': 'Accede all\'identificatore pubblicitario per mostrare annunci personalizzati',
     'location_permission_warning': 'Con la richiesta di aiuto non verrà inviata la posizione. Tocchi per consentirla.',
     'location_permission_settings_title': 'Serve l\'autorizzazione alla posizione',
-    'location_permission_settings_body_ios': 'Selezioni «Anbu» e, in «Posizione», scelga «Mentre usi l\'app».',
-    'location_permission_settings_body_android': 'Vada in «Autorizzazioni» → «Posizione» e scelga «Consenti solo mentre l\'app è in uso».',
+    'location_permission_settings_body_ios': 'Selezioni «Anbu» e, in «Posizione», scelga «Mentre uso l\'app».',
+    'location_permission_settings_body_android': 'Vada in «Autorizzazioni» → «Posizione» e scelga «Consenti solo durante l\'uso dell\'app».',
     'permission_notification_required_title': 'Serve l\'autorizzazione alle notifiche',
     'permission_notification_required_message': 'Anbu ha bisogno delle notifiche per funzionare.\nLe consenta nelle Impostazioni.',
     'permission_go_to_settings': 'Apri Impostazioni',
@@ -262,7 +262,7 @@ abstract class ItIt {
     'gs_disable_failed': 'Impossibile disattivare i Suoi check-in',
     'gs_activity_permission_denied_warning': 'Il permesso per contare i passi è disattivato. Tocchi qui per consentirlo.',
     'gs_activity_permission_settings_title': 'Serve un permesso',
-    'gs_activity_permission_settings_body': 'Consenta «Attività fisica» (Movimento e fitness) nelle impostazioni dell\'app.',
+    'gs_activity_permission_settings_body': 'Consenta «Attività fisica» (Movimento e Fitness) nelle impostazioni dell\'app.',
     'gs_activity_permission_settings_go': 'Apri Impostazioni',
 
     // ── Modalità Guardiano → G+S (Drawer/Dialog) ──

@@ -64,7 +64,7 @@ abstract class HiIn {
     'location_permission_warning': 'मदद माँगते समय स्थान नहीं भेजा जाएगा। अनुमति देने के लिए टैप करें।',
     'location_permission_settings_title': 'स्थान की अनुमति ज़रूरी है',
     'location_permission_settings_body_ios': '"Anbu" ढूँढ़कर चुनें, फिर "स्थान" में "ऐप का उपयोग करते समय" चुनें।',
-    'location_permission_settings_body_android': '"अनुमतियाँ" → "स्थान" चुनें, फिर "सिर्फ़ ऐप इस्तेमाल करते समय अनुमति दें" चुनें।',
+    'location_permission_settings_body_android': '"अनुमतियाँ" → "स्थान" चुनें, फिर "केवल ऐप का उपयोग करते समय अनुमति दें" चुनें।',
     'permission_notification_required_title': 'सूचनाओं की अनुमति ज़रूरी है',
     'permission_notification_required_message': 'Anbu को काम करने के लिए सूचनाओं की अनुमति चाहिए।\nकृपया सेटिंग में सूचनाओं की अनुमति दें।',
     'permission_go_to_settings': 'सेटिंग खोलें',
@@ -75,7 +75,7 @@ abstract class HiIn {
     'permission_hibernation_go_to_settings': 'सेटिंग खोलें',
     'stability_battery_warning_short': 'बैटरी की पाबंदी हटाएँ',
     'stability_battery_dialog_title': 'बैटरी की पाबंदी हटाना',
-    'stability_battery_dialog_message': 'जब फ़ोन बैटरी बचत मोड में चला जाता है, तो खैरियत की सूचना देखभाल करने वालों तक देर से पहुँच सकती है या पहुँच ही नहीं पाती।\n\nनीचे [सेटिंग खोलें] पर टैप करें और "बैटरी" को "कोई पाबंदी नहीं" पर रखें। इससे हर दिन तय समय के आसपास खैरियत की सूचना ज़्यादा भरोसे से पहुँचेगी।\n\n※ फ़ोन बनाने वाली कंपनी के अनुसार नाम थोड़े अलग हो सकते हैं।',
+    'stability_battery_dialog_message': 'जब फ़ोन बैटरी बचत मोड में चला जाता है, तो खैरियत की सूचना देखभाल करने वालों तक देर से पहुँच सकती है या पहुँच ही नहीं पाती।\n\nनीचे [सेटिंग खोलें] पर टैप करें और "बैटरी" को "बिना प्रतिबंध" पर रखें। इससे हर दिन तय समय के आसपास खैरियत की सूचना ज़्यादा भरोसे से पहुँचेगी।\n\n※ फ़ोन बनाने वाली कंपनी के अनुसार नाम थोड़े अलग हो सकते हैं।',
 
     // ── ऑनबोर्डिंग ──
     'onboarding_safety_code_title': 'आपका सुरक्षा कोड अपने-आप बन जाता है',
@@ -260,7 +260,7 @@ abstract class HiIn {
     'gs_disable_failed': 'खैरियत भेजना बंद नहीं हो सका',
     'gs_activity_permission_denied_warning': 'क़दम गिनने की अनुमति बंद है। अनुमति देने के लिए यहाँ टैप करें।',
     'gs_activity_permission_settings_title': 'अनुमति ज़रूरी है',
-    'gs_activity_permission_settings_body': 'कृपया ऐप की सेटिंग में "शारीरिक गतिविधि" (मोशन और फ़िटनेस) की अनुमति दें।',
+    'gs_activity_permission_settings_body': 'कृपया ऐप की सेटिंग में "शारीरिक गतिविधि" (गति और फ़िटनेस) की अनुमति दें।',
     'gs_activity_permission_settings_go': 'सेटिंग खोलें',
 
     // ── अभिभावक मोड → G+S स्विच (Drawer/डायलॉग) ──

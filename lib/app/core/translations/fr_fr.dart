@@ -64,7 +64,7 @@ abstract class FrFr {
     'location_permission_warning': 'Votre position ne sera pas envoyée lors d\'une demande d\'aide. Touchez pour autoriser.',
     'location_permission_settings_title': 'Autorisation de localisation requise',
     'location_permission_settings_body_ios': 'Sélectionnez « Anbu », puis sous « Position » choisissez « Lorsque l\'app est active ».',
-    'location_permission_settings_body_android': 'Sélectionnez « Autorisations » → « Position », puis « Autoriser seulement si l\'appli est en cours d\'utilisation ».',
+    'location_permission_settings_body_android': 'Sélectionnez « Autorisations » → « Position », puis « Autoriser uniquement lorsque l\'app est utilisée ».',
     'permission_notification_required_title': 'Autorisation des notifications requise',
     'permission_notification_required_message': 'Anbu a besoin des notifications pour fonctionner.\nVeuillez les autoriser dans les Réglages.',
     'permission_go_to_settings': 'Ouvrir les réglages',
@@ -75,7 +75,7 @@ abstract class FrFr {
     'permission_hibernation_go_to_settings': 'Ouvrir les réglages',
     'stability_battery_warning_short': 'Levez la restriction de batterie',
     'stability_battery_dialog_title': 'Lever la restriction de batterie',
-    'stability_battery_dialog_message': 'Quand le téléphone passe en économie d\'énergie, vos nouvelles peuvent arriver en retard chez vos aidants, ou ne pas arriver du tout.\n\nTouchez [Ouvrir les réglages] ci-dessous, puis réglez « Batterie » sur « Non restreinte ». Vos nouvelles arriveront alors plus régulièrement, chaque jour vers l\'heure prévue.\n\n※ Les intitulés peuvent varier selon le fabricant du téléphone.',
+    'stability_battery_dialog_message': 'Quand le téléphone passe en économie d\'énergie, vos nouvelles peuvent arriver en retard chez vos aidants, ou ne pas arriver du tout.\n\nTouchez [Ouvrir les réglages] ci-dessous, puis réglez « Batterie » sur « Sans restriction ». Vos nouvelles arriveront alors plus régulièrement, chaque jour vers l\'heure prévue.\n\n※ Les intitulés peuvent varier selon le fabricant du téléphone.',
 
     // ── Présentation ──
     'onboarding_safety_code_title': 'Votre code de sécurité est créé automatiquement',

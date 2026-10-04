@@ -63,8 +63,8 @@ abstract class IdId {
     'permission_tracking_desc': 'Memakai ID iklan untuk menampilkan iklan yang sesuai dengan Anda',
     'location_permission_warning': 'Lokasi tidak akan dikirim saat meminta bantuan. Ketuk untuk mengizinkan.',
     'location_permission_settings_title': 'Perlu izin lokasi',
-    'location_permission_settings_body_ios': 'Cari dan pilih "Anbu", lalu di "Lokasi" pilih "Saat Menggunakan App".',
-    'location_permission_settings_body_android': 'Pilih "Izin" → "Lokasi", lalu pilih "Izinkan hanya saat aplikasi digunakan".',
+    'location_permission_settings_body_ios': 'Cari dan pilih "Anbu", lalu di "Lokasi" pilih "Ketika Menggunakan App Ini".',
+    'location_permission_settings_body_android': 'Pilih "Izin" → "Lokasi", lalu pilih "Izinkan hanya saat menggunakan aplikasi".',
     'permission_notification_required_title': 'Perlu izin notifikasi',
     'permission_notification_required_message': 'Anbu memerlukan notifikasi agar bisa berjalan.\nSilakan izinkan notifikasi di Pengaturan.',
     'permission_go_to_settings': 'Buka Pengaturan',
@@ -75,7 +75,7 @@ abstract class IdId {
     'permission_hibernation_go_to_settings': 'Buka Pengaturan',
     'stability_battery_warning_short': 'Matikan pembatasan baterai',
     'stability_battery_dialog_title': 'Matikan pembatasan baterai',
-    'stability_battery_dialog_message': 'Saat ponsel masuk mode hemat daya, kabar Anda bisa terlambat sampai ke pendamping atau tidak sampai sama sekali.\n\nKetuk [Buka Pengaturan] di bawah, lalu atur "Baterai" ke "Tidak dibatasi". Dengan begitu kabar Anda akan sampai lebih andal setiap hari, sekitar jam yang dijadwalkan.\n\n※ Nama menu bisa sedikit berbeda menurut merek ponsel.',
+    'stability_battery_dialog_message': 'Saat ponsel masuk mode hemat daya, kabar Anda bisa terlambat sampai ke pendamping atau tidak sampai sama sekali.\n\nKetuk [Buka Pengaturan] di bawah, lalu atur "Baterai" ke "Tidak Dibatasi". Dengan begitu kabar Anda akan sampai lebih andal setiap hari, sekitar jam yang dijadwalkan.\n\n※ Nama menu bisa sedikit berbeda menurut merek ponsel.',
 
     // ── Onboarding ──
     'onboarding_safety_code_title': 'Kode keamanan dibuat otomatis',

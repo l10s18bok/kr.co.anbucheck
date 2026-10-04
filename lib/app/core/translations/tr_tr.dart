@@ -63,8 +63,8 @@ abstract class TrTr {
     'permission_tracking_desc': 'Kişiselleştirilmiş reklam göstermek için reklam kimliğini kullanır',
     'location_permission_warning': 'Yardım istediğinizde konum gönderilmeyecek. İzin vermek için dokunun.',
     'location_permission_settings_title': 'Konum izni gerekli',
-    'location_permission_settings_body_ios': '"Anbu"yu bulup seçin, ardından "Konum" bölümünde "Uygulamayı Kullanırken" seçeneğini seçin.',
-    'location_permission_settings_body_android': '"İzinler" → "Konum" yolunu izleyin ve "Yalnızca uygulama kullanılırken izin ver" seçeneğini seçin.',
+    'location_permission_settings_body_ios': '"Anbu"yu bulup seçin, ardından "Konum" bölümünde "Uygulamayı kullanırken" seçeneğini seçin.',
+    'location_permission_settings_body_android': '"İzinler" → "Konum" yolunu izleyin ve "Yalnızca uygulamayı kullanırken izin ver" seçeneğini seçin.',
     'permission_notification_required_title': 'Bildirim izni gerekli',
     'permission_notification_required_message': 'Anbu\'nun çalışması için bildirim izni gerekir.\nLütfen Ayarlar\'dan bildirimlere izin verin.',
     'permission_go_to_settings': 'Ayarları aç',
@@ -75,7 +75,7 @@ abstract class TrTr {
     'permission_hibernation_go_to_settings': 'Ayarları aç',
     'stability_battery_warning_short': 'Pil kısıtlamasını kaldırın',
     'stability_battery_dialog_title': 'Pil kısıtlamasını kaldırma',
-    'stability_battery_dialog_message': 'Telefon güç tasarrufuna geçtiğinde, haberiniz koruyucularınıza geç ulaşabilir ya da hiç ulaşmayabilir.\n\nAşağıdaki [Ayarları aç] düğmesine dokunup "Pil" ayarını "Kısıtlamasız" yapın. Böylece haberiniz her gün planlanan saat civarında daha güvenilir şekilde ulaşır.\n\n※ Ayar adları telefon üreticisine göre biraz farklı olabilir.',
+    'stability_battery_dialog_message': 'Telefon güç tasarrufuna geçtiğinde, haberiniz koruyucularınıza geç ulaşabilir ya da hiç ulaşmayabilir.\n\nAşağıdaki [Ayarları aç] düğmesine dokunup "Pil" ayarını "Kısıtlama yok" yapın. Böylece haberiniz her gün planlanan saat civarında daha güvenilir şekilde ulaşır.\n\n※ Ayar adları telefon üreticisine göre biraz farklı olabilir.',
 
     // ── Tanıtım ──
     'onboarding_safety_code_title': 'Güvenlik kodunuz otomatik oluşturulur',
@@ -260,7 +260,7 @@ abstract class TrTr {
     'gs_disable_failed': 'Haber verme kapatılamadı',
     'gs_activity_permission_denied_warning': 'Adım sayma izni kapalı. İzin vermek için buraya dokunun.',
     'gs_activity_permission_settings_title': 'İzin gerekli',
-    'gs_activity_permission_settings_body': 'Lütfen uygulama ayarlarından "Fiziksel etkinlik" (Hareket ve Fitness) iznini verin.',
+    'gs_activity_permission_settings_body': 'Lütfen uygulama ayarlarından "Fiziksel aktivite" (Hareket ve Fitness) iznini verin.',
     'gs_activity_permission_settings_go': 'Ayarları aç',
 
     // ── Koruyucu modunda G+S geçişi (Drawer/Diyalog) ──

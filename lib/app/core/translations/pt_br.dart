@@ -63,8 +63,8 @@ abstract class PtBr {
     'permission_tracking_desc': 'Acessa o identificador de publicidade para mostrar anúncios personalizados',
     'location_permission_warning': 'Sua localização não será enviada no pedido de ajuda. Toque para permitir.',
     'location_permission_settings_title': 'Permissão de localização necessária',
-    'location_permission_settings_body_ios': 'Encontre e selecione "Anbu" e, em "Localização", escolha "Durante o Uso do App".',
-    'location_permission_settings_body_android': 'Vá em "Permissões" → "Localização" e escolha "Permitir apenas durante o uso do app".',
+    'location_permission_settings_body_ios': 'Encontre e selecione "Anbu" e, em "Localização", escolha "Ao Usar o App".',
+    'location_permission_settings_body_android': 'Vá em "Permissões" → "Local" e escolha "Permitir somente ao usar o app".',
     'permission_notification_required_title': 'Permissão de notificações necessária',
     'permission_notification_required_message': 'O Anbu precisa das notificações para funcionar.\nPermita-as nos Ajustes.',
     'permission_go_to_settings': 'Abrir Ajustes',
@@ -260,7 +260,7 @@ abstract class PtBr {
     'gs_disable_failed': 'Não foi possível desativar seu check-in',
     'gs_activity_permission_denied_warning': 'A permissão para contar passos está desativada. Toque aqui para permitir.',
     'gs_activity_permission_settings_title': 'Permissão necessária',
-    'gs_activity_permission_settings_body': 'Permita "Atividade física" (Movimento e Condicionamento) nos ajustes do app.',
+    'gs_activity_permission_settings_body': 'Permita "Atividade física" (Movimento e Atividade Física) nos ajustes do app.',
     'gs_activity_permission_settings_go': 'Abrir Ajustes',
 
     // ── Modo Guardião → G+S (Drawer/Diálogo) ──

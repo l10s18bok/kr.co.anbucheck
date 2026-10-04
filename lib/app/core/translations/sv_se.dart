@@ -64,7 +64,7 @@ abstract class SvSe {
     'location_permission_warning': 'Din plats skickas inte med när du ber om hjälp. Tryck för att tillåta.',
     'location_permission_settings_title': 'Platsbehörighet behövs',
     'location_permission_settings_body_ios': 'Leta upp och välj ”Anbu” och välj sedan ”När appen används” under ”Plats”.',
-    'location_permission_settings_body_android': 'Välj ”Behörigheter” → ”Plats” och sedan ”Tillåt endast när appen används”.',
+    'location_permission_settings_body_android': 'Välj ”Behörigheter” → ”Plats” och sedan ”Tillåt endast medan appen används”.',
     'permission_notification_required_title': 'Aviseringar behövs',
     'permission_notification_required_message': 'Anbu behöver aviseringar för att fungera.\nTillåt dem i Inställningar.',
     'permission_go_to_settings': 'Öppna inställningar',
@@ -260,7 +260,7 @@ abstract class SvSe {
     'gs_disable_failed': 'Det gick inte att stänga av dina incheckningar',
     'gs_activity_permission_denied_warning': 'Stegräkning är inte tillåten. Tryck här för att tillåta.',
     'gs_activity_permission_settings_title': 'Behörighet behövs',
-    'gs_activity_permission_settings_body': 'Tillåt ”Fysisk aktivitet” (Rörelse och träning) i appens inställningar.',
+    'gs_activity_permission_settings_body': 'Tillåt ”Fysisk aktivitet” (Rörelse och kondition) i appens inställningar.',
     'gs_activity_permission_settings_go': 'Öppna inställningar',
 
     // ── Vårdare → G+S växling (Drawer/Dialog) ──

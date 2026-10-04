@@ -63,8 +63,8 @@ abstract class ViVn {
     'permission_tracking_desc': 'Dùng mã nhận dạng quảng cáo để hiển thị quảng cáo phù hợp',
     'location_permission_warning': 'Vị trí sẽ không được gửi khi bạn yêu cầu trợ giúp. Chạm để cho phép.',
     'location_permission_settings_title': 'Cần quyền vị trí',
-    'location_permission_settings_body_ios': 'Tìm và chọn "Anbu", sau đó trong "Vị trí" chọn "Khi dùng ứng dụng".',
-    'location_permission_settings_body_android': 'Chọn "Quyền" → "Vị trí", sau đó chọn "Chỉ cho phép khi dùng ứng dụng".',
+    'location_permission_settings_body_ios': 'Tìm và chọn "Anbu", sau đó trong "Vị trí" chọn "Khi đang sử dụng ứng dụng".',
+    'location_permission_settings_body_android': 'Chọn "Quyền" → "Vị trí", sau đó chọn "Chỉ cho phép khi đang sử dụng ứng dụng".',
     'permission_notification_required_title': 'Cần quyền thông báo',
     'permission_notification_required_message': 'Anbu cần quyền thông báo để hoạt động.\nVui lòng cho phép thông báo trong Cài đặt.',
     'permission_go_to_settings': 'Mở Cài đặt',
@@ -75,7 +75,7 @@ abstract class ViVn {
     'permission_hibernation_go_to_settings': 'Mở Cài đặt',
     'stability_battery_warning_short': 'Hãy bỏ giới hạn pin',
     'stability_battery_dialog_title': 'Bỏ giới hạn pin',
-    'stability_battery_dialog_message': 'Khi điện thoại chuyển sang chế độ tiết kiệm pin, tin bình an có thể đến người chăm sóc muộn hoặc không đến.\n\nChạm [Mở Cài đặt] bên dưới, rồi đặt "Pin" thành "Không hạn chế". Khi đó tin bình an sẽ đến ổn định hơn mỗi ngày, vào khoảng giờ đã hẹn.\n\n※ Tên mục có thể hơi khác tùy hãng điện thoại.',
+    'stability_battery_dialog_message': 'Khi điện thoại chuyển sang chế độ tiết kiệm pin, tin bình an có thể đến người chăm sóc muộn hoặc không đến.\n\nChạm [Mở Cài đặt] bên dưới, rồi đặt "Pin" thành "Không giới hạn". Khi đó tin bình an sẽ đến ổn định hơn mỗi ngày, vào khoảng giờ đã hẹn.\n\n※ Tên mục có thể hơi khác tùy hãng điện thoại.',
 
     // ── Gioi thieu ──
     'onboarding_safety_code_title': 'Mã an toàn được tạo tự động',
@@ -260,7 +260,7 @@ abstract class ViVn {
     'gs_disable_failed': 'Không tắt được báo bình an của bạn',
     'gs_activity_permission_denied_warning': 'Quyền đếm bước đang bị tắt. Chạm vào đây để cho phép.',
     'gs_activity_permission_settings_title': 'Cần cấp quyền',
-    'gs_activity_permission_settings_body': 'Vui lòng cho phép "Hoạt động thể chất" (Chuyển động & thể chất) trong cài đặt ứng dụng.',
+    'gs_activity_permission_settings_body': 'Vui lòng cho phép "Hoạt động thể chất" (Chuyển động và Thể hình) trong cài đặt ứng dụng.',
     'gs_activity_permission_settings_go': 'Mở Cài đặt',
 
     // ── Chế độ Người bảo vệ → G+S (Drawer/Hộp thoại) ──
