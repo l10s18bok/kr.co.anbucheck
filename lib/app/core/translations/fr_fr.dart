@@ -376,5 +376,17 @@ abstract class FrFr {
     'offline_alarm_title': '💗 Vos nouvelles n\'ont pas encore été envoyées',
     'offline_alarm_body': 'Appuyez une fois sur cette notification.\nVos nouvelles seront alors envoyées à vos aidants.',
     'noti_channel_name': 'Alertes Anbu',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Désactiver la protection',
+    'gs_disable_dialog_body':
+        "La désactivation supprimera votre code de sécurité et arrêtera l'envoi des vérifications à vos protecteurs connectés.",
+    'gs_disable_confirm': 'Désactiver',
+    'error_unknown': 'Une erreur inconnue est survenue.',
+    'error_timeout': 'La requête a expiré.',
+    'error_network': 'Veuillez vérifier votre connexion internet.',
+    'error_unauthorized': 'Authentification requise.',
+};
 }

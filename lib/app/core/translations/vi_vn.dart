@@ -376,5 +376,17 @@ abstract class ViVn {
     'offline_alarm_title': '💗 Chưa gửi được tin bình an',
     'offline_alarm_body': 'Vui lòng chạm vào thông báo này một lần.\nKhi chạm, tin bình an sẽ được gửi đến người chăm sóc.',
     'noti_channel_name': 'Thông báo Anbu',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Tắt bảo vệ',
+    'gs_disable_dialog_body':
+        'Tắt bảo vệ sẽ xóa mã an toàn của bạn và ngừng gửi kiểm tra bình an cho người bảo vệ đã kết nối.',
+    'gs_disable_confirm': 'Tắt',
+    'error_unknown': 'Đã xảy ra lỗi không xác định.',
+    'error_timeout': 'Yêu cầu đã hết thời gian.',
+    'error_network': 'Vui lòng kiểm tra kết nối mạng.',
+    'error_unauthorized': 'Cần xác thực.',
+};
 }

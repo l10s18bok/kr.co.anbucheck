@@ -376,5 +376,17 @@ abstract class IdId {
     'offline_alarm_title': '💗 Kabar Anda belum terkirim',
     'offline_alarm_body': 'Silakan ketuk notifikasi ini sekali.\nSetelah diketuk, kabar Anda akan sampai ke pendamping.',
     'noti_channel_name': 'Notifikasi Anbu',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Nonaktifkan perlindungan',
+    'gs_disable_dialog_body':
+        'Menonaktifkan akan menghapus kode keamanan Anda dan menghentikan pengiriman pemeriksaan kesehatan ke penjaga yang terhubung.',
+    'gs_disable_confirm': 'Nonaktifkan',
+    'error_unknown': 'Terjadi kesalahan yang tidak diketahui.',
+    'error_timeout': 'Waktu permintaan habis.',
+    'error_network': 'Silakan periksa koneksi jaringan Anda.',
+    'error_unauthorized': 'Autentikasi diperlukan.',
+};
 }

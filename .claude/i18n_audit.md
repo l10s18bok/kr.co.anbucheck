@@ -1,5 +1,9 @@
 # 앱 번역 전수 조사 (2026-08-14)
 
+> ⚠️ **2026-10-05 전면 재검수로 대체됨.** 아래 1~N절의 언어별 지적은 그날 19개 언어를 한국어 원문에서
+> 다시 쓰면서 해소됐다(현재 기준·근거는 `.claude/translation_glossary.md`). 이 문서는 당시 진단 기록으로만 남긴다.
+> 키 개수도 바뀌었다: 미사용 키 정리 후 **335키**(아래 '미사용 37개' 절 참조).
+
 대상: `lib/app/core/translations/` 20개 언어 × 364키
 제약: 키 이름 변경·삭제 금지 / 새 `@placeholder` 추가 금지 / `dart format` 금지
 
@@ -764,9 +768,9 @@ locale=el_GR  device24h=true   style=post12  18:00->18:00    07:00->07:00    00:
 
 | 묶음 | 개수 | 비고 |
 |---|---|---|
-| `error_unknown`/`error_timeout`/`error_network`/`error_unauthorized` | 4 | 아래 `api_error.dart` 항목과 동일 사안 |
-| `heartbeat_schedule_title_ios` / `_hint_ios` | 2 | PRD가 "쓰인다"고 적었으나 실제로는 `heartbeat_schedule_change_title_ios`만 사용. PRD 쪽을 정정함 |
-| 미구현 기능 (G+S 해제 다이얼로그, 권한 다이얼로그, 다크모드 라벨, 구독 준비 중 등) | 31 | 기능 구현 시 사용 예정 — 삭제하지 않음 |
+| `error_unknown`/`error_timeout`/`error_network`/`error_unauthorized` | 4 | 아래 `api_error.dart` 항목과 동일 사안 — **유지**(2026-10-05) |
+| `heartbeat_schedule_title_ios` / `_hint_ios` | 2 | PRD가 "쓰인다"고 적었으나 실제로는 `heartbeat_schedule_change_title_ios`만 사용. PRD 쪽을 정정함. **2026-10-05 삭제** — 안내 내용(탭해야 전송)이 iOS 자동 전송 도입으로 사실이 아니게 됨 |
+| 미구현 기능 (G+S 해제 다이얼로그, 권한 다이얼로그, 다크모드 라벨, 구독 준비 중 등) | 31 | ~~기능 구현 시 사용 예정 — 삭제하지 않음~~ → **2026-10-05 사용자 확인 후 정리**: G+S 해제 확인 창 3개(`gs_disable_*`)만 남기고, 현재 설계와 맞지 않는 나머지(사전 권한 안내 창·배터리 최적화 제외 권한·사실이 아니게 된 iOS 안내·삭제된 설정 카드·다른 키로 대체된 문구)는 삭제. 되살릴 땐 커밋 `8ec80d2` 직전 버전에서 꺼낼 것 |
 
 ## `api_error.dart` — 고쳐야 하는 결함이 아니다 (근거)
 

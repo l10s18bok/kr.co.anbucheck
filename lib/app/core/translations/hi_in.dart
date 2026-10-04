@@ -376,5 +376,17 @@ abstract class HiIn {
     'offline_alarm_title': '💗 आपकी खैरियत अभी तक नहीं भेजी गई',
     'offline_alarm_body': 'कृपया इस सूचना पर एक बार टैप करें।\nटैप करते ही आपकी खैरियत देखभाल करने वालों तक पहुँच जाएगी।',
     'noti_channel_name': 'Anbu सूचनाएँ',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'सुरक्षा निष्क्रिय करें',
+    'gs_disable_dialog_body':
+        'सुरक्षा निष्क्रिय करने पर आपका सुरक्षा कोड हटा दिया जाएगा और जुड़े अभिभावकों को जाँच भेजना बंद हो जाएगा।',
+    'gs_disable_confirm': 'निष्क्रिय करें',
+    'error_unknown': 'एक अज्ञात त्रुटि हुई।',
+    'error_timeout': 'अनुरोध का समय समाप्त हो गया।',
+    'error_network': 'कृपया अपना नेटवर्क कनेक्शन जांचें।',
+    'error_unauthorized': 'प्रमाणीकरण आवश्यक है।',
+};
 }

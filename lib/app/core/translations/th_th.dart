@@ -376,5 +376,17 @@ abstract class ThTh {
     'offline_alarm_title': '💗 ยังแจ้งว่าสบายดีไม่สำเร็จ',
     'offline_alarm_body': 'กรุณาแตะการแจ้งเตือนนี้หนึ่งครั้ง\nเมื่อแตะแล้ว ระบบจะแจ้งผู้ดูแลว่าคุณสบายดี',
     'noti_channel_name': 'การแจ้งเตือนของ Anbu',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'ปิดใช้งานการดูแล',
+    'gs_disable_dialog_body':
+        'การปิดใช้งานจะลบรหัสความปลอดภัยและหยุดส่งการตรวจสอบความเป็นอยู่ไปยังผู้ดูแลที่เชื่อมต่อ',
+    'gs_disable_confirm': 'ปิดใช้งาน',
+    'error_unknown': 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ',
+    'error_timeout': 'หมดเวลาคำขอ',
+    'error_network': 'กรุณาตรวจสอบการเชื่อมต่อเครือข่าย',
+    'error_unauthorized': 'จำเป็นต้องยืนยันตัวตน',
+};
 }

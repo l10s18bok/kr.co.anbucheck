@@ -376,5 +376,17 @@ abstract class NlNl {
     'offline_alarm_title': '💗 Uw check-in is nog niet verstuurd',
     'offline_alarm_body': 'Tik één keer op deze melding.\nDan gaat uw check-in naar uw contactpersonen.',
     'noti_channel_name': 'Anbu-meldingen',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Welzijnsbescherming deactiveren',
+    'gs_disable_dialog_body':
+        'Bij deactivering wordt uw veiligheidscode verwijderd en worden welzijnscontroles aan verbonden beschermers gestopt.',
+    'gs_disable_confirm': 'Deactiveren',
+    'error_unknown': 'Er is een onbekende fout opgetreden.',
+    'error_timeout': 'Het verzoek is verlopen.',
+    'error_network': 'Controleer uw netwerkverbinding.',
+    'error_unauthorized': 'Authenticatie vereist.',
+};
 }

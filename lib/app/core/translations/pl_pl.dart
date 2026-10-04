@@ -376,5 +376,17 @@ abstract class PlPl {
     'offline_alarm_title': '💗 Znak życia nie został jeszcze wysłany',
     'offline_alarm_body': 'Dotknij raz tego powiadomienia.\nWtedy znak życia trafi do opiekunów.',
     'noti_channel_name': 'Powiadomienia Anbu',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Wyłącz ochronę',
+    'gs_disable_dialog_body':
+        'Wyłączenie ochrony usunie twój kod bezpieczeństwa i zatrzyma wysyłanie kontroli do połączonych opiekunów.',
+    'gs_disable_confirm': 'Wyłącz',
+    'error_unknown': 'Wystąpił nieznany błąd.',
+    'error_timeout': 'Upłynął czas zadania.',
+    'error_network': 'Proszę sprawdzić połączenie sieciowe.',
+    'error_unauthorized': 'Wymagane uwierzytelnienie.',
+};
 }

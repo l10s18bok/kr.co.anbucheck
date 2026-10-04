@@ -376,5 +376,17 @@ abstract class PtBr {
     'offline_alarm_title': '💗 Seu check-in ainda não foi enviado',
     'offline_alarm_body': 'Toque nesta notificação uma vez.\nAssim seu check-in chega aos seus cuidadores.',
     'noti_channel_name': 'Alertas do Anbu',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Desativar proteção',
+    'gs_disable_dialog_body':
+        'Ao desativar, seu código de segurança será excluído e as verificações aos guardiões conectados serão interrompidas.',
+    'gs_disable_confirm': 'Desativar',
+    'error_unknown': 'Ocorreu um erro desconhecido.',
+    'error_timeout': 'A solicitação expirou.',
+    'error_network': 'Verifique sua conexão de rede.',
+    'error_unauthorized': 'Autenticação necessária.',
+};
 }

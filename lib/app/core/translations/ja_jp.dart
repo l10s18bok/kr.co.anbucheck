@@ -376,5 +376,16 @@ abstract class JaJp {
     'offline_alarm_title': '💗 まだ安否を伝えられていません',
     'offline_alarm_body': 'この通知を一度タップしてください。\nタップすると見守り人に安否を伝えます。',
     'noti_channel_name': '安否のお知らせ',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': '安否保護を無効化',
+    'gs_disable_dialog_body': '安否保護を無効化すると、安全コードが削除され、接続された見守り人への安否確認の送信が停止されます。',
+    'gs_disable_confirm': '無効化',
+    'error_unknown': '不明なエラーが発生しました。',
+    'error_timeout': 'リクエストがタイムアウトしました。',
+    'error_network': 'ネットワーク接続を確認してください。',
+    'error_unauthorized': '認証が必要です。',
+};
 }

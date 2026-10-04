@@ -378,5 +378,17 @@ abstract class ItIt {
     'offline_alarm_title': '💗 Il Suo check-in non è ancora stato inviato',
     'offline_alarm_body': 'Tocchi una volta questa notifica.\nCosì il Suo check-in arriverà ai caregiver.',
     'noti_channel_name': 'Avvisi Anbu',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Disattiva protezione',
+    'gs_disable_dialog_body':
+        'Disattivando verrà eliminato il Suo codice di sicurezza e verranno interrotte le verifiche ai guardiani collegati.',
+    'gs_disable_confirm': 'Disattiva',
+    'error_unknown': 'Si è verificato un errore sconosciuto.',
+    'error_timeout': 'La richiesta è scaduta.',
+    'error_network': 'Verifichi la connessione di rete.',
+    'error_unauthorized': 'Autenticazione necessaria.',
+};
 }

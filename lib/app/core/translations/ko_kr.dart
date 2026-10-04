@@ -393,5 +393,16 @@ abstract class KoKr {
     'offline_alarm_title': '💗 안부를 아직 전하지 못했습니다',
     'offline_alarm_body': '이 알림을 한 번 눌러 주세요.\n눌러 주시면 보호자에게 안부를 전합니다.',
     'noti_channel_name': '안부 알림',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': '안부 보호 해제',
+    'gs_disable_dialog_body': '안부 보호를 해제하면 안전 코드가 삭제되고, 연결된 보호자에게 더 이상 안부 확인이 전송되지 않습니다.',
+    'gs_disable_confirm': '해제',
+    'error_unknown': '알수없는 에러가 발생했습니다.',
+    'error_timeout': '요청 시간이 초과되었습니다.',
+    'error_network': '네트워크 연결을 확인해주세요.',
+    'error_unauthorized': '인증이 필요합니다.',
+};
 }

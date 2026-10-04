@@ -376,5 +376,17 @@ abstract class EnUs {
     'offline_alarm_title': '💗 Your wellness check hasn\'t been sent yet',
     'offline_alarm_body': 'Please tap this notification once.\nTapping it sends your wellness check to your guardians.',
     'noti_channel_name': 'Anbu alerts',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Disable Wellness Protection',
+    'gs_disable_dialog_body':
+        'Disabling wellness protection will delete your safety code and stop sending wellness checks to connected guardians.',
+    'gs_disable_confirm': 'Disable',
+    'error_unknown': 'An unknown error occurred.',
+    'error_timeout': 'Request timed out.',
+    'error_network': 'Please check your network connection.',
+    'error_unauthorized': 'Authentication required.',
+};
 }

@@ -2871,20 +2871,23 @@ WorkManager/BGTaskScheduler 콜백은 별도 isolate에서 실행되므로 GetX 
 [포그라운드 — Splash 초기화 시]
     NotificationTextCache.cacheAll()
     → GetX .tr로 번역 문자열을 SharedPreferences에 저장
-    → 키: 'noti_text_local_alarm_title', 'noti_text_local_alarm_body' 등
+    → 키: 'noti_text_offline_alarm_title', 'noti_text_nse_delivered_title' 등
 
 [백그라운드 isolate — WorkManager/BGTask 콜백]
-    NotificationTextCache.get('local_alarm_title', fallback: 'Wellness check needed')
+    NotificationTextCache.get('offline_alarm_title', fallback: "💗 Your wellness check hasn't been sent yet")
     → SharedPreferences에서 캐시된 번역 문자열 읽기
     → 캐시 없으면 영문 fallback 사용
 ```
 
-**대상 로컬 알림 (iOS 전용 1건):**
+**캐시 대상 (`NotificationTextCache._keys`):**
 
-| 알림 | 캐시 키 | 한국어 기본값 |
+| 쓰는 곳 | 캐시 키 | 한국어 기본값 |
 |---|---|---|
-| 오늘의 안부 확인 메시지 로컬 알림 (iOS 전용) | `local_alarm_title`, `local_alarm_body` | 📱 안부 확인이 필요합니다 / 이 메시지 알림을 한 번 터치해 주세요. |
+| Android 전송 실패 알림 · iOS 오프라인 폴백 | `offline_alarm_title`, `offline_alarm_body` | 💗 안부를 아직 전하지 못했습니다 / 이 알림을 한 번 눌러 주세요… |
+| iOS 확장 전송 성공 문구 | `nse_delivered_title`, `nse_delivered_body` | ✅ 안부 전달 완료 / 오늘의 안부를 보호자에게 전달했습니다. |
 | Android 채널명 | `noti_channel_name` | 안부 알림 |
+
+> 2026-10-05: 캐시에 쓰기만 되고 읽히지 않던 `local_alarm_*`(iOS `gs_deadman` 예약 중단 이후 미사용)·`wellbeing_check_*`·`notification_send_failed_*`는 번역 파일과 캐시 목록에서 삭제했다.
 
 
 ### 12.6 번역 파일 구조

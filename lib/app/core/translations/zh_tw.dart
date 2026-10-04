@@ -376,5 +376,16 @@ abstract class ZhTw {
     'offline_alarm_title': '💗 還沒能報平安',
     'offline_alarm_body': '請點一下這則通知。\n點一下後會向守護者報平安。',
     'noti_channel_name': '平安通知',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': '停用平安守護',
+    'gs_disable_dialog_body': '停用平安守護將刪除您的安全碼，並停止向已連接的守護者發送平安確認。',
+    'gs_disable_confirm': '停用',
+    'error_unknown': '發生了未知錯誤。',
+    'error_timeout': '請求逾時。',
+    'error_network': '請檢查網路連線。',
+    'error_unauthorized': '需要驗證身分。',
+};
 }

@@ -378,5 +378,17 @@ abstract class DeDe {
     'offline_alarm_title': '💗 Ihr Lebenszeichen wurde noch nicht gesendet',
     'offline_alarm_body': 'Bitte tippen Sie einmal auf diese Benachrichtigung.\nDann wird Ihr Lebenszeichen an Ihre Kontaktpersonen gesendet.',
     'noti_channel_name': 'Anbu-Benachrichtigungen',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Wohlbefindens-Schutz deaktivieren',
+    'gs_disable_dialog_body':
+        'Bei Deaktivierung wird Ihr Sicherheitscode gelöscht und die Wohlbefindens-Meldungen an verbundene Betreuer werden gestoppt.',
+    'gs_disable_confirm': 'Deaktivieren',
+    'error_unknown': 'Ein unbekannter Fehler ist aufgetreten.',
+    'error_timeout': 'Zeitüberschreitung der Anfrage.',
+    'error_network': 'Bitte überprüfen Sie Ihre Internetverbindung.',
+    'error_unauthorized': 'Authentifizierung erforderlich.',
+};
 }

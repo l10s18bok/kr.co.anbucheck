@@ -376,5 +376,17 @@ abstract class EsEs {
     'offline_alarm_title': '💗 Su aviso aún no se ha enviado',
     'offline_alarm_body': 'Toque esta notificación una vez.\nAl tocarla, su aviso llegará a sus cuidadores.',
     'noti_channel_name': 'Alertas de Anbu',
-  };
+
+    // ── 미사용 키(아직 화면이 없는 기능용) — 2026-10-05 재검수 대상에서 제외 ──
+    // gs_disable_*: G+S 해제 확인 창 / error_*: api_error.dart 배선용.
+    // 화면을 만들 때 .claude/translation_glossary.md 용어로 다시 번역할 것.
+    'gs_disable_dialog_title': 'Desactivar protección',
+    'gs_disable_dialog_body':
+        'Al desactivar se eliminará su código de seguridad y se dejará de enviar verificaciones a sus protectores conectados.',
+    'gs_disable_confirm': 'Desactivar',
+    'error_unknown': 'Se ha producido un error desconocido.',
+    'error_timeout': 'La solicitud ha expirado.',
+    'error_network': 'Compruebe su conexión a internet.',
+    'error_unauthorized': 'Se requiere autenticación.',
+};
 }
