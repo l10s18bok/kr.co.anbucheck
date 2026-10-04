@@ -201,7 +201,7 @@ abstract class ViVn {
     'guardian_chart_x_axis_last_30_days': '30 ngày qua',
     'guardian_safety_needed': 'Cần kiểm tra an toàn',
     'guardian_error_load_subjects': 'Không thể tải danh sách người được bảo vệ.',
-    'guardian_safety_confirmed_name': 'Đã xác nhận an toàn.',
+    'guardian_safety_confirmed_name': '@name Đã xác nhận an toàn.',
     'guardian_error_clear_alerts': 'Không thể xóa cảnh báo.',
 
     // ── Them nguoi duoc bao ve ──
@@ -346,7 +346,7 @@ abstract class ViVn {
     'connection_unlink_warning_detail':
         'Các bản ghi trước đó không thể khôi phục sau khi kết nối lại. Bạn sẽ cần nhập lại mã của người được bảo vệ.',
     'connection_heartbeat_schedule': 'Hằng ngày lúc @time',
-    'connection_time_change_note': 'Thời gian báo cáo bình an: ',
+    'connection_time_change_note': 'Thời gian báo cáo bình an: @label chỉ có thể thay đổi trong ứng dụng',
     'connection_subject_label': 'Người được bảo vệ',
     'connection_edit_title': 'Chỉnh sửa người được bảo vệ',
     'connection_alias_label': 'Tên gọi',

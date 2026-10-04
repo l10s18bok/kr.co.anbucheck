@@ -185,7 +185,7 @@ abstract class ZhCn {
     'guardian_chart_x_axis_last_30_days': '最近30天',
     'guardian_safety_needed': '需要确认安全',
     'guardian_error_load_subjects': '加载被守护者列表失败。',
-    'guardian_safety_confirmed_name': '安全已确认。',
+    'guardian_safety_confirmed_name': '@name 安全已确认。',
     'guardian_error_clear_alerts': '解除警报失败。',
 
     // ── 守护者添加被守护者 ──
@@ -321,7 +321,7 @@ abstract class ZhCn {
     'connection_unlink_warning': '解除连接后，该被守护者的数据将被删除。',
     'connection_unlink_warning_detail': '重新连接后无法恢复之前的记录， 需要重新输入被守护者的安全码。',
     'connection_heartbeat_schedule': '每天 @time',
-    'connection_time_change_note': '问安报告时间为 ',
+    'connection_time_change_note': '问安报告时间为 @label 仅可在应用中更改',
     'connection_subject_label': '被守护者',
     'connection_edit_title': '编辑被守护者',
     'connection_alias_label': '别名',

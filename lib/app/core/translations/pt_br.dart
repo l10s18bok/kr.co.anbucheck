@@ -204,7 +204,7 @@ abstract class PtBr {
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 dias',
     'guardian_safety_needed': 'Verificação necessária',
     'guardian_error_load_subjects': 'Não foi possível carregar a lista de protegidos.',
-    'guardian_safety_confirmed_name': 'Segurança confirmada.',
+    'guardian_safety_confirmed_name': '@name Segurança confirmada.',
     'guardian_error_clear_alerts': 'Não foi possível limpar os alertas.',
 
     // ── Adicionar protegido ──
@@ -351,7 +351,7 @@ abstract class PtBr {
     'connection_unlink_warning_detail':
         'Os dados anteriores não poderão ser recuperados após uma nova vinculação. Você precisará inserir o código do protegido novamente.',
     'connection_heartbeat_schedule': 'Diariamente às @time',
-    'connection_time_change_note': 'O horário do relatório de bem-estar é ',
+    'connection_time_change_note': 'O horário do relatório de bem-estar é @label só pode ser alterado no app',
     'connection_subject_label': 'Protegido',
     'connection_edit_title': 'Editar protegido',
     'connection_alias_label': 'Apelido',

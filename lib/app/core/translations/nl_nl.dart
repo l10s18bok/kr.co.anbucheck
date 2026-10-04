@@ -204,7 +204,7 @@ abstract class NlNl {
     'guardian_chart_x_axis_last_30_days': 'Afgelopen 30 dagen',
     'guardian_safety_needed': 'Veiligheidscontrole nodig',
     'guardian_error_load_subjects': 'Kan de lijst met beschermelingen niet laden.',
-    'guardian_safety_confirmed_name': 'Veiligheid bevestigd.',
+    'guardian_safety_confirmed_name': '@name Veiligheid bevestigd.',
     'guardian_error_clear_alerts': 'Kan waarschuwingen niet wissen.',
 
     // ── Beschermeling toevoegen ──
@@ -351,7 +351,7 @@ abstract class NlNl {
     'connection_unlink_warning_detail':
         'Eerdere gegevens kunnen na opnieuw koppelen niet worden hersteld. U moet de code van de beschermeling opnieuw invoeren.',
     'connection_heartbeat_schedule': 'Dagelijks om @time',
-    'connection_time_change_note': 'De welzijnsrapportagetijd is ',
+    'connection_time_change_note': 'De welzijnsrapportagetijd is @label kan alleen in de app worden gewijzigd',
     'connection_subject_label': 'Beschermeling',
     'connection_edit_title': 'Beschermeling bewerken',
     'connection_alias_label': 'Bijnaam',

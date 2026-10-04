@@ -224,7 +224,7 @@ abstract class ItIt {
     'guardian_safety_needed': 'Verifica necessaria',
     'guardian_error_load_subjects':
         'Impossibile caricare la lista degli assistiti.',
-    'guardian_safety_confirmed_name': 'Sicurezza confermata.',
+    'guardian_safety_confirmed_name': '@name Sicurezza confermata.',
     'guardian_error_clear_alerts': 'Impossibile cancellare gli avvisi.',
 
     // ── Aggiunta assistito ──
@@ -382,8 +382,7 @@ abstract class ItIt {
     'connection_unlink_warning_detail':
         "I dati precedenti non potranno essere recuperati dopo un nuovo collegamento. Dovrà reinserire il codice dell'assistito.",
     'connection_heartbeat_schedule': 'Ogni giorno alle @time',
-    'connection_time_change_note':
-        "L'orario di segnalazione del benessere è ",
+    'connection_time_change_note': 'L'orario di segnalazione del benessere è @label può essere modificato solo nell'app',
     'connection_subject_label': 'Assistito',
     'connection_edit_title': 'Modifica assistito',
     'connection_alias_label': 'Soprannome',

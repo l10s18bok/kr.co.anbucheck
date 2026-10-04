@@ -201,7 +201,7 @@ abstract class TrTr {
     'guardian_chart_x_axis_last_30_days': 'Son 30 gün',
     'guardian_safety_needed': 'Güvenlik kontrolü gerekli',
     'guardian_error_load_subjects': 'Korunan kişiler listesi yüklenemedi.',
-    'guardian_safety_confirmed_name': 'Güvenlik onaylandı.',
+    'guardian_safety_confirmed_name': '@name Güvenlik onaylandı.',
     'guardian_error_clear_alerts': 'Uyarılar temizlenemedi.',
 
     // ── Korunan Kişi Ekleme ──
@@ -345,7 +345,7 @@ abstract class TrTr {
     'connection_unlink_warning_detail':
         'Yeniden bağlandıktan sonra önceki kayıtlar kurtarılamaz. Korunan kişinin kodunu tekrar girmeniz gerekecektir.',
     'connection_heartbeat_schedule': 'Her gün @time',
-    'connection_time_change_note': 'Hal hatır rapor zamanı: ',
+    'connection_time_change_note': 'Hal hatır rapor zamanı: @label yalnızca uygulamadan değiştirilebilir',
     'connection_subject_label': 'Korunan kişi',
     'connection_edit_title': 'Korunan Kişiyi Düzenle',
     'connection_alias_label': 'Takma Ad',

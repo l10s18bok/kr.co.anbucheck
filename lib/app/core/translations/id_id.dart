@@ -206,7 +206,7 @@ abstract class IdId {
     'guardian_chart_x_axis_last_30_days': '30 hari terakhir',
     'guardian_safety_needed': 'Perlu diperiksa',
     'guardian_error_load_subjects': 'Gagal memuat daftar orang yang dilindungi.',
-    'guardian_safety_confirmed_name': 'Keamanan dikonfirmasi.',
+    'guardian_safety_confirmed_name': '@name Keamanan dikonfirmasi.',
     'guardian_error_clear_alerts': 'Gagal menghapus peringatan.',
 
     // ── Pelindung Tambah Orang yang Dilindungi ──
@@ -353,7 +353,7 @@ abstract class IdId {
     'connection_unlink_warning_detail':
         'Catatan sebelumnya tidak dapat dipulihkan setelah menghubungkan ulang. Anda perlu memasukkan kembali kode orang yang dilindungi.',
     'connection_heartbeat_schedule': 'Setiap hari pukul @time',
-    'connection_time_change_note': 'Waktu laporan kesejahteraan: ',
+    'connection_time_change_note': 'Waktu laporan kesejahteraan: @label hanya dapat diubah di aplikasi',
     'connection_subject_label': 'Orang yang Dilindungi',
     'connection_edit_title': 'Edit Orang yang Dilindungi',
     'connection_alias_label': 'Alias',

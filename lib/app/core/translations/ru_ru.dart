@@ -205,7 +205,7 @@ abstract class RuRu {
     'guardian_chart_x_axis_last_30_days': 'Последние 30 дней',
     'guardian_safety_needed': 'Требуется проверка',
     'guardian_error_load_subjects': 'Не удалось загрузить список подопечных.',
-    'guardian_safety_confirmed_name': 'Безопасность подтверждена.',
+    'guardian_safety_confirmed_name': '@name Безопасность подтверждена.',
     'guardian_error_clear_alerts': 'Не удалось сбросить предупреждения.',
 
     // ── Добавление подопечного ──
@@ -351,7 +351,7 @@ abstract class RuRu {
     'connection_unlink_warning_detail':
         'Предыдущие записи не подлежат восстановлению. Вам потребуется заново ввести код подопечного.',
     'connection_heartbeat_schedule': 'Ежедневно в @time',
-    'connection_time_change_note': 'Время отчёта о самочувствии — ',
+    'connection_time_change_note': 'Время отчёта о самочувствии — @label можно изменить только в приложении',
     'connection_subject_label': 'Подопечный',
     'connection_edit_title': 'Редактировать подопечного',
     'connection_alias_label': 'Имя',

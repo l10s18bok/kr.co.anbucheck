@@ -206,7 +206,7 @@ abstract class FrFr {
     'guardian_chart_x_axis_last_30_days': '30 derniers jours',
     'guardian_safety_needed': 'Vérification nécessaire',
     'guardian_error_load_subjects': 'Impossible de charger la liste des personnes protégées.',
-    'guardian_safety_confirmed_name': 'Sécurité confirmée.',
+    'guardian_safety_confirmed_name': '@name Sécurité confirmée.',
     'guardian_error_clear_alerts': 'Impossible de lever les alertes.',
 
     // ── Ajouter une personne protégée ──
@@ -355,7 +355,7 @@ abstract class FrFr {
     'connection_unlink_warning_detail':
         'Les données précédentes ne pourront pas être récupérées après une nouvelle association. Vous devrez saisir à nouveau le code de la personne.',
     'connection_heartbeat_schedule': 'Tous les jours à @time',
-    'connection_time_change_note': 'L\'heure du rapport est ',
+    'connection_time_change_note': 'L\'heure du rapport est @label modifiable uniquement dans l\'application',
     'connection_subject_label': 'Personne protégée',
     'connection_edit_title': 'Modifier la personne protégée',
     'connection_alias_label': 'Surnom',
