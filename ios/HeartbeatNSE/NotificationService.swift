@@ -328,10 +328,10 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
 
-        body.title = HeartbeatStore.text("nse_delivered_title", fallback: "Wellness check sent")
+        body.title = HeartbeatStore.text("nse_delivered_title", fallback: "✅ Wellness check sent")
         body.body = HeartbeatStore.text(
             "nse_delivered_body",
-            fallback: "Today's wellness check has been delivered."
+            fallback: "Today's wellness check has been sent to your guardians."
         )
         // 사용자가 **아무것도 하지 않아도 된다**는 것을 표시 강도로도 알린다.
         body.sound = nil

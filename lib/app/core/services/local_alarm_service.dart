@@ -174,11 +174,11 @@ class LocalAlarmService {
 
     final title = await NotificationTextCache.get(
         'offline_alarm_title',
-        fallback: "💗 Today's wellness check hasn't been sent");
+        fallback: "💗 Your wellness check hasn't been sent yet");
     final body = await NotificationTextCache.get(
         'offline_alarm_body',
-        fallback: 'Tap this notification once.\n'
-            'Tapping sends your wellness check to your guardian.');
+        fallback: 'Please tap this notification once.\n'
+            'Tapping it sends your wellness check to your guardians.');
     final channelName = await NotificationTextCache.get(
         'noti_channel_name', fallback: 'Anbu Alerts');
 

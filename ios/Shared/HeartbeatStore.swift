@@ -476,10 +476,10 @@ struct HeartbeatStore {
         // 망 문제를 단정했는데, 실제로는 APNs 슬롯 덮어쓰기(§13.5)나 확장 실패로도 뜬다 —
         // 망이 멀쩡한데 "인터넷 연결 확인"이 뜨는 일이 드물지 않다. 이 알림이 참인 조건은
         // 하나뿐이다: **오늘 안부가 아직 나가지 않았다.** 문구도 그것만 말한다.
-        let title = text("offline_alarm_title", fallback: "💗 Today's wellness check hasn't been sent")
+        let title = text("offline_alarm_title", fallback: "💗 Your wellness check hasn't been sent yet")
         let body = text(
             "offline_alarm_body",
-            fallback: "Tap this notification once.\nTapping sends your wellness check to your guardian."
+            fallback: "Please tap this notification once.\nTapping it sends your wellness check to your guardians."
         )
 
         for offset in 0..<offlineRollingDays {
