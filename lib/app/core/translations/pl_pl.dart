@@ -40,7 +40,7 @@ abstract class PlPl {
     // ── Wybor trybu ──
     'mode_select_title': 'Jak chcesz zacząć?',
     'mode_select_subtitle': 'Powiedz, czy będziesz wysyłać znak życia, czy go odbierać',
-    'mode_subject_title': 'Chcę tylko dawać znać, że wszystko u mnie dobrze',
+    'mode_subject_title': 'Chcę tylko dawać znak życia',
     'mode_subject_desc': 'Bardzo prosty ekran, tylko z tym, co potrzebne',
     'mode_subject_button': 'Wysyłaj znak życia →',
     'mode_guardian_title': 'Chcę czuwać nad kilkoma osobami',
@@ -165,7 +165,7 @@ abstract class PlPl {
     'guardian_subject_list': 'Podopieczni',
     'guardian_call_now': 'Zadzwoń',
     'phone_call_failed': 'Nie udało się zadzwonić.',
-    'guardian_confirm_safety': 'Wszystko w porządku',
+    'guardian_confirm_safety': 'Potwierdź',
     'guardian_no_check_history': 'Brak znaku życia',
     'guardian_last_check_now': 'Ostatni znak życia: przed chwilą',
     'guardian_last_check_minutes': 'Ostatni znak życia: @minutes min temu',
@@ -182,7 +182,7 @@ abstract class PlPl {
     'guardian_chart_y_axis_steps': 'Kroki',
     'guardian_chart_x_axis_last_7_days': 'Ostatnie 7 dni',
     'guardian_chart_x_axis_last_30_days': 'Ostatnie 30 dni',
-    'guardian_safety_needed': 'Sprawdź, czy wszystko w porządku',
+    'guardian_safety_needed': 'Trzeba sprawdzić',
     'guardian_error_load_subjects': 'Nie udało się wczytać listy podopiecznych.',
     'guardian_safety_confirmed_name': '@name: potwierdzono, że wszystko w porządku.',
     'guardian_error_clear_alerts': 'Nie udało się wyłączyć alertów.',
@@ -332,7 +332,7 @@ abstract class PlPl {
     // ── Dolna nawigacja opiekuna ──
     'nav_home': 'Start',
     'nav_connection': 'Połączenia',
-    'nav_notification': 'Powiadomienia',
+    'nav_notification': 'Alerty',
     'nav_settings': 'Ustawienia',
 
     // ── Heartbeat ──

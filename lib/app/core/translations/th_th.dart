@@ -182,7 +182,7 @@ abstract class ThTh {
     'guardian_chart_y_axis_steps': 'จำนวนก้าว',
     'guardian_chart_x_axis_last_7_days': '7 วันล่าสุด',
     'guardian_chart_x_axis_last_30_days': '30 วันล่าสุด',
-    'guardian_safety_needed': 'กรุณาตรวจสอบว่าปลอดภัยดีไหม',
+    'guardian_safety_needed': 'ต้องตรวจสอบ',
     'guardian_error_load_subjects': 'โหลดรายชื่อผู้ได้รับการดูแลไม่ได้',
     'guardian_safety_confirmed_name': '@name: ยืนยันแล้วว่าปลอดภัยดี',
     'guardian_error_clear_alerts': 'ยกเลิกการแจ้งเตือนไม่ได้',

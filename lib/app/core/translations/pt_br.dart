@@ -165,7 +165,7 @@ abstract class PtBr {
     'guardian_subject_list': 'Entes queridos',
     'guardian_call_now': 'Ligar agora',
     'phone_call_failed': 'Não foi possível fazer a ligação.',
-    'guardian_confirm_safety': 'Tudo bem',
+    'guardian_confirm_safety': 'Confirmar',
     'guardian_no_check_history': 'Ainda sem check-in',
     'guardian_last_check_now': 'Último check-in: agora',
     'guardian_last_check_minutes': 'Último check-in: há @minutes min',

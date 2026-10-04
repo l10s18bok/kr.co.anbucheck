@@ -165,7 +165,7 @@ abstract class ZhCn {
     'guardian_subject_list': '被守护者列表',
     'guardian_call_now': '立即拨打',
     'phone_call_failed': '无法拨打电话。',
-    'guardian_confirm_safety': '已确认安全',
+    'guardian_confirm_safety': '确认安全',
     'guardian_no_check_history': '暂无确认记录',
     'guardian_last_check_now': '上次确认：刚刚',
     'guardian_last_check_minutes': '上次确认：@minutes分钟前',

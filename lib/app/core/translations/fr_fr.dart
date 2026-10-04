@@ -165,7 +165,7 @@ abstract class FrFr {
     'guardian_subject_list': 'Mes proches',
     'guardian_call_now': 'Appeler',
     'phone_call_failed': 'Impossible de passer l\'appel.',
-    'guardian_confirm_safety': 'Tout va bien',
+    'guardian_confirm_safety': 'Confirmer',
     'guardian_no_check_history': 'Pas encore de nouvelles',
     'guardian_last_check_now': 'Dernières nouvelles : à l\'instant',
     'guardian_last_check_minutes': 'Dernières nouvelles : il y a @minutes min',

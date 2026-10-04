@@ -165,7 +165,7 @@ abstract class ZhTw {
     'guardian_subject_list': '被守護者列表',
     'guardian_call_now': '立即撥打',
     'phone_call_failed': '無法撥打電話。',
-    'guardian_confirm_safety': '已確認安全',
+    'guardian_confirm_safety': '確認安全',
     'guardian_no_check_history': '暫無確認紀錄',
     'guardian_last_check_now': '上次確認：剛剛',
     'guardian_last_check_minutes': '上次確認：@minutes分鐘前',
