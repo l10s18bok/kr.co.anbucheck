@@ -165,7 +165,7 @@ abstract class EsEs {
     'guardian_subject_list': 'Sus seres queridos',
     'guardian_call_now': 'Llamar ahora',
     'phone_call_failed': 'No se pudo hacer la llamada.',
-    'guardian_confirm_safety': 'Confirmar',
+    'guardian_confirm_safety': 'Confirmar seguridad',
     'guardian_no_check_history': 'Aún no hay avisos',
     'guardian_last_check_now': 'Último aviso: ahora mismo',
     'guardian_last_check_minutes': 'Último aviso: hace @minutes min',

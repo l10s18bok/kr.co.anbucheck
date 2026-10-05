@@ -165,7 +165,7 @@ abstract class IdId {
     'guardian_subject_list': 'Orang tersayang',
     'guardian_call_now': 'Telepon sekarang',
     'phone_call_failed': 'Tidak dapat menelepon.',
-    'guardian_confirm_safety': 'Konfirmasi',
+    'guardian_confirm_safety': 'Konfirmasi aman',
     'guardian_no_check_history': 'Belum ada kabar',
     'guardian_last_check_now': 'Kabar terakhir: baru saja',
     'guardian_last_check_minutes': 'Kabar terakhir: @minutes menit lalu',

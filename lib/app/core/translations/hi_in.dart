@@ -165,7 +165,7 @@ abstract class HiIn {
     'guardian_subject_list': 'आपके प्रियजन',
     'guardian_call_now': 'अभी कॉल करें',
     'phone_call_failed': 'कॉल नहीं हो सकी।',
-    'guardian_confirm_safety': 'पुष्टि करें',
+    'guardian_confirm_safety': 'सुरक्षा की पुष्टि करें',
     'guardian_no_check_history': 'अभी कोई खैरियत नहीं',
     'guardian_last_check_now': 'पिछली खैरियत: अभी-अभी',
     'guardian_last_check_minutes': 'पिछली खैरियत: @minutes मिनट पहले',

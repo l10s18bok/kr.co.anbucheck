@@ -165,7 +165,7 @@ abstract class NlNl {
     'guardian_subject_list': 'Uw naasten',
     'guardian_call_now': 'Nu bellen',
     'phone_call_failed': 'Bellen is niet gelukt.',
-    'guardian_confirm_safety': 'Bevestigen',
+    'guardian_confirm_safety': 'Veiligheid bevestigen',
     'guardian_no_check_history': 'Nog geen check-in',
     'guardian_last_check_now': 'Laatste check-in: zojuist',
     'guardian_last_check_minutes': 'Laatste check-in: @minutes min geleden',

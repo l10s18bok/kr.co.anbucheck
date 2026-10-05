@@ -165,7 +165,7 @@ abstract class RuRu {
     'guardian_subject_list': 'Подопечные',
     'guardian_call_now': 'Позвонить',
     'phone_call_failed': 'Не удалось позвонить.',
-    'guardian_confirm_safety': 'Подтвердить',
+    'guardian_confirm_safety': 'Подтвердить безопасность',
     'guardian_no_check_history': 'Отметок пока нет',
     'guardian_last_check_now': 'Последняя отметка: только что',
     'guardian_last_check_minutes': 'Последняя отметка: @minutes мин назад',

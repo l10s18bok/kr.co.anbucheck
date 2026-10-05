@@ -166,7 +166,7 @@ abstract class ItIt {
     'guardian_subject_list': 'Persone care',
     'guardian_call_now': 'Chiama ora',
     'phone_call_failed': 'Impossibile effettuare la chiamata.',
-    'guardian_confirm_safety': 'Conferma',
+    'guardian_confirm_safety': 'Conferma sicurezza',
     'guardian_no_check_history': 'Ancora nessun check-in',
     'guardian_last_check_now': 'Ultimo check-in: adesso',
     'guardian_last_check_minutes': 'Ultimo check-in: @minutes min fa',

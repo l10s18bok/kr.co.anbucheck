@@ -165,7 +165,7 @@ abstract class PlPl {
     'guardian_subject_list': 'Podopieczni',
     'guardian_call_now': 'Zadzwoń',
     'phone_call_failed': 'Nie udało się zadzwonić.',
-    'guardian_confirm_safety': 'Potwierdź',
+    'guardian_confirm_safety': 'Potwierdź bezpieczeństwo',
     'guardian_no_check_history': 'Brak znaku życia',
     'guardian_last_check_now': 'Ostatni znak życia: przed chwilą',
     'guardian_last_check_minutes': 'Ostatni znak życia: @minutes min temu',

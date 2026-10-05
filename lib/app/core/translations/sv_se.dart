@@ -165,7 +165,7 @@ abstract class SvSe {
     'guardian_subject_list': 'Dina närstående',
     'guardian_call_now': 'Ring nu',
     'phone_call_failed': 'Det gick inte att ringa.',
-    'guardian_confirm_safety': 'Bekräfta',
+    'guardian_confirm_safety': 'Bekräfta säkerhet',
     'guardian_no_check_history': 'Ingen incheckning än',
     'guardian_last_check_now': 'Senaste incheckning: nyss',
     'guardian_last_check_minutes': 'Senaste incheckning: för @minutes min sedan',

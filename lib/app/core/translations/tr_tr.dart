@@ -165,7 +165,7 @@ abstract class TrTr {
     'guardian_subject_list': 'Yakınlarınız',
     'guardian_call_now': 'Hemen ara',
     'phone_call_failed': 'Arama yapılamadı.',
-    'guardian_confirm_safety': 'Onayla',
+    'guardian_confirm_safety': 'Güvende olduğunu onayla',
     'guardian_no_check_history': 'Henüz haber yok',
     'guardian_last_check_now': 'Son haber: az önce',
     'guardian_last_check_minutes': 'Son haber: @minutes dk önce',
