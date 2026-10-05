@@ -166,7 +166,7 @@ abstract class DeDe {
     'guardian_subject_list': 'Verbundene Personen',
     'guardian_call_now': 'Jetzt anrufen',
     'phone_call_failed': 'Anruf nicht möglich.',
-    'guardian_confirm_safety': 'Bestätigen',
+    'guardian_confirm_safety': 'Sicher bestätigt',
     'guardian_no_check_history': 'Noch kein Lebenszeichen',
     'guardian_last_check_now': 'Zuletzt: gerade eben',
     'guardian_last_check_minutes': 'Zuletzt: vor @minutes Min.',
