@@ -89,9 +89,14 @@ class GuardianNotificationsPage
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('notifications_today'.tr,
-                      style: AppTextTheme.labelMedium(
-                          color: const Color(0xFF4355B9), fw: FontWeight.w600)),
+                  Expanded(
+                    child: Text('notifications_today'.tr,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextTheme.labelMedium(
+                            color: const Color(0xFF4355B9),
+                            fw: FontWeight.w600)),
+                  ),
                   IconButton(
                     icon: Icon(Icons.help_outline_rounded,
                         size: 24.w,

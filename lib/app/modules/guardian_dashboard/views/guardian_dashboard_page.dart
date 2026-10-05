@@ -121,11 +121,15 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             color: const Color(0xFFE65100),
                           ),
                           SizedBox(width: 6.w),
-                          Text(
-                            'guardian_subscription_expired'.tr,
-                            style: AppTextTheme.bodyMedium(
-                              color: const Color(0xFFE65100),
-                              fw: FontWeight.w700,
+                          Expanded(
+                            child: Text(
+                              'guardian_subscription_expired'.tr,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextTheme.bodyMedium(
+                                color: const Color(0xFFE65100),
+                                fw: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ],
