@@ -182,6 +182,7 @@ lib/
    - 앱 이름 브랜드 규칙: 한국어만 "안부", 나머지 19개 언어는 "Anbu"
      - ⚠️ **예외 1개**: `app_guardian_title`(보호자 대시보드 헤더)은 **한국어도 영문** `Anbu Guardian`이다. 브랜드 노출 목적의 의도된 예외이며 "번역 누락"으로 보고 되돌리지 말 것. 사용처는 그 헤더 한 곳뿐이고 averic-lab 추출 키 목록에도 없어 웹사이트 영향이 없다
    - 하드코딩 한글 텍스트 금지 — 반드시 `'key'.tr` 사용
+   - 예외: 아랍어 복수형 변형 키(`guardian_last_check_*_one/_two/_many/_other`)는 `ar_sa.dart`에만 있다(`NumberText.trAr`). 코드로 `라벨: 값`을 조합할 때는 `labelSeparator()` 사용. 상세는 `.claude/translation_glossary.md` §3
 
 ## 디자인 시스템
 

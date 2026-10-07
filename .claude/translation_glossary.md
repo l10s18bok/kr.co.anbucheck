@@ -34,3 +34,17 @@
 - G+S 라벨: `見守る側・見守られる側`. 앱 제목: `Anbu 見守り`
 - 금지: `見守り人`(지자체 자원봉사자 용례), `見守り対象者`(행정 문서체). 근거는 웹 용례 + GPT 의견이며 **일본어 원어민 확인은 받지 못했다**
 
+## 3. 코드로 조합하는 문장 규칙 (2026-10-07)
+
+번역 값이 아니라 **코드가 조합하는 곳**의 언어별 처리다. 새로 조합 코드를 넣을 때 같은 곳을 쓴다.
+
+| 대상 | 위치 | 규칙 |
+|---|---|---|
+| 천 단위 숫자 | `NumberText.format` | de·es·it·nl·pt·tr·id·vi `.` / fr·ru·pl·sv 공백 / 그 외 `,`. 서버 `i18n/messages.py` `format_number`와 같은 표. 차트 눈금도 이걸 쓴다 |
+| 단수형 | `NumberText.tr(key, param, n)` | `n==1`이면 `<key>_one`. **`_one` 키가 없는 키로 부르면 키 이름이 화면에 나온다** — 키가 있는 곳에만 쓴다 |
+| 아랍어 복수형 | `NumberText.trAr` | 1 `_one` / 2 `_two` / 3~10 기본 / 11~99 `_many` / 100+ `_other`. 아랍어 파일에만 키가 있다(**CLAUDE.md 규칙 8의 의도된 예외**). 컨트롤러 `_formatLastSeen`이 아랍어일 때만 이 경로를 탄다 |
+| `라벨: 값` 구분자 | `labelSeparator({koSpaced})` (`core/utils/label_separator.dart`) | fr `\u00a0: `, ja·zh 전각 `：`, 그 외 `: `. 한국어는 활동량·마지막 안부 확인이 ` : `(영상 확정본), 등급 카운터는 `: ` |
+
+확인된 사실: 폴란드어 `dn.`·`godz.`, 러시아어 `дн.`·`ч`, 이탈리아어 `h`는 표준 약어라 숫자와 무관하게 맞고, 힌디어 `1 घंटे पहले`는 후치사 때문에 oblique 형태가 맞다 — 고치지 말 것.
+앱은 아랍어에서 이미 좌우 반전된다(`DefaultWidgetsLocalizations`가 RTL 처리). 빠진 것은 `flutter_localizations`(시각 선택기 등 Material 위젯 문구가 영어로 나옴)뿐이다.
+
