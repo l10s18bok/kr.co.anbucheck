@@ -45,4 +45,24 @@ class NumberText {
     final k = n == 1 ? '${key}_one' : key;
     return k.trParams({...extra, param: format(n)});
   }
+
+  /// 아랍어 복수형(CLDR)으로 번역 키를 고른다 — 1 `_one` / 2 `_two` / 3~10 기본 키 /
+  /// 11~99 `_many` / 그 외(100 이상) `_other`. `_other`가 없는 키(분·시간)는 n이 100을
+  /// 넘지 않으므로 호출부가 쓰지 않는다.
+  static String trAr(String key, String param, int n) {
+    final r = n % 100;
+    final suffix = n == 1
+        ? '_one'
+        : n == 2
+            ? '_two'
+            : (r >= 3 && r <= 10)
+                ? ''
+                : (r >= 11)
+                    ? '_many'
+                    : '_other';
+    return '$key$suffix'.trParams({param: format(n)});
+  }
+
+  /// "N분/시간/일 전" 문장 — 아랍어만 복수형 선택, 나머지 언어는 [tr](일수) 또는 기존 키 그대로.
+  static bool get isArabic => Get.locale?.languageCode == 'ar';
 }

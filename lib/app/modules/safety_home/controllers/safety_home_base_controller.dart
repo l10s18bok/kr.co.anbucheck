@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/label_separator.dart';
 import 'dart:io';
 
 import 'package:battery_plus/battery_plus.dart';
@@ -210,7 +211,7 @@ abstract class SafetyHomeBaseController extends BaseController
       case 'reported':
         final date = lastHeartbeatDate;
         if (date.isNotEmpty) {
-          return '${'subject_home_check_title_last'.tr} : $date';
+          return '${'subject_home_check_title_last'.tr}${labelSeparator(koSpaced: true)}$date';
         }
         return 'subject_home_check_title_last'.tr;
       case 'pending':

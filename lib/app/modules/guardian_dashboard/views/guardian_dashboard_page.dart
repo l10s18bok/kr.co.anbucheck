@@ -13,6 +13,7 @@ import 'package:anbucheck/app/core/widgets/banner_ad_widget.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/app/core/utils/number_text.dart';
+import 'package:anbucheck/app/core/utils/label_separator.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
 class GuardianDashboardPage extends GetView<GuardianDashboardController> {
@@ -242,7 +243,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             .map(
                               (e) => _LegendDot(
                                 color: colors[e.key]!,
-                                label: '${labels[e.key]}: ${e.value}',
+                                label: '${labels[e.key]}${labelSeparator()}${e.value}',
                               ),
                             )
                             .toList(),
@@ -910,7 +911,7 @@ class _StepsBarChart extends StatelessWidget {
 
   /// 1234567 → "1,234,567" (천단위 쉼표, 로케일 의존성 없이 구현)
   String _formatSteps(int value) {
-    return value.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (m) => '${m[1]},');
+    return NumberText.format(value);
   }
 }
 

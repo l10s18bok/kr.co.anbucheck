@@ -24,6 +24,7 @@ import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dar
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/app/core/utils/number_text.dart';
+import 'package:anbucheck/app/core/utils/label_separator.dart';
 
 /// 보호자 대시보드 컨트롤러
 /// PRD 7.6: 대상자 목록, 상태 모니터링, 알림 레벨 표시
@@ -498,6 +499,11 @@ class GuardianDashboardController extends BaseController
     if (dt == null) return 'guardian_no_check_history'.tr;
     final diff = DateTime.now().difference(dt);
     if (diff.inMinutes < 1) return 'guardian_last_check_now'.tr;
+    if (NumberText.isArabic) {
+      if (diff.inHours < 1) return NumberText.trAr('guardian_last_check_minutes', 'minutes', diff.inMinutes);
+      if (diff.inHours < 24) return NumberText.trAr('guardian_last_check_hours', 'hours', diff.inHours);
+      return NumberText.trAr('guardian_last_check_days', 'days', diff.inDays);
+    }
     if (diff.inHours < 1) return 'guardian_last_check_minutes'.trParams({'minutes': diff.inMinutes.toString()});
     if (diff.inHours < 24) return 'guardian_last_check_hours'.trParams({'hours': diff.inHours.toString()});
     return NumberText.tr('guardian_last_check_days', 'days', diff.inDays);
@@ -751,7 +757,7 @@ class SubjectStatus {
 /// [SubjectStatus.activityLabelFor]와 [내 걸음수] 다이얼로그가 공유한다 —
 /// 본인에게는 대상자 카드 같은 경고 등급 개념이 없어 등급 분기 없이 이 함수만 쓴다.
 String activityLabelFromSteps(List<int?> steps) {
-  final prefix = '${'guardian_activity_prefix'.tr} : ';
+  final prefix = '${'guardian_activity_prefix'.tr}${labelSeparator(koSpaced: true)}';
   final valid = steps.whereType<int>().toList();
   if (valid.length < 3) {
     return '$prefix${'guardian_activity_collecting'.tr}';
