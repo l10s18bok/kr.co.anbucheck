@@ -177,6 +177,7 @@ lib/
 6. Freezed 모델은 `abstract class`로 선언
 7. 모듈 생성 후 `flutter analyze` 실행
 8. **다국어 번역 필수** — UI에 새 문자열 추가·변경 시 반드시 20개 언어 번역 파일에 동시 반영
+   - ⚠️ **번역을 새로 쓰거나 고칠 때(앱·서버 `i18n/messages.py`·홈페이지·쇼츠 공통) 먼저 `.claude/translation_glossary.md`를 읽는다** — 언어별 안부·대상자·보호자 용어, 금지어(신호·후견·건강검진 계열), 경어, 숫자·복수형 규칙의 유일한 기준이다. 용어를 바꾸면 그 파일을 먼저 고친다
    - 번역 파일: `lib/app/core/translations/` 아래 20개 파일
    - 대상 언어: ko_KR, en_US, ja_JP, zh_CN, zh_TW, de_DE, fr_FR, es_ES, it_IT, nl_NL, pt_BR, ru_RU, ar_SA, tr_TR, pl_PL, vi_VN, th_TH, sv_SE, hi_IN, id_ID
    - 앱 이름 브랜드 규칙: 한국어만 "안부", 나머지 19개 언어는 "Anbu"
