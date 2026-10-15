@@ -124,3 +124,43 @@ manual_report·auto_report·battery_low·emergency), `push_alert_cleared_body` �
 - tr: "hal hatır"는 관용구(sormak)뿐, 앱 명사 사례 없음 → haber / ar: 기사·앱 설명 "الاطمئنان", "طمّنا عليك"는 구어·주체 모호
 - th: "สบายดี" 상태 기록, ผู้ดูแล / vi: người thân, xác nhận an toàn / hi: 매체 "खैर खबर/हालचाल"(खैरियत 계열)
 - ja(2026-10-07 교체): 見守る方/見守る側 — 웹 용례 + GPT 의견. 일본어 원어민 확인은 받지 못했다(§2 일본어 호칭 규칙).
+
+## 9. 독거·고독사 표현 (2026-10-13, iOS 설명 둘째 문단)
+
+한국어 iOS 설명에 있는 "독거노인·1인 가구의 생존 확인과 고독사 예방이 걱정되는 분께…" 문단을 19개 언어로 옮길 때 쓴 현지어다.
+**위치**: `스토어 앱 등록 정보/ios/<언어>.txt`의 [설명], "걱정과 시간을 아껴 드립니다" 문단 바로 뒤. **안드로이드 설명에는 넣지 않았다**(사용자 결정 — iOS 심사 결과를 보고 판단). CLAUDE.md의 스토어 문구 서술은 심사 결과가 나오면 고친다.
+
+### 규칙
+
+- **"걱정되는 분께"의 서술형만 쓴다.** "고독사를 막아 줍니다"류 약속은 쓰지 않는다(CLAUDE.md 「노출 우선 문구 정책」의 금지 항목 — 사실과 다른 약속).
+- **다른 앱 이름·바이럴 사례를 쓰지 않는다**: 死了么·Are You Dead·Demumu·Snug 등. 검색하면 결과가 이 사례로 도배되므로 현지어 용어 조사 때 주의한다.
+- 안부·보호자 명사는 §2 표를 그대로 쓴다(문단 안에서 새 용어를 만들지 않는다).
+- 생존 확인(`생존확인`)은 번역하지 않았다 — "check-in/안부"로 이미 표현되고, 영어 survival check 같은 직역은 부자연스럽다.
+- App Store는 설명을 검색 색인에 쓰지 않는다(제목·부제·키워드가 색인). 이 문단은 읽는 사람을 위한 것이므로 **키워드 나열로 바꾸지 말고** 자연스러운 문장을 유지한다.
+
+### 언어별 표현
+
+| 로케일 | 독거 고령자 / 혼자 사는 사람 | 고독사(혼자 죽음) | 근거 |
+|---|---|---|---|
+| ko | 독거노인·1인 가구 | 고독사 | 원문 |
+| en | older people / those who live alone | dying alone without anyone noticing | 기사·앱 설명 다수 ("die alone") |
+| ja | 独居の高齢者・一人暮らし | 孤独死 | **현지 확인**: 孤独死·孤立死·独居老人·一人暮らし 高齢者 (自治体·ニュース) |
+| zh_CN | 独居老人 | 孤独死 … 无人知晓 | 보도에 "孤独死事件"·独居老人. 空巢老人은 "자녀가 떠난 노인"이라 독거와 같지 않아 쓰지 않았다 |
+| zh_TW | 獨居長者 | 孤獨死 | **현지 확인**: 台灣媒體(獨居長者·孤獨死) |
+| de | alleinlebende Senioren / Menschen, die allein leben | einsam und unbemerkt sterben | **현지 확인**: "einsam sterben"(Wien zeigt Trend zum einsamen Sterben), "wochenlang unbemerkt tot" |
+| fr | personne âgée vivant seule | mort solitaire passée inaperçue | **현지 확인**: Petits Frères des Pauvres "mort solitaire" 연례 보고 |
+| es | personas mayores que viven solas | morir solo sin que nadie lo note | 기사: "morir solos en sus hogares", "Voy a morir solo" |
+| it | anziani che vivono da soli | morire da solo senza che nessuno se ne accorga | 기사: "anziani che vivono da soli", "morire da soli" |
+| pt_BR | idosos que moram sozinhos | morrer sozinho sem ninguém perceber | 기사: "mortes solitárias", "idosos que moram sozinhos" |
+| nl | alleenwonende ouderen | alleen en onopgemerkt overlijden | "alleenwonende ouderen"는 확인. 죽음 쪽은 현지 기사에서 직접 확인하지 못함(**추정**) |
+| ru | пожилые люди, которые живут одни | умереть в одиночестве | 기사: "Умру в одиночестве…", MSD "Одиноко проживающие пожилые люди" |
+| pl | seniorzy mieszkający samotnie | umrzeć w samotności, a nikt się nie dowie | 기사 제목 "Śmierć w samotności"(1건), "samotni seniorzy" |
+| sv | ensamboende äldre | dö ensam | 기사: "ingen skall behöva dö i ensamhet", "döda och bortglömda" |
+| tr | yalnız yaşayan yaşlılar | kimse fark etmeden yalnız ölmek | "yalnız yaşayan yaşlı"는 확인. 죽음 표현은 **추정**(현지 기사는 kodokushi 설명 위주) |
+| ar | كبار السن الذين يعيشون بمفردهم | أن يموت وحيدًا دون أن يعلم به أحد | MSD(كبار السن الذين يعيشون لوحدهم), 기사 "وفاة المسنين وحيدين" |
+| hi | अकेले रहने वाले बुज़ुर्ग | किसी की अकेले मौत हो जाए और किसी को पता न चले | **추정** — 힌디어 현지 용례를 검색에서 확인하지 못했다. 원어민 확인 필요 |
+| vi | người cao tuổi sống một mình | chết cô độc | **현지 확인**: "chết cô độc"·"chết trong cô đơn"(VOH·Viettimes) |
+| th | ผู้สูงอายุที่อยู่ลำพัง | เสียชีวิตอย่างโดดเดี่ยว | **현지 확인**: Thai PBS "การตายอย่างโดดเดี่ยว"·"ผู้สูงอายุที่อยู่ลำพัง", Bangkok Biz |
+| id | lansia yang tinggal sendiri | meninggal sendirian | 기사(detik): "meninggal sendirian", "mati dalam sepi" |
+
+"현지 확인"은 해당 언어 매체·기관이 그 표현을 실제로 쓴 것을 검색으로 봤다는 뜻이고, **원어민 검수는 받지 않았다**. 표에서 **추정**이라 적은 칸(nl 죽음, tr 죽음, hi 전체)은 검색에서 직접 근거를 못 찾았으므로 다음 검수 때 우선 확인한다.
