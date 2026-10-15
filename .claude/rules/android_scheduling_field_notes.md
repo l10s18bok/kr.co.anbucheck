@@ -331,6 +331,19 @@ one-off 이름이 `heartbeat_scheduled_<yyyy-MM-dd>`라, **이름만 보고 상�
 
 ---
 
+### ⚠️ `dumpsys jobscheduler` 목록에 없다고 "WorkManager work가 없다"고 단정하지 말 것 (2026-10-15)
+
+2026-10-15 삼성 진단에서 `JOB #u0a1227`이 one-off 1개(#1082)뿐인 것을 보고 "periodic이 사라졌다"고
+보고했으나 **틀렸다.** 그날 19:46 알람이 프로세스를 띄우자 `src=periodic`·`src=one-off`·`src=alarm`
+워커 3개가 모두 실행됐다 — periodic은 WorkManager DB에 살아 있었다.
+
+- WorkManager는 자기 DB가 원본이고 JobScheduler job은 그 사본이다. **앱 프로세스가 없으면 사본이 빠져
+  있을 수 있다.** 프로세스가 뜰 때 `ForceStopRunnable`이 DB와 JobScheduler를 다시 맞춘다.
+- 쿼터(`WITHIN_QUOTA`)·Doze에 막힌 job은 목록에 `Unsatisfied`로 보이거나 아예 안 보일 수 있다.
+- 따라서 "목록에 없다"는 **"JobScheduler에 등록돼 있지 않다"까지만** 말한다. periodic 존재 여부의
+  판정은 `REQUEST_DIAGNOSTICS`(프로세스를 띄워 쿼터 세션을 쓴다) 또는 **실제 `HeartbeatWorker fire src=periodic` 로그**로만 한다.
+- 보고할 때도 "없다"가 아니라 "JobScheduler 목록에서 보이지 않는다(WorkManager DB는 미확인)"로 쓴다.
+
 ### periodic flex 실측 — `flexInterval` 누락의 서명 (2026-08-20)
 
 `registerPeriodicTask`에 `flexInterval`을 넘기지 않으면 플러그인 기본값 5분
