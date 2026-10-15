@@ -102,6 +102,22 @@ class HeartbeatService {
   final _tokenDs      = TokenLocalDatasource();
   final _battery      = Battery();
 
+  /// [execute] 진입부터의 경과 — `HeartbeatSend: BEGIN`의 `t=` 진단 전용.
+  final _execWatch    = Stopwatch();
+
+  /// 전송 없이 끝나는 종료 경로를 릴리스 로그로 남긴다 (`HeartbeatSend: SKIP …`).
+  ///
+  /// 이 경로들은 `debugPrint`만 있었고 릴리스에서는 그것이 꺼져 있어, 워커가 떠도
+  /// **전송 바이트 0 · `send_failed` 알림 없음**으로 끝나 원인을 가를 수 없었다
+  /// (2026-10-14 실측: 19:36 알람 창 91초·20:30 FCM 창·화면 켜짐 구간 모두에서 앱 트래픽 0).
+  /// OK/FAIL과 같은 태그를 써서 `grep HeartbeatSend` 한 번으로 한 사이클의 결말이 다 보이게 한다.
+  /// 판정에는 쓰지 않는다.
+  static Future<void> _logSkip(String reason, {String? key}) => ScreenState.log(
+        'HeartbeatSend',
+        'SKIP src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
+            'reason=$reason key=${key ?? "-"}',
+      );
+
   /// heartbeat 1회 실행
   /// [manual] 대상자가 직접 버튼을 눌러 전송한 경우 true
   /// [recovery] 예약시각 이전 "회복 전송"인 경우 true — 전날 미전송 갭이 있을 때
@@ -126,12 +142,19 @@ class HeartbeatService {
     bool recovery = false,
     bool? isInteractiveAtTrigger,
   }) async {
-    if (_busy) return false;
+    if (_busy) {
+      await _logSkip('busy');
+      return false;
+    }
     _busy = true;
+    _execWatch.start();
     try {
       final deviceId    = await _tokenDs.getDeviceId();
       final deviceToken = await _tokenDs.getDeviceToken();
-      if (deviceId == null || deviceToken == null) return false;
+      if (deviceId == null || deviceToken == null) {
+        await _logSkip('no-credentials');
+        return false;
+      }
 
       if (recovery) {
         // ★ 회복 전송 **전에 지난 날짜 보류 메모를 먼저 비운다.**
@@ -200,6 +223,7 @@ class HeartbeatService {
       final lastKey = await _tokenDs.getLastScheduledKey();
       if (lastKey == scheduledKey) {
         debugPrint('[HeartbeatService] 이미 전송 완료 — 스킵 ($scheduledKey)');
+        await _logSkip('already-sent', key: scheduledKey);
         return false;
       }
 
@@ -207,13 +231,33 @@ class HeartbeatService {
       // TTL 30초 초과한 stale 락은 tryAcquire 내부에서 일괄 삭제되므로 crashed
       // isolate가 남긴 락도 새 진입자가 이어받을 수 있다.
       lockAcquired = await _lockDs.tryAcquire(scheduledKey);
-      if (!lockAcquired) return false;
+      if (!lockAcquired) {
+        await _logSkip(_lockDs.lastSkipReason ?? 'lock', key: scheduledKey);
+        return false;
+      }
     }
 
     try {
       final timestamp    = now.toUtc().toIso8601String();
       final batteryLevel = await _getBatteryLevel();
+      final stepsWatch   = Stopwatch()..start();
       final stepsDelta   = await _getStepsDelta();
+      stepsWatch.stop();
+
+      // ★ 전송 직전 한 줄 — 워커가 **어디서 멈췄는지** 가르는 경계다.
+      // SKIP/OK/FAIL은 함수가 끝까지 실행돼 빠져나갈 때만 찍히므로, 실행 도중 멈추거나
+      // 죽으면 아무것도 남지 않는다(2026-10-14: job 6분 실행·앱 트래픽 0·실패 알림 없음).
+      //   `→ execute` 뒤에 BEGIN 없음      → 보류 큐·락·배터리·걸음수 단계에서 멈춤
+      //   BEGIN 있고 OK/FAIL 없음          → 네트워크 시도 중 멈춤
+      // `t=`는 execute 진입부터의 경과, `stepsMs=`는 걸음수 조회 시간(33초 사례 기준선).
+      if (!manual) {
+        await ScreenState.log(
+          'HeartbeatSend',
+          'BEGIN src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
+              'key=$scheduledKey t=${_execWatch.elapsedMilliseconds}ms '
+              'stepsMs=${stepsWatch.elapsedMilliseconds} steps=${stepsDelta ?? "-"}',
+        );
+      }
 
       // suspicious 판정 (manual 제외 자동 경로):
       //   1) steps > 0                     → false (걸음 = 활동 증거)
@@ -277,14 +321,18 @@ class HeartbeatService {
     final today = formatYmd(now);
 
     // 당일 회복 전송 이미 완료 → 스킵
+    final recoveryKey = 'recovery_$today';
     if (await _tokenDs.getLastRecoveryDate() == today) {
       debugPrint('[HeartbeatService] 회복 전송 이미 완료 — 스킵 ($today)');
+      await _logSkip('recovery-done', key: recoveryKey);
       return false;
     }
 
     // cross-isolate 원자 락 (회복 전용 키). 동시 발화한 두 isolate 중 하나만 통과.
-    final recoveryKey = 'recovery_$today';
-    if (!await _lockDs.tryAcquire(recoveryKey)) return false;
+    if (!await _lockDs.tryAcquire(recoveryKey)) {
+      await _logSkip(_lockDs.lastSkipReason ?? 'lock', key: recoveryKey);
+      return false;
+    }
 
     try {
       final batteryLevel = await _getBatteryLevel();
@@ -315,10 +363,20 @@ class HeartbeatService {
           return true;
         } catch (e) {
           debugPrint('[HeartbeatService] 회복 전송 실패 (시도 $attempt): $e');
+          final unreachable = e is HeartbeatSendException && e.isUnreachable;
           // pending 큐 미사용 — 다음 fire/정시 전송이 회복한다.
-          if (attempt == 3 || !DateTime.now().isBefore(deadline)) return false;
+          if (attempt == 3 || !DateTime.now().isBefore(deadline)) {
+            // 회복 전송은 실패 알림을 띄우지 않아 이 줄이 유일한 흔적이다.
+            await ScreenState.log(
+              'HeartbeatSend',
+              'FAIL src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
+                  'recovery=true attempt=$attempt unreachable=$unreachable '
+                  'key=$recoveryKey',
+            );
+            return false;
+          }
           // 연결 자체가 안 되면 백오프가 무의미하다 — 창 예산만 태운다.
-          if (!(e is HeartbeatSendException && e.isUnreachable)) {
+          if (!unreachable) {
             await Future.delayed(Duration(seconds: attempt * 5));
           }
         }
@@ -400,7 +458,14 @@ class HeartbeatService {
         await LocalAlarmService.cancelSendFailed();
         await LocalAlarmService.cancelSubjectSafetyNet();
       }
-    } catch (_) {
+    } catch (e) {
+      // 보류 큐 재전송은 `_sendOrSavePending`을 거치지 않아 실패도 여기서 직접 남긴다.
+      await ScreenState.log(
+        'HeartbeatSend',
+        'FAIL src=${HeartbeatWorkerService.triggerSource ?? "foreground"} '
+            'pending=true unreachable=${e is HeartbeatSendException && e.isUnreachable} '
+            'key=${payload['scheduled_key'] ?? "-"}',
+      );
       // pending 전송 자체는 실패 — 큐는 그대로 남겨 다음 fire에서 재시도.
       // 단 schedule은 반드시 재등록 — oneOff fire-and-not-rescheduled 차단.
       // 실패 경로이므로 periodic은 살려둔다(success: false).

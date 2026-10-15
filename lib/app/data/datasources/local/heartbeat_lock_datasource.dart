@@ -53,7 +53,18 @@ class HeartbeatLockDatasource {
   /// 호출 직전 TTL(30s) 초과한 stale 행을 일괄 삭제해 크래시한 이전 isolate가
   /// 남긴 락을 새 진입자가 이어받을 수 있게 한다. 이 cleanup과 INSERT는 같은
   /// 트랜잭션으로 묶어야 cross-isolate CAS가 깨지지 않는다.
+  /// 직전 [tryAcquire]가 `false`를 반환한 사유 — 진단 로그 전용(판정에 쓰지 말 것).
+  ///
+  /// `false`는 "다른 isolate가 이미 잡았다"(정상 CAS)와 "DB가 잠겨 못 잡았다"를 한 값으로
+  /// 뭉친다. 호출부가 이걸 로그에 실어야 둘을 사후에 가를 수 있다 — 2026-10-14 실측에서
+  /// 워커가 떴는데 전송 바이트 0·실패 알림 없이 끝났고, 이 구분이 없어 원인을 못 좁혔다.
+  ///   - `lock-held`      : UNIQUE 충돌 — 다른 isolate가 같은 키를 이미 잡았다
+  ///   - `lock-busy`      : 트랜잭션이 busy_timeout(5초)을 넘겼다
+  ///   - `lock-open-busy` : DB open 단계에서 busy
+  String? lastSkipReason;
+
   Future<bool> tryAcquire(String scheduledKey) async {
+    lastSkipReason = null;
     final sql.Database db;
     try {
       db = await _open();
@@ -64,6 +75,7 @@ class HeartbeatLockDatasource {
       // 의미이므로 UniqueConstraintError와 동일하게 false 반환으로 처리한다.
       if (_isBusyError(e)) {
         debugPrint('[HeartbeatLock] DB open busy — 스킵 ($scheduledKey)');
+        lastSkipReason = 'lock-open-busy';
         return false;
       }
       rethrow;
@@ -92,6 +104,8 @@ class HeartbeatLockDatasource {
       //   "나는 전송 안 함"을 의미한다.
       if (e.isUniqueConstraintError() || _isBusyError(e)) {
         debugPrint('[HeartbeatLock] 다른 isolate 전송 중 — 스킵 ($scheduledKey)');
+        lastSkipReason =
+            e.isUniqueConstraintError() ? 'lock-held' : 'lock-busy';
         return false;
       }
       rethrow;

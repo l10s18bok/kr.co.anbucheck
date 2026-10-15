@@ -83,7 +83,10 @@ void heartbeatWorkerCallback() {
       // (`FIRED` → `HOLD started` → `src=*` → `HOLD ended`)에서 한 이벤트가 여러 줄로
       // 흩어져 읽기가 깨진다.
       // ⚠️ role 미일치 조기 return과 catch 경로는 이 줄을 남기지 않는다(의도) — 전자는
-      //    대상자가 아닌 기기라 관측 대상이 아니고, 후자는 예외 메시지가 더 정확하다.
+      //    대상자가 아닌 기기라 관측 대상이 아니고, 후자는 catch가 `HeartbeatWorker: error …`
+      //    한 줄을 예외 메시지와 함께 따로 남긴다.
+      // 이 줄 뒤의 결말은 `HeartbeatSend: OK / FAIL / SKIP …` 중 하나로 남는다. `→ execute`
+      // 뒤에 셋 다 없으면 워커가 전송 전에 멈췄거나 죽은 것이다.
       Future<void> logFire(String decision) => ScreenState.log(
             'HeartbeatWorker',
             'fire src=${HeartbeatWorkerService.triggerSource ?? "-"} '
@@ -157,6 +160,13 @@ void heartbeatWorkerCallback() {
       // mutation이 4건 발생하는 부작용을 막고, 단일 책임으로 일원화).
     } catch (e) {
       debugPrint('[HeartbeatWorker] 실행 실패: $e');
+      // 릴리스에서는 위 debugPrint가 꺼져 있어 예외가 통째로 사라진다 — 네이티브 로그로 남긴다.
+      final msg = e.toString();
+      await ScreenState.log(
+        'HeartbeatWorker',
+        'error src=${HeartbeatWorkerService.triggerSource ?? "-"} task=$taskName '
+            '${msg.length > 300 ? msg.substring(0, 300) : msg}',
+      );
     }
     return true;
   });
