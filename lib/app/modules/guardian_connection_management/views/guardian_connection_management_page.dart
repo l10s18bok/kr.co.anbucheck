@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
     show FilteringTextInputFormatter, LengthLimitingTextInputFormatter;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/widgets/resume_replay_mixin.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
@@ -261,8 +264,13 @@ class _SubjectReorderableListState extends State<_SubjectReorderableList> {
         autoScrollerVelocityScalar: 4.0,
         itemBuilder: (_, index) {
           final subject = widget.subjects[index];
-          return _SubjectListTile(
+          return _PopInEntrance(
+            // ReorderableListView는 최상위 자식의 key로 항목을 식별한다.
+            // code 기준 State라 순서를 바꿔도 연출이 다시 재생되지 않는다.
             key: ValueKey(subject.code),
+            index: index,
+            child: _SubjectListTile(
+            key: ValueKey('tile_${subject.code}'),
             index: index,
             alias: subject.alias,
             phone: subject.phone,
@@ -273,8 +281,83 @@ class _SubjectReorderableListState extends State<_SubjectReorderableList> {
             onSave: (newAlias, newPhone) =>
                 widget.onSave(index, newAlias, newPhone),
             onDelete: () => widget.onDelete(index),
+            ),
           );
         },
+      ),
+    );
+  }
+}
+
+/// 목록 진입 연출 — 카드가 아래에서 떠오르며 살짝 커지는(pop-in) 슬라이드+스케일+페이드.
+/// 위에서부터 시차를 두고 재생한다(알림 목록의 좌·우 지그재그와 구분되는 연출).
+/// 시차는 [_maxStaggerIndex]로 제한해 화면 밖 카드 때문에 길어지지 않게 한다.
+class _PopInEntrance extends StatefulWidget {
+  final int index;
+  final Widget child;
+
+  const _PopInEntrance({super.key, required this.index, required this.child});
+
+  @override
+  State<_PopInEntrance> createState() => _PopInEntranceState();
+}
+
+class _PopInEntranceState extends State<_PopInEntrance>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver, ResumeReplayMixin {
+  static const int _maxStaggerIndex = 6;
+  static const Duration _stagger = Duration(milliseconds: 110);
+
+  late final AnimationController _ctrl;
+  late final Animation<double> _curve;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 520),
+    );
+    _curve = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutBack);
+    _play();
+  }
+
+  Timer? _timer;
+
+  /// 처음부터 재생 — 위에서부터 시차를 두고 시작한다.
+  void _play() {
+    _timer?.cancel();
+    _ctrl.value = 0;
+    final i = widget.index > _maxStaggerIndex ? _maxStaggerIndex : widget.index;
+    _timer = Timer(_stagger * i, () {
+      if (mounted) _ctrl.forward();
+    });
+  }
+
+  @override
+  void replayOnResume() => _play();
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // easeOutBack은 1을 넘겨 튀므로 opacity는 0~1로 제한한 별도 곡선을 쓴다.
+    final fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
+    return FadeTransition(
+      opacity: fade,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.3),
+          end: Offset.zero,
+        ).animate(_curve),
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.92, end: 1.0).animate(_curve),
+          child: widget.child,
+        ),
       ),
     );
   }

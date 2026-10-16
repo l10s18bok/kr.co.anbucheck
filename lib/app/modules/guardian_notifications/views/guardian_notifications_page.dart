@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/widgets/resume_replay_mixin.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
@@ -130,7 +133,11 @@ class GuardianNotificationsPage
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ...items.map((item) => _NotificationCard(item: item)),
+                              for (int i = 0; i < items.length; i++)
+                                _ZigZagEntrance(
+                                  index: i,
+                                  child: _NotificationCard(item: items[i]),
+                                ),
                               SizedBox(height: AppSpacing.sp6),
                             ],
                           ),
@@ -270,6 +277,81 @@ class GuardianNotificationsPage
 }
 
 // ─── 알림 카드 ─────────────────────────────────────────────────────────────────
+
+/// 목록 진입 연출 — 카드가 좌·우에서 번갈아(지그재그) 슬라이드+페이드로 들어온다.
+///
+/// 짝수 번째는 왼쪽, 홀수 번째는 오른쪽에서 시작하고 위에서부터 시차를 둔다.
+/// 위치(index) 기준 State라 목록이 갱신(새로고침)돼도 이미 보이던 자리의 카드는
+/// 다시 재생되지 않고, 새로 생긴 자리만 재생된다. 화면 밖 카드의 시차가 길어지지
+/// 않도록 index를 [_maxStaggerIndex]로 제한한다.
+class _ZigZagEntrance extends StatefulWidget {
+  final int index;
+  final Widget child;
+
+  const _ZigZagEntrance({required this.index, required this.child});
+
+  @override
+  State<_ZigZagEntrance> createState() => _ZigZagEntranceState();
+}
+
+class _ZigZagEntranceState extends State<_ZigZagEntrance>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver, ResumeReplayMixin {
+  static const int _maxStaggerIndex = 8;
+  static const Duration _stagger = Duration(milliseconds: 90);
+
+  late final AnimationController _ctrl;
+  late final Animation<double> _curve;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 480),
+    );
+    _curve = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic);
+    _play();
+  }
+
+  Timer? _timer;
+
+  /// 처음부터 재생 — 위에서부터 시차를 두고 시작한다.
+  void _play() {
+    _timer?.cancel();
+    _ctrl.value = 0;
+    final i = widget.index > _maxStaggerIndex ? _maxStaggerIndex : widget.index;
+    _timer = Timer(_stagger * i, () {
+      if (mounted) _ctrl.forward();
+    });
+  }
+
+  @override
+  void replayOnResume() => _play();
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 짝수: 왼쪽(-), 홀수: 오른쪽(+). RTL(아랍어)에서도 화면 기준 좌·우를 유지하려고
+    // 방향에 따라 부호를 맞춘다.
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    final fromLeft = widget.index.isEven != isRtl;
+    final slide = Tween<Offset>(
+      begin: Offset(fromLeft ? -0.35 : 0.35, 0),
+      end: Offset.zero,
+    ).animate(_curve);
+    return FadeTransition(
+      opacity: _curve,
+      child: SlideTransition(position: slide, child: widget.child),
+    );
+  }
+}
+
 
 class _NotificationCard extends StatelessWidget {
   final NotificationEntity item;

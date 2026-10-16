@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:anbucheck/app/core/widgets/resume_replay_mixin.dart';
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -321,6 +322,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             final isHighlighted =
                                 controller.highlightedInviteCode.value == subject.inviteCode;
                             final steps = subject.weeklySteps;
+                            final isActiveCard = controller.currentCardIndex.value == i;
                             return _SubjectCard(
                               key: ValueKey(subject.inviteCode),
                               inviteCode: subject.inviteCode,
@@ -334,6 +336,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                               showChart: isNormal,
                               showActionButtons: !isNormal,
                               isHighlighted: isHighlighted,
+                              isActive: isActiveCard,
                               phone: subject.phone,
                               onCall: () => controller.onCallTapped(subject.inviteCode),
                               onConfirmSafety: () =>
@@ -426,6 +429,9 @@ class _SubjectCard extends StatefulWidget {
   final bool showChart;
   final bool showActionButtons;
   final bool isHighlighted;
+
+  /// PageView에서 현재 보이는 카드인지 — 차트 막대 애니메이션 재생 트리거.
+  final bool isActive;
   final VoidCallback? onCall;
   final VoidCallback? onConfirmSafety;
   final int? batteryLevel;
@@ -456,6 +462,7 @@ class _SubjectCard extends StatefulWidget {
     this.showChart = false,
     this.showActionButtons = false,
     this.isHighlighted = false,
+    this.isActive = true,
     this.onCall,
     this.onConfirmSafety,
     this.batteryLevel,
@@ -630,7 +637,14 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                   _buildFullChartButton(),
                 ],
               ),
-              Expanded(child: _StepsBarChart(steps: widget.steps, isShowing30Days: false)),
+              Expanded(
+                child: _StepsBarChart(
+                  steps: widget.steps,
+                  isShowing30Days: false,
+                  animate: true,
+                  active: widget.isActive,
+                ),
+              ),
             ],
 
             // 경고: 활동 라벨 (왼쪽 정렬, 닉네임-버튼 수직 중앙) + 달력 토글 (정상 카드와 동일 위치)
@@ -744,16 +758,88 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
 /// · null = 등록 전 날짜: 연회색 낮은 막대
 /// · 0    = heartbeat 없음: 연회색 짧은 막대
 /// · >0   = 실제 걸음수. 오늘 막대는 주황(`_todayColor`)으로 강조, 그 외는 파랑(`_chartColor` alpha 0.7)
-class _StepsBarChart extends StatelessWidget {
-  static const Color _todayColor = Color(0xFFFB8C00); // 오늘 강조 (Orange 600)
-
+class _StepsBarChart extends StatefulWidget {
   final List<int?> steps;
   final bool isShowing30Days;
 
-  const _StepsBarChart({required this.steps, required this.isShowing30Days});
+  /// true면 막대가 왼쪽부터 차례로 솟아오른다 — 30일 다이얼로그(대상자 달력 아이콘·[내 걸음수] 공용)에서만 켠다.
+  final bool animate;
+
+  /// animate=true일 때, 이 차트가 화면에 보이는 상태인가. false→true로 바뀔 때마다 처음부터 다시 재생한다
+  /// (대상자 카드 PageView에서 해당 카드가 현재 페이지가 될 때). 다이얼로그는 항상 true.
+  final bool active;
+
+  const _StepsBarChart({
+    required this.steps,
+    required this.isShowing30Days,
+    this.animate = false,
+    this.active = true,
+  });
+
+  @override
+  State<_StepsBarChart> createState() => _StepsBarChartState();
+}
+
+class _StepsBarChartState extends State<_StepsBarChart>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver, ResumeReplayMixin {
+  static const Color _todayColor = Color(0xFFFB8C00); // 오늘 강조 (Orange 600)
+
+  /// 막대 하나가 솟는 구간 / 시작 시차가 퍼지는 구간 (전체 시간 대비 비율, 합 1.0).
+  static const double _riseSpan = 0.4;
+  static const double _staggerSpan = 0.6;
+
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    );
+    if (!widget.animate) {
+      _ctrl.value = 1;
+    } else if (widget.active) {
+      // 다이얼로그 scale 전환(300ms)이 끝난 뒤 시작해야 솟는 모습이 보인다.
+      Future<void>.delayed(const Duration(milliseconds: 300), () {
+        if (mounted && widget.active) _ctrl.forward();
+      });
+    }
+  }
+
+  @override
+  void replayOnResume() {
+    if (widget.animate && widget.active) _ctrl.forward(from: 0);
+  }
+
+  @override
+  void didUpdateWidget(_StepsBarChart old) {
+    super.didUpdateWidget(old);
+    if (!widget.animate) return;
+    if (widget.active && !old.active) {
+      _ctrl.forward(from: 0);
+    } else if (!widget.active && old.active) {
+      _ctrl.value = 0; // 다시 활성화될 때 처음부터 재생되도록 비워 둔다.
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  /// 막대 i의 진행도 0~1 (왼쪽 막대부터 시차를 두고 시작).
+  double _progress(int i, int n) {
+    final start = i / n * _staggerSpan;
+    final t = ((_ctrl.value - start) / _riseSpan).clamp(0.0, 1.0);
+    return Curves.easeOutCubic.transform(t);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final steps = widget.steps;
+    final isShowing30Days = widget.isShowing30Days;
     if (steps.isEmpty) return const SizedBox.shrink();
 
     // 다크모드에서는 진한 파랑이 잘 보이지 않으므로 Cyan으로 전환
@@ -776,7 +862,11 @@ class _StepsBarChart extends StatelessWidget {
 
     final emptyColor = AppColors.textTertiary.withValues(alpha: 0.25);
 
-    return BarChart(
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (context, _) => BarChart(
+      // 매 프레임 값을 직접 넣으므로 fl_chart 자체 보간은 끈다(이중 보간 방지).
+      duration: Duration.zero,
       BarChartData(
         alignment: BarChartAlignment.spaceAround,
         maxY: maxY,
@@ -847,6 +937,10 @@ class _StepsBarChart extends StatelessWidget {
               reservedSize: 16,
               getTitlesWidget: (value, meta) {
                 if (value.toInt() != maxIdx) return const SizedBox.shrink();
+                // 최댓값 막대가 다 솟은 뒤에 라벨을 띄운다.
+                if (_progress(maxIdx, steps.length) < 1) {
+                  return const SizedBox.shrink();
+                }
                 return SideTitleWidget(
                   axisSide: meta.axisSide,
                   fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
@@ -872,7 +966,7 @@ class _StepsBarChart extends StatelessWidget {
                   : [],
               barRods: [
                 BarChartRodData(
-                  toY: _rodHeight(steps[i], maxY),
+                  toY: _rodHeight(steps[i], maxY) * _progress(i, steps.length),
                   width: _rodWidth(steps.length),
                   color: _rodColor(
                     steps[i],
@@ -885,6 +979,7 @@ class _StepsBarChart extends StatelessWidget {
               ],
             ),
         ],
+      ),
       ),
     );
   }
@@ -1032,7 +1127,7 @@ class _StepsChartDialog extends StatelessWidget {
             SizedBox(height: 12.h),
             SizedBox(
               height: 280.h,
-              child: _StepsBarChart(steps: steps, isShowing30Days: true),
+              child: _StepsBarChart(steps: steps, isShowing30Days: true, animate: true),
             ),
           ],
         ),
