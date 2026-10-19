@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/fold_state_service.dart';
@@ -128,7 +129,7 @@ class _SplitShellState extends State<SplitShell> {
       MediaQueryData paneMq(double w) =>
           mq.copyWith(size: Size(w, size.height));
 
-      return Row(
+      final row = Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
@@ -160,6 +161,25 @@ class _SplitShellState extends State<SplitShell> {
                     ),
                   ),
                 ),
+              ),
+            ),
+          ),
+        ],
+      );
+      if (!split) return row;
+      // 두 pane 사이 경계선 — 펼친 화면의 힌지(접힌 선) 위치. 에뮬레이터·일부 기기는 접힌 선을
+      // 그리지 않아 분할이 어디서 나뉘는지 보이지 않는다. 폭을 차지하지 않도록 겹쳐 그린다.
+      return Stack(
+        children: [
+          row,
+          Positioned(
+            left: leftW - 0.5,
+            top: 0,
+            bottom: 0,
+            width: 1,
+            child: IgnorePointer(
+              child: ColoredBox(
+                color: AppColors.outlineVariant.withValues(alpha: 0.6),
               ),
             ),
           ),
