@@ -136,7 +136,17 @@ class _SplitShellState extends State<SplitShell> {
             width: leftW,
             child: SplitLeftScope(
               split: split,
-              child: MediaQuery(data: paneMq(leftW), child: widget.child),
+              // 분할 중 왼쪽(대시보드)의 버튼이 아닌 곳을 탭하면 분할을 풀고 전폭 대시보드로 돌아간다
+              // (홈 탭과 같은 동작 — pane 스택을 비우면 탭 강조도 홈으로 돌아온다).
+              // 버튼·탭바·카드 슬라이드는 자기 제스처가 먼저 이겨 이 탭은 발생하지 않는다.
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: split
+                    ? () => Get.nestedKey(_paneId)?.currentState
+                        ?.popUntil((r) => r.isFirst)
+                    : null,
+                child: MediaQuery(data: paneMq(leftW), child: widget.child),
+              ),
             ),
           ),
           // 접혀 있어도 Navigator는 트리에 유지(Offstage) — 스택 보관.
