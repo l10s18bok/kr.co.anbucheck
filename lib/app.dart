@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:anbucheck/app/core/utils/layout_breakpoints.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,7 @@ class App extends StatelessWidget {
 
   /// 대형 화면(펼친 폴더블·태블릿) 판정 기준 폭. Material 3 window size class의
   /// medium 하한이자 Android가 방향·리사이즈 제한을 무시하기 시작하는 sw600dp와 같다.
-  static const double largeScreenBreakpoint = 600;
+  static const double largeScreenBreakpoint = kLargeScreenBreakpoint;
 
   /// 기준 설계 폭. 이 값 배수로 designSize를 늘려 .w 배율을 낮춘다.
   static const double _baseDesignWidth = 375;

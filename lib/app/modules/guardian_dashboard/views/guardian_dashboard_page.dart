@@ -15,8 +15,13 @@ import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/app/core/utils/number_text.dart';
 import 'package:anbucheck/app/core/utils/label_separator.dart';
+import 'package:anbucheck/app/core/utils/layout_breakpoints.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
+/// 대상자 카드 한 칸(카드 + 오른쪽 여백) 고정 폭 — 폭 ≥ 600dp에서 한 줄 표시 판단용(논리 px, `.w` 아님:
+/// 큰 화면에서 designSize 확대로 `.w`가 늘어나도 카드는 폰 카드와 같은 크기를 유지해야 한다).
+const double _kFixedCardSlotWidth = 348;
+
 class GuardianDashboardPage extends GetView<GuardianDashboardController> {
   const GuardianDashboardPage({super.key});
 
@@ -266,139 +271,168 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               ),
               SizedBox(height: AppSpacing.md),
 
-              // 대상자 카드 슬라이드
+              // 대상자 카드 — 좁은 화면(폰)은 슬라이드, 넓은 화면(폴더블 펼침 등)에서
+              // 고정 크기 카드가 한 줄에 모두 들어가면 한 줄 표시, 넘치면 슬라이드로 폴백.
               Obx(() {
                 final items = controller.subjects;
                 if (items.isEmpty) return const SizedBox.shrink();
 
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 200.h,
-                      child: PageView.builder(
-                        clipBehavior: Clip.none,
-                        padEnds: false,
-                        itemCount: items.length,
-                        controller: PageController(viewportFraction: items.length > 1 ? 0.92 : 1.0),
-                        onPageChanged: (i) => controller.currentCardIndex.value = i,
-                        itemBuilder: (_, i) {
-                          final subject = items[i];
-                          final level = subject.alertLevel == 'info'
-                              ? 'normal'
-                              : subject.alertLevel;
-                          final isNormal = level == 'normal';
+                // 카드 하나를 만든다. [forceActive]는 한 줄 표시(슬라이드가 없어 "현재 카드"
+                // 개념이 없을 때)에서 모든 카드의 차트 진입 애니메이션을 켜기 위한 것.
+                Widget buildCard(int i, {bool forceActive = false}) {
+                final subject = items[i];
+                final level = subject.alertLevel == 'info'
+                    ? 'normal'
+                    : subject.alertLevel;
+                final isNormal = level == 'normal';
 
-                          final statusColor = switch (level) {
-                            'caution' => const Color(0xFFF59E0B),
-                            'warning' => const Color(0xFFE65100),
-                            'urgent' => const Color(0xFFE53935),
-                            _ => const Color(0xFF00685E),
-                          };
-                          final dark = AppColors.isDark;
-                          final bgColor = switch (level) {
-                            'caution' =>
-                              dark
-                                  ? const Color(0xFF2E2E00).withValues(alpha: 0.6)
-                                  : const Color(0xFFFFF9C4).withValues(alpha: 0.6),
-                            'warning' =>
-                              dark
-                                  ? const Color(0xFF4E2000).withValues(alpha: 0.6)
-                                  : const Color(0xFFFFE0B2).withValues(alpha: 0.6),
-                            'urgent' =>
-                              dark
-                                  ? const Color(0xFF4E0000).withValues(alpha: 0.6)
-                                  : const Color(0xFFFFEBEE).withValues(alpha: 0.6),
-                            _ =>
-                              dark
-                                  ? const Color(0xFF0A3A2A).withValues(alpha: 0.5)
-                                  : const Color(0xFFE8F5E9).withValues(alpha: 0.5),
-                          };
-                          final statusLabel = switch (level) {
-                            'caution' => 'guardian_status_caution'.tr,
-                            'warning' => 'guardian_status_warning'.tr,
-                            'urgent' => 'guardian_status_urgent'.tr,
-                            _ => 'guardian_status_confirmed'.tr,
-                          };
+                final statusColor = switch (level) {
+                  'caution' => const Color(0xFFF59E0B),
+                  'warning' => const Color(0xFFE65100),
+                  'urgent' => const Color(0xFFE53935),
+                  _ => const Color(0xFF00685E),
+                };
+                final dark = AppColors.isDark;
+                final bgColor = switch (level) {
+                  'caution' =>
+                    dark
+                        ? const Color(0xFF2E2E00).withValues(alpha: 0.6)
+                        : const Color(0xFFFFF9C4).withValues(alpha: 0.6),
+                  'warning' =>
+                    dark
+                        ? const Color(0xFF4E2000).withValues(alpha: 0.6)
+                        : const Color(0xFFFFE0B2).withValues(alpha: 0.6),
+                  'urgent' =>
+                    dark
+                        ? const Color(0xFF4E0000).withValues(alpha: 0.6)
+                        : const Color(0xFFFFEBEE).withValues(alpha: 0.6),
+                  _ =>
+                    dark
+                        ? const Color(0xFF0A3A2A).withValues(alpha: 0.5)
+                        : const Color(0xFFE8F5E9).withValues(alpha: 0.5),
+                };
+                final statusLabel = switch (level) {
+                  'caution' => 'guardian_status_caution'.tr,
+                  'warning' => 'guardian_status_warning'.tr,
+                  'urgent' => 'guardian_status_urgent'.tr,
+                  _ => 'guardian_status_confirmed'.tr,
+                };
 
-                          return Obx(() {
-                            final isHighlighted =
-                                controller.highlightedInviteCode.value == subject.inviteCode;
-                            final steps = subject.weeklySteps;
-                            final isActiveCard = controller.currentCardIndex.value == i;
-                            return _SubjectCard(
-                              key: ValueKey(subject.inviteCode),
-                              inviteCode: subject.inviteCode,
-                              name: subject.alias,
-                              status: statusLabel,
-                              statusColor: statusColor,
-                              borderColor: statusColor,
-                              backgroundColor: bgColor,
-                              activityLabel: subject.activityLabelFor(steps),
-                              lastCheck: subject.lastCheck,
-                              showChart: isNormal,
-                              showActionButtons: !isNormal,
-                              isHighlighted: isHighlighted,
-                              isActive: isActiveCard,
-                              phone: subject.phone,
-                              onCall: () => controller.onCallTapped(subject.inviteCode),
-                              onConfirmSafety: () =>
-                                  controller.confirmSafety(subject.inviteCode, subject.alias),
-                              batteryLevel: isNormal ? subject.batteryLevel : null,
-                              steps: steps,
-                              onOpenFullChart: () async {
-                                // 중복 오픈 방지 — 로드 대기 중/다이얼로그 열린 동안 재탭 무시.
-                                // 데이터 로드가 느릴 때 두 번 탭하면 다이얼로그가 2개 뜨던 문제 차단.
-                                if (controller.isChartDialogBusy) return;
-                                controller.isChartDialogBusy = true;
-                                try {
-                                  final ok = await controller.loadMonthlyStepsIfNeeded(subject);
-                                  if (!ok) return;
-                                  if (!context.mounted) return;
-                                  // 차트가 작게 시작해 튀어나오는 느낌 — scale(0.7→1.0, easeOutBack) + fade
-                                  final monthly = controller
-                                          .monthlyStepsCache[subject.inviteCode] ??
-                                      const <int?>[];
-                                  await _showStepsChartDialog(
-                                    context,
-                                    title: subject.alias,
-                                    subtitle: subject.activityLabelFor(monthly),
-                                    steps: monthly,
-                                  );
-                                } finally {
-                                  controller.isChartDialogBusy = false;
-                                }
-                              },
-                            );
-                          });
-                        },
-                      ),
-                    ),
+                return Obx(() {
+                  final isHighlighted =
+                      controller.highlightedInviteCode.value == subject.inviteCode;
+                  final steps = subject.weeklySteps;
+                  final isActiveCard =
+                      forceActive || controller.currentCardIndex.value == i;
+                  return _SubjectCard(
+                    key: ValueKey(subject.inviteCode),
+                    inviteCode: subject.inviteCode,
+                    name: subject.alias,
+                    status: statusLabel,
+                    statusColor: statusColor,
+                    borderColor: statusColor,
+                    backgroundColor: bgColor,
+                    activityLabel: subject.activityLabelFor(steps),
+                    lastCheck: subject.lastCheck,
+                    showChart: isNormal,
+                    showActionButtons: !isNormal,
+                    isHighlighted: isHighlighted,
+                    isActive: isActiveCard,
+                    phone: subject.phone,
+                    onCall: () => controller.onCallTapped(subject.inviteCode),
+                    onConfirmSafety: () =>
+                        controller.confirmSafety(subject.inviteCode, subject.alias),
+                    batteryLevel: isNormal ? subject.batteryLevel : null,
+                    steps: steps,
+                    onOpenFullChart: () async {
+                      // 중복 오픈 방지 — 로드 대기 중/다이얼로그 열린 동안 재탭 무시.
+                      // 데이터 로드가 느릴 때 두 번 탭하면 다이얼로그가 2개 뜨던 문제 차단.
+                      if (controller.isChartDialogBusy) return;
+                      controller.isChartDialogBusy = true;
+                      try {
+                        final ok = await controller.loadMonthlyStepsIfNeeded(subject);
+                        if (!ok) return;
+                        if (!context.mounted) return;
+                        // 차트가 작게 시작해 튀어나오는 느낌 — scale(0.7→1.0, easeOutBack) + fade
+                        final monthly = controller
+                                .monthlyStepsCache[subject.inviteCode] ??
+                            const <int?>[];
+                        await _showStepsChartDialog(
+                          context,
+                          title: subject.alias,
+                          subtitle: subject.activityLabelFor(monthly),
+                          steps: monthly,
+                        );
+                      } finally {
+                        controller.isChartDialogBusy = false;
+                      }
+                    },
+                  );
+                });
+                }
 
-                    // 페이지 인디케이터
-                    if (items.length > 1) ...[
-                      SizedBox(height: 10.h),
-                      Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(items.length, (i) {
-                            final isActive = controller.currentCardIndex.value == i;
-                            return AnimatedContainer(
-                              duration: const Duration(milliseconds: 250),
-                              margin: EdgeInsets.symmetric(horizontal: 3.w),
-                              width: isActive ? 20.w : 6.w,
-                              height: 6.w,
-                              decoration: BoxDecoration(
-                                color: isActive
-                                    ? const Color(0xFF4355B9)
-                                    : const Color(0xFF4355B9).withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(3.r),
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    // 분기는 창 폭(MediaQuery)으로 — 폰(<600dp)은 기존 슬라이드 그대로.
+                    final wide = MediaQuery.sizeOf(context).width >= kLargeScreenBreakpoint;
+                    final needed = items.length * _kFixedCardSlotWidth;
+                    if (wide && needed <= constraints.maxWidth) {
+                      return SizedBox(
+                        height: 200.h,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (var i = 0; i < items.length; i++)
+                              SizedBox(
+                                width: _kFixedCardSlotWidth,
+                                child: buildCard(i, forceActive: true),
                               ),
-                            );
-                          }),
+                          ],
                         ),
-                      ),
-                    ],
-                  ],
+                      );
+                    }
+
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 200.h,
+                          child: PageView.builder(
+                            clipBehavior: Clip.none,
+                            padEnds: false,
+                            itemCount: items.length,
+                            controller: PageController(viewportFraction: items.length > 1 ? 0.92 : 1.0),
+                            onPageChanged: (i) => controller.currentCardIndex.value = i,
+                            itemBuilder: (_, i) => buildCard(i),
+                          ),
+                        ),
+
+                        // 페이지 인디케이터
+                        if (items.length > 1) ...[
+                          SizedBox(height: 10.h),
+                          Obx(
+                            () => Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(items.length, (i) {
+                                final isActive = controller.currentCardIndex.value == i;
+                                return AnimatedContainer(
+                                  duration: const Duration(milliseconds: 250),
+                                  margin: EdgeInsets.symmetric(horizontal: 3.w),
+                                  width: isActive ? 20.w : 6.w,
+                                  height: 6.w,
+                                  decoration: BoxDecoration(
+                                    color: isActive
+                                        ? const Color(0xFF4355B9)
+                                        : const Color(0xFF4355B9).withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(3.r),
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ],
+                      ],
+                    );
+                  },
                 );
               }),
               SizedBox(height: AppSpacing.sp6),
