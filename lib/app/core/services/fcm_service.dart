@@ -1,3 +1,5 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
+import 'package:anbucheck/app/core/widgets/split_shell.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -179,6 +181,18 @@ Future<void> _handleNotificationTap(String type,
 /// 경고/정보 알림 공통 라우팅 — 이미 알림 화면이면 스택 유지하고 목록 갱신,
 /// 아니면 알림 화면으로 스택 리셋 (toNamed push 시 dashboard 컨트롤러 중복 이슈 회피)
 void _routeToNotifications() {
+  // 분할 화면(펼친 폴더블): 대시보드를 유지한 채 오른쪽 pane에 연다(셸을 날리지 않는다).
+  if (AppNav.paneActive) {
+    if (SplitPaneState.tab == 2 &&
+        Get.isRegistered<GuardianNotificationsController>()) {
+      try {
+        Get.find<GuardianNotificationsController>().load();
+      } catch (_) {}
+    } else {
+      AppNav.offNamed(AppRoutes.guardianNotifications);
+    }
+    return;
+  }
   if (Get.currentRoute == AppRoutes.guardianNotifications) {
     try {
       Get.find<GuardianNotificationsController>().load();
@@ -193,6 +207,10 @@ void _routeToNotifications() {
 /// permanent로 등록된 GuardianSettingsController는 진입 시 onInit/onResumed에서
 /// _loadSubscription을 호출하므로 별도 refresh 호출 불필요.
 void _routeToGuardianSettings() {
+  if (AppNav.paneActive) {
+    if (SplitPaneState.tab != 3) AppNav.offNamed(AppRoutes.guardianSettings);
+    return;
+  }
   if (Get.currentRoute != AppRoutes.guardianSettings) {
     Get.offAllNamed(AppRoutes.guardianSettings);
   }

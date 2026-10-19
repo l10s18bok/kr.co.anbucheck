@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -114,7 +115,8 @@ class SplashController extends BaseController {
             'auto_report', 'manual_report', 'alert_info',
           };
           if (guardianAlertTypes.contains(pendingFcm)) {
-            Get.toNamed(AppRoutes.guardianNotifications);
+            // 펼친 폴더블이면 대시보드를 유지한 채 오른쪽 pane에, 아니면 기존처럼 push.
+            AppNav.pushFromLaunch(AppRoutes.guardianNotifications);
           } else if (pendingFcm == 'subject_safety_net') {
             // G+S 대상자 본인 안부유도 푸시(서버, Android)로 kill 런치된 경우 —
             // gs_deadman/safety_net 로컬 알림과 동일하게 dashboard를 base로 두고
