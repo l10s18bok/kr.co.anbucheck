@@ -56,6 +56,10 @@ class GuardianDashboardController extends BaseController
 
   /// 구독 활성 여부 — 단일 소스 [SubscriptionService]에 위임(중복 Rx 제거).
   /// 만료 시 대상자 카드·걸음수 그래프 로드를 차단하는 게이트로 사용.
+  /// 광고 자리에 fallback(추가 박스)이 보이는 중인가 — 넓은 화면에서 제목 줄의 작은 추가 버튼을
+  /// 숨기는 데 쓴다(광고 위젯이 알려 줌).
+  final adFallbackShown = false.obs;
+
   RxBool get isSubscriptionActive => _sub.isActive;
 
   // ── G+S (보호자 겸 대상자) 상태 ──

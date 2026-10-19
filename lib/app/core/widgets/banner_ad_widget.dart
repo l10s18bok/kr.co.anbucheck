@@ -19,7 +19,16 @@ import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart
 /// 앱 백그라운드→포그라운드 복귀(resumed) 시점에 광고가 사라짐. 대상자 모드는
 /// plan/is_active 캐시가 채워지지 않거나 false → 항상 광고 표시.
 class BannerAdWidget extends StatefulWidget {
-  const BannerAdWidget({super.key});
+  const BannerAdWidget({super.key, this.fallback, this.onFallbackChanged});
+
+  /// 광고를 보여 줄 수 없을 때(프리미엄 구독 / 동의·권한 거부 / 로드 실패) 같은 자리에 대신
+  /// 보여 줄 위젯. null이면 기존처럼 아무것도 그리지 않는다(폰 레이아웃은 변화 없음).
+  /// 아직 결과가 정해지지 않은 동안(최대 [_pendingTimeoutSeconds]초)은 깜빡임을 막으려고
+  /// 이 위젯도 광고도 그리지 않는다.
+  final Widget? fallback;
+
+  /// [fallback]이 실제로 보이는지 바뀔 때 호출(제목 줄의 작은 추가 버튼을 숨기는 등).
+  final ValueChanged<bool>? onFallbackChanged;
 
   @override
   State<BannerAdWidget> createState() => _BannerAdWidgetState();
@@ -35,9 +44,20 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
 
   final _tokenDs = TokenLocalDatasource();
 
+  /// 광고 시도 결과가 정해지지 않아도 이 시간이 지나면 fallback을 보인다(무기한 빈칸 방지).
+  static const int _pendingTimeoutSeconds = 8;
+
   BannerAd? _bannerAd;
   bool _isLoaded = false;
   bool _hideForPremium = false;
+
+  /// 프리미엄 여부 조회가 끝났는가 — 끝나기 전에는 fallback을 보이지 않는다.
+  bool _premiumChecked = false;
+
+  /// 첫 광고 시도가 실패/차단으로 끝났거나 대기 시간이 지났는가.
+  bool _attemptFinished = false;
+  Timer? _pendingTimer;
+  bool _lastFallbackShown = false;
   int _retryCount = 0;
   Timer? _retryTimer;
 
@@ -46,6 +66,24 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _checkPremium();
+    _pendingTimer = Timer(const Duration(seconds: _pendingTimeoutSeconds), () {
+      if (mounted && !_isLoaded && !_attemptFinished) {
+        setState(() => _attemptFinished = true);
+      }
+    });
+    // 페이지에 다시 들어올 때 이전 fallback 상태가 남아 있지 않게 초기화.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.onFallbackChanged?.call(false);
+    });
+  }
+
+  /// fallback 표시 여부가 바뀌면 build 밖(프레임 뒤)에서 알린다.
+  void _syncFallbackShown(bool shown) {
+    if (shown == _lastFallbackShown) return;
+    _lastFallbackShown = shown;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.onFallbackChanged?.call(shown);
+    });
   }
 
   /// 프리미엄 구독 보호자는 광고 숨김 (PRD-FrontEnd §1.5).
@@ -55,6 +93,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     final isActive = await _tokenDs.getSubscriptionActive();
     final isPremium = plan == 'yearly' && isActive;
     if (!mounted) return;
+    if (!_premiumChecked) setState(() => _premiumChecked = true);
     if (isPremium != _hideForPremium) {
       setState(() => _hideForPremium = isPremium);
       if (isPremium) {
@@ -109,11 +148,18 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
 
     // UMP 동의 확인 — EEA/UK/스위스 사용자가 동의 거부 시 광고 로드 차단.
     // 동의 상태는 사용자 결정이므로 retry하지 않는다.
-    if (!await ConsentInformation.instance.canRequestAds()) return;
+    if (!await ConsentInformation.instance.canRequestAds()) {
+      // 동의 거부 — retry하지 않으므로 여기서 시도 종료로 확정(fallback 표시 가능).
+      if (mounted) setState(() => _attemptFinished = true);
+      return;
+    }
     if (!mounted) return;
 
     final adSize = await AdSize.getAnchoredAdaptiveBannerAdSize(Orientation.portrait, width);
-    if (adSize == null || !mounted) return;
+    if (adSize == null || !mounted) {
+      if (mounted) setState(() => _attemptFinished = true);
+      return;
+    }
 
     _bannerAd = BannerAd(
       adUnitId: AdConfig.bannerAdUnitId,
@@ -141,6 +187,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
           setState(() {
             _bannerAd = null;
             _isLoaded = false;
+            _attemptFinished = true;
           });
           _scheduleRetry();
         },
@@ -165,6 +212,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _retryTimer?.cancel();
+    _pendingTimer?.cancel();
     _bannerAd?.dispose();
     super.dispose();
   }
@@ -172,8 +220,14 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   @override
   Widget build(BuildContext context) {
     if (_hideForPremium || !_isLoaded || _bannerAd == null) {
-      return const SizedBox.shrink();
+      // 프리미엄이거나 광고 시도가 끝났는데 광고가 없으면 fallback. 아직 정해지지 않았으면 빈칸.
+      final showFallback = widget.fallback != null &&
+          _premiumChecked &&
+          (_hideForPremium || _attemptFinished);
+      _syncFallbackShown(showFallback);
+      return showFallback ? widget.fallback! : const SizedBox.shrink();
     }
+    _syncFallbackShown(false);
 
     return SizedBox(
       width: double.infinity,

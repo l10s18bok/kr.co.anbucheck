@@ -289,13 +289,18 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                       ),
                     ),
                     // 새 번역 키 없이 기존 'add_subject_button'(새로운 보호 대상자 추가)을 재사용.
-                    TextButton.icon(
-                      onPressed: controller.goToAddSubject,
-                      icon: const Icon(Icons.add_rounded, size: 20),
-                      label: Text(
-                        'add_subject_button'.tr,
-                        style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
-                      ),
+                    // 광고 자리에 추가 박스가 보이는 동안은 중복이라 숨긴다.
+                    Obx(
+                      () => controller.adFallbackShown.value
+                          ? const SizedBox.shrink()
+                          : TextButton.icon(
+                              onPressed: controller.goToAddSubject,
+                              icon: const Icon(Icons.add_rounded, size: 20),
+                              label: Text(
+                                'add_subject_button'.tr,
+                                style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
+                              ),
+                            ),
                     ),
                   ],
                 )
@@ -492,7 +497,14 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 SizedBox(height: AppSpacing.sp6),
               ],
 
-              const BannerAdWidget(),
+              BannerAdWidget(
+                // 넓은 화면에서만: 광고가 없으면(프리미엄·권한/동의 거부·로드 실패) 같은 자리에
+                // 기존 디자인의 추가 박스(컴팩트)를 보인다. 폰은 fallback 없음 → 기존 동작.
+                fallback: wide
+                    ? AddSubjectButton(onTap: controller.goToAddSubject, compact: true)
+                    : null,
+                onFallbackChanged: (shown) => controller.adFallbackShown.value = shown,
+              ),
               SizedBox(height: AppSpacing.sp6),
             ],
           ),
