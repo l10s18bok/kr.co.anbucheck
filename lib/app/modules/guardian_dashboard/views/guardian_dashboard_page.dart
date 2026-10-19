@@ -21,6 +21,14 @@ import 'package:anbucheck/app/core/services/fold_state_service.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
 /// 폴더블을 접은 상태인가. 서비스가 없거나(테스트 등) 폰이면 false.
+/// 넓은 화면이거나 폴더블 접힘이면 컴팩트 배치.
+/// ⚠️ `wide || _isFolded()`로 쓰면 wide=true에서 단락 평가로 Rx를 읽지 않아 Obx가
+/// "improper use of a GetX" 예외를 던진다 — 항상 접힘 상태를 먼저 읽는다.
+bool _compact(bool wide) {
+  final folded = _isFolded();
+  return wide || folded;
+}
+
 bool _isFolded() =>
     Get.isRegistered<FoldStateService>() &&
     Get.find<FoldStateService>().posture.value == FoldPosture.folded;
@@ -284,7 +292,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 );
               }),
               Obx(() => SizedBox(
-                    height: (wide || _isFolded()) ? AppSpacing.lg : AppSpacing.sp6,
+                    height: _compact(wide) ? AppSpacing.lg : AppSpacing.sp6,
                   )),
 
               // 대상자 리스트 헤더 — 우측에 있던 등급별 카운터는 위 "오늘의 안부 요약"
@@ -293,7 +301,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               // 세로 공간이 부족한 화면(폭 ≥600dp이거나 폴더블을 접은 상태)에서는 추가 박스를
               // 제목 줄의 작은 버튼으로 줄인다. 접힘 상태는 변할 수 있어 Obx로 감싼다.
               Obx(() {
-                final compact = wide || _isFolded();
+                final compact = _compact(wide);
                 if (!compact) {
                   return Text(
                     'guardian_subject_list'.tr,
@@ -522,7 +530,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
 
               // 다른 대상자 추가 버튼 — 넓은 화면은 제목 줄의 작은 버튼으로 대체
               Obx(
-                () => (wide || _isFolded())
+                () => _compact(wide)
                     ? const SizedBox.shrink()
                     : Column(
                         children: [
@@ -537,7 +545,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                   // 세로 공간이 부족한 화면(넓은 화면·폴더블 접힘)에서만: 광고가 없으면
                   // (프리미엄·권한/동의 거부·로드 실패) 같은 자리에 기존 디자인의 추가 박스(컴팩트)를
                   // 보인다. 폰은 fallback 없음 → 기존 동작.
-                  fallback: (wide || _isFolded())
+                  fallback: _compact(wide)
                       ? AddSubjectButton(onTap: controller.goToAddSubject, compact: true)
                       : null,
                   onFallbackChanged: (shown) => controller.adFallbackShown.value = shown,
