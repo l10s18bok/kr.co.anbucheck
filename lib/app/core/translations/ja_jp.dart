@@ -282,14 +282,14 @@ abstract class JaJp {
     'notifications_level_health': '正常',
     'notifications_level_health_desc': '見守られる方の安否がいつもどおり確認できました',
     'notifications_level_caution': '注意',
-    'notifications_level_caution_desc': 'まだ安否が届いていないか、活動記録が検出されていません',
+    'notifications_level_caution_desc': 'まだ安否確認が届いていないか、活動記録が検出されていません',
     'notifications_level_warning': '警告',
-    'notifications_level_warning_desc': '安否が届かない、または活動記録がない状態が続いています',
+    'notifications_level_warning_desc': '安否確認が届かない、または活動記録がない状態が続いています',
     'notifications_level_urgent': '緊急',
     'notifications_level_urgent_desc': '今すぐ確認が必要です',
     'notifications_level_info': '情報',
     'notifications_level_info_desc': '歩数やバッテリー残量の低下など、参考のための通知',
-    'notifications_activity_note': '※ 歩数は、その日の午前0時から安否を送った時刻までの合計です。',
+    'notifications_activity_note': '※ 歩数は、その日の午前0時から安否確認を送った時刻までの合計です。',
 
     // ── 見守り通知設定 ──
     'notification_settings_title': '通知設定',

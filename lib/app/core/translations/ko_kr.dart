@@ -297,14 +297,14 @@ abstract class KoKr {
     'notifications_level_health': '정상',
     'notifications_level_health_desc': '대상자의 안부가 정상적으로 확인됨',
     'notifications_level_caution': '주의',
-    'notifications_level_caution_desc': '아직 안부 신호가 없거나 활동 기록이 감지되지 않아요',
+    'notifications_level_caution_desc': '아직 안부 확인이 없거나 활동 기록이 감지되지 않아요',
     'notifications_level_warning': '경고',
-    'notifications_level_warning_desc': '연속으로 안부 신호가 없거나 활동 기록이 감지되지 않아요',
+    'notifications_level_warning_desc': '연속으로 안부 확인이 없거나 활동 기록이 감지되지 않아요',
     'notifications_level_urgent': '긴급',
     'notifications_level_urgent_desc': '지금 바로 확인이 필요해요',
     'notifications_level_info': '정보',
     'notifications_level_info_desc': '걸음수, 배터리 부족 등 참고용 알림',
-    'notifications_activity_note': '※ 걸음수는 당일 자정(0시)부터 안부 신호 전송 시각까지의 누적 걸음수입니다.',
+    'notifications_activity_note': '※ 걸음수는 당일 자정(0시)부터 안부 확인 전송 시각까지의 누적 걸음수입니다.',
 
     // ── 보호자 알림 설정 ──
     'notification_settings_title': '알림 설정',
