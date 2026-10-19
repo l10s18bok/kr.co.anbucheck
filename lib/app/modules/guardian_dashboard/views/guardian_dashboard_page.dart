@@ -44,9 +44,17 @@ const double _kRoomyHeight = 780;
 bool _isFolded(BuildContext context) {
   // 분할 화면의 왼쪽 pane도 접힘과 같은 컴팩트 배치(폭 절반 · 높이 그대로).
   final inSplit = SplitLeftScope.of(context);
-  final folded = Get.isRegistered<FoldStateService>() &&
-      Get.find<FoldStateService>().posture.value == FoldPosture.folded;
-  return inSplit || folded;
+  final svc = Get.isRegistered<FoldStateService>() ? Get.find<FoldStateService>() : null;
+  // ⚠️ 두 Rx를 항상 읽는다(Obx 안에서 호출되므로 단락 평가로 건너뛰면 안 된다).
+  final folded = svc?.posture.value == FoldPosture.folded;
+  // 기기 종류(폴더블 여부·모델)로 분기하지 않고 창 크기만 본다: 폭 < 600dp 이면서 세로가 폭의
+  // 1.7배 미만인 "폰답지 않게 뭉툭한" 창(Duo 접힘 466×678 등). 폰은 세로가 폭의 1.78배 이상이라 해당 없음.
+  // 자세 값은 신뢰할 수 없다 — iOS는 펼치는 도중 창이 아직 외부 화면 크기인데 halfOpen이 되고
+  // (카드 13px 오버플로우), 안드로이드 접힘은 pose=unknown으로 온다.
+  final size = MediaQuery.sizeOf(context);
+  final squarishNarrow =
+      size.width < kLargeScreenBreakpoint && size.height < size.width * 1.7;
+  return inSplit || folded || squarishNarrow;
 }
 
 /// 대상자 카드 한 칸(카드 + 오른쪽 여백) 고정 폭 — 폭 ≥ 600dp에서 한 줄 표시 판단용(논리 px, `.w` 아님:
