@@ -49,6 +49,17 @@ class SplitShell extends StatefulWidget {
 class _SplitShellState extends State<SplitShell> {
   static const int _paneId = 1;
 
+  /// pane Navigator의 GlobalKey(`Get.nestedKey`)는 앱 전체에서 하나뿐이라, 대시보드 셸이
+  /// 스택에 둘 이상 살아 있으면(예: 대시보드 위에 push된 화면이 offNamed로 교체되며 새 대시보드가
+  /// 생기는 경우) 중복 키 예외가 난다. 한 번에 하나의 셸만 Navigator를 가진다.
+  static final Rxn<Object> _owner = Rxn<Object>();
+
+  void _claimIfFree() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _owner.value == null) _owner.value = this;
+    });
+  }
+
   final _hasRight = false.obs;
   late final _PaneObserver _observer = _PaneObserver(_syncDepth);
 
@@ -59,8 +70,17 @@ class _SplitShellState extends State<SplitShell> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _claimIfFree();
+  }
+
+  @override
   void dispose() {
-    AppNav.paneId = null;
+    if (_owner.value == this) {
+      _owner.value = null;
+      AppNav.paneId = null;
+    }
     super.dispose();
   }
 
@@ -91,10 +111,16 @@ class _SplitShellState extends State<SplitShell> {
       final folded =
           Get.isRegistered<FoldStateService>() &&
           Get.find<FoldStateService>().posture.value == FoldPosture.folded;
-      final capable = size.width >= kLargeScreenBreakpoint && !folded;
+      final foldable = Get.isRegistered<FoldStateService>() &&
+          Get.find<FoldStateService>().isFoldable.value;
+      final isOwner = _owner.value == this;
+      if (_owner.value == null) _claimIfFree();
+      // 폰(폴더블도 아니고 폭 <600dp)은 분할이 불가능하므로 Navigator를 아예 두지 않는다.
+      final needNavigator = isOwner && (foldable || size.width >= kLargeScreenBreakpoint);
+      final capable = size.width >= kLargeScreenBreakpoint && !folded && isOwner;
       final split = capable && _hasRight.value;
       // 빌드 중 상태 변경을 피하려고 값만 대입(Rx 아님).
-      AppNav.paneId = capable ? _paneId : null;
+      if (isOwner) AppNav.paneId = capable ? _paneId : null;
 
       final leftW = split ? size.width / 2 : size.width;
       final rightW = split ? size.width / 2 : 0.0;
@@ -123,12 +149,14 @@ class _SplitShellState extends State<SplitShell> {
                   child: PaneScope(
                     child: MediaQuery(
                       data: paneMq(rightW == 0 ? size.width / 2 : rightW),
-                      child: Navigator(
-                        key: Get.nestedKey(_paneId),
-                        initialRoute: '/',
-                        observers: [_observer],
-                        onGenerateRoute: _onGenerateRoute,
-                      ),
+                      child: needNavigator
+                          ? Navigator(
+                              key: Get.nestedKey(_paneId),
+                              initialRoute: '/',
+                              observers: [_observer],
+                              onGenerateRoute: _onGenerateRoute,
+                            )
+                          : const SizedBox.shrink(),
                     ),
                   ),
                 ),
