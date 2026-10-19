@@ -202,19 +202,21 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               // 남으면 아래에 아무것도 없는 빈 제목이 된다.
               Obx(() {
                 final subjects = controller.subjects;
+                // 표시 순서: 긴급 → 경고 → 주의 → 안전 (대상자 리스트 정렬과 동일)
                 final counts = {
+                  'urgent': subjects.where((s) => s.alertLevel == 'urgent').length,
+                  'warning': subjects.where((s) => s.alertLevel == 'warning').length,
+                  'caution': subjects.where((s) => s.alertLevel == 'caution').length,
                   'normal': subjects
                       .where((s) => s.alertLevel == 'normal' || s.alertLevel == 'info')
                       .length,
-                  'caution': subjects.where((s) => s.alertLevel == 'caution').length,
-                  'warning': subjects.where((s) => s.alertLevel == 'warning').length,
-                  'urgent': subjects.where((s) => s.alertLevel == 'urgent').length,
                 };
-                const colors = {
-                  'normal': Color(0xFF00685E),
-                  'caution': Color(0xFFF59E0B),
-                  'warning': Color(0xFFE65100),
-                  'urgent': Color(0xFFE53935),
+                final colors = {
+                  // 다크 모드에서는 어두운 배경에 묻히지 않도록 안전(초록) 점을 밝게
+                  'normal': AppColors.isDark ? const Color(0xFF2DD4BF) : const Color(0xFF00685E),
+                  'caution': const Color(0xFFF59E0B),
+                  'warning': const Color(0xFFE65100),
+                  'urgent': const Color(0xFFE53935),
                 };
                 final labels = {
                   'normal': 'guardian_status_normal'.tr,
@@ -511,6 +513,15 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
     return Icons.battery_alert_rounded;
   }
 
+  /// 배터리 아이콘 색 — 다크 모드에서는 어두운 배경에서도 눈에 띄도록
+  /// 정상(>30%)은 형광 초록, 부족(≤30%)은 밝은 주황, 매우 부족(≤15%)은 밝은 빨강.
+  Color _getBatteryIconColor(int level) {
+    if (!AppColors.isDark) return _getBatteryColor(level);
+    if (level <= 15) return const Color(0xFFFF4D4D);
+    if (level <= 30) return const Color(0xFFFFA726);
+    return const Color(0xFF39FF14);
+  }
+
   Color _getBatteryColor(int level) {
     if (level <= 15) return const Color(0xFFD32F2F);
     if (level <= 30) return const Color(0xFFFF9800);
@@ -518,6 +529,20 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
   }
 
   /// 30일 전체 차트 다이얼로그를 여는 달력 아이콘 버튼. 정상/경고 카드 공통 사용.
+  /// 주의/경고/긴급 카드의 강조색. 다크 모드에서는 어두운 카드 배경에 묻히지 않도록
+  /// 등급색을 한 단계 밝은 같은 계열로 올린다(라이트 모드는 등급색 그대로).
+  Color get _emphasisColor {
+    if (!AppColors.isDark) return widget.statusColor;
+    if (widget.statusColor == const Color(0xFFF59E0B)) return const Color(0xFFFFD54F);
+    if (widget.statusColor == const Color(0xFFE65100)) return const Color(0xFFFF9E40);
+    if (widget.statusColor == const Color(0xFFE53935)) return const Color(0xFFFF7B72);
+    return widget.statusColor;
+  }
+
+  /// "마지막 확인: 값"의 값 색 — 정상·주의·경고·긴급 카드 공통.
+  Color get _lastCheckValueColor =>
+      Theme.of(context).brightness == Brightness.dark ? Colors.white : const Color(0xFF8B4513);
+
   Widget _buildFullChartButton() {
     if (widget.onOpenFullChart == null) return const SizedBox.shrink();
     return InkWell(
@@ -526,29 +551,52 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
       child: Padding(
         padding: EdgeInsets.all(4.w),
         child: SizedBox(
-          width: 30.w,
-          height: 30.w,
+          width: 22.w,
+          height: 22.w,
+          // 달력 모양: 상단 색 띠(월 표시줄) + 링 2개 + 흰 본문에 날짜 숫자
           child: Stack(
+            clipBehavior: Clip.none,
             alignment: Alignment.center,
             children: [
-              Icon(
-                Icons.calendar_month_rounded,
-                size: 30.w,
-                color: AppColors.textSecondary,
-              ),
               Container(
-                margin: EdgeInsets.only(top: 5.h),
-                color: Colors.white,
-                child: Text(
-                  '30',
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textSecondary,
-                    height: 1,
+                margin: EdgeInsets.only(top: 3.w),
+                // 테두리: 라이트=회색 계열, 다크=해당 카드 등급색
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: AppColors.isDark ? _emphasisColor : const Color(0xFF9E9E9E),
+                    width: 1.5,
                   ),
                 ),
+                child: Column(
+                  children: [
+                    Container(height: 7.w, color: const Color(0xFF4355B9)),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          '30',
+                          style: TextStyle(
+                            fontSize: 9.sp,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF1A1C1C),
+                            height: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              for (final dx in [-7.0, 7.0])
+                Positioned(
+                  top: 0,
+                  left: 11.w + dx.w * 0.7 - 1.w,
+                  child: Container(
+                    width: 2.w,
+                    height: 5.w,
+                    color: const Color(0xFF2E3A8C),
+                  ),
+                ),
             ],
           ),
         ),
@@ -592,13 +640,15 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                         Icon(
                           _getBatteryIcon(widget.batteryLevel!),
                           size: 18.w,
-                          color: _getBatteryColor(widget.batteryLevel!),
+                          color: _getBatteryIconColor(widget.batteryLevel!),
                         ),
                         SizedBox(width: 2.w),
                         Text(
                           '${widget.batteryLevel}%',
                           style: AppTextTheme.labelSmall(
-                            color: _getBatteryColor(widget.batteryLevel!),
+                            color: AppColors.isDark
+                                ? Colors.white
+                                : _getBatteryColor(widget.batteryLevel!),
                             fw: FontWeight.w600,
                           ),
                         ),
@@ -614,7 +664,13 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                   ),
                   child: Text(
                     widget.status,
-                    style: AppTextTheme.labelSmall(color: widget.statusColor, fw: FontWeight.w600),
+                    style: AppTextTheme.labelSmall(
+                      // 다크 모드의 '안전'(정상) 뱃지만 흰색 — 어두운 초록이 배경에 묻힌다
+                      color: AppColors.isDark && !widget.showActionButtons
+                          ? Colors.white
+                          : widget.statusColor,
+                      fw: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -627,9 +683,12 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                 children: [
                   if (widget.activityLabel != null)
                     Expanded(
-                      child: Text(
-                        widget.activityLabel!,
-                        style: AppTextTheme.bodySmall(color: AppColors.textSecondary),
+                      child: _LabelValueText(
+                        text: widget.activityLabel!,
+                        labelColor: AppColors.textSecondary,
+                        valueColor: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : null,
                       ),
                     )
                   else
@@ -652,7 +711,7 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
               const Spacer(),
               Row(
                 children: [
-                  Icon(Icons.info_outline_rounded, size: 18.w, color: widget.statusColor),
+                  Icon(Icons.info_outline_rounded, size: 18.w, color: _emphasisColor),
                   SizedBox(width: 6.w),
                   Expanded(
                     // ⚠️ 카드 높이가 200.h 고정이라 이 라벨이 3줄이 되면 세로 오버플로가 난다.
@@ -662,7 +721,7 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                       widget.activityLabel!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTextTheme.bodyLarge(color: widget.statusColor, fw: FontWeight.w700),
+                      style: AppTextTheme.bodyLarge(color: _emphasisColor, fw: FontWeight.w700),
                     ),
                   ),
                   _buildFullChartButton(),
@@ -674,7 +733,11 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
             // 정상: 마지막 확인 시간 (차트 아래)
             if (!widget.showActionButtons) ...[
               SizedBox(height: 0.h),
-              Text(widget.lastCheck, style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
+              _LabelValueText(
+                text: widget.lastCheck,
+                labelColor: AppColors.textTertiary,
+                valueColor: _lastCheckValueColor,
+              ),
             ],
 
             // 주의 상태 — 액션 버튼
@@ -726,7 +789,7 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                     child: Container(
                       height: 40.h,
                       decoration: BoxDecoration(
-                        border: Border.all(color: widget.statusColor.withValues(alpha: 0.3)),
+                        border: Border.all(color: _emphasisColor.withValues(alpha: 0.7), width: 1.5),
                         borderRadius: BorderRadius.circular(10.r),
                       ),
                       child: Center(
@@ -735,8 +798,8 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppTextTheme.labelSmall(
-                            color: widget.statusColor,
-                            fw: FontWeight.w600,
+                            color: _emphasisColor,
+                            fw: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -745,7 +808,11 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                 ],
               ),
               SizedBox(height: 8.h),
-              Text(widget.lastCheck, style: AppTextTheme.bodySmall(color: AppColors.textTertiary)),
+              _LabelValueText(
+                text: widget.lastCheck,
+                labelColor: AppColors.textTertiary,
+                valueColor: _lastCheckValueColor,
+              ),
             ],
           ],
         ),
@@ -843,9 +910,21 @@ class _StepsBarChartState extends State<_StepsBarChart>
     if (steps.isEmpty) return const SizedBox.shrink();
 
     // 다크모드에서는 진한 파랑이 잘 보이지 않으므로 Cyan으로 전환
-    final chartColor = AppColors.isDark
-        ? const Color(0xFF00BCD4) // Cyan 500
-        : const Color(0xFF1A237E); // Indigo 900
+    // 다크 모드(7일 카드·30일 다이얼로그 공통)는 막대·글자 모두 형광 초록으로 — 어두운 배경에서 또렷하게.
+    final neon = AppColors.isDark;
+    const neonColor = Color(0xFF39FF14);
+    final chartColor = neon
+        ? neonColor
+        : AppColors.isDark
+            ? const Color(0xFF00BCD4) // Cyan 500
+            : const Color(0xFF1A237E); // Indigo 900
+    final chartTextColor = neon ? neonColor : AppColors.textTertiary;
+    // 축 이름(걸음수 / 지난 30일)은 형광 주황 — 막대·수치(형광 초록)와 구분
+    // x/y 축 선: 다크 모드는 반투명 흰색
+    final axisLineColor = neon
+        ? Colors.white.withValues(alpha: 0.5)
+        : AppColors.textTertiary.withValues(alpha: 0.4);
+    final axisTextColor = neon ? const Color(0xFFFF8C1A) : AppColors.textTertiary;
 
     // null 제외 최댓값. 모두 null/0이면 1로 대체해 나눗셈 방지.
     final values = steps.whereType<int>().toList();
@@ -860,7 +939,10 @@ class _StepsBarChartState extends State<_StepsBarChart>
       }
     }
 
-    final emptyColor = AppColors.textTertiary.withValues(alpha: 0.25);
+    // 0걸음 막대 — 다크 모드에서는 배경에 묻히지 않도록 밝은 반투명 흰색
+    final emptyColor = neon
+        ? Colors.white.withValues(alpha: 0.4)
+        : AppColors.textTertiary.withValues(alpha: 0.25);
 
     return AnimatedBuilder(
       animation: _ctrl,
@@ -888,7 +970,7 @@ class _StepsBarChartState extends State<_StepsBarChart>
               if (v == null || v == 0) return null;
               return BarTooltipItem(
                 _formatSteps(v),
-                AppTextTheme.labelSmall(color: AppColors.textTertiary, fw: FontWeight.w600),
+                AppTextTheme.labelSmall(color: chartTextColor, fw: FontWeight.w600),
               );
             },
           ),
@@ -897,8 +979,8 @@ class _StepsBarChartState extends State<_StepsBarChart>
         borderData: FlBorderData(
           show: true,
           border: Border(
-            left: BorderSide(color: AppColors.textTertiary.withValues(alpha: 0.4), width: 1),
-            bottom: BorderSide(color: AppColors.textTertiary.withValues(alpha: 0.4), width: 1),
+            left: BorderSide(color: axisLineColor, width: 1),
+            bottom: BorderSide(color: axisLineColor, width: 1),
             top: BorderSide.none,
             right: BorderSide.none,
           ),
@@ -909,19 +991,19 @@ class _StepsBarChartState extends State<_StepsBarChart>
             axisNameSize: 16,
             axisNameWidget: Text(
               'guardian_chart_y_axis_steps'.tr,
-              style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
+              style: AppTextTheme.labelSmall(color: axisTextColor),
             ),
             sideTitles: const SideTitles(showTitles: false),
           ),
           bottomTitles: AxisTitles(
             axisNameSize: 16,
             axisNameWidget: Align(
-              alignment: isShowing30Days ? Alignment.center : Alignment.centerRight,
+              alignment: Alignment.center,
               child: Text(
                 isShowing30Days
                     ? 'guardian_chart_x_axis_last_30_days'.tr
                     : 'guardian_chart_x_axis_last_7_days'.tr,
-                style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
+                style: AppTextTheme.labelSmall(color: axisTextColor),
               ),
             ),
             sideTitles: const SideTitles(showTitles: false),
@@ -948,7 +1030,11 @@ class _StepsBarChartState extends State<_StepsBarChart>
                     _formatSteps(maxVal),
                     softWrap: false,
                     overflow: TextOverflow.visible,
-                    style: AppTextTheme.labelSmall(color: chartColor, fw: FontWeight.w700),
+                    // 최댓값 숫자는 막대(형광 초록)와 구분되도록 형광 청록
+                    style: AppTextTheme.labelSmall(
+                      color: neon ? const Color(0xFF00E5FF) : chartColor,
+                      fw: FontWeight.w700,
+                    ),
                   ),
                 );
               },
@@ -995,7 +1081,7 @@ class _StepsBarChartState extends State<_StepsBarChart>
   Color _rodColor(int? value, Color active, Color empty, {bool isToday = false}) {
     if (value == null) return empty.withValues(alpha: 0.15);
     if (value == 0) return empty;
-    return isToday ? _todayColor : active.withValues(alpha: 0.7);
+    return isToday ? _todayColor : active.withValues(alpha: active == const Color(0xFF39FF14) ? 0.9 : 0.7);
   }
 
   double _rodWidth(int n) {
@@ -1022,7 +1108,7 @@ Future<void> _showStepsChartDialog(
     context: context,
     barrierDismissible: true,
     barrierLabel: 'dismiss',
-    barrierColor: Colors.black54,
+    barrierColor: AppColors.isDark ? Colors.black87 : Colors.black54,
     transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (_, _, _) =>
         _StepsChartDialog(title: title, subtitle: subtitle, steps: steps),
@@ -1096,6 +1182,8 @@ class _StepsChartDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      // 다크 모드에서 흰 배경에 밝은 글자가 묻히던 문제 — 어두운 배경으로
+      backgroundColor: AppColors.isDark ? const Color(0xFF1E2022) : null,
       insetPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 40.h),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       child: Padding(
@@ -1114,15 +1202,21 @@ class _StepsChartDialog extends StatelessWidget {
                   onTap: () => Get.back<void>(),
                   child: Padding(
                     padding: EdgeInsets.all(6.w),
-                    child: Icon(Icons.close_rounded, size: 22.w, color: AppColors.textSecondary),
+                    child: Icon(
+                      Icons.close_rounded,
+                      size: 22.w,
+                      color: AppColors.isDark ? Colors.white : AppColors.textSecondary,
+                    ),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 4.h),
-            Text(
-              subtitle,
-              style: AppTextTheme.bodySmall(color: AppColors.textSecondary),
+            // "활동량 : 값" — 값만 bold, 다크 모드에서는 형광 핑크
+            _LabelValueText(
+              text: subtitle,
+              labelColor: AppColors.textSecondary,
+              valueColor: AppColors.isDark ? const Color(0xFFFF8AE8) : null,
             ),
             SizedBox(height: 12.h),
             SizedBox(
@@ -1136,6 +1230,46 @@ class _StepsChartDialog extends StatelessWidget {
   }
 }
 
+
+/// "라벨: 값" 문장에서 첫 구분자(':' 또는 전각 '：') 뒤의 값 부분만 bold 처리한다.
+/// 구분자가 없으면(예: "확인 기록 없음") 전체를 라벨 스타일로 그린다.
+/// 번역 키를 라벨/값으로 쪼개지 않고 완성된 문장에서 나누므로 20개 언어에 그대로 적용된다.
+class _LabelValueText extends StatelessWidget {
+  final String text;
+  final Color labelColor;
+  final Color? valueColor;
+
+  const _LabelValueText({
+    required this.text,
+    required this.labelColor,
+    this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final idx = text.indexOf(RegExp(r'[:：]'));
+    final labelStyle = AppTextTheme.bodySmall(color: labelColor);
+    if (idx < 0) return Text(text, style: labelStyle);
+    final head = text.substring(0, idx + 1);
+    final tail = text.substring(idx + 1);
+    final leading = tail.length - tail.trimLeft().length;
+    return Text.rich(
+      TextSpan(
+        style: labelStyle,
+        children: [
+          TextSpan(text: head + tail.substring(0, leading)),
+          TextSpan(
+            text: tail.substring(leading),
+            style: AppTextTheme.bodySmall(
+              color: valueColor ?? labelColor,
+              fw: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 /// 등급별 인원 카운터의 항목 하나 — 색 점 + "등급: N".
 ///
@@ -1159,7 +1293,9 @@ class _LegendDot extends StatelessWidget {
         SizedBox(width: 4.w),
         Text(
           label,
-          style: AppTextTheme.labelSmall(color: AppColors.textTertiary),
+          style: AppTextTheme.labelSmall(
+            color: AppColors.isDark ? Colors.white : AppColors.textTertiary,
+          ),
         ),
       ],
     );

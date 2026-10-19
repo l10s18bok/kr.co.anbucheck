@@ -12,11 +12,15 @@ class AddSubjectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 다크 모드에서는 테두리·아이콘·텍스트를 흰색으로 (어두운 배경에서 잘 보이도록)
+    final dark = AppColors.isDark;
     return GestureDetector(
       onTap: onTap,
       child: CustomPaint(
         painter: _DashedBorderPainter(
-          color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
+          color: dark
+              ? Colors.white.withValues(alpha: 0.6)
+              : AppColors.onSurfaceVariant.withValues(alpha: 0.5),
           radius: 14.r,
           dashWidth: 6,
           dashSpace: 4,
@@ -32,17 +36,20 @@ class AddSubjectButton extends StatelessWidget {
                 width: 36.w,
                 height: 36.w,
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLow,
+                  color: dark
+                      ? const Color(0xFF5A5F69)
+                      : AppColors.surfaceContainerLow,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Icons.add,
-                    size: 20.w, color: AppColors.onSurfaceVariant),
+                    size: 20.w,
+                    color: dark ? Colors.white : AppColors.onSurfaceVariant),
               ),
               SizedBox(height: 10.h),
               Text(
                 'add_subject_button'.tr,
                 style: AppTextTheme.bodyMedium(
-                  color: AppColors.textSecondary,
+                  color: dark ? Colors.white : AppColors.textSecondary,
                   fw: FontWeight.w500,
                 ),
               ),
