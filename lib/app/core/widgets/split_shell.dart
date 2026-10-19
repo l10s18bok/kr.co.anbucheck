@@ -172,14 +172,30 @@ class _SplitShellState extends State<SplitShell> {
       return Stack(
         children: [
           row,
+          // 두 pane 톤 구분 — 배경이 같아 한 화면처럼 보이므로 **왼쪽(대시보드)만** 살짝 다르게
+          // 덮는다(라이트: 어둡게, 다크: 밝게 → 상대적으로 오른쪽이 라이트에서 밝고 다크에서 어둡다). 페이지 Scaffold 배경이 명시돼 있어 뒤가 아니라 위에
+          // 얹고, 터치는 막지 않는다. 분할일 때만 그려서 폰·전폭 화면에는 영향이 없다.
           Positioned(
-            left: leftW - 0.5,
+            left: 0,
+            width: leftW,
             top: 0,
             bottom: 0,
-            width: 1,
             child: IgnorePointer(
               child: ColoredBox(
-                color: AppColors.outlineVariant.withValues(alpha: 0.6),
+                color: AppColors.isDark
+                    ? Colors.white.withValues(alpha: 0.12)
+                    : Colors.black.withValues(alpha: 0.09),
+              ),
+            ),
+          ),
+          Positioned(
+            left: leftW - 1.5,
+            top: 0,
+            bottom: 0,
+            width: 3,
+            child: IgnorePointer(
+              child: ColoredBox(
+                color: AppColors.outlineVariant.withValues(alpha: 0.8),
               ),
             ),
           ),

@@ -1,8 +1,8 @@
+import 'package:anbucheck/app/core/utils/invite_code_formatter.dart';
 import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
     show
-        TextInputFormatter,
         FilteringTextInputFormatter,
         LengthLimitingTextInputFormatter;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -101,16 +101,12 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                       enableSuggestions: false,
                       autofillHints: const [],
                       inputFormatters: [
-                        // invite_code는 ASCII 영숫자 + 하이픈만 — 비-ASCII(자국어 IME 조합 등)
-                        // 입력 자체를 차단. (visiblePassword로 대부분 라틴 키보드가 강제되지만
-                        // iOS/붙여넣기 대비 방어)
-                        FilteringTextInputFormatter.allow(
-                          RegExp(r'[A-Za-z0-9-]'),
-                        ),
-                        TextInputFormatter.withFunction(
-                          (old, next) =>
-                              next.copyWith(text: next.text.toUpperCase()),
-                        ),
+                        // 영문자·숫자만 입력받는다. `-`는 사용자가 치지 않고 3자리 뒤에 자동으로 들어간다.
+                        // 비-ASCII(자국어 IME 조합 등) 입력 자체를 차단 — visiblePassword로 대부분 라틴
+                        // 키보드가 강제되지만 iOS/붙여넣기 대비 방어. (붙여넣은 코드의 `-`는 정리 후 재삽입)
+                        FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9]')),
+                        // 대문자 변환 + 3자리 뒤 `-` 자동 삽입 + 7자리 제한(XXX-XXXX).
+                        const InviteCodeFormatter(),
                       ],
                       decoration: InputDecoration(
                         hintText: '123-4567',

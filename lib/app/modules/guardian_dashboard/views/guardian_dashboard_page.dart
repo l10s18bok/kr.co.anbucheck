@@ -28,8 +28,18 @@ import 'package:anbucheck/app/core/services/fold_state_service.dart';
 /// "improper use of a GetX" 예외를 던진다 — 항상 접힘 상태를 먼저 읽는다.
 bool _compact(BuildContext context, bool wide) {
   final folded = _isFolded(context);
-  return wide || folded;
+  // 일반 폰은 wide·접힘·분할 어느 것도 아니라 여기서 항상 false — 높이와 무관하게 기존 배치 그대로.
+  if (!(wide || folded)) return false;
+  // 폴더블·태블릿 계열이라도 세로가 넉넉하면(안드로이드 폴드 안쪽 화면 등) 컴팩트로 줄이지 않고
+  // 폰과 같은 원래 위치(카드 아래 점선 박스)에 둔다. iOS Duo(약 670~680pt)처럼 모자랄 때만 컴팩트.
+  // 창 높이는 분할 pane에서도 전체 높이가 그대로라 왼쪽 pane 판단에도 쓸 수 있다.
+  final height = MediaQuery.sizeOf(context).height;
+  return height < _kRoomyHeight;
 }
+
+/// 컴팩트 배치(추가 박스를 제목 줄 버튼으로 줄임)가 필요 없을 만큼 세로가 넉넉한 창 높이(논리 px).
+/// 실측: iOS Duo 안쪽 약 669 · 접힘 약 678 → 모자람, 안드로이드 Fold 안쪽 약 883 → 넉넉.
+const double _kRoomyHeight = 780;
 
 bool _isFolded(BuildContext context) {
   // 분할 화면의 왼쪽 pane도 접힘과 같은 컴팩트 배치(폭 절반 · 높이 그대로).
@@ -338,16 +348,11 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                     Obx(
                       () => controller.adFallbackShown.value
                           ? const SizedBox.shrink()
-                          : TextButton.icon(
-                              onPressed: controller.goToAddSubject,
-                              // 기본 좌우 패딩(12) 중 오른쪽만 제거 — 버튼 글자가 화면 여백선(오른쪽 끝)에 맞도록
-                              style: TextButton.styleFrom(
-                                padding: const EdgeInsets.only(left: 12),
-                              ),
-                              icon: const Icon(Icons.add_rounded, size: 20),
-                              label: Text(
-                                'add_subject_button'.tr,
-                                style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
+                          // 화면 오른쪽 끝으로 16px 더 붙인다(본문 여백 안쪽이 아니라 pane 가장자리 쪽).
+                          : Transform.translate(
+                              offset: const Offset(16, 0),
+                              child: AddSubjectChipButton(
+                                onTap: controller.goToAddSubject,
                               ),
                             ),
                     ),

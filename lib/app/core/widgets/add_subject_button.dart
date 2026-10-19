@@ -65,6 +65,49 @@ class AddSubjectButton extends StatelessWidget {
   }
 }
 
+/// 제목 줄용 작은 추가 버튼 — 점선 테두리 + `+` 아이콘 + 텍스트.
+/// 넓은 화면·폴더블 접힘·분할 왼쪽 pane에서 [AddSubjectButton](큰 점선 박스) 대신 쓴다.
+/// 테두리는 반투명(큰 박스와 같은 점선 톤, 조금 더 연하게).
+class AddSubjectChipButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const AddSubjectChipButton({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = AppColors.isDark;
+    final color = dark ? Colors.white : AppColors.onSurfaceVariant;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: CustomPaint(
+        painter: _DashedBorderPainter(
+          color: color.withValues(alpha: dark ? 0.35 : 0.3),
+          radius: 10,
+          dashWidth: 5,
+          dashSpace: 3.5,
+          strokeWidth: 1.2,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.add_rounded, size: 20, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 6),
+              Text(
+                'add_subject_button'.tr,
+                // 원래 제목 줄 버튼과 같은 글자색(기본값 textSecondary — 다크는 #B0B0B0).
+                style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _DashedBorderPainter extends CustomPainter {
   final Color color;
   final double radius;
