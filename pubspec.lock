@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  bifold:
+    dependency: "direct main"
+    description:
+      name: bifold
+      sha256: "2abb872809e012eab3b72eb6d3e2013b16abd9eab396a741602cd91a8b4f04f5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   boolean_selector:
     dependency: transitive
     description:

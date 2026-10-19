@@ -12,6 +12,7 @@ import 'package:anbucheck/app/core/services/theme_service.dart';
 import 'package:anbucheck/app/core/services/ad_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_worker_service.dart';
 import 'package:anbucheck/app/core/services/stability_service.dart';
+import 'package:anbucheck/app/core/services/fold_state_service.dart';
 
 void main() async {
   // 릴리스 빌드에서는 debugPrint를 전역 비활성화 — logcat에 상태/스케줄/토큰 일부가
@@ -42,6 +43,8 @@ void main() async {
   }
   Get.put(ThemeService());
   Get.put(StabilityService());
+  // 폴더블 접힘 상태 — 폰에서는 항상 unknown이며 실패해도 앱 시작에 영향 없음.
+  Get.put(FoldStateService().start(), permanent: true);
   // AdMob 초기화 — Android 전용.
   // iOS는 ATT 권한 흐름이 권한 화면(PermissionController)에서 제어되므로
   // 여기서 초기화하면 ATT 팝업이 Splash 이전에 뜨는 문제가 발생한다.
