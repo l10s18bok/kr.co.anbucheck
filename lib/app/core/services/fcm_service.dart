@@ -675,15 +675,6 @@ class FcmService extends GetxService {
     try {
       Get.find<GuardianSubjectService>().refresh();
     } catch (_) {}
-    // 분할 화면에서 오른쪽 pane이 알림 목록이면 새 알림이 바로 보이도록 목록도 갱신한다.
-    // (폰은 대시보드와 알림 목록이 동시에 보이지 않아 기존 동작 유지)
-    if (AppNav.paneActive &&
-        SplitPaneState.tab == 2 &&
-        Get.isRegistered<GuardianNotificationsController>()) {
-      try {
-        Get.find<GuardianNotificationsController>().load();
-      } catch (_) {}
-    }
   }
 
 /// 특정 토픽 구독 (대상자별 알림 채널)
