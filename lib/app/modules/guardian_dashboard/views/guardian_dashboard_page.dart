@@ -1024,7 +1024,7 @@ class _StepsBarChartState extends State<_StepsBarChart>
                   return const SizedBox.shrink();
                 }
                 return SideTitleWidget(
-                  axisSide: meta.axisSide,
+                  meta: meta,
                   fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
                   child: Text(
                     _formatSteps(maxVal),

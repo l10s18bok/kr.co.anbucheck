@@ -6,11 +6,11 @@ part of 'api_response_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ApiResponseImpl<T> _$$ApiResponseImplFromJson<T>(
+_ApiResponse<T> _$ApiResponseFromJson<T>(
   Map json,
   T Function(Object? json) fromJsonT,
-) => $checkedCreate(r'_$ApiResponseImpl', json, ($checkedConvert) {
-  final val = _$ApiResponseImpl<T>(
+) => $checkedCreate('_ApiResponse', json, ($checkedConvert) {
+  final val = _ApiResponse<T>(
     data: $checkedConvert(
       'data',
       (v) => _$nullableGenericFromJson(v, fromJsonT),
@@ -19,8 +19,8 @@ _$ApiResponseImpl<T> _$$ApiResponseImplFromJson<T>(
   return val;
 });
 
-Map<String, dynamic> _$$ApiResponseImplToJson<T>(
-  _$ApiResponseImpl<T> instance,
+Map<String, dynamic> _$ApiResponseToJson<T>(
+  _ApiResponse<T> instance,
   Object? Function(T value) toJsonT,
 ) => <String, dynamic>{'data': _$nullableGenericToJson(instance.data, toJsonT)};
 
@@ -34,11 +34,11 @@ Object? _$nullableGenericToJson<T>(
   Object? Function(T value) toJson,
 ) => input == null ? null : toJson(input);
 
-_$ApiListResponseImpl<T> _$$ApiListResponseImplFromJson<T>(
+_ApiListResponse<T> _$ApiListResponseFromJson<T>(
   Map json,
   T Function(Object? json) fromJsonT,
-) => $checkedCreate(r'_$ApiListResponseImpl', json, ($checkedConvert) {
-  final val = _$ApiListResponseImpl<T>(
+) => $checkedCreate('_ApiListResponse', json, ($checkedConvert) {
+  final val = _ApiListResponse<T>(
     errCode: $checkedConvert('errCode', (v) => v as String? ?? ''),
     errNo: $checkedConvert('errNo', (v) => v as String? ?? ''),
     data: $checkedConvert(
@@ -49,8 +49,8 @@ _$ApiListResponseImpl<T> _$$ApiListResponseImplFromJson<T>(
   return val;
 });
 
-Map<String, dynamic> _$$ApiListResponseImplToJson<T>(
-  _$ApiListResponseImpl<T> instance,
+Map<String, dynamic> _$ApiListResponseToJson<T>(
+  _ApiListResponse<T> instance,
   Object? Function(T value) toJsonT,
 ) => <String, dynamic>{
   'errCode': instance.errCode,
@@ -58,9 +58,9 @@ Map<String, dynamic> _$$ApiListResponseImplToJson<T>(
   'data': instance.data.map(toJsonT).toList(),
 };
 
-_$DynamicResponseImpl _$$DynamicResponseImplFromJson(Map json) =>
-    $checkedCreate(r'_$DynamicResponseImpl', json, ($checkedConvert) {
-      final val = _$DynamicResponseImpl(
+_DynamicResponse _$DynamicResponseFromJson(Map json) =>
+    $checkedCreate('_DynamicResponse', json, ($checkedConvert) {
+      final val = _DynamicResponse(
         code: $checkedConvert('code', (v) => v as String),
         msg: $checkedConvert('msg', (v) => v as String),
         result: $checkedConvert('result', (v) => v),
@@ -68,10 +68,9 @@ _$DynamicResponseImpl _$$DynamicResponseImplFromJson(Map json) =>
       return val;
     });
 
-Map<String, dynamic> _$$DynamicResponseImplToJson(
-  _$DynamicResponseImpl instance,
-) => <String, dynamic>{
-  'code': instance.code,
-  'msg': instance.msg,
-  'result': instance.result,
-};
+Map<String, dynamic> _$DynamicResponseToJson(_DynamicResponse instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+      'msg': instance.msg,
+      'result': instance.result,
+    };

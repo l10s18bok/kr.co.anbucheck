@@ -4,7 +4,7 @@ part 'api_response_model.freezed.dart';
 part 'api_response_model.g.dart';
 
 @Freezed(genericArgumentFactories: true)
-class ApiResponse<T> with _$ApiResponse<T> {
+abstract class ApiResponse<T> with _$ApiResponse<T> {
   const factory ApiResponse({
     T? data,
   }) = _ApiResponse;
@@ -17,7 +17,7 @@ class ApiResponse<T> with _$ApiResponse<T> {
 }
 
 @Freezed(genericArgumentFactories: true)
-class ApiListResponse<T> with _$ApiListResponse<T> {
+abstract class ApiListResponse<T> with _$ApiListResponse<T> {
   const factory ApiListResponse({
     @Default('') String errCode,
     @Default('') String errNo,
@@ -32,7 +32,7 @@ class ApiListResponse<T> with _$ApiListResponse<T> {
 }
 
 @freezed
-class DynamicResponse with _$DynamicResponse {
+abstract class DynamicResponse with _$DynamicResponse {
   const factory DynamicResponse({
     required String code,
     required String msg,
