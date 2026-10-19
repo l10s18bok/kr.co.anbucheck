@@ -15,6 +15,62 @@ class GuardianAddSubjectController extends BaseController {
   final aliasController = TextEditingController();
   final phoneController = TextEditingController();
 
+  // 입력란 포커스 시 고정 헤더 바로 아래로 스크롤하기 위한 노드/키
+  final codeFocus = FocusNode();
+  final aliasFocus = FocusNode();
+  final phoneFocus = FocusNode();
+  final codeKey = GlobalKey();
+  final aliasKey = GlobalKey();
+  final phoneKey = GlobalKey();
+
+  /// 어느 입력란이든 포커스 중이면 true — 스크롤 여유 공간 확보용
+  final isFieldFocused = false.obs;
+
+  final scrollController = ScrollController();
+
+  void _scrollToTopIfUnfocused() {
+    // 필드 간 이동 시 잠깐 포커스가 비므로 짧게 기다린 뒤 판단
+    Future.delayed(const Duration(milliseconds: 150), () {
+      if (isFieldFocused.value || !scrollController.hasClients) return;
+      scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  void _bindFocus(FocusNode node, GlobalKey key) {
+    node.addListener(() {
+      isFieldFocused.value =
+          codeFocus.hasFocus || aliasFocus.hasFocus || phoneFocus.hasFocus;
+      if (!node.hasFocus) {
+        _scrollToTopIfUnfocused();
+        return;
+      }
+      // 키보드 올라오며 뷰포트가 줄어든 뒤 + 여유 공간이 붙은 뒤에 스크롤
+      Future.delayed(const Duration(milliseconds: 350), () {
+        final ctx = key.currentContext;
+        if (ctx == null || !node.hasFocus) return;
+        // ignore: use_build_context_synchronously
+        Scrollable.ensureVisible(
+          ctx,
+          alignment: 0,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+      });
+    });
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    _bindFocus(codeFocus, codeKey);
+    _bindFocus(aliasFocus, aliasKey);
+    _bindFocus(phoneFocus, phoneKey);
+  }
+
   final _isCodeValid = false.obs;
   final _isAliasValid = false.obs;
   // 연락처는 선택 입력 — 연결하기 버튼 활성화 조건에는 포함되지 않음
@@ -27,7 +83,9 @@ class GuardianAddSubjectController extends BaseController {
 
   void onCodeChanged(String value) {
     // XXX-XXXX 형식 (7자리 + 하이픈)
-    _isCodeValid.value = RegExp(r'^[A-Z0-9]{3}-[A-Z0-9]{4}$').hasMatch(value.trim().toUpperCase());
+    _isCodeValid.value = RegExp(
+      r'^[A-Z0-9]{3}-[A-Z0-9]{4}$',
+    ).hasMatch(value.trim().toUpperCase());
   }
 
   void onAliasChanged(String value) {
@@ -64,7 +122,9 @@ class GuardianAddSubjectController extends BaseController {
       if (!svc.canAddMore.value) {
         AppSnackbar.show(
           'common_error'.tr,
-          'add_subject_error_limit'.trParams({'max': '${svc.maxSubjects.value}'}),
+          'add_subject_error_limit'.trParams({
+            'max': '${svc.maxSubjects.value}',
+          }),
         );
         return;
       }
@@ -99,8 +159,8 @@ class GuardianAddSubjectController extends BaseController {
       final msg = e.toString().contains('404')
           ? 'add_subject_error_invalid_code'.tr
           : e.toString().contains('409')
-              ? 'add_subject_error_already_connected'.tr
-              : 'add_subject_error_failed'.tr;
+          ? 'add_subject_error_already_connected'.tr
+          : 'add_subject_error_failed'.tr;
       AppSnackbar.show('common_error'.tr, msg);
     } finally {
       isLoading = false;
@@ -112,6 +172,10 @@ class GuardianAddSubjectController extends BaseController {
     codeController.dispose();
     aliasController.dispose();
     phoneController.dispose();
+    scrollController.dispose();
+    codeFocus.dispose();
+    aliasFocus.dispose();
+    phoneFocus.dispose();
     super.onClose();
   }
 }
