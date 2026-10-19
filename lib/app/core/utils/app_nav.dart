@@ -20,7 +20,7 @@ class AppNav {
   /// 콜드 스타트 푸시 탭: 대시보드 직후엔 셸이 pane을 아직 켜지 않았을 수 있어 잠시 기다린다.
   /// 분할 불가(폰·접힘)면 기다림 없이 기존처럼 루트에 push.
   static Future<void> pushFromLaunch(String route, {dynamic arguments}) async {
-    for (var i = 0; i < 10 && paneId == null; i++) {
+    for (var i = 0; i < 20 && paneId == null; i++) {
       await Future<void>.delayed(const Duration(milliseconds: 50));
     }
     if (paneActive) {

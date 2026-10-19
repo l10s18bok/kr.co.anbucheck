@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/widgets/wide_route_normalizer.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ class App extends StatelessWidget {
               value: brightness == Brightness.dark
                   ? SystemUiOverlayStyle.light
                   : SystemUiOverlayStyle.dark,
-              child: child ?? const SizedBox.shrink(),
+              child: WideRouteNormalizer(child: child ?? const SizedBox.shrink()),
             );
           },
         );

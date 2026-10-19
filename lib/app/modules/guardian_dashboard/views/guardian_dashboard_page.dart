@@ -34,12 +34,23 @@ bool _compact(BuildContext context, bool wide) {
   // 폰과 같은 원래 위치(카드 아래 점선 박스)에 둔다. iOS Duo(약 670~680pt)처럼 모자랄 때만 컴팩트.
   // 창 높이는 분할 pane에서도 전체 높이가 그대로라 왼쪽 pane 판단에도 쓸 수 있다.
   final height = MediaQuery.sizeOf(context).height;
+  assert(() {
+    // TEMP-DIAG: 기기별 실제 창 높이(dp) 확인용 — 확인 후 삭제. 값이 바뀔 때만 출력.
+    final size = MediaQuery.sizeOf(context);
+    final tag = '${size.width.round()}x${size.height.round()} wide=$wide folded=$folded';
+    if (_lastCompactLog != tag) {
+      _lastCompactLog = tag;
+      debugPrint('[Compact] $tag → compact=${height < _kRoomyHeight}');
+    }
+    return true;
+  }());
   return height < _kRoomyHeight;
 }
 
 /// 컴팩트 배치(추가 박스를 제목 줄 버튼으로 줄임)가 필요 없을 만큼 세로가 넉넉한 창 높이(논리 px).
 /// 실측: iOS Duo 안쪽 약 669 · 접힘 약 678 → 모자람, 안드로이드 Fold 안쪽 약 883 → 넉넉.
 const double _kRoomyHeight = 780;
+String? _lastCompactLog; // TEMP-DIAG
 
 bool _isFolded(BuildContext context) {
   // 분할 화면의 왼쪽 pane도 접힘과 같은 컴팩트 배치(폭 절반 · 높이 그대로).
