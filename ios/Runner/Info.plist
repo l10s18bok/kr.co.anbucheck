@@ -65,9 +65,14 @@
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
+		<!-- iPhone: 가로를 네이티브에서 허용하되 실제 잠금은 Flutter(main.dart의 portraitUp)가 한다.
+		     폴더블(iPhone Duo)은 접힌 채 시작한 뒤 펼치면 안쪽 화면이 가로라, 세로 전용이면 앱이
+		     90도 눕혀 그려진다 → FoldStateService가 폴더블일 때만 모든 방향을 허용한다. -->
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>

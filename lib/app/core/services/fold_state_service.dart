@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:bifold/bifold.dart';
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 /// 폴더블(iPhone Duo·Android 폴더블) 접힘 상태 — 앱 전체가 보는 **단일 래퍼**.
@@ -61,7 +64,9 @@ class FoldStateService extends GetxService {
         FoldPose.fullyOpen => FoldPosture.open,
         FoldPose.unknown => FoldPosture.unknown,
       };
+      final wasFoldable = isFoldable.value;
       isFoldable.value = info.isFoldable;
+      if (info.isFoldable != wasFoldable) _applyOrientationPolicy(info.isFoldable);
       // 시뮬레이터에서 실제로 어떤 값이 오는지 확인하기 위한 로그(릴리스에서는 debugPrint가 꺼짐).
       debugPrint(
         '[FoldState] pose=${info.pose.name} → ${posture.value.name} '
@@ -72,6 +77,17 @@ class FoldStateService extends GetxService {
       posture.value = FoldPosture.unknown;
       debugPrint('[FoldState] map failed: $e');
     }
+  }
+
+  /// iOS 방향 정책 — 폰은 세로 고정 그대로, 폴더블은 모든 방향 허용.
+  /// 접힌(세로 외부 화면) 채로 시작한 뒤 펼치면 안쪽 화면이 가로라, 세로 전용이면 앱이
+  /// 90도 눕혀 그려진다(2026-10-19 Duo 시뮬레이터 실측). 펼친 채 시작하면 발생하지 않는다.
+  /// Android는 매니페스트 고정 + 대형 화면 opt-out 정책이라 건드리지 않는다.
+  void _applyOrientationPolicy(bool foldable) {
+    if (!Platform.isIOS) return;
+    SystemChrome.setPreferredOrientations(
+      foldable ? DeviceOrientation.values : const [DeviceOrientation.portraitUp],
+    );
   }
 
   @override

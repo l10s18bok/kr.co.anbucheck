@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/widgets/split_shell.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -250,7 +251,8 @@ class _SubjectReorderableListState extends State<_SubjectReorderableList> {
   Widget build(BuildContext context) {
     return Scrollbar(
       controller: _scrollController,
-      thumbVisibility: true,
+      // 분할 화면 오른쪽 pane에서는 스크롤바 썸 위치가 어긋나 카드 위에 선으로 보여 끈다.
+      thumbVisibility: !PaneScope.of(context),
       child: ReorderableListView.builder(
         scrollController: _scrollController,
         // 우측만 여백 — thumbVisibility 스크롤바가 카드 우측 끝에 겹쳐 그려지는 것을 피한다

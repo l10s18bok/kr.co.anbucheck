@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/widgets/split_shell.dart';
 import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
@@ -23,16 +24,20 @@ import 'package:anbucheck/app/core/services/fold_state_service.dart';
 /// 보호자 대시보드 — 시안 _5 기준
 /// 폴더블을 접은 상태인가. 서비스가 없거나(테스트 등) 폰이면 false.
 /// 넓은 화면이거나 폴더블 접힘이면 컴팩트 배치.
-/// ⚠️ `wide || _isFolded()`로 쓰면 wide=true에서 단락 평가로 Rx를 읽지 않아 Obx가
+/// ⚠️ `wide || _isFolded(context)`로 쓰면 wide=true에서 단락 평가로 Rx를 읽지 않아 Obx가
 /// "improper use of a GetX" 예외를 던진다 — 항상 접힘 상태를 먼저 읽는다.
-bool _compact(bool wide) {
-  final folded = _isFolded();
+bool _compact(BuildContext context, bool wide) {
+  final folded = _isFolded(context);
   return wide || folded;
 }
 
-bool _isFolded() =>
-    Get.isRegistered<FoldStateService>() &&
-    Get.find<FoldStateService>().posture.value == FoldPosture.folded;
+bool _isFolded(BuildContext context) {
+  // 분할 화면의 왼쪽 pane도 접힘과 같은 컴팩트 배치(폭 절반 · 높이 그대로).
+  final inSplit = SplitLeftScope.of(context);
+  final folded = Get.isRegistered<FoldStateService>() &&
+      Get.find<FoldStateService>().posture.value == FoldPosture.folded;
+  return inSplit || folded;
+}
 
 /// 대상자 카드 한 칸(카드 + 오른쪽 여백) 고정 폭 — 폭 ≥ 600dp에서 한 줄 표시 판단용(논리 px, `.w` 아님:
 /// 큰 화면에서 designSize 확대로 `.w`가 늘어나도 카드는 폰 카드와 같은 크기를 유지해야 한다).
@@ -43,6 +48,9 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
 
   @override
   Widget build(BuildContext context) {
+    // 분할 화면 셸 — 펼친 폴더블에서 오른쪽 pane을 붙인다. 폰·접힘은 child 그대로.
+    // Builder: 셸이 덮어쓴 MediaQuery(pane 폭)를 아래 `wide` 판정이 읽도록 새 context로 한 번 더 빌드.
+    return SplitShell(child: Builder(builder: (context) {
     // 넓은 화면(폴더블 펼침·태블릿): 추가 박스를 제목 줄의 작은 버튼으로 줄여 세로 공간 확보(광고 노출).
     final wide = MediaQuery.sizeOf(context).width >= kLargeScreenBreakpoint;
     return PopScope(
@@ -237,7 +245,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               Obx(() {
                 // 폴더블을 접은 상태(외부 화면)도 세로 공간이 부족해 숨긴다. 폰·비폴더블은
                 // posture가 항상 unknown이라 영향 없음.
-                if (_isFolded()) return const SizedBox.shrink();
+                if (_isFolded(context)) return const SizedBox.shrink();
                 final subjects = controller.subjects;
                 // 표시 순서: 긴급 → 경고 → 주의 → 안전 (대상자 리스트 정렬과 동일)
                 final counts = {
@@ -293,7 +301,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 );
               }),
               Obx(() => SizedBox(
-                    height: _compact(wide) ? AppSpacing.lg : AppSpacing.sp6,
+                    height: _compact(context, wide) ? AppSpacing.lg : AppSpacing.sp6,
                   )),
 
               // 대상자 리스트 헤더 — 우측에 있던 등급별 카운터는 위 "오늘의 안부 요약"
@@ -302,7 +310,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               // 세로 공간이 부족한 화면(폭 ≥600dp이거나 폴더블을 접은 상태)에서는 추가 박스를
               // 제목 줄의 작은 버튼으로 줄인다. 접힘 상태는 변할 수 있어 Obx로 감싼다.
               Obx(() {
-                final compact = _compact(wide);
+                final compact = _compact(context, wide);
                 if (!compact) {
                   return Text(
                     'guardian_subject_list'.tr,
@@ -442,7 +450,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
 
                 // Obx 안(추적 범위)에서 읽어야 접힘 상태 변화에 다시 그려진다 — LayoutBuilder 콜백은
                 // Obx 추적 밖이라 거기서 읽으면 갱신되지 않을 수 있다.
-                final folded = _isFolded();
+                final folded = _isFolded(context);
 
                 return LayoutBuilder(
                   builder: (context, constraints) {
@@ -531,7 +539,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
 
               // 다른 대상자 추가 버튼 — 넓은 화면은 제목 줄의 작은 버튼으로 대체
               Obx(
-                () => _compact(wide)
+                () => _compact(context, wide)
                     ? const SizedBox.shrink()
                     : Column(
                         children: [
@@ -546,7 +554,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                   // 세로 공간이 부족한 화면(넓은 화면·폴더블 접힘)에서만: 광고가 없으면
                   // (프리미엄·권한/동의 거부·로드 실패) 같은 자리에 기존 디자인의 추가 박스(컴팩트)를
                   // 보인다. 폰은 fallback 없음 → 기존 동작.
-                  fallback: _compact(wide)
+                  fallback: _compact(context, wide)
                       ? AddSubjectButton(onTap: controller.goToAddSubject, compact: true)
                       : null,
                   onFallbackChanged: (shown) => controller.adFallbackShown.value = shown,
@@ -559,6 +567,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
         bottomNavigationBar: const GuardianBottomNav(currentIndex: 0),
       ),
     );
+    }));
   }
 }
 

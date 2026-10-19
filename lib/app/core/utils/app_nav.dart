@@ -15,8 +15,18 @@ class AppNav {
   static Future<T?>? toNamed<T>(String route, {dynamic arguments}) =>
       Get.toNamed<T>(route, arguments: arguments, id: paneId);
 
-  static Future<T?>? offNamed<T>(String route, {dynamic arguments}) =>
-      Get.offNamed<T>(route, arguments: arguments, id: paneId);
+  /// pane 모드에서는 pane 스택 맨 아래(빈 시작 화면)만 남기고 교체 — 탭 전환이 스택에 쌓이지 않게.
+  static Future<T?>? offNamed<T>(String route, {dynamic arguments}) {
+    if (paneId != null) {
+      return Get.offNamedUntil<T>(
+        route,
+        (r) => r.isFirst,
+        arguments: arguments,
+        id: paneId,
+      );
+    }
+    return Get.offNamed<T>(route, arguments: arguments);
+  }
 
   static void back<T>({T? result}) => Get.back<T>(result: result, id: paneId);
 }

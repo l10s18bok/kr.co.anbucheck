@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
+import 'package:anbucheck/app/core/widgets/split_shell.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 모드 공통 하단 네비게이션 바
@@ -15,6 +16,8 @@ class GuardianBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 분할 화면의 오른쪽 pane 안 페이지는 탭바를 그리지 않는다(왼쪽 대시보드의 탭바를 공유).
+    if (PaneScope.of(context)) return const SizedBox.shrink();
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
