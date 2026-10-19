@@ -28,7 +28,7 @@ class DeviceTimezone {
   /// 이번 변경의 범위를 벗어난다.
   static Future<String?> refresh() async {
     try {
-      final name = await FlutterTimezone.getLocalTimezone();
+      final name = (await FlutterTimezone.getLocalTimezone()).identifier;
       if (name.isEmpty) return null;
       current = name;
       return name;

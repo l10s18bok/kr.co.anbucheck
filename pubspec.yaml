@@ -23,7 +23,7 @@ dependencies:
   flutter_native_contact_picker: ^0.0.9
   firebase_core: ^3.12.1
   firebase_messaging: ^15.2.4
-  flutter_local_notifications: ^18.0.1
+  flutter_local_notifications: ^22.3.2
   shared_preferences: ^2.5.3
   sqflite: ^2.4.0
   share_plus: ^12.0.1
@@ -31,8 +31,8 @@ dependencies:
   screen_state:
     path: ./packages/screen_state
   device_info_plus: ^12.3.0
-  timezone: ^0.9.4
-  flutter_timezone: ^3.0.0
+  timezone: ^0.11.2
+  flutter_timezone: ^5.1.1
   workmanager: ^0.9.0+3
   package_info_plus: ^9.0.1
   flutter_native_splash: ^2.4.7

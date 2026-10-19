@@ -142,7 +142,8 @@ class SplashController extends BaseController {
     // timezone 초기화
     tz.initializeTimeZones();
     try {
-      final localTzName = await FlutterTimezone.getLocalTimezone();
+      // flutter_timezone 5: TimezoneInfo → IANA 식별자 문자열만 꺼낸다(의미 동일)
+      final localTzName = (await FlutterTimezone.getLocalTimezone()).identifier;
       // 서버 전송용 원본값 — getLocation 실패(→ 서울 폴백)와 무관하게 OS 값만 담는다.
       DeviceTimezone.current = localTzName;
       tzlib.setLocalLocation(tzlib.getLocation(localTzName));

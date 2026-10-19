@@ -514,7 +514,7 @@ class FcmService extends GetxService {
     );
 
     await _localNotifications.initialize(
-      const InitializationSettings(
+      settings: const InitializationSettings(
         android: androidSettings,
         iOS: iosSettings,
       ),
@@ -610,10 +610,10 @@ class FcmService extends GetxService {
     // _androidChannel은 getter라 접근할 때마다 객체를 새로 만든다 — 한 번만 읽는다
     final channel = _androidChannel;
     _localNotifications.show(
-      message.hashCode,
-      notification.title ?? 'app_name'.tr,
-      notification.body ?? '',
-      NotificationDetails(
+      id: message.hashCode,
+      title: notification.title ?? 'app_name'.tr,
+      body: notification.body ?? '',
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           channel.id,
           channel.name,

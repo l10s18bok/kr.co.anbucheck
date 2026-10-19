@@ -56,7 +56,7 @@ class LocalAlarmService {
     if (_plugin != null) return;
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin.initialize(
-      const InitializationSettings(
+      settings: const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: DarwinInitializationSettings(
           requestAlertPermission: true,
@@ -183,10 +183,10 @@ class LocalAlarmService {
         'noti_channel_name', fallback: 'Anbu Alerts');
 
     await _plugin!.show(
-      _sendFailedId,
-      title,
-      body,
-      NotificationDetails(
+      id: _sendFailedId,
+      title: title,
+      body: body,
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           _androidChannelId,
           channelName,
@@ -210,7 +210,7 @@ class LocalAlarmService {
   static Future<void> cancelSendFailed() async {
     if (Platform.isIOS) return;
     await _ensureInitialized();
-    await _plugin!.cancel(_sendFailedId);
+    await _plugin!.cancel(id: _sendFailedId);
   }
 
   /// 무료체험 종료 1회성 로컬 알림 예약 — **최초 설치 보호자 전용**.
@@ -234,11 +234,11 @@ class LocalAlarmService {
         'noti_channel_name', fallback: 'Anbu Alerts');
 
     await _plugin!.zonedSchedule(
-      _trialEndedId,
-      title,
-      body,
-      scheduled,
-      NotificationDetails(
+      id: _trialEndedId,
+      title: title,
+      body: body,
+      scheduledDate: scheduled,
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           _androidChannelId,
           channelName,
@@ -252,8 +252,6 @@ class LocalAlarmService {
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
       // matchDateTimeComponents 없음 → 1회성 (반복 안 함)
       payload: trialEndedPayload,
     );
@@ -263,7 +261,7 @@ class LocalAlarmService {
   /// 무료체험 종료 1회성 알림 취소 — 구독 성공/탈퇴/모드변경 시 호출.
   static Future<void> cancelTrialEnded() async {
     await _ensureInitialized();
-    await _plugin!.cancel(_trialEndedId);
+    await _plugin!.cancel(id: _trialEndedId);
   }
 
   /// 서버 FCM 푸시 `subject_safety_net` 알림 취소 (Android 전용).
@@ -331,6 +329,6 @@ class LocalAlarmService {
   /// 내부 취소 (schedule 내에서도 호출)
   static Future<void> _cancelInternal() async {
     await _ensureInitialized();
-    await _plugin!.cancel(_alarmId);
+    await _plugin!.cancel(id: _alarmId);
   }
 }
