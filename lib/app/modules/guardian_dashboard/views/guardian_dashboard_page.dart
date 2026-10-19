@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:anbucheck/app/core/widgets/resume_replay_mixin.dart';
@@ -27,6 +28,8 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
 
   @override
   Widget build(BuildContext context) {
+    // 넓은 화면(폴더블 펼침·태블릿): 추가 박스를 제목 줄의 작은 버튼으로 줄여 세로 공간 확보(광고 노출).
+    final wide = MediaQuery.sizeOf(context).width >= kLargeScreenBreakpoint;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
@@ -265,10 +268,31 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               // 대상자 리스트 헤더 — 우측에 있던 등급별 카운터는 위 "오늘의 안부 요약"
               // 블록으로 옮겼다. 헤더와 한 줄을 공유하던 탓에 등급이 3종 이상 섞이면
               // Wrap이 두 줄로 늘어 헤더 높이가 흔들렸기 때문이다.
-              Text(
-                'guardian_subject_list'.tr,
-                style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
-              ),
+              if (wide)
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'guardian_subject_list'.tr,
+                        style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
+                      ),
+                    ),
+                    // 새 번역 키 없이 기존 'add_subject_button'(새로운 보호 대상자 추가)을 재사용.
+                    TextButton.icon(
+                      onPressed: controller.goToAddSubject,
+                      icon: const Icon(Icons.add_rounded, size: 20),
+                      label: Text(
+                        'add_subject_button'.tr,
+                        style: AppTextTheme.bodyMedium(fw: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                )
+              else
+                Text(
+                  'guardian_subject_list'.tr,
+                  style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
+                ),
               SizedBox(height: AppSpacing.md),
 
               // 대상자 카드 — 좁은 화면(폰)은 슬라이드, 넓은 화면(폴더블 펼침 등)에서
@@ -376,9 +400,15 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                     // 분기는 창 폭(MediaQuery)으로 — 폰(<600dp)은 기존 슬라이드 그대로.
                     final wide = MediaQuery.sizeOf(context).width >= kLargeScreenBreakpoint;
                     final needed = items.length * _kFixedCardSlotWidth;
+                    // 카드 높이: 폰은 기존 200.h. 넓은 화면은 designSize 확대로 `.w`가 ≥1.0이고
+                    // `.h`/`.sp`는 창 높이에 따라 <1.0이 될 수 있어(가로로 넓은 Duo 펼침에서
+                    // 높이 비 0.82) 200.h로는 내용(.w 크기 아이콘·버튼 포함)이 넘쳤다
+                    // (BOTTOM OVERFLOWED BY 15 PIXELS). 최소 1.0배 이상을 보장한다.
+                    final double cardHeight =
+                        wide ? 200.0 * math.max(ScreenUtil().scaleHeight, 1.0) : 200.h;
                     if (wide && needed <= constraints.maxWidth) {
                       return SizedBox(
-                        height: 200.h,
+                        height: cardHeight,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -395,7 +425,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                     return Column(
                       children: [
                         SizedBox(
-                          height: 200.h,
+                          height: cardHeight,
                           child: PageView.builder(
                             clipBehavior: Clip.none,
                             padEnds: false,
@@ -437,9 +467,11 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               }),
               SizedBox(height: AppSpacing.sp6),
 
-              // 다른 대상자 추가 버튼
-              AddSubjectButton(onTap: controller.goToAddSubject),
-              SizedBox(height: AppSpacing.sp6),
+              // 다른 대상자 추가 버튼 — 넓은 화면은 제목 줄의 작은 버튼으로 대체
+              if (!wide) ...[
+                AddSubjectButton(onTap: controller.goToAddSubject),
+                SizedBox(height: AppSpacing.sp6),
+              ],
 
               const BannerAdWidget(),
               SizedBox(height: AppSpacing.sp6),
