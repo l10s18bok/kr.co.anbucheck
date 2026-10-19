@@ -56,7 +56,15 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) BackPressHandler.onBackPressed();
+        if (didPop) return;
+        // 분할 화면: 오른쪽 pane에 열린 페이지가 있으면 그것부터 닫는다(안드로이드 시스템 뒤로 가기).
+        // pane 스택 맨 아래는 빈 시작 화면이라 2개 이상일 때만 닫을 페이지가 있다.
+        // 마지막 페이지가 닫히면 분할이 풀려 대시보드가 전폭으로 돌아온다.
+        if (AppNav.paneActive && SplitPaneState.stack.length > 1) {
+          Get.nestedKey(1)?.currentState?.maybePop();
+          return;
+        }
+        BackPressHandler.onBackPressed();
       },
       child: Scaffold(
         backgroundColor: AppColors.surface,
