@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -176,7 +177,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                           //  3) 사용자 정보(days, plan 등) 풍부히 못 보여줌
                           // → Settings 탭으로 이동 후 거기서 [구독하기]/[구독 복원]
                           //   선택하도록 가이드.
-                          onPressed: () => Get.offNamed(AppRoutes.guardianSettings),
+                          onPressed: () => AppNav.offNamed(AppRoutes.guardianSettings),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE65100),
                             foregroundColor: Colors.white,

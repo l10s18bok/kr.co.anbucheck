@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class GuardianConnectionManagementController extends BaseController {
   }
 
   void goToAddSubject() {
-    Get.toNamed(AppRoutes.guardianAddSubject)
+    AppNav.toNamed(AppRoutes.guardianAddSubject)
         ?.then((_) => _loadSubjects(force: true));
   }
 

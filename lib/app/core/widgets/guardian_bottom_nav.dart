@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -57,13 +58,13 @@ class GuardianBottomNav extends StatelessWidget {
             if (index == currentIndex) return;
             switch (index) {
               case 0:
-                Get.offNamed(AppRoutes.guardianDashboard);
+                AppNav.offNamed(AppRoutes.guardianDashboard);
               case 1:
-                Get.offNamed(AppRoutes.guardianConnectionManagement);
+                AppNav.offNamed(AppRoutes.guardianConnectionManagement);
               case 2:
-                Get.offNamed(AppRoutes.guardianNotifications);
+                AppNav.offNamed(AppRoutes.guardianNotifications);
               case 3:
-                Get.offNamed(AppRoutes.guardianSettings);
+                AppNav.offNamed(AppRoutes.guardianSettings);
             }
           },
         ),

@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -539,7 +540,7 @@ class GuardianDashboardController extends BaseController
 
   /// 대상자 추가 페이지로 이동 — 연결 완료 시 목록 즉시 갱신
   Future<void> goToAddSubject() async {
-    final result = await Get.toNamed(AppRoutes.guardianAddSubject);
+    final result = await AppNav.toNamed(AppRoutes.guardianAddSubject);
     if (result == true) {
       await _svc.refresh();
       await _loadSubjects();

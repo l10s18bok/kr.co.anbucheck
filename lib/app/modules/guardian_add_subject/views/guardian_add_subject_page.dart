@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
     show
@@ -33,7 +34,7 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
               color: AppColors.onSurface,
               size: 20.w,
             ),
-            onPressed: () => Get.back(),
+            onPressed: () => AppNav.back(),
           ),
           title: Text(
             'add_subject_title'.tr,

@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -448,7 +449,7 @@ class _NotificationCard extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton.icon(
                   onPressed: () {
-                    Get.toNamed(
+                    AppNav.toNamed(
                       AppRoutes.guardianEmergencyMap,
                       arguments: {
                         'lat': item.locationLat,

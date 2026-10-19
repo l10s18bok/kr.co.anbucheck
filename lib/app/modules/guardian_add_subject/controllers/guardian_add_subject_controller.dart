@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
@@ -154,7 +155,7 @@ class GuardianAddSubjectController extends BaseController {
       // 페이지가 아니라 스낵바 오버레이 쪽이 pop되어 화면이 안 넘어가는 문제가
       // 있었다(GetX 알려진 충돌). 목록 화면으로 돌아가 방금 추가한 대상자가
       // 바로 보이는 것 자체가 성공 확인이므로 스낵바 없이도 충분하다.
-      Get.back(result: true);
+      AppNav.back(result: true);
     } catch (e) {
       final msg = e.toString().contains('404')
           ? 'add_subject_error_invalid_code'.tr

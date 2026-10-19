@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -20,7 +21,7 @@ class GuardianEmergencyMapPage extends GetWidget<GuardianEmergencyMapController>
         foregroundColor: AppColors.guardianOnPrimary,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded, size: 20.w),
-          onPressed: () => Get.back(),
+          onPressed: () => AppNav.back(),
         ),
       ),
       body: SafeArea(

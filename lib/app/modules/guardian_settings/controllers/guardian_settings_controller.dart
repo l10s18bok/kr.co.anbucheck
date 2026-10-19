@@ -1,3 +1,4 @@
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -167,11 +168,11 @@ class GuardianSettingsController extends BaseController {
   // ── 네비게이션 ──
 
   void goToConnectionManagement() {
-    Get.toNamed(AppRoutes.guardianConnectionManagement);
+    AppNav.toNamed(AppRoutes.guardianConnectionManagement);
   }
 
   void goToNotificationSettings() {
-    Get.toNamed(AppRoutes.guardianNotificationSettings, arguments: 3);
+    AppNav.toNamed(AppRoutes.guardianNotificationSettings, arguments: 3);
   }
 
   /// 계정 탈퇴 — heartbeat 예약 정리는 Dashboard 컨트롤러에 위임.
