@@ -93,6 +93,9 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                     TextField(
                       controller: controller.codeController,
                       focusNode: controller.codeFocus,
+                      // 키보드 완료/다음 키 → 별칭 입력란으로 이동
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (_) => controller.aliasFocus.requestFocus(),
                       onChanged: controller.onCodeChanged,
                       style: AppTextTheme.bodyLarge(),
                       keyboardType: TextInputType.visiblePassword,
@@ -101,10 +104,11 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                       enableSuggestions: false,
                       autofillHints: const [],
                       inputFormatters: [
-                        // 영문자·숫자만 입력받는다. `-`는 사용자가 치지 않고 3자리 뒤에 자동으로 들어간다.
+                        // 영문자·숫자·하이픈만 입력받는다. 하이픈은 사용자가 직접 치면 3자리 직후에 그대로
+                        // 보이고, 치지 않으면 4번째 글자가 들어올 때 자동으로 들어간다(InviteCodeFormatter).
                         // 비-ASCII(자국어 IME 조합 등) 입력 자체를 차단 — visiblePassword로 대부분 라틴
-                        // 키보드가 강제되지만 iOS/붙여넣기 대비 방어. (붙여넣은 코드의 `-`는 정리 후 재삽입)
-                        FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9]')),
+                        // 키보드가 강제되지만 iOS/붙여넣기 대비 방어.
+                        FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9-]')),
                         // 대문자 변환 + 3자리 뒤 `-` 자동 삽입 + 7자리 제한(XXX-XXXX).
                         const InviteCodeFormatter(),
                       ],
@@ -174,6 +178,9 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                     TextField(
                       controller: controller.aliasController,
                       focusNode: controller.aliasFocus,
+                      // 완료/다음 키 → 연락처 입력란으로 이동
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (_) => controller.phoneFocus.requestFocus(),
                       onChanged: controller.onAliasChanged,
                       // 서버가 20자에서 절단하므로(Push 본문에 실리는 값) 입력도 맞춘다.
                       // maxLength 대신 formatter를 쓰는 이유: 글자수 카운터를 노출하지 않기 위함.
@@ -226,6 +233,10 @@ class GuardianAddSubjectPage extends GetWidget<GuardianAddSubjectController> {
                     TextField(
                       controller: controller.phoneController,
                       focusNode: controller.phoneFocus,
+                      // 마지막 칸 — 완료 키는 키보드를 내려 [연결하기] 버튼이 보이게 한다.
+                      // 앞 입력(코드·별칭)이 올바르면 버튼은 이미 활성화돼 있다(연락처는 선택 입력).
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) => controller.phoneFocus.unfocus(),
                       style: AppTextTheme.bodyLarge(),
                       keyboardType: TextInputType.phone,
                       autofillHints: const [],
