@@ -46,5 +46,15 @@ class AppNav {
     return Get.offNamed<T>(route, arguments: arguments);
   }
 
-  static void back<T>({T? result}) => Get.back<T>(result: result, id: paneId);
+  static void back<T>({T? result}) {
+    final id = paneId;
+    if (id != null) {
+      // pane에서는 Navigator를 직접 pop한다. `Get.back`은 스낵바가 떠 있으면 페이지가 아니라
+      // 스낵바만 닫고 끝내서(GetX 4.x 호환 코드) 연결 성공 직후 화면이 안 닫힐 수 있다.
+      final nav = Get.nestedKey(id)?.currentState;
+      if (nav != null && nav.canPop()) nav.pop<T>(result);
+      return;
+    }
+    Get.back<T>(result: result);
+  }
 }
