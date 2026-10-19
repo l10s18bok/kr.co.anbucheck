@@ -8,7 +8,11 @@ import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 class AddSubjectButton extends StatelessWidget {
   final VoidCallback onTap;
 
-  const AddSubjectButton({super.key, required this.onTap});
+  /// true면 세로를 줄인 컴팩트 형태(넓은 화면에서 광고 자리를 대신할 때). 논리 px 고정값을
+  /// 써서 큰 화면의 `.h`/`.w` 스케일과 무관하게 높이가 예측되게 한다.
+  final bool compact;
+
+  const AddSubjectButton({super.key, required this.onTap, this.compact = false});
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +32,13 @@ class AddSubjectButton extends StatelessWidget {
         ),
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 28.h),
+          padding: EdgeInsets.symmetric(vertical: compact ? 22 : 28.h),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 36.w,
-                height: 36.w,
+                width: compact ? 32 : 36.w,
+                height: compact ? 32 : 36.w,
                 decoration: BoxDecoration(
                   color: dark
                       ? const Color(0xFF5A5F69)
@@ -45,7 +49,7 @@ class AddSubjectButton extends StatelessWidget {
                     size: 20.w,
                     color: dark ? Colors.white : AppColors.onSurfaceVariant),
               ),
-              SizedBox(height: 10.h),
+              SizedBox(height: compact ? 6 : 10.h),
               Text(
                 'add_subject_button'.tr,
                 style: AppTextTheme.bodyMedium(
