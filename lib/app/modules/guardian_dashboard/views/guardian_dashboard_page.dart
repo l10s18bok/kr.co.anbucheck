@@ -17,8 +17,14 @@ import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/app/core/utils/number_text.dart';
 import 'package:anbucheck/app/core/utils/label_separator.dart';
 import 'package:anbucheck/app/core/utils/layout_breakpoints.dart';
+import 'package:anbucheck/app/core/services/fold_state_service.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
+/// 폴더블을 접은 상태인가. 서비스가 없거나(테스트 등) 폰이면 false.
+bool _isFolded() =>
+    Get.isRegistered<FoldStateService>() &&
+    Get.find<FoldStateService>().posture.value == FoldPosture.folded;
+
 /// 대상자 카드 한 칸(카드 + 오른쪽 여백) 고정 폭 — 폭 ≥ 600dp에서 한 줄 표시 판단용(논리 px, `.w` 아님:
 /// 큰 화면에서 designSize 확대로 `.w`가 늘어나도 카드는 폰 카드와 같은 크기를 유지해야 한다).
 const double _kFixedCardSlotWidth = 348;
@@ -220,6 +226,9 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               // 하단 광고 배너가 스크롤 밖으로 밀리므로 이 요약 블록을 숨긴다.
               if (!wide)
               Obx(() {
+                // 폴더블을 접은 상태(외부 화면)도 세로 공간이 부족해 숨긴다. 폰·비폴더블은
+                // posture가 항상 unknown이라 영향 없음.
+                if (_isFolded()) return const SizedBox.shrink();
                 final subjects = controller.subjects;
                 // 표시 순서: 긴급 → 경고 → 주의 → 안전 (대상자 리스트 정렬과 동일)
                 final counts = {
@@ -274,13 +283,24 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                   ),
                 );
               }),
-              SizedBox(height: wide ? AppSpacing.lg : AppSpacing.sp6),
+              Obx(() => SizedBox(
+                    height: (wide || _isFolded()) ? AppSpacing.lg : AppSpacing.sp6,
+                  )),
 
               // 대상자 리스트 헤더 — 우측에 있던 등급별 카운터는 위 "오늘의 안부 요약"
               // 블록으로 옮겼다. 헤더와 한 줄을 공유하던 탓에 등급이 3종 이상 섞이면
               // Wrap이 두 줄로 늘어 헤더 높이가 흔들렸기 때문이다.
-              if (wide)
-                Row(
+              // 세로 공간이 부족한 화면(폭 ≥600dp이거나 폴더블을 접은 상태)에서는 추가 박스를
+              // 제목 줄의 작은 버튼으로 줄인다. 접힘 상태는 변할 수 있어 Obx로 감싼다.
+              Obx(() {
+                final compact = wide || _isFolded();
+                if (!compact) {
+                  return Text(
+                    'guardian_subject_list'.tr,
+                    style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
+                  );
+                }
+                return Row(
                   children: [
                     Expanded(
                       child: Text(
@@ -295,6 +315,10 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                           ? const SizedBox.shrink()
                           : TextButton.icon(
                               onPressed: controller.goToAddSubject,
+                              // 기본 좌우 패딩(12) 중 오른쪽만 제거 — 버튼 글자가 화면 여백선(오른쪽 끝)에 맞도록
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.only(left: 12),
+                              ),
                               icon: const Icon(Icons.add_rounded, size: 20),
                               label: Text(
                                 'add_subject_button'.tr,
@@ -303,12 +327,8 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             ),
                     ),
                   ],
-                )
-              else
-                Text(
-                  'guardian_subject_list'.tr,
-                  style: AppTextTheme.bodyLarge(fw: FontWeight.w600),
-                ),
+                );
+              }),
               SizedBox(height: AppSpacing.md),
 
               // 대상자 카드 — 좁은 화면(폰)은 슬라이드, 넓은 화면(폴더블 펼침 등)에서
@@ -411,6 +431,10 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 });
                 }
 
+                // Obx 안(추적 범위)에서 읽어야 접힘 상태 변화에 다시 그려진다 — LayoutBuilder 콜백은
+                // Obx 추적 밖이라 거기서 읽으면 갱신되지 않을 수 있다.
+                final folded = _isFolded();
+
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     // 분기는 창 폭(MediaQuery)으로 — 폰(<600dp)은 기존 슬라이드 그대로.
@@ -420,8 +444,13 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                     // `.h`/`.sp`는 창 높이에 따라 <1.0이 될 수 있어(가로로 넓은 Duo 펼침에서
                     // 높이 비 0.82) 200.h로는 내용(.w 크기 아이콘·버튼 포함)이 넘쳤다
                     // (BOTTOM OVERFLOWED BY 15 PIXELS). 최소 1.0배 이상을 보장한다.
-                    final double cardHeight =
-                        wide ? 200.0 * math.max(ScreenUtil().scaleHeight, 1.0) : 200.h;
+                    //
+                    // 폴더블을 접은 외부 화면(폭 <600dp)도 같다 — 설계 비율(375×812)보다 가로로
+                    // 넓고 낮아 `.w` 크기 요소가 `.h` 예산을 넘는다(BOTTOM OVERFLOWED BY 13 PIXELS).
+                    // 접힘 상태일 때만 보정하므로 일반 폰은 그대로다.
+                    final double cardHeight = (wide || folded)
+                        ? 200.0 * math.max(ScreenUtil().scaleHeight, 1.0)
+                        : 200.h;
                     if (wide && needed <= constraints.maxWidth) {
                       return SizedBox(
                         height: cardHeight,
@@ -492,18 +521,27 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               SizedBox(height: AppSpacing.sp6),
 
               // 다른 대상자 추가 버튼 — 넓은 화면은 제목 줄의 작은 버튼으로 대체
-              if (!wide) ...[
-                AddSubjectButton(onTap: controller.goToAddSubject),
-                SizedBox(height: AppSpacing.sp6),
-              ],
+              Obx(
+                () => (wide || _isFolded())
+                    ? const SizedBox.shrink()
+                    : Column(
+                        children: [
+                          AddSubjectButton(onTap: controller.goToAddSubject),
+                          SizedBox(height: AppSpacing.sp6),
+                        ],
+                      ),
+              ),
 
-              BannerAdWidget(
-                // 넓은 화면에서만: 광고가 없으면(프리미엄·권한/동의 거부·로드 실패) 같은 자리에
-                // 기존 디자인의 추가 박스(컴팩트)를 보인다. 폰은 fallback 없음 → 기존 동작.
-                fallback: wide
-                    ? AddSubjectButton(onTap: controller.goToAddSubject, compact: true)
-                    : null,
-                onFallbackChanged: (shown) => controller.adFallbackShown.value = shown,
+              Obx(
+                () => BannerAdWidget(
+                  // 세로 공간이 부족한 화면(넓은 화면·폴더블 접힘)에서만: 광고가 없으면
+                  // (프리미엄·권한/동의 거부·로드 실패) 같은 자리에 기존 디자인의 추가 박스(컴팩트)를
+                  // 보인다. 폰은 fallback 없음 → 기존 동작.
+                  fallback: (wide || _isFolded())
+                      ? AddSubjectButton(onTap: controller.goToAddSubject, compact: true)
+                      : null,
+                  onFallbackChanged: (shown) => controller.adFallbackShown.value = shown,
+                ),
               ),
               SizedBox(height: AppSpacing.sp6),
             ],
