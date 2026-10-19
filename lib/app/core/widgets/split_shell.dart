@@ -141,19 +141,60 @@ class _SplitShellState extends State<SplitShell> {
   }
 }
 
+/// 오른쪽 pane의 현재 화면 → 하단 탭 인덱스. 왼쪽 탭바가 pane 쪽 탭을 강조하는 데 쓴다.
+class SplitPaneState {
+  SplitPaneState._();
+
+  /// pane 스택(맨 아래는 빈 시작 화면).
+  static final stack = <Route<dynamic>>[].obs;
+
+  /// 오른쪽 pane의 탭 인덱스(1 연결 · 2 알림 · 3 설정). pane이 비어 있으면 null.
+  static int? get tab {
+    if (stack.isEmpty) return null;
+    final s = stack.last.settings;
+    switch (s.name) {
+      case AppRoutes.guardianConnectionManagement:
+      case AppRoutes.guardianAddSubject:
+        return 1;
+      case AppRoutes.guardianNotifications:
+      case AppRoutes.guardianEmergencyMap:
+        return 2;
+      case AppRoutes.guardianSettings:
+        return 3;
+      case AppRoutes.guardianNotificationSettings:
+        // 설정 탭에서 열면 arguments=3(설정 탭 유지), 알림 탭에서 열면 기본 2.
+        return (s.arguments as int?) ?? 2;
+    }
+    return null;
+  }
+}
+
 class _PaneObserver extends NavigatorObserver {
   _PaneObserver(this.onChange);
   final VoidCallback onChange;
 
-  void _notify() =>
-      WidgetsBinding.instance.addPostFrameCallback((_) => onChange());
+  // 빌드 중 Rx를 바꾸지 않도록 다음 프레임에 반영.
+  void _later(void Function() f) => WidgetsBinding.instance.addPostFrameCallback((_) {
+        f();
+        onChange();
+      });
 
   @override
-  void didPush(Route route, Route? previousRoute) => _notify();
+  void didPush(Route route, Route? previousRoute) =>
+      _later(() => SplitPaneState.stack.add(route));
   @override
-  void didPop(Route route, Route? previousRoute) => _notify();
+  void didPop(Route route, Route? previousRoute) =>
+      _later(() => SplitPaneState.stack.remove(route));
   @override
-  void didRemove(Route route, Route? previousRoute) => _notify();
+  void didRemove(Route route, Route? previousRoute) =>
+      _later(() => SplitPaneState.stack.remove(route));
   @override
-  void didReplace({Route? newRoute, Route? oldRoute}) => _notify();
+  void didReplace({Route? newRoute, Route? oldRoute}) => _later(() {
+        final i = oldRoute == null ? -1 : SplitPaneState.stack.indexOf(oldRoute);
+        if (i >= 0 && newRoute != null) {
+          SplitPaneState.stack[i] = newRoute;
+        } else if (newRoute != null) {
+          SplitPaneState.stack.add(newRoute);
+        }
+      });
 }
