@@ -248,7 +248,14 @@ class _SubjectReorderableListState extends State<_SubjectReorderableList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
+    // Scrollbar는 MediaQuery.padding(세이프 에리어)만큼 썸을 안쪽으로 민다 — Duo처럼 카메라 쪽에
+    // 좌우 인셋이 큰 화면에서는 썸이 카드 한가운데에 세로줄로 떠 버린다. 좌우 인셋을 지워 썸을
+    // 리스트 오른쪽 끝(이미 padding.right로 비워 둔 자리)에 붙인다. 폰은 좌우 인셋이 0이라 변화 없음.
+    return MediaQuery.removePadding(
+      context: context,
+      removeLeft: true,
+      removeRight: true,
+      child: Scrollbar(
       controller: _scrollController,
       thumbVisibility: true,
       child: ReorderableListView.builder(
@@ -284,6 +291,7 @@ class _SubjectReorderableListState extends State<_SubjectReorderableList> {
             ),
           );
         },
+      ),
       ),
     );
   }
