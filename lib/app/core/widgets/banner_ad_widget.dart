@@ -58,6 +58,12 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   bool _attemptFinished = false;
   Timer? _pendingTimer;
   bool _lastFallbackShown = false;
+
+  /// 이 위젯이 실제로 받는 가로 폭(LayoutBuilder). 넓은 화면(≥600dp)에서만 광고 폭 계산에 쓴다.
+  /// 분할 화면의 왼쪽 pane처럼 창 폭보다 좁은 자리에 창 폭 크기의 광고를 요청하면
+  /// "Ad size will not fit on screen"으로 로드가 실패한다. 폰(<600dp)은 기존처럼 창 폭을 그대로 쓴다.
+  double? _availWidth;
+  int? _loadedWidth;
   int _retryCount = 0;
   Timer? _retryTimer;
 
@@ -144,7 +150,12 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     }
 
     // context 값을 async 호출 전에 캡처 (BuildContext across async gap 방지)
-    final width = MediaQuery.of(context).size.width.truncate();
+    final mq = MediaQuery.of(context).size;
+    final wideWindow = mq.width >= 600;
+    // 넓은 화면은 레이아웃 폭이 정해질 때까지 기다린다(LayoutBuilder가 확정 후 다시 부른다).
+    if (wideWindow && _availWidth == null) return;
+    final width = (wideWindow ? _availWidth! : mq.width).truncate();
+    _loadedWidth = width;
 
     // UMP 동의 확인 — EEA/UK/스위스 사용자가 동의 거부 시 광고 로드 차단.
     // 동의 상태는 사용자 결정이므로 retry하지 않는다.
@@ -155,7 +166,10 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     }
     if (!mounted) return;
 
-    final adSize = await AdSize.getAnchoredAdaptiveBannerAdSize(Orientation.portrait, width);
+    final adSize = await AdSize.getAnchoredAdaptiveBannerAdSize(
+      wideWindow && mq.width > mq.height ? Orientation.landscape : Orientation.portrait,
+      width,
+    );
     if (adSize == null || !mounted) {
       if (mounted) setState(() => _attemptFinished = true);
       return;
@@ -217,8 +231,31 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     super.dispose();
   }
 
+  /// 넓은 화면에서 내가 받는 폭이 바뀌었으면(펼침·분할 전환) 광고를 새 폭으로 다시 요청한다.
+  void _onLayoutWidth(double w) {
+    if (MediaQuery.sizeOf(context).width < 600) return;
+    _availWidth = w;
+    if (_loadedWidth != null && _loadedWidth == w.truncate()) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _hideForPremium) return;
+      _retryTimer?.cancel();
+      _retryTimer = null;
+      _bannerAd?.dispose();
+      _bannerAd = null;
+      _isLoaded = false;
+      _loadAd();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.hasBoundedWidth) _onLayoutWidth(constraints.maxWidth);
+      return _buildContent(context);
+    });
+  }
+
+  Widget _buildContent(BuildContext context) {
     if (_hideForPremium || !_isLoaded || _bannerAd == null) {
       // 프리미엄이거나 광고 시도가 끝났는데 광고가 없으면 fallback. 아직 정해지지 않았으면 빈칸.
       final showFallback = widget.fallback != null &&
