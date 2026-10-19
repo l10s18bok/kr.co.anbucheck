@@ -190,7 +190,14 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 final text = count == 0
                     ? 'guardian_no_subjects'.tr
                     : NumberText.tr('guardian_checking_subjects', 'count', count);
-                return Text(text, style: AppTextTheme.headlineMedium(fw: FontWeight.w700));
+                // 넓은 화면은 가로 여유가 있어 두 줄(\n) 제목을 한 줄로 합쳐 세로 공간을 아낀다.
+                // 일본어·중국어·태국어는 단어 사이 공백이 없으므로 공백 없이 잇는다.
+                final lang = Get.locale?.languageCode;
+                final joiner = (lang == 'ja' || lang == 'zh' || lang == 'th') ? '' : ' ';
+                return Text(
+                  wide ? text.replaceAll('\n', joiner) : text,
+                  style: AppTextTheme.headlineMedium(fw: FontWeight.w700),
+                );
               }),
 
               // "오늘의 안부 요약" 라벨 + 등급별 인원 카운터
@@ -208,6 +215,10 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               //
               // 표시할 등급이 없으면(대상자 0명) 라벨까지 함께 숨긴다 — 라벨만 덩그러니
               // 남으면 아래에 아무것도 없는 빈 제목이 된다.
+              //
+              // 넓은 화면(폴더블 펼침 등)은 세로 공간이 부족해(가로로 넓어 창 높이가 낮음)
+              // 하단 광고 배너가 스크롤 밖으로 밀리므로 이 요약 블록을 숨긴다.
+              if (!wide)
               Obx(() {
                 final subjects = controller.subjects;
                 // 표시 순서: 긴급 → 경고 → 주의 → 안전 (대상자 리스트 정렬과 동일)
@@ -263,7 +274,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                   ),
                 );
               }),
-              SizedBox(height: AppSpacing.sp6),
+              SizedBox(height: wide ? AppSpacing.lg : AppSpacing.sp6),
 
               // 대상자 리스트 헤더 — 우측에 있던 등급별 카운터는 위 "오늘의 안부 요약"
               // 블록으로 옮겼다. 헤더와 한 줄을 공유하던 탓에 등급이 3종 이상 섞이면
@@ -430,15 +441,22 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                             clipBehavior: Clip.none,
                             padEnds: false,
                             itemCount: items.length,
-                            controller: PageController(viewportFraction: items.length > 1 ? 0.92 : 1.0),
+                            // 넓은 화면은 카드 폭을 고정(한 칸 = _kFixedCardSlotWidth)하고 옆 카드가 이어서 보이는
+                            // 스트립으로 — viewportFraction을 칸 폭/가용 폭으로 둔다. 폰은 기존 0.92.
+                            controller: PageController(
+                              viewportFraction: wide
+                                  ? (_kFixedCardSlotWidth / constraints.maxWidth).clamp(0.1, 1.0)
+                                  : (items.length > 1 ? 0.92 : 1.0),
+                            ),
                             onPageChanged: (i) => controller.currentCardIndex.value = i,
-                            itemBuilder: (_, i) => buildCard(i),
+                            // 넓은 화면은 여러 장이 동시에 보이므로 모두 활성(차트 진입 애니메이션)
+                            itemBuilder: (_, i) => buildCard(i, forceActive: wide),
                           ),
                         ),
 
-                        // 페이지 인디케이터
+                        // 페이지 인디케이터 — 넓은 화면은 카드와의 간격을 넓힌다(20 논리 px)
                         if (items.length > 1) ...[
-                          SizedBox(height: 10.h),
+                          SizedBox(height: wide ? 20 : 10.h),
                           Obx(
                             () => Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -465,6 +483,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                   },
                 );
               }),
+              // 카드와 광고 사이 — 넓은 화면도 원래 간격(sp6)을 유지(광고가 카드에 붙어 보이지 않게)
               SizedBox(height: AppSpacing.sp6),
 
               // 다른 대상자 추가 버튼 — 넓은 화면은 제목 줄의 작은 버튼으로 대체
