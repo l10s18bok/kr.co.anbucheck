@@ -90,7 +90,7 @@ abstract class TrTr {
     'onboarding_notifications_desc': 'Her şey yolundayken adım sayısı gibi etkinlikleri görürsünüz. Haber gelmezse ya da etkinlik kaydedilmezse yukarıdaki gibi bildirim alırsınız.',
     'onboarding_push_now': 'şimdi',
     'onboarding_gs_enable_title': 'Kendi güvenlik kodunuzu etkinleştirin',
-    'onboarding_gs_enable_desc': 'Ayarlar\'da [Güvenlik kodumu oluştur] seçeneğine dokunun,\nsizin haberiniz de koruyucularınıza gitsin',
+    'onboarding_gs_enable_desc': 'Siz de haber vermek istiyorsanız,\nAyarlar\'da [Güvenlik kodumu oluştur] seçeneğine dokunun',
     'onboarding_role_subject': 'Yakın',
     'onboarding_role_guardian': 'Koruyucu',
     'onboarding_role_guardian_subject': 'Koruyucu ve yakın',

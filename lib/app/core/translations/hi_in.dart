@@ -90,7 +90,7 @@ abstract class HiIn {
     'onboarding_notifications_desc': 'सब ठीक होने पर क़दमों जैसी गतिविधि दिखती है। खैरियत की सूचना न आए या कोई गतिविधि दर्ज न हो, तो ऊपर जैसी सूचना मिलती है।',
     'onboarding_push_now': 'अभी',
     'onboarding_gs_enable_title': 'अपना सुरक्षा कोड चालू करें',
-    'onboarding_gs_enable_desc': 'सेटिंग में [मेरा सुरक्षा कोड बनाएँ] पर टैप करें,\nताकि आपकी खैरियत भी देखभाल करने वालों तक पहुँचे',
+    'onboarding_gs_enable_desc': 'अपनी खैरियत भी भेजनी हो तो\nसेटिंग में [मेरा सुरक्षा कोड बनाएँ] पर टैप करें',
     'onboarding_role_subject': 'प्रियजन',
     'onboarding_role_guardian': 'देखभाल करने वाले',
     'onboarding_role_guardian_subject': 'देखभाल करने वाले और प्रियजन',

@@ -90,7 +90,7 @@ abstract class ThTh {
     'onboarding_notifications_desc': 'เมื่อทุกอย่างปกติ คุณจะเห็นการเคลื่อนไหว เช่น จำนวนก้าว ถ้าไม่ได้รับการแจ้งว่าสบายดีหรือไม่พบบันทึกกิจกรรม เราจะแจ้งคุณแบบด้านบน',
     'onboarding_push_now': 'ตอนนี้',
     'onboarding_gs_enable_title': 'เปิดใช้รหัสความปลอดภัยของคุณ',
-    'onboarding_gs_enable_desc': 'แตะ [สร้างรหัสความปลอดภัยของฉัน] ในการตั้งค่า\nเพื่อแจ้งผู้ดูแลว่าคุณสบายดีด้วย',
+    'onboarding_gs_enable_desc': 'หากต้องการแจ้งว่าคุณสบายดีด้วย\nให้แตะ [สร้างรหัสความปลอดภัยของฉัน] ในการตั้งค่า',
     'onboarding_role_subject': 'ผู้ได้รับการดูแล',
     'onboarding_role_guardian': 'ผู้ดูแล',
     'onboarding_role_guardian_subject': 'ผู้ดูแลและผู้ได้รับการดูแล',

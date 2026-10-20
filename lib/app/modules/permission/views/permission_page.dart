@@ -22,90 +22,143 @@ class PermissionPage extends GetWidget<PermissionController> {
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 고정 타이틀
-              SizedBox(height: AppSpacing.vsm),
-              Text('permission_title'.tr, style: AppTextTheme.displaySmall()),
-              SizedBox(height: AppSpacing.sp8),
-
-              // 스크롤 영역 (권한 카드들)
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 1. 알림 권한 카드 (공통)
-                      _PermissionCard(
-                        icon: Icons.notifications_rounded,
-                        title: 'permission_notification'.tr,
-                        description: controller.isSubjectMode
-                            ? 'permission_notification_subject_desc'.tr
-                            : 'permission_notification_guardian_desc'.tr,
-                      ),
-
-                      // 2. 신체 활동 권한 카드
-                      //   - Android 대상자 / G+S 복원: 카드 표시 + 권한 요청
-                      //   - Android 순수 보호자 / iOS: heartbeat 전송이 이 시점에 필요 없으므로 숨김
-                      //     (iOS는 G+S 활성화 시점에 CMPedometer 트리거로 시스템 팝업 표시)
-                      if (Platform.isAndroid &&
-                          (controller.isSubjectMode || controller.isAlsoSubject)) ...[
-                        SizedBox(height: AppSpacing.lg),
-                        _PermissionCard(
-                          icon: Icons.directions_walk_rounded,
-                          title: 'permission_activity'.tr,
-                          description: 'permission_activity_desc'.tr,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // 낮은 창(Duo 접힘 세로·가로 등)에서는 고정 버튼이 카드 위로 겹치고 카드가 가려진다 →
+            // 제목·카드·버튼을 한 스크롤에 넣어 겹침을 없앤다. 창 크기만으로 판단(폰은 해당 없음):
+            // 폭 <600dp인데 뭉툭한 창(세로 < 폭×1.7) 또는 폭 ≥600dp인데 낮은 창(높이 <700).
+            final mq = MediaQuery.sizeOf(context);
+            final compact = (mq.width < 600 && mq.height < mq.width * 1.7) ||
+                (mq.width >= 600 && mq.height < 700);
+            final title = Text('permission_title'.tr, style: AppTextTheme.displaySmall());
+            final cards = _buildCards();
+            final button = SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: controller.requestPermissions,
+                child: Text('common_confirm'.tr, style: AppTextTheme.labelLarge()),
+              ),
+            );
+            if (compact) {
+              // 제목+카드는 스크롤, [확인] 버튼은 하단 고정(스크롤 영역과 간격을 둬 카드가 버튼에 붙어 잘려
+              // 겹쳐 보이지 않게 한다). 제목은 줄바꿈 없이 한 줄로 이어 붙인다.
+              return Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 560),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: AppSpacing.vsm),
+                                Text(
+                                  'permission_title'.tr.replaceAll('\n', ' '),
+                                  style: AppTextTheme.displaySmall(),
+                                ),
+                                const SizedBox(height: 12),
+                                ...cards,
+                                const SizedBox(height: 12),
+                              ],
+                            ),
+                          ),
                         ),
+                        const SizedBox(height: 8),
+                        button,
+                        SizedBox(height: AppSpacing.sp6),
                       ],
-
-                      // 3. 위치 권한 카드 (긴급 도움 요청 시 1회성 첨부용)
-                      //   - 활동 인식 권한과 동일 조건: Android 대상자 기능 사용 경로만 노출
-                      //   - 거부해도 긴급 요청 자체는 동작하며 위치 없이 전송됨
-                      if (Platform.isAndroid &&
-                          (controller.isSubjectMode || controller.isAlsoSubject)) ...[
-                        SizedBox(height: AppSpacing.lg),
-                        _PermissionCard(
-                          icon: Icons.location_on_rounded,
-                          title: 'permission_location'.tr,
-                          description: 'permission_location_desc'.tr,
-                        ),
-                      ],
-
-                      // 4. 광고 추적 권한 카드 (iOS 전용 — ATT)
-                      //   - GMA SDK 초기화 전 사용자에게 목적을 미리 안내
-                      //   - [확인] 탭 후 ATT 시스템 팝업 → AdMob 초기화 순서를 보장
-                      if (Platform.isIOS) ...[
-                        SizedBox(height: AppSpacing.lg),
-                        _PermissionCard(
-                          icon: Icons.track_changes_rounded,
-                          title: 'permission_tracking'.tr,
-                          description: 'permission_tracking_desc'.tr,
-                        ),
-                      ],
-
-                      SizedBox(height: AppSpacing.sp8),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              );
+            }
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.horizontalMargin),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 고정 타이틀
+                  SizedBox(height: AppSpacing.vsm),
+                  title,
+                  SizedBox(height: AppSpacing.sp8),
 
-              // 하단 고정 버튼
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: controller.requestPermissions,
-                  child: Text('common_confirm'.tr, style: AppTextTheme.labelLarge()),
-                ),
+                  // 스크롤 영역 (권한 카드들)
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [...cards, SizedBox(height: AppSpacing.sp8)],
+                      ),
+                    ),
+                  ),
+
+                  // 하단 고정 버튼
+                  button,
+                  SizedBox(height: AppSpacing.sp6),
+                ],
               ),
-              SizedBox(height: AppSpacing.sp6),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
+  }
+
+  /// 권한 카드 목록(카드 사이 간격 포함).
+  List<Widget> _buildCards() {
+    return [
+      // 1. 알림 권한 카드 (공통)
+      _PermissionCard(
+        icon: Icons.notifications_rounded,
+        title: 'permission_notification'.tr,
+        description: controller.isSubjectMode
+            ? 'permission_notification_subject_desc'.tr
+            : 'permission_notification_guardian_desc'.tr,
+      ),
+
+      // 2. 신체 활동 권한 카드
+      //   - Android 대상자 / G+S 복원: 카드 표시 + 권한 요청
+      //   - Android 순수 보호자 / iOS: heartbeat 전송이 이 시점에 필요 없으므로 숨김
+      //     (iOS는 G+S 활성화 시점에 CMPedometer 트리거로 시스템 팝업 표시)
+      if (Platform.isAndroid &&
+          (controller.isSubjectMode || controller.isAlsoSubject)) ...[
+        SizedBox(height: AppSpacing.lg),
+        _PermissionCard(
+          icon: Icons.directions_walk_rounded,
+          title: 'permission_activity'.tr,
+          description: 'permission_activity_desc'.tr,
+        ),
+      ],
+
+      // 3. 위치 권한 카드 (긴급 도움 요청 시 1회성 첨부용)
+      //   - 활동 인식 권한과 동일 조건: Android 대상자 기능 사용 경로만 노출
+      //   - 거부해도 긴급 요청 자체는 동작하며 위치 없이 전송됨
+      if (Platform.isAndroid &&
+          (controller.isSubjectMode || controller.isAlsoSubject)) ...[
+        SizedBox(height: AppSpacing.lg),
+        _PermissionCard(
+          icon: Icons.location_on_rounded,
+          title: 'permission_location'.tr,
+          description: 'permission_location_desc'.tr,
+        ),
+      ],
+
+      // 4. 광고 추적 권한 카드 (iOS 전용 — ATT)
+      //   - GMA SDK 초기화 전 사용자에게 목적을 미리 안내
+      //   - [확인] 탭 후 ATT 시스템 팝업 → AdMob 초기화 순서를 보장
+      if (Platform.isIOS) ...[
+        SizedBox(height: AppSpacing.lg),
+        _PermissionCard(
+          icon: Icons.track_changes_rounded,
+          title: 'permission_tracking'.tr,
+          description: 'permission_tracking_desc'.tr,
+        ),
+      ],
+    ];
   }
 }
 

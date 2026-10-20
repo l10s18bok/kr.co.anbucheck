@@ -90,7 +90,7 @@ abstract class PlPl {
     'onboarding_notifications_desc': 'Gdy wszystko jest w porządku, widzisz aktywność, np. liczbę kroków. Gdy znak życia nie dotrze albo nie odnotowano aktywności, dostaniesz powiadomienie jak powyżej.',
     'onboarding_push_now': 'teraz',
     'onboarding_gs_enable_title': 'Włącz własny kod bezpieczeństwa',
-    'onboarding_gs_enable_desc': 'Dotknij w ustawieniach [Utwórz mój kod bezpieczeństwa],\naby także Twój znak życia trafiał do opiekunów',
+    'onboarding_gs_enable_desc': 'Jeśli chcesz też przekazać swój znak życia,\ndotknij w ustawieniach [Utwórz mój kod bezpieczeństwa]',
     'onboarding_role_subject': 'Podopieczny',
     'onboarding_role_guardian': 'Opiekun',
     'onboarding_role_guardian_subject': 'Opiekun i podopieczny',

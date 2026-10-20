@@ -90,7 +90,7 @@ abstract class EnUs {
     'onboarding_notifications_desc': 'When all is well, you\'ll see activity such as step counts. If a wellness check doesn\'t arrive or no activity is recorded, you\'ll be alerted like this.',
     'onboarding_push_now': 'now',
     'onboarding_gs_enable_title': 'Turn on your own safety code',
-    'onboarding_gs_enable_desc': 'Tap [Create my safety code] in Settings\nto send your own wellness check to your guardians',
+    'onboarding_gs_enable_desc': 'If you want to share your wellness check too,\ntap [Create my safety code] in Settings',
     'onboarding_role_subject': 'Loved one',
     'onboarding_role_guardian': 'Guardian',
     'onboarding_role_guardian_subject': 'Guardian & loved one',

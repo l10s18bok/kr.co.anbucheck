@@ -90,7 +90,7 @@ abstract class IdId {
     'onboarding_notifications_desc': 'Saat semua baik-baik saja, Anda melihat aktivitas seperti jumlah langkah. Jika kabar tidak datang atau tidak ada aktivitas tercatat, Anda akan diberi tahu seperti di atas.',
     'onboarding_push_now': 'sekarang',
     'onboarding_gs_enable_title': 'Aktifkan kode keamanan Anda sendiri',
-    'onboarding_gs_enable_desc': 'Ketuk [Buat kode keamanan saya] di Pengaturan\nagar kabar Anda juga sampai ke pendamping',
+    'onboarding_gs_enable_desc': 'Jika Anda juga ingin mengirim kabar,\nketuk [Buat kode keamanan saya] di Pengaturan',
     'onboarding_role_subject': 'Orang tersayang',
     'onboarding_role_guardian': 'Pendamping',
     'onboarding_role_guardian_subject': 'Pendamping sekaligus orang tersayang',

@@ -90,7 +90,7 @@ abstract class ZhCn {
     'onboarding_notifications_desc': '一切正常时会显示步数等活动信息；没有收到平安信息或没有活动记录时，会像上面这样提醒您。',
     'onboarding_push_now': '刚刚',
     'onboarding_gs_enable_title': '启用我的安全码',
-    'onboarding_gs_enable_desc': '在设置中点按［生成我的安全码］，\n您的平安信息也会发送给守护者',
+    'onboarding_gs_enable_desc': '如果您也想报平安，\n请在设置中点按［生成我的安全码］',
     'onboarding_role_subject': '被守护者',
     'onboarding_role_guardian': '守护者',
     'onboarding_role_guardian_subject': '守护者兼被守护者',

@@ -90,7 +90,7 @@ abstract class NlNl {
     'onboarding_notifications_desc': 'Als alles goed is, ziet u activiteit zoals het aantal stappen. Komt er geen check-in of wordt er geen activiteit geregistreerd, dan krijgt u een melding zoals hierboven.',
     'onboarding_push_now': 'nu',
     'onboarding_gs_enable_title': 'Uw eigen veiligheidscode inschakelen',
-    'onboarding_gs_enable_desc': 'Tik in Instellingen op [Mijn veiligheidscode maken]\nom ook zelf check-ins naar uw contactpersonen te sturen',
+    'onboarding_gs_enable_desc': 'Wilt u ook zelf een check-in sturen?\nTik dan in Instellingen op [Mijn veiligheidscode maken]',
     'onboarding_role_subject': 'Naaste',
     'onboarding_role_guardian': 'Contactpersoon',
     'onboarding_role_guardian_subject': 'Contactpersoon en naaste',

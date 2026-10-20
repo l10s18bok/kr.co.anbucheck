@@ -99,7 +99,7 @@ abstract class KoKr {
     'onboarding_push_now': '지금',
     'onboarding_gs_enable_title': '내 안전 코드 활성화',
     'onboarding_gs_enable_desc':
-        '설정에서 [내 안전 코드 생성]을 누르면\n내 안부도 보호자에게 전해져요',
+        '내 안부도 전하고 싶다면\n설정에서 [내 안전 코드 생성]을 눌러 주세요',
     'onboarding_role_subject': '보호 대상자',
     'onboarding_role_guardian': '보호자',
     'onboarding_role_guardian_subject': '보호자 겸 대상자',

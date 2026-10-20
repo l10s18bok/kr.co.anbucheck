@@ -90,7 +90,7 @@ abstract class SvSe {
     'onboarding_notifications_desc': 'När allt är bra ser du aktivitet som antal steg. Om incheckningen inte kommer eller ingen aktivitet registreras får du en avisering som ovan.',
     'onboarding_push_now': 'nu',
     'onboarding_gs_enable_title': 'Aktivera din egen säkerhetskod',
-    'onboarding_gs_enable_desc': 'Tryck på [Skapa min säkerhetskod] i Inställningar\nså skickas även din incheckning till dina kontaktpersoner',
+    'onboarding_gs_enable_desc': 'Vill du också skicka din incheckning?\nTryck då på [Skapa min säkerhetskod] i Inställningar',
     'onboarding_role_subject': 'Närstående',
     'onboarding_role_guardian': 'Kontaktperson',
     'onboarding_role_guardian_subject': 'Kontaktperson och närstående',

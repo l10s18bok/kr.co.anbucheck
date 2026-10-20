@@ -90,7 +90,7 @@ abstract class EsEs {
     'onboarding_notifications_desc': 'Si todo va bien, verá la actividad, como los pasos. Si el aviso no llega o no consta actividad, le avisaremos como se ve arriba.',
     'onboarding_push_now': 'ahora',
     'onboarding_gs_enable_title': 'Activar mi propio código de seguridad',
-    'onboarding_gs_enable_desc': 'Toque [Crear mi código de seguridad] en Ajustes\npara que su aviso llegue también a sus cuidadores',
+    'onboarding_gs_enable_desc': 'Si también quiere dar su aviso,\ntoque [Crear mi código de seguridad] en Ajustes',
     'onboarding_role_subject': 'Ser querido',
     'onboarding_role_guardian': 'Cuidador',
     'onboarding_role_guardian_subject': 'Cuidador y ser querido',

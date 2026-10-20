@@ -91,7 +91,7 @@ abstract class ItIt {
     'onboarding_notifications_desc': 'Se va tutto bene, vede l\'attività, come i passi. Se il check-in non arriva o non risulta attività, La avvisiamo come qui sopra.',
     'onboarding_push_now': 'ora',
     'onboarding_gs_enable_title': 'Attivare il proprio codice di sicurezza',
-    'onboarding_gs_enable_desc': 'Tocchi [Crea il mio codice di sicurezza] nelle Impostazioni\nper inviare anche il Suo check-in ai caregiver',
+    'onboarding_gs_enable_desc': 'Se desidera inviare anche il Suo check-in,\ntocchi [Crea il mio codice di sicurezza] nelle Impostazioni',
     'onboarding_role_subject': 'Persona cara',
     'onboarding_role_guardian': 'Caregiver',
     'onboarding_role_guardian_subject': 'Caregiver e persona cara',

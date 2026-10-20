@@ -91,7 +91,7 @@ abstract class DeDe {
     'onboarding_notifications_desc': 'Ist alles in Ordnung, sehen Sie Aktivitäten wie die Schrittzahl. Kommt kein Lebenszeichen an oder wird keine Aktivität erfasst, werden Sie wie oben benachrichtigt.',
     'onboarding_push_now': 'jetzt',
     'onboarding_gs_enable_title': 'Eigenen Sicherheitscode aktivieren',
-    'onboarding_gs_enable_desc': 'Tippen Sie in den Einstellungen auf [Meinen Sicherheitscode erstellen],\num auch selbst Lebenszeichen zu senden',
+    'onboarding_gs_enable_desc': 'Möchten Sie auch selbst ein Lebenszeichen senden,\ntippen Sie in den Einstellungen auf [Meinen Sicherheitscode erstellen]',
     'onboarding_role_subject': 'Verbundene Person',
     'onboarding_role_guardian': 'Kontaktperson',
     'onboarding_role_guardian_subject': 'Kontaktperson und verbundene Person',

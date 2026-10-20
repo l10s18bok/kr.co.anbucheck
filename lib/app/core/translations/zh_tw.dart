@@ -90,7 +90,7 @@ abstract class ZhTw {
     'onboarding_notifications_desc': '一切正常時會顯示步數等活動資訊；沒有收到平安訊息或沒有活動紀錄時，會像上面這樣提醒您。',
     'onboarding_push_now': '剛剛',
     'onboarding_gs_enable_title': '啟用我的安全碼',
-    'onboarding_gs_enable_desc': '在設定中點一下［產生我的安全碼］，\n您的平安訊息也會傳送給守護者',
+    'onboarding_gs_enable_desc': '如果您也想報平安，\n請在設定中點一下［產生我的安全碼］',
     'onboarding_role_subject': '被守護者',
     'onboarding_role_guardian': '守護者',
     'onboarding_role_guardian_subject': '守護者兼被守護者',

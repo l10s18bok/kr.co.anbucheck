@@ -90,7 +90,7 @@ abstract class FrFr {
     'onboarding_notifications_desc': 'Quand tout va bien, vous voyez l\'activité, comme le nombre de pas. Si les nouvelles n\'arrivent pas ou si aucune activité n\'est enregistrée, vous êtes prévenu comme ci-dessus.',
     'onboarding_push_now': 'maintenant',
     'onboarding_gs_enable_title': 'Activer mon propre code de sécurité',
-    'onboarding_gs_enable_desc': 'Touchez [Créer mon code de sécurité] dans les réglages\npour envoyer aussi vos nouvelles à vos aidants',
+    'onboarding_gs_enable_desc': 'Pour donner aussi de vos nouvelles,\ntouchez [Créer mon code de sécurité] dans les réglages',
     'onboarding_role_subject': 'Proche',
     'onboarding_role_guardian': 'Aidant',
     'onboarding_role_guardian_subject': 'Aidant et proche',

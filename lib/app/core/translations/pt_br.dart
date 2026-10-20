@@ -90,7 +90,7 @@ abstract class PtBr {
     'onboarding_notifications_desc': 'Quando está tudo bem, você vê a atividade, como os passos. Se o check-in não chegar ou não houver atividade registrada, você é avisado como acima.',
     'onboarding_push_now': 'agora',
     'onboarding_gs_enable_title': 'Ativar seu próprio código de segurança',
-    'onboarding_gs_enable_desc': 'Toque em [Criar meu código de segurança] nos Ajustes\npara enviar também o seu check-in aos cuidadores',
+    'onboarding_gs_enable_desc': 'Se você também quiser enviar o seu check-in,\ntoque em [Criar meu código de segurança] nos Ajustes',
     'onboarding_role_subject': 'Ente querido',
     'onboarding_role_guardian': 'Cuidador',
     'onboarding_role_guardian_subject': 'Cuidador e ente querido',

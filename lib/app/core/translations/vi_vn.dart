@@ -90,7 +90,7 @@ abstract class ViVn {
     'onboarding_notifications_desc': 'Khi mọi thứ bình thường, bạn sẽ thấy hoạt động như số bước. Khi không có tin bình an hoặc không ghi nhận hoạt động, bạn sẽ được báo như trên.',
     'onboarding_push_now': 'bây giờ',
     'onboarding_gs_enable_title': 'Bật mã an toàn của bạn',
-    'onboarding_gs_enable_desc': 'Chạm [Tạo mã an toàn của tôi] trong Cài đặt\nđể tin bình an của bạn cũng đến người chăm sóc',
+    'onboarding_gs_enable_desc': 'Nếu bạn cũng muốn gửi tin bình an,\nhãy chạm [Tạo mã an toàn của tôi] trong Cài đặt',
     'onboarding_role_subject': 'Người thân',
     'onboarding_role_guardian': 'Người chăm sóc',
     'onboarding_role_guardian_subject': 'Người chăm sóc kiêm người thân',

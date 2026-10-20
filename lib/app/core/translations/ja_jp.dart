@@ -90,7 +90,7 @@ abstract class JaJp {
     'onboarding_notifications_desc': '問題がないときは歩数などの活動情報を表示し、安否が届かないときや活動記録がないときは、このようにお知らせします。',
     'onboarding_push_now': '今',
     'onboarding_gs_enable_title': '自分の安全コードを有効にする',
-    'onboarding_gs_enable_desc': '設定で［自分の安全コードを作成］をタップすると\n自分の安否も見守る方に届きます',
+    'onboarding_gs_enable_desc': '自分の安否も伝えたいときは\n設定で［自分の安全コードを作成］をタップしてください',
     'onboarding_role_subject': '見守られる側',
     'onboarding_role_guardian': '見守る側',
     'onboarding_role_guardian_subject': '見守る側・見守られる側',

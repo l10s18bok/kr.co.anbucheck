@@ -90,7 +90,7 @@ abstract class ArSa {
     'onboarding_notifications_desc': 'عندما يكون كل شيء على ما يرام ترى النشاط مثل عدد الخطوات. وإذا لم تصل رسالة الاطمئنان أو لم يُسجَّل أي نشاط، نُعلمك كما في الأعلى.',
     'onboarding_push_now': 'الآن',
     'onboarding_gs_enable_title': 'تفعيل رمز الأمان الخاص بك',
-    'onboarding_gs_enable_desc': 'اضغط [إنشاء رمز الأمان الخاص بي] في الإعدادات\nلتصل رسالة اطمئنانك إلى المرافقين أيضًا',
+    'onboarding_gs_enable_desc': 'لإرسال رسالة اطمئنانك أيضًا،\nاضغط [إنشاء رمز الأمان الخاص بي] في الإعدادات',
     'onboarding_role_subject': 'الشخص المحمي',
     'onboarding_role_guardian': 'مرافق',
     'onboarding_role_guardian_subject': 'مرافق وشخص محمي',
