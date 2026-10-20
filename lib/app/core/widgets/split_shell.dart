@@ -79,8 +79,14 @@ class _SplitShellState extends State<SplitShell> {
   @override
   void dispose() {
     if (_owner.value == this) {
-      _owner.value = null;
       AppNav.paneId = null;
+      // dispose는 트리가 잠긴(finalizeTree) 중에 불리는데, 여기서 Rx를 바꾸면 그것을 보는 Obx(다른
+      // 셸의 build)가 markNeedsBuild를 불러 "widget tree was locked" 예외가 난다(Duo 접힘에서
+      // 90도 회전 중 대시보드↔연결 화면이 교체될 때 발생). 프레임 뒤로 미룬다.
+      final self = this;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_owner.value == self) _owner.value = null;
+      });
     }
     super.dispose();
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/services/fold_state_service.dart';
 import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'package:anbucheck/app/core/utils/layout_breakpoints.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
@@ -47,6 +48,12 @@ class _WideRouteNormalizerState extends State<WideRouteNormalizer> {
   }
 
   Future<void> _normalize() async {
+    // 접힌 채 가로로 돌려 폭이 600dp를 넘은 경우는 분할이 되지 않는다(SplitShell은 접힘이면 전폭).
+    // 이때 정리하면 대시보드가 잠깐 끼어들었다 같은 페이지로 돌아오는 깜빡임·교체 예외만 생긴다.
+    if (Get.isRegistered<FoldStateService>() &&
+        Get.find<FoldStateService>().posture.value == FoldPosture.folded) {
+      return;
+    }
     final route = Get.currentRoute;
     if (!_paneRoutes.contains(route)) return;
     final args = Get.arguments;
