@@ -1859,9 +1859,14 @@ lib/
 
 Android 16(targetSdk 36)은 sw≥600dp 화면에서 방향 제한을 무시하므로, `<application>`에 `PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY` opt-out을 넣어 기존 동작을 유지한다. ⚠️ 이 property는 **targetSdk 37에서 제거**되며, `build.gradle.kts`가 `targetSdk = flutter.targetSdkVersion`으로 핀하지 않아 Flutter 업그레이드 시 경고 없이 무효화된다(그때는 targetSdk 핀 또는 가로 대응이 필요).
 
+> ⚠️ **2026-10-20 갱신 (브랜치 `feature/duo-adaptive-layout`, 폴더블 대응) — 위 "세로 고정"은 폰(폭 <600dp)에만 적용된다.** 넓은 창(펼친 폴더블·태블릿, 폭 ≥600dp)은 가로 회전을 허용하고 화면을 꽉 채운다. 판단은 **창 폭으로만** 한다(기기 종류·모델·자세로 분기하지 않는다):
+> - **Android**: 매니페스트의 `PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY` opt-out을 **제거**했다(그 설정이 Android 16의 대형 화면 방향 해제를 막아 회전 시 좌우가 검게 남는 필러박스가 생겼다). `screenOrientation="portrait"`는 그대로라 폰은 계속 세로 고정(Android가 sw 600dp 미만에서는 항상 지킨다). `lib/app.dart`가 창 폭 ≥600dp면 `setPreferredOrientations`를 모든 방향으로, 그 미만이면 `portraitUp`으로 맞춘다(Flutter가 `portraitUp`을 계속 요청하면 일부 회전에서 앱이 세로 모양으로 갇힌다). ⚠️ 안드로이드 **태블릿에서도 가로 회전이 허용된다**.
+> - **iOS**: iPhone 방향에 가로를 추가(`Info.plist`)하고, 폴더블(`FoldStateService`)일 때만 모든 방향을 허용한다. 일반 iPhone은 `portraitUp`. iPad는 지원 대상이 아니다.
+> - 상세·실측은 `.ref/폴더블-대응-환경-계획.md` §8 (분할 화면·접힘 판정·글래스 UI 등 폴더블 브랜치 변경 전반).
+
 #### 대형 화면(펼친 폴더블·태블릿) 대응 — ScreenUtil designSize
 
-> ⚠️ **핵심: 세로 고정은 "방향"을 지키지만 "폭"은 지키지 않는다.** 펼친 폴더블은 **세로인 채로** 851dp가 된다. 따라서 세로 고정 결정(위)은 그대로 유지하고, 폭 문제는 **별개로** 해결한다. 이 절을 "가로를 허용하자"로 읽지 말 것.
+> ⚠️ **(2026-10-20 이전 서술 — 위 갱신 참고)** **핵심: 세로 고정은 "방향"을 지키지만 "폭"은 지키지 않는다.** 펼친 폴더블은 **세로인 채로** 851dp가 된다. 따라서 세로 고정 결정(위)은 그대로 유지하고, 폭 문제는 **별개로** 해결한다. 이 절을 "가로를 허용하자"로 읽지 말 것.
 
 **2026-08-13 Pixel 10 Pro Fold(API 36) 에뮬레이터 실측:**
 
