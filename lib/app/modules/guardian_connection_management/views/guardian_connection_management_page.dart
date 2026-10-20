@@ -13,6 +13,7 @@ import 'package:anbucheck/app/modules/guardian_connection_management/controllers
 import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 보호자 연결 관리 페이지 — 시안 _4 기준
 class GuardianConnectionManagementPage
@@ -419,8 +420,11 @@ class _SubjectListTile extends StatelessWidget {
   void _openEditDialog(BuildContext context) {
     showDialog<void>(
       context: context,
-      builder: (_) =>
-          _EditSubjectDialog(alias: alias, phone: phone, onSave: onSave),
+      barrierColor: Colors.transparent,
+      useSafeArea: false,
+      builder: (_) => GlassBackdrop(
+        child: _EditSubjectDialog(alias: alias, phone: phone, onSave: onSave),
+      ),
     );
   }
 
@@ -592,119 +596,161 @@ class _EditSubjectDialogState extends State<_EditSubjectDialog> {
     if (mounted) Navigator.pop(context);
   }
 
+  InputDecoration _fieldDecoration(String hint, bool dark) => InputDecoration(
+    hintText: hint,
+    hintStyle: AppTextTheme.bodyLarge(
+      color: dark ? const Color(0xFF8E9096) : const Color(0xFF9A9CA3),
+    ),
+    filled: true,
+    // 글래스 카드 위에서는 불투명 회색 대신 반투명 면으로 — 뒤 블러가 은은하게 비친다.
+    fillColor: dark
+        ? Colors.white.withValues(alpha: 0.08)
+        : Colors.white.withValues(alpha: 0.7),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14.r),
+      borderSide: BorderSide.none,
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14.r),
+      borderSide: const BorderSide(color: AppColors.guardianPrimary, width: 1.5),
+    ),
+    isDense: true,
+    contentPadding: EdgeInsets.symmetric(
+      horizontal: AppSpacing.md,
+      vertical: AppSpacing.md,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        'connection_edit_title'.tr,
-        style: AppTextTheme.headlineSmall(color: const Color(0xFF212121)),
-      ),
-      content: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'connection_alias_label'.tr,
-              style: AppTextTheme.labelMedium(color: const Color(0xFF757575)),
-            ),
-            SizedBox(height: AppSpacing.sm),
-            TextField(
-              controller: _aliasController,
-              // 서버가 20자에서 절단하므로(Push 본문에 실리는 값) 입력도 맞춘다.
-              inputFormatters: [LengthLimitingTextInputFormatter(20)],
-              cursorColor: const Color(0xFF212121),
-              decoration: InputDecoration(
-                hintText: widget.alias,
-                hintStyle: AppTextTheme.bodyLarge(
-                  color: const Color(0xFF9E9E9E),
-                ),
-                filled: true,
-                fillColor: const Color(0xFFF5F5F5),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                  borderSide: BorderSide.none,
-                ),
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.md,
-                ),
-              ),
-              style: AppTextTheme.bodyLarge(color: const Color(0xFF212121)),
-            ),
-            SizedBox(height: AppSpacing.md),
-            Text(
-              'add_subject_phone_label'.tr,
-              style: AppTextTheme.labelMedium(color: const Color(0xFF757575)),
-            ),
-            SizedBox(height: AppSpacing.sm),
-            TextField(
-              controller: _phoneController,
-              cursorColor: const Color(0xFF212121),
-              keyboardType: TextInputType.phone,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9+\-\s()]')),
-              ],
-              decoration: InputDecoration(
-                hintText: 'add_subject_phone_hint'.tr,
-                hintStyle: AppTextTheme.bodyLarge(
-                  color: const Color(0xFF9E9E9E),
-                ),
-                filled: true,
-                fillColor: const Color(0xFFF5F5F5),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                  borderSide: BorderSide.none,
-                ),
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.md,
-                ),
-              ),
-              style: AppTextTheme.bodyLarge(color: const Color(0xFF212121)),
-            ),
-            SizedBox(height: AppSpacing.sm),
-            Row(
+    final dark = AppColors.isDark;
+    final textColor = dark ? Colors.white : const Color(0xFF1A1C1C);
+    final subColor = dark ? const Color(0xFFB0B3BA) : const Color(0xFF5F6168);
+    return GlassDialogCard(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.lg,
+          AppSpacing.lg,
+          AppSpacing.md,
+        ),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.info_outline_rounded,
-                  size: 14.w,
-                  color: const Color(0xFF9E9E9E),
+                Text(
+                  'connection_edit_title'.tr,
+                  style: AppTextTheme.headlineSmall(color: textColor),
                 ),
-                SizedBox(width: 4.w),
-                Expanded(
-                  child: Text(
-                    'add_subject_phone_info'.tr,
-                    style: AppTextTheme.bodySmall(
-                      color: const Color(0xFF9E9E9E),
+                SizedBox(height: AppSpacing.lg),
+                Text(
+                  'connection_alias_label'.tr,
+                  style: AppTextTheme.labelMedium(color: subColor),
+                ),
+                SizedBox(height: AppSpacing.sm),
+                TextField(
+                  controller: _aliasController,
+                  // 서버가 20자에서 절단하므로(Push 본문에 실리는 값) 입력도 맞춘다.
+                  inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                  cursorColor: AppColors.guardianPrimary,
+                  decoration: _fieldDecoration(widget.alias, dark),
+                  style: AppTextTheme.bodyLarge(color: textColor),
+                ),
+                SizedBox(height: AppSpacing.md),
+                Text(
+                  'add_subject_phone_label'.tr,
+                  style: AppTextTheme.labelMedium(color: subColor),
+                ),
+                SizedBox(height: AppSpacing.sm),
+                TextField(
+                  controller: _phoneController,
+                  cursorColor: AppColors.guardianPrimary,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9+\-\s()]')),
+                  ],
+                  decoration: _fieldDecoration('add_subject_phone_hint'.tr, dark),
+                  style: AppTextTheme.bodyLarge(color: textColor),
+                ),
+                SizedBox(height: AppSpacing.sm),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 1),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        size: 14.w,
+                        color: subColor,
+                      ),
                     ),
-                  ),
+                    SizedBox(width: 4.w),
+                    Expanded(
+                      child: Text(
+                        'add_subject_phone_info'.tr,
+                        style: AppTextTheme.bodySmall(color: subColor),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppSpacing.lg),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        // 앱 테마가 버튼 최소 크기를 가로 무한대·높이 64로 잡아 두므로(Row 안에서
+                        // 무한 폭 예외) 다이얼로그 버튼은 직접 지정한다.
+                        minimumSize: Size(0, 48.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.lg,
+                          vertical: AppSpacing.md,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.r),
+                        ),
+                      ),
+                      child: Text(
+                        'common_cancel'.tr,
+                        style: AppTextTheme.bodyMedium(color: subColor),
+                      ),
+                    ),
+                    SizedBox(width: AppSpacing.sm),
+                    FilledButton(
+                      onPressed: _save,
+                      style: FilledButton.styleFrom(
+                        minimumSize: Size(0, 48.h),
+                        backgroundColor: AppColors.guardianPrimary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.xl,
+                          vertical: AppSpacing.md,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.r),
+                        ),
+                      ),
+                      child: Text(
+                        'common_save'.tr,
+                        style: AppTextTheme.bodyMedium(
+                          color: Colors.white,
+                          fw: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            'common_cancel'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF757575)),
-          ),
-        ),
-        TextButton(
-          onPressed: _save,
-          child: Text(
-            'common_save'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF212121)),
-          ),
-        ),
-      ],
     );
   }
 }

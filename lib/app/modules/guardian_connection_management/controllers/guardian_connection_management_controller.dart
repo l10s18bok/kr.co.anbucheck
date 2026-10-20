@@ -11,6 +11,7 @@ import 'package:anbucheck/app/data/datasources/local/subject_phone_local_datasou
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/subject_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 보호자 연결 관리 컨트롤러
 /// PRD: 대상자 목록 편집, 추가/삭제
@@ -109,7 +110,7 @@ class GuardianConnectionManagementController extends BaseController {
     final deviceToken = await _tokenDs.getDeviceToken();
     if (deviceToken == null) return;
 
-    final confirm = await Get.dialog<bool>(
+    final confirm = await AppDialog.show<bool>(
       _buildConfirmDialog(subject.alias),
     );
     if (confirm != true) return;
@@ -140,7 +141,7 @@ class _ConfirmUnlinkDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return GlassAlertDialog(
       title: Text('connection_unlink_title'.tr),
       content: Column(
         mainAxisSize: MainAxisSize.min,

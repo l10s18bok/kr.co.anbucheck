@@ -24,6 +24,7 @@ import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.d
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/firebase_options.dart';
 import 'package:anbucheck/app/core/utils/device_timezone.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// Splash 컨트롤러
 /// 흐름: 네이티브 스플래시 제거 → 서비스 초기화 → 버전 체크 → 홈 or 모드 선택
@@ -265,10 +266,10 @@ class SplashController extends BaseController {
 
   /// 강제 업데이트 — [업데이트]만 노출, 닫기·뒤로가기 모두 차단.
   Future<void> _showForceUpdateDialog(String version, String storeUrl) async {
-    await Get.dialog(
+    await AppDialog.show(
       PopScope(
         canPop: false,
-        child: AlertDialog(
+        child: GlassAlertDialog(
           title: Text('update_required_title'.tr),
           content:
               Text('update_required_message'.trParams({'version': version})),
@@ -286,8 +287,8 @@ class SplashController extends BaseController {
 
   /// 일반(선택적) 업데이트 — [나중에] + [업데이트], 닫기 가능.
   Future<void> _showOptionalUpdateDialog(String version, String storeUrl) async {
-    await Get.dialog(
-      AlertDialog(
+    await AppDialog.show(
+      GlassAlertDialog(
         title: Text('update_available_title'.tr),
         content: Text('update_available_message'.trParams({'version': version})),
         actions: [

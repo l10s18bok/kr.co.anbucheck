@@ -26,6 +26,7 @@ import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.d
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/app/core/utils/number_text.dart';
 import 'package:anbucheck/app/core/utils/label_separator.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 보호자 대시보드 컨트롤러
 /// PRD 7.6: 대상자 목록, 상태 모니터링, 알림 레벨 표시
@@ -430,13 +431,13 @@ class GuardianDashboardController extends BaseController
   /// 권한 안내 다이얼로그 → [확인] 시 OS 권한 요청(영구 거부면 앱 설정으로).
   /// 문구는 safety_home과 동일한 키를 재사용한다.
   Future<void> _requestActivityPermissionForSteps() async {
-    final proceed = await Get.dialog<bool>(
-      AlertDialog(
+    final proceed = await AppDialog.show<bool>(
+      GlassAlertDialog(
         title: Text('gs_activity_permission_settings_title'.tr,
             style: AppTextTheme.headlineSmall(
-                fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
+                fw: FontWeight.w700, color: GlassColors.title)),
         content: Text('gs_activity_permission_settings_body'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+            style: AppTextTheme.bodyMedium(color: GlassColors.body)),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),

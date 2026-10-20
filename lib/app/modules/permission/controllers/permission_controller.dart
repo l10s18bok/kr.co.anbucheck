@@ -8,6 +8,7 @@ import 'package:anbucheck/app/core/services/ad_service.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/heartbeat_service.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 권한 안내 및 요청 컨트롤러
 /// 모드 선택 후 진입, arguments['mode']로 모드 구분
@@ -93,8 +94,8 @@ class PermissionController extends BaseController {
 
   /// 알림 권한 거부 시 다이얼로그
   Future<bool> _showNotificationDeniedDialog() async {
-    final result = await Get.dialog<bool>(
-      AlertDialog(
+    final result = await AppDialog.show<bool>(
+      GlassAlertDialog(
         title: Text('permission_notification_required_title'.tr),
         content: Text(
           'permission_notification_required_message'.tr,

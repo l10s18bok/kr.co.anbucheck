@@ -14,6 +14,7 @@ import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/app/core/utils/number_text.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 보호자 알림 목록 페이지 — 당일 알림만 표시 (서버 API 기반)
 class GuardianNotificationsPage
@@ -164,23 +165,26 @@ class GuardianNotificationsPage
   void _confirmDeleteAll(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      barrierColor: Colors.transparent,
+      useSafeArea: false,
+      builder: (dialogContext) => GlassBackdrop(child: GlassAlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-        title: Text('notifications_delete_all_title'.tr, style: AppTextTheme.headlineSmall(color: const Color(0xFF1A1C1C))),
-        content: Text('notifications_delete_all_message'.tr, style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+        title: Text('notifications_delete_all_title'.tr, style: AppTextTheme.headlineSmall(color: GlassColors.title)),
+        content: Text('notifications_delete_all_message'.tr, style: AppTextTheme.bodyMedium(color: GlassColors.body)),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('common_cancel'.tr, style: AppTextTheme.bodyLarge(color: const Color(0xFF9E9E9E))),
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text('common_cancel'.tr, style: AppTextTheme.bodyLarge(color: GlassColors.muted)),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               controller.deleteAll();
             },
             child: Text('common_delete'.tr, style: AppTextTheme.bodyLarge(color: const Color(0xFFE53935), fw: FontWeight.w600)),
           ),
         ],
+      ),
       ),
     );
   }
@@ -188,9 +192,11 @@ class GuardianNotificationsPage
   void _showAlertLevelGuide(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      barrierColor: Colors.transparent,
+      useSafeArea: false,
+      builder: (dialogContext) => GlassBackdrop(child: GlassAlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-        title: Text('notifications_guide_title'.tr, style: AppTextTheme.headlineSmall(color: const Color(0xFF1A1C1C))),
+        title: Text('notifications_guide_title'.tr, style: AppTextTheme.headlineSmall(color: GlassColors.title)),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +230,7 @@ class GuardianNotificationsPage
                 description: 'notifications_level_urgent_desc'.tr,
               ),
               SizedBox(height: AppSpacing.lg),
-              const Divider(color: Color(0xFFE0E0E0)),
+              Divider(color: GlassColors.divider),
               SizedBox(height: AppSpacing.md),
               _alertGuideItem(
                 icon: Icons.notifications_rounded,
@@ -235,17 +241,18 @@ class GuardianNotificationsPage
               SizedBox(height: AppSpacing.md),
               Text(
                 'notifications_activity_note'.tr,
-                style: AppTextTheme.bodySmall(color: const Color(0xFF9E9E9E)).copyWith(fontSize: 11.sp),
+                style: AppTextTheme.bodySmall(color: GlassColors.muted).copyWith(fontSize: 11.sp),
               ),
             ],
           ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text('common_confirm'.tr, style: AppTextTheme.bodyLarge(color: const Color(0xFF4355B9), fw: FontWeight.w600)),
           ),
         ],
+      ),
       ),
     );
   }
@@ -265,9 +272,9 @@ class GuardianNotificationsPage
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppTextTheme.bodyLarge(fw: FontWeight.w600, color: const Color(0xFF1A1C1C))),
+              Text(title, style: AppTextTheme.bodyLarge(fw: FontWeight.w600, color: GlassColors.title)),
               SizedBox(height: 2.h),
-              Text(description, style: AppTextTheme.bodySmall(color: const Color(0xFF3F4948))),
+              Text(description, style: AppTextTheme.bodySmall(color: GlassColors.body)),
             ],
           ),
         ),

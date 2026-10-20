@@ -20,6 +20,7 @@ import 'package:anbucheck/app/core/utils/number_text.dart';
 import 'package:anbucheck/app/core/utils/label_separator.dart';
 import 'package:anbucheck/app/core/utils/layout_breakpoints.dart';
 import 'package:anbucheck/app/core/services/fold_state_service.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 보호자 대시보드 — 시안 _5 기준
 /// 폴더블을 접은 상태인가. 서비스가 없거나(테스트 등) 폰이면 false.
@@ -458,7 +459,9 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                         await _showStepsChartDialog(
                           context,
                           title: subject.alias,
-                          subtitle: subject.activityLabelFor(monthly),
+                          // 카드 등급(주의·경고·긴급)과 무관하게 30일 걸음수로 활동량을 보여준다 — 카드는 "안전 확인이
+                          // 필요합니다"여도 이 차트는 정상일 때와 같은 활동량 라벨이어야 한다.
+                          subtitle: activityLabelFromSteps(monthly),
                           steps: monthly,
                         );
                       } finally {
@@ -1282,7 +1285,7 @@ Future<void> _showStepsChartDialog(
     context: context,
     barrierDismissible: true,
     barrierLabel: 'dismiss',
-    barrierColor: AppColors.isDark ? Colors.black87 : Colors.black54,
+    barrierColor: Colors.transparent,
     transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (_, _, _) =>
         _StepsChartDialog(title: title, subtitle: subtitle, steps: steps),
@@ -1292,11 +1295,14 @@ Future<void> _showStepsChartDialog(
         curve: Curves.easeOutBack,
         reverseCurve: Curves.easeInBack,
       );
+      // 글래스 배경은 확대 전환 밖에 둔다(배경까지 0.7배에서 커지지 않게).
       return FadeTransition(
         opacity: anim,
-        child: ScaleTransition(
-          scale: Tween<double>(begin: 0.7, end: 1.0).animate(scale),
-          child: child,
+        child: GlassBackdrop(
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.7, end: 1.0).animate(scale),
+            child: child,
+          ),
         ),
       );
     },
@@ -1355,11 +1361,7 @@ class _StepsChartDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      // 다크 모드에서 흰 배경에 밝은 글자가 묻히던 문제 — 어두운 배경으로
-      backgroundColor: AppColors.isDark ? const Color(0xFF1E2022) : null,
-      insetPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 40.h),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+    return GlassDialogCard(
       child: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(

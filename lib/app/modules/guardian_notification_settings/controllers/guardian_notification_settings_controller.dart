@@ -7,6 +7,7 @@ import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/notification_settings_remote_datasource.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 보호자 알림 설정 컨트롤러
 /// - 개별 스위치 ↔ "전체 알림 받기" 양방향 동기화
@@ -211,11 +212,9 @@ class GuardianNotificationSettingsController extends BaseController {
     final initialDate = DateTime(2026, 1, 1, hourRx.value, minuteRx.value);
     var selectedTime = initialDate;
 
-    await showCupertinoModalPopup(
-      context: Get.context!,
-      builder: (context) => Container(
+    await showGlassSheet<void>(
+      builder: (context) => SizedBox(
         height: 280,
-        color: CupertinoColors.systemBackground.resolveFrom(context),
         child: Column(
           children: [
             SizedBox(

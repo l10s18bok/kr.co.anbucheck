@@ -7,6 +7,7 @@ import 'package:anbucheck/app/data/datasources/local/subject_order_local_datasou
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/user_remote_datasource.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 모드 선택 컨트롤러
 /// 모드 선택 시 기존 역할 확인 → 권한 안내 페이지로 이동
@@ -50,9 +51,9 @@ class ModeSelectController extends BaseController {
             ? 'onboarding_already_registered_message_gs'
             : 'onboarding_already_registered_message';
 
-        final choice = await Get.dialog<String>(
+        final choice = await AppDialog.show<String>(
           barrierDismissible: false,
-          AlertDialog(
+          GlassAlertDialog(
             title: Text('onboarding_already_registered_title'.tr),
             content: Text(
               messageKey.trParams({

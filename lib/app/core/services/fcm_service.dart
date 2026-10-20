@@ -19,6 +19,7 @@ import 'package:anbucheck/app/modules/guardian_notifications/controllers/guardia
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 import 'package:anbucheck/app/core/utils/device_timezone.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// FCM 백그라운드 메시지 핸들러 (top-level 함수 필수)
 /// heartbeat 트리거는 WorkManager/BGTaskScheduler로 전환 — FCM은 보호자 알림만 처리
@@ -284,8 +285,8 @@ class FcmService extends GetxService {
     if (Get.context == null) return;
     final showAlready =
         pendingAlreadyReported && pendingReportedTime.isNotEmpty;
-    await Get.dialog<void>(
-      AlertDialog(
+    await AppDialog.show<void>(
+      GlassAlertDialog(
         title: Text('safety_net_dialog_title'.tr),
         content: Text(showAlready
             ? 'safety_net_dialog_already_body'

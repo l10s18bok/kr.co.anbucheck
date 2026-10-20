@@ -16,6 +16,7 @@ import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_da
 import 'package:anbucheck/app/modules/guardian_settings/controllers/guardian_settings_controller.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/solid_action_button.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 보호자 설정 페이지 — v2: G+S 통합 카드 포함
 class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
@@ -367,22 +368,22 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
   /// 세 키는 **번역 파일에서 지우지 말 것** — 웹(`averic-lab/_faq-build/extract_strings.py`)의
   /// 추출 키 목록에 있어 지우면 페이지 빌드가 exit 1로 실패한다. 코드에서 쓰지 않을 뿐이다.
   void _showEnableConfirm() {
-    Get.dialog(
-      AlertDialog(
+    AppDialog.show(
+      GlassAlertDialog(
         title: Text(
           'gs_enable_dialog_title'.tr,
-          style: AppTextTheme.headlineSmall(fw: FontWeight.w700, color: const Color(0xFF1A1C1C)),
+          style: AppTextTheme.headlineSmall(fw: FontWeight.w700, color: GlassColors.title),
         ),
         content: Text(
           'gs_enable_dialog_body'.tr,
-          style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+          style: AppTextTheme.bodyMedium(color: GlassColors.body),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
               'common_cancel'.tr,
-              style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+              style: AppTextTheme.bodyMedium(color: GlassColors.body),
             ),
           ),
           TextButton(
@@ -403,8 +404,8 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
   // ── 탈퇴 확인 다이얼로그 ──
 
   void _showDeleteConfirm() {
-    Get.dialog(
-      AlertDialog(
+    AppDialog.show(
+      GlassAlertDialog(
         title: Text('drawer_withdraw'.tr, style: AppTextTheme.headlineSmall(fw: FontWeight.w700)),
         content: Text(
           // 체험 안내는 **보호자 경로에만** 붙인다. safety_home의 탈퇴 다이얼로그는
@@ -414,14 +415,14 @@ class GuardianSettingsPage extends GetWidget<GuardianSettingsController> {
           // (서버 trial_grants — PRD-BackEnd §4.2.1). 손해 경고가 아니라
           // "탈퇴하면 초기화되니 체험도 다시 받겠지"라는 오해를 막기 위한 고지다.
           '${'drawer_withdraw_message'.tr}\n\n${'drawer_withdraw_message_trial'.tr}',
-          style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+          style: AppTextTheme.bodyMedium(color: GlassColors.body),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
               'common_cancel'.tr,
-              style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+              style: AppTextTheme.bodyMedium(color: GlassColors.body),
             ),
           ),
           TextButton(

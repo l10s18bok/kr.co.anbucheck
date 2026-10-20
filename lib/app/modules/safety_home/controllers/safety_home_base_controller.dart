@@ -24,6 +24,7 @@ import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
 import 'package:anbucheck/app/data/datasources/remote/emergency_remote_datasource.dart';
 import 'package:anbucheck/app/modules/safety_home/controllers/safety_home_role.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 안전 홈 페이지 공통 부모 컨트롤러 (abstract)
 ///
@@ -158,8 +159,8 @@ abstract class SafetyHomeBaseController extends BaseController
   /// 사용자가 [설정 열기]를 선택하면 OS 앱 정보 페이지로 진입.
   /// 사용자가 "배터리 → 제한 없음" 경로를 모를 수 있으므로 사전 안내 필수.
   Future<void> openBatteryOptimizationSettings() async {
-    await Get.dialog<void>(
-      AlertDialog(
+    await AppDialog.show<void>(
+      GlassAlertDialog(
         title: Text('stability_battery_dialog_title'.tr),
         content: Text('stability_battery_dialog_message'.tr),
         actions: [
@@ -328,13 +329,13 @@ abstract class SafetyHomeBaseController extends BaseController
   }
 
   Future<void> _showActivitySettingsDialog() async {
-    final goToSettings = await Get.dialog<bool>(
-      AlertDialog(
+    final goToSettings = await AppDialog.show<bool>(
+      GlassAlertDialog(
         title: Text('gs_activity_permission_settings_title'.tr,
             style: AppTextTheme.headlineSmall(
-                fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
+                fw: FontWeight.w700, color: GlassColors.title)),
         content: Text('gs_activity_permission_settings_body'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+            style: AppTextTheme.bodyMedium(color: GlassColors.body)),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -353,16 +354,16 @@ abstract class SafetyHomeBaseController extends BaseController
   }
 
   Future<void> _showLocationSettingsDialog() async {
-    final goToSettings = await Get.dialog<bool>(
-      AlertDialog(
+    final goToSettings = await AppDialog.show<bool>(
+      GlassAlertDialog(
         title: Text('location_permission_settings_title'.tr,
             style: AppTextTheme.headlineSmall(
-                fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
+                fw: FontWeight.w700, color: GlassColors.title)),
         content: Text(
             Platform.isIOS
                 ? 'location_permission_settings_body_ios'.tr
                 : 'location_permission_settings_body_android'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+            style: AppTextTheme.bodyMedium(color: GlassColors.body)),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),

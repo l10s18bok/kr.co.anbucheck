@@ -23,6 +23,7 @@ import 'package:anbucheck/app/modules/safety_home/widgets/invite_code_share_card
 import 'package:anbucheck/app/modules/safety_home/widgets/location_permission_warning.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/manual_report_button.dart';
 import 'package:anbucheck/app/modules/safety_home/widgets/schedule_row_button.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// 안전 홈 페이지 — S 모드와 G+S 모드 통합 페이지
 ///
@@ -292,7 +293,7 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
     // 컨트롤러 소유를 StatefulWidget에 위임한다. State.dispose는 위젯이 트리에서
     // 완전히 제거된 뒤(닫힘 애니메이션 종료 후)에만 호출되므로 "used after disposed"가
     // 발생하지 않는다. (핸들러/Future 완료 시점 dispose는 애니메이션 프레임과 race라 실패)
-    Get.dialog(
+    AppDialog.show(
       _EmergencyConfirmDialog(
         onSend: (message) => controller.sendEmergency(message: message),
       ),
@@ -503,28 +504,28 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
   // ── Drawer 내부 다이얼로그 (S 전용) ────────────────────────────────
 
   void _showSwitchToGuardianConfirm(SubjectHomeController s) {
-    Get.dialog(
-      AlertDialog(
+    AppDialog.show(
+      GlassAlertDialog(
         title: Row(
           children: [
             Expanded(
               child: Text('s_to_gs_dialog_title'.tr,
                   style: AppTextTheme.headlineSmall(
                       fw: FontWeight.w700,
-                      color: const Color(0xFF1A1C1C))),
+                      color: GlassColors.title)),
             ),
             GestureDetector(
               onTap: () => Get.back(),
               child: Padding(
                 padding: EdgeInsets.all(4.w),
                 child: Icon(Icons.close_rounded,
-                    size: 24.w, color: const Color(0xFF3F4948)),
+                    size: 24.w, color: GlassColors.body),
               ),
             ),
           ],
         ),
         content: Text('s_to_gs_dialog_body'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+            style: AppTextTheme.bodyMedium(color: GlassColors.body)),
         actions: [
           TextButton(
             onPressed: () {
@@ -543,19 +544,19 @@ class SafetyHomePage extends GetView<SafetyHomeBaseController> {
   void _showDeleteConfirm(
       GlobalKey<ScaffoldState> scaffoldKey, SubjectHomeController s) {
     scaffoldKey.currentState?.closeDrawer();
-    Get.dialog(
-      AlertDialog(
+    AppDialog.show(
+      GlassAlertDialog(
         title: Text('drawer_withdraw'.tr,
             style: AppTextTheme.headlineSmall(
-                fw: FontWeight.w700, color: const Color(0xFF1A1C1C))),
+                fw: FontWeight.w700, color: GlassColors.title)),
         content: Text('drawer_withdraw_message'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+            style: AppTextTheme.bodyMedium(color: GlassColors.body)),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
             child: Text('common_cancel'.tr,
                 style:
-                    AppTextTheme.bodyMedium(color: const Color(0xFF3F4948))),
+                    AppTextTheme.bodyMedium(color: GlassColors.body)),
           ),
           TextButton(
             onPressed: () {
@@ -597,7 +598,7 @@ class _EmergencyConfirmDialogState extends State<_EmergencyConfirmDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return GlassAlertDialog(
       title: Text(
         'subject_home_emergency_confirm_title'.tr,
         style: AppTextTheme.headlineSmall(
@@ -612,7 +613,7 @@ class _EmergencyConfirmDialogState extends State<_EmergencyConfirmDialog> {
           children: [
             Text(
               'subject_home_emergency_confirm_body'.tr,
-              style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+              style: AppTextTheme.bodyMedium(color: GlassColors.body),
             ),
             SizedBox(height: AppSpacing.vmd),
             TextField(
@@ -638,7 +639,7 @@ class _EmergencyConfirmDialogState extends State<_EmergencyConfirmDialog> {
           onPressed: () => Get.back(),
           child: Text(
             'common_cancel'.tr,
-            style: AppTextTheme.bodyMedium(color: const Color(0xFF3F4948)),
+            style: AppTextTheme.bodyMedium(color: GlassColors.body),
           ),
         ),
         TextButton(

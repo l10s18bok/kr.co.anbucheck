@@ -9,6 +9,7 @@ import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/data/datasources/local/token_local_datasource.dart';
 import 'package:anbucheck/app/core/utils/app_snackbar.dart';
 import 'package:anbucheck/app/data/datasources/remote/device_remote_datasource.dart';
+import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 
 /// Heartbeat 시각 변경 기능 Mixin
 /// 대상자/보호자 컨트롤러에서 공통으로 사용
@@ -107,13 +108,11 @@ mixin HeartbeatScheduleMixin on GetxController {
     final initialDate = DateTime(2026, 1, 1, hour, minute);
     var selectedTime = initialDate;
 
-    await showCupertinoModalPopup(
-      context: Get.context!,
-      builder: (context) => Container(
+    await showGlassSheet<void>(
+      builder: (context) => SizedBox(
         // Android의 helpText에 대응하는 안내 한 줄이 들어가므로 그만큼 높인다
         // (Expanded로 휠이 줄어드는 대신 전체를 키워 휠 높이를 유지).
         height: 336,
-        color: CupertinoColors.systemBackground.resolveFrom(context),
         child: Column(
           children: [
             Row(
