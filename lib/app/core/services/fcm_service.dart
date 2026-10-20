@@ -184,7 +184,11 @@ Future<void> _handleNotificationTap(String type,
 void _routeToNotifications() {
   // 분할 화면(펼친 폴더블): 대시보드를 유지한 채 오른쪽 pane에 연다(셸을 날리지 않는다).
   if (AppNav.paneActive) {
-    if (SplitPaneState.tab == 2 &&
+    // 알림 **목록**이 맨 위일 때만 갱신으로 끝낸다. `tab == 2`는 긴급 위치 지도(알림 탭에서 여는 화면)도
+    // 포함하므로 그걸로 판단하면, 지도가 위에 열려 있을 때 푸시를 탭해도 목록 화면으로 돌아오지 않는다.
+    final topName =
+        SplitPaneState.stack.isEmpty ? null : SplitPaneState.stack.last.settings.name;
+    if (topName == AppRoutes.guardianNotifications &&
         Get.isRegistered<GuardianNotificationsController>()) {
       try {
         Get.find<GuardianNotificationsController>().load();
