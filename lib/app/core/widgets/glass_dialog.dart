@@ -438,3 +438,36 @@ Future<T?> showGlassSheet<T>({required WidgetBuilder builder}) {
     ),
   );
 }
+
+/// `showTimePicker` 대체(안드로이드 시간 선택) — 글래스 배경 + 세이프 에리어까지 덮음.
+/// 기본 `showTimePicker`는 배경을 세이프 에리어 안쪽에만 그리고 배리어 색 외에는 꾸밀 수 없어,
+/// `TimePickerDialog`를 직접 `showDialog`로 띄운다. [builder]는 기존처럼 다이얼로그를 감싼다(12/24시간제 등).
+Future<TimeOfDay?> showGlassTimePicker({
+  required TimeOfDay initialTime,
+  String? helpText,
+  TransitionBuilder? builder,
+}) {
+  return showDialog<TimeOfDay>(
+    context: Get.context!,
+    barrierColor: Colors.transparent,
+    useSafeArea: false,
+    builder: (ctx) {
+      final theme = Theme.of(ctx);
+      // 다른 글래스 다이얼로그와 같은 큰 모서리 + 모드별 테두리(라이트 어두운 선 / 다크 밝은 선).
+      final Widget dialog = Theme(
+        data: theme.copyWith(
+          timePickerTheme: theme.timePickerTheme.copyWith(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+              side: BorderSide(color: GlassColors.border, width: GlassColors.borderWidth),
+            ),
+          ),
+        ),
+        child: TimePickerDialog(initialTime: initialTime, helpText: helpText),
+      );
+      return GlassBackdrop(
+        child: builder == null ? dialog : builder(ctx, dialog),
+      );
+    },
+  );
+}

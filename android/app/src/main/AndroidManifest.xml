@@ -35,14 +35,12 @@
         android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules">
         <!-- Android 16(targetSdk 36)은 sw≥600dp 대형 화면(펼친 폴더블·태블릿)에서
-             screenOrientation="portrait"를 무시해 가로 진입을 허용한다. 이 앱의 세로 고정은
-             PRD-FrontEnd §6에 기록된 의도적 결정이므로 opt-out으로 기존 동작을 유지한다.
-             ⚠️ 이 property는 targetSdk 37에서 완전히 제거된다. build.gradle.kts가
-             targetSdk를 핀하지 않고 flutter.targetSdkVersion을 따라가므로, Flutter 업그레이드로
-             targetSdk가 37이 되는 순간 경고 없이 무효화된다(그때는 반응형 대응 또는 targetSdk 핀). -->
-        <property
-            android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY"
-            android:value="true" />
+             screenOrientation="portrait"를 무시해 가로 진입을 허용한다.
+             과거에는 PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY opt-out으로 세로 고정을 유지했으나
+             (회전하면 좌우가 검게 남는 필러박스), 폴더블 대응(2026-10-20)에서 이 opt-out을 **제거**했다:
+             넓은 화면에서는 가로 회전을 허용해 화면을 꽉 채운다(iOS Duo와 동일). 폰(<600dp)은 여전히
+             매니페스트의 세로 고정을 따른다 — Android가 sw 600dp로 판단하므로 기기 종류와 무관.
+             (이 property는 targetSdk 37에서 어차피 제거된다.) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

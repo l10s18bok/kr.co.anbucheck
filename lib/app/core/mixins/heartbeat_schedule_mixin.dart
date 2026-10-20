@@ -86,8 +86,7 @@ mixin HeartbeatScheduleMixin on GetxController {
 
   Future<void> _showMaterialTimePicker() async {
     final (hour, minute) = _currentTime();
-    final picked = await showTimePicker(
-      context: Get.context!,
+    final picked = await showGlassTimePicker(
       initialTime: TimeOfDay(hour: hour, minute: minute),
       // Material `showTimePicker`에는 선택 범위를 제한하는 파라미터가 없다(입력 모드의
       // 검증자도 private이라 주입 불가). 그래서 다이얼에서는 22시 이후도 고를 수 있고,

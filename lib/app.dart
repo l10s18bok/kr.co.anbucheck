@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:anbucheck/app/core/widgets/wide_route_normalizer.dart';
 import 'dart:math' as math;
 
@@ -40,11 +41,28 @@ class App extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
+        _syncAndroidOrientation(width);
         final designWidth = width >= largeScreenBreakpoint
             ? math.min(_baseDesignWidth * 2, width)
             : _baseDesignWidth;
         return _buildApp(Size(designWidth, 812));
       },
+    );
+  }
+
+  /// 안드로이드 방향 정책 — **창 폭**으로 판단한다(기기 종류 아님).
+  /// 폰(<600dp)은 세로 고정(main.dart의 `portraitUp` + 매니페스트), 넓은 창(펼친 폴더블·태블릿)은 모든 방향.
+  /// Flutter가 `portraitUp`을 계속 요청하면 Android 16이 대형 화면에서 매니페스트 제한을 풀어 줘도
+  /// 일부 회전에서 앱이 세로 모양으로 갇혀 좌우가 검게 남는다(2026-10-20 Fold10 에뮬레이터 실측).
+  /// iOS는 `FoldStateService`가 따로 처리한다.
+  static bool? _androidAllOrientations;
+  static void _syncAndroidOrientation(double width) {
+    if (!Platform.isAndroid) return;
+    final wide = width >= largeScreenBreakpoint;
+    if (_androidAllOrientations == wide) return;
+    _androidAllOrientations = wide;
+    SystemChrome.setPreferredOrientations(
+      wide ? DeviceOrientation.values : const [DeviceOrientation.portraitUp],
     );
   }
 

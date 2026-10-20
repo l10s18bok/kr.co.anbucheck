@@ -192,8 +192,7 @@ class GuardianNotificationSettingsController extends BaseController {
   }
 
   Future<void> _showMaterialPicker(RxInt hourRx, RxInt minuteRx) async {
-    final picked = await showTimePicker(
-      context: Get.context!,
+    final picked = await showGlassTimePicker(
       initialTime: TimeOfDay(hour: hourRx.value, minute: minuteRx.value),
       // 피커 자체도 화면 표기와 같은 제도를 쓰도록 맞춘다.
       builder: (ctx, child) => MediaQuery(
