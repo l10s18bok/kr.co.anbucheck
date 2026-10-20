@@ -101,6 +101,8 @@ class _SplitShellState extends State<SplitShell> {
     }
     final page = AppPages.pages.firstWhereOrNull((p) => p.name == s.name);
     if (page == null) return null;
+    // pane 안 페이지가 읽을 arguments(`Get.arguments`는 루트 라우트 값이라 여기선 안 맞는다).
+    AppNav.paneArguments = s.arguments;
     return GetPageRoute<dynamic>(
       settings: s,
       page: page.page,

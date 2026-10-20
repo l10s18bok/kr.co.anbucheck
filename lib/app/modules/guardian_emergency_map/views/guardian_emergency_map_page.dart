@@ -38,28 +38,13 @@ class GuardianEmergencyMapPage extends GetWidget<GuardianEmergencyMapController>
           return Column(
             children: [
               Expanded(
-                child: GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: position,
-                    zoom: 16,
-                  ),
-                  markers: {
-                    Marker(
-                      markerId: const MarkerId('emergency_subject'),
-                      position: position,
-                      infoWindow: InfoWindow(
-                        title: controller.displayName.isEmpty
-                            ? 'emergency_map_subject_label'.tr
-                            : controller.displayName,
-                        snippet: _formatCapturedAt(
-                          controller.capturedAt.value,
-                        ),
-                      ),
-                    ),
-                  },
-                  onMapCreated: controller.onMapCreated,
-                  myLocationButtonEnabled: false,
-                  zoomControlsEnabled: false,
+                child: _ResumeSafeMap(
+                  controller: controller,
+                  position: position,
+                  title: controller.displayName.isEmpty
+                      ? 'emergency_map_subject_label'.tr
+                      : controller.displayName,
+                  snippet: _formatCapturedAt(controller.capturedAt.value),
                 ),
               ),
               _BottomInfoCard(controller: controller),
@@ -172,5 +157,66 @@ class _BottomInfoCard extends StatelessWidget {
     final h = local.hour.toString().padLeft(2, '0');
     final mi = local.minute.toString().padLeft(2, '0');
     return '$y-$mo-$d $h:$mi';
+  }
+}
+
+/// 외부 지도 앱 등으로 갔다 돌아오면(앱 resume) GoogleMap의 플랫폼 뷰가 타일을 그리지 못하고 빈 회색으로
+/// 남는 경우가 있다(안드로이드 폴드 에뮬레이터 실측: 구글 로고만 보이고 지도·마커 없음).
+/// resume 때마다 키를 바꿔 지도를 새로 만든다 — 위치·마커는 컨트롤러 값에서 다시 그려진다.
+class _ResumeSafeMap extends StatefulWidget {
+  const _ResumeSafeMap({
+    required this.controller,
+    required this.position,
+    required this.title,
+    required this.snippet,
+  });
+
+  final GuardianEmergencyMapController controller;
+  final LatLng position;
+  final String title;
+  final String snippet;
+
+  @override
+  State<_ResumeSafeMap> createState() => _ResumeSafeMapState();
+}
+
+class _ResumeSafeMapState extends State<_ResumeSafeMap> with WidgetsBindingObserver {
+  int _generation = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      setState(() => _generation++);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+      key: ValueKey(_generation),
+      initialCameraPosition: CameraPosition(target: widget.position, zoom: 16),
+      markers: {
+        Marker(
+          markerId: const MarkerId('emergency_subject'),
+          position: widget.position,
+          infoWindow: InfoWindow(title: widget.title, snippet: widget.snippet),
+        ),
+      },
+      onMapCreated: widget.controller.onMapCreated,
+      myLocationButtonEnabled: false,
+      zoomControlsEnabled: false,
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,7 +22,7 @@ class GuardianEmergencyMapController extends BaseController {
   @override
   void onInit() {
     super.onInit();
-    final args = Get.arguments;
+    final args = AppNav.arguments;
     if (args is Map) {
       lat.value = _parseDouble(args['lat']);
       lng.value = _parseDouble(args['lng']);

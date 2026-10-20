@@ -13,6 +13,14 @@ class AppNav {
   /// 분할 중일 때 오른쪽 pane의 `Get.nestedKey` id. null이면 루트 Navigator(기존 동작).
   static int? paneId;
 
+  /// 오른쪽 pane에 마지막으로 연 페이지의 arguments. `Get.arguments`는 **루트** 내비게이터의 현재
+  /// 라우트 값이라 pane 안 페이지에서는 읽히지 않는다(긴급 위치 페이지가 "No location available"로 나온
+  /// 원인). pane 라우트가 만들어질 때 [SplitShell]이 여기에 담는다.
+  static Object? paneArguments;
+
+  /// 페이지가 자기 arguments를 읽는 단일 진입점 — pane 안이면 pane 값, 아니면 `Get.arguments`.
+  static Object? get arguments => paneId != null && paneArguments != null ? paneArguments : Get.arguments;
+
   /// 분할 가능 상태로 대시보드가 최상단에 있는가 — 푸시 탭이 오른쪽 pane에 열릴 수 있는 조건.
   static bool get paneActive =>
       paneId != null && Get.currentRoute == AppRoutes.guardianDashboard;
