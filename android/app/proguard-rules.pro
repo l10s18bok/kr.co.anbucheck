@@ -39,3 +39,15 @@
 
 # 플러그인이 Gson으로 직렬화하는 예약 알림 모델 클래스 보존 (방어적)
 -keep class com.dexterous.flutterlocalnotifications.** { *; }
+
+# ─────────────────────────────────────────────────────────────
+# shared_preferences_android — R8가 Pigeon 생성 suspend 메서드 시그니처를 바꿔
+# release에서 스플래시가 멈추던 문제 (2026-10-20, Flutter 3.47.7 빌드)
+# "NoSuchMethodError: SharedPreferencesApiRegistrar.getAll(String, List, Continuation)"
+# ─────────────────────────────────────────────────────────────
+-keep class io.flutter.plugins.sharedpreferences.** { *; }
+# 위 플러그인은 Dart가 JNI로 메서드를 "이름+시그니처"로 찾는다. R8이 시그니처에 쓰인 타입
+# (kotlin.coroutines.Continuation 등)을 난독화하면 NoSuchMethodError가 난다.
+-keep class kotlin.coroutines.Continuation { *; }
+-keep class kotlin.Result { *; }
+-keep class kotlin.Unit { *; }
