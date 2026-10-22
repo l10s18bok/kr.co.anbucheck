@@ -51,3 +51,15 @@
 -keep class kotlin.coroutines.Continuation { *; }
 -keep class kotlin.Result { *; }
 -keep class kotlin.Unit { *; }
+# (2차 보강) JNI(package:jni)로 접근되는 플러그인은 R8이 Kotlin 표준 라이브러리 내부 클래스까지
+# 지우거나 이름을 바꾸면 런타임에 ClassNotFoundException이 난다
+# (실측: kotlin.coroutines.intrinsics.CoroutineSingletons 누락 → 스플래시 멈춤).
+-keep class kotlin.coroutines.** { *; }
+-keep class kotlin.jvm.internal.** { *; }
+-keep class androidx.datastore.** { *; }
+-keep class io.flutter.plugins.pathprovider.** { *; }
+-keep class com.github.dart_lang.jni.** { *; }
+-dontwarn kotlin.**
+# (3차) 클래스를 하나씩 막으면 계속 다른 클래스가 나온다(Result$Failure …) → Kotlin 전체 보존.
+-keep class kotlin.** { *; }
+-keep class kotlinx.coroutines.** { *; }
