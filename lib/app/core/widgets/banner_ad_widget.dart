@@ -64,8 +64,15 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   /// "Ad size will not fit on screen"으로 로드가 실패한다. 폰(<600dp)은 기존처럼 창 폭을 그대로 쓴다.
   double? _availWidth;
   int? _loadedWidth;
-  int _retryCount = 0;
   Timer? _retryTimer;
+
+  /// 광고 실패 횟수·다음 요청 허용 시각 — **앱 전체에서 공유**한다(위젯 인스턴스마다 두지 말 것).
+  /// 보호자 하단 탭은 이동할 때마다 페이지(와 이 위젯)가 새로 만들어지는데, 대기 횟수를 인스턴스에
+  /// 두면 탭을 옮길 때마다 0으로 돌아가 `didChangeDependencies`가 곧바로 광고를 다시 요청한다.
+  /// 광고 재고가 없는 기기(저사양 삼성폰 실측)에서는 탭마다 GMA SDK·웹뷰가 다시 뜨며 UI 스레드가
+  /// 끊겼다(dumpsys gfxinfo: 끊긴 프레임 47~51%, 로드 실패 로그가 탭 간격 2~4초).
+  static int _failStreak = 0;
+  static DateTime? _nextAllowedAt;
 
   @override
   void initState() {
@@ -131,7 +138,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
       if (!_hideForPremium && _bannerAd == null) {
         _retryTimer?.cancel();
         _retryTimer = null;
-        _retryCount = 0;
+        _failStreak = 0;
+        _nextAllowedAt = null;
         _loadAd();
       }
     }
@@ -143,6 +151,18 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     if (Platform.isIOS && !Get.isRegistered<AdService>()) {
       _retryTimer?.cancel();
       _retryTimer = Timer(const Duration(seconds: 2), () {
+        _retryTimer = null;
+        if (mounted && _bannerAd == null) _loadAd();
+      });
+      return;
+    }
+
+    // 직전 실패의 대기 시간이 남아 있으면 지금 요청하지 않고 남은 시간 뒤로 미룬다(탭 이동으로 새로 만들어진
+    // 위젯도 같은 대기를 따른다). 재시도 타이머가 걸려 있는 동안 didChangeDependencies는 다시 부르지 않는다.
+    final wait = _nextAllowedAt?.difference(DateTime.now());
+    if (wait != null && !wait.isNegative && wait > Duration.zero) {
+      _retryTimer?.cancel();
+      _retryTimer = Timer(wait, () {
         _retryTimer = null;
         if (mounted && _bannerAd == null) _loadAd();
       });
@@ -187,8 +207,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
           }
           setState(() {
             _isLoaded = true;
-            _retryCount = 0;
           });
+          _failStreak = 0;
+          _nextAllowedAt = null;
         },
         onAdFailedToLoad: (ad, error) {
           if (kDebugMode) {
@@ -197,6 +218,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
             );
           }
           ad.dispose();
+          // 위젯이 이미 없어져도(탭 이동) 실패는 공유 대기에 반영한다.
+          _recordFailure();
           if (!mounted) return;
           setState(() {
             _bannerAd = null;
@@ -209,14 +232,19 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     )..load();
   }
 
-  void _scheduleRetry() {
+  void _recordFailure() {
     final delay = min(
-      (_baseDelaySeconds * pow(2, _retryCount)).toInt(),
+      (_baseDelaySeconds * pow(2, _failStreak)).toInt(),
       _maxDelaySeconds,
     );
-    _retryCount++;
+    _failStreak++;
+    _nextAllowedAt = DateTime.now().add(Duration(seconds: delay));
+  }
+
+  void _scheduleRetry() {
+    final delay = _nextAllowedAt?.difference(DateTime.now()) ?? Duration.zero;
     _retryTimer?.cancel();
-    _retryTimer = Timer(Duration(seconds: delay), () {
+    _retryTimer = Timer(delay.isNegative ? Duration.zero : delay, () {
       _retryTimer = null;
       if (mounted && _bannerAd == null) _loadAd();
     });
