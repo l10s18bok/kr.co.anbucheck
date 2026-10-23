@@ -15,7 +15,7 @@
 
 ## 기술 스택
 
-- **Flutter** 3.41.9 / Dart 3.11.5
+- **Flutter** 3.47.7 / Dart 3.13.5 (SDK: `/Users/macmini/dev/flutter-3.47`, 단일 SDK — 기본 `flutter` 명령·VS Code 모두 이 경로)
 - **상태관리**: GetX / Clean Architecture (Presentation → Domain ← Data)
 - **HTTP**: GetConnect / Dio (ApiClientFactory 패턴)
 - **코드생성**: Freezed + json_serializable / flutter_screenutil (375×812 기준)
