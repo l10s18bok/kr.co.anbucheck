@@ -119,6 +119,14 @@ class GuardianDashboardController extends BaseController
     _initGuardianSubjectMode();
   }
 
+  /// 탈퇴 후 같은 실행에서 재가입해 대시보드에 다시 들어올 때 — permanent라 [onInit]이 다시 돌지
+  /// 않으므로 초기 로드를 직접 수행한다([resetSubjectState]가 만료로 리셋해 둔 구독 상태 갱신).
+  void reloadAfterRegister() {
+    _loadSubjectsAndSubscription(force: true);
+    _loadSubjectState();
+    _initGuardianSubjectMode();
+  }
+
   /// 앱이 포그라운드로 복귀 — 대상자 목록 갱신 + G+S heartbeat 재확인
   @override
   void onResumed() {

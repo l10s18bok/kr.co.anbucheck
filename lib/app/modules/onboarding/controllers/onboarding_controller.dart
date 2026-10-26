@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:anbucheck/app/modules/guardian_dashboard/controllers/guardian_dashboard_controller.dart';
 import 'package:anbucheck/app/core/base/base_controller.dart';
 import 'package:anbucheck/app/core/services/fcm_service.dart';
 import 'package:anbucheck/app/core/services/local_alarm_service.dart';
@@ -226,6 +227,11 @@ class OnboardingController extends BaseController {
         } catch (e) {
           debugPrint('[onboarding] 체험 종료 알림 예약 실패(무시): $e');
         }
+      }
+      // 탈퇴 직후 같은 실행에서 재가입하면 permanent 대시보드 컨트롤러가 살아 있어 onInit이 다시
+      // 돌지 않는다 — 구독·대상자 상태가 탈퇴 때의 리셋값(만료)으로 남아 만료 카드가 뜬다.
+      if (Get.isRegistered<GuardianDashboardController>()) {
+        Get.find<GuardianDashboardController>().reloadAfterRegister();
       }
       Get.offNamed(AppRoutes.guardianDashboard);
     }
