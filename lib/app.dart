@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:anbucheck/app/core/utils/layout_breakpoints.dart';
+import 'package:anbucheck/app/core/services/fold_state_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -50,19 +51,23 @@ class App extends StatelessWidget {
     );
   }
 
-  /// 안드로이드 방향 정책 — **창 폭**으로 판단한다(기기 종류 아님).
-  /// 폰(<600dp)은 세로 고정(main.dart의 `portraitUp` + 매니페스트), 넓은 창(펼친 폴더블·태블릿)은 모든 방향.
+  /// 안드로이드 방향 정책 — 폰(<600dp)은 세로 고정(main.dart의 `portraitUp` + 매니페스트),
+  /// 넓은 창(펼친 폴더블·태블릿)은 모든 방향. **폴더블은 접힌 좁은 화면에서도 모든 방향 허용**
+  /// (iOS와 동일 — 2026-10-26, `FoldStateService.isFoldable`). 폴더블 인식은 시작 직후 비동기라
+  /// 서비스가 인식 시점에 직접 방향을 풀고, 여기서는 그 값을 덮어쓰지 않도록 같이 본다.
   /// Flutter가 `portraitUp`을 계속 요청하면 Android 16이 대형 화면에서 매니페스트 제한을 풀어 줘도
   /// 일부 회전에서 앱이 세로 모양으로 갇혀 좌우가 검게 남는다(2026-10-20 Fold10 에뮬레이터 실측).
   /// iOS는 `FoldStateService`가 따로 처리한다.
   static bool? _androidAllOrientations;
   static void _syncAndroidOrientation(double width) {
     if (!Platform.isAndroid) return;
-    final wide = width >= largeScreenBreakpoint;
-    if (_androidAllOrientations == wide) return;
-    _androidAllOrientations = wide;
+    final foldable =
+        Get.isRegistered<FoldStateService>() && Get.find<FoldStateService>().isFoldable.value;
+    final allow = width >= largeScreenBreakpoint || foldable;
+    if (_androidAllOrientations == allow) return;
+    _androidAllOrientations = allow;
     SystemChrome.setPreferredOrientations(
-      wide ? DeviceOrientation.values : const [DeviceOrientation.portraitUp],
+      allow ? DeviceOrientation.values : const [DeviceOrientation.portraitUp],
     );
   }
 

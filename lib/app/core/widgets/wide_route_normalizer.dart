@@ -34,14 +34,26 @@ class _WideRouteNormalizerState extends State<WideRouteNormalizer> {
     AppRoutes.guardianEmergencyMap,
   };
 
-  bool? _wasWide;
+  /// 직전 빌드에서 분할이 가능했는가 — [SplitShell]의 `capable`과 같은 조건(짧은 변 ≥600dp이고 접힘 아님).
+  /// 폭만 보면 안 된다: 안드로이드 에뮬레이터는 반접힘(90°)에서 창이 먼저 커지는데 그때 판정은 아직
+  /// "접힘"(끝점 유지)이라 정리가 건너뛰어지고, 완전히 펼쳐져(180°) 접힘이 풀릴 때는 폭이 이미 넓어서
+  /// 다시 발동하지 않았다(접힌 채 연 Connections가 전체 화면으로 남음, 2026-10-26).
+  bool? _wasCapable;
 
   @override
   Widget build(BuildContext context) {
-    final wide = MediaQuery.sizeOf(context).width >= kLargeScreenBreakpoint;
-    final crossedUp = _wasWide == false && wide;
-    _wasWide = wide;
-    if (crossedUp) {
+    final size = MediaQuery.sizeOf(context);
+    // 서비스가 없으면(테스트 등) Obx가 관찰할 Rx가 없어 예외를 던지므로 Obx를 쓰지 않는다.
+    if (!Get.isRegistered<FoldStateService>()) return _track(size, false);
+    final svc = Get.find<FoldStateService>();
+    return Obx(() => _track(size, svc.posture.value == FoldPosture.folded));
+  }
+
+  Widget _track(Size size, bool folded) {
+    final capable = size.shortestSide >= kLargeScreenBreakpoint && !folded;
+    final becameCapable = _wasCapable == false && capable;
+    _wasCapable = capable;
+    if (becameCapable) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _normalize());
     }
     return widget.child;

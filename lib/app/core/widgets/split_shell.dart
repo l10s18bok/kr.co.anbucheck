@@ -61,6 +61,24 @@ class _SplitShellState extends State<SplitShell> {
     });
   }
 
+  bool _wasSplit = false;
+
+  Future<void> _openPaneAsFullPage() async {
+    if (!mounted || Get.currentRoute != AppRoutes.guardianDashboard) return;
+    Route<dynamic>? top;
+    for (final r in SplitPaneState.stack.reversed) {
+      if ((r.settings.name ?? '/') != '/') {
+        top = r;
+        break;
+      }
+    }
+    final name = top?.settings.name;
+    if (top == null || name == null) return;
+    final args = top.settings.arguments;
+    Get.nestedKey(_paneId)?.currentState?.popUntil((r) => r.isFirst);
+    await Get.toNamed(name, arguments: args);
+  }
+
   final _hasRight = false.obs;
   late final _PaneObserver _observer = _PaneObserver(_syncDepth);
 
@@ -126,10 +144,24 @@ class _SplitShellState extends State<SplitShell> {
       if (_owner.value == null) _claimIfFree();
       // 폰(폴더블도 아니고 폭 <600dp)은 분할이 불가능하므로 Navigator를 아예 두지 않는다.
       final needNavigator = isOwner && (foldable || size.width >= kLargeScreenBreakpoint);
-      final capable = size.width >= kLargeScreenBreakpoint && !folded && isOwner;
+      // 분할은 **짧은 변**이 600dp 이상일 때만(안드로이드 sw600 기준). 폭만 보면 접힌 화면을 가로로
+      // 돌렸을 때(Fold8 접힘 789×499, Duo 접힘 678×466) 폭이 600을 넘어 분할이 켜진다. 접힘 자세 값은
+      // 안드로이드에서 unknown/halfOpen으로 와 믿을 수 없다(2026-10-26 Fold8 에뮬레이터). 펼친 화면은
+      // 짧은 변이 739(Fold8)·669(Duo)로 600을 넘는다.
+      final capable =
+          size.shortestSide >= kLargeScreenBreakpoint && !folded && isOwner;
       final split = capable && _hasRight.value;
       // 빌드 중 상태 변경을 피하려고 값만 대입(Rx 아님).
       if (isOwner) AppNav.paneId = capable ? _paneId : null;
+
+      // 분할 중에 접으면 대시보드만 남지 않고, 오른쪽 pane에서 보던 화면을 전체 화면으로 연다
+      // (접힌 화면은 하단 탭이 고른 화면 하나만 보여 준다). 다시 펼치면 WideRouteNormalizer가
+      // 그 페이지를 오른쪽 pane으로 되돌린다. 접힘 시작·분할이 아니던 접힘은 건드리지 않는다.
+      final foldedFromSplit = _wasSplit && !capable && isOwner;
+      _wasSplit = split;
+      if (foldedFromSplit) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => _openPaneAsFullPage());
+      }
 
       final leftW = split ? size.width / 2 : size.width;
       final rightW = split ? size.width / 2 : 0.0;
