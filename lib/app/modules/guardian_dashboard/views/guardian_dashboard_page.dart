@@ -27,8 +27,11 @@ import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
 /// 넓은 화면이거나 폴더블 접힘이면 컴팩트 배치.
 /// ⚠️ `wide || _isFolded(context)`로 쓰면 wide=true에서 단락 평가로 Rx를 읽지 않아 Obx가
 /// "improper use of a GetX" 예외를 던진다 — 항상 접힘 상태를 먼저 읽는다.
-bool _compact(BuildContext context, bool wide) {
+bool _compact(BuildContext context, bool wide, bool hasSubjects) {
   final folded = _isFolded(context);
+  // 대상자가 없으면(카드 리스트가 없으면) 컴팩트로 줄이지 않고 폰 세로와 같은 큰 점선 박스를 쓴다.
+  // 카드가 있을 때만 제목 줄 버튼으로 줄인다(2026-10-26 사용자 결정). ⚠️ 위 Rx를 읽은 뒤에 판단한다.
+  if (!hasSubjects) return false;
   // 일반 폰은 wide·접힘·분할 어느 것도 아니라 여기서 항상 false — 높이와 무관하게 기존 배치 그대로.
   if (!(wide || folded)) return false;
   // 폴더블·태블릿 계열이라도 세로가 넉넉하면(안드로이드 폴드 안쪽 화면 등) 컴팩트로 줄이지 않고
@@ -40,7 +43,9 @@ bool _compact(BuildContext context, bool wide) {
 
 /// 컴팩트 배치(추가 박스를 제목 줄 버튼으로 줄임)가 필요 없을 만큼 세로가 넉넉한 창 높이(논리 px).
 /// 실측(2026-10-20, 로그 확인): iOS Duo 안쪽 951×669 · 접힘 466×678 → 모자람, 안드로이드 Fold 안쪽 약 851×883 → 넉넉.
-const double _kRoomyHeight = 780;
+/// 2026-10-26: 삼성 Fold8 안쪽 가로(2448×1848 @400dpi ≈ 979×739dp)가 780 미만이라 컴팩트로 떨어져
+/// 세로 화면과 달리 제목 줄 버튼이 됐다 → 기준을 700으로 낮춘다(Duo 669·678은 계속 컴팩트).
+const double _kRoomyHeight = 700;
 
 bool _isFolded(BuildContext context) {
   // 분할 화면의 왼쪽 pane도 접힘과 같은 컴팩트 배치(폭 절반 · 높이 그대로).
@@ -328,7 +333,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                 );
               }),
               Obx(() => SizedBox(
-                    height: _compact(context, wide) ? AppSpacing.lg : AppSpacing.sp6,
+                    height: _compact(context, wide, controller.subjects.isNotEmpty) ? AppSpacing.lg : AppSpacing.sp6,
                   )),
 
               // 대상자 리스트 헤더 — 우측에 있던 등급별 카운터는 위 "오늘의 안부 요약"
@@ -337,7 +342,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
               // 세로 공간이 부족한 화면(폭 ≥600dp이거나 폴더블을 접은 상태)에서는 추가 박스를
               // 제목 줄의 작은 버튼으로 줄인다. 접힘 상태는 변할 수 있어 Obx로 감싼다.
               Obx(() {
-                final compact = _compact(context, wide);
+                final compact = _compact(context, wide, controller.subjects.isNotEmpty);
                 if (!compact) {
                   return Text(
                     'guardian_subject_list'.tr,
@@ -489,8 +494,13 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                     // 폴더블을 접은 외부 화면(폭 <600dp)도 같다 — 설계 비율(375×812)보다 가로로
                     // 넓고 낮아 `.w` 크기 요소가 `.h` 예산을 넘는다(BOTTOM OVERFLOWED BY 13 PIXELS).
                     // 접힘 상태일 때만 보정하므로 일반 폰은 그대로다.
+                    //
+                    // 접힌 세로가 Duo(466dp)보다 넓은 창(Fold8 접힘 499dp)이면 `.w` 배율이 더 커져
+                    // (1.24 → 1.33) 같은 높이로는 12px 안팎 넘쳤다(2026-10-26 Fold8 접힘 세로 실측).
+                    // `.w` 크기 요소 몫(약 160)을 폭 배율이 1.2를 넘는 만큼 더해 준다. 폰·넓은 화면(배율 ≤1.2)은 0.
                     final double cardHeight = (wide || folded)
-                        ? 200.0 * math.max(ScreenUtil().scaleHeight, 1.0)
+                        ? 200.0 * math.max(ScreenUtil().scaleHeight, 1.0) +
+                            160.0 * math.max(0.0, ScreenUtil().scaleWidth - 1.2)
                         : 200.h;
                     if (wide && needed <= constraints.maxWidth) {
                       return SizedBox(
@@ -563,11 +573,21 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
 
               // 다른 대상자 추가 버튼 — 넓은 화면은 제목 줄의 작은 버튼으로 대체
               Obx(
-                () => _compact(context, wide)
+                () => _compact(context, wide, controller.subjects.isNotEmpty)
                     ? const SizedBox.shrink()
                     : Column(
                         children: [
-                          AddSubjectButton(onTap: controller.goToAddSubject),
+                          // 카드가 있고 넓은 가로 창(분할 왼쪽 pane 포함)이면 한 줄짜리 얇은 박스로 —
+                          // 세로가 모자라 광고가 아래로 밀리던 것을 막는다(2026-10-26 Fold8 펼친 가로).
+                          // 세로 화면(폰·펼친 세로)은 기존 큰 박스를 유지한다.
+                          AddSubjectButton(
+                            onTap: controller.goToAddSubject,
+                            slim: controller.subjects.isNotEmpty &&
+                                (SplitLeftScope.of(context) ||
+                                    (wide &&
+                                        MediaQuery.sizeOf(context).width >
+                                            MediaQuery.sizeOf(context).height)),
+                          ),
                           SizedBox(height: AppSpacing.sp6),
                         ],
                       ),
@@ -578,7 +598,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                   // 세로 공간이 부족한 화면(넓은 화면·폴더블 접힘)에서만: 광고가 없으면
                   // (프리미엄·권한/동의 거부·로드 실패) 같은 자리에 기존 디자인의 추가 박스(컴팩트)를
                   // 보인다. 폰은 fallback 없음 → 기존 동작.
-                  fallback: _compact(context, wide)
+                  fallback: _compact(context, wide, controller.subjects.isNotEmpty)
                       ? AddSubjectButton(onTap: controller.goToAddSubject, compact: true)
                       : null,
                   onFallbackChanged: (shown) => controller.adFallbackShown.value = shown,

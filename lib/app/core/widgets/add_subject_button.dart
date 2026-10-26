@@ -12,7 +12,15 @@ class AddSubjectButton extends StatelessWidget {
   /// 써서 큰 화면의 `.h`/`.w` 스케일과 무관하게 높이가 예측되게 한다.
   final bool compact;
 
-  const AddSubjectButton({super.key, required this.onTap, this.compact = false});
+  /// true면 아이콘과 글자를 한 줄로 놓은 얇은 형태(분할 화면 왼쪽 pane처럼 세로가 모자랄 때).
+  final bool slim;
+
+  const AddSubjectButton({
+    super.key,
+    required this.onTap,
+    this.compact = false,
+    this.slim = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +40,25 @@ class AddSubjectButton extends StatelessWidget {
         ),
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: compact ? 22 : 28.h),
-          child: Column(
+          padding: EdgeInsets.symmetric(vertical: slim ? 14 : (compact ? 22 : 28.h)),
+          child: slim
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add,
+                        size: 20,
+                        color: dark ? Colors.white : AppColors.onSurfaceVariant),
+                    const SizedBox(width: 8),
+                    Text(
+                      'add_subject_button'.tr,
+                      style: AppTextTheme.bodyMedium(
+                        color: dark ? Colors.white : AppColors.textSecondary,
+                        fw: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(

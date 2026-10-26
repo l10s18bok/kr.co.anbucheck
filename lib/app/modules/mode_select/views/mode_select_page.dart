@@ -19,6 +19,39 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
     // 하단 안내 문구 — 옐로 계열 강조
     const noticeColor = Color(0xFFFFD54F);
 
+    // 가로로 넓은 창(폭이 높이의 1.2배 이상)이면 두 카드를 좌우로 놓는다.
+    final size = MediaQuery.sizeOf(context);
+    final sideBySide = size.width >= size.height * 1.2;
+
+    // 대상자 모드 카드 (Teal)
+    final subjectCard = _ModeCard(
+      gradientColors: const [Color(0xFFE0F2F1), Color(0xFFC8E6C9)],
+      bandColors: const [Color(0xFF00897B), Color(0xFF00695C)],
+      illustrationPath: 'assets/illustrations/select_dependent.svg',
+      title: 'mode_subject_title'.tr,
+      description: 'mode_subject_desc'.tr,
+      buttonLabel: 'mode_subject_button'.tr,
+      buttonColor: const Color(0xFF00685E),
+      onTap: controller.selectSubjectMode,
+      badgeText: 'mode_subject_badge'.tr,
+      badgeAtRight: true,
+      roomyText: sideBySide,
+    );
+
+    // 보호자 모드 카드 (Indigo)
+    final guardianCard = _ModeCard(
+      gradientColors: const [Color(0xFFE8EAF6), Color(0xFFDDE1FF)],
+      bandColors: const [Color(0xFF4355B9), Color(0xFF303F9F)],
+      illustrationPath: 'assets/illustrations/select_guardian.svg',
+      title: 'mode_guardian_title'.tr,
+      description: 'mode_guardian_desc'.tr,
+      buttonLabel: 'mode_guardian_button'.tr,
+      buttonColor: const Color(0xFF4355B9),
+      onTap: controller.selectGuardianMode,
+      badgeText: 'mode_guardian_badge'.tr,
+      roomyText: sideBySide,
+    );
+
     return Scaffold(
       // 다크 톤 배경 — 검정 그림자가 읽히도록 반 단계 밝힌 미드 인디고
       // (AppBar 영역과 body 그라데이션 상단이 이어지도록 동일 색 사용)
@@ -62,45 +95,24 @@ class ModeSelectPage extends GetWidget<ModeSelectController> {
 
                 SizedBox(height: AppSpacing.md),
 
-                // 대상자 모드 카드 (Teal)
-                Expanded(
-                  child: _ModeCard(
-                    gradientColors: const [
-                      Color(0xFFE0F2F1),
-                      Color(0xFFC8E6C9),
-                    ],
-                    bandColors: const [Color(0xFF00897B), Color(0xFF00695C)],
-                    illustrationPath:
-                        'assets/illustrations/select_dependent.svg',
-                    title: 'mode_subject_title'.tr,
-                    description: 'mode_subject_desc'.tr,
-                    buttonLabel: 'mode_subject_button'.tr,
-                    buttonColor: const Color(0xFF00685E),
-                    onTap: controller.selectSubjectMode,
-                    badgeText: 'mode_subject_badge'.tr,
-                    badgeAtRight: true,
-                  ),
-                ),
-                SizedBox(height: AppSpacing.sp6),
-
-                // 보호자 모드 카드 (Indigo)
-                Expanded(
-                  child: _ModeCard(
-                    gradientColors: const [
-                      Color(0xFFE8EAF6),
-                      Color(0xFFDDE1FF),
-                    ],
-                    bandColors: const [Color(0xFF4355B9), Color(0xFF303F9F)],
-                    illustrationPath:
-                        'assets/illustrations/select_guardian.svg',
-                    title: 'mode_guardian_title'.tr,
-                    description: 'mode_guardian_desc'.tr,
-                    buttonLabel: 'mode_guardian_button'.tr,
-                    buttonColor: const Color(0xFF4355B9),
-                    onTap: controller.selectGuardianMode,
-                    badgeText: 'mode_guardian_badge'.tr,
-                  ),
-                ),
+                // 두 카드 — 창이 가로로 넓으면(폴더블 접힘 가로·펼친 가로 등) 좌우로, 아니면 위아래로.
+                // 기기 종류가 아니라 창 모양만 본다. 위아래로 쌓으면 세로가 낮은 가로 창(약 500dp)에서
+                // 카드 하나가 150dp 안팎이 되어 일러스트가 점처럼 줄어든다.
+                if (sideBySide)
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(child: subjectCard),
+                        SizedBox(width: AppSpacing.sp6),
+                        Expanded(child: guardianCard),
+                      ],
+                    ),
+                  )
+                else ...[
+                  Expanded(child: subjectCard),
+                  SizedBox(height: AppSpacing.sp6),
+                  Expanded(child: guardianCard),
+                ],
 
                 SizedBox(height: AppSpacing.lg),
 
@@ -151,6 +163,11 @@ class _ModeCard extends StatelessWidget {
   /// 배지를 우측 상단에 배치 (기본은 좌측 상단)
   final bool badgeAtRight;
 
+  /// 텍스트 밴드에 카드 높이의 더 큰 몫을 허용한다(좌우 배치처럼 카드가 낮을 때).
+  /// 텍스트가 길어지면 글자를 줄이기 전에 일러스트 영역이 먼저 줄어든다(일러스트는 contain이라
+  /// 잘리거나 찌그러지지 않고 작아지기만 한다).
+  final bool roomyText;
+
   const _ModeCard({
     required this.gradientColors,
     required this.bandColors,
@@ -162,6 +179,7 @@ class _ModeCard extends StatelessWidget {
     required this.onTap,
     this.badgeText,
     this.badgeAtRight = false,
+    this.roomyText = false,
   });
 
   @override
@@ -237,7 +255,9 @@ class _ModeCard extends StatelessWidget {
                         ),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
-                            maxHeight: constraints.maxHeight * 0.62,
+                            maxHeight:
+                                constraints.maxHeight *
+                                (roomyText ? 0.8 : 0.62),
                           ),
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
@@ -257,7 +277,7 @@ class _ModeCard extends StatelessWidget {
                                     // 긴 번역은 줄 수 제한 + 말줄임 처리
                                     Text(
                                       title,
-                                      maxLines: 2,
+                                      maxLines: roomyText ? 3 : 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppTextTheme.bodyLarge(
                                         color: Colors.white,
@@ -267,7 +287,7 @@ class _ModeCard extends StatelessWidget {
                                     SizedBox(height: AppSpacing.xs),
                                     Text(
                                       description,
-                                      maxLines: 2,
+                                      maxLines: roomyText ? 3 : 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppTextTheme.bodySmall(
                                         color: Colors.white.withValues(
