@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/widgets/resume_replay_mixin.dart';
+import 'package:anbucheck/app/core/utils/duo_right_inset.dart';
 import 'package:anbucheck/app/core/theme/app_colors.dart';
 import 'package:anbucheck/app/core/theme/app_text_theme.dart';
 import 'package:anbucheck/app/core/theme/app_spacing.dart';
@@ -81,6 +82,8 @@ class GuardianNotificationsPage
         // 헤더("오늘 받은 알림" + 자정 삭제 안내 + 등급 안내 [?])는 알림 유무와
         // 무관하게 항상 표시한다 — 알림이 없을 때도 "왜 비어 있는지"(자정 자동 삭제)와
         // 등급 안내 진입점이 사라지지 않아야 한다.
+        // iPhone Duo 전용 오른쪽 여백(공통 함수) — [?]가 시스템 영역에 가려지지 않게 한다.
+        final duoInset = duoRightInset(context);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -89,7 +92,7 @@ class GuardianNotificationsPage
               // 아이콘이 좌측 텍스트와 같은 수평 마진에 맞춰 보이도록 한다(AppBar 액션과 동일 패턴).
               padding: EdgeInsets.only(
                 left: AppSpacing.horizontalMargin,
-                right: AppSpacing.horizontalMargin - 12.w,
+                right: AppSpacing.horizontalMargin - 12.w + duoInset,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

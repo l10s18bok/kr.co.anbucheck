@@ -14,6 +14,7 @@ import 'package:anbucheck/app/core/utils/back_press_handler.dart';
 import 'package:anbucheck/app/core/utils/time_utils.dart';
 import 'package:anbucheck/app/core/widgets/guardian_bottom_nav.dart';
 import 'package:anbucheck/app/core/widgets/glass_dialog.dart';
+import 'package:anbucheck/app/core/utils/duo_right_inset.dart';
 
 /// 보호자 연결 관리 페이지 — 시안 _4 기준
 class GuardianConnectionManagementPage
@@ -59,8 +60,13 @@ class GuardianConnectionManagementPage
                   children: [
                     SizedBox(height: AppSpacing.lg),
 
-                    // 연결된 대상자 섹션
-                    Row(
+                    // 연결된 대상자 섹션 — iPhone Duo에서는 오른쪽 [+]가 시스템 영역(시간·Wi‑Fi)에
+                    // 가려지지 않게 오른쪽 여백을 더한다(알림 페이지의 [?]와 같은 값, 그 외 기기는 0).
+                    Padding(
+                      padding: EdgeInsets.only(right: duoRightInset(context)),
+                      child: Row(
+                      // 문구가 여러 줄로 줄바꿈돼도 [+]는 제목 첫 줄에 붙는다(언어와 무관하게 같은 자리).
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: RichText(
@@ -92,13 +98,21 @@ class GuardianConnectionManagementPage
                         if (controller.canAddMore)
                           GestureDetector(
                             onTap: controller.goToAddSubject,
-                            child: Icon(
-                              Icons.add_circle_outline_rounded,
-                              size: 26.w,
-                              color: const Color(0xFF4355B9),
+                            // 제목 한 줄 높이(headlineSmall: 18.sp × height 1.44)만큼의 칸 안에서 가운데 —
+                            // 첫 줄의 세로 가운데에 [+]가 놓인다.
+                            child: SizedBox(
+                              height: 18.sp * 1.44,
+                              child: Center(
+                                child: Icon(
+                                  Icons.add_circle_outline_rounded,
+                                  size: 26.w,
+                                  color: const Color(0xFF4355B9),
+                                ),
+                              ),
                             ),
                           ),
                       ],
+                    ),
                     ),
                     // 안내 멘트는 2명 이상일 때만 표시 (1명 이하는 순서 변경 의미 없음)
                     if (controller.subjects.length >= 2) ...[
