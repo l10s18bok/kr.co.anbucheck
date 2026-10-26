@@ -70,6 +70,20 @@ class _WideRouteNormalizerState extends State<WideRouteNormalizer> {
     if (!_paneRoutes.contains(route)) return;
     final args = Get.arguments;
     Get.offAllNamed(AppRoutes.guardianDashboard);
+    // 새 대시보드 셸의 오른쪽 Navigator가 준비될 때까지 기다린다. `AppNav.paneId`는 **옛 셸**이 이미
+    // 1로 켜 둔 값이라 pushFromLaunch의 "paneId가 null이면 기다림"이 작동하지 않고, 새 셸이 Navigator를
+    // 만들기 전에 pane으로 열려다 조용히 무시돼 대시보드만 남았다(접힌 가로 설정 → 펼침, 2026-10-26).
+    // 옛 셸이 사라지는 전환(약 300ms)이 끝난 뒤의 Navigator만 새 셸 것이라 최소 대기를 둔다.
+    await Future<void>.delayed(const Duration(milliseconds: 400));
+    for (var i = 0; i < 60; i++) {
+      final id = AppNav.paneId;
+      if (id != null &&
+          Get.currentRoute == AppRoutes.guardianDashboard &&
+          Get.nestedKey(id)?.currentState != null) {
+        break;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    }
     await AppNav.pushFromLaunch(route, arguments: args);
   }
 }
