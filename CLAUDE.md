@@ -16,6 +16,7 @@
 ## 기술 스택
 
 - **Flutter** 3.47.7 / Dart 3.13.5 (SDK: `/Users/macmini/dev/flutter-3.47`, 단일 SDK — 기본 `flutter` 명령·VS Code 모두 이 경로)
+- **iOS 빌드**: **Xcode 27.1(iOS 27.1 SDK)로 빌드한다**(시험·심사·배포 공통, 1.3.7(65)부터). 기본 `xcode-select`가 26.x를 가리키면 `DEVELOPER_DIR=/Applications/Xcode-27.1.app/Contents/Developer`를 붙이거나 `sudo xcode-select -s`로 바꾼다. ⚠️ 26.x SDK로 빌드하면 iPhone Duo에서 앱이 호환 창(작은 창, 검은 여백)으로 뜬다 — 코드 문제가 아니다
 - **상태관리**: GetX / Clean Architecture (Presentation → Domain ← Data)
 - **HTTP**: GetConnect / Dio (ApiClientFactory 패턴)
 - **코드생성**: Freezed + json_serializable / flutter_screenutil (375×812 기준)
