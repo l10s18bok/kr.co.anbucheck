@@ -47,6 +47,9 @@ class SplitShell extends StatefulWidget {
   State<SplitShell> createState() => _SplitShellState();
 }
 
+/// 살아 있는(pane Navigator를 가진) 대시보드 셸이 스택에 있는가.
+bool get splitShellAlive => _SplitShellState._owner.value != null;
+
 class _SplitShellState extends State<SplitShell> {
   static const int _paneId = 1;
 

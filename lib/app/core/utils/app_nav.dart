@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:anbucheck/app/core/widgets/split_shell.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 보호자 화면 이동 헬퍼 — 분할 화면(폴더블 펼침)에서 오른쪽 pane으로 보내기 위한 단일 진입점.
@@ -50,6 +51,13 @@ class AppNav {
         arguments: arguments,
         id: paneId,
       );
+    }
+    // 접힌 화면에서 연 페이지 밑에 대시보드가 이미 살아 있으면(분할에서 접어 `_openPaneAsFullPage`로 페이지를
+    // 위에 얹은 경우) 새 대시보드로 교체하지 말고 그 대시보드로 돌아간다. 교체하면 대시보드가 둘이 되고
+    // pane Navigator는 밑의 옛 셸이 쥐고 있어, 펼친 뒤 탭을 눌러도 보이지 않는 옛 셸로만 열렸다(2026-10-26).
+    if (route == AppRoutes.guardianDashboard && splitShellAlive) {
+      Get.until((r) => r.settings.name == AppRoutes.guardianDashboard);
+      return null;
     }
     return Get.offNamed<T>(route, arguments: arguments);
   }
