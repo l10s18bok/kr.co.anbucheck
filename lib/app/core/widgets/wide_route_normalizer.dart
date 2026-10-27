@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/fold_state_service.dart';
 import 'package:anbucheck/app/core/utils/app_nav.dart';
 import 'package:anbucheck/app/core/utils/layout_breakpoints.dart';
+import 'package:anbucheck/app/core/widgets/split_shell.dart';
 import 'package:anbucheck/app/routes/app_pages.dart';
 
 /// 좁은 화면(폰·접힘)에서 연 보호자 페이지를 펼쳤을 때 분할 화면으로 바꿔 준다.
@@ -69,16 +70,22 @@ class _WideRouteNormalizerState extends State<WideRouteNormalizer> {
     final route = Get.currentRoute;
     if (!_paneRoutes.contains(route)) return;
     final args = Get.arguments;
+    final oldOwner = splitShellOwner;
     Get.offAllNamed(AppRoutes.guardianDashboard);
     // 새 대시보드 셸의 오른쪽 Navigator가 준비될 때까지 기다린다. `AppNav.paneId`는 **옛 셸**이 이미
     // 1로 켜 둔 값이라 pushFromLaunch의 "paneId가 null이면 기다림"이 작동하지 않고, 새 셸이 Navigator를
     // 만들기 전에 pane으로 열려다 조용히 무시돼 대시보드만 남았다(접힌 가로 설정 → 펼침, 2026-10-26).
     // 옛 셸이 사라지는 전환(약 300ms)이 끝난 뒤의 Navigator만 새 셸 것이라 최소 대기를 둔다.
     await Future<void>.delayed(const Duration(milliseconds: 400));
-    for (var i = 0; i < 60; i++) {
+    // 400ms로도 느린 기기·에뮬레이터는 옛 셸이 아직 남아 있어 그 Navigator를 새 것으로 착각하고 열었다가
+    // 사라져 대시보드만 남는다. 그래서 pane Navigator를 쥔 **셸이 바뀐 것**(새 셸이 소유자가 됨)까지 확인한다.
+    for (var i = 0; i < 100; i++) {
       final id = AppNav.paneId;
+      final owner = splitShellOwner;
       if (id != null &&
           Get.currentRoute == AppRoutes.guardianDashboard &&
+          owner != null &&
+          owner != oldOwner &&
           Get.nestedKey(id)?.currentState != null) {
         break;
       }

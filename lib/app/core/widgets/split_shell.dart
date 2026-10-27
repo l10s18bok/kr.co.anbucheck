@@ -1,4 +1,7 @@
 import 'package:anbucheck/app/core/theme/app_colors.dart';
+import 'dart:io' show Platform;
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:anbucheck/app/core/services/fold_state_service.dart';
@@ -49,6 +52,10 @@ class SplitShell extends StatefulWidget {
 
 /// 살아 있는(pane Navigator를 가진) 대시보드 셸이 스택에 있는가.
 bool get splitShellAlive => _SplitShellState._owner.value != null;
+
+/// 지금 pane Navigator를 쥔 셸의 식별 토큰(없으면 null). 대시보드가 새로 만들어졌는지(소유자가 바뀌었는지)
+/// 비교하는 데만 쓴다 — [WideRouteNormalizer]가 "옛 셸이 아니라 새 셸의 Navigator"를 기다릴 때.
+Object? get splitShellOwner => _SplitShellState._owner.value;
 
 class _SplitShellState extends State<SplitShell> {
   static const int _paneId = 1;
@@ -154,7 +161,13 @@ class _SplitShellState extends State<SplitShell> {
       final capable =
           size.shortestSide >= kLargeScreenBreakpoint && !folded && isOwner;
       final split = capable && _hasRight.value;
-      // 빌드 중 상태 변경을 피하려고 값만 대입(Rx 아님).
+      // 글래스는 안드로이드 가로 화면에서만 — 세로 화면은 제외한다. 각도 값이 아니라 참/거짓 하나만 관찰해
+      // (180° 완전히 펼침이면 false) 각도가 바뀔 때마다 다시 빌드되지 않게 한다.
+      final landscape = size.width > size.height;
+      final halfOpen = Platform.isAndroid &&
+          landscape &&
+          Get.isRegistered<FoldStateService>() &&
+          Get.find<FoldStateService>().splitGlass.value;      // 빌드 중 상태 변경을 피하려고 값만 대입(Rx 아님).
       if (isOwner) AppNav.paneId = capable ? _paneId : null;
 
       // 분할 중에 접으면 대시보드만 남지 않고, 오른쪽 pane에서 보던 화면을 전체 화면으로 연다
@@ -188,7 +201,12 @@ class _SplitShellState extends State<SplitShell> {
                     ? () => Get.nestedKey(_paneId)?.currentState
                         ?.popUntil((r) => r.isFirst)
                     : null,
-                child: MediaQuery(data: paneMq(leftW), child: widget.child),
+                // 글래스가 덮인 동안은 왼쪽 대시보드의 애니메이션을 멈춘다 — 아래가 움직이면 블러를 매 프레임
+                // 다시 계산해야 해서 접고 펴는 순간 부하가 커진다(데이터 갱신은 그대로, 애니메이션만 정지).
+                child: TickerMode(
+                  enabled: !halfOpen,
+                  child: MediaQuery(data: paneMq(leftW), child: widget.child),
+                ),
               ),
             ),
           ),
@@ -219,6 +237,8 @@ class _SplitShellState extends State<SplitShell> {
           ),
         ],
       );
+      // 접힌 데서 펼치는 중(접힘 판정 + 힌지 90° 이상)의 덮개는 화면 종류와 무관하게 앱 전체에 깔아야 해서
+      // [FoldUnfoldOverlay]가 맡는다(여기에는 분할 중 왼쪽 덮개만 남긴다).
       if (!split) return row;
       // 두 pane 사이 경계선 — 펼친 화면의 힌지(접힌 선) 위치. 에뮬레이터·일부 기기는 접힌 선을
       // 그리지 않아 분할이 어디서 나뉘는지 보이지 않는다. 폭을 차지하지 않도록 겹쳐 그린다.
@@ -234,10 +254,15 @@ class _SplitShellState extends State<SplitShell> {
             top: 0,
             bottom: 0,
             child: IgnorePointer(
-              child: ColoredBox(
-                color: AppColors.isDark
-                    ? Colors.white.withValues(alpha: 0.12)
-                    : Colors.black.withValues(alpha: 0.09),
+              child: ClipRect(
+                child: halfOpen
+                    // 덜 펼친(160° 미만) 상태 — 최대 세기 블러 덮개(_FoldBlur). 그 외에는 블러 없음(최소).
+                    ? const _FoldBlur()
+                    : ColoredBox(
+                        color: AppColors.isDark
+                            ? Colors.white.withValues(alpha: 0.12)
+                            : Colors.black.withValues(alpha: 0.09),
+                      ),
               ),
             ),
           ),
@@ -255,6 +280,47 @@ class _SplitShellState extends State<SplitShell> {
         ],
       );
     });
+  }
+}
+
+/// 덜 펼친 폴더블 화면 위에 얹는 블러 덮개 — 어둡힘 없이 블러만.
+///
+/// 위치에 따라 부드럽게 커진다: 안쪽(힌지 쪽, 오른쪽)은 블러 0(최소), 바깥쪽(왼쪽 끝)은 [_maxSigma](최대).
+/// 왼쪽부터 폭이 줄어드는 블러 층 [_layers]개를 겹쳐 쌓아, 바깥으로 갈수록 겹친 층이 많아 더 흐려진다
+/// (겹친 블러는 제곱합의 제곱근으로 합쳐진다). 층 하나의 세기가 작아서 띠로 나눌 때 같은 큰 계단이 생기지
+/// 않는다. 각도에 따라 세기가 변하지는 않고, 이 위젯이 그려지는 구간(덜 펼친 각도)에서만 켜진다.
+class _FoldBlur extends StatelessWidget {
+  const _FoldBlur();
+
+  /// 블러 세기(전체에 같은 값, 다이얼로그는 14).
+  static const double _sigma = 8;
+
+  /// 맨 바깥의 반투명 면 불투명도(0~1). 클수록 뒤가 덜 비친다.
+  static const double _maxOpacity = 0.60;
+
+  @override
+  Widget build(BuildContext context) {
+    final veil = AppColors.isDark ? const Color(0xFF24262B) : Colors.white;
+    // 렌더링을 줄이려고 **블러는 한 번만** 건다(블러 층을 쌓으면 층 수만큼 매 프레임 블러를 다시 계산한다).
+    // 바깥은 거칠고 안쪽은 맑은 느낌은 위의 반투명 면 그라데이션이 맡는다 — 바깥으로 갈수록 불투명해져
+    // 같은 블러도 더 뿌옇게 보인다. 불투명도(= 투명도를 낮추는 면)는 안쪽 0(완전히 비침) → 바깥 최대.
+    // 어둡게가 아니라 다이얼로그 글래스와 같은 흰(다크는 짙은 회색) 반투명 면이다.
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: _sigma, sigmaY: _sigma, tileMode: TileMode.mirror),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              veil.withValues(alpha: _maxOpacity),
+              veil.withValues(alpha: 0),
+            ],
+          ),
+        ),
+        child: const SizedBox.expand(),
+      ),
+    );
   }
 }
 

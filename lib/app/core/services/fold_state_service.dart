@@ -38,6 +38,17 @@ class FoldStateService extends GetxService {
   /// 현재 접힘 상태.
   final posture = FoldPosture.unknown.obs;
 
+  /// 완전히 펼침으로 보는 각도. 센서가 180°를 정확히 보고하지 않을 수 있어 170°로 둔다.
+  static const double _fullyOpenAngle = 170;
+
+  /// 글래스를 다시 켜는 각도(펼침 → 접는 방향). [_fullyOpenAngle]보다 5° 낮게 둔 완충 구간.
+  static const double _glassOnAngle = 165;
+
+  /// 분할 화면 왼쪽에 글래스를 까는 조건 — 완전히 펼치면(170° 이상) false(블러 0), 165° 미만이면 true.
+  /// 각도 값 자체를 관찰하면 중간 각도마다 화면이 다시 빌드되므로, 화면은 이 참/거짓 하나만 본다
+  /// (값이 뒤집힐 때만 빌드된다).
+  final splitGlass = false.obs;
+
   /// 폴더블 기기인가(폰이면 false).
   final isFoldable = false.obs;
 
@@ -63,12 +74,28 @@ class FoldStateService extends GetxService {
       // 들어오므로 null은 무시하고 마지막 유효 각도를 유지한다.
       final angle = info.hingeAngleDegrees;
       if (angle != null) _lastAngle = angle;
-      posture.value = switch (info.pose) {
-        FoldPose.closed => FoldPosture.folded,
-        FoldPose.partiallyOpen => FoldPosture.halfOpen,
-        FoldPose.fullyOpen => FoldPosture.open,
-        FoldPose.unknown => _postureFromAngle(_lastAngle),
-      };
+      // 각도가 한 번이라도 들어왔으면 **각도 판정만** 쓴다. 안드로이드 에뮬레이터는 같은 순간에 각도 기반
+      // 이벤트(pose=unknown, 끝점 유지로 "접힘")와 플랫폼 자세 이벤트(pose=partiallyOpen → "반접힘")를
+      // 번갈아 보내는데, 둘을 섞으면 접힘 → 90°에서 접힘/반접힘이 0.4초가량 번갈아 바뀌어 분할 화면이
+      // 잠깐 켜졌다 꺼진다(2026-10-27 실측). 각도가 없는 기기(iPhone Duo 등)는 pose 그대로 쓴다.
+      posture.value = _lastAngle != null
+          ? _postureFromAngle(_lastAngle)
+          : switch (info.pose) {
+              FoldPose.closed => FoldPosture.folded,
+              FoldPose.partiallyOpen => FoldPosture.halfOpen,
+              FoldPose.fullyOpen => FoldPosture.open,
+              FoldPose.unknown => FoldPosture.unknown,
+            };
+      final a = _lastAngle;
+      // 완전히 펼침 = [_fullyOpenAngle]° 이상(글래스 끔). 다시 켜는 것은 [_glassOnAngle]° 미만으로 내려와야 —
+      // 그 사이(165~170°)는 직전 상태 유지라 센서가 기준 근처에서 떨려도 글래스가 켜졌다 꺼지지 않는다.
+      if (a != null) {
+        if (a >= _fullyOpenAngle) {
+          splitGlass.value = false;
+        } else if (a < _glassOnAngle) {
+          splitGlass.value = true;
+        }
+      }
       final wasFoldable = isFoldable.value;
       isFoldable.value = info.isFoldable;
       if (info.isFoldable != wasFoldable) _applyOrientationPolicy(info.isFoldable);
@@ -87,17 +114,19 @@ class FoldStateService extends GetxService {
   /// 마지막으로 받은 유효 힌지 각도(null은 덮어쓰지 않는다).
   double? _lastAngle;
 
-  /// 힌지 각도 → 접힘 상태. 구간은 AVD의 posture 정의(0-30 접힘 / 30-150 반접힘 / 150-180 펼침)와 같다.
+  /// 힌지 각도 → 접힘 상태. 30° 이하 접힘 / **90° 이상 펼침** / 그 사이(30~90°)는 직전 끝점 유지.
+  /// 90°부터 펼침으로 보는 이유: 접힘에서 90°를 넘기면 OS가 안쪽 큰 화면(창 크기)을 주므로 분할 화면도
+  /// 그 시점에 같이 켠다(2026-10-27 사용자 결정 — AVD의 반접힘 정의(30~150°)와는 다르다).
   /// 각도가 아직 없으면 unknown(폰·비폴더블과 같은 동작).
   ///
-  /// **반접힘(30~150°)에서는 직전 끝점(접힘/펼침)을 그대로 유지한다.** 접힘→펼치는 중에는 150°를 넘을 때까지
+  /// **30~90°에서는 직전 끝점(접힘/펼침)을 그대로 유지한다.** 접힘→펼치는 중에는 90°를 넘을 때까지
   /// 접힘 판정, 펼침→접는 중에는 30° 이하가 될 때까지 펼침 판정이라 중간에 분할 화면이 깜빡이지 않는다
   /// (창 크기는 OS가 정하고 앱은 따라 그릴 뿐 — 앱이 정하는 건 이 판정으로 켜지는 분할·요약 숨김뿐).
   /// 끝점을 한 번도 못 본 채 반접힘이면 halfOpen 그대로.
   FoldPosture _postureFromAngle(double? angle) {
     if (angle == null) return FoldPosture.unknown;
     if (angle <= 30) return _lastEndpoint = FoldPosture.folded;
-    if (angle >= 150) return _lastEndpoint = FoldPosture.open;
+    if (angle >= 90) return _lastEndpoint = FoldPosture.open;
     return _lastEndpoint ?? FoldPosture.halfOpen;
   }
 
