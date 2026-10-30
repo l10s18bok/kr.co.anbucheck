@@ -182,6 +182,8 @@ abstract class ViVn {
     'guardian_chart_y_axis_steps': 'Số bước',
     'guardian_chart_x_axis_last_7_days': '7 ngày qua',
     'guardian_chart_x_axis_last_30_days': '30 ngày qua',
+    'guardian_chart_x_axis_last_7_days_local': '7 ngày qua · giờ của người thân',
+    'guardian_chart_x_axis_last_30_days_local': '30 ngày qua · giờ của người thân',
     'guardian_safety_needed': 'Cần kiểm tra',
     'guardian_error_load_subjects': 'Không tải được danh sách người thân.',
     'guardian_safety_confirmed_name': '@name: đã xác nhận bình an.',

@@ -182,6 +182,8 @@ abstract class SvSe {
     'guardian_chart_y_axis_steps': 'Steg',
     'guardian_chart_x_axis_last_7_days': 'Senaste 7 dagarna',
     'guardian_chart_x_axis_last_30_days': 'Senaste 30 dagarna',
+    'guardian_chart_x_axis_last_7_days_local': 'Senaste 7 dagarna · närståendes tid',
+    'guardian_chart_x_axis_last_30_days_local': 'Senaste 30 dagarna · närståendes tid',
     'guardian_safety_needed': 'Behöver kontrolleras',
     'guardian_error_load_subjects': 'Det gick inte att läsa in dina närstående.',
     'guardian_safety_confirmed_name': '@name: bekräftat att allt är bra.',

@@ -182,6 +182,8 @@ abstract class ZhTw {
     'guardian_chart_y_axis_steps': '步數',
     'guardian_chart_x_axis_last_7_days': '最近7天',
     'guardian_chart_x_axis_last_30_days': '最近30天',
+    'guardian_chart_x_axis_last_7_days_local': '最近7天（被守護者當地時間）',
+    'guardian_chart_x_axis_last_30_days_local': '最近30天（被守護者當地時間）',
     'guardian_safety_needed': '需要確認安全',
     'guardian_error_load_subjects': '無法載入被守護者列表。',
     'guardian_safety_confirmed_name': '@name：已確認安全。',

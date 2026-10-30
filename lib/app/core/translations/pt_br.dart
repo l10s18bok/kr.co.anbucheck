@@ -182,6 +182,8 @@ abstract class PtBr {
     'guardian_chart_y_axis_steps': 'Passos',
     'guardian_chart_x_axis_last_7_days': 'Últimos 7 dias',
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 dias',
+    'guardian_chart_x_axis_last_7_days_local': 'Últimos 7 dias · horário do ente querido',
+    'guardian_chart_x_axis_last_30_days_local': 'Últimos 30 dias · horário do ente querido',
     'guardian_safety_needed': 'Confira se está tudo bem',
     'guardian_error_load_subjects': 'Não foi possível carregar a lista de entes queridos.',
     'guardian_safety_confirmed_name': '@name: confirmado que está tudo bem.',

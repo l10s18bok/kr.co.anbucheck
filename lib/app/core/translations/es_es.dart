@@ -182,6 +182,8 @@ abstract class EsEs {
     'guardian_chart_y_axis_steps': 'Pasos',
     'guardian_chart_x_axis_last_7_days': 'Últimos 7 días',
     'guardian_chart_x_axis_last_30_days': 'Últimos 30 días',
+    'guardian_chart_x_axis_last_7_days_local': 'Últimos 7 días · hora de su ser querido',
+    'guardian_chart_x_axis_last_30_days_local': 'Últimos 30 días · hora de su ser querido',
     'guardian_safety_needed': 'Compruebe cómo está',
     'guardian_error_load_subjects': 'No se pudo cargar la lista de seres queridos.',
     'guardian_safety_confirmed_name': '@name: confirmado que todo está bien.',

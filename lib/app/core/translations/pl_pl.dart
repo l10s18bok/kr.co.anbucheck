@@ -182,6 +182,8 @@ abstract class PlPl {
     'guardian_chart_y_axis_steps': 'Kroki',
     'guardian_chart_x_axis_last_7_days': 'Ostatnie 7 dni',
     'guardian_chart_x_axis_last_30_days': 'Ostatnie 30 dni',
+    'guardian_chart_x_axis_last_7_days_local': 'Ostatnie 7 dni · czas podopiecznego',
+    'guardian_chart_x_axis_last_30_days_local': 'Ostatnie 30 dni · czas podopiecznego',
     'guardian_safety_needed': 'Trzeba sprawdzić',
     'guardian_error_load_subjects': 'Nie udało się wczytać listy podopiecznych.',
     'guardian_safety_confirmed_name': '@name: potwierdzono, że wszystko w porządku.',

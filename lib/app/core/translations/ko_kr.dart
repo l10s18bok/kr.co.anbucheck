@@ -195,6 +195,8 @@ abstract class KoKr {
     'guardian_chart_y_axis_steps': '걸음수',
     'guardian_chart_x_axis_last_7_days': '지난 7일',
     'guardian_chart_x_axis_last_30_days': '지난 30일',
+    'guardian_chart_x_axis_last_7_days_local': '지난 7일 · 대상자의 현지 시각 기준',
+    'guardian_chart_x_axis_last_30_days_local': '지난 30일 · 대상자의 현지 시각 기준',
     'guardian_safety_needed': '안전 확인이 필요합니다',
     'guardian_error_load_subjects': '보호 대상자 목록을 불러오지 못했습니다.',
     'guardian_safety_confirmed_name': '@name의 안전이 확인되었습니다.',

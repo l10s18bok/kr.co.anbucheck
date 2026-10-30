@@ -448,6 +448,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                         controller.confirmSafety(subject.inviteCode, subject.alias),
                     batteryLevel: isNormal ? subject.batteryLevel : null,
                     steps: steps,
+                    localTime: subject.isDifferentTimezone,
                     onOpenFullChart: () async {
                       // 중복 오픈 방지 — 로드 대기 중/다이얼로그 열린 동안 재탭 무시.
                       // 데이터 로드가 느릴 때 두 번 탭하면 다이얼로그가 2개 뜨던 문제 차단.
@@ -468,6 +469,7 @@ class GuardianDashboardPage extends GetView<GuardianDashboardController> {
                           // 필요합니다"여도 이 차트는 정상일 때와 같은 활동량 라벨이어야 한다.
                           subtitle: activityLabelFromSteps(monthly),
                           steps: monthly,
+                          localTime: subject.isDifferentTimezone,
                         );
                       } finally {
                         controller.isChartDialogBusy = false;
@@ -642,6 +644,9 @@ class _SubjectCard extends StatefulWidget {
   /// 차트에 표시할 걸음수 배열 (카드는 항상 7일). null=등록 전, 0=heartbeat 없음, >0=활동량.
   final List<int?> steps;
 
+  /// 대상자 시간대가 이 기기와 달라 막대 날짜가 어긋남 → 차트 라벨에 '현지 기준'.
+  final bool localTime;
+
   /// 달력 아이콘 탭 → 30일 전체 차트 다이얼로그 오픈.
   final VoidCallback? onOpenFullChart;
 
@@ -667,6 +672,7 @@ class _SubjectCard extends StatefulWidget {
     this.batteryLevel,
     this.phone,
     this.steps = const [],
+    this.localTime = false,
     this.onOpenFullChart,
   });
 
@@ -897,6 +903,7 @@ class _SubjectCardState extends State<_SubjectCard> with TickerProviderStateMixi
                 child: _StepsBarChart(
                   steps: widget.steps,
                   isShowing30Days: false,
+                  localTime: widget.localTime,
                   animate: true,
                   active: widget.isActive,
                 ),
@@ -1026,6 +1033,10 @@ class _StepsBarChart extends StatefulWidget {
   final List<int?> steps;
   final bool isShowing30Days;
 
+  /// 막대 날짜가 대상자 현지 날짜라 보호자 날짜와 어긋난다 → 하단 라벨을 '… · 현지 기준'으로.
+  /// [내 걸음수]는 본인 기록이라 항상 false.
+  final bool localTime;
+
   /// true면 막대가 왼쪽부터 차례로 솟아오른다 — 30일 다이얼로그(대상자 달력 아이콘·[내 걸음수] 공용)에서만 켠다.
   final bool animate;
 
@@ -1036,6 +1047,7 @@ class _StepsBarChart extends StatefulWidget {
   const _StepsBarChart({
     required this.steps,
     required this.isShowing30Days,
+    this.localTime = false,
     this.animate = false,
     this.active = true,
   });
@@ -1196,10 +1208,16 @@ class _StepsBarChartState extends State<_StepsBarChart>
             axisNameSize: 16,
             axisNameWidget: Align(
               alignment: Alignment.center,
+              // 줄 높이가 axisNameSize(16)로 고정이라 두 줄로 접히면 잘린다 → 한 줄 + 말줄임.
               child: Text(
-                isShowing30Days
-                    ? 'guardian_chart_x_axis_last_30_days'.tr
-                    : 'guardian_chart_x_axis_last_7_days'.tr,
+                switch ((isShowing30Days, widget.localTime)) {
+                  (true, true) => 'guardian_chart_x_axis_last_30_days_local'.tr,
+                  (true, false) => 'guardian_chart_x_axis_last_30_days'.tr,
+                  (false, true) => 'guardian_chart_x_axis_last_7_days_local'.tr,
+                  (false, false) => 'guardian_chart_x_axis_last_7_days'.tr,
+                },
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: AppTextTheme.labelSmall(color: axisTextColor),
               ),
             ),
@@ -1300,6 +1318,7 @@ Future<void> _showStepsChartDialog(
   required String title,
   required String subtitle,
   required List<int?> steps,
+  bool localTime = false,
 }) {
   return showGeneralDialog<void>(
     context: context,
@@ -1308,7 +1327,7 @@ Future<void> _showStepsChartDialog(
     barrierColor: Colors.transparent,
     transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (_, _, _) =>
-        _StepsChartDialog(title: title, subtitle: subtitle, steps: steps),
+        _StepsChartDialog(title: title, subtitle: subtitle, steps: steps, localTime: localTime),
     transitionBuilder: (_, anim, _, child) {
       final scale = CurvedAnimation(
         parent: anim,
@@ -1373,10 +1392,14 @@ class _StepsChartDialog extends StatelessWidget {
   /// 30일 걸음수 배열.
   final List<int?> steps;
 
+  /// 대상자 시간대가 이 기기와 다름 → 하단 라벨 '현지 기준'.
+  final bool localTime;
+
   const _StepsChartDialog({
     required this.title,
     required this.subtitle,
     required this.steps,
+    this.localTime = false,
   });
 
   @override
@@ -1417,7 +1440,12 @@ class _StepsChartDialog extends StatelessWidget {
             SizedBox(height: 12.h),
             SizedBox(
               height: 280.h,
-              child: _StepsBarChart(steps: steps, isShowing30Days: true, animate: true),
+              child: _StepsBarChart(
+                steps: steps,
+                isShowing30Days: true,
+                localTime: localTime,
+                animate: true,
+              ),
             ),
           ],
         ),

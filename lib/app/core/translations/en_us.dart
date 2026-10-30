@@ -182,6 +182,8 @@ abstract class EnUs {
     'guardian_chart_y_axis_steps': 'Steps',
     'guardian_chart_x_axis_last_7_days': 'Last 7 days',
     'guardian_chart_x_axis_last_30_days': 'Last 30 days',
+    'guardian_chart_x_axis_last_7_days_local': 'Last 7 days · their local time',
+    'guardian_chart_x_axis_last_30_days_local': 'Last 30 days · their local time',
     'guardian_safety_needed': 'Safety check needed',
     'guardian_error_load_subjects': 'Couldn\'t load your loved ones.',
     'guardian_safety_confirmed_name': '@name is confirmed safe.',

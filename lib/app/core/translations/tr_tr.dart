@@ -182,6 +182,8 @@ abstract class TrTr {
     'guardian_chart_y_axis_steps': 'Adım',
     'guardian_chart_x_axis_last_7_days': 'Son 7 gün',
     'guardian_chart_x_axis_last_30_days': 'Son 30 gün',
+    'guardian_chart_x_axis_last_7_days_local': 'Son 7 gün · yakınınızın saati',
+    'guardian_chart_x_axis_last_30_days_local': 'Son 30 gün · yakınınızın saati',
     'guardian_safety_needed': 'Kontrol gerekli',
     'guardian_error_load_subjects': 'Yakınlarınızın listesi yüklenemedi.',
     'guardian_safety_confirmed_name': '@name: iyi olduğu doğrulandı.',

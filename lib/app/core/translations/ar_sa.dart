@@ -194,6 +194,8 @@ abstract class ArSa {
     'guardian_chart_y_axis_steps': 'الخطوات',
     'guardian_chart_x_axis_last_7_days': 'آخر 7 أيام',
     'guardian_chart_x_axis_last_30_days': 'آخر 30 يومًا',
+    'guardian_chart_x_axis_last_7_days_local': 'آخر 7 أيام · بتوقيت الشخص المحمي',
+    'guardian_chart_x_axis_last_30_days_local': 'آخر 30 يومًا · بتوقيت الشخص المحمي',
     'guardian_safety_needed': 'يلزم التحقق',
     'guardian_error_load_subjects': 'تعذّر تحميل قائمة الأشخاص المحميين.',
     'guardian_safety_confirmed_name': '@name: تم التأكد من أن كل شيء على ما يرام.',

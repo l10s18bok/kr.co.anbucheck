@@ -182,6 +182,8 @@ abstract class ZhCn {
     'guardian_chart_y_axis_steps': '步数',
     'guardian_chart_x_axis_last_7_days': '最近7天',
     'guardian_chart_x_axis_last_30_days': '最近30天',
+    'guardian_chart_x_axis_last_7_days_local': '最近7天（被守护者当地时间）',
+    'guardian_chart_x_axis_last_30_days_local': '最近30天（被守护者当地时间）',
     'guardian_safety_needed': '需要确认安全',
     'guardian_error_load_subjects': '无法加载被守护者列表。',
     'guardian_safety_confirmed_name': '@name：已确认安全。',

@@ -182,6 +182,8 @@ abstract class JaJp {
     'guardian_chart_y_axis_steps': '歩数',
     'guardian_chart_x_axis_last_7_days': '過去7日',
     'guardian_chart_x_axis_last_30_days': '過去30日',
+    'guardian_chart_x_axis_last_7_days_local': '過去7日（見守られる方の現地時間）',
+    'guardian_chart_x_axis_last_30_days_local': '過去30日（見守られる方の現地時間）',
     'guardian_safety_needed': '安全確認が必要です',
     'guardian_error_load_subjects': '見守られる方の一覧を読み込めませんでした。',
     'guardian_safety_confirmed_name': '@name：安全が確認されました。',

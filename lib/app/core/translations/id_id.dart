@@ -182,6 +182,8 @@ abstract class IdId {
     'guardian_chart_y_axis_steps': 'Langkah',
     'guardian_chart_x_axis_last_7_days': '7 hari terakhir',
     'guardian_chart_x_axis_last_30_days': '30 hari terakhir',
+    'guardian_chart_x_axis_last_7_days_local': '7 hari terakhir · waktu orang tersayang',
+    'guardian_chart_x_axis_last_30_days_local': '30 hari terakhir · waktu orang tersayang',
     'guardian_safety_needed': 'Perlu diperiksa',
     'guardian_error_load_subjects': 'Daftar orang tersayang tidak dapat dimuat.',
     'guardian_safety_confirmed_name': '@name: sudah dipastikan aman.',

@@ -182,6 +182,8 @@ abstract class FrFr {
     'guardian_chart_y_axis_steps': 'Pas',
     'guardian_chart_x_axis_last_7_days': '7 derniers jours',
     'guardian_chart_x_axis_last_30_days': '30 derniers jours',
+    'guardian_chart_x_axis_last_7_days_local': '7 derniers jours · heure de votre proche',
+    'guardian_chart_x_axis_last_30_days_local': '30 derniers jours · heure de votre proche',
     'guardian_safety_needed': 'Vérifiez que tout va bien',
     'guardian_error_load_subjects': 'Impossible de charger vos proches.',
     'guardian_safety_confirmed_name': '@name : tout va bien, c\'est confirmé.',

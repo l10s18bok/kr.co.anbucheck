@@ -72,6 +72,7 @@ class GuardianSubjectService extends GetxService {
           heartbeatMinute: s['heartbeat_minute'] as int? ?? 0,
           batteryLevel: s['battery_level'] as int?,
           weeklySteps: weeklySteps,
+          utcOffsetMinutes: s['utc_offset_minutes'] as int?,
         );
       }).toList();
 
@@ -184,6 +185,7 @@ class GuardianSubjectService extends GetxService {
       heartbeatMinute: s.heartbeatMinute,
       batteryLevel: s.batteryLevel,
       weeklySteps: s.weeklySteps,
+      utcOffsetMinutes: s.utcOffsetMinutes,
     );
   }
 
@@ -267,6 +269,9 @@ class SubjectItem {
   /// 최근 7일 걸음수. index 0 = 6일 전, index 6 = 오늘.
   /// null = 등록 전 날짜 (빈 막대), 0 = heartbeat 없음, >0 = 실제 걸음수.
   final List<int?> weeklySteps;
+  /// 걸음수 날짜를 나눈 대상자 시간대의 지금 UTC 시차(분). 구버전 서버면 null.
+  /// 보호자 기기 시차와 다르면 차트 라벨에 '현지 기준'을 붙인다.
+  final int? utcOffsetMinutes;
 
   const SubjectItem({
     required this.guardianId,
@@ -282,7 +287,13 @@ class SubjectItem {
     this.heartbeatMinute = 0,
     this.batteryLevel,
     this.weeklySteps = const [],
+    this.utcOffsetMinutes,
   });
+
+  /// 대상자 시간대가 이 기기와 시차가 달라 걸음수 막대의 날짜가 보호자 날짜와 어긋나는가.
+  bool get isDifferentTimezone =>
+      utcOffsetMinutes != null &&
+      utcOffsetMinutes != DateTime.now().timeZoneOffset.inMinutes;
 
   bool get isNormal => status == 'normal';
 
@@ -308,6 +319,7 @@ class SubjectItem {
       heartbeatMinute: heartbeatMinute ?? this.heartbeatMinute,
       batteryLevel: batteryLevel,
       weeklySteps: weeklySteps ?? this.weeklySteps,
+      utcOffsetMinutes: utcOffsetMinutes,
     );
   }
 }

@@ -182,6 +182,8 @@ abstract class RuRu {
     'guardian_chart_y_axis_steps': 'Шаги',
     'guardian_chart_x_axis_last_7_days': 'Последние 7 дней',
     'guardian_chart_x_axis_last_30_days': 'Последние 30 дней',
+    'guardian_chart_x_axis_last_7_days_local': 'Последние 7 дней · время подопечного',
+    'guardian_chart_x_axis_last_30_days_local': 'Последние 30 дней · время подопечного',
     'guardian_safety_needed': 'Нужна проверка',
     'guardian_error_load_subjects': 'Не удалось загрузить список подопечных.',
     'guardian_safety_confirmed_name': '@name: подтверждено, что всё в порядке.',

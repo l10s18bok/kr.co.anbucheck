@@ -373,6 +373,7 @@ class GuardianDashboardController extends BaseController
           daysInactive: locked ? 0 : s.alertDaysInactive,
           batteryLevel: s.batteryLevel,
           weeklySteps: locked ? List<int?>.filled(7, 0) : s.weeklySteps,
+          isDifferentTimezone: s.isDifferentTimezone,
         )).toList()
       ..sort((a, b) {
         final ai = alertOrder.indexOf(a.alertLevel);
@@ -732,6 +733,8 @@ class SubjectStatus {
   /// 최근 7일 걸음수. index 0 = 6일 전, index 6 = 오늘.
   /// null = 등록 전, 0 = heartbeat 없음, >0 = 실제 걸음수.
   final List<int?> weeklySteps;
+  /// 대상자 시간대가 이 기기와 시차가 달라 막대 날짜가 보호자 날짜와 어긋남 → 차트 라벨에 '현지 기준'.
+  final bool isDifferentTimezone;
 
   const SubjectStatus({
     required this.guardianId,
@@ -744,6 +747,7 @@ class SubjectStatus {
     this.daysInactive = 0,
     this.batteryLevel,
     this.weeklySteps = const [],
+    this.isDifferentTimezone = false,
   });
 
   bool get isNormal => alertLevel == 'normal';

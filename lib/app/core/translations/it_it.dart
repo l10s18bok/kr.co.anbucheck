@@ -183,6 +183,8 @@ abstract class ItIt {
     'guardian_chart_y_axis_steps': 'Passi',
     'guardian_chart_x_axis_last_7_days': 'Ultimi 7 giorni',
     'guardian_chart_x_axis_last_30_days': 'Ultimi 30 giorni',
+    'guardian_chart_x_axis_last_7_days_local': 'Ultimi 7 giorni · ora della persona cara',
+    'guardian_chart_x_axis_last_30_days_local': 'Ultimi 30 giorni · ora della persona cara',
     'guardian_safety_needed': 'Verifichi come sta',
     'guardian_error_load_subjects': 'Impossibile caricare l\'elenco delle persone care.',
     'guardian_safety_confirmed_name': '@name: confermato che va tutto bene.',

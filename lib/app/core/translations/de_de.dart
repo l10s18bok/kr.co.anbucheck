@@ -183,6 +183,8 @@ abstract class DeDe {
     'guardian_chart_y_axis_steps': 'Schritte',
     'guardian_chart_x_axis_last_7_days': 'Letzte 7 Tage',
     'guardian_chart_x_axis_last_30_days': 'Letzte 30 Tage',
+    'guardian_chart_x_axis_last_7_days_local': 'Letzte 7 Tage · Ortszeit der Person',
+    'guardian_chart_x_axis_last_30_days_local': 'Letzte 30 Tage · Ortszeit der Person',
     'guardian_safety_needed': 'Bitte nachsehen',
     'guardian_error_load_subjects': 'Verbundene Personen konnten nicht geladen werden.',
     'guardian_safety_confirmed_name': '@name: Alles in Ordnung bestätigt.',

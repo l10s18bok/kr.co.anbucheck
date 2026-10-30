@@ -182,6 +182,8 @@ abstract class HiIn {
     'guardian_chart_y_axis_steps': 'क़दम',
     'guardian_chart_x_axis_last_7_days': 'पिछले 7 दिन',
     'guardian_chart_x_axis_last_30_days': 'पिछले 30 दिन',
+    'guardian_chart_x_axis_last_7_days_local': 'पिछले 7 दिन · प्रियजन का समय',
+    'guardian_chart_x_axis_last_30_days_local': 'पिछले 30 दिन · प्रियजन का समय',
     'guardian_safety_needed': 'जाँच ज़रूरी है',
     'guardian_error_load_subjects': 'प्रियजनों की सूची लोड नहीं हो सकी।',
     'guardian_safety_confirmed_name': '@name: सब ठीक होने की पुष्टि हो गई।',

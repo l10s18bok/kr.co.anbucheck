@@ -182,6 +182,8 @@ abstract class NlNl {
     'guardian_chart_y_axis_steps': 'Stappen',
     'guardian_chart_x_axis_last_7_days': 'Afgelopen 7 dagen',
     'guardian_chart_x_axis_last_30_days': 'Afgelopen 30 dagen',
+    'guardian_chart_x_axis_last_7_days_local': 'Afgelopen 7 dagen · tijd van uw naaste',
+    'guardian_chart_x_axis_last_30_days_local': 'Afgelopen 30 dagen · tijd van uw naaste',
     'guardian_safety_needed': 'Ga na of alles goed is',
     'guardian_error_load_subjects': 'Uw naasten konden niet worden geladen.',
     'guardian_safety_confirmed_name': '@name: bevestigd dat alles goed is.',
