@@ -334,7 +334,7 @@ flowchart TD
 
     SaveNoti --> FindGuardians[연결된 보호자 전원 조회<br/>guardians + devices JOIN]
 
-    FindGuardians --> Push[보호자 전원에게 긴급 Push 발송<br/>FCM data에 lat/lng/accuracy 포함 가능<br/>message 있으면 푸시 본문을 대상자 원문으로 치환<br/>본문 앞 별칭 프리픽스는 그대로 적용<br/>asyncio.gather 병렬, DND 무시, 구독 만료 무관]
+    FindGuardians --> Push[보호자 전원에게 긴급 Push 발송<br/>FCM data에 lat/lng/accuracy 포함 가능<br/>message 있으면 푸시 본문을 대상자 원문으로 치환<br/>본문 앞 별칭 프리픽스는 그대로 적용<br/>asyncio.gather 병렬, DND 무시<br/>구독 만료 보호자는 제외(_get_active_guardians)]
 
     Push --> Response([200 OK 응답<br/>클라: 위치 포함 여부에 따라 스낵바 분기])
 
@@ -349,8 +349,8 @@ flowchart TD
 | 경고 등급 | 즉시 urgent (caution→warning→urgent 단계 생략) |
 | 기존 카운터 | suspicious_count, days_inactive 변경 없음 |
 | DND | 무시 (항상 발송) |
-| 구독 상태 | 무관 (만료되어도 발송) |
-| 보호자 범위 | 연결된 전원 |
+| 구독 상태 | **구독 활성 보호자에게만 발송** — 만료 보호자는 제외(의도, 2026-11-07 확정) |
+| 보호자 범위 | 연결된 보호자 중 구독 활성인 전원 |
 | 반복 발송 | 없음 (1회 즉시 발송) |
 | 클라이언트 | 확인 다이얼로그로 오탐 방지 |
 | 위치 | optional — 사용자 동의 + 서비스 ON일 때 2단계 폴백으로 획득: (1) `getLastKnownPosition` 캐시 위치 선행 (수 ms) → (2) `getCurrentPosition` medium 정확도 + 10초 타임아웃. 거부/실패 어떤 경우에도 긴급 API 호출 자체는 항상 실행. S 모드 홈과 G+S 안전코드 페이지 양쪽 긴급 버튼이 공통 `captureEmergencyLocation()` 헬퍼를 공유 |
