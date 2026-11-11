@@ -60,9 +60,8 @@ ios/Runner/GoogleService-Info.plist
 # 로컬 참고 문서 (버전 관리 제외)
 .ref/
 
-# 서버 버전 업데이트 스킬 admin 키 (커밋 금지)
-.claude/skills/store-update/admin_key
-.claude/skills/server-version-update/admin_key
+# 스킬 전체 비공개 (로컬 전용 — 공개 저장소라 올리지 않는다. admin 키도 이 안에 있다)
+.claude/skills/
 
 # Flutter DevTools가 자동 생성하는 개인 설정
 devtools_options.yaml
